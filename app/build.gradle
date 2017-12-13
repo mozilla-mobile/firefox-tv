@@ -15,7 +15,7 @@ android {
     buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "org.mozilla.video"
-        minSdkVersion 21
+        minSdkVersion 22
         targetSdkVersion 26
         versionCode 11 // This versionCode is "frozen" for local builds. For "release" builds we
         // override this with a generated versionCode at build time.
