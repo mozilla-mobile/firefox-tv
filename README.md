@@ -1,11 +1,3 @@
-Please contact Barbara (b@mozilla.com) about this repo. Not currently open to contributions.
-
-# Instructions
-`adb connect <IP address>`
-
-After that, can install through Android Studio.
-Only a single device can be connected to each TV at a time.
-
 # Firefox Focus for Android
 
 [![BuddyBuild](https://dashboard.buddybuild.com/api/statusImage?appID=584f67f6f3d6eb01000842d6&branch=master&build=latest)](https://dashboard.buddybuild.com/apps/584f67f6f3d6eb01000842d6/build/latest?branch=master)
@@ -21,6 +13,23 @@ _Browse like no one’s watching. The new Firefox Focus automatically blocks a w
 * [Google Play: Firefox Focus (All countries)](https://play.google.com/store/apps/details?id=org.mozilla.focus)
 * [Google Play: Firefox Klar (Germany, Austria, Switzerland)](https://play.google.com/store/apps/details?id=org.mozilla.klar)
 * [Download APKs](https://github.com/mozilla-mobile/focus-android/releases)
+
+Getting Involved
+----------------
+
+We encourage you to participate in this open source project. We love Pull Requests, Bug Reports, ideas, (security) code reviews or any kind of positive contribution. Please read the [Community Participation Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/).
+
+* Overview to contributing (**new contributors start here!**): https://github.com/mozilla-mobile/focus-android/wiki/Contributing
+
+* Issues: [https://github.com/mozilla-mobile/focus-android/issues](https://github.com/mozilla-mobile/focus-android/issues)
+
+* IRC: [#focus (irc.mozilla.org)](https://wiki.mozilla.org/IRC); logs: https://mozilla.logbot.info/focus/; we're available Monday-Friday, GMT and PST working hours.
+
+* Mailing list: [firefox-focus-public@](https://mail.mozilla.org/listinfo/firefox-focus-public)
+
+* Wiki: [https://github.com/mozilla-mobile/focus-android/wiki](https://github.com/mozilla-mobile/focus-android/wiki)
+
+Watch out for [issues with the "good first issue" label](https://github.com/mozilla-mobile/focus-android/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22). Those are easy starter bugs that are available to work on!
 
 Build instructions
 ------------------
