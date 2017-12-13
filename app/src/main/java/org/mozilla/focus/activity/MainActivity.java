@@ -183,12 +183,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity {
 
         final boolean isShowingBrowser = browserFragment != null;
 
-        if (isShowingBrowser) {
-            ViewUtils.showBrandedSnackbar(findViewById(android.R.id.content),
-                    R.string.feedback_erase,
-                    getResources().getInteger(R.integer.erase_snackbar_delay));
-        }
-
         // We add the url input fragment to the layout if it doesn't exist yet.
         final FragmentTransaction transaction = fragmentManager
                 .beginTransaction();
