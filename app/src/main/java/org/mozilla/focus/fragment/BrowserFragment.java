@@ -57,7 +57,6 @@ import org.mozilla.focus.session.Session;
 import org.mozilla.focus.session.SessionCallbackProxy;
 import org.mozilla.focus.session.SessionManager;
 import org.mozilla.focus.session.Source;
-import org.mozilla.focus.session.ui.SessionsSheetFragment;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.Browsers;
 import org.mozilla.focus.utils.ColorUtils;
@@ -743,11 +742,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
             }
 
             case R.id.tabs:
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .add(R.id.container, new SessionsSheetFragment(), SessionsSheetFragment.FRAGMENT_TAG)
-                        .commit();
-
                 TelemetryWrapper.openTabsTrayEvent();
                 break;
 
