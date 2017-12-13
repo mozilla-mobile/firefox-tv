@@ -7,7 +7,9 @@ package org.mozilla.focus.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -18,6 +20,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -36,6 +39,7 @@ import org.mozilla.focus.session.SessionManager;
 import org.mozilla.focus.session.Source;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.OnUrlEnteredListener;
+import org.mozilla.focus.utils.Direction;
 import org.mozilla.focus.utils.SafeIntent;
 import org.mozilla.focus.utils.Settings;
 import org.mozilla.focus.utils.UrlUtils;
@@ -45,7 +49,9 @@ import org.mozilla.focus.web.WebViewProvider;
 import org.mozilla.focus.widget.InlineAutocompleteEditText;
 import org.w3c.dom.Text;
 
+import java.util.HashSet;
 import java.util.List;
+
 
 public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlEnteredListener {
 
@@ -399,5 +405,74 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 SessionManager.getInstance().createSession(Source.USER_ENTERED, urlStr);
             }
         }
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
+
+        if (browserFragment == null || !browserFragment.isVisible()) {
+            return super.dispatchKeyEvent(event);
+        }
+
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            switch (event.getKeyCode()) {
+                case KeyEvent.KEYCODE_DPAD_UP:
+                    browserFragment.moveCursor(Direction.UP);
+                    break;
+                case KeyEvent.KEYCODE_DPAD_DOWN:
+                    browserFragment.moveCursor(Direction.DOWN);
+                    break;
+                case KeyEvent.KEYCODE_DPAD_LEFT:
+                    browserFragment.moveCursor(Direction.LEFT);
+                    break;
+                case KeyEvent.KEYCODE_DPAD_RIGHT:
+                    browserFragment.moveCursor(Direction.RIGHT);
+                    break;
+                case KeyEvent.KEYCODE_DPAD_CENTER:
+                    Point point = browserFragment.getCursorLocation();
+
+                    // Obtain MotionEvent object
+                    long downTime = SystemClock.uptimeMillis();
+                    long eventTime = SystemClock.uptimeMillis() + 100;
+
+                    MotionEvent ev = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, point.x, point.y, 0);
+                    dispatchTouchEvent(ev);
+
+                    break;
+                default:
+                    return super.dispatchKeyEvent(event);
+            }
+        } else if (event.getAction() == KeyEvent.ACTION_UP) {
+            switch (event.getKeyCode()) {
+                case KeyEvent.KEYCODE_DPAD_UP:
+                    browserFragment.stopMoving(Direction.UP);
+                    break;
+                case KeyEvent.KEYCODE_DPAD_DOWN:
+                    browserFragment.stopMoving(Direction.DOWN);
+                    break;
+                case KeyEvent.KEYCODE_DPAD_LEFT:
+                    browserFragment.stopMoving(Direction.LEFT);
+                    break;
+                case KeyEvent.KEYCODE_DPAD_RIGHT:
+                    browserFragment.stopMoving(Direction.RIGHT);
+                    break;
+                case KeyEvent.KEYCODE_DPAD_CENTER:
+                    Point point = browserFragment.getCursorLocation();
+
+                    // Obtain MotionEvent object
+                    long downTime = SystemClock.uptimeMillis();
+                    long eventTime = downTime - 100;
+
+                    MotionEvent ev = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_UP, point.x, point.y, 0);
+                    dispatchTouchEvent(ev);
+                    break;
+                default:
+                    return super.dispatchKeyEvent(event);
+            }
+        }
+
+        return true;
     }
 }
