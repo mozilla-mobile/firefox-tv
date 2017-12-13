@@ -51,7 +51,6 @@ import org.mozilla.focus.broadcastreceiver.DownloadBroadcastReceiver;
 import org.mozilla.focus.customtabs.CustomTabConfig;
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity;
 import org.mozilla.focus.menu.browser.BrowserMenu;
-import org.mozilla.focus.menu.context.WebContextMenu;
 import org.mozilla.focus.open.OpenWithFragment;
 import org.mozilla.focus.session.NullSession;
 import org.mozilla.focus.session.Session;
@@ -445,9 +444,7 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
             public void onBlockingStateChanged(boolean isBlockingEnabled) {}
 
             @Override
-            public void onLongPress(final IWebView.HitTarget hitTarget) {
-                WebContextMenu.show(getActivity(), this, hitTarget);
-            }
+            public void onLongPress(final IWebView.HitTarget hitTarget) {}
 
             @Override
             public void onEnterFullScreen(@NonNull final IWebView.FullscreenCallback callback, @Nullable View view) {
