@@ -25,6 +25,7 @@ import com.amazon.android.webkit.AmazonWebKitFactory;
 import org.mozilla.focus.R;
 import org.mozilla.focus.architecture.NonNullObserver;
 import org.mozilla.focus.fragment.BrowserFragment;
+import org.mozilla.focus.fragment.HomeFragment;
 import org.mozilla.focus.fragment.UrlInputFragment;
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity;
 import org.mozilla.focus.session.Session;
@@ -85,7 +86,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity {
                 if (sessions.isEmpty()) {
                     // There's no active session. Show the URL input screen so that the user can
                     // start a new session.
-                    showUrlInputScreen();
+                    showHomeScreen();
                     wasSessionsEmpty = true;
                 } else {
                     // This happens when we move from 0 to 1 sessions: either on startup or after an erase.
@@ -187,29 +188,11 @@ public class MainActivity extends LocaleAwareAppCompatActivity {
         }
     }
 
-    private void showUrlInputScreen() {
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-
-        final boolean isShowingBrowser = browserFragment != null;
-
-        // We add the url input fragment to the layout if it doesn't exist yet.
-        final FragmentTransaction transaction = fragmentManager
-                .beginTransaction();
-
-        // We only want to play the animation if a browser fragment is added and resumed.
-        // If it is not resumed then the application is currently in the process of resuming
-        // and the session was removed while the app was in the background (e.g. via the
-        // notification). In this case we do not want to show the content and remove the
-        // browser fragment immediately.
-        boolean shouldAnimate = isShowingBrowser && browserFragment.isResumed();
-
-        if (shouldAnimate) {
-            transaction.setCustomAnimations(0, R.anim.erase_animation);
-        }
-
-        transaction
-                .replace(R.id.container, UrlInputFragment.createWithoutSession(), UrlInputFragment.FRAGMENT_TAG)
+    private void showHomeScreen() {
+        // TODO: animations if fragment is found.
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, HomeFragment.create(), HomeFragment.FRAGMENT_TAG)
                 .commit();
     }
 
@@ -244,6 +227,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity {
     public void onBackPressed() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
+        // todo: address
         final UrlInputFragment urlInputFragment = (UrlInputFragment) fragmentManager.findFragmentByTag(UrlInputFragment.FRAGMENT_TAG);
         if (urlInputFragment != null &&
                 urlInputFragment.isVisible() &&
