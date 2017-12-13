@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,7 +21,6 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -54,19 +54,23 @@ import org.mozilla.focus.session.SessionManager;
 import org.mozilla.focus.session.Source;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.Browsers;
+import org.mozilla.focus.utils.Direction;
 import org.mozilla.focus.utils.DownloadUtils;
+import org.mozilla.focus.utils.Edge;
 import org.mozilla.focus.utils.Features;
 import org.mozilla.focus.utils.UrlUtils;
 import org.mozilla.focus.web.Download;
 import org.mozilla.focus.web.IWebView;
 import org.mozilla.focus.widget.AnimatedProgressBar;
+import org.mozilla.focus.widget.Cursor;
+import org.mozilla.focus.widget.CursorEvent;
 
 import java.lang.ref.WeakReference;
 
 /**
  * Fragment for displaying the browser UI.
  */
-public class BrowserFragment extends WebFragment implements View.OnClickListener, DownloadDialogFragment.DownloadDialogListener {
+public class BrowserFragment extends WebFragment implements View.OnClickListener, DownloadDialogFragment.DownloadDialogListener, CursorEvent {
     public static final String FRAGMENT_TAG = "browser";
 
     private static int REQUEST_CODE_STORAGE_PERMISSION = 101;
@@ -94,6 +98,7 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
     private ImageButton menuView;
     private View statusBar;
     private View urlBar;
+    private Cursor cursor;
     private SwipeRefreshLayout swipeRefresh;
     private WeakReference<BrowserMenu> menuWeakReference = new WeakReference<>(null);
 
@@ -186,6 +191,9 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
         }
 
         final View view = inflater.inflate(R.layout.fragment_browser, container, false);
+
+        cursor = (Cursor) view.findViewById(R.id.cursor);
+        cursor.cursorEvent = this;
 
         videoContainer = (ViewGroup) view.findViewById(R.id.video_container);
         browserContainer = view.findViewById(R.id.browser_container);
@@ -872,5 +880,32 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
     // In the future, if more badging icons are needed, this should be abstracted
     public void updateBlockingBadging(boolean enabled) {
         blockView.setVisibility(enabled ? View.GONE : View.VISIBLE);
+    }
+
+    public void moveCursor(Direction direction) {
+        cursor.moveCursor(direction);
+    }
+
+    public void stopMoving(Direction direction) {
+        cursor.stopMoving(direction);
+    }
+
+    public Point getCursorLocation() {
+        return cursor.getLocation();
+    }
+
+    public void cursorHitEdge(Edge edge) {
+        IWebView webView = getWebView();
+
+        switch (edge) {
+            case TOP:
+                break;
+            case BOTTOM:
+                break;
+            case LEFT:
+                break;
+            case RIGHT:
+                break;
+        }
     }
 }
