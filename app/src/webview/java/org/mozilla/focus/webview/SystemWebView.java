@@ -22,12 +22,14 @@ import android.view.autofill.AutofillValue;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.webkit.CookieManager;
-import android.webkit.DownloadListener;
-import android.webkit.WebBackForwardList;
-import android.webkit.WebChromeClient;
 import android.webkit.WebStorage;
-import android.webkit.WebView;
 import android.webkit.WebViewDatabase;
+
+import com.amazon.android.webkit.AmazonDownloadListener;
+import com.amazon.android.webkit.AmazonWebBackForwardList;
+import com.amazon.android.webkit.AmazonWebChromeClient;
+import com.amazon.android.webkit.AmazonWebKitFactory;
+import com.amazon.android.webkit.AmazonWebView;
 
 import org.mozilla.focus.BuildConfig;
 import org.mozilla.focus.session.Session;
@@ -50,9 +52,13 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
     private Callback callback;
     private FocusWebViewClient client;
     private final LinkHandler linkHandler;
+    
 
-    public SystemWebView(Context context, AttributeSet attrs) {
+    public SystemWebView(Context context, AttributeSet attrs, AmazonWebKitFactory factory) {
         super(context, attrs);
+
+        // I think you need to initialize with the factory before initializing the client
+        factory.initializeWebView(this, 0xFFFFFF, false, null);
 
         client = new FocusWebViewClient(getContext().getApplicationContext());
 
@@ -60,9 +66,10 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
         setWebChromeClient(createWebChromeClient());
         setDownloadListener(createDownloadListener());
 
-        if (BuildConfig.DEBUG) {
-            setWebContentsDebuggingEnabled(true);
-        }
+        // TODO This does not exist with the AmazonWebView
+//        if (BuildConfig.DEBUG) {
+//            setWebContentsDebuggingEnabled(true);
+//        }
 
         setLongClickable(true);
 
@@ -113,7 +120,7 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
     public void restoreWebViewState(Session session) {
         final Bundle stateData = session.getWebViewState();
 
-        final WebBackForwardList backForwardList = stateData != null
+        final AmazonWebBackForwardList backForwardList = stateData != null
                 ? super.restoreState(stateData)
                 : null;
 
@@ -236,10 +243,10 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
         });
     }
 
-    private WebChromeClient createWebChromeClient() {
-        return new WebChromeClient() {
+    private AmazonWebChromeClient createWebChromeClient() {
+        return new AmazonWebChromeClient() {
             @Override
-            public void onProgressChanged(WebView view, int newProgress) {
+            public void onProgressChanged(AmazonWebView view, int newProgress) {
                 if (callback != null) {
                     // This is the earliest point where we might be able to confirm a redirected
                     // URL: we don't necessarily get a shouldInterceptRequest() after a redirect,
@@ -272,8 +279,8 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
         };
     }
 
-    private DownloadListener createDownloadListener() {
-        return new DownloadListener() {
+    private AmazonDownloadListener createDownloadListener() {
+        return new AmazonDownloadListener() {
             @Override
             public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
                 if (!AppConstants.supportsDownloadingFiles()) {

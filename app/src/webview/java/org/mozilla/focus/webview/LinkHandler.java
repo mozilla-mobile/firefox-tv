@@ -12,14 +12,16 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.webkit.WebView;
 
+import com.amazon.android.webkit.AmazonWebView;
+
 import org.mozilla.focus.web.IWebView;
 
 /* package */ class LinkHandler implements View.OnLongClickListener {
-    private final WebView webView;
+    private final AmazonWebView webView;
     private @Nullable
     IWebView.Callback callback = null;
 
-    public LinkHandler(final WebView webView) {
+    public LinkHandler(final AmazonWebView webView) {
         this.webView = webView;
     }
 
@@ -33,20 +35,20 @@ import org.mozilla.focus.web.IWebView;
             return false;
         }
 
-        final WebView.HitTestResult hitTestResult = webView.getHitTestResult();
+        final AmazonWebView.HitTestResult hitTestResult = webView.getHitTestResult();
 
         switch (hitTestResult.getType()) {
-            case WebView.HitTestResult.SRC_ANCHOR_TYPE:
+            case AmazonWebView.HitTestResult.SRC_ANCHOR_TYPE:
                 final String linkURL = hitTestResult.getExtra();
                 callback.onLongPress(new IWebView.HitTarget(true, linkURL, false, null));
                 return true;
 
-            case WebView.HitTestResult.IMAGE_TYPE:
+            case AmazonWebView.HitTestResult.IMAGE_TYPE:
                 final String imageURL = hitTestResult.getExtra();
                 callback.onLongPress(new IWebView.HitTarget(false, null, true, imageURL));
                 return true;
 
-            case WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE:
+            case AmazonWebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE:
                 // hitTestResult.getExtra() contains only the image URL, and not the link
                 // URL. Internally, WebView's HitTestData contains both, but they only
                 // make it available via requestFocusNodeHref...

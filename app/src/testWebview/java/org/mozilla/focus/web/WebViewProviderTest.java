@@ -3,6 +3,8 @@ package org.mozilla.focus.web;
 import android.os.Build;
 import android.webkit.WebSettings;
 
+import com.amazon.android.webkit.AmazonWebSettings;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -52,7 +54,7 @@ public class WebViewProviderTest {
         // easily test that the output is expected (without simply replicating what buildUserAgentString does),
         // so instead we just use mocking to supply a fixed UA string - we then know exactly what
         // the output String should look like:
-        WebSettings testSettings = mock(WebSettings.class);
+        AmazonWebSettings testSettings = mock(AmazonWebSettings.class);
         when(testSettings.getUserAgentString()).thenReturn("Mozilla/5.0 (Linux; U; Android 4.0.3; ko-kr; LG-L160L Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30");
 
         assertEquals("Mozilla/5.0 (Linux; Android " + Build.VERSION.RELEASE + ") AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30 fakeappname/null",
