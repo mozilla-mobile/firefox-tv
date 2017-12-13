@@ -10,7 +10,6 @@ import android.text.TextUtils;
 
 import org.mozilla.focus.architecture.NonNullLiveData;
 import org.mozilla.focus.architecture.NonNullMutableLiveData;
-import org.mozilla.focus.customtabs.CustomTabConfig;
 
 import java.util.UUID;
 
@@ -25,7 +24,6 @@ public class Session {
     private final NonNullMutableLiveData<Boolean> secure;
     private final NonNullMutableLiveData<Boolean> loading;
     private final NonNullMutableLiveData<Integer> trackersBlocked;
-    private CustomTabConfig customTabConfig;
     private Bundle webviewState;
     private String searchTerms;
     private String searchUrl;
@@ -46,10 +44,8 @@ public class Session {
         this.isRecorded = false;
     }
 
-    /* package */ Session(String url, @NonNull CustomTabConfig customTabConfig) {
+    /* package */ Session(String url) {
         this(Source.CUSTOM_TAB, url);
-
-        this.customTabConfig = customTabConfig;
     }
 
     public Source getSource() {
@@ -114,14 +110,6 @@ public class Session {
 
     public boolean hasWebViewState() {
         return webviewState != null;
-    }
-
-    public boolean isCustomTab() {
-        return customTabConfig != null;
-    }
-
-    public CustomTabConfig getCustomTabConfig() {
-        return customTabConfig;
     }
 
     public boolean isRecorded() {

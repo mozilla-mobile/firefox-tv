@@ -8,14 +8,12 @@ package org.mozilla.focus.menu.browser;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import org.mozilla.focus.R;
-import org.mozilla.focus.customtabs.CustomTabConfig;
 import org.mozilla.focus.fragment.BrowserFragment;
 import org.mozilla.focus.utils.Browsers;
 import org.mozilla.focus.utils.HardwareUtils;
@@ -49,24 +47,20 @@ public class BrowserMenuAdapter extends RecyclerView.Adapter<BrowserMenuViewHold
     private WeakReference<NavigationItemViewHolder> navigationItemViewHolderReference;
     private WeakReference<BlockingItemViewHolder> blockingItemViewHolderReference;
 
-    public BrowserMenuAdapter(Context context, BrowserMenu menu, BrowserFragment fragment,
-                              final @Nullable CustomTabConfig customTabConfig) {
+    public BrowserMenuAdapter(Context context, BrowserMenu menu, BrowserFragment fragment) {
         this.context = context;
         this.menu = menu;
         this.fragment = fragment;
 
-        initializeMenu(fragment.getUrl(), customTabConfig);
+        initializeMenu(fragment.getUrl());
     }
 
-    private void initializeMenu(String url, final @Nullable CustomTabConfig customTabConfig) {
+    private void initializeMenu(String url) {
         final Resources resources = context.getResources();
         final Browsers browsers = new Browsers(context, url);
 
         this.items = new ArrayList<>();
-
-        if (customTabConfig == null || customTabConfig.showShareMenuItem) {
-            items.add(new MenuItem(R.id.share, resources.getString(R.string.menu_share)));
-        }
+        items.add(new MenuItem(R.id.share, resources.getString(R.string.menu_share)));
 
         if (browsers.hasThirdPartyDefaultBrowser(context)) {
             items.add(new MenuItem(R.id.open_default, resources.getString(
@@ -82,20 +76,6 @@ public class BrowserMenuAdapter extends RecyclerView.Adapter<BrowserMenuViewHold
         items.add(new MenuItem(R.id.add_to_homescreen, resources.getString(R.string.menu_add_to_home_screen)));
 
         items.add(new MenuItem(R.id.settings, resources.getString(R.string.menu_settings)));
-
-        if (customTabConfig != null) {
-            addCustomTabMenuItems(items, customTabConfig);
-        }
-    }
-
-    private void addCustomTabMenuItems(final List<MenuItem> items, final @NonNull CustomTabConfig customTabConfig) {
-        for (final CustomTabConfig.CustomTabMenuItem inputItem : customTabConfig.menuItems) {
-            final String name = inputItem.name;
-            final PendingIntent pendingIntent = inputItem.pendingIntent;
-
-            final MenuItem item = new MenuItem(R.id.custom_tab_menu_item, name, pendingIntent);
-            items.add(item);
-        }
     }
 
     public void updateTrackers(int trackers) {

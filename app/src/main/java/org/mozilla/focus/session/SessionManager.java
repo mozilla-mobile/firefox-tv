@@ -13,7 +13,6 @@ import android.text.TextUtils;
 
 import org.mozilla.focus.architecture.NonNullLiveData;
 import org.mozilla.focus.architecture.NonNullMutableLiveData;
-import org.mozilla.focus.customtabs.CustomTabConfig;
 import org.mozilla.focus.shortcut.HomeScreen;
 import org.mozilla.focus.utils.SafeIntent;
 import org.mozilla.focus.utils.UrlUtils;
@@ -180,16 +179,12 @@ public class SessionManager {
     }
 
     private void createSession(Context context, Source source, SafeIntent intent, String url) {
-        final Session session = CustomTabConfig.isCustomTabIntent(intent)
-                ? new Session(url, CustomTabConfig.parseCustomTabIntent(context, intent))
-                : new Session(source, url);
+        final Session session = new Session(source, url);
         addSession(session);
     }
 
     private void createSession(Context context, Source source, SafeIntent intent, String url, boolean blockingEnabled) {
-        final Session session = CustomTabConfig.isCustomTabIntent(intent)
-                ? new Session(url, CustomTabConfig.parseCustomTabIntent(context, intent))
-                : new Session(source, url);
+        final Session session = new Session(source, url);
         session.setBlockingEnabled(blockingEnabled);
         addSession(session);
     }

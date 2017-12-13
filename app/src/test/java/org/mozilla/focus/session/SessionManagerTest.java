@@ -13,7 +13,6 @@ import android.support.customtabs.CustomTabsIntent;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mozilla.focus.customtabs.CustomTabConfig;
 import org.mozilla.focus.utils.SafeIntent;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -61,8 +60,6 @@ public class SessionManagerTest {
 
         final Session session = sessions.get(0);
         assertEquals(TEST_URL, session.getUrl().getValue());
-        assertFalse(session.isCustomTab());
-        assertNull(session.getCustomTabConfig());
 
         assertTrue(sessionManager.hasSession());
     }
@@ -101,13 +98,6 @@ public class SessionManagerTest {
 
         final Session session = sessions.get(0);
         assertEquals(TEST_URL, session.getUrl().getValue());
-        assertTrue(session.isCustomTab());
-        assertNotNull(session.getCustomTabConfig());
-
-        final CustomTabConfig config = session.getCustomTabConfig();
-        assertNotNull(config.toolbarColor);
-        assertEquals(Color.GREEN, config.toolbarColor.intValue());
-        assertTrue(config.showShareMenuItem);
 
         assertTrue(sessionManager.hasSession());
     }
@@ -161,8 +151,6 @@ public class SessionManagerTest {
         final Session session = sessions.get(0);
         assertFalse(session.isSearch());
         assertEquals(TEST_URL, session.getUrl().getValue());
-        assertFalse(session.isCustomTab());
-        assertNull(session.getCustomTabConfig());
 
         assertTrue(sessionManager.hasSession());
     }
@@ -183,8 +171,6 @@ public class SessionManagerTest {
         assertTrue(session.isSearch());
         assertEquals("Hello World Focus", session.getSearchTerms());
         assertEquals(TEST_URL, session.getUrl().getValue());
-        assertFalse(session.isCustomTab());
-        assertNull(session.getCustomTabConfig());
 
         assertTrue(sessionManager.hasSession());
     }

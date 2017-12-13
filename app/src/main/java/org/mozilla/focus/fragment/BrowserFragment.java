@@ -7,22 +7,18 @@ package org.mozilla.focus.fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.app.DownloadManager;
-import android.app.PendingIntent;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -48,7 +44,6 @@ import org.mozilla.focus.activity.InstallFirefoxActivity;
 import org.mozilla.focus.animation.TransitionDrawableGroup;
 import org.mozilla.focus.architecture.NonNullObserver;
 import org.mozilla.focus.broadcastreceiver.DownloadBroadcastReceiver;
-import org.mozilla.focus.customtabs.CustomTabConfig;
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity;
 import org.mozilla.focus.menu.browser.BrowserMenu;
 import org.mozilla.focus.open.OpenWithFragment;
@@ -59,9 +54,7 @@ import org.mozilla.focus.session.SessionManager;
 import org.mozilla.focus.session.Source;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.Browsers;
-import org.mozilla.focus.utils.ColorUtils;
 import org.mozilla.focus.utils.DownloadUtils;
-import org.mozilla.focus.utils.DrawableUtils;
 import org.mozilla.focus.utils.Features;
 import org.mozilla.focus.utils.UrlUtils;
 import org.mozilla.focus.web.Download;
@@ -295,83 +288,13 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
         menuView = (ImageButton) view.findViewById(R.id.menuView);
         menuView.setOnClickListener(this);
 
-        if (session.isCustomTab()) {
-            initialiseCustomTabUi(view);
-        } else {
-            initialiseNormalBrowserUi(view);
-        }
+        initialiseNormalBrowserUi(view);
 
         return view;
     }
 
     private void initialiseNormalBrowserUi(final @NonNull View view) {
         urlView.setOnClickListener(this);
-    }
-
-    private void initialiseCustomTabUi(final @NonNull View view) {
-        final CustomTabConfig customTabConfig = session.getCustomTabConfig();
-
-        final int textColor;
-
-        if (customTabConfig.toolbarColor != null) {
-            urlBar.setBackgroundColor(customTabConfig.toolbarColor);
-
-            textColor = ColorUtils.getReadableTextColor(customTabConfig.toolbarColor);
-            urlView.setTextColor(textColor);
-        } else {
-            textColor = Color.WHITE;
-        }
-
-        final ImageView closeButton = (ImageView) view.findViewById(R.id.customtab_close);
-
-        closeButton.setVisibility(View.VISIBLE);
-        closeButton.setOnClickListener(this);
-
-        if (customTabConfig.closeButtonIcon != null) {
-            closeButton.setImageBitmap(customTabConfig.closeButtonIcon);
-        } else {
-            // Always set the icon in case it's been overridden by a previous CT invocation
-            final Drawable closeIcon = DrawableUtils.loadAndTintDrawable(getContext(), R.drawable.ic_close, textColor);
-
-            closeButton.setImageDrawable(closeIcon);
-        }
-
-        if (customTabConfig.disableUrlbarHiding) {
-            AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) urlBar.getLayoutParams();
-            params.setScrollFlags(0);
-        }
-
-        if (customTabConfig.actionButtonConfig != null) {
-            final ImageButton actionButton = (ImageButton) view.findViewById(R.id.customtab_actionbutton);
-            actionButton.setVisibility(View.VISIBLE);
-
-            actionButton.setImageBitmap(customTabConfig.actionButtonConfig.icon);
-            actionButton.setContentDescription(customTabConfig.actionButtonConfig.description);
-
-            final PendingIntent pendingIntent = customTabConfig.actionButtonConfig.pendingIntent;
-
-            actionButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        final Intent intent = new Intent();
-                        intent.setData(Uri.parse(getUrl()));
-
-                        pendingIntent.send(getContext(), 0, intent);
-                    } catch (PendingIntent.CanceledException e) {
-                        // There's really nothing we can do here...
-                    }
-                    TelemetryWrapper.customTabActionButtonEvent();
-                }
-            });
-        }
-
-        // We need to tint some icons.. We already tinted the close button above. Let's tint our other icons too.
-        final Drawable lockIcon = DrawableUtils.loadAndTintDrawable(getContext(), R.drawable.ic_lock, textColor);
-        lockView.setImageDrawable(lockIcon);
-
-        final Drawable menuIcon = DrawableUtils.loadAndTintDrawable(getContext(), R.drawable.ic_menu, textColor);
-        menuView.setImageDrawable(menuIcon);
     }
 
     @Override
@@ -718,7 +641,7 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.menuView:
-                BrowserMenu menu = new BrowserMenu(getActivity(), this, session.getCustomTabConfig());
+                BrowserMenu menu = new BrowserMenu(getActivity(), this);
                 menu.show(menuView);
 
                 menuWeakReference = new WeakReference<>(menu);
@@ -941,8 +864,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
         }
 
         statusBar.setBackgroundResource(enabled ? R.drawable.animated_background : R.drawable.animated_background_disabled);
-
-        if (!session.isCustomTab()) {
             // Only update the toolbar background if this is not a custom tab. Custom tabs set their
             // own color and we do not want to override this here.
             urlBar.setBackgroundResource(enabled ? R.drawable.animated_background : R.drawable.animated_background_disabled);
@@ -951,11 +872,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
                     (TransitionDrawable) urlBar.getBackground(),
                     (TransitionDrawable) statusBar.getBackground()
             );
-        } else {
-            backgroundTransitionGroup = new TransitionDrawableGroup(
-                    (TransitionDrawable) statusBar.getBackground()
-            );
-        }
     }
 
     // In the future, if more badging icons are needed, this should be abstracted
