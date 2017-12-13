@@ -10,7 +10,6 @@ import android.content.res.Resources
 import android.preference.PreferenceManager
 
 import org.mozilla.focus.R
-import org.mozilla.focus.fragment.FirstrunFragment
 import org.mozilla.focus.search.SearchEngine
 
 /**
@@ -42,9 +41,6 @@ class Settings private constructor(context: Context) {
                     resources.getString(R.string.pref_key_performance_block_images),
                     false); */
             false
-
-    fun shouldShowFirstrun(): Boolean =
-            !preferences.getBoolean(FirstrunFragment.FIRSTRUN_PREF, false)
 
     fun shouldUseSecureMode(): Boolean =
             preferences.getBoolean(getPreferenceKey(R.string.pref_key_secure), false)

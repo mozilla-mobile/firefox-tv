@@ -21,7 +21,6 @@ import com.amazon.android.webkit.AmazonWebKitFactory;
 import org.mozilla.focus.R;
 import org.mozilla.focus.architecture.NonNullObserver;
 import org.mozilla.focus.fragment.BrowserFragment;
-import org.mozilla.focus.fragment.FirstrunFragment;
 import org.mozilla.focus.fragment.UrlInputFragment;
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity;
 import org.mozilla.focus.session.Session;
@@ -30,7 +29,6 @@ import org.mozilla.focus.session.ui.SessionsSheetFragment;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.SafeIntent;
 import org.mozilla.focus.utils.Settings;
-import org.mozilla.focus.utils.ViewUtils;
 import org.mozilla.focus.web.IWebView;
 import org.mozilla.focus.web.WebViewProvider;
 
@@ -95,11 +93,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity {
 
                     // We have at least one session. Show a fragment for the current session.
                     showBrowserScreenForCurrentSession();
-                }
-
-                // If needed show the first run tour on top of the browser or url input fragment.
-                if (Settings.getInstance(MainActivity.this).shouldShowFirstrun()) {
-                    showFirstrun();
                 }
             }
         });
@@ -200,13 +193,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity {
 
         transaction
                 .replace(R.id.container, UrlInputFragment.createWithoutSession(), UrlInputFragment.FRAGMENT_TAG)
-                .commit();
-    }
-
-    private void showFirstrun() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.container, FirstrunFragment.create(), FirstrunFragment.FRAGMENT_TAG)
                 .commit();
     }
 
