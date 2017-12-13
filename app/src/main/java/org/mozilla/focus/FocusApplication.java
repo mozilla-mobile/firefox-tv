@@ -11,7 +11,6 @@ import android.preference.PreferenceManager;
 
 import org.mozilla.focus.locale.LocaleAwareApplication;
 import org.mozilla.focus.search.SearchEngineManager;
-import org.mozilla.focus.session.NotificationSessionObserver;
 import org.mozilla.focus.session.Session;
 import org.mozilla.focus.session.SessionManager;
 import org.mozilla.focus.session.VisibilityLifeCycleCallback;
@@ -42,7 +41,6 @@ public class FocusApplication extends LocaleAwareApplication {
         registerActivityLifecycleCallbacks(visibilityLifeCycleCallback = new VisibilityLifeCycleCallback(this));
 
         final LiveData<List<Session>> sessions = SessionManager.getInstance().getSessions();
-        sessions.observeForever(new NotificationSessionObserver(this));
         sessions.observeForever(new TelemetrySessionObserver());
         sessions.observeForever(new CleanupSessionObserver(this));
     }
