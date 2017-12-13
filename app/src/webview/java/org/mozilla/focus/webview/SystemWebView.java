@@ -21,20 +21,14 @@ import android.view.View;
 import android.view.autofill.AutofillValue;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
-import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.WebBackForwardList;
 import android.webkit.WebChromeClient;
-import android.webkit.WebStorage;
 import android.webkit.WebView;
-import android.webkit.WebViewDatabase;
-
 import org.mozilla.focus.BuildConfig;
 import org.mozilla.focus.session.Session;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.AppConstants;
-import org.mozilla.focus.utils.FileUtils;
-import org.mozilla.focus.utils.ThreadUtils;
 import org.mozilla.focus.utils.UrlUtils;
 import org.mozilla.focus.utils.ViewUtils;
 import org.mozilla.focus.web.Download;
@@ -195,6 +189,7 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
 
     @Override
     public void cleanup() {
+        /*
         clearFormData();
         clearHistory();
         clearMatches();
@@ -212,6 +207,7 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
         webViewDatabase.clearHttpAuthUsernamePassword();
 
         deleteContentFromKnownLocations(getContext());
+        */
     }
 
     @Override
@@ -222,6 +218,7 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
     }
 
     public static void deleteContentFromKnownLocations(final Context context) {
+        /*
         ThreadUtils.postToBackgroundThread(new Runnable() {
             @Override
             public void run() {
@@ -234,6 +231,7 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
                 FileUtils.truncateCacheDirectory(context);
             }
         });
+        */
     }
 
     private WebChromeClient createWebChromeClient() {

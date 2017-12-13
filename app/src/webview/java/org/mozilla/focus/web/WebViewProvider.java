@@ -9,15 +9,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.StrictMode;
 import android.support.annotation.VisibleForTesting;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.webkit.WebSettings;
-import android.webkit.WebStorage;
 import android.webkit.WebView;
-
 import org.mozilla.focus.R;
 import org.mozilla.focus.utils.Settings;
 import org.mozilla.focus.webview.SystemWebView;
@@ -48,6 +45,7 @@ public class WebViewProvider {
      * This function must be called before WebView.loadUrl to avoid erasing current session data.
      */
     public static void performNewBrowserSessionCleanup() {
+        /*
         // We run this on the main thread to guarantee it occurs before loadUrl so we don't erase current session data.
         final StrictMode.ThreadPolicy oldPolicy = StrictMode.allowThreadDiskWrites();
 
@@ -56,6 +54,7 @@ public class WebViewProvider {
         WebStorage.getInstance().deleteAllData();
 
         StrictMode.setThreadPolicy(oldPolicy);
+        */
     }
 
     public static View create(Context context, AttributeSet attrs) {
