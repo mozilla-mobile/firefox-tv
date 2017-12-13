@@ -11,12 +11,9 @@ import android.net.http.SslCertificate;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.amazon.android.webkit.AmazonSslErrorHandler;
-import com.amazon.android.webkit.AmazonWebKitFactory;
 import com.amazon.android.webkit.AmazonWebResourceResponse;
 import com.amazon.android.webkit.AmazonWebView;
 
@@ -83,30 +80,30 @@ import org.mozilla.focus.web.IWebView;
     public void onLoadResource(AmazonWebView view, String url) {
         // We can't access the webview during shouldInterceptRequest(), however onLoadResource()
         // is called on the UI thread so we're allowed to do this now:
-        evaluateJavascript(view,
-                "(function() {" +
-
-                "function cleanupVisited() {" +
-                CLEAR_VISITED_CSS +
-                "}" +
-
-                // Add an onLoad() listener so that we run the cleanup script every time
-                // a <link>'d css stylesheet is loaded:
-                "var links = document.getElementsByTagName('link');" +
-                "for (i = 0; i < links.length; i++) {" +
-                "  link = links[i];" +
-                "  if (link.rel == 'stylesheet') {" +
-                "    link.addEventListener('load', cleanupVisited, false);" +
-                "  }" +
-                "}" +
-
-                "})();");
+//        evaluateJavascript(view,
+//                "(function() {" +
+//
+//                "function cleanupVisited() {" +
+//                CLEAR_VISITED_CSS +
+//                "}" +
+//
+//                // Add an onLoad() listener so that we run the cleanup script every time
+//                // a <link>'d css stylesheet is loaded:
+//                "var links = document.getElementsByTagName('link');" +
+//                "for (i = 0; i < links.length; i++) {" +
+//                "  link = links[i];" +
+//                "  if (link.rel == 'stylesheet') {" +
+//                "    link.addEventListener('load', cleanupVisited, false);" +
+//                "  }" +
+//                "}" +
+//
+//                "})();");
 
         super.onLoadResource(view, url);
     }
 
     // TODO we need to figure out what to do with the shouldInterceptRequest method that has a request
-    // String instead of WebResourceRequest
+    // String instead of WebResourceRequest. This "request" is a string of the URL.
     // WebResourceRequest was added in API21 and there is no equivalent AmazonWebResourceRequest
     @Override
     public AmazonWebResourceResponse shouldInterceptRequest(AmazonWebView view, String request) {
@@ -213,15 +210,16 @@ import org.mozilla.focus.web.IWebView;
         }
         super.onPageFinished(view, url);
 
-        evaluateJavascript(view,
-                "(function() {" +
-
-                CLEAR_VISITED_CSS +
-
-                "})();");
+//        evaluateJavascript(view,
+//                "(function() {" +
+//
+//                CLEAR_VISITED_CSS +
+//
+//                "})();");
     }
 
     private void evaluateJavascript(AmazonWebView view, String javascriptString) {
+        // TODO this way of evaluating javascript currently launches unescapable dialogs >:(
         view.loadUrl("javascript:" + javascriptString);
     }
 
