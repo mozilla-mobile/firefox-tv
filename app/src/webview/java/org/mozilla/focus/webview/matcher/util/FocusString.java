@@ -79,7 +79,7 @@ public abstract class FocusString {
         }
     }
 
-    private static class ReverseString extends FocusString {
+    private static class ReverseString extends org.mozilla.focus.webview.matcher.util.FocusString {
         public ReverseString(final String string, final int offsetStart, final int offsetEnd) {
             super(string, offsetStart, offsetEnd);
         }

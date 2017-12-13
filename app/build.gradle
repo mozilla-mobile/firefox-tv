@@ -18,7 +18,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 11 // This versionCode is "frozen" for local builds. For "release" builds we
-                       // override this with a generated versionCode at build time.
+        // override this with a generated versionCode at build time.
         versionName "4.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -197,6 +197,9 @@ dependencies {
     androidTestCompile "tools.fastlane:screengrab:1.1.0", {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
+    
+    compile files('libs/awv_api/awv_interface.jar')
+    compile files('libs/awv_api/awv_android_factory.jar')
 }
 
 // -------------------------------------------------------------------------------------------------

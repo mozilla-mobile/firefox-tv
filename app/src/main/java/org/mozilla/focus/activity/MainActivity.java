@@ -15,6 +15,9 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.amazon.android.webkit.AmazonWebKitFactories;
+import com.amazon.android.webkit.AmazonWebKitFactory;
+
 import org.mozilla.focus.R;
 import org.mozilla.focus.architecture.NonNullObserver;
 import org.mozilla.focus.fragment.BrowserFragment;
@@ -48,9 +51,14 @@ public class MainActivity extends LocaleAwareAppCompatActivity {
         sessionManager = SessionManager.getInstance();
     }
 
+    private static boolean isAmazonFactoryInit = false;
+    public static AmazonWebKitFactory factory = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        initAmazonFactory();
 
         if (Settings.getInstance(this).shouldUseSecureMode()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
@@ -229,7 +237,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity {
     public View onCreateView(String name, Context context, AttributeSet attrs) {
         if (name.equals(IWebView.class.getName())) {
             // Inject our implementation of IWebView from the WebViewProvider.
-            return WebViewProvider.create(this, attrs);
+            return WebViewProvider.create(this, attrs, factory);
         }
 
         return super.onCreateView(name, context, attrs);
@@ -266,5 +274,22 @@ public class MainActivity extends LocaleAwareAppCompatActivity {
         }
 
         super.onBackPressed();
+    }
+
+    private void initAmazonFactory() {
+        if (!isAmazonFactoryInit) {
+            factory = AmazonWebKitFactories.getDefaultFactory();
+            if (factory.isRenderProcess(this)) {
+                return; // Do nothing if this is on render process
+            }
+            factory.initialize(this.getApplicationContext());
+
+            // factory configuration is done here, for example:
+            factory.getCookieManager().setAcceptCookie(true);
+
+            isAmazonFactoryInit = true;
+        } else {
+            factory = AmazonWebKitFactories.getDefaultFactory();
+        }
     }
 }

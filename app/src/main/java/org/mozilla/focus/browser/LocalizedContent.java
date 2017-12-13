@@ -14,6 +14,8 @@ import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.webkit.WebView;
 
+import com.amazon.android.webkit.AmazonWebView;
+
 import org.mozilla.focus.R;
 import org.mozilla.focus.locale.Locales;
 import org.mozilla.focus.utils.HtmlLoader;
@@ -27,7 +29,7 @@ public class LocalizedContent {
     public static final String URL_ABOUT = "focus:about";
     public static final String URL_RIGHTS = "focus:rights";
 
-    public static boolean handleInternalContent(String url, WebView webView) {
+    public static boolean handleInternalContent(String url, AmazonWebView webView) {
         if (URL_ABOUT.equals(url)) {
             loadAbout(webView);
             return true;
@@ -42,7 +44,7 @@ public class LocalizedContent {
     /**
      * Load the content for focus:about
      */
-    private static void loadAbout(@NonNull final WebView webView) {
+    private static void loadAbout(@NonNull final AmazonWebView webView) {
         final Context context = webView.getContext();
         final Resources resources = Locales.getLocalizedResources(context);
 
@@ -75,7 +77,7 @@ public class LocalizedContent {
     /**
      * Load the content for focus:rights
      */
-    private static void loadRights(@NonNull final WebView webView) {
+    private static void loadRights(@NonNull final AmazonWebView webView) {
         final Context context = webView.getContext();
         final Resources resources = Locales.getLocalizedResources(context);
 
@@ -110,7 +112,7 @@ public class LocalizedContent {
         webView.loadDataWithBaseURL("file:///android_asset/rights.html", data, "text/html", "UTF-8", null);
     }
 
-    private static void putLayoutDirectionIntoMap(WebView webView, Map<String, String> substitutionMap) {
+    private static void putLayoutDirectionIntoMap(AmazonWebView webView, Map<String, String> substitutionMap) {
         ViewCompat.setLayoutDirection(webView, View.LAYOUT_DIRECTION_LOCALE);
         final int layoutDirection = ViewCompat.getLayoutDirection(webView);
 

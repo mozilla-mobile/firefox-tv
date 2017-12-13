@@ -18,6 +18,10 @@ import android.webkit.WebSettings;
 import android.webkit.WebStorage;
 import android.webkit.WebView;
 
+import com.amazon.android.webkit.AmazonWebKitFactory;
+import com.amazon.android.webkit.AmazonWebSettings;
+import com.amazon.android.webkit.AmazonWebView;
+
 import org.mozilla.focus.R;
 import org.mozilla.focus.utils.Settings;
 import org.mozilla.focus.webview.SystemWebView;
@@ -58,10 +62,9 @@ public class WebViewProvider {
         StrictMode.setThreadPolicy(oldPolicy);
     }
 
-    public static View create(Context context, AttributeSet attrs) {
-        final SystemWebView webkitView = new SystemWebView(context, attrs);
-        final WebSettings settings = webkitView.getSettings();
-
+    public static View create(Context context, AttributeSet attrs, AmazonWebKitFactory factory) {
+        final SystemWebView webkitView = new SystemWebView(context, attrs, factory);
+        final AmazonWebSettings settings = webkitView.getSettings();
         setupView(webkitView);
         configureDefaultSettings(context, settings);
         applyAppSettings(context, settings);
@@ -69,13 +72,13 @@ public class WebViewProvider {
         return webkitView;
     }
 
-    private static void setupView(WebView webView) {
+    private static void setupView(AmazonWebView webView) {
         webView.setVerticalScrollBarEnabled(true);
         webView.setHorizontalScrollBarEnabled(true);
     }
 
     @SuppressLint("SetJavaScriptEnabled") // We explicitly want to enable JavaScript
-    private static void configureDefaultSettings(Context context, WebSettings settings) {
+    private static void configureDefaultSettings(Context context, AmazonWebSettings settings) {
         settings.setJavaScriptEnabled(true);
 
         // Needs to be enabled to display some HTML5 sites that use local storage
@@ -92,7 +95,8 @@ public class WebViewProvider {
 
         // Also increase text size to fill the viewport (this mirrors the behaviour of Firefox,
         // Chrome does this in the current Chrome Dev, but not Chrome release).
-        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
+        // TODO TEXT_AUTOSIZING does not exist in AmazonWebSettings
+        //settings.setLayoutAlgorithm(AmazonWebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
 
         // Disable access to arbitrary local files by webpages - assets can still be loaded
         // via file:///android_asset/res, so at least error page images won't be blocked.
@@ -120,7 +124,7 @@ public class WebViewProvider {
         settings.setSavePassword(false);
     }
 
-    public static void applyAppSettings(Context context, WebSettings settings) {
+    public static void applyAppSettings(Context context, AmazonWebSettings settings) {
         // We could consider calling setLoadsImagesAutomatically() here too (This will block images not loaded over the network too)
         settings.setBlockNetworkImage(Settings.getInstance(context).shouldBlockImages());
     }
@@ -162,7 +166,7 @@ public class WebViewProvider {
         return TextUtils.join(" ", tokens) + " " + focusToken;
     }
 
-    @VisibleForTesting static String buildUserAgentString(final Context context, final WebSettings settings, final String appName) {
+    @VisibleForTesting static String buildUserAgentString(final Context context, final AmazonWebSettings settings, final String appName) {
         final StringBuilder uaBuilder = new StringBuilder();
 
         uaBuilder.append("Mozilla/5.0");
