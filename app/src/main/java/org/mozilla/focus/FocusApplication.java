@@ -16,7 +16,6 @@ import org.mozilla.focus.session.SessionManager;
 import org.mozilla.focus.session.VisibilityLifeCycleCallback;
 import org.mozilla.focus.telemetry.TelemetrySessionObserver;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
-import org.mozilla.focus.utils.AdjustHelper;
 import org.mozilla.focus.utils.AppConstants;
 import org.mozilla.focus.web.CleanupSessionObserver;
 
@@ -36,7 +35,6 @@ public class FocusApplication extends LocaleAwareApplication {
         SearchEngineManager.getInstance().init(this);
 
         TelemetryWrapper.init(this);
-        AdjustHelper.setupAdjustIfNeeded(this);
 
         registerActivityLifecycleCallbacks(visibilityLifeCycleCallback = new VisibilityLifeCycleCallback(this));
 
