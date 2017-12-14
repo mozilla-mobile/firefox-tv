@@ -22,7 +22,21 @@
         android:id="@+id/navigation"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:menu="@menu/menu_home_drawer" />
+        android:layout_gravity="start">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <include layout="@layout/custom_drawer_item" />
+
+            <!-- Double navigation view is a workaround so that we could add the custom layout above -->
+            <android.support.design.widget.NavigationView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                app:menu="@menu/menu_home_drawer" />
+
+        </LinearLayout>
+    </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>
