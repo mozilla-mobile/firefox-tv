@@ -21,18 +21,30 @@
         android:orientation="horizontal"
         android:baselineAligned="false">
 
+        <!-- A hidden focus view: when the drawer closes, we clear focus so the drawer can't be interacted
+             with. When focus is cleared, the topmost view in the hierarchy regains focus. To avoid refocusing
+             the drawer, we add this dummy View to gain focus instead. -->
+        <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:focusable="true"
+                android:nextFocusDown="@+id/container"
+                android:nextFocusUp="@id/container"
+                android:nextFocusRight="@id/container">
+                <requestFocus/> <!-- Requests initial focus -->
+        </View>
+
         <!-- A view that hints to the user that they can click left to get to the navigation bar. -->
         <include layout="@layout/hint_navigation_bar"/>
 
         <LinearLayout
             android:orientation="vertical"
-            android:id="@+id/container"
+            android:id="@id/container"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:focusable="true"
-            android:descendantFocusability="afterDescendants"> <!-- todo: can't focus inside, maybe descedentFocusability unneeded -->
-            <requestFocus/> <!-- Requests initial focus -->
+            android:descendantFocusability="afterDescendants">
         </LinearLayout>
 
     </LinearLayout>
