@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.mozilla.focus.R
+import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.UrlUtils
 import org.mozilla.focus.utils.ViewUtils
@@ -24,6 +25,7 @@ private const val COL_COUNT = 5
 class HomeFragment : Fragment() {
 
     var onUrlEnteredListener = object : OnUrlEnteredListener {} // default impl does nothing.
+    val urlAutoCompleteFilter = UrlAutoCompleteFilter()
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater!!.inflate(R.layout.fragment_home, container, false)
@@ -32,6 +34,11 @@ class HomeFragment : Fragment() {
         // todo: saved instance state?
         initTiles()
         initUrlInputView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        urlAutoCompleteFilter.load(context)
     }
 
     // todo: resize tiles.
@@ -46,6 +53,7 @@ class HomeFragment : Fragment() {
         setOnCommitListener {
             onUrlEnteredListener.onUrlEntered(text.toString())
         }
+        setOnFilterListener { searchText, view -> urlAutoCompleteFilter.onFilter(searchText, view) }
     }
 
     companion object {
