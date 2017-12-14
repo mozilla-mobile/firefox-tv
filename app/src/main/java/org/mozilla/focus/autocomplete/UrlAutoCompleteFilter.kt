@@ -18,18 +18,15 @@ import java.io.IOException
 import java.util.Locale
 
 class UrlAutoCompleteFilter : InlineAutocompleteEditText.OnFilterListener {
-    companion object {
-        private val LOG_TAG = "UrlAutoCompleteFilter"
-    }
+
+    private val LOG_TAG = "UrlAutoCompleteFilter"
 
     object AutocompleteSource {
         const val DEFAULT_LIST = "default"
-        const val CUSTOM_LIST = "custom"
     }
 
     private var settings: Settings? = null
 
-    private var customDomains: List<String> = emptyList()
     private var preInstalledDomains: List<String> = emptyList()
 
     override fun onFilter(rawSearchText: String, view: InlineAutocompleteEditText?) {
@@ -39,21 +36,6 @@ class UrlAutoCompleteFilter : InlineAutocompleteEditText.OnFilterListener {
 
         // Search terms are all lowercase already, we just need to lowercase the search text
         val searchText = rawSearchText.toLowerCase(Locale.US)
-
-        settings?.let {
-            if (it.shouldAutocompleteFromCustomDomainList()) {
-                val autocomplete = tryToAutocomplete(searchText, customDomains)
-                if (autocomplete != null) {
-                    view.onAutocomplete(prepareAutocompleteResult(
-                            rawSearchText,
-                            autocomplete,
-                            AutocompleteSource.CUSTOM_LIST,
-                            customDomains.size))
-                    return
-                }
-            }
-
-            if (it.shouldAutocompleteFromShippedDomainList()) {
                 val autocomplete = tryToAutocomplete(searchText, preInstalledDomains)
                 if (autocomplete != null) {
                     view.onAutocomplete(prepareAutocompleteResult(
@@ -63,10 +45,6 @@ class UrlAutoCompleteFilter : InlineAutocompleteEditText.OnFilterListener {
                             preInstalledDomains.size))
                     return
                 }
-            }
-        }
-
-        view.onAutocomplete(AutocompleteResult.emptyResult())
     }
 
     private fun tryToAutocomplete(searchText: String, domains: List<String>): String? {
@@ -84,20 +62,17 @@ class UrlAutoCompleteFilter : InlineAutocompleteEditText.OnFilterListener {
         return null
     }
 
-    internal fun onDomainsLoaded(domains: List<String>, customDomains: List<String>) {
+    internal fun onDomainsLoaded(domains: List<String>) {
         this.preInstalledDomains = domains
-        this.customDomains = customDomains
     }
 
     fun load(context: Context, loadDomainsFromDisk: Boolean = true) {
-        settings = Settings.getInstance(context)
 
         if (loadDomainsFromDisk) {
             launch(UI) {
                 val domains = async(CommonPool) { loadDomains(context) }
-                val customDomains = async(CommonPool) { CustomAutocomplete.loadCustomAutoCompleteDomains(context) }
 
-                onDomainsLoaded(domains.await(), customDomains.await())
+                onDomainsLoaded(domains.await())
             }
         }
     }
