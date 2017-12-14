@@ -97,6 +97,15 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             }
         });
 
+        findViewById(R.id.hint_navigation_bar).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(final View v, final boolean hasFocus) {
+                if (hasFocus) {
+                    drawer.openDrawer(GravityCompat.START);
+                }
+            }
+        });
+
         final SafeIntent intent = new SafeIntent(getIntent());
 
         if (intent.isLauncherIntent()) {

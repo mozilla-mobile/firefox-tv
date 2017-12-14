@@ -4,6 +4,7 @@
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
 <!-- todo: width, colors, image assets -->
+<!-- We make this focusable so that we can open the real navigation bar when this is selected. -->
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/hint_navigation_bar"
@@ -11,7 +12,8 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:background="@color/colorAccent">
+        android:background="@color/colorAccent"
+        android:focusable="true">
 
     <TextView
             android:layout_width="wrap_content"
