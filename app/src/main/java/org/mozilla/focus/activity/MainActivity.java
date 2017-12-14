@@ -22,6 +22,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import com.amazon.android.webkit.AmazonWebKitFactories;
 import com.amazon.android.webkit.AmazonWebKitFactory;
@@ -56,6 +57,8 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private final SessionManager sessionManager;
 
     private DrawerLayout drawer;
+    private NavigationView navigationBar;
+    private View fragmentContainer;
 
     public MainActivity() {
         sessionManager = SessionManager.getInstance();
@@ -78,22 +81,35 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
         setContentView(R.layout.activity_main);
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ((NavigationView) findViewById(R.id.navigation)).setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        fragmentContainer = findViewById(R.id.container);
+        drawer = findViewById(R.id.drawer_layout);
+        navigationBar = findViewById(R.id.navigation);
+        navigationBar.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.drawer_home:
                         showHomeScreen();
-                        drawer.closeDrawer(GravityCompat.START);
-                        return true;
+                        break;
 
                     case R.id.drawer_settings:
                         showSettingsScreen();
                         drawer.closeDrawer(GravityCompat.START);
                         break;
+
+                    default:
+                        return false;
                 }
-                return false;
+
+                fragmentContainer.requestFocus(); // TODO: correct? can't navigate in home fragment.
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
+        drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerOpened(final View drawerView) {
+                navigationBar.requestFocus(); // focuses first item in list.
             }
         });
 
@@ -228,6 +244,10 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
     private void showHomeScreen() {
         // TODO: animations if fragment is found.
+        if (getSupportFragmentManager().findFragmentByTag(HomeFragment.FRAGMENT_TAG) != null) {
+            return;
+        }
+
         final HomeFragment homeFragment = HomeFragment.create();
         homeFragment.setOnUrlEnteredListener(this);
         getSupportFragmentManager()
