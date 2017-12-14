@@ -11,11 +11,11 @@ import android.net.http.SslCertificate;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
-import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import com.amazon.android.webkit.AmazonSslErrorHandler;
+import com.amazon.android.webkit.AmazonWebResourceResponse;
+import com.amazon.android.webkit.AmazonWebView;
 
 import org.mozilla.focus.browser.LocalizedContent;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
@@ -77,72 +77,78 @@ import org.mozilla.focus.web.IWebView;
             "}";
 
     @Override
-    public void onLoadResource(WebView view, String url) {
+    public void onLoadResource(AmazonWebView view, String url) {
         // We can't access the webview during shouldInterceptRequest(), however onLoadResource()
         // is called on the UI thread so we're allowed to do this now:
-        view.evaluateJavascript(
-                "(function() {" +
-
-                "function cleanupVisited() {" +
-                CLEAR_VISITED_CSS +
-                "}" +
-
-                // Add an onLoad() listener so that we run the cleanup script every time
-                // a <link>'d css stylesheet is loaded:
-                "var links = document.getElementsByTagName('link');" +
-                "for (i = 0; i < links.length; i++) {" +
-                "  link = links[i];" +
-                "  if (link.rel == 'stylesheet') {" +
-                "    link.addEventListener('load', cleanupVisited, false);" +
-                "  }" +
-                "}" +
-
-                "})();",
-
-                null);
+//        evaluateJavascript(view,
+//                "(function() {" +
+//
+//                "function cleanupVisited() {" +
+//                CLEAR_VISITED_CSS +
+//                "}" +
+//
+//                // Add an onLoad() listener so that we run the cleanup script every time
+//                // a <link>'d css stylesheet is loaded:
+//                "var links = document.getElementsByTagName('link');" +
+//                "for (i = 0; i < links.length; i++) {" +
+//                "  link = links[i];" +
+//                "  if (link.rel == 'stylesheet') {" +
+//                "    link.addEventListener('load', cleanupVisited, false);" +
+//                "  }" +
+//                "}" +
+//
+//                "})();");
 
         super.onLoadResource(view, url);
     }
 
+    // TODO we need to figure out what to do with the shouldInterceptRequest method that has a request
+    // String instead of WebResourceRequest. This "request" is a string of the URL.
+    // WebResourceRequest was added in API21 and there is no equivalent AmazonWebResourceRequest
     @Override
-    public WebResourceResponse shouldInterceptRequest(WebView view, final WebResourceRequest request) {
-        // Only update the user visible URL if:
-        // 1. The purported site URL has actually been requested
-        // 2. And it's being loaded for the main frame (and not a fake/hidden/iframe request)
-        // Note also: shouldInterceptRequest() runs on a background thread, so we can't actually
-        // query WebView.getURL().
-        // We update the URL when loading has finished too (redirects can happen after a request has been
-        // made in which case we don't get shouldInterceptRequest with the final URL), but this
-        // allows us to update the URL during loading.
-        if (request.isForMainFrame()) {
-
-            // WebView will always add a trailing / to the request URL, but currentPageURL may or may
-            // not have a trailing URL (usually no trailing / when a link is entered via UrlInputFragment),
-            // hence we do a somewhat convoluted test:
-            final String requestURL = request.getUrl().toString();
-            final String currentURL = currentPageURL;
-
-            if (UrlUtils.urlsMatchExceptForTrailingSlash(currentURL, requestURL)) {
-                view.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (callback != null) {
-                            callback.onURLChanged(currentURL);
-                        }
-                    }
-                });
-            }
-
-            if (callback != null) {
-                callback.onRequest(request.hasGesture());
-            }
-        }
-
+    public AmazonWebResourceResponse shouldInterceptRequest(AmazonWebView view, String request) {
         return super.shouldInterceptRequest(view, request);
     }
 
+//    @Override
+//    public AmazonWebResourceResponse shouldInterceptRequest(AmazonWebView view, final AmazonWebResourceRequest request) {
+//        // Only update the user visible URL if:
+//        // 1. The purported site URL has actually been requested
+//        // 2. And it's being loaded for the main frame (and not a fake/hidden/iframe request)
+//        // Note also: shouldInterceptRequest() runs on a background thread, so we can't actually
+//        // query WebView.getURL().
+//        // We update the URL when loading has finished too (redirects can happen after a request has been
+//        // made in which case we don't get shouldInterceptRequest with the final URL), but this
+//        // allows us to update the URL during loading.
+//        if (request.isForMainFrame()) {
+//
+//            // WebView will always add a trailing / to the request URL, but currentPageURL may or may
+//            // not have a trailing URL (usually no trailing / when a link is entered via UrlInputFragment),
+//            // hence we do a somewhat convoluted test:
+//            final String requestURL = request.getUrl().toString();
+//            final String currentURL = currentPageURL;
+//
+//            if (UrlUtils.urlsMatchExceptForTrailingSlash(currentURL, requestURL)) {
+//                view.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (callback != null) {
+//                            callback.onURLChanged(currentURL);
+//                        }
+//                    }
+//                });
+//            }
+//
+//            if (callback != null) {
+//                callback.onRequest(request.hasGesture());
+//            }
+//        }
+//
+//        return super.shouldInterceptRequest(view, request);
+//    }
+
     @Override
-    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+    public void onPageStarted(AmazonWebView view, String url, Bitmap favicon) {
         if (errorReceived) {
             // When dealing with error pages, WebView sometimes sends onPageStarted()
             // without a matching onPageFinished(). We hack around that by using
@@ -159,7 +165,7 @@ import org.mozilla.focus.web.IWebView;
         super.onPageStarted(view, url, favicon);
     }
 
-    /* package */ void saveState(WebView view, Bundle bundle) {
+    /* package */ void saveState(SystemWebView view, Bundle bundle) {
         final SslCertificate certificate = view.getCertificate();
         if (certificate != null) {
             bundle.putString(STATE_KEY_URL, view.getUrl());
@@ -175,7 +181,7 @@ import org.mozilla.focus.web.IWebView;
     }
 
     @Override
-    public void onPageFinished(WebView view, final String url) {
+    public void onPageFinished(AmazonWebView view, final String url) {
         SslCertificate certificate = view.getCertificate();
 
         if (!TextUtils.isEmpty(restoredUrl)) {
@@ -204,18 +210,21 @@ import org.mozilla.focus.web.IWebView;
         }
         super.onPageFinished(view, url);
 
-        view.evaluateJavascript(
-                "(function() {" +
+//        evaluateJavascript(view,
+//                "(function() {" +
+//
+//                CLEAR_VISITED_CSS +
+//
+//                "})();");
+    }
 
-                CLEAR_VISITED_CSS +
-
-                "})();",
-
-                null);
+    private void evaluateJavascript(AmazonWebView view, String javascriptString) {
+        // TODO this way of evaluating javascript currently launches unescapable dialogs >:(
+        view.loadUrl("javascript:" + javascriptString);
     }
 
     @Override
-    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+    public boolean shouldOverrideUrlLoading(AmazonWebView view, String url) {
         // If this is an internal URL like focus:about then we load the content ourselves here.
         if (LocalizedContent.handleInternalContent(url, view)) {
             return true;
@@ -251,7 +260,7 @@ import org.mozilla.focus.web.IWebView;
     }
 
     @Override
-    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+    public void onReceivedSslError(AmazonWebView view, AmazonSslErrorHandler handler, SslError error) {
         handler.cancel();
 
         // WebView can try to load the favicon for a bad page when you set a new URL. If we then
@@ -268,7 +277,7 @@ import org.mozilla.focus.web.IWebView;
     }
 
     @Override
-    public void onReceivedError(final WebView webView, int errorCode, final String description, String failingUrl) {
+    public void onReceivedError(final AmazonWebView webView, int errorCode, final String description, String failingUrl) {
         errorReceived = true;
 
         // This is a hack: onReceivedError(WebView, WebResourceRequest, WebResourceError) is API 23+ only,

@@ -35,8 +35,7 @@ import org.mozilla.telemetry.storage.FileTelemetryStorage
         "LargeClass"
 )
 object TelemetryWrapper {
-    private const val TELEMETRY_APP_NAME_FOCUS = "Focus"
-    private const val TELEMETRY_APP_NAME_KLAR = "Klar"
+    private const val TELEMETRY_APP_NAME_FOCUS_TV = "Focus TV"
 
     private const val MAXIMUM_CUSTOM_TAB_EXTRAS = 10
 
@@ -185,7 +184,7 @@ object TelemetryWrapper {
 
             val configuration = TelemetryConfiguration(context)
                     .setServerEndpoint("https://incoming.telemetry.mozilla.org")
-                    .setAppName(if (AppConstants.isKlarBuild()) TELEMETRY_APP_NAME_KLAR else TELEMETRY_APP_NAME_FOCUS)
+                    .setAppName(TELEMETRY_APP_NAME_FOCUS_TV)
                     .setUpdateChannel(BuildConfig.BUILD_TYPE)
                     .setPreferencesImportantForTelemetry(
                             resources.getString(R.string.pref_key_search_engine),

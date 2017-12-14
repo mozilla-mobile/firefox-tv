@@ -9,16 +9,16 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.WorkerThread;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+
+import com.amazon.android.webkit.AmazonWebResourceResponse;
+import com.amazon.android.webkit.AmazonWebView;
+import com.amazon.android.webkit.AmazonWebViewClient;
+import org.mozilla.focus.webview.matcher.UrlMatcher;
 
 import org.mozilla.focus.R;
 import org.mozilla.focus.web.IWebView;
-import org.mozilla.focus.webview.matcher.UrlMatcher;
 
-public class TrackingProtectionWebViewClient extends WebViewClient {
+public class TrackingProtectionWebViewClient extends AmazonWebViewClient {
     private static volatile UrlMatcher MATCHER;
 
     public static void triggerPreload(final Context context) {
@@ -68,27 +68,30 @@ public class TrackingProtectionWebViewClient extends WebViewClient {
         return blockingEnabled;
     }
 
+    // TODO we need to figure out what to do with the shouldInterceptRequest method that has a request
+    // String instead of WebResourceRequest
+    // WebResourceRequest was added in API21 and there is no equivalent AmazonWebResourceRequest
     @Override
-    public WebResourceResponse shouldInterceptRequest(final WebView view, final WebResourceRequest request) {
+    public AmazonWebResourceResponse shouldInterceptRequest(final AmazonWebView view, final String request) {
         if (!blockingEnabled) {
             return super.shouldInterceptRequest(view, request);
         }
 
-        final Uri resourceUri = request.getUrl();
+        final Uri resourceUri = Uri.parse(request);
 
         // shouldInterceptRequest() might be called _before_ onPageStarted or shouldOverrideUrlLoading
         // are called (this happens when the webview is first shown). However we are notified of the URL
         // via notifyCurrentURL in that case.
         final String scheme = resourceUri.getScheme();
 
-        if (!request.isForMainFrame() &&
-                !scheme.equals("http") && !scheme.equals("https")) {
-            // Block any malformed non-http(s) URIs. WebView will already ignore things like market: URLs,
-            // but not in all cases (malformed market: URIs, such as market:://... will still end up here).
-            // (Note: data: URIs are automatically handled by WebView, and won't end up here either.)
-            // file:// URIs are disabled separately by setting WebSettings.setAllowFileAccess()
-            return new WebResourceResponse(null, null, null);
-        }
+//        if (!request.isForMainFrame() &&
+//                !scheme.equals("http") && !scheme.equals("https")) {
+//            // Block any malformed non-http(s) URIs. WebView will already ignore things like market: URLs,
+//            // but not in all cases (malformed market: URIs, such as market:://... will still end up here).
+//            // (Note: data: URIs are automatically handled by WebView, and won't end up here either.)
+//            // file:// URIs are disabled separately by setting WebSettings.setAllowFileAccess()
+//            return new AmazonWebResourceResponse(null, null, null);
+//        }
 
         // WebView always requests a favicon, even though it won't be used anywhere. This check
         // isn't able to block all favicons (some of them will be loaded using <link rel="shortcut icon">
@@ -96,7 +99,7 @@ public class TrackingProtectionWebViewClient extends WebViewClient {
         // favicon loading that's performed.
         final String path = resourceUri.getPath();
         if (path != null && path.endsWith("/favicon.ico")) {
-            return new WebResourceResponse(null, null, null);
+            return new AmazonWebResourceResponse(null, null, null);
         }
 
         final UrlMatcher matcher = getMatcher(view.getContext());
@@ -104,13 +107,14 @@ public class TrackingProtectionWebViewClient extends WebViewClient {
         // Don't block the main frame from being loaded. This also protects against cases where we
         // open a link that redirects to another app (e.g. to the play store).
         final Uri pageUri = Uri.parse(currentPageURL);
-        if ((!request.isForMainFrame()) &&
-                matcher.matches(resourceUri, pageUri)) {
-            if (callback != null) {
-                callback.countBlockedTracker();
-            }
-            return new WebResourceResponse(null, null, null);
-        }
+
+//        if ((!request.isForMainFrame()) &&
+//                matcher.matches(resourceUri, pageUri)) {
+//            if (callback != null) {
+//                callback.countBlockedTracker();
+//            }
+//            return new AmazonWebResourceResponse(null, null, null);
+//        }
 
         return super.shouldInterceptRequest(view, request);
     }
@@ -127,7 +131,7 @@ public class TrackingProtectionWebViewClient extends WebViewClient {
     }
 
     @Override
-    public void onPageStarted(WebView view, String url, Bitmap favicon) {
+    public void onPageStarted(AmazonWebView view, String url, Bitmap favicon) {
         if (callback != null) {
             callback.resetBlockedTrackers();
         }

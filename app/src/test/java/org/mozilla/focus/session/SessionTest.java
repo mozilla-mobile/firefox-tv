@@ -8,17 +8,12 @@ import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.Observer;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.customtabs.CustomTabsIntent;
 import android.text.TextUtils;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mozilla.focus.customtabs.CustomTabConfig;
-import org.mozilla.focus.utils.SafeIntent;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -45,9 +40,6 @@ public class SessionTest {
         assertFalse(session.getSecure().getValue());
         assertFalse(session.getLoading().getValue());
         assertEquals(0, (int) session.getBlockedTrackers().getValue());
-
-        assertNull(session.getCustomTabConfig());
-        assertFalse(session.isCustomTab());
     }
 
     @Test
@@ -125,21 +117,6 @@ public class SessionTest {
             session.setTrackersBlocked(23);
             verify(blockedTrackersObserver).onChanged(23);
         }
-    }
-
-    @Test
-    public void testCustomTabConfiguration() {
-        final CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        builder.setToolbarColor(Color.GREEN);
-
-        final SafeIntent intent = new SafeIntent(builder.build().intent);
-        final CustomTabConfig customTabConfig = CustomTabConfig.parseCustomTabIntent(RuntimeEnvironment.application, intent);
-        final Session session = new Session(TEST_URL, customTabConfig);
-
-        assertTrue(session.isCustomTab());
-        assertNotNull(session.getCustomTabConfig());
-        assertNotNull(session.getCustomTabConfig().toolbarColor);
-        assertEquals(Color.GREEN, (int) session.getCustomTabConfig().toolbarColor);
     }
 
     @Test

@@ -101,9 +101,6 @@
             </intent-filter>
         </service>
 
-        <service android:name=".session.SessionNotificationService"
-            android:exported="false" />
-
         <meta-data android:name="android.webkit.WebView.MetricsOptOut"
                    android:value="true" />
     </application>

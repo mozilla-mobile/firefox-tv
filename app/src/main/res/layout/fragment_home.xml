@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<!-- TODO: scrolll view -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="50dp">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="12dp"
+            android:paddingBottom="50dp">
+
+        <!-- TODO: analyze the params below -->
+        <org.mozilla.focus.widget.InlineAutocompleteEditText
+                android:id="@+id/urlInputView"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:hint="@string/urlbar_hint"
+                android:imeOptions="actionGo|flagNoExtractUi|flagNoFullscreen"
+                android:background="@color/cardview_dark_background"
+                android:inputType="textUri"
+                android:lines="1"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:requiresFadingEdge="horizontal"
+                android:selectAllOnFocus="true"
+                android:textColor="#ffffff"
+                android:textColorHighlight="@color/colorAccent"
+                android:textColorHint="@color/colorTextInactive"
+                android:textSize="15sp"
+                android:textCursorDrawable="@drawable/cursor"
+                android:importantForAutofill="no"
+                tools:targetApi="o" /><!-- importantForAutofill is only supported on Android O+ -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:drawableStart="@drawable/ic_notification"
+            android:drawablePadding="5dp"
+            android:layout_gravity="center"
+            android:text="FirefoxTV"/>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+            android:id="@+id/tileContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"/>
+
+</LinearLayout>
