@@ -20,27 +20,6 @@ class NewSettingsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater!!.inflate(R.layout.fragment_new_settings, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // todo: saved instance state?
-        val linearLayout = view.findViewById<LinearLayout>(R.id.new_settings_list)
-        val lparams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        val text1 = TextView(context)
-        text1.text = "SETTINGS 1"
-        text1.layoutParams = lparams
-        val text2 = TextView(context)
-        text2.text = "SETTINGS 2"
-        text2.layoutParams = lparams
-
-
-        val text3 = TextView(context)
-        text3.text = "SETTINGS 3"
-        text3.layoutParams = lparams
-
-        linearLayout.addView(text1)
-        linearLayout.addView(text2)
-        linearLayout.addView(text3)
-    }
-
     companion object {
         const val FRAGMENT_TAG = "new_settings"
 
