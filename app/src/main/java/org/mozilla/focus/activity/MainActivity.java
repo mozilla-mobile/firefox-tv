@@ -10,13 +10,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import com.amazon.android.webkit.AmazonWebKitFactories;
@@ -50,6 +54,8 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
     private final SessionManager sessionManager;
 
+    private DrawerLayout drawer;
+
     public MainActivity() {
         sessionManager = SessionManager.getInstance();
     }
@@ -70,6 +76,24 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
         setContentView(R.layout.activity_main);
+
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ((NavigationView) findViewById(R.id.navigation)).setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.drawer_home:
+                        showHomeScreen();
+                        drawer.closeDrawer(GravityCompat.START);
+                        return true;
+
+                    case R.id.drawer_settings:
+                        // todo: add me!
+                        break;
+                }
+                return false;
+            }
+        });
 
         final SafeIntent intent = new SafeIntent(getIntent());
 
@@ -107,7 +131,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
-            final DrawerLayout drawer = findViewById(R.id.drawer_layout);
             if (drawer.isDrawerOpen(GravityCompat.START)) {
                 drawer.closeDrawer(GravityCompat.START);
             } else {
@@ -117,7 +140,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         }
         return super.onKeyDown(keyCode, event);
     }
-
 
     @Override
     public void applyLocale() {
