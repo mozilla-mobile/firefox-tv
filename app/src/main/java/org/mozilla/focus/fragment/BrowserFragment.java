@@ -601,6 +601,7 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
             goBack();
         } else {
             if (session.getSource() == Source.VIEW || session.getSource() == Source.CUSTOM_TAB) {
+                // todo: do we handle external links?
                 TelemetryWrapper.eraseBackToAppEvent();
 
                 // This session has been started from a VIEW intent. Go back to the previous app
@@ -645,16 +646,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
                 menu.show(menuView);
 
                 menuWeakReference = new WeakReference<>(menu);
-                break;
-
-            case R.id.display_url:
-                final Fragment urlFragment = UrlInputFragment
-                        .createWithSession(session, urlView);
-
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .add(R.id.container, urlFragment, UrlInputFragment.FRAGMENT_TAG)
-                        .commit();
                 break;
 
             case R.id.erase: {
