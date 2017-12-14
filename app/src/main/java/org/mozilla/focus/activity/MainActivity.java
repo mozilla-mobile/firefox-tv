@@ -269,11 +269,8 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
-        // Replace all fragments with a fresh browser fragment. This means we either remove the
-        // HomeFragment with an UrlInputFragment on top or an old BrowserFragment with an
-        // UrlInputFragment.
+        // TODO: could this ever happen where browserFragment is on top? and do we need to do anything special for it?
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-
         if (browserFragment != null && browserFragment.isVisible()) {
             // Reuse existing visible fragment - in this case we know the user is already browsing.
             // The fragment might exist if we "erased" a browsing session, hence we need to check
