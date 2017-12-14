@@ -23,7 +23,6 @@ import org.mozilla.focus.R;
 import org.mozilla.focus.activity.MainActivity;
 import org.mozilla.focus.activity.TestHelper;
 import org.mozilla.focus.activity.helpers.MainActivityFirstrunTestRule;
-import org.mozilla.focus.autocomplete.CustomAutocomplete;
 
 import java.util.Collections;
 
@@ -69,9 +68,6 @@ public class SettingsScreenshots extends ScreenshotTest {
                 .edit()
                 .clear()
                 .apply();
-        CustomAutocomplete.INSTANCE.saveDomains(
-                InstrumentationRegistry.getInstrumentation().getTargetContext(),
-                Collections.<String>emptyList());
     }
 
     @Test
