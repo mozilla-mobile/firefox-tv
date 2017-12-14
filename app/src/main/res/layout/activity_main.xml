@@ -13,11 +13,26 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
+
+    <!-- baselineAligned=false for better perf - it's not needed for nested layouts (Intellij warning). -->
     <LinearLayout
-        android:orientation="vertical"
-        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
+        <!-- A view that hints to the user that they can click left to get to the navigation bar. -->
+        <include layout="@layout/hint_navigation_bar"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation"
         android:layout_width="wrap_content"
