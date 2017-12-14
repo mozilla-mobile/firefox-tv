@@ -27,7 +27,6 @@ import org.mozilla.focus.architecture.NonNullObserver;
 import org.mozilla.focus.fragment.BrowserFragment;
 import org.mozilla.focus.fragment.HomeFragment;
 import org.mozilla.focus.fragment.OnUrlEnteredListener;
-import org.mozilla.focus.fragment.UrlInputFragment;
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity;
 import org.mozilla.focus.session.Session;
 import org.mozilla.focus.session.SessionManager;
