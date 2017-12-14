@@ -9,27 +9,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ListView;
-
 import com.amazon.android.webkit.AmazonWebKitFactories;
 import com.amazon.android.webkit.AmazonWebKitFactory;
-
+import org.jetbrains.annotations.NotNull;
 import org.mozilla.focus.R;
 import org.mozilla.focus.architecture.NonNullObserver;
 import org.mozilla.focus.fragment.BrowserFragment;
 import org.mozilla.focus.fragment.HomeFragment;
+import org.mozilla.focus.fragment.OnUrlEnteredListener;
 import org.mozilla.focus.fragment.UrlInputFragment;
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity;
 import org.mozilla.focus.session.Session;
 import org.mozilla.focus.session.SessionManager;
+import org.mozilla.focus.session.Source;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.SafeIntent;
 import org.mozilla.focus.utils.Settings;
@@ -38,7 +40,7 @@ import org.mozilla.focus.web.WebViewProvider;
 
 import java.util.List;
 
-public class MainActivity extends LocaleAwareAppCompatActivity {
+public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlEnteredListener {
     public static final String ACTION_ERASE = "erase";
     public static final String ACTION_OPEN = "open";
 
@@ -190,9 +192,11 @@ public class MainActivity extends LocaleAwareAppCompatActivity {
 
     private void showHomeScreen() {
         // TODO: animations if fragment is found.
+        final HomeFragment homeFragment = HomeFragment.create();
+        homeFragment.setOnUrlEnteredListener(this);
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.container, HomeFragment.create(), HomeFragment.FRAGMENT_TAG)
+                .replace(R.id.container, homeFragment, HomeFragment.FRAGMENT_TAG)
                 .commit();
     }
 
@@ -227,15 +231,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity {
     public void onBackPressed() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
-        // todo: address
-        final UrlInputFragment urlInputFragment = (UrlInputFragment) fragmentManager.findFragmentByTag(UrlInputFragment.FRAGMENT_TAG);
-        if (urlInputFragment != null &&
-                urlInputFragment.isVisible() &&
-                urlInputFragment.onBackPressed()) {
-            // The URL input fragment has handled the back press. It does its own animations so
-            // we do not try to remove it from outside.
-            return;
-        }
+        // todo: homefragment?
 
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
         if (browserFragment != null &&
@@ -263,6 +259,38 @@ public class MainActivity extends LocaleAwareAppCompatActivity {
             isAmazonFactoryInit = true;
         } else {
             factory = AmazonWebKitFactories.getDefaultFactory();
+        }
+    }
+
+    // todo: naming
+    // todo: to make MainActivity smaller, this should move to a single responsibility class like FragmentDispatcher
+    @Override
+    public void onUrlEntered(@NotNull final String urlStr, @Nullable final String searchTerms) {
+        if (sessionManager.hasSession()) sessionManager.getCurrentSession().setSearchTerms(searchTerms); // todo: correct?
+
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // Replace all fragments with a fresh browser fragment. This means we either remove the
+        // HomeFragment with an UrlInputFragment on top or an old BrowserFragment with an
+        // UrlInputFragment.
+        final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
+
+        if (browserFragment != null && browserFragment.isVisible()) {
+            // Reuse existing visible fragment - in this case we know the user is already browsing.
+            // The fragment might exist if we "erased" a browsing session, hence we need to check
+            // for visibility in addition to existence.
+            browserFragment.loadUrl(urlStr);
+
+            // And this fragment can be removed again.
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, browserFragment)
+                    .commit();
+        } else {
+            if (!TextUtils.isEmpty(searchTerms)) {
+                SessionManager.getInstance().createSearchSession(Source.USER_ENTERED, urlStr, searchTerms);
+            } else {
+                SessionManager.getInstance().createSession(Source.USER_ENTERED, urlStr);
+            }
         }
     }
 }
