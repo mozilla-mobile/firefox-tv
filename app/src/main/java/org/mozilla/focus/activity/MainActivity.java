@@ -131,14 +131,18 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
-                drawer.closeDrawer(GravityCompat.START);
-            } else {
-                drawer.openDrawer(GravityCompat.START);
-            }
+            toggleDrawer();
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void toggleDrawer() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            drawer.openDrawer(GravityCompat.START);
+        }
     }
 
     @Override
