@@ -30,6 +30,7 @@ import org.mozilla.focus.R;
 import org.mozilla.focus.architecture.NonNullObserver;
 import org.mozilla.focus.fragment.BrowserFragment;
 import org.mozilla.focus.fragment.HomeFragment;
+import org.mozilla.focus.fragment.NewSettingsFragment;
 import org.mozilla.focus.fragment.OnUrlEnteredListener;
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity;
 import org.mozilla.focus.session.Session;
@@ -88,7 +89,8 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                         return true;
 
                     case R.id.drawer_settings:
-                        // todo: add me!
+                        showSettingsScreen();
+                        drawer.closeDrawer(GravityCompat.START);
                         break;
                 }
                 return false;
@@ -224,6 +226,17 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 .replace(R.id.container, homeFragment, HomeFragment.FRAGMENT_TAG)
                 .commit();
     }
+
+    private void showSettingsScreen() {
+        // TODO: animations if fragment is found.
+        final NewSettingsFragment settingsFragment = NewSettingsFragment.create();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, settingsFragment, NewSettingsFragment.FRAGMENT_TAG)
+                .commit();
+    }
+
+
 
     private void showBrowserScreenForCurrentSession() {
         final Session currentSession = sessionManager.getCurrentSession();
