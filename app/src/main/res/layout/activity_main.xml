@@ -28,6 +28,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:focusable="true"
+                android:nextFocusLeft="@+id/hint_navigation_bar"
                 android:nextFocusDown="@+id/container"
                 android:nextFocusUp="@id/container"
                 android:nextFocusRight="@id/container">

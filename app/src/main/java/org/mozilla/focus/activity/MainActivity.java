@@ -94,7 +94,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
                     case R.id.drawer_settings:
                         showSettingsScreen();
-                        drawer.closeDrawer(GravityCompat.START);
                         break;
 
                     default:
