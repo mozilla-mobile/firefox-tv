@@ -25,6 +25,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import com.amazon.android.webkit.AmazonWebKitFactories;
 import com.amazon.android.webkit.AmazonWebKitFactory;
 import org.jetbrains.annotations.NotNull;
@@ -73,6 +74,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private ImageButton drawerRefresh;
     private ImageButton drawerForward;
     private ImageButton drawerBack;
+    private LinearLayout customNavItem;
 
     public MainActivity() {
         sessionManager = SessionManager.getInstance();
@@ -132,6 +134,11 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             public void onDrawerOpened(final View drawerView) {
                 findViewById(R.id.urlView).requestFocus();
             }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                updateDrawerNavUI();
+            }
         });
 
         hintNavigationBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -151,6 +158,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 final String userInput = drawerUrlInput.getText().toString();
                 if (!TextUtils.isEmpty(userInput)) {
                     drawer.closeDrawer(GravityCompat.START);
+                    drawerUrlInput.setText(userInput);
                     onUrlEntered(userInput);
                 }
             }
@@ -167,6 +175,8 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         if (intent.isLauncherIntent()) {
             TelemetryWrapper.openFromIconEvent();
         }
+
+        customNavItem = findViewById(R.id.custom_button_layout);
 
         sessionManager.handleIntent(this, intent, savedInstanceState);
 
@@ -234,11 +244,18 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     }
 
     private void toggleDrawer() {
+        updateDrawerNavUI();
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             drawer.openDrawer(GravityCompat.START);
         }
+    }
+    
+    private void updateDrawerNavUI() {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
+        customNavItem.setVisibility((browserFragment != null && browserFragment.isVisible()) ? View.VISIBLE : View.GONE);
     }
 
     private boolean isDrawerOpen() {
