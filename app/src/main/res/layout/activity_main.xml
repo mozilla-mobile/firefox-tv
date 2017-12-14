@@ -63,7 +63,14 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include layout="@layout/custom_drawer_item" />
+            <LinearLayout
+                android:id="@+id/custom_button_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <include layout="@layout/custom_drawer_item" />
+            </LinearLayout>
 
             <!-- Double navigation view is a workaround so that we could add the custom layout above -->
             <android.support.design.widget.NavigationView

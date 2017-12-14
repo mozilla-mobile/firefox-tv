@@ -60,22 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="5">
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
-
-        <ImageButton
-            android:id="@+id/drawer_home_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/content_description_clear_input"
-            android:src="@drawable/ic_stop" />
+        android:weightSum="4">
 
         <Space
             android:layout_width="0dp"
@@ -89,7 +74,6 @@
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/content_description_clear_input"
             android:src="@drawable/ic_back" />
 
         <Space
@@ -104,7 +88,6 @@
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/content_description_clear_input"
             android:src="@drawable/ic_forward" />
 
         <Space
@@ -119,7 +102,6 @@
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/content_description_clear_input"
             android:src="@drawable/ic_refresh" />
 
         <Space
