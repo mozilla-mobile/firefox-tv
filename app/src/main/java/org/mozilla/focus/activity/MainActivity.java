@@ -26,6 +26,7 @@ import com.amazon.android.webkit.AmazonWebKitFactory;
 import org.jetbrains.annotations.NotNull;
 import org.mozilla.focus.R;
 import org.mozilla.focus.architecture.NonNullObserver;
+import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter;
 import org.mozilla.focus.fragment.BrowserFragment;
 import org.mozilla.focus.fragment.HomeFragment;
 import org.mozilla.focus.fragment.NewSettingsFragment;
@@ -57,6 +58,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private static final String EXTRA_SHORTCUT = "shortcut";
 
     private final SessionManager sessionManager;
+    private final UrlAutoCompleteFilter drawerUrlAutoCompleteFilter = new UrlAutoCompleteFilter();
 
     private DrawerLayout drawer;
     private NavigationView fragmentNavigationBar;
@@ -124,6 +126,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         });
 
         final InlineAutocompleteEditText drawerUrlInput = findViewById(R.id.urlView);
+        drawerUrlInput.setImeOptions(drawerUrlInput.getImeOptions() | ViewUtils.IME_FLAG_NO_PERSONALIZED_LEARNING);
         drawerUrlInput.setOnCommitListener(new InlineAutocompleteEditText.OnCommitListener() {
             @Override
             public void onCommit() {
@@ -132,6 +135,12 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                     drawer.closeDrawer(GravityCompat.START);
                     onUrlEntered(userInput);
                 }
+            }
+        });
+        drawerUrlInput.setOnFilterListener(new InlineAutocompleteEditText.OnFilterListener() {
+            @Override
+            public void onFilter(final String searchText, final InlineAutocompleteEditText view) {
+                drawerUrlAutoCompleteFilter.onFilter(searchText, view);
             }
         });
 
@@ -169,6 +178,8 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         WebViewProvider.preload(this);
     }
 
+
+
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
             toggleDrawer();
@@ -201,6 +212,8 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
+
+        drawerUrlAutoCompleteFilter.load(getApplicationContext(), /* using kotlin default value */ true);
     }
 
     @Override
