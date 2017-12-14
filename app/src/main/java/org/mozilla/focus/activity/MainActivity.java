@@ -11,18 +11,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import com.amazon.android.webkit.AmazonWebKitFactories;
 import com.amazon.android.webkit.AmazonWebKitFactory;
@@ -57,7 +53,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private final SessionManager sessionManager;
 
     private DrawerLayout drawer;
-    private NavigationView navigationBar;
+    private NavigationView fragmentNavigationBar;
     private View fragmentContainer;
 
     public MainActivity() {
@@ -83,8 +79,9 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
         fragmentContainer = findViewById(R.id.container);
         drawer = findViewById(R.id.drawer_layout);
-        navigationBar = findViewById(R.id.navigation);
-        navigationBar.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        // todo: remove amiguity between navigation bars.
+        fragmentNavigationBar = findViewById(R.id.fragment_navigation);
+        fragmentNavigationBar.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
                 switch (item.getItemId()) {
@@ -100,7 +97,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                         return false;
                 }
 
-                navigationBar.clearFocus();
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             }
@@ -108,7 +104,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerOpened(final View drawerView) {
-                navigationBar.requestFocus(); // focuses first item in list.
+                findViewById(R.id.urlView).requestFocus();
             }
         });
 
