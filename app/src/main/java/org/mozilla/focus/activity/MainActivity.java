@@ -101,7 +101,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                         return false;
                 }
 
-                fragmentContainer.requestFocus(); // TODO: correct? can't navigate in home fragment.
+                navigationBar.clearFocus();
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             }
