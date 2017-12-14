@@ -648,6 +648,10 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
                 menuWeakReference = new WeakReference<>(menu);
                 break;
 
+            case R.id.display_url:
+                // do nothing so don't crash.
+                break;
+
             case R.id.erase: {
                 TelemetryWrapper.eraseEvent();
 
