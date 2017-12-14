@@ -14,14 +14,11 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.mozilla.focus.R
+import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.UrlUtils
 import org.mozilla.focus.utils.ViewUtils
 
 private const val COL_COUNT = 5
-
-interface OnUrlEnteredListener {
-    fun onUrlEntered(urlStr: String, searchTerms: String?) {}
-}
 
 /** The home fragment which displays the navigation tiles of the app. */
 class HomeFragment : Fragment() {
@@ -47,18 +44,7 @@ class HomeFragment : Fragment() {
     private fun initUrlInputView() = with (urlInputView) {
         setOnTextChangeListener { originalText, autocompleteText ->  } // todo
         setOnCommitListener {
-            val input = urlInputView.text.toString()
-
-            if (input.trim { it <= ' ' }.isNotEmpty()) {
-                ViewUtils.hideKeyboard(urlInputView)
-
-                val isUrl = UrlUtils.isUrl(input)
-                val url = if (isUrl) UrlUtils.normalize(input) else UrlUtils.createSearchUrl(context, input)
-                val searchTerms = if (isUrl) null else input.trim { it <= ' ' }
-
-                // todo: should input conversion happen in MainActivity?
-                onUrlEnteredListener.onUrlEntered(url, searchTerms)
-            }
+            onUrlEnteredListener.onUrlEntered(text.toString())
         }
     }
 

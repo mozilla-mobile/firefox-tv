@@ -20,6 +20,7 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 import com.amazon.android.webkit.AmazonWebKitFactories;
 import com.amazon.android.webkit.AmazonWebKitFactory;
 import org.jetbrains.annotations.NotNull;
@@ -28,20 +29,25 @@ import org.mozilla.focus.architecture.NonNullObserver;
 import org.mozilla.focus.fragment.BrowserFragment;
 import org.mozilla.focus.fragment.HomeFragment;
 import org.mozilla.focus.fragment.NewSettingsFragment;
-import org.mozilla.focus.fragment.OnUrlEnteredListener;
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity;
 import org.mozilla.focus.session.Session;
 import org.mozilla.focus.session.SessionManager;
 import org.mozilla.focus.session.Source;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
+import org.mozilla.focus.utils.OnUrlEnteredListener;
 import org.mozilla.focus.utils.SafeIntent;
 import org.mozilla.focus.utils.Settings;
+import org.mozilla.focus.utils.UrlUtils;
+import org.mozilla.focus.utils.ViewUtils;
 import org.mozilla.focus.web.IWebView;
 import org.mozilla.focus.web.WebViewProvider;
+import org.mozilla.focus.widget.InlineAutocompleteEditText;
+import org.w3c.dom.Text;
 
 import java.util.List;
 
 public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlEnteredListener {
+
     public static final String ACTION_ERASE = "erase";
     public static final String ACTION_OPEN = "open";
 
@@ -113,6 +119,18 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             public void onFocusChange(final View v, final boolean hasFocus) {
                 if (hasFocus) {
                     drawer.openDrawer(GravityCompat.START);
+                }
+            }
+        });
+
+        final InlineAutocompleteEditText drawerUrlInput = findViewById(R.id.urlView);
+        drawerUrlInput.setOnCommitListener(new InlineAutocompleteEditText.OnCommitListener() {
+            @Override
+            public void onCommit() {
+                final String userInput = drawerUrlInput.getText().toString();
+                if (!TextUtils.isEmpty(userInput)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                    onUrlEntered(userInput);
                 }
             }
         });
@@ -327,7 +345,24 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     // todo: naming
     // todo: to make MainActivity smaller, this should move to a single responsibility class like FragmentDispatcher
     @Override
-    public void onUrlEntered(@NotNull final String urlStr, @Nullable final String searchTerms) {
+    public void onUrlEntered(@NotNull final String userQuery) {
+        if (TextUtils.isEmpty(userQuery.trim())) {
+            return;
+        }
+
+        ViewUtils.hideKeyboard(fragmentContainer);
+
+        final boolean isUrl = UrlUtils.isUrl(userQuery);
+        final String urlStr;
+        final String searchTerms;
+        if (isUrl) {
+            urlStr = UrlUtils.normalize(userQuery);
+            searchTerms = null;
+        } else {
+            urlStr = UrlUtils.createSearchUrl(this, userQuery);
+            searchTerms = userQuery.trim();
+        }
+
         if (sessionManager.hasSession()) sessionManager.getCurrentSession().setSearchTerms(searchTerms); // todo: correct?
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
