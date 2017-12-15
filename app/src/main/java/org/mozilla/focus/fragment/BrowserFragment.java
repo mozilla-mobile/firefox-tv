@@ -643,10 +643,7 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
             }
 
             case R.id.stop: {
-                final IWebView webView = getWebView();
-                if (webView != null) {
-                    webView.stopLoading();
-                }
+                stop();
                 break;
             }
 
@@ -815,6 +812,13 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
         final IWebView webView = getWebView();
         if (webView != null) {
             webView.reload();
+        }
+    }
+
+    public void stop() {
+        final IWebView webView = getWebView();
+        if (webView != null) {
+            webView.stopLoading();
         }
     }
 
