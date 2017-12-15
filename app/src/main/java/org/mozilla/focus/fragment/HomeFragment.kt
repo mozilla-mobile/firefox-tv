@@ -84,7 +84,7 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener) :
 
             // order?
             HomeTile("http://metacritic.com", R.string.tile_metacritic, R.drawable.tile_metacritic),
-            HomeTile("https://fandango.com", R.string.tile_fandango, R.drawable.tile_fandango),
+            HomeTile("http://fandango.com", R.string.tile_fandango, R.drawable.tile_fandango),
 
             HomeTile("https://hollywoodreporter.com", R.string.tile_hollywood_reporter, R.drawable.tile_hollywood_reporter),
             HomeTile("https://flickr.com", R.string.tile_flickr, R.drawable.tile_flickr),
