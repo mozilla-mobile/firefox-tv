@@ -41,12 +41,20 @@
                 android:textCursorDrawable="@drawable/cursor"
                 android:importantForAutofill="no"
                 tools:targetApi="o" /><!-- importantForAutofill is only supported on Android O+ -->
+
+        <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="7dp"
+                android:src="@drawable/ic_firefoxtv"
+        />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="15dp"
-            android:drawableStart="@drawable/ic_notification"
-            android:drawablePadding="5dp"
             android:layout_gravity="center"
             android:text="FirefoxTV"/>
 
