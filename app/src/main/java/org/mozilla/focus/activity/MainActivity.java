@@ -288,6 +288,8 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 .beginTransaction()
                 .replace(R.id.container, homeFragment, HomeFragment.FRAGMENT_TAG)
                 .commit();
+
+        hintNavigationBar.setVisibility(View.VISIBLE);
     }
 
     private void showSettingsScreen() {
@@ -297,6 +299,8 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 .beginTransaction()
                 .replace(R.id.container, settingsFragment, NewSettingsFragment.FRAGMENT_TAG)
                 .commit();
+
+        hintNavigationBar.setVisibility(View.VISIBLE);
     }
 
 
@@ -316,6 +320,8 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 .replace(R.id.container,
                         BrowserFragment.createForSession(currentSession), BrowserFragment.FRAGMENT_TAG)
                 .commit();
+
+        hintNavigationBar.setVisibility(View.GONE);
     }
 
     @Override
