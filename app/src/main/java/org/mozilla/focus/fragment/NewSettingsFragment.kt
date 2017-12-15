@@ -8,13 +8,11 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_new_settings.*
 import org.mozilla.focus.R
-import org.mozilla.focus.R.id.*
 import org.mozilla.focus.activity.InfoActivity
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
@@ -25,15 +23,18 @@ class NewSettingsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater!!.inflate(R.layout.fragment_new_settings, container, false)
 
+    private fun setTelemetryUIChecked(isEnabled: Boolean) = if (isEnabled) {
+        telemetryButton.setImageResource(R.drawable.ic_checkmark_enabled)
+    } else {
+        telemetryButton.setImageResource(R.drawable.ic_checkmark_disabled)
+    }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        setTelemetryUIChecked(TelemetryWrapper.isTelemetryEnabled(context))
         telemetryButton.setOnClickListener { view ->
             val telemetryEnabled = !TelemetryWrapper.isTelemetryEnabled(activity)
             TelemetryWrapper.setTelemetryEnabled(activity, telemetryEnabled)
-            if (telemetryEnabled) {
-                telemetryButton.setImageResource(R.drawable.ic_checkmark_enabled)
-            } else {
-                telemetryButton.setImageResource(R.drawable.ic_checkmark_disabled)
-            }
+            setTelemetryUIChecked(telemetryEnabled)
         }
 
         deleteButton.setOnClickListener { view ->
