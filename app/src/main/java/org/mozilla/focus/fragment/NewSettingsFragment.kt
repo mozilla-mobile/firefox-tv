@@ -41,8 +41,8 @@ class NewSettingsFragment : Fragment() {
         deleteButton = rootView.findViewById(R.id.deleteButton)
         deleteButton.setOnClickListener { view ->
             val builder1 = AlertDialog.Builder(activity)
-            builder1.setTitle("Clear all cookies and site data")
-            builder1.setMessage("Selecting ‘Clear Now’ will clear all cookies and site data stored by Firefox for Fire TV. This may sign you out of websites and remove offline web content.")
+            builder1.setTitle(R.string.settings_cookies_dialog_title)
+            builder1.setMessage(R.string.settings_cookies_dialog_content)
             builder1.setCancelable(true)
 
             builder1.setPositiveButton(
@@ -61,23 +61,7 @@ class NewSettingsFragment : Fragment() {
 
         aboutButton = rootView.findViewById(R.id.aboutButton)
         aboutButton.setOnClickListener { view ->
-            val builder1 = AlertDialog.Builder(activity)
-            builder1.setTitle("Clear all cookies and site data")
-            builder1.setMessage("Selecting ‘Clear Now’ will clear all cookies and site data stored by Firefox for Fire TV. This may sign you out of websites and remove offline web content.")
-            builder1.setCancelable(true)
-
-            builder1.setPositiveButton(
-                    "OK",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        SessionManager.getInstance().removeAllSessions()
-                        dialog.cancel() })
-
-            builder1.setNegativeButton(
-                    "Cancel",
-                    DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
-
-            val alert11 = builder1.create()
-            alert11.show()
+            // Show new settings layout with text
         }
         return rootView
     }
