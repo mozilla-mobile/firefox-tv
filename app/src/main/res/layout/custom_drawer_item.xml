@@ -69,6 +69,8 @@
 
         <ImageButton
             android:id="@+id/drawer_back_button"
+            android:clickable="false"
+            android:tint="@color/colorTextInactive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -83,6 +85,8 @@
 
         <ImageButton
             android:id="@+id/drawer_forward_button"
+            android:clickable="false"
+            android:tint="@color/colorTextInactive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -97,6 +101,8 @@
 
         <ImageButton
             android:id="@+id/drawer_refresh_button"
+            android:clickable="false"
+            android:tint="@color/colorTextInactive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
