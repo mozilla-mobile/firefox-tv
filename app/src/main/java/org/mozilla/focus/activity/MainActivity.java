@@ -248,12 +248,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             toggleDrawer();
             return true;
         }
-        if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
-            if (isDrawerOpen) {
-                drawer.closeDrawer(GravityCompat.START);
-            }
-            return true;
-        }
         return super.onKeyDown(keyCode, event);
     }
 
