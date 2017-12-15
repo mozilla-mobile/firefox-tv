@@ -78,6 +78,7 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
 
     private static final String ARGUMENT_SESSION_UUID = "sessionUUID";
     private static final String RESTORE_KEY_DOWNLOAD = "download";
+    private static final int SCROLL_VELOCITY = 1200;
 
     public static BrowserFragment createForSession(Session session) {
         final Bundle arguments = new Bundle();
@@ -899,12 +900,16 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
 
         switch (edge) {
             case TOP:
+                webView.flingScroll(0, -SCROLL_VELOCITY);
                 break;
             case BOTTOM:
+                webView.flingScroll(0, SCROLL_VELOCITY);
                 break;
             case LEFT:
+                webView.flingScroll(-SCROLL_VELOCITY, 0);
                 break;
             case RIGHT:
+                webView.flingScroll(SCROLL_VELOCITY, 0);
                 break;
         }
     }

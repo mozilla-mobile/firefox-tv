@@ -85,7 +85,7 @@ public class Cursor extends View {
             moveOneDirection(direction, speed);
         }
 
-        speed = Math.max(MAX_SPEED, speed + VELOCITY);
+        speed = Math.min(MAX_SPEED, speed + VELOCITY);
         invalidate();
     }
 

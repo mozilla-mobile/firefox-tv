@@ -113,6 +113,8 @@ public interface IWebView {
 
     void saveWebViewState(@NonNull Session session);
 
+    void flingScroll(int vx, int vy);
+
     /**
      * Get the title of the currently displayed website.
      */
