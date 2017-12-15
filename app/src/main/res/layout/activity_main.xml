@@ -67,7 +67,7 @@
                 android:id="@+id/custom_button_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone">
+                android:visibility="invisible">
 
                 <include layout="@layout/custom_drawer_item" />
             </LinearLayout>

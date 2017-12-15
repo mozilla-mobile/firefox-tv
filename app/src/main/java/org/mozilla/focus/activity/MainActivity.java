@@ -7,14 +7,14 @@ package org.mozilla.focus.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Point;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
@@ -69,6 +69,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private DrawerLayout drawer;
     private NavigationView fragmentNavigationBar;
     private View fragmentContainer;
+    private InlineAutocompleteEditText drawerUrlInput;
     private View hintNavigationBar;
 
     private ImageButton drawerRefresh;
@@ -151,7 +152,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             }
         });
 
-        final InlineAutocompleteEditText drawerUrlInput = findViewById(R.id.urlView);
+        drawerUrlInput = findViewById(R.id.urlView);
         drawerUrlInput.setImeOptions(drawerUrlInput.getImeOptions() | ViewUtils.IME_FLAG_NO_PERSONALIZED_LEARNING);
         drawerUrlInput.setOnCommitListener(new InlineAutocompleteEditText.OnCommitListener() {
             @Override
@@ -159,7 +160,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 final String userInput = drawerUrlInput.getText().toString();
                 if (!TextUtils.isEmpty(userInput)) {
                     drawer.closeDrawer(GravityCompat.START);
-                    drawerUrlInput.setText(userInput);
                     onUrlEntered(userInput);
                 }
             }
@@ -258,7 +258,14 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private void updateDrawerNavUI() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-        customNavItem.setVisibility((browserFragment != null && browserFragment.isVisible()) ? View.VISIBLE : View.GONE);
+        customNavItem.setVisibility((browserFragment != null && browserFragment.isVisible()) ? View.VISIBLE : View.INVISIBLE);
+        if (customNavItem.getVisibility() == View.VISIBLE && browserFragment != null) {
+            drawerForward.setClickable(browserFragment.canGoForward());
+            drawerForward.setColorFilter((browserFragment.canGoForward() ? Color.WHITE : ContextCompat.getColor(this, R.color.colorTextInactive)), android.graphics.PorterDuff.Mode.SRC_IN);
+            drawerBack.setColorFilter((browserFragment.canGoBack() ? Color.WHITE : ContextCompat.getColor(this, R.color.colorTextInactive)), android.graphics.PorterDuff.Mode.SRC_IN);
+            drawerBack.setClickable(browserFragment.canGoBack());
+            drawerUrlInput.setText(browserFragment.getUrl());
+        }
     }
 
     @Override
