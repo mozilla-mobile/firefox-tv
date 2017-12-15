@@ -69,12 +69,13 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private DrawerLayout drawer;
     private NavigationView fragmentNavigationBar;
     private View fragmentContainer;
-
     private View hintNavigationBar;
+
     private ImageButton drawerRefresh;
     private ImageButton drawerForward;
     private ImageButton drawerBack;
     private LinearLayout customNavItem;
+    private boolean isDrawerOpen = false;
 
     public MainActivity() {
         sessionManager = SessionManager.getInstance();
@@ -245,6 +246,8 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
     private void toggleDrawer() {
         updateDrawerNavUI();
+        isDrawerOpen = !isDrawerOpen;
+
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -256,10 +259,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
         customNavItem.setVisibility((browserFragment != null && browserFragment.isVisible()) ? View.VISIBLE : View.GONE);
-    }
-
-    private boolean isDrawerOpen() {
-        return drawer.isDrawerOpen(GravityCompat.START);
     }
 
     @Override
@@ -478,7 +477,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
 
-        if (browserFragment == null || !browserFragment.isVisible() || isDrawerOpen()) {
+        if (browserFragment == null || !browserFragment.isVisible() || isDrawerOpen) {
             return super.dispatchKeyEvent(event);
         }
 
@@ -501,7 +500,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
                     // Obtain MotionEvent object
                     long downTime = SystemClock.uptimeMillis();
-                    long eventTime = SystemClock.uptimeMillis() + 100;
+                    long eventTime = downTime + 100;
 
                     MotionEvent ev = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, point.x, point.y, 0);
                     dispatchTouchEvent(ev);
@@ -529,7 +528,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
                     // Obtain MotionEvent object
                     long downTime = SystemClock.uptimeMillis();
-                    long eventTime = downTime - 100;
+                    long eventTime = downTime + 100;
 
                     MotionEvent ev = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_UP, point.x, point.y, 0);
                     dispatchTouchEvent(ev);
