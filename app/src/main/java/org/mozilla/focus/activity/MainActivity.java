@@ -202,6 +202,10 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         }
     }
 
+    private boolean isDrawerOpen() {
+        return drawer.isDrawerOpen(GravityCompat.START);
+    }
+
     @Override
     public void applyLocale() {
         // We don't care here: all our fragments update themselves as appropriate
@@ -412,7 +416,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
 
-        if (browserFragment == null || !browserFragment.isVisible()) {
+        if (browserFragment == null || !browserFragment.isVisible() || isDrawerOpen()) {
             return super.dispatchKeyEvent(event);
         }
 
