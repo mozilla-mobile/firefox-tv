@@ -5,19 +5,20 @@
 package org.mozilla.focus.fragment
 
 import android.os.Bundle
+import android.support.annotation.DrawableRes
+import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.utils.OnUrlEnteredListener
-import org.mozilla.focus.utils.UrlUtils
-import org.mozilla.focus.utils.ViewUtils
 
 private const val COL_COUNT = 5
 
@@ -41,15 +42,13 @@ class HomeFragment : Fragment() {
         urlAutoCompleteFilter.load(context)
     }
 
-    // todo: resize tiles.
     private fun initTiles() = with (tileContainer) {
-        adapter = HomeTileAdapter()
+        adapter = HomeTileAdapter(onUrlEnteredListener)
         layoutManager = GridLayoutManager(context, COL_COUNT)
         setHasFixedSize(true)
     }
 
     private fun initUrlInputView() = with (urlInputView) {
-        setOnTextChangeListener { originalText, autocompleteText ->  } // todo
         setOnCommitListener {
             onUrlEnteredListener.onUrlEntered(text.toString())
         }
@@ -64,14 +63,33 @@ class HomeFragment : Fragment() {
     }
 }
 
-private const val TILE_COUNT = 10
+private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener) :
+        RecyclerView.Adapter<TileViewHolder>() {
 
-private class HomeTileAdapter : RecyclerView.Adapter<TileViewHolder>() {
+    val tiles = listOf(
+            HomeTile("https://youtube.com/tv", R.string.tile_youtube_tv,R.drawable.ic_forward),
+            HomeTile("https://www.google.com/search?tbm=vid", R.string.tile_google_video_search, R.drawable.ic_forward),
+            HomeTile("http://imdb.com", R.string.tile_imdb, R.drawable.ic_forward),
+            HomeTile("https://www.rottentomatoes.com", R.string.tile_rottentomatoes, R.drawable.ic_forward),
+
+            // order?
+            HomeTile("http://metacritic.com", R.string.tile_metacritic, R.drawable.ic_forward),
+            HomeTile("https://fandango.com", R.string.tile_fandango, R.drawable.ic_forward),
+
+            HomeTile("https://hollywoodreporter.com", R.string.tile_hollywood_reporter, R.drawable.ic_forward),
+            HomeTile("https://flickr.com", R.string.tile_flickr, R.drawable.ic_forward),
+            HomeTile("https://instagram.com", R.string.tile_instagram, R.drawable.ic_forward), // sign in required
+            HomeTile("https://pinterest.com", R.string.tile_pinterest, R.drawable.ic_forward) // sign in required
+    )
 
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) {
+        val item = tiles[position]
+        holder.itemView.setOnClickListener { onUrlEnteredListener.onUrlEntered(item.url) }
+        holder.iconView.setImageResource(item.imageRes)
+        holder.titleView.setText(item.titleRes)
     }
 
-    override fun getItemCount() = TILE_COUNT
+    override fun getItemCount() = tiles.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = TileViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.home_tile, parent, false)
@@ -80,4 +98,13 @@ private class HomeTileAdapter : RecyclerView.Adapter<TileViewHolder>() {
 
 private class TileViewHolder(
         itemView: View
-) : RecyclerView.ViewHolder(itemView)
+) : RecyclerView.ViewHolder(itemView) {
+    val iconView = itemView.findViewById<ImageView>(R.id.tile_icon)
+    val titleView = itemView.findViewById<TextView>(R.id.tile_title)
+}
+
+private data class HomeTile (
+        val url: String,
+        @StringRes val titleRes: Int,
+        @DrawableRes val imageRes: Int
+)
