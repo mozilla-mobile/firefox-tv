@@ -2,10 +2,11 @@
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
-              android:layout_width="130dp"
-              android:layout_height="86dp"
+              android:layout_width="140dp"
+              android:layout_height="100dp"
               android:background="@drawable/home_tile_selector"
               android:focusable="true"
               android:clickable="true"
@@ -14,13 +15,22 @@
     <ImageView
             android:id="@+id/tile_icon"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"/>
+            android:layout_height="0dp"
+            android:scaleType="centerInside"
+            android:tint="@color/photonBlue50"
+            android:layout_weight="1"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/ic_forward"/>
 
     <TextView
         android:id="@+id/tile_title"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_horizontal"
+        android:textColor="@android:color/black"
+        android:fontFamily="sans-serif-medium"
+        android:maxLines="1"
+        tools:text="YouTube"/>
 
-</FrameLayout>
+</LinearLayout>

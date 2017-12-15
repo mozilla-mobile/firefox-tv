@@ -5,15 +5,24 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
         <shape>
-            <solid android:color="@color/colorAccent"/>
+            <solid android:color="#99ffffff"/>
+            <corners android:radius="4dp"/>
         </shape>
     </item>
 
     <item android:state_focused="true">
         <shape>
-            <solid android:color="@android:color/holo_orange_dark"/>
+            <solid android:color="#bbffffff"/>
+            <corners android:radius="4dp"/>
         </shape>
     </item>
-    <item android:drawable="@android:color/transparent"/>
+
+    <item>
+        <shape>
+            <solid android:color="@android:color/white"/>
+            <corners android:radius="4dp"/>
+        </shape>
+    </item>
+
 
 </selector>
