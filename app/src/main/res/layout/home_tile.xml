@@ -17,10 +17,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scaleType="centerInside"
-            android:tint="@color/photonBlue50"
             android:layout_weight="1"
+            android:layout_margin="8dp"
             tools:ignore="ContentDescription"
-            tools:src="@drawable/ic_forward"/>
+            tools:src="@drawable/tile_youtube"/>
 
     <TextView
         android:id="@+id/tile_title"

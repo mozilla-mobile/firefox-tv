@@ -67,19 +67,19 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener) :
         RecyclerView.Adapter<TileViewHolder>() {
 
     val tiles = listOf(
-            HomeTile("https://youtube.com/tv", R.string.tile_youtube_tv,R.drawable.ic_forward),
+            HomeTile("https://youtube.com/tv", R.string.tile_youtube_tv,R.drawable.tile_youtube),
             HomeTile("https://www.google.com/search?tbm=vid", R.string.tile_google_video_search, R.drawable.ic_forward),
             HomeTile("http://imdb.com", R.string.tile_imdb, R.drawable.ic_forward),
             HomeTile("https://www.rottentomatoes.com", R.string.tile_rottentomatoes, R.drawable.ic_forward),
 
             // order?
-            HomeTile("http://metacritic.com", R.string.tile_metacritic, R.drawable.ic_forward),
+            HomeTile("http://metacritic.com", R.string.tile_metacritic, R.drawable.tile_metacritic),
             HomeTile("https://fandango.com", R.string.tile_fandango, R.drawable.ic_forward),
 
             HomeTile("https://hollywoodreporter.com", R.string.tile_hollywood_reporter, R.drawable.ic_forward),
-            HomeTile("https://flickr.com", R.string.tile_flickr, R.drawable.ic_forward),
-            HomeTile("https://instagram.com", R.string.tile_instagram, R.drawable.ic_forward), // sign in required
-            HomeTile("https://pinterest.com", R.string.tile_pinterest, R.drawable.ic_forward) // sign in required
+            HomeTile("https://flickr.com", R.string.tile_flickr, R.drawable.tile_flickr),
+            HomeTile("https://instagram.com", R.string.tile_instagram, R.drawable.tile_instagram), // sign in required
+            HomeTile("https://pinterest.com", R.string.tile_pinterest, R.drawable.tile_pinterest) // sign in required
     )
 
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) {
