@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import org.mozilla.focus.web.Download;
 import org.mozilla.focus.web.IWebView;
 
 public class SessionCallbackProxy implements IWebView.Callback {
@@ -81,12 +80,6 @@ public class SessionCallbackProxy implements IWebView.Callback {
     @Override
     public void onBlockingStateChanged(boolean isBlockingEnabled) {
         session.setBlockingEnabled(isBlockingEnabled);
-    }
-
-    @Override
-    public void onDownloadStart(Download download) {
-        // TODO: Replace with session property
-        delegate.onDownloadStart(download);
     }
 
     @Override

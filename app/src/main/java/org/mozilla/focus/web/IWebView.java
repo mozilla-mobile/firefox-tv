@@ -45,8 +45,6 @@ public interface IWebView {
 
         void onRequest(final boolean isTriggeredByUserGesture);
 
-        void onDownloadStart(Download download);
-
         void onLongPress(final HitTarget hitTarget);
 
         /**

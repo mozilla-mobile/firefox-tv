@@ -7,31 +7,25 @@ package org.mozilla.focus.webview;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.autofill.AutofillValue;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
-import com.amazon.android.webkit.AmazonDownloadListener;
 import com.amazon.android.webkit.AmazonWebBackForwardList;
 import com.amazon.android.webkit.AmazonWebChromeClient;
 import com.amazon.android.webkit.AmazonWebKitFactory;
 import com.amazon.android.webkit.AmazonWebView;
 import org.mozilla.focus.session.Session;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
-import org.mozilla.focus.utils.AppConstants;
 import org.mozilla.focus.utils.UrlUtils;
 import org.mozilla.focus.utils.ViewUtils;
-import org.mozilla.focus.web.Download;
 import org.mozilla.focus.web.IWebView;
 import org.mozilla.focus.web.WebViewProvider;
 
@@ -56,7 +50,6 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
 
         setWebViewClient(client);
         setWebChromeClient(createWebChromeClient());
-        setDownloadListener(createDownloadListener());
 
         // TODO This does not exist with the AmazonWebView
 //        if (BuildConfig.DEBUG) {
@@ -271,31 +264,6 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
             @Override
             public void onHideCustomView() {
                 callback.onExitFullScreen();
-            }
-        };
-    }
-
-    private AmazonDownloadListener createDownloadListener() {
-        return new AmazonDownloadListener() {
-            @Override
-            public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
-                if (!AppConstants.supportsDownloadingFiles()) {
-                    return;
-                }
-
-                final String scheme = Uri.parse(url).getScheme();
-                if (scheme == null || (!scheme.equals("http") && !scheme.equals("https"))) {
-                    // We are ignoring everything that is not http or https. This is a limitation of
-                    // Android's download manager. There's no reason to show a download dialog for
-                    // something we can't download anyways.
-                    Log.w(TAG, "Ignoring download from non http(s) URL: " + url);
-                    return;
-                }
-
-                if (callback != null) {
-                    final Download download = new Download(url, userAgent, contentDisposition, mimetype, contentLength, Environment.DIRECTORY_DOWNLOADS);
-                    callback.onDownloadStart(download);
-                }
             }
         };
     }
