@@ -69,6 +69,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private DrawerLayout drawer;
     private NavigationView fragmentNavigationBar;
     private View fragmentContainer;
+    private View hintNavigationBar;
 
     public MainActivity() {
         sessionManager = SessionManager.getInstance();
@@ -93,6 +94,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
         fragmentContainer = findViewById(R.id.container);
         drawer = findViewById(R.id.drawer_layout);
+        hintNavigationBar = findViewById(R.id.hint_navigation_bar);
         // todo: remove amiguity between navigation bars.
         fragmentNavigationBar = findViewById(R.id.fragment_navigation);
         fragmentNavigationBar.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -122,7 +124,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             }
         });
 
-        findViewById(R.id.hint_navigation_bar).setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        hintNavigationBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(final View v, final boolean hasFocus) {
                 if (hasFocus) {
