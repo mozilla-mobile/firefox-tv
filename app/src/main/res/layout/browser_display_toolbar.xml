@@ -16,6 +16,9 @@
         android:layout_height="56dp"
         android:background="@drawable/animated_background"
         android:elevation="4dp"
+        android:layout_margin="15dp"
+        android:clickable="false"
+        android:focusable="false"
         app:layout_scrollFlags="scroll|enterAlways|snap|exitUntilCollapsed"
         android:clipChildren="false">
 

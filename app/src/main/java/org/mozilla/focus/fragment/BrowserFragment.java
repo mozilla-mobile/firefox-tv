@@ -14,7 +14,6 @@ import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
-import android.graphics.drawable.TransitionDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -23,7 +22,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,7 +31,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,7 +38,6 @@ import android.widget.Toast;
 import org.mozilla.focus.R;
 import org.mozilla.focus.activity.InfoActivity;
 import org.mozilla.focus.activity.InstallFirefoxActivity;
-import org.mozilla.focus.animation.TransitionDrawableGroup;
 import org.mozilla.focus.architecture.NonNullObserver;
 import org.mozilla.focus.broadcastreceiver.DownloadBroadcastReceiver;
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity;
@@ -57,7 +53,6 @@ import org.mozilla.focus.utils.Browsers;
 import org.mozilla.focus.utils.Direction;
 import org.mozilla.focus.utils.DownloadUtils;
 import org.mozilla.focus.utils.Edge;
-import org.mozilla.focus.utils.Features;
 import org.mozilla.focus.utils.UrlUtils;
 import org.mozilla.focus.web.Download;
 import org.mozilla.focus.web.IWebView;
@@ -91,16 +86,10 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
     }
 
     private Download pendingDownload;
-    private TransitionDrawableGroup backgroundTransitionGroup;
     private TextView urlView;
     private AnimatedProgressBar progressView;
-    private FrameLayout blockView;
     private ImageView lockView;
-    private ImageButton menuView;
-    private View statusBar;
-    private View urlBar;
     private Cursor cursor;
-    private SwipeRefreshLayout swipeRefresh;
     private WeakReference<BrowserMenu> menuWeakReference = new WeakReference<>(null);
 
     /**
@@ -199,25 +188,9 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
         videoContainer = (ViewGroup) view.findViewById(R.id.video_container);
         browserContainer = view.findViewById(R.id.browser_container);
 
-        urlBar = view.findViewById(R.id.urlbar);
-        statusBar = view.findViewById(R.id.status_bar_background);
-
         urlView = (TextView) view.findViewById(R.id.display_url);
 
         progressView = (AnimatedProgressBar) view.findViewById(R.id.progress);
-
-        swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
-        swipeRefresh.setColorSchemeResources(R.color.colorAccent);
-        swipeRefresh.setEnabled(Features.SWIPE_TO_REFRESH);
-
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                reload();
-
-                TelemetryWrapper.swipeReloadEvent();
-            }
-        });
 
         session.getUrl().observe(this, new Observer<String>() {
             @Override
@@ -232,22 +205,16 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
             @Override
             public void onValueChanged(@NonNull Boolean loading) {
                 if (loading) {
-                    backgroundTransitionGroup.resetTransition();
-
                     progressView.setProgress(5);
                     progressView.setVisibility(View.VISIBLE);
                 } else {
                     if (progressView.getVisibility() == View.VISIBLE) {
                         // We start a transition only if a page was just loading before
                         // allowing to avoid issue #1179
-                        backgroundTransitionGroup.startTransition(ANIMATION_DURATION);
                         progressView.setProgress(progressView.getMax());
                         progressView.setVisibility(View.GONE);
                     }
-                    swipeRefresh.setRefreshing(false);
                 }
-
-                updateBlockingBadging(loading || session.isBlockingEnabled());
 
                 updateToolbarButtonStates(loading);
 
@@ -274,11 +241,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
             backButton.setOnClickListener(this);
         }
 
-        final ImageView blockIcon = (ImageView) view.findViewById(R.id.block_image);
-        blockIcon.setImageResource(R.drawable.ic_tracking_protection_disabled);
-
-        blockView = (FrameLayout) view.findViewById(R.id.block);
-
         lockView = (ImageView) view.findViewById(R.id.lock);
         session.getSecure().observe(this, new Observer<Boolean>() {
             @Override
@@ -293,9 +255,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
                 progressView.setProgress(progress);
             }
         });
-
-        menuView = (ImageButton) view.findViewById(R.id.menuView);
-        menuView.setOnClickListener(this);
 
         initialiseNormalBrowserUi(view);
 
@@ -650,16 +609,10 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.menuView:
-                BrowserMenu menu = new BrowserMenu(getActivity(), this);
-                menu.show(menuView);
-
-                menuWeakReference = new WeakReference<>(menu);
-                break;
-
-            case R.id.display_url:
+            case R.id.display_url: {
                 // do nothing so don't crash.
                 break;
+            }
 
             case R.id.erase: {
                 TelemetryWrapper.eraseEvent();
@@ -866,21 +819,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
         if (webView != null) {
             webView.setBlockingEnabled(enabled);
         }
-
-        statusBar.setBackgroundResource(enabled ? R.drawable.animated_background : R.drawable.animated_background_disabled);
-            // Only update the toolbar background if this is not a custom tab. Custom tabs set their
-            // own color and we do not want to override this here.
-            urlBar.setBackgroundResource(enabled ? R.drawable.animated_background : R.drawable.animated_background_disabled);
-
-            backgroundTransitionGroup = new TransitionDrawableGroup(
-                    (TransitionDrawable) urlBar.getBackground(),
-                    (TransitionDrawable) statusBar.getBackground()
-            );
-    }
-
-    // In the future, if more badging icons are needed, this should be abstracted
-    public void updateBlockingBadging(boolean enabled) {
-        blockView.setVisibility(enabled ? View.GONE : View.VISIBLE);
     }
 
     public void moveCursor(Direction direction) {
