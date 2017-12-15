@@ -4,30 +4,28 @@
 
 package org.mozilla.focus.fragment
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
-import org.mozilla.focus.telemetry.TelemetryWrapper
-import android.app.AlertDialog
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import kotlinx.android.synthetic.main.fragment_new_settings.*
 import org.mozilla.focus.R
-import android.R.string.cancel
-import android.content.DialogInterface
+import org.mozilla.focus.R.id.*
+import org.mozilla.focus.activity.InfoActivity
 import org.mozilla.focus.session.SessionManager
+import org.mozilla.focus.telemetry.TelemetryWrapper
 
 
 /** The home fragment which displays the navigation tiles of the app. */
 class NewSettingsFragment : Fragment() {
-    lateinit var telemetryButton: ImageView;
-    lateinit var deleteButton: ImageView;
-    lateinit var aboutButton: ImageView;
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
+            inflater!!.inflate(R.layout.fragment_new_settings, container, false)
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View?  {
-        val rootView = inflater!!.inflate(R.layout.fragment_new_settings, container, false)
-        telemetryButton = rootView.findViewById<ImageView>(R.id.telemetryButton)
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         telemetryButton.setOnClickListener { view ->
             val telemetryEnabled = !TelemetryWrapper.isTelemetryEnabled(activity)
             TelemetryWrapper.setTelemetryEnabled(activity, telemetryEnabled)
@@ -38,7 +36,6 @@ class NewSettingsFragment : Fragment() {
             }
         }
 
-        deleteButton = rootView.findViewById(R.id.deleteButton)
         deleteButton.setOnClickListener { view ->
             val builder1 = AlertDialog.Builder(activity)
             builder1.setTitle(R.string.settings_cookies_dialog_title)
@@ -59,11 +56,13 @@ class NewSettingsFragment : Fragment() {
             alert11.show()
         }
 
-        aboutButton = rootView.findViewById(R.id.aboutButton)
-        aboutButton.setOnClickListener { view ->
-            // Show new settings layout with text
+        aboutButton.setOnClickListener {
+            startActivity(InfoActivity.getAboutIntent(context))
         }
-        return rootView
+
+        privacyNoticeButton.setOnClickListener {
+            startActivity(InfoActivity.getPrivacyNoticeIntent(context))
+        }
     }
 
     companion object {

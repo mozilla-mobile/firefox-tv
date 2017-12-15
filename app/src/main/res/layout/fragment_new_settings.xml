@@ -2,8 +2,9 @@
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
-<!-- TODO: scrolll view -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,20 +13,19 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Settings"
-        android:textSize="45dp"
-        android:layout_marginLeft="30dp"/>
+        android:text="@string/menu_settings"
+        android:textSize="45sp"
+        android:layout_marginStart="30dp"/>
 
     <LinearLayout
         android:id="@+id/new_settings_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:weightSum="3"
         android:layout_gravity="center">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
@@ -36,21 +36,23 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Improve TV"
+                android:text="@string/preference_mozilla_telemetry2"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
-                android:textSize="25dp"/>
+                android:textSize="25sp"/>
             <ImageButton
                 android:id="@+id/telemetryButton"
-                android:layout_width="180dp"
-                android:layout_height="180dp"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
                 android:src="@drawable/ic_checkmark_enabled"
+                android:scaleType="fitCenter"
                 android:background="@android:color/transparent"
                 android:layout_gravity="center"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/aboutButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
@@ -61,20 +63,45 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="About"
+                android:text="@string/menu_about"
                 android:layout_gravity="center"
-                android:textSize="25dp"
+                android:textSize="25sp"
                 android:layout_marginBottom="15dp" />
             <ImageView
-                android:id="@+id/aboutButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
                 android:src="@drawable/ic_about"
+                android:scaleType="fitCenter"
                 android:layout_gravity="center"/>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+                android:id="@+id/privacyNoticeButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:background="@drawable/home_tile_selector"
+                android:focusable="true"
+                android:clickable="true"
+                android:layout_gravity="center_vertical">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/preference_privacy_notice"
+                    android:layout_gravity="center"
+                    android:textSize="25sp"
+                    android:layout_marginBottom="15dp" />
+            <ImageView
+                    android:layout_width="128dp"
+                    android:layout_height="128dp"
+                    android:src="@drawable/ic_lock"
+                    android:scaleType="fitCenter"
+                    android:layout_gravity="center"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
@@ -85,15 +112,17 @@
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Clear"
+                android:text="@string/settings_cookies_dialog_title"
                 android:layout_gravity="center"
-                android:textSize="25dp"
+                android:gravity="center"
+                android:textSize="25sp"
                 android:layout_marginBottom="15dp" />
             <ImageView
                 android:id="@+id/deleteButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
                 android:src="@drawable/ic_delete"
+                android:scaleType="fitCenter"
                 android:layout_gravity="center"/>
         </LinearLayout>
 
