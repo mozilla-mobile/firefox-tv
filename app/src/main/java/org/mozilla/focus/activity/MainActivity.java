@@ -135,6 +135,13 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             @Override
             public void onDrawerOpened(final View drawerView) {
                 findViewById(R.id.urlView).requestFocus();
+                isDrawerOpen = true;
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                isDrawerOpen = false;
             }
 
             @Override
@@ -240,12 +247,17 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             toggleDrawer();
             return true;
         }
+        if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+            if (isDrawerOpen) {
+                drawer.closeDrawer(GravityCompat.START);
+            }
+            return true;
+        }
         return super.onKeyDown(keyCode, event);
     }
 
     private void toggleDrawer() {
         updateDrawerNavUI();
-        isDrawerOpen = !isDrawerOpen;
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -369,6 +381,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, settingsFragment, NewSettingsFragment.FRAGMENT_TAG)
+                .addToBackStack(null)
                 .commit();
 
         hintNavigationBar.setVisibility(View.VISIBLE);
@@ -410,6 +423,11 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
         // todo: homefragment?
+
+        if (isDrawerOpen) {
+            drawer.closeDrawer(GravityCompat.START);
+            return;
+        }
 
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
         if (browserFragment != null &&
