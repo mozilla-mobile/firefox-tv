@@ -561,7 +561,7 @@ be temporary, and you can try again later.</li>
     <string name="tile_google_video_search">Google Videos</string>
     <string name="tile_imdb">IMDB</string>
     <string name="tile_rottentomatoes">Rotten Tomatoes</string>
-    <string name="tile_metacritic">Metacritic</string>
+    <string name="tile_metacritic">metacritic</string>
     <string name="tile_fandango">Fandango</string>
     <string name="tile_hollywood_reporter">Hollywood Reporter</string>
     <string name="tile_flickr">Flickr</string>
