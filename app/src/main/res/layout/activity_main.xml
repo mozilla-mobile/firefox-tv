@@ -32,7 +32,6 @@
                 android:nextFocusDown="@+id/container"
                 android:nextFocusUp="@id/container"
                 android:nextFocusRight="@id/container">
-                <requestFocus/> <!-- Requests initial focus -->
         </View>
 
         <!-- A view that hints to the user that they can click left to get to the navigation bar. -->

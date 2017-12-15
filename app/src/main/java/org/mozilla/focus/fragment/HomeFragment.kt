@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.mozilla.focus.R
@@ -25,12 +26,15 @@ private const val COL_COUNT = 5
 
 /** The home fragment which displays the navigation tiles of the app. */
 class HomeFragment : Fragment() {
-
+    lateinit var urlBar: LinearLayout;
     var onUrlEnteredListener = object : OnUrlEnteredListener {} // default impl does nothing.
     val urlAutoCompleteFilter = UrlAutoCompleteFilter()
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater!!.inflate(R.layout.fragment_home, container, false)
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val rootView = inflater!!.inflate(R.layout.fragment_home, container, false)
+        urlBar = rootView.findViewById(R.id.homeUrlBar)
+        return rootView
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // todo: saved instance state?
@@ -41,6 +45,11 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         urlAutoCompleteFilter.load(context)
+    }
+
+    override fun onAttachFragment(childFragment: Fragment?) {
+        super.onAttachFragment(childFragment)
+        urlBar.requestFocus()
     }
 
     private fun initTiles() = with (tileContainer) {

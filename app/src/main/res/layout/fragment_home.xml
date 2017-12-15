@@ -10,6 +10,7 @@
               android:padding="50dp">
 
     <LinearLayout
+            android:id="@+id/homeUrlBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -51,7 +52,7 @@
                 android:layout_marginEnd="10dp"
                 android:src="@drawable/ic_firefox_and_workmark"
                 tools:ignore="ContentDescription"/>
-
+        <requestFocus/> <!-- Requests initial focus -->
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
