@@ -8,6 +8,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.RadialGradient;
+import android.graphics.Shader;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.View;
@@ -55,8 +57,8 @@ public class Cursor extends View {
         // create the Paint and set its color
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(getResources().getColor(R.color.colorProgressGradientEnd));
-        paint.setAlpha(100);
+        paint.setAlpha(102);
+        paint.setAntiAlias(true);
     }
 
     public Point getLocation() {
@@ -141,6 +143,8 @@ public class Cursor extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        paint.setShader(new RadialGradient(x, y, 45f, getResources().getColor(R.color.teal50), getResources().getColor(R.color.photonBlue50), Shader.TileMode.CLAMP));
         canvas.drawCircle(x, y, CURSOR_SIZE, paint);
     }
 
