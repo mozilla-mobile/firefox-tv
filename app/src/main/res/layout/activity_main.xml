@@ -52,6 +52,7 @@
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation"
+        android:background="@drawable/drawer_background"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
@@ -59,21 +60,24 @@
         android:nextFocusRight="@id/container"
         android:descendantFocusability="afterDescendants">
         <LinearLayout
+            android:background="@android:color/transparent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
+                android:background="@android:color/transparent"
                 android:id="@+id/custom_button_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="invisible">
+                android:layout_height="wrap_content">
 
                 <include layout="@layout/custom_drawer_item" />
             </LinearLayout>
 
             <!-- Double navigation view is a workaround so that we could add the custom layout above -->
             <android.support.design.widget.NavigationView
+                android:paddingTop="48dp"
+                android:background="@android:color/transparent"
                 android:id="@+id/fragment_navigation"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

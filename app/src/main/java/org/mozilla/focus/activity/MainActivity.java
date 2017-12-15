@@ -229,11 +229,10 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 }
                 break;
             default:
-                break;
+                // Return so that we don't try to close the drawer
+                return;
         }
-        if (isDrawerOpen) {
-            drawer.closeDrawer(GravityCompat.START);
-        }
+        drawer.closeDrawer(GravityCompat.START);
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -258,13 +257,21 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private void updateDrawerNavUI() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-        customNavItem.setVisibility((browserFragment != null && browserFragment.isVisible()) ? View.VISIBLE : View.INVISIBLE);
         if (customNavItem.getVisibility() == View.VISIBLE && browserFragment != null) {
             drawerForward.setClickable(browserFragment.canGoForward());
             drawerForward.setColorFilter((browserFragment.canGoForward() ? Color.WHITE : ContextCompat.getColor(this, R.color.colorTextInactive)), android.graphics.PorterDuff.Mode.SRC_IN);
             drawerBack.setColorFilter((browserFragment.canGoBack() ? Color.WHITE : ContextCompat.getColor(this, R.color.colorTextInactive)), android.graphics.PorterDuff.Mode.SRC_IN);
             drawerBack.setClickable(browserFragment.canGoBack());
             drawerUrlInput.setText(browserFragment.getUrl());
+            drawerRefresh.setClickable(true);
+            drawerRefresh.setColorFilter(Color.WHITE);
+        } else {
+            drawerForward.setClickable(false);
+            drawerForward.setColorFilter(ContextCompat.getColor(this, R.color.colorTextInactive), android.graphics.PorterDuff.Mode.SRC_IN);
+            drawerBack.setColorFilter(ContextCompat.getColor(this, R.color.colorTextInactive), android.graphics.PorterDuff.Mode.SRC_IN);
+            drawerBack.setClickable(false);
+            drawerRefresh.setClickable(false);
+            drawerRefresh.setColorFilter(ContextCompat.getColor(this, R.color.colorTextInactive), android.graphics.PorterDuff.Mode.SRC_IN);
         }
     }
 

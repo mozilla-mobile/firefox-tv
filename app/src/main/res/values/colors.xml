@@ -63,4 +63,7 @@
     <color name="preference_row_disabled">#B3313131</color>
 
     <color name="scrollbarThumb">#b2b2b2b2</color>
+    <color name="teal50">#00feff</color>
+    <color name="ink70">#363959</color>
+    <color name="ink80">#202340</color>
 </resources>
