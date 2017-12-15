@@ -12,7 +12,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Settings" />
+        android:text="Settings"
+        android:textSize="45dp"
+        android:layout_marginLeft="30dp"/>
 
     <LinearLayout
         android:id="@+id/new_settings_list"
@@ -20,50 +22,79 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:weightSum="3"
-        android:orientation="horizontal">
+        android:layout_gravity="center">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@drawable/home_tile_selector"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_gravity="center_vertical">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Telemetry"/>
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:text="Improve TV"
+                android:layout_gravity="center"
+                android:layout_marginBottom="15dp"
+                android:textSize="25dp"/>
+            <ImageButton
+                android:id="@+id/telemetryButton"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:src="@drawable/ic_checkmark_enabled"
+                android:background="@android:color/transparent"
+                android:layout_gravity="center"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@drawable/home_tile_selector"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_gravity="center_vertical">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="About"/>
+                android:text="About"
+                android:layout_gravity="center"
+                android:textSize="25dp"
+                android:layout_marginBottom="15dp" />
             <ImageView
+                android:id="@+id/aboutButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_refresh"/>
+                android:src="@drawable/ic_about"
+                android:layout_gravity="center"/>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
-            <TextView
+            android:orientation="vertical"
+            android:background="@drawable/home_tile_selector"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_gravity="center_vertical">
+        <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Clear"/>
+                android:text="Clear"
+                android:layout_gravity="center"
+                android:textSize="25dp"
+                android:layout_marginBottom="15dp" />
             <ImageView
+                android:id="@+id/deleteButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_refresh"/>
+                android:src="@drawable/ic_delete"
+                android:layout_gravity="center"/>
         </LinearLayout>
 
     </LinearLayout>
