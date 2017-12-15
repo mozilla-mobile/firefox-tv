@@ -4,6 +4,7 @@
 
 package org.mozilla.focus.fragment
 
+import android.graphics.Color
 import android.os.Bundle
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
@@ -82,11 +83,24 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener) :
             HomeTile("https://pinterest.com", R.string.tile_pinterest, R.drawable.tile_pinterest) // sign in required
     )
 
-    override fun onBindViewHolder(holder: TileViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with (holder) {
         val item = tiles[position]
-        holder.itemView.setOnClickListener { onUrlEnteredListener.onUrlEntered(item.url) }
-        holder.iconView.setImageResource(item.imageRes)
-        holder.titleView.setText(item.titleRes)
+        titleView.setText(item.titleRes)
+        iconView.setImageResource(item.imageRes)
+        itemView.setOnClickListener { onUrlEnteredListener.onUrlEntered(item.url) }
+        itemView.setOnFocusChangeListener { v, hasFocus ->
+            val backgroundResource: Int
+            val textColor: Int
+            if (hasFocus) {
+                backgroundResource = R.drawable.home_tile_title_focused_background
+                textColor = Color.WHITE
+            } else {
+                backgroundResource = 0
+                textColor = Color.BLACK
+            }
+            titleView.setBackgroundResource(backgroundResource)
+            titleView.setTextColor(textColor)
+        }
     }
 
     override fun getItemCount() = tiles.size
