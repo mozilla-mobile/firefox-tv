@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:background="@drawable/home_tile_selector"
+            android:background="@drawable/settings_item_selector"
             android:focusable="true"
             android:clickable="true"
             android:layout_gravity="center_vertical">
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:background="@drawable/home_tile_selector"
+            android:background="@drawable/settings_item_selector"
             android:focusable="true"
             android:clickable="true"
             android:layout_gravity="center_vertical">
@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:background="@drawable/home_tile_selector"
+                android:background="@drawable/settings_item_selector"
                 android:focusable="true"
                 android:clickable="true"
                 android:layout_gravity="center_vertical">
@@ -105,7 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:background="@drawable/home_tile_selector"
+            android:background="@drawable/settings_item_selector"
             android:focusable="true"
             android:clickable="true"
             android:layout_gravity="center_vertical">
