@@ -3,26 +3,31 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
-<!-- todo: width, colors, image assets -->
 <!-- We make this focusable so that we can open the real navigation bar when this is selected. -->
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/hint_navigation_bar"
-        android:layout_width="50dp"
+        android:layout_width="67dp"
         android:layout_height="match_parent"
-        android:gravity="center"
+        android:gravity="end|center_vertical"
         android:orientation="vertical"
         android:background="@color/colorAccent"
         android:focusable="true">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Home"/>
+    <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="48dp"
+            android:src="@drawable/ic_home"
+            tools:ignore="ContentDescription"/>
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Settings"/>
+    <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_settings"
+            tools:ignore="ContentDescription"/>
 
 </LinearLayout>
