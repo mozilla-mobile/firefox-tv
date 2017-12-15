@@ -56,11 +56,11 @@ public class Cursor extends View {
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(getResources().getColor(R.color.colorProgressGradientEnd));
+        paint.setAlpha(100);
     }
 
     public Point getLocation() {
-        int cursorMidPoint = Math.round(CURSOR_SIZE / 2);
-        return new Point(x + cursorMidPoint, y + cursorMidPoint);
+        return new Point(x, y);
     }
 
     public void moveCursor(Direction direction) {
