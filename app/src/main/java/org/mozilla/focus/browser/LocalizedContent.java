@@ -55,14 +55,15 @@ public class LocalizedContent {
         String aboutVersion = "";
         try {
             final PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            aboutVersion = String.format("%s (Build #%s)", packageInfo.versionName, packageInfo.versionCode);
+            aboutVersion = String.format("%s", packageInfo.versionName);
         } catch (PackageManager.NameNotFoundException e) {
             // Nothing to do if we can't find the package name.
         }
         substitutionMap.put("%about-version%", aboutVersion);
 
-        final String aboutContent = resources.getString(R.string.about_content, appName, learnMoreURL);
-        substitutionMap.put("%about-content%", aboutContent);
+        final String appNameExtended = resources.getString(R.string.app_name_extended_fire);
+        substitutionMap.put("%about-title%", appNameExtended);
+
 
         final String wordmark = HtmlLoader.loadPngAsDataURI(context, R.drawable.wordmark);
         substitutionMap.put("%wordmark%", wordmark);
