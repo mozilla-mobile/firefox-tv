@@ -77,6 +77,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private ImageButton drawerBack;
     private LinearLayout customNavItem;
     private boolean isDrawerOpen = false;
+    private boolean isCursorEnabled = true;
 
     public MainActivity() {
         sessionManager = SessionManager.getInstance();
@@ -440,6 +441,16 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         }
     }
 
+    public void toggleCursor(boolean enabled) {
+        if (isCursorEnabled == enabled) { return; }
+
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
+
+        isCursorEnabled = enabled;
+        browserFragment.toggleCursor(enabled);
+    }
+
     // todo: naming
     // todo: to make MainActivity smaller, this should move to a single responsibility class like FragmentDispatcher
     @Override
@@ -491,7 +502,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
 
-        if (browserFragment == null || !browserFragment.isVisible() || isDrawerOpen) {
+        if (browserFragment == null || !browserFragment.isVisible() || isDrawerOpen || !isCursorEnabled) {
             return super.dispatchKeyEvent(event);
         }
 
@@ -544,8 +555,10 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                     long downTime = SystemClock.uptimeMillis();
                     long eventTime = downTime + 100;
 
+
                     MotionEvent ev = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_UP, point.x, point.y, 0);
                     dispatchTouchEvent(ev);
+
                     break;
                 default:
                     return super.dispatchKeyEvent(event);

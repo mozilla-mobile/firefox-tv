@@ -38,6 +38,7 @@ import android.widget.Toast;
 import org.mozilla.focus.R;
 import org.mozilla.focus.activity.InfoActivity;
 import org.mozilla.focus.activity.InstallFirefoxActivity;
+import org.mozilla.focus.activity.MainActivity;
 import org.mozilla.focus.architecture.NonNullObserver;
 import org.mozilla.focus.broadcastreceiver.DownloadBroadcastReceiver;
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity;
@@ -222,6 +223,9 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
                 if (menu != null) {
                     menu.updateLoading(loading);
                 }
+
+                MainActivity activity = (MainActivity)getActivity();
+                activity.toggleCursor(!getWebView().getUrl().contains("youtube.com/tv"));
             }
         });
 
@@ -839,6 +843,10 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
 
     public Point getCursorLocation() {
         return cursor.getLocation();
+    }
+
+    public void toggleCursor(boolean enabled) {
+        cursor.setVisibility(enabled ? View.VISIBLE : View.GONE);
     }
 
     public void cursorHitEdge(Edge edge) {

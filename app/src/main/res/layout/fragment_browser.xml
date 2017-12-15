@@ -26,7 +26,9 @@
                     android:id="@+id/webview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scrollbarThumbVertical="@drawable/scrollbar_thumb" />
+                    android:scrollbarThumbVertical="@drawable/scrollbar_thumb">
+                    <requestFocus />
+                </org.mozilla.focus.web.IWebView>
 
             <include
                 layout="@layout/browser_display_toolbar"/>
