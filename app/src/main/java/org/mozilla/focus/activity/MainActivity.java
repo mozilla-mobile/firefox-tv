@@ -8,6 +8,7 @@ package org.mozilla.focus.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
@@ -23,7 +24,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.TextView;
+import android.widget.ImageButton;
 import com.amazon.android.webkit.AmazonWebKitFactories;
 import com.amazon.android.webkit.AmazonWebKitFactory;
 import org.jetbrains.annotations.NotNull;
@@ -47,13 +48,11 @@ import org.mozilla.focus.utils.ViewUtils;
 import org.mozilla.focus.web.IWebView;
 import org.mozilla.focus.web.WebViewProvider;
 import org.mozilla.focus.widget.InlineAutocompleteEditText;
-import org.w3c.dom.Text;
 
-import java.util.HashSet;
 import java.util.List;
 
 
-public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlEnteredListener {
+public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlEnteredListener, View.OnClickListener {
 
     public static final String ACTION_ERASE = "erase";
     public static final String ACTION_OPEN = "open";
@@ -69,7 +68,11 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private DrawerLayout drawer;
     private NavigationView fragmentNavigationBar;
     private View fragmentContainer;
+
     private View hintNavigationBar;
+    private ImageButton drawerRefresh;
+    private ImageButton drawerForward;
+    private ImageButton drawerBack;
 
     public MainActivity() {
         sessionManager = SessionManager.getInstance();
@@ -95,6 +98,13 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         fragmentContainer = findViewById(R.id.container);
         drawer = findViewById(R.id.drawer_layout);
         hintNavigationBar = findViewById(R.id.hint_navigation_bar);
+        drawerRefresh = findViewById(R.id.drawer_refresh_button);
+        drawerRefresh.setOnClickListener(this);
+        drawerForward = findViewById(R.id.drawer_forward_button);
+        drawerForward.setOnClickListener(this);
+        drawerBack = findViewById(R.id.drawer_back_button);
+        drawerBack.setOnClickListener(this);
+
         // todo: remove amiguity between navigation bars.
         fragmentNavigationBar = findViewById(R.id.fragment_navigation);
         fragmentNavigationBar.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -186,7 +196,34 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         WebViewProvider.preload(this);
     }
 
-
+    @Override
+    public void onClick(View view) {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        final BrowserFragment fragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
+        if (fragment == null || !fragment.isVisible()) {
+            return;
+        }
+        switch (view.getId()) {
+            case R.id.drawer_refresh_button:
+                fragment.reload();
+                break;
+            case R.id.drawer_back_button:
+                if (fragment.canGoBack()) {
+                    fragment.goBack();
+                }
+                break;
+            case R.id.drawer_forward_button:
+                if (fragment.canGoForward()) {
+                    fragment.goForward();
+                }
+                break;
+            default:
+                break;
+        }
+        if (isDrawerOpen()) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+    }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
