@@ -4,32 +4,22 @@
 
 package org.mozilla.focus.fragment;
 
-import android.Manifest;
 import android.app.Activity;
-import android.app.DownloadManager;
 import android.arch.lifecycle.Observer;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.CookieManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,7 +29,6 @@ import org.mozilla.focus.R;
 import org.mozilla.focus.activity.InfoActivity;
 import org.mozilla.focus.activity.InstallFirefoxActivity;
 import org.mozilla.focus.architecture.NonNullObserver;
-import org.mozilla.focus.broadcastreceiver.DownloadBroadcastReceiver;
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity;
 import org.mozilla.focus.menu.browser.BrowserMenu;
 import org.mozilla.focus.open.OpenWithFragment;
@@ -51,10 +40,8 @@ import org.mozilla.focus.session.Source;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.Browsers;
 import org.mozilla.focus.utils.Direction;
-import org.mozilla.focus.utils.DownloadUtils;
 import org.mozilla.focus.utils.Edge;
 import org.mozilla.focus.utils.UrlUtils;
-import org.mozilla.focus.web.Download;
 import org.mozilla.focus.web.IWebView;
 import org.mozilla.focus.widget.AnimatedProgressBar;
 import org.mozilla.focus.widget.Cursor;
@@ -65,14 +52,12 @@ import java.lang.ref.WeakReference;
 /**
  * Fragment for displaying the browser UI.
  */
-public class BrowserFragment extends WebFragment implements View.OnClickListener, DownloadDialogFragment.DownloadDialogListener, CursorEvent {
+public class BrowserFragment extends WebFragment implements View.OnClickListener, CursorEvent {
     public static final String FRAGMENT_TAG = "browser";
 
-    private static int REQUEST_CODE_STORAGE_PERMISSION = 101;
     private static final int ANIMATION_DURATION = 300;
 
     private static final String ARGUMENT_SESSION_UUID = "sessionUUID";
-    private static final String RESTORE_KEY_DOWNLOAD = "download";
     private static final int SCROLL_VELOCITY = 1200;
 
     public static BrowserFragment createForSession(Session session) {
@@ -85,7 +70,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
         return fragment;
     }
 
-    private Download pendingDownload;
     private TextView urlView;
     private AnimatedProgressBar progressView;
     private ImageView lockView;
@@ -108,10 +92,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
     private View stopButton;
 
     private IWebView.FullscreenCallback fullscreenCallback;
-
-    private DownloadManager manager;
-
-    private DownloadBroadcastReceiver downloadBroadcastReceiver;
 
     private SessionManager sessionManager;
     private Session session;
@@ -162,7 +142,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
     @Override
     public void onPause() {
         super.onPause();
-        getContext().unregisterReceiver(downloadBroadcastReceiver);
 
         final BrowserMenu menu = menuWeakReference.get();
         if (menu != null) {
@@ -174,12 +153,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
 
     @Override
     public View inflateLayout(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if (savedInstanceState != null && savedInstanceState.containsKey(RESTORE_KEY_DOWNLOAD)) {
-            // If this activity was destroyed before we could start a download (e.g. because we were waiting for a permission)
-            // then restore the download object.
-            pendingDownload = savedInstanceState.getParcelable(RESTORE_KEY_DOWNLOAD);
-        }
-
         final View view = inflater.inflate(R.layout.fragment_browser, container, false);
 
         cursor = (Cursor) view.findViewById(R.id.cursor);
@@ -268,12 +241,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
-        if (pendingDownload != null) {
-            // We were not able to start this download yet (waiting for a permission). Save this download
-            // so that we can start it once we get restored and receive the permission.
-            outState.putParcelable(RESTORE_KEY_DOWNLOAD, pendingDownload);
-        }
     }
 
     @Override
@@ -342,39 +309,7 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
                     fullscreenCallback = null;
                 }
             }
-
-            @Override
-            public void onDownloadStart(Download download) {
-                if (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    // Long press image displays its own dialog and we handle other download cases here
-                    if (!isDownloadFromLongPressImage(download)) {
-                        showDownloadPromptDialog(download);
-                    } else {
-                        // Download dialog has already been shown from long press on image. Proceed with download.
-                        queueDownload(download);
-                    }
-                } else {
-                    // We do not have the permission to write to the external storage. Request the permission and start the
-                    // download from onRequestPermissionsResult().
-                    final Activity activity = getActivity();
-                    if (activity == null) {
-                        return;
-                    }
-
-                    pendingDownload = download;
-
-                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_STORAGE_PERMISSION);
-                }
-            }
         });
-    }
-
-    /**
-     * Checks a download's destination directory to determine if it is being called from
-     * a long press on an image or otherwise.
-     */
-    private boolean isDownloadFromLongPressImage(Download download) {
-        return download.getDestinationDirectory().equals(Environment.DIRECTORY_PICTURES);
     }
 
     /**
@@ -429,47 +364,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
         exitImmersiveModeIfNeeded();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode != REQUEST_CODE_STORAGE_PERMISSION) {
-            return;
-        }
-
-        if (grantResults.length <= 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-            // We didn't get the storage permission: We are not able to start this download.
-            pendingDownload = null;
-        }
-
-        // The actual download dialog will be shown from onResume(). If this activity/fragment is
-        // getting restored then we need to 'resume' first before we can show a dialog (attaching
-        // another fragment).
-    }
-
-    void showDownloadPromptDialog(Download download) {
-        final FragmentManager fragmentManager = getFragmentManager();
-
-        if (fragmentManager.findFragmentByTag(DownloadDialogFragment.FRAGMENT_TAG) != null) {
-            // We are already displaying a download dialog fragment (Probably a restored fragment).
-            // No need to show another one.
-            return;
-        }
-
-        final DialogFragment downloadDialogFragment = DownloadDialogFragment.newInstance(download);
-        downloadDialogFragment.setTargetFragment(BrowserFragment.this, 300);
-
-        try {
-            downloadDialogFragment.show(fragmentManager, DownloadDialogFragment.FRAGMENT_TAG);
-        } catch (IllegalStateException e) {
-            // It can happen that at this point in time the activity is already in the background
-            // and onSaveInstanceState() has already been called. Fragment transactions are not
-            // allowed after that anymore. It's probably safe to guess that the user might not
-            // be interested in the download at this point. So we could just *not* show the dialog.
-            // Unfortunately we can't call commitAllowingStateLoss() because committing the
-            // transaction is happening inside the DialogFragment code. Therefore we just swallow
-            // the exception here. Gulp!
-        }
-    }
-
     void showAddToHomescreenDialog(String url, String title) {
         final FragmentManager fragmentManager = getFragmentManager();
 
@@ -489,77 +383,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
             // and onSaveInstanceState() has already been called. Fragment transactions are not
             // allowed after that anymore. It's probably safe to guess that the user might not
             // be interested in adding to homescreen now.
-        }
-    }
-
-    @Override
-    public void onFinishDownloadDialog(Download download, boolean shouldDownload) {
-        if (shouldDownload) {
-            queueDownload(download);
-        }
-    }
-
-    @Override
-    public void onCreateViewCalled() {
-        manager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
-        downloadBroadcastReceiver = new DownloadBroadcastReceiver(browserContainer, manager);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        final IntentFilter filter = new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-        getContext().registerReceiver(downloadBroadcastReceiver, filter);
-
-        if (pendingDownload != null
-                && PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            // There's a pending download (waiting for the storage permission) and now we have the
-            // missing permission: Show the dialog to ask whether the user wants to actually proceed
-            // with downloading this file.
-            showDownloadPromptDialog(pendingDownload);
-            pendingDownload = null;
-        }
-    }
-
-    /**
-     * Use Android's Download Manager to queue this download.
-     */
-    private void queueDownload(Download download) {
-        if (download == null) {
-            return;
-        }
-
-        final Context context = getContext();
-        if (context == null) {
-            return;
-        }
-
-        final String cookie = CookieManager.getInstance().getCookie(download.getUrl());
-        final String fileName = DownloadUtils.guessFileName(download);
-
-        final DownloadManager.Request request = new DownloadManager.Request(Uri.parse(download.getUrl()))
-                .addRequestHeader("User-Agent", download.getUserAgent())
-                .addRequestHeader("Cookie", cookie)
-                .addRequestHeader("Referer", getUrl())
-                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-                .setMimeType(download.getMimeType());
-
-        try {
-            request.setDestinationInExternalPublicDir(
-                    download.getDestinationDirectory(), fileName);
-        } catch (IllegalStateException e) {
-            Log.e(FRAGMENT_TAG, "Cannot create download directory");
-            return;
-        }
-
-        request.allowScanningByMediaScanner();
-
-        try {
-            long downloadReference = manager.enqueue(request);
-            downloadBroadcastReceiver.addQueuedDownload(downloadReference);
-        } catch (RuntimeException e) {
-            Log.e(FRAGMENT_TAG, "Download failed: " + e);
         }
     }
 

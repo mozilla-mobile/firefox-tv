@@ -14,8 +14,6 @@ import android.widget.ProgressBar;
 
 import org.mozilla.focus.R;
 import org.mozilla.focus.session.Session;
-import org.mozilla.focus.utils.SupportUtils;
-import org.mozilla.focus.web.Download;
 import org.mozilla.focus.web.IWebView;
 
 public class InfoFragment extends WebFragment {
@@ -56,9 +54,6 @@ public class InfoFragment extends WebFragment {
     }
 
     @Override
-    public void onCreateViewCalled() {}
-
-    @Override
     public IWebView.Callback createCallback() {
         return new IWebView.Callback() {
             @Override
@@ -83,9 +78,6 @@ public class InfoFragment extends WebFragment {
             public void onProgress(int progress) {
                 progressView.setProgress(progress);
             }
-
-            @Override
-            public void onDownloadStart(Download download) {}
 
             @Override
             public void onLongPress(IWebView.HitTarget hitTarget) {}
