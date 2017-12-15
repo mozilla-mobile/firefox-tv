@@ -68,15 +68,15 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener) :
 
     val tiles = listOf(
             HomeTile("https://youtube.com/tv", R.string.tile_youtube_tv,R.drawable.tile_youtube),
-            HomeTile("https://www.google.com/search?tbm=vid", R.string.tile_google_video_search, R.drawable.ic_forward),
-            HomeTile("http://imdb.com", R.string.tile_imdb, R.drawable.ic_forward),
-            HomeTile("https://www.rottentomatoes.com", R.string.tile_rottentomatoes, R.drawable.ic_forward),
+            HomeTile("https://www.google.com/search?tbm=vid", R.string.tile_google_video_search, R.drawable.tile_google),
+            HomeTile("http://imdb.com", R.string.tile_imdb, R.drawable.tile_imdb),
+            HomeTile("https://www.rottentomatoes.com", R.string.tile_rottentomatoes, R.drawable.tile_rotten_tomatoes),
 
             // order?
             HomeTile("http://metacritic.com", R.string.tile_metacritic, R.drawable.tile_metacritic),
-            HomeTile("https://fandango.com", R.string.tile_fandango, R.drawable.ic_forward),
+            HomeTile("https://fandango.com", R.string.tile_fandango, R.drawable.tile_fandango),
 
-            HomeTile("https://hollywoodreporter.com", R.string.tile_hollywood_reporter, R.drawable.ic_forward),
+            HomeTile("https://hollywoodreporter.com", R.string.tile_hollywood_reporter, R.drawable.tile_hollywood_reporter),
             HomeTile("https://flickr.com", R.string.tile_flickr, R.drawable.tile_flickr),
             HomeTile("https://instagram.com", R.string.tile_instagram, R.drawable.tile_instagram), // sign in required
             HomeTile("https://pinterest.com", R.string.tile_pinterest, R.drawable.tile_pinterest) // sign in required
