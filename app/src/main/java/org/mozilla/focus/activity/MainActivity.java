@@ -231,7 +231,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             default:
                 break;
         }
-        if (isDrawerOpen()) {
+        if (isDrawerOpen) {
             drawer.closeDrawer(GravityCompat.START);
         }
     }
