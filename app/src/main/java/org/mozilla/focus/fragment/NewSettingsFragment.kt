@@ -17,7 +17,6 @@ import org.mozilla.focus.activity.InfoActivity
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 
-
 /** The home fragment which displays the navigation tiles of the app. */
 class NewSettingsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
@@ -41,6 +40,7 @@ class NewSettingsFragment : Fragment() {
                     "OK",
                     DialogInterface.OnClickListener { dialog, id ->
                         SessionManager.getInstance().removeAllSessions()
+                        settingsWebView.cleanup()
                         dialog.cancel() })
 
             builder1.setNegativeButton(
