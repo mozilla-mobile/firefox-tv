@@ -464,8 +464,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     }
 
     public void toggleCursor(boolean enabled) {
-        if (isCursorEnabled == enabled) { return; }
-
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
 
