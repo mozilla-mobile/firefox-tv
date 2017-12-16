@@ -135,4 +135,11 @@
         </LinearLayout>
 
     </LinearLayout>
+    <org.mozilla.focus.web.IWebView
+        android:id="@+id/settingsWebView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+        android:visibility="gone">
+    </org.mozilla.focus.web.IWebView>
 </LinearLayout>
