@@ -24,6 +24,16 @@
         android:layout_weight="1"
         android:layout_gravity="center">
 
+        <CheckBox
+            android:id="@+id/telemetryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:layout_gravity="center_vertical"
+            android:text="@string/preference_mozilla_telemetry2"
+            android:scaleType="fitCenter"
+            android:button="@drawable/telemetry_check_selector"/>
+        <!--
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -31,7 +41,6 @@
             android:orientation="vertical"
             android:background="@drawable/settings_item_selector"
             android:focusable="true"
-            android:clickable="true"
             android:layout_gravity="center_vertical">
             <TextView
                 android:layout_width="wrap_content"
@@ -40,15 +49,14 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
                 android:textSize="25sp"/>
-            <ImageButton
+            <CheckBox
                 android:id="@+id/telemetryButton"
                 android:layout_width="128dp"
                 android:layout_height="128dp"
-                android:src="@drawable/ic_checkmark_enabled"
                 android:scaleType="fitCenter"
-                android:background="@android:color/transparent"
                 android:layout_gravity="center"/>
         </LinearLayout>
+        -->
 
         <LinearLayout
             android:id="@+id/aboutButton"

@@ -23,18 +23,12 @@ class NewSettingsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater!!.inflate(R.layout.fragment_new_settings, container, false)
 
-    private fun setTelemetryUIChecked(isEnabled: Boolean) = if (isEnabled) {
-        telemetryButton.setImageResource(R.drawable.ic_checkmark_enabled)
-    } else {
-        telemetryButton.setImageResource(R.drawable.ic_checkmark_disabled)
-    }
-
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        setTelemetryUIChecked(TelemetryWrapper.isTelemetryEnabled(context))
+
+        telemetryButton.isChecked = !TelemetryWrapper.isTelemetryEnabled(activity)
         telemetryButton.setOnClickListener { view ->
             val telemetryEnabled = !TelemetryWrapper.isTelemetryEnabled(activity)
             TelemetryWrapper.setTelemetryEnabled(activity, telemetryEnabled)
-            setTelemetryUIChecked(telemetryEnabled)
         }
 
         deleteButton.setOnClickListener { view ->
