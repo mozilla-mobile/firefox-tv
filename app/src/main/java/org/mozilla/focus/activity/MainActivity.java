@@ -117,6 +117,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.drawer_home:
+                        popSettingsFragment();
                         showHomeScreen();
                         break;
 
@@ -424,6 +425,10 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             return;
         }
 
+        if (popSettingsFragment()) {
+            return;
+        }
+
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
         if (browserFragment != null &&
                 browserFragment.isVisible() &&
@@ -434,6 +439,16 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         }
 
         super.onBackPressed();
+    }
+
+    private boolean popSettingsFragment() {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        final NewSettingsFragment newSettingsFragment = (NewSettingsFragment) fragmentManager.findFragmentByTag(NewSettingsFragment.FRAGMENT_TAG);
+        if (newSettingsFragment != null && newSettingsFragment.isVisible()) {
+            fragmentManager.popBackStack();
+            return true;
+        }
+        return false;
     }
 
     private void initAmazonFactory() {
