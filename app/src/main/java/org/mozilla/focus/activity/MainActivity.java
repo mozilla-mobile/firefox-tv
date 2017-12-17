@@ -376,7 +376,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, settingsFragment, NewSettingsFragment.FRAGMENT_TAG)
-                .addToBackStack(null)
                 .commit();
 
         hintNavigationBar.setVisibility(View.VISIBLE);
@@ -424,6 +423,11 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             return;
         }
 
+        if (settingsFragmentIsShowing()) {
+            showHomeScreen();
+            return;
+        }
+
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
         if (browserFragment != null &&
                 browserFragment.isVisible() &&
@@ -434,6 +438,12 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         }
 
         super.onBackPressed();
+    }
+
+    private boolean settingsFragmentIsShowing() {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        final NewSettingsFragment settingsFragment = (NewSettingsFragment) fragmentManager.findFragmentByTag(NewSettingsFragment.FRAGMENT_TAG);
+        return (settingsFragment != null && settingsFragment.isVisible());
     }
 
     private void initAmazonFactory() {
