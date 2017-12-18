@@ -399,10 +399,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
                 // todo: do we handle external links?
                 TelemetryWrapper.eraseBackToAppEvent();
 
-                // This session has been started from a VIEW intent. Go back to the previous app
-                // immediately and erase the current browsing session.
-                erase();
-
                 // If there are no other sessions then we remove the whole task because otherwise
                 // the old session might still be partially visible in the app switcher.
                 if (!SessionManager.getInstance().hasSession()) {
@@ -416,8 +412,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
             } else {
                 // Just go back to the home screen.
                 TelemetryWrapper.eraseBackToHomeEvent();
-
-                erase();
             }
         }
 
@@ -442,9 +436,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
             }
 
             case R.id.erase: {
-                TelemetryWrapper.eraseEvent();
-
-                erase();
                 break;
             }
 
