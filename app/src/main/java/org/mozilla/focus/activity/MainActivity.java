@@ -523,6 +523,13 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
 
         if (browserFragment == null || !browserFragment.isVisible() || isDrawerOpen || !isCursorEnabled) {
+
+            if(event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+                KeyEvent keyEvent = new KeyEvent(event.getAction(), KeyEvent.KEYCODE_ESCAPE);
+                dispatchKeyEvent(keyEvent);
+                return true;
+            }
+
             return super.dispatchKeyEvent(event);
         }
 
