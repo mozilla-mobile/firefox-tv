@@ -182,4 +182,7 @@
   <string name="your_rights_content3"><![CDATA["Mozilla、Firefox、%1$s の名称やロゴを含む、Mozilla Foundation や第三者の商標に関するいかなる権利やライセンスもあなたには与えられていません。詳しい情報は "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#12371;&#12385;&#12425;</a>" をご覧ください。"]]></string>
   <string name="your_rights_content4"><![CDATA["%1$s の追加ソースコードは様々な他のフリーでオープンソースの "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#12521;&#12452;&#12475;&#12531;&#12473;</a>" に基いて公開されています。"]]></string>
   <string name="your_rights_content5"><![CDATA["%1$s は Disconnect, Inc. によって提供されているブロックリストも "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>" の下で単独のリソースとして使用しており、それらは "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">&#12371;&#12385;&#12425;</a>" から入手可能です。"]]></string>
+  <string name="menu_drawer_home">ホーム</string>
+  <string name="settings_cookies_dialog_title">すべての Cookie とサイトデータの消去</string>
+  <string name="settings_cookies_dialog_content">‘今すぐ消去’ を選択すると Firefox に保存されたすべての Cookie とサイトデータが消去されます。ウェブサイトからログアウトし、オフライン作業用のウェブページが削除されます。</string>
 </resources>

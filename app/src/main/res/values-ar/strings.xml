@@ -182,4 +182,7 @@
   <string name="your_rights_content3"><![CDATA["لا يعطيك هذا أي حقوق أو تراخيص للعلامات التجارية لمؤسسة موزيلا أو أي طرف آخر، متضمنًا أسماء موزيلا أو فَيَرفُكس أو %1$s أو شعاراتها. يمكنك الاطلاع على مزيد من المعلومات من "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#1607;&#1606;&#1575;</a>.]]></string>
   <string name="your_rights_content4"><![CDATA["النصوص المصدرية الإضافية لِ‍ %1$s متاحة وفق "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#1585;&#1582;&#1589;</a>" البرمجيات الحرة والمفتوحة المصدر الأخرى."]]></string>
   <string name="your_rights_content5"><![CDATA["يستخدم %1$s قوائم المنع التي توفّرها شركة Disconnect, Inc كأعمال منفصلة ومستقرّة برخصة "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#1594;&#1606;&#1608; &#1575;&#1604;&#1593;&#1605;&#1608;&#1605;&#1610;&#1577; &#1575;&#1604;&#1573;&#1589;&#1583;&#1575;&#1585;&#1577; &#1575;&#1604;&#1579;&#1575;&#1604;&#1579;&#1577;</a>"، وهي متاحة "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">&#1607;&#1606;&#1575;</a>.]]></string>
+  <string name="menu_drawer_home">البداية</string>
+  <string name="settings_cookies_dialog_title">امسح كل الكعكات و بيانات الموقع</string>
+  <string name="settings_cookies_dialog_content">اختيار ’امسح الآن‘ يمسح كل الكعكات و بيانات الموقع التي يحفظها فَيرفُكس. قد يعني هذا خروجك من المواقع و حذف بيانات العمل دون اتصال.</string>
 </resources>

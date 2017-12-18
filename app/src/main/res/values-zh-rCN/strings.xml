@@ -182,4 +182,7 @@
   <string name="your_rights_content3"><![CDATA[您没有取得 Mozilla 基金会或任何一方的商标的任何权利或许可，包括 Mozilla、Firefox 和 %1$s 名称或徽标的许可。有关信息请查阅<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#27492;&#22788;</a>。]]></string>
   <string name="your_rights_content4"><![CDATA[%1$s 其他源代码以各类自由和开源<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#35768;&#21487;&#35777;</a>开放。]]></string>
   <string name="your_rights_content5"><![CDATA["%1$s 还使用 Disconnect 公司提供的阻止列表，它是以 "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU &#36890;&#29992;&#20844;&#20849;&#35768;&#21487;&#35777; v3</a>" 提供的一个独立的作品，可在"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">&#36825;&#37324;</a>找到。]]></string>
+  <string name="menu_drawer_home">主页</string>
+  <string name="settings_cookies_dialog_title">清除所有 Cookie 和站点数据</string>
+  <string name="settings_cookies_dialog_content">选择“立即清除”将清除 Firefox 存储的所有 Cookie 和站点数据。这可能使您退出网站的登录，以及删除离线的网站内容。</string>
 </resources>

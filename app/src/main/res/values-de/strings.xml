@@ -182,4 +182,7 @@
   <string name="your_rights_content3"><![CDATA["Ihnen werden keine Rechte oder Lizenzen an den Markenrechten der Mozilla Foundation oder einer anderen Partei eingeräumt, dazu zählen die Namen und Logos von Mozilla, Firefox oder %1$s. Weitere Informationen finden Sie "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">hier</a>.]]></string>
   <string name="your_rights_content4"><![CDATA[Sonstiger Quelltext für %1$s steht unter diversen anderen freien und Open-Source-<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Lizenzen</a>.]]></string>
   <string name="your_rights_content5"><![CDATA["%1$s nutzt auch von Disconnect, Inc. angebotene Blockierlisten als separate und unabhängige Werke unter der "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License3</a>", die "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">hier</a>" verfügbar sind."]]></string>
+  <string name="menu_drawer_home">Startseite</string>
+  <string name="settings_cookies_dialog_title">Alle Cookies und Websitedaten entfernen</string>
+  <string name="settings_cookies_dialog_content">"Jetzt leeren" löscht alle Cookies und Websitedaten, die Firefox gespeichert hat. Dadurch werden Sie wahrscheinlich von Websites abgemeldet und Offline-Webinhalte werden gelöscht.</string>
 </resources>

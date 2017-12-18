@@ -182,4 +182,7 @@
   <string name="your_rights_content3"><![CDATA["귀하는 Mozilla와 Firefox, %1$s 명칭이나 로고를 포함한 Mozilla 재단 및 다른 서비스 제공자 소유의 지적재산권으로 보호받는 권리나 라이선스가 부여되는 것이 아님을 인지하셔야 합니다. 추가적인 정보는 "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#45796;&#51020;</a>을 참고하시기 바랍니다.]]></string>
   <string name="your_rights_content4"><![CDATA["%1$s의 소스 코드는 기타 다양한 무료 및 오픈 소스 "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#46972;&#51060;&#49440;&#49828;</a>" 계약에 따라 무료로 제공됩니다."]]></string>
   <string name="your_rights_content5"><![CDATA["%1$s는 Disconnect, Inc에서 제공하는 차단목록에서 "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>"를 바탕으로 자체적으로 별도로 관리하는 차단목록을 사용합니다. 자세한 내용은 "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">&#45796;&#51020;</a>에서 확인할 수 있습니다.]]></string>
+  <string name="menu_drawer_home">홈</string>
+  <string name="settings_cookies_dialog_title">모든 쿠키와 사이트 데이터 삭제</string>
+  <string name="settings_cookies_dialog_content">‘지금 삭제’를 선택하면 Firefox에 저장되어 있는 모든 쿠키와 사이트 데이터가 삭제됩니다. 웹사이트에서 로그아웃될 수 있고 오프라인 웹 콘텐츠를 삭제할 것입니다.</string>
 </resources>
