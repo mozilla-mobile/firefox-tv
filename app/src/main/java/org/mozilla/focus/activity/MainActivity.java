@@ -79,6 +79,10 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private boolean isDrawerOpen = false;
     private boolean isCursorEnabled = true;
 
+    public enum VideoPlayerState {
+       BROWSER, HOME, SETTINGS
+    }
+
     public MainActivity() {
         sessionManager = SessionManager.getInstance();
     }
@@ -367,8 +371,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 .replace(R.id.container, homeFragment, HomeFragment.FRAGMENT_TAG)
                 .addToBackStack(null)
                 .commit();
-
-        hintNavigationBar.setVisibility(View.VISIBLE);
     }
 
     private void showSettingsScreen() {
@@ -379,11 +381,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 .replace(R.id.container, settingsFragment, NewSettingsFragment.FRAGMENT_TAG)
                 .addToBackStack(null)
                 .commit();
-
-        hintNavigationBar.setVisibility(View.VISIBLE);
     }
-
-
 
     private void showBrowserScreenForCurrentSession() {
         final Session currentSession = sessionManager.getCurrentSession();
@@ -401,12 +399,20 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                         BrowserFragment.createForSession(currentSession), BrowserFragment.FRAGMENT_TAG)
                 .addToBackStack(null)
                 .commit();
-
-        hintNavigationBar.setVisibility(View.GONE);
     }
 
-    public void hideHintNavigationBar() {
-        hintNavigationBar.setVisibility(View.GONE);
+    public void updateHintNavigationVisibility(VideoPlayerState state) {
+        switch (state) {
+            case HOME:
+            case SETTINGS:
+                hintNavigationBar.setVisibility(View.VISIBLE);
+                break;
+            case BROWSER:
+                hintNavigationBar.setVisibility(View.GONE);
+                break;
+            default:
+                hintNavigationBar.setVisibility(View.GONE);
+        }
     }
 
     @Override

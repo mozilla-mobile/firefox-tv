@@ -131,6 +131,15 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        final Activity activity = getActivity();
+        if (activity instanceof MainActivity) {
+            ((MainActivity) activity).updateHintNavigationVisibility(MainActivity.VideoPlayerState.BROWSER);
+        }
+    }
+
     public Session getSession() {
         return session;
     }
