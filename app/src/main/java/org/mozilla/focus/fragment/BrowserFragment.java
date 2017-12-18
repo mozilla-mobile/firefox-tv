@@ -404,24 +404,7 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
             // Go back in web history
             goBack();
         } else {
-            if (session.getSource() == Source.VIEW || session.getSource() == Source.CUSTOM_TAB) {
-                // todo: do we handle external links?
-                TelemetryWrapper.eraseBackToAppEvent();
-
-                // If there are no other sessions then we remove the whole task because otherwise
-                // the old session might still be partially visible in the app switcher.
-                if (!SessionManager.getInstance().hasSession()) {
-                    getActivity().finishAndRemoveTask();
-                } else {
-                    getActivity().finish();
-                }
-
-                // We can't show a snackbar outside of the app. So let's show a toast instead.
-                Toast.makeText(getContext(), R.string.feedback_erase, Toast.LENGTH_SHORT).show();
-            } else {
-                // Just go back to the home screen.
-                TelemetryWrapper.eraseBackToHomeEvent();
-            }
+            getFragmentManager().popBackStack();
         }
 
         return true;
