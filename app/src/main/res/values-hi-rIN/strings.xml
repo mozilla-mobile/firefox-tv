@@ -157,4 +157,7 @@
   <string name="your_rights_content3"><![CDATA["आपको Mozilla Foundation अथवा Mozilla, Firefox या %1$s नाम या प्रतीकचिन्हों सहित किसी भी पक्ष के ट्रेडमार्कों के कोई भी अधिकार या लाइसेन्स प्रदान नहीं किए गए हैं. अतिरिक्त जानकारी "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#2351;&#2361;&#2366;&#2305;</a>" मिल सकती है."]]></string>
   <string name="your_rights_content4"><![CDATA["%1$s के लिए अतिरिक्त स्रोत कोड कई अन्य निशुल्क और मुक्त स्रोत "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#2354;&#2366;&#2311;&#2360;&#2375;&#2344;&#2381;&#2360;&#2379;&#2306;</a>" के अंतर्गत उपलब्ध हैं."]]></string>
   <string name="your_rights_content5"><![CDATA["%1$s Disconnect, Inc. द्वारा प्रदत्त अवरुद्धसूची का भी उपयोग "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>" के अंतर्गत पृथक और स्वतंत्र कार्यों के रूप में करता है, और "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">&#2351;&#2361;&#2366;&#2305;</a>" उपलब्ध है."]]></string>
+  <string name="menu_drawer_home">घर</string>
+  <string name="settings_cookies_dialog_title">सभी कुकीज और साइट आँकड़े साफ़ करें</string>
+  <string name="settings_cookies_dialog_content">‘अब साफ़ करें’ का चयन करने से Firefox द्वारा संग्रहीत सभी कुकीज़ और साइट डेटा साफ हो जाएँगे. इससे आप वेबसाइटों से साइन आउट कर सकते हैं और ऑफ़लाइन वेब सामग्री को हटा सकते हैं.</string>
 </resources>

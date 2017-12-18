@@ -38,13 +38,13 @@ class NewSettingsFragment : Fragment() {
             builder1.setCancelable(true)
 
             builder1.setPositiveButton(
-                    "OK",
+                    getString(R.string.action_ok),
                     DialogInterface.OnClickListener { dialog, id ->
                         SessionManager.getInstance().removeAllSessions()
                         dialog.cancel() })
 
             builder1.setNegativeButton(
-                    "Cancel",
+                    getString(R.string.action_cancel),
                     DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
 
             val alert11 = builder1.create()

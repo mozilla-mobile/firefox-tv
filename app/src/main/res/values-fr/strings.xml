@@ -182,4 +182,7 @@
   <string name="your_rights_content3"><![CDATA["Il ne vous est cédé aucun droit ou licence sur les marques déposées de la Fondation Mozilla ou de tiers, y compris sur les noms et logos de Mozilla, Firefox ou %1$s. Des informations complémentaires peuvent être consultées "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">ici</a>.]]></string>
   <string name="your_rights_content4"><![CDATA["Le code source complémentaire pour %1$s est disponible sous différentes "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">licences</a>" libres et open source."]]></string>
   <string name="your_rights_content5"><![CDATA["%1$s utilise aussi des listes de blocage fournies par Disconnect Inc, en tant que créations sous la licence "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>" et qui sont disponibles "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">ici</a>.]]></string>
+  <string name="menu_drawer_home">Accueil</string>
+  <string name="settings_cookies_dialog_title">Effacer les cookies et les données des sites</string>
+  <string name="settings_cookies_dialog_content">En cliquant sur « Effacer maintenant », vous effacerez toutes les données des sites et tous les cookies stockés par Firefox. Cette action peut vous déconnecter de certains sites et supprimer du contenu web disponible hors connexion.</string>
 </resources>
