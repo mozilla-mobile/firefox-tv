@@ -109,6 +109,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/deleteButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -126,7 +127,6 @@
                 android:textSize="25sp"
                 android:layout_marginBottom="15dp" />
             <ImageView
-                android:id="@+id/deleteButton"
                 android:layout_width="128dp"
                 android:layout_height="128dp"
                 android:src="@drawable/ic_delete"
