@@ -31,7 +31,7 @@ import org.mozilla.focus.web.WebViewProvider;
  */
 public class InfoActivity extends AppCompatActivity {
     private static final String PRIVACY_NOTICE_URL = "https://www.mozilla.org/privacy/firefox-fire-tv/";
-    private static final String PRIVACY_NOTICE_KLAR_URL = "https://www.mozilla.org/de/privacy/firefox-klar/";
+    private static final String PRIVACY_NOTICE_KLAR_URL = "https://www.mozilla.org/privacy/firefox-fire-tv/";
 
     private static final String EXTRA_URL = "extra_url";
     private static final String EXTRA_TITLE = "extra_title";
