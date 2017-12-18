@@ -524,7 +524,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
         if (browserFragment == null || !browserFragment.isVisible() || isDrawerOpen || !isCursorEnabled) {
 
-            if(event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            if(event.getKeyCode() == KeyEvent.KEYCODE_BACK && browserFragment.isVisible() && !isDrawerOpen) {
                 KeyEvent keyEvent = new KeyEvent(event.getAction(), KeyEvent.KEYCODE_ESCAPE);
                 dispatchKeyEvent(keyEvent);
                 return true;
