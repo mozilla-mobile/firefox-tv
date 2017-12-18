@@ -28,6 +28,7 @@ import org.mozilla.focus.utils.UrlUtils;
 import org.mozilla.focus.utils.ViewUtils;
 import org.mozilla.focus.web.IWebView;
 import org.mozilla.focus.web.WebViewProvider;
+import android.webkit.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -187,7 +188,6 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
 
     @Override
     public void cleanup() {
-        /*
         clearFormData();
         clearHistory();
         clearMatches();
@@ -205,7 +205,6 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
         webViewDatabase.clearHttpAuthUsernamePassword();
 
         deleteContentFromKnownLocations(getContext());
-        */
     }
 
     @Override
