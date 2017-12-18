@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_new_settings.*
 import org.mozilla.focus.R
 import org.mozilla.focus.activity.InfoActivity
+import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 
@@ -59,6 +60,14 @@ class NewSettingsFragment : Fragment() {
 
         privacyNoticeButton.setOnClickListener {
             startActivity(InfoActivity.getPrivacyNoticeIntent(context))
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val a = activity
+        if (a is MainActivity) {
+            a.updateHintNavigationVisibility(MainActivity.VideoPlayerState.SETTINGS)
         }
     }
 
