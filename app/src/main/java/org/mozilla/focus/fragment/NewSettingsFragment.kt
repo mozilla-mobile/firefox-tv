@@ -25,10 +25,11 @@ class NewSettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 
-        telemetryButton.isChecked = !TelemetryWrapper.isTelemetryEnabled(activity)
-        telemetryButton.setOnClickListener { view ->
-            val telemetryEnabled = !TelemetryWrapper.isTelemetryEnabled(activity)
-            TelemetryWrapper.setTelemetryEnabled(activity, telemetryEnabled)
+        telemetryButton.isChecked = TelemetryWrapper.isTelemetryEnabled(activity)
+        telemetryView.setOnClickListener { view ->
+            val newTelemetryState = !TelemetryWrapper.isTelemetryEnabled(activity)
+            TelemetryWrapper.setTelemetryEnabled(activity, newTelemetryState)
+            telemetryButton.isChecked = newTelemetryState
         }
 
         deleteButton.setOnClickListener { view ->

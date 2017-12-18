@@ -14,7 +14,6 @@ import org.mozilla.focus.BuildConfig
 import org.mozilla.focus.R
 import org.mozilla.focus.search.SearchEngineManager
 import org.mozilla.focus.session.SessionManager
-import org.mozilla.focus.utils.AppConstants
 import org.mozilla.focus.widget.InlineAutocompleteEditText.AutocompleteResult
 import org.mozilla.telemetry.Telemetry
 import org.mozilla.telemetry.TelemetryHolder
