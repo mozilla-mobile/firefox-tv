@@ -68,4 +68,5 @@
     <color name="blue_nav">#0060df</color>
     <color name="ink70">#363959</color>
     <color name="ink80">#202340</color>
+    <color name="homeUrlBarBackground">#B3424242</color>
 </resources>
