@@ -356,7 +356,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
     private void showHomeScreen() {
         // TODO: animations if fragment is found.
-        if (getSupportFragmentManager().findFragmentByTag(HomeFragment.FRAGMENT_TAG) != null) {
+        if (getSupportFragmentManager().findFragmentByTag(HomeFragment.FRAGMENT_TAG) != null && getSupportFragmentManager().findFragmentByTag(HomeFragment.FRAGMENT_TAG).isVisible()) {
             return;
         }
 
@@ -365,6 +365,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, homeFragment, HomeFragment.FRAGMENT_TAG)
+                .addToBackStack(null)
                 .commit();
 
         hintNavigationBar.setVisibility(View.VISIBLE);
@@ -376,6 +377,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, settingsFragment, NewSettingsFragment.FRAGMENT_TAG)
+                .addToBackStack(null)
                 .commit();
 
         hintNavigationBar.setVisibility(View.VISIBLE);
@@ -397,8 +399,13 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 .beginTransaction()
                 .replace(R.id.container,
                         BrowserFragment.createForSession(currentSession), BrowserFragment.FRAGMENT_TAG)
+                .addToBackStack(null)
                 .commit();
 
+        hintNavigationBar.setVisibility(View.GONE);
+    }
+
+    public void hideHintNavigationBar() {
         hintNavigationBar.setVisibility(View.GONE);
     }
 
@@ -423,11 +430,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             return;
         }
 
-        if (settingsFragmentIsShowing()) {
-            showHomeScreen();
-            return;
-        }
-
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
         if (browserFragment != null &&
                 browserFragment.isVisible() &&
@@ -438,12 +440,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         }
 
         super.onBackPressed();
-    }
-
-    private boolean settingsFragmentIsShowing() {
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        final NewSettingsFragment settingsFragment = (NewSettingsFragment) fragmentManager.findFragmentByTag(NewSettingsFragment.FRAGMENT_TAG);
-        return (settingsFragment != null && settingsFragment.isVisible());
     }
 
     private void initAmazonFactory() {
@@ -507,6 +503,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             // And this fragment can be removed again.
             fragmentManager.beginTransaction()
                     .replace(R.id.container, browserFragment)
+                    .addToBackStack(null)
                     .commit();
         } else {
             if (!TextUtils.isEmpty(searchTerms)) {
