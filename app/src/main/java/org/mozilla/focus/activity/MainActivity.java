@@ -522,14 +522,17 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
 
+        // Remaps the back button to escape when:
+        // - The browser is visible
+        // - The cursor is disabled
+        // - The drawer isn't open
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && browserFragment != null && browserFragment.isVisible() && !isCursorEnabled && !isDrawerOpen) {
+            KeyEvent keyEvent = new KeyEvent(event.getAction(), KeyEvent.KEYCODE_ESCAPE);
+            dispatchKeyEvent(keyEvent);
+            return true;
+        }
+
         if (browserFragment == null || !browserFragment.isVisible() || isDrawerOpen || !isCursorEnabled) {
-
-            if(event.getKeyCode() == KeyEvent.KEYCODE_BACK && browserFragment.isVisible() && !isDrawerOpen) {
-                KeyEvent keyEvent = new KeyEvent(event.getAction(), KeyEvent.KEYCODE_ESCAPE);
-                dispatchKeyEvent(keyEvent);
-                return true;
-            }
-
             return super.dispatchKeyEvent(event);
         }
 
