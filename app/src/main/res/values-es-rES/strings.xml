@@ -184,5 +184,5 @@
   <string name="your_rights_content5"><![CDATA["%1$s también utiliza las listas de bloqueo de DIsconnect, Inc. como trabajos separados e independientes bajo la "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Licencia P&#250;blica General de GNU v3</a>" y que puedes encontrar "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">aqu&#237;</a>.]]></string>
   <string name="menu_drawer_home">Inicio</string>
   <string name="settings_cookies_dialog_title">Limpiar todas las cookies y datos del sitio</string>
-  <string name="settings_cookies_dialog_content">Seleccionar 'Limpiar ahora' limpiará todas las cookies y datos del sitio guardados por Firefox. Esto puede desconectarle de sitios web y eliminar el contenido web sin conexión.</string>
+  <string name="settings_cookies_dialog_content">Seleccionar \"Limpiar ahora\" limpiará todas las cookies y datos del sitio guardados por Firefox. Esto puede desconectarle de sitios web y eliminar el contenido web sin conexión.</string>
 </resources>
