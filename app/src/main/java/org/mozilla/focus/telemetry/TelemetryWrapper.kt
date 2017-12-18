@@ -39,8 +39,8 @@ object TelemetryWrapper {
     private const val MAXIMUM_CUSTOM_TAB_EXTRAS = 10
 
     private val isEnabledByDefault: Boolean
-        // Telemetry enabled by default for Focus video
-        get() = true
+        // Telemetry is disabled by default for Focus video
+        get() = false
 
     private object Category {
         val ACTION = "action"
