@@ -41,7 +41,8 @@ class NewSettingsFragment : Fragment() {
                     DialogInterface.OnClickListener { dialog, id ->
                         SessionManager.getInstance().removeAllSessions()
                         settingsWebView.cleanup()
-                        dialog.cancel() })
+                        dialog.cancel()
+                    })
 
             builder1.setNegativeButton(
                     "Cancel",
