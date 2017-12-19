@@ -40,14 +40,15 @@ import org.mozilla.focus.session.Session;
 import org.mozilla.focus.session.SessionManager;
 import org.mozilla.focus.session.Source;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
-import org.mozilla.focus.utils.OnUrlEnteredListener;
 import org.mozilla.focus.utils.Direction;
+import org.mozilla.focus.utils.OnUrlEnteredListener;
 import org.mozilla.focus.utils.SafeIntent;
 import org.mozilla.focus.utils.Settings;
 import org.mozilla.focus.utils.UrlUtils;
 import org.mozilla.focus.utils.ViewUtils;
 import org.mozilla.focus.web.IWebView;
 import org.mozilla.focus.web.WebViewProvider;
+import org.mozilla.focus.webview.SystemWebView;
 import org.mozilla.focus.widget.InlineAutocompleteEditText;
 
 import java.util.List;
@@ -157,6 +158,15 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 isDrawerOpen = false;
+
+                // If you open and close the menu on youtube, dpad navigation stops working for an unknown reason.
+                // One workaround is to reload the page, which we do here.
+                final BrowserFragment browserFragment = (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
+                if (browserFragment != null && browserFragment.isVisible() && browserFragment.getUrl().contains("youtube.com/tv")) {
+                    final SystemWebView wv = (SystemWebView) browserFragment.getWebView();
+                    wv.requestFocus();
+                    wv.reload();
+                }
             }
 
             @Override
