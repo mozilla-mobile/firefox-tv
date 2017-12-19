@@ -41,8 +41,8 @@ class NewSettingsFragment : Fragment() {
             builder1.setPositiveButton(
                     getString(R.string.action_ok),
                     DialogInterface.OnClickListener { dialog, id ->
-                        SessionManager.getInstance().removeAllSessions()
                         settingsWebView.cleanup()
+                        SessionManager.getInstance().removeAllSessions()
                         dialog.cancel()
                     })
 
