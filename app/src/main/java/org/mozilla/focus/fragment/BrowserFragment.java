@@ -11,10 +11,12 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -206,8 +208,18 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
                     menu.updateLoading(loading);
                 }
 
-                MainActivity activity = (MainActivity)getActivity();
+                final MainActivity activity = (MainActivity)getActivity();
                 activity.toggleCursor(!getWebView().getUrl().contains("youtube.com/tv"));
+
+                if (!loading && activity.isReloadingForYoutubeDrawerClosed) {
+                    activity.isReloadingForYoutubeDrawerClosed = false;
+
+                    // We send a play event which:
+                    // - If we're on the video selection page, does nothing.
+                    // - If we're in a fullscreen video, will show the play/pause controls on the screen so
+                    // we don't just see a black screen.
+                    activity.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
+                }
             }
         });
 
