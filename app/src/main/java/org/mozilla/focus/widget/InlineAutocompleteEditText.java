@@ -50,6 +50,10 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         void onTextChange(String originalText, String autocompleteText);
     }
 
+    public interface OnBackPressedListener {
+        void onBackPressed();
+    }
+
     public static class AutocompleteResult {
         public static AutocompleteResult emptyResult() {
             return new AutocompleteResult("", "", 0);
@@ -99,6 +103,7 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
     private OnFilterListener mFilterListener;
     private OnSearchStateChangeListener mSearchStateChangeListener;
     private OnTextChangeListener mTextChangeListener;
+    private OnBackPressedListener mOnBackPressedListener;
 
     // The previous autocomplete result returned to us
     private AutocompleteResult mAutoCompleteResult = AutocompleteResult.emptyResult();
@@ -123,6 +128,8 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
     public void setOnFilterListener(OnFilterListener listener) {
         mFilterListener = listener;
     }
+
+    public void setOnBackPressedListener(OnBackPressedListener listener) { mOnBackPressedListener = listener; }
 
     void setOnSearchStateChangeListener(OnSearchStateChangeListener listener) {
         mSearchStateChangeListener = listener;
@@ -635,6 +642,9 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
 
             if (keyCode == KeyEvent.KEYCODE_BACK) {
                 removeAutocomplete(getText());
+                if (mOnBackPressedListener != null) {
+                    mOnBackPressedListener.onBackPressed();
+                }
                 return false;
             }
 
