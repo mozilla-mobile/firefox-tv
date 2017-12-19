@@ -288,20 +288,20 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private void updateDrawerNavUI() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-        if (customNavItem.getVisibility() == View.VISIBLE && browserFragment != null) {
-            drawerForward.setClickable(browserFragment.canGoForward());
+        if (customNavItem.getVisibility() == View.VISIBLE && browserFragment != null && browserFragment.isVisible()) {
+            drawerForward.setFocusable(browserFragment.canGoForward());
             drawerForward.setColorFilter((browserFragment.canGoForward() ? Color.WHITE : ContextCompat.getColor(this, R.color.colorTextInactive)), android.graphics.PorterDuff.Mode.SRC_IN);
             drawerBack.setColorFilter((browserFragment.canGoBack() ? Color.WHITE : ContextCompat.getColor(this, R.color.colorTextInactive)), android.graphics.PorterDuff.Mode.SRC_IN);
-            drawerBack.setClickable(browserFragment.canGoBack());
+            drawerBack.setFocusable(browserFragment.canGoBack());
             drawerUrlInput.setText(browserFragment.getUrl());
-            drawerRefresh.setClickable(true);
+            drawerRefresh.setFocusable(true);
             drawerRefresh.setColorFilter(Color.WHITE);
         } else {
-            drawerForward.setClickable(false);
+            drawerForward.setFocusable(false);
             drawerForward.setColorFilter(ContextCompat.getColor(this, R.color.colorTextInactive), android.graphics.PorterDuff.Mode.SRC_IN);
             drawerBack.setColorFilter(ContextCompat.getColor(this, R.color.colorTextInactive), android.graphics.PorterDuff.Mode.SRC_IN);
-            drawerBack.setClickable(false);
-            drawerRefresh.setClickable(false);
+            drawerBack.setFocusable(false);
+            drawerRefresh.setFocusable(false);
             drawerRefresh.setColorFilter(ContextCompat.getColor(this, R.color.colorTextInactive), android.graphics.PorterDuff.Mode.SRC_IN);
         }
         final HomeFragment homeFragment = (HomeFragment) fragmentManager.findFragmentByTag (HomeFragment.FRAGMENT_TAG);
