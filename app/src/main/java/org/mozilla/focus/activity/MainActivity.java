@@ -463,7 +463,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         super.onBackPressed();
     }
 
-    private void initAmazonFactory() {
+    public void initAmazonFactory() {
         if (!isAmazonFactoryInit) {
             factory = AmazonWebKitFactories.getDefaultFactory();
             if (factory.isRenderProcess(this)) {
