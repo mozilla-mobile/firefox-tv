@@ -144,10 +144,12 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
                 // Stop cursor movement upon drawer opening
                 final BrowserFragment browserFragment = (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-                browserFragment.stopMoving(Direction.DOWN);
-                browserFragment.stopMoving(Direction.LEFT);
-                browserFragment.stopMoving(Direction.RIGHT);
-                browserFragment.stopMoving(Direction.UP);
+                if browserFragment != null {
+                    browserFragment.stopMoving(Direction.DOWN);
+                    browserFragment.stopMoving(Direction.LEFT);
+                    browserFragment.stopMoving(Direction.RIGHT);
+                    browserFragment.stopMoving(Direction.UP);
+                }
             }
 
             @Override
