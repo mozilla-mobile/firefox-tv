@@ -294,6 +294,10 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             drawerRefresh.setClickable(false);
             drawerRefresh.setColorFilter(ContextCompat.getColor(this, R.color.colorTextInactive), android.graphics.PorterDuff.Mode.SRC_IN);
         }
+        final HomeFragment homeFragment = (HomeFragment) fragmentManager.findFragmentByTag (HomeFragment.FRAGMENT_TAG);
+        if (homeFragment != null && homeFragment.isVisible()) {
+            drawerUrlInput.setText("");
+        }
     }
 
     @Override
@@ -459,7 +463,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             // in the browsing history.
             return;
         }
-
         super.onBackPressed();
     }
 
