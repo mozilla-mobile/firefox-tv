@@ -131,7 +131,7 @@ public abstract class WebFragment extends LocaleAwareFragment {
     }
 
     @Nullable
-    protected IWebView getWebView() {
+    public IWebView getWebView() {
         return isWebViewAvailable ? webView : null;
     }
 }
