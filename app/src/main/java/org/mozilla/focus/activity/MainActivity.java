@@ -193,6 +193,16 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             }
         });
 
+        drawerUrlInput.setOnBackPressedListener(new InlineAutocompleteEditText.OnBackPressedListener() {
+            @Override
+            public void onBackPressed() {
+                if (isDrawerOpen) {
+                    drawer.requestFocus();
+                    drawerUrlInput.requestFocus();
+                }
+            }
+        });
+
         final SafeIntent intent = new SafeIntent(getIntent());
 
         if (intent.isLauncherIntent()) {
@@ -549,7 +559,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             dispatchKeyEvent(keyEvent);
             return true;
         }
-
         if (browserFragment == null || !browserFragment.isVisible() || isDrawerOpen || !isCursorEnabled) {
             return super.dispatchKeyEvent(event);
         }
