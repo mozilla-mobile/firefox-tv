@@ -405,6 +405,7 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
             goBack();
         } else {
             getFragmentManager().popBackStack();
+            SessionManager.getInstance().removeCurrentSession();
         }
 
         return true;
