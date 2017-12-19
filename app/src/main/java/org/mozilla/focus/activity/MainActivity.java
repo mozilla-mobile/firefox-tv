@@ -137,6 +137,13 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             public void onDrawerOpened(final View drawerView) {
                 findViewById(R.id.urlView).requestFocus();
                 isDrawerOpen = true;
+
+                // Stop cursor movement upon drawer opening
+                final BrowserFragment browserFragment = (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
+                browserFragment.stopMoving(Direction.DOWN);
+                browserFragment.stopMoving(Direction.LEFT);
+                browserFragment.stopMoving(Direction.RIGHT);
+                browserFragment.stopMoving(Direction.UP);
             }
 
             @Override
