@@ -30,6 +30,9 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:id="@+id/telemetryView"
+            android:nextFocusUp="@+id/aboutButton"
+            android:nextFocusRight="@id/aboutButton"
+            android:nextFocusDown="@+id/deleteButton"
             android:background="@drawable/settings_item_selector"
             android:focusable="true"
             android:layout_gravity="center_vertical">
@@ -51,7 +54,11 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/aboutButton"
+            android:id="@id/aboutButton"
+            android:nextFocusUp="@+id/privacyNoticeButton"
+            android:nextFocusRight="@id/privacyNoticeButton"
+            android:nextFocusLeft="@id/telemetryView"
+            android:nextFocusDown="@id/telemetryView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -76,15 +83,19 @@
         </LinearLayout>
 
         <LinearLayout
-                android:id="@+id/privacyNoticeButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:background="@drawable/settings_item_selector"
-                android:focusable="true"
-                android:clickable="true"
-                android:layout_gravity="center_vertical">
+            android:id="@id/privacyNoticeButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@drawable/settings_item_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:nextFocusDown="@id/aboutButton"
+            android:nextFocusLeft="@id/aboutButton"
+            android:nextFocusRight="@id/deleteButton"
+            android:nextFocusUp="@id/deleteButton"
+            android:orientation="vertical">
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -102,6 +113,10 @@
 
         <LinearLayout
             android:id="@+id/deleteButton"
+            android:nextFocusUp="@id/telemetryView"
+            android:nextFocusRight="@id/telemetryView"
+            android:nextFocusLeft="@id/privacyNoticeButton"
+            android:nextFocusDown="@id/privacyNoticeButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -110,20 +125,22 @@
             android:focusable="true"
             android:clickable="true"
             android:layout_gravity="center_vertical">
-        <TextView
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_cookies_dialog_title"
                 android:layout_gravity="center"
+                android:layout_marginBottom="15dp"
                 android:gravity="center"
-                android:textSize="25sp"
-                android:layout_marginBottom="15dp" />
+                android:text="@string/settings_cookies_dialog_title"
+                android:textSize="25sp" />
+
             <ImageView
                 android:layout_width="128dp"
                 android:layout_height="128dp"
-                android:src="@drawable/ic_delete"
+                android:layout_gravity="center"
                 android:scaleType="fitCenter"
-                android:layout_gravity="center"/>
+                android:src="@drawable/ic_delete" />
         </LinearLayout>
 
     </LinearLayout>
