@@ -360,16 +360,21 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
     private void showHomeScreen() {
         // TODO: animations if fragment is found.
-        if (getSupportFragmentManager().findFragmentByTag(HomeFragment.FRAGMENT_TAG) != null && getSupportFragmentManager().findFragmentByTag(HomeFragment.FRAGMENT_TAG).isVisible()) {
+        final HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HomeFragment.FRAGMENT_TAG);
+        if (homeFragment != null && homeFragment.isVisible()) {
+            // This is already at the top of the stack - do nothing.
             return;
         }
 
-        final HomeFragment homeFragment = HomeFragment.create();
-        homeFragment.setOnUrlEnteredListener(this);
+        // We don't want to be able to go back from the back stack, so clear the whole fragment back stack.
+        getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        // Show the home screen.
+        final HomeFragment newHomeFragment = HomeFragment.create();
+        newHomeFragment.setOnUrlEnteredListener(this);
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.container, homeFragment, HomeFragment.FRAGMENT_TAG)
-                .addToBackStack(null)
+                .replace(R.id.container, newHomeFragment, HomeFragment.FRAGMENT_TAG)
                 .commit();
     }
 
