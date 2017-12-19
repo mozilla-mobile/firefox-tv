@@ -139,6 +139,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 isDrawerOpen = true;
 
                 // Stop cursor movement upon drawer opening
+                // Need to fix follow-up issue https://github.com/mozilla-mobile/focus-video/issues/219
                 final BrowserFragment browserFragment = (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
                 if (browserFragment != null) {
                     browserFragment.stopMoving(Direction.DOWN);
