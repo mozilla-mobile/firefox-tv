@@ -104,6 +104,7 @@
                     android:textSize="25sp"
                     android:layout_marginBottom="15dp" />
             <ImageView
+                    android:id="@+id/ic_lock"
                     android:layout_width="128dp"
                     android:layout_height="128dp"
                     android:src="@drawable/ic_lock"
