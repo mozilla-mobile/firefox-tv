@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_new_settings.*
 import org.mozilla.focus.R
+import org.mozilla.focus.R.drawable.ic_lock
 import org.mozilla.focus.activity.InfoActivity
 import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.session.SessionManager
@@ -25,6 +26,7 @@ class NewSettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 
+        ic_lock.setImageResource(R.drawable.ic_lock)
         telemetryButton.isChecked = TelemetryWrapper.isTelemetryEnabled(activity)
         telemetryView.setOnClickListener { view ->
             val newTelemetryState = !TelemetryWrapper.isTelemetryEnabled(activity)

@@ -103,12 +103,14 @@
                     android:layout_gravity="center"
                     android:textSize="25sp"
                     android:layout_marginBottom="15dp" />
+            <!-- We set the image resource dynamically because on lower API versions
+            it turns out distorted when set in the XML -->
             <ImageView
-                    android:layout_width="128dp"
-                    android:layout_height="128dp"
-                    android:src="@drawable/ic_lock"
-                    android:scaleType="fitCenter"
-                    android:layout_gravity="center"/>
+                android:id="@+id/ic_lock"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter" />
         </LinearLayout>
 
         <LinearLayout
