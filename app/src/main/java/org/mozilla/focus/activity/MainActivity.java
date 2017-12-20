@@ -512,12 +512,12 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         }
     }
 
-    public void toggleCursor(boolean enabled) {
+    public void setCursorEnabled(boolean toEnable) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
 
-        isCursorEnabled = enabled;
-        browserFragment.toggleCursor(enabled);
+        isCursorEnabled = toEnable;
+        browserFragment.setCursorEnabled(toEnable);
     }
 
     // todo: naming
