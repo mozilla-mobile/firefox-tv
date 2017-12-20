@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -206,7 +207,11 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
                 }
 
                 final MainActivity activity = (MainActivity)getActivity();
-                activity.setCursorEnabled(!getWebView().getUrl().contains("youtube.com/tv"));
+                final IWebView webView = getWebView();
+                // Bandaid null checks, underlying issue #249
+                final boolean enableCursor = webView == null ? false :
+                        (webView.getUrl() == null ? false : !webView.getUrl().contains("youtube.com/tv"));
+                activity.setCursorEnabled(enableCursor);
 
                 if (!loading && activity.isReloadingForYoutubeDrawerClosed) {
                     activity.isReloadingForYoutubeDrawerClosed = false;
@@ -667,6 +672,9 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
 
     public void cursorHitEdge(Edge edge) {
         IWebView webView = getWebView();
+        if (webView == null) {
+            return;
+        }
 
         switch (edge) {
             case TOP:
