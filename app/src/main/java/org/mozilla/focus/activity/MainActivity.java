@@ -25,6 +25,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import com.amazon.android.webkit.AmazonWebKitFactories;
 import com.amazon.android.webkit.AmazonWebKitFactory;
@@ -76,6 +77,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private ImageButton drawerRefresh;
     private ImageButton drawerForward;
     private ImageButton drawerBack;
+    private ImageView hintSettings;
     private LinearLayout customNavItem;
     private boolean isDrawerOpen = false;
     private boolean isCursorEnabled = true;
@@ -117,6 +119,9 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         drawerForward.setOnClickListener(this);
         drawerBack = findViewById(R.id.drawer_back_button);
         drawerBack.setOnClickListener(this);
+
+        hintSettings = findViewById(R.id.hint_settings);
+        hintSettings.setImageResource(R.drawable.ic_settings);
 
         // todo: remove amiguity between navigation bars.
         fragmentNavigationBar = findViewById(R.id.fragment_navigation);
