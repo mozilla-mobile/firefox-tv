@@ -24,7 +24,7 @@ class NewSettingsFragment : Fragment() {
             inflater!!.inflate(R.layout.fragment_new_settings, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-
+        ic_lock.setImageResource(R.drawable.ic_lock)
         telemetryButton.isChecked = TelemetryWrapper.isTelemetryEnabled(activity)
         telemetryView.setOnClickListener { view ->
             val newTelemetryState = !TelemetryWrapper.isTelemetryEnabled(activity)
