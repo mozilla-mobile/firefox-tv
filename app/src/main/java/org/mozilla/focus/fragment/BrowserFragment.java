@@ -11,7 +11,6 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -25,7 +24,6 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.mozilla.focus.R;
 import org.mozilla.focus.activity.InfoActivity;
@@ -39,7 +37,6 @@ import org.mozilla.focus.session.NullSession;
 import org.mozilla.focus.session.Session;
 import org.mozilla.focus.session.SessionCallbackProxy;
 import org.mozilla.focus.session.SessionManager;
-import org.mozilla.focus.session.Source;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.Browsers;
 import org.mozilla.focus.utils.Direction;
@@ -209,7 +206,7 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
                 }
 
                 final MainActivity activity = (MainActivity)getActivity();
-                activity.toggleCursor(!getWebView().getUrl().contains("youtube.com/tv"));
+                activity.setCursorEnabled(!getWebView().getUrl().contains("youtube.com/tv"));
 
                 if (!loading && activity.isReloadingForYoutubeDrawerClosed) {
                     activity.isReloadingForYoutubeDrawerClosed = false;
@@ -664,8 +661,8 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
         return cursor.getLocation();
     }
 
-    public void toggleCursor(boolean enabled) {
-        cursor.setVisibility(enabled ? View.VISIBLE : View.GONE);
+    public void setCursorEnabled(boolean toEnable) {
+        cursor.setVisibility(toEnable ? View.VISIBLE : View.GONE);
     }
 
     public void cursorHitEdge(Edge edge) {
