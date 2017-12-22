@@ -41,6 +41,7 @@ import org.mozilla.focus.session.Session;
 import org.mozilla.focus.session.SessionManager;
 import org.mozilla.focus.session.Source;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
+import org.mozilla.focus.utils.AppConstants;
 import org.mozilla.focus.utils.Direction;
 import org.mozilla.focus.utils.OnUrlEnteredListener;
 import org.mozilla.focus.utils.SafeIntent;
@@ -170,7 +171,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 // If you open and close the menu on youtube, dpad navigation stops working for an unknown reason.
                 // One workaround is to reload the page, which we do here.
                 final BrowserFragment browserFragment = (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-                if (browserFragment != null && browserFragment.isVisible() && browserFragment.getUrl().contains("youtube.com/tv")) {
+                if (browserFragment != null && browserFragment.isVisible() && browserFragment.getUrl().contains(AppConstants.YOUTUBE_MATCH_STRING)) {
                     final SystemWebView wv = (SystemWebView) browserFragment.getWebView();
                     wv.requestFocus();
                     wv.reload();
