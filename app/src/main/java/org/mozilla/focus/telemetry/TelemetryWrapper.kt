@@ -34,7 +34,7 @@ import org.mozilla.telemetry.storage.FileTelemetryStorage
         "LargeClass"
 )
 object TelemetryWrapper {
-    private const val TELEMETRY_APP_NAME_FOCUS_TV = "Focus TV"
+    private const val TELEMETRY_APP_NAME_FOCUS_TV = "FirefoxForFireTV"
 
     private const val MAXIMUM_CUSTOM_TAB_EXTRAS = 10
 
