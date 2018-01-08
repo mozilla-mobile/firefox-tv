@@ -39,6 +39,7 @@ import org.mozilla.focus.session.Session;
 import org.mozilla.focus.session.SessionCallbackProxy;
 import org.mozilla.focus.session.SessionManager;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
+import org.mozilla.focus.utils.AppConstants;
 import org.mozilla.focus.utils.Browsers;
 import org.mozilla.focus.utils.Direction;
 import org.mozilla.focus.utils.Edge;
@@ -210,7 +211,7 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
                 final IWebView webView = getWebView();
                 // Bandaid null checks, underlying issue #249
                 final boolean enableCursor = webView == null ? false :
-                        (webView.getUrl() == null ? false : !webView.getUrl().contains("youtube.com/tv"));
+                        (webView.getUrl() == null ? false : !webView.getUrl().contains(AppConstants.YOUTUBE_MATCH_STRING));
                 activity.setCursorEnabled(enableCursor);
 
                 if (!loading && activity.isReloadingForYoutubeDrawerClosed) {

@@ -35,4 +35,7 @@ public final class AppConstants {
     public static boolean supportsDownloadingFiles() {
         return true;
     }
+
+    public static final String YOUTUBE_TILE_LINK = "https://m.youtube.com";
+    public static final String YOUTUBE_MATCH_STRING = "m.youtube.com";
 }
