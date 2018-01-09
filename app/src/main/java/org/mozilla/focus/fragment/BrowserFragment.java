@@ -15,13 +15,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,6 +31,7 @@ import org.mozilla.focus.activity.InfoActivity;
 import org.mozilla.focus.activity.InstallFirefoxActivity;
 import org.mozilla.focus.activity.MainActivity;
 import org.mozilla.focus.architecture.NonNullObserver;
+import org.mozilla.focus.ext.ContextKt;
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity;
 import org.mozilla.focus.menu.browser.BrowserMenu;
 import org.mozilla.focus.open.OpenWithFragment;
@@ -211,7 +212,12 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
                 // Bandaid null checks, underlying issue #249
                 final boolean enableCursor = webView != null &&
                         webView.getUrl() != null &&
-                        !webView.getUrl().contains("youtube.com/tv");
+                        !webView.getUrl().contains("youtube.com/tv") &&
+                        getContext() != null &&
+                        !ContextKt.isVoiceViewEnabled(getContext()); // VoiceView has its own navigation controls.
+                if (enableCursor) {
+                    Log.d("lol", "what");
+                }
                 activity.setCursorEnabled(enableCursor);
 
                 if (!loading && activity.isReloadingForYoutubeDrawerClosed) {
