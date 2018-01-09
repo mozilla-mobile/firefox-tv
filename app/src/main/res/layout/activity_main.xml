@@ -34,8 +34,37 @@
                 android:nextFocusRight="@id/container">
         </View>
 
-        <!-- A view that hints to the user that they can click left to get to the navigation bar. -->
-        <include layout="@layout/hint_navigation_bar"/>
+        <!-- A view that hints to the user that they can click left to get to the navigation bar.
+             We make this focusable so that we can open the real navigation bar when this is selected. -->
+        <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/hint_navigation_bar"
+                android:layout_width="67dp"
+                android:layout_height="match_parent"
+                android:gravity="end|center_vertical"
+                android:orientation="vertical"
+                android:background="@drawable/drawer_background"
+                android:focusable="true">
+
+            <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="24dp"
+                    android:src="@drawable/ic_home"
+                    tools:ignore="ContentDescription"/>
+
+            <!-- We set the image resource dynamically because on lower API versions
+                   it turns out distorted when set in the XML -->
+            <ImageView
+                    android:id="@+id/hint_settings"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="20dp"
+                    tools:ignore="ContentDescription" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
