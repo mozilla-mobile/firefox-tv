@@ -23,15 +23,15 @@ import java.util.Set;
 
 public class Cursor extends View {
 
-    private final int VELOCITY = 4;
     private float CURSOR_SIZE = 45;
     private final int MAX_SPEED = 15;
+    private final double FRICTION = 0.98;
 
     public CursorEvent cursorEvent;
     private Paint paint;
     private int x;
     private int y;
-    private int speed = 1;
+    private float speed = 0;
     private Set<Direction> activeDirections = new HashSet<>();
     private int maxHeight;
     private int maxWidth;
@@ -79,15 +79,19 @@ public class Cursor extends View {
         if (activeDirections.size() == 0) {
             handler.removeCallbacks(tick);
             moving = false;
+            speed = 0;
         }
     }
 
     private void move() {
+        speed++;
+        speed *= FRICTION;
+        speed = Math.min(MAX_SPEED, speed);
+
         for (Direction direction : activeDirections) {
-            moveOneDirection(direction, speed);
+            moveOneDirection(direction, Math.round(speed));
         }
 
-        speed = Math.min(MAX_SPEED, speed + VELOCITY);
         invalidate();
     }
 
