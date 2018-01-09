@@ -209,8 +209,9 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
                 final MainActivity activity = (MainActivity)getActivity();
                 final IWebView webView = getWebView();
                 // Bandaid null checks, underlying issue #249
-                final boolean enableCursor = webView == null ? false :
-                        (webView.getUrl() == null ? false : !webView.getUrl().contains("youtube.com/tv"));
+                final boolean enableCursor = webView != null &&
+                        webView.getUrl() != null &&
+                        !webView.getUrl().contains("youtube.com/tv");
                 activity.setCursorEnabled(enableCursor);
 
                 if (!loading && activity.isReloadingForYoutubeDrawerClosed) {
