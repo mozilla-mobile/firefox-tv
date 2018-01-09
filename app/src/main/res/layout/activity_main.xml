@@ -14,34 +14,39 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <!-- baselineAligned=false for better perf - it's not needed for nested layouts (Intellij warning). -->
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:baselineAligned="false">
+        android:layout_height="match_parent">
 
-        <!-- A hidden focus view: when the drawer closes, we clear focus so the drawer can't be interacted
-             with. When focus is cleared, the topmost view in the hierarchy regains focus. To avoid refocusing
-             the drawer, we add this dummy View to gain focus instead. -->
-        <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:focusable="true"
-                android:nextFocusLeft="@+id/hint_navigation_bar"
-                android:nextFocusDown="@+id/container"
-                android:nextFocusUp="@id/container"
-                android:nextFocusRight="@id/container">
-        </View>
+        <!-- This view must be specified first so that it's focused first when other views (e.g. menu drawer)
+             lose focus. This is important for VoiceTalk: when links are clicked, we must continue to focus
+             the WebView, otherwise users in Review Mode will stop having WebView-specific options (like
+             navigating by links).
+
+             We align with parent when missing because the hint navigation bar is sometimes hidden. -->
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/container"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/hint_navigation_bar"
+            android:layout_alignWithParentIfMissing="true"
+            android:focusable="true"
+            android:descendantFocusability="afterDescendants">
+        </LinearLayout>
 
         <!-- A view that hints to the user that they can click left to get to the navigation bar.
              We make this focusable so that we can open the real navigation bar when this is selected. -->
         <LinearLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/hint_navigation_bar"
+                android:id="@id/hint_navigation_bar"
                 android:layout_width="67dp"
                 android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
                 android:gravity="end|center_vertical"
                 android:orientation="vertical"
                 android:background="@drawable/drawer_background"
@@ -65,18 +70,7 @@
                     tools:ignore="ContentDescription" />
 
         </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:id="@id/container"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:focusable="true"
-            android:descendantFocusability="afterDescendants">
-        </LinearLayout>
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation"
