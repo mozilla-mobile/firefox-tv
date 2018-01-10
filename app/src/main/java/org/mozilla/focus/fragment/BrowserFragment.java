@@ -57,7 +57,7 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
     private static final int ANIMATION_DURATION = 300;
 
     private static final String ARGUMENT_SESSION_UUID = "sessionUUID";
-    private static final int SCROLL_VELOCITY = 1200;
+    private static final int SCROLL_VELOCITY = 45;
 
     public static BrowserFragment createForSession(Session session) {
         final Bundle arguments = new Bundle();
@@ -675,6 +675,11 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
         cursor.setVisibility(toEnable ? View.VISIBLE : View.GONE);
     }
 
+    private int getScrollVelocity() {
+        int speed = (int)cursor.getSpeed();
+        return speed * SCROLL_VELOCITY;
+    }
+
     public void cursorHitEdge(Edge edge) {
         IWebView webView = getWebView();
         if (webView == null) {
@@ -683,16 +688,16 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
 
         switch (edge) {
             case TOP:
-                webView.flingScroll(0, -SCROLL_VELOCITY);
+                webView.flingScroll(0, -getScrollVelocity());
                 break;
             case BOTTOM:
-                webView.flingScroll(0, SCROLL_VELOCITY);
+                webView.flingScroll(0, getScrollVelocity());
                 break;
             case LEFT:
-                webView.flingScroll(-SCROLL_VELOCITY, 0);
+                webView.flingScroll(-getScrollVelocity(), 0);
                 break;
             case RIGHT:
-                webView.flingScroll(SCROLL_VELOCITY, 0);
+                webView.flingScroll(getScrollVelocity(), 0);
                 break;
         }
     }

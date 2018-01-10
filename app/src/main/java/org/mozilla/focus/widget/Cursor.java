@@ -65,6 +65,10 @@ public class Cursor extends View {
         return new Point(x, y);
     }
 
+    public float getSpeed() {
+        return speed;
+    }
+
     public void moveCursor(Direction direction) {
         activeDirections.add(direction);
         
