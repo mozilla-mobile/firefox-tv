@@ -83,7 +83,8 @@
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_back" />
+            android:src="@drawable/ic_back"
+            android:contentDescription="@string/content_description_back"/>
 
         <Space
             android:layout_width="0dp"
@@ -99,7 +100,8 @@
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_forward" />
+            android:src="@drawable/ic_forward"
+            android:contentDescription="@string/content_description_forward"/>
 
         <Space
             android:layout_width="0dp"
@@ -115,7 +117,8 @@
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_refresh" />
+            android:src="@drawable/ic_refresh"
+            android:contentDescription="@string/content_description_reload"/>
 
         <Space
             android:layout_width="0dp"
