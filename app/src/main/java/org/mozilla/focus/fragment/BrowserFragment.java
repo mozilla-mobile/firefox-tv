@@ -208,18 +208,7 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
                 }
 
                 final MainActivity activity = (MainActivity)getActivity();
-                final IWebView webView = getWebView();
-                // Bandaid null checks, underlying issue #249
-                final boolean enableCursor = webView != null &&
-                        webView.getUrl() != null &&
-                        !webView.getUrl().contains("youtube.com/tv") &&
-                        getContext() != null &&
-                        !ContextKt.isVoiceViewEnabled(getContext()); // VoiceView has its own navigation controls.
-                if (enableCursor) {
-                    Log.d("lol", "what");
-                }
-                activity.setCursorEnabled(enableCursor);
-
+                updateCursorState();
                 if (!loading && activity.isReloadingForYoutubeDrawerClosed) {
                     activity.isReloadingForYoutubeDrawerClosed = false;
 
@@ -266,6 +255,27 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
         initialiseNormalBrowserUi(view);
 
         return view;
+    }
+
+    /**
+     * Gets the current state of the application and updates the cursor state accordingly.
+     *
+     * Note that this pattern could use some improvements:
+     * - It's a little weird to get the current state from globals, rather than get passed in relevant values.
+     * - BrowserFragment.setCursorEnabled should be called from this code path, but that's unclear
+     * - BrowserFragment should use a listener to talk to MainActivity and shouldn't know about it directly.
+     * - BrowserFragment calls MainActivity which calls BrowserFragment again - this is unnecessary.
+     */
+    public void updateCursorState() {
+        final MainActivity activity = (MainActivity)getActivity();
+        final IWebView webView = getWebView();
+        // Bandaid null checks, underlying issue #249
+        final boolean enableCursor = webView != null &&
+                webView.getUrl() != null &&
+                !webView.getUrl().contains("youtube.com/tv") &&
+                getContext() != null &&
+                !ContextKt.isVoiceViewEnabled(getContext()); // VoiceView has its own navigation controls.
+        activity.setCursorEnabled(enableCursor);
     }
 
     private void initialiseNormalBrowserUi(final @NonNull View view) {
