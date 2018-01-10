@@ -90,11 +90,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         @Override
         public void onTouchExplorationStateChanged(final boolean enabled) {
             // The user can turn on/off VoiceView, at which point we may want to change the cursor visibility.
-            final BrowserFragment browserFragment =
-                    (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-            if (browserFragment != null) {
-                browserFragment.updateCursorState();
-            }
+            updateCursorState();
         }
     };
 
@@ -274,10 +270,19 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         WebViewProvider.preload(this);
     }
 
+    private void updateCursorState() {
+        final BrowserFragment browserFragment =
+                (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
+        if (browserFragment != null) {
+            browserFragment.updateCursorState();
+        }
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
         ContextKt.getAccessibilityManager(this).addTouchExplorationStateChangeListener(voiceViewStateChangeListener);
+        updateCursorState(); // VoiceView could be disabled when we're outside the app.
     }
 
     @Override
