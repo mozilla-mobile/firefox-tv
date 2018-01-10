@@ -24,7 +24,7 @@ import java.util.Set;
 public class Cursor extends View {
 
     private float CURSOR_SIZE = 45;
-    private final int MAX_SPEED = 15;
+    private final int MAX_SPEED = 25;
     private final double FRICTION = 0.98;
 
     public CursorEvent cursorEvent;
