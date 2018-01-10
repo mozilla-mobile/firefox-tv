@@ -23,6 +23,7 @@ val Context.isVoiceViewEnabled: Boolean
     get() {
         // In my understanding, isTouchExplorationEnabled should represent VoiceView being enabled,
         // whereas isEnabled says if the accessibility manager is enabled for other services.
-        val am = this.getSystemService(Context.ACCESSIBILITY_SERVICE) as? AccessibilityManager ?: return false
-        return am.isEnabled && am.isTouchExplorationEnabled
+        return accessibilityManager.isEnabled && accessibilityManager.isTouchExplorationEnabled
     }
+
+val Context.accessibilityManager: AccessibilityManager get() = getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager

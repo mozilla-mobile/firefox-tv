@@ -5,6 +5,7 @@
 
 package org.mozilla.focus.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -12,6 +13,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -24,6 +26,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,6 +36,7 @@ import org.jetbrains.annotations.NotNull;
 import org.mozilla.focus.R;
 import org.mozilla.focus.architecture.NonNullObserver;
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter;
+import org.mozilla.focus.ext.ContextKt;
 import org.mozilla.focus.fragment.BrowserFragment;
 import org.mozilla.focus.fragment.HomeFragment;
 import org.mozilla.focus.fragment.NewSettingsFragment;
@@ -81,6 +85,18 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private LinearLayout customNavItem;
     private boolean isDrawerOpen = false;
     private boolean isCursorEnabled = true;
+
+    private final AccessibilityManager.TouchExplorationStateChangeListener voiceViewStateChangeListener = new AccessibilityManager.TouchExplorationStateChangeListener() {
+        @Override
+        public void onTouchExplorationStateChanged(final boolean enabled) {
+            // The user can turn on/off VoiceView, at which point we may want to change the cursor visibility.
+            final BrowserFragment browserFragment =
+                    (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
+            if (browserFragment != null) {
+                browserFragment.updateCursorState();
+            }
+        }
+    };
 
     public enum VideoPlayerState {
        BROWSER, HOME, SETTINGS
@@ -259,6 +275,12 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        ContextKt.getAccessibilityManager(this).addTouchExplorationStateChangeListener(voiceViewStateChangeListener);
+    }
+
+    @Override
     public void onClick(View view) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final BrowserFragment fragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
@@ -364,6 +386,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     protected void onStop() {
         super.onStop();
 
+        ContextKt.getAccessibilityManager(this).removeTouchExplorationStateChangeListener(voiceViewStateChangeListener);
         TelemetryWrapper.stopMainActivity();
     }
 
