@@ -19,8 +19,8 @@ val Context.appVersionName: String?
         return packageInfo.versionName
     }
 
-val Context.accessibilityManager: AccessibilityManager get() = getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+fun Context.getAccessibilityManager() = getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
 
 // AccessibilityManager.isAccessibilityEnabled can be enabled for more things than just VoiceView. If we want
 // VoiceView, we only need to check this one field; via comments on https://stackoverflow.com/a/12362545/582004.
-val Context.isVoiceViewEnabled: Boolean get() = accessibilityManager.isTouchExplorationEnabled
+fun Context.isVoiceViewEnabled() = getAccessibilityManager().isTouchExplorationEnabled
