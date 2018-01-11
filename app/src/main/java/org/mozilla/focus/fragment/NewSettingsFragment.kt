@@ -8,19 +8,27 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat.startActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.accessibility.AccessibilityManager
 import kotlinx.android.synthetic.main.fragment_new_settings.*
 import org.mozilla.focus.R
+import org.mozilla.focus.R.id.*
 import org.mozilla.focus.activity.InfoActivity
 import org.mozilla.focus.activity.MainActivity
+import org.mozilla.focus.ext.getAccessibilityManager
 import org.mozilla.focus.ext.isVoiceViewEnabled
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 
 /** The home fragment which displays the navigation tiles of the app. */
 class NewSettingsFragment : Fragment() {
+    private val voiceViewStateChangeListener = AccessibilityManager.TouchExplorationStateChangeListener {
+        updateForAccessibility()
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater!!.inflate(R.layout.fragment_new_settings, container, false)
 
@@ -67,7 +75,13 @@ class NewSettingsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        context.getAccessibilityManager().addTouchExplorationStateChangeListener(voiceViewStateChangeListener)
         updateForAccessibility()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        context.getAccessibilityManager().removeTouchExplorationStateChangeListener(voiceViewStateChangeListener)
     }
 
     /**
