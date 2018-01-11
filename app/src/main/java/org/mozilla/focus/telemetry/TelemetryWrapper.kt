@@ -23,7 +23,7 @@ import org.mozilla.telemetry.measurement.DefaultSearchMeasurement
 import org.mozilla.telemetry.measurement.SearchesMeasurement
 import org.mozilla.telemetry.net.HttpURLConnectionTelemetryClient
 import org.mozilla.telemetry.ping.TelemetryCorePingBuilder
-import org.mozilla.telemetry.ping.TelemetryEventPingBuilder
+import org.mozilla.telemetry.ping.TelemetryMobileEventPingBuilder
 import org.mozilla.telemetry.schedule.jobscheduler.JobSchedulerTelemetryScheduler
 import org.mozilla.telemetry.serialize.JSONPingSerializer
 import org.mozilla.telemetry.storage.FileTelemetryStorage
@@ -209,7 +209,7 @@ object TelemetryWrapper {
 
             TelemetryHolder.set(Telemetry(configuration, storage, client, scheduler)
                     .addPingBuilder(TelemetryCorePingBuilder(configuration))
-                    .addPingBuilder(TelemetryEventPingBuilder(configuration))
+                    .addPingBuilder(TelemetryMobileEventPingBuilder(configuration))
                     .setDefaultSearchProvider(createDefaultSearchProvider(context)))
         } finally {
             StrictMode.setThreadPolicy(threadPolicy)
@@ -256,7 +256,7 @@ object TelemetryWrapper {
     fun stopMainActivity() {
         TelemetryHolder.get()
                 .queuePing(TelemetryCorePingBuilder.TYPE)
-                .queuePing(TelemetryEventPingBuilder.TYPE)
+                .queuePing(TelemetryMobileEventPingBuilder.TYPE)
                 .scheduleUpload()
     }
 
