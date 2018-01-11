@@ -13,9 +13,9 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_new_settings.*
 import org.mozilla.focus.R
-import org.mozilla.focus.R.drawable.ic_lock
 import org.mozilla.focus.activity.InfoActivity
 import org.mozilla.focus.activity.MainActivity
+import org.mozilla.focus.ext.isVoiceViewEnabled
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 
@@ -62,6 +62,36 @@ class NewSettingsFragment : Fragment() {
 
         privacyNoticeButton.setOnClickListener {
             startActivity(InfoActivity.getPrivacyNoticeIntent(context))
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        updateForAccessibility()
+    }
+
+    /**
+     * Updates the views in this fragment based on Accessibility status.
+     * See the comment at the declaration of these views in XML for more details.
+     */
+    private fun updateForAccessibility() {
+        telemetryButton.contentDescription = telemetryDescriptionView.text
+
+        val viewToFocus: View
+        val viewToDisableFocus: View
+        if (context.isVoiceViewEnabled()) {
+            viewToFocus = telemetryButton
+            viewToDisableFocus = telemetryView
+        } else {
+            viewToFocus = telemetryView
+            viewToDisableFocus = telemetryButton
+        }
+
+        val isFocused = telemetryButton.isFocused || telemetryView.isFocused
+        viewToFocus.isFocusable = true
+        viewToDisableFocus.isFocusable = false
+        if (isFocused) {
+            viewToFocus.requestFocus()
         }
     }
 

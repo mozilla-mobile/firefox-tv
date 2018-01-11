@@ -36,8 +36,24 @@
             android:background="@drawable/settings_item_selector"
             android:focusable="true"
             android:layout_gravity="center_vertical">
+
             <requestFocus/> <!-- Otherwise focus gets stuck on outer id/container. -->
+
+            <!-- a11y: FRAGILE! When the parent layout is focused, we want to speak, "Checkbox (un)checked", based
+                 on the state of the checkbox child. However, unlike for TextViews, VoiceView does not read the
+                 checked state of child CheckBoxes so we have to work around this:
+
+                 When VoiceView is enabled, we dynamically change focusability so the parent layout is
+                 unfocusable and we focus the CheckBox instead, which announces the correct data. Since the
+                 TextView is no longer spoken, we dynamically set the contentDescription of the CheckBox to the
+                 text of the TextView to cause them to have the same announcement.
+
+                 Unfortunately, implementing a more correct solution was taking too long: I came up with a
+                 solution where the parent layout sets itself checkable in the AccessibilityDelegate and the
+                 "checked" announcement was made, but this did not work in VoiceView, just in TalkBack. There
+                 were no other obvious solutions so I opted to do this faster hack. -->
             <TextView
+                android:id="@+id/telemetryDescriptionView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/preference_mozilla_telemetry2"
