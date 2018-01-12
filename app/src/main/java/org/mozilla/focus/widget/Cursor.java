@@ -91,9 +91,11 @@ public class Cursor extends View {
         speed++;
         speed *= FRICTION;
         speed = Math.min(MAX_SPEED, speed);
+        boolean isMovingDiagnol = activeDirections.size() > 1;
+        float moveSpeed = isMovingDiagnol ? speed / 2 : speed;
 
         for (Direction direction : activeDirections) {
-            moveOneDirection(direction, Math.round(speed));
+            moveOneDirection(direction, Math.round(moveSpeed));
         }
 
         invalidate();
