@@ -112,6 +112,7 @@ public class TrackingProtectionWebViewClient extends AmazonWebViewClient {
         // The matcher code could be better named to make this apparent.
         if (blockedSiteMatcher.matches(resourceUri, currentPageUri)) {
             if (callback != null) {
+                // TODO: the variable this value updates is inaccurate: see #317.
                 callback.countBlockedTracker();
             }
             return new AmazonWebResourceResponse(null, null, null);
