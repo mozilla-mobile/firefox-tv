@@ -20,12 +20,19 @@ import org.mozilla.focus.utils.Edge;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class Cursor extends View {
 
     private float CURSOR_SIZE = 45;
+
     private final int MAX_SPEED = 25;
     private final double FRICTION = 0.98;
+    private final int CURSOR_ALPHA = 102;
+    private final int CURSOR_ANIMATION_DURATION = 250;
+    private final long CURSOR_HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3);
+    private final float VIEW_MIN_ALPHA = 0f;
+    private final float VIEW_MAX_ALPHA = 1f;
 
     public CursorEvent cursorEvent;
     private Paint paint;
@@ -49,7 +56,6 @@ public class Cursor extends View {
         }
     };
 
-
     public Cursor(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -57,7 +63,7 @@ public class Cursor extends View {
         // create the Paint and set its color
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
-        paint.setAlpha(102);
+        paint.setAlpha(CURSOR_ALPHA);
         paint.setAntiAlias(true);
     }
 
@@ -71,8 +77,12 @@ public class Cursor extends View {
 
     public void moveCursor(Direction direction) {
         activeDirections.add(direction);
-        
+
+        // If the cursor isn't moving start the move loop
         if (!moving) {
+            animate().cancel();
+            setAlpha(VIEW_MAX_ALPHA);
+
             moving = true;
             handler.post(tick);
         }
@@ -80,10 +90,15 @@ public class Cursor extends View {
 
     public void stopMoving(Direction direction) {
         activeDirections.remove(direction);
+
         if (activeDirections.size() == 0) {
             handler.removeCallbacks(tick);
             moving = false;
             speed = 0;
+
+            animate().alpha(VIEW_MIN_ALPHA)
+                    .setDuration(CURSOR_ANIMATION_DURATION)
+                    .setStartDelay(CURSOR_HIDE_AFTER_MILLIS);
         }
     }
 
@@ -91,8 +106,8 @@ public class Cursor extends View {
         speed++;
         speed *= FRICTION;
         speed = Math.min(MAX_SPEED, speed);
-        boolean isMovingDiagnol = activeDirections.size() > 1;
-        float moveSpeed = isMovingDiagnol ? speed / 2 : speed;
+        boolean isMovingDiagonal = activeDirections.size() > 1;
+        float moveSpeed = isMovingDiagonal ? speed / 2 : speed;
 
         for (Direction direction : activeDirections) {
             moveOneDirection(direction, Math.round(moveSpeed));
