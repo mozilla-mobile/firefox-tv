@@ -102,19 +102,20 @@ public class TrackingProtectionWebViewClient extends AmazonWebViewClient {
             return new AmazonWebResourceResponse(null, null, null);
         }
 
-        final UrlMatcher matcher = getMatcher(view.getContext());
+        final UrlMatcher blockedSiteMatcher = getMatcher(view.getContext());
 
         // Don't block the main frame from being loaded. This also protects against cases where we
         // open a link that redirects to another app (e.g. to the play store).
-        final Uri pageUri = Uri.parse(currentPageURL);
+        final Uri currentPageUri = Uri.parse(currentPageURL);
 
-//        if ((!request.isForMainFrame()) &&
-//                matcher.matches(resourceUri, pageUri)) {
-//            if (callback != null) {
-//                callback.countBlockedTracker();
-//            }
-//            return new AmazonWebResourceResponse(null, null, null);
-//        }
+        // Matches is true if the resourceUri is on the blocklist and is not a first party request.
+        // The matcher code could be better named to make this apparent.
+        if (blockedSiteMatcher.matches(resourceUri, currentPageUri)) {
+            if (callback != null) {
+                callback.countBlockedTracker();
+            }
+            return new AmazonWebResourceResponse(null, null, null);
+        }
 
         return super.shouldInterceptRequest(view, request);
     }
