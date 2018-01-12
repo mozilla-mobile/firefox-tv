@@ -57,7 +57,7 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
     private static final int ANIMATION_DURATION = 300;
 
     private static final String ARGUMENT_SESSION_UUID = "sessionUUID";
-    private static final int SCROLL_VELOCITY = 45;
+    private static final int SCROLL_MULTIPLIER = 45;
 
     public static BrowserFragment createForSession(Session session) {
         final Bundle arguments = new Bundle();
@@ -677,7 +677,7 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
 
     private int getScrollVelocity() {
         int speed = (int)cursor.getSpeed();
-        return speed * SCROLL_VELOCITY;
+        return speed * SCROLL_MULTIPLIER;
     }
 
     public void cursorHitEdge(Edge edge) {
