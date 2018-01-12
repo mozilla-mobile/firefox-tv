@@ -209,15 +209,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
 
                 final MainActivity activity = (MainActivity)getActivity();
                 updateCursorState();
-                if (!loading && activity.isReloadingForYoutubeDrawerClosed) {
-                    activity.isReloadingForYoutubeDrawerClosed = false;
-
-                    // We send a play event which:
-                    // - If we're on the video selection page, does nothing.
-                    // - If we're in a fullscreen video, will show the play/pause controls on the screen so
-                    // we don't just see a black screen.
-                    activity.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
-                }
             }
         });
 

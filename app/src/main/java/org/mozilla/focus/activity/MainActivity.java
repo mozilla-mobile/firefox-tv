@@ -102,9 +102,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         sessionManager = SessionManager.getInstance();
     }
 
-    // We need to respond to the onPageFinished event so we set a flag here.
-    public boolean isReloadingForYoutubeDrawerClosed = false;
-
     private static boolean isAmazonFactoryInit = false;
     public static AmazonWebKitFactory factory = null;
 
@@ -178,16 +175,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 isDrawerOpen = false;
-
-                // If you open and close the menu on youtube, dpad navigation stops working for an unknown reason.
-                // One workaround is to reload the page, which we do here.
-                final BrowserFragment browserFragment = (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-                if (browserFragment != null && browserFragment.isVisible() && browserFragment.getUrl().contains("youtube.com/tv")) {
-                    final SystemWebView wv = (SystemWebView) browserFragment.getWebView();
-                    wv.requestFocus();
-                    wv.reload();
-                    isReloadingForYoutubeDrawerClosed = true;
-                }
             }
 
             @Override
