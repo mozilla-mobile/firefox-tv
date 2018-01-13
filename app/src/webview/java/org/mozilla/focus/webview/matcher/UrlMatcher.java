@@ -244,6 +244,7 @@ public class UrlMatcher implements  SharedPreferences.OnSharedPreferenceChangeLi
         final String resourceHost = resourceURI.getHost();
         final String pageHost = pageURI.getHost();
 
+        // Whitelist first party requests.
         if (pageHost != null && pageHost.equals(resourceHost)) {
             return false;
         }
