@@ -43,7 +43,8 @@
                  on the state of the checkbox child. However, unlike for TextViews, VoiceView does not read the
                  checked state of child CheckBoxes so we have to work around this:
 
-                 When VoiceView is enabled, we dynamically change focusability so the parent layout is
+                 When VoiceWiev is enabled, we sacrifice consistency in visual highlighting in order to get the
+                 correct content description by dynamically changing focusability so that the parent layout is
                  unfocusable and we focus the CheckBox instead, which announces the correct data. Since the
                  TextView is no longer spoken, we dynamically set the contentDescription of the CheckBox to the
                  text of the TextView to cause them to have the same announcement.
