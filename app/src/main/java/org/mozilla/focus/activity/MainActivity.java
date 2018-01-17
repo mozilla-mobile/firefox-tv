@@ -589,9 +589,10 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
         // Remaps the back button to escape when:
         // - The browser is visible
-        // - The cursor is disabled
+        // - We're on youtube (i.e. the cursor is disabled).
         // - The drawer isn't open
-        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && browserFragment != null && browserFragment.isVisible() && !isCursorEnabled && !isDrawerOpen) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && browserFragment != null && browserFragment.isVisible() &&
+                browserFragment.getUrl().contains("youtube.com/tv") && !isDrawerOpen) {
             KeyEvent keyEvent = new KeyEvent(event.getAction(), KeyEvent.KEYCODE_ESCAPE);
             dispatchKeyEvent(keyEvent);
             return true;
