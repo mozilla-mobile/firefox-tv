@@ -39,10 +39,6 @@ object TelemetryWrapper {
 
     private const val MAXIMUM_CUSTOM_TAB_EXTRAS = 10
 
-    private val isEnabledByDefault: Boolean
-        // Telemetry is enabled by default for Focus video except for dev builds
-        get() = !AppConstants.isDevBuild()
-
     private object Category {
         val ACTION = "action"
         val ERROR = "error"
@@ -146,14 +142,15 @@ object TelemetryWrapper {
 
     @JvmStatic
     fun isTelemetryEnabled(context: Context): Boolean {
+        if (AppConstants.isDevBuild()) return false
+
         // The first access to shared preferences will require a disk read.
         val threadPolicy = StrictMode.allowThreadDiskReads()
         try {
             val resources = context.resources
             val preferences = PreferenceManager.getDefaultSharedPreferences(context)
 
-            return preferences.getBoolean(
-                    resources.getString(R.string.pref_key_telemetry), isEnabledByDefault)
+            return preferences.getBoolean(resources.getString(R.string.pref_key_telemetry), true)
         } finally {
             StrictMode.setThreadPolicy(threadPolicy)
         }
