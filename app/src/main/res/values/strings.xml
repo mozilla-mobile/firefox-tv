@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- This Source Code Form is subject to the terms of the Mozilla Public
+<?xml version="1.0" encoding="utf-8"?><!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <resources>
@@ -369,7 +368,7 @@
     <string name="download_dialog_action_cancel">Cancel</string>
 
     <!-- Option in download dialogue to start a download -->
-     <string name="download_dialog_action_download">Download</string>
+    <string name="download_dialog_action_download">Download</string>
 
     <!-- The page html title (i.e. the <title> tag content) -->
     <string name="errorpage_title">Problem loading page</string>
@@ -569,11 +568,12 @@ be temporary, and you can try again later.</li>
     <!-- Settings strings -->
     <string name="settings_cookies_dialog_title">Clear all cookies and site data</string>
     <string name="settings_cookies_dialog_content">Selecting ‘Clear Now’ will clear all cookies and site data stored by Firefox for Fire TV. This may sign you out of websites and remove offline web content.</string>
-
+    
     <!-- Appended by save_robotranslations.py -->
     <string name="turbo_mode">Turbo Mode</string>
     <string name="onboarding_turbo_mode_title">Turbo Mode helps you browse faster</string>
     <string name="onboarding_turbo_mode_body">Turbo Mode automatically blocks trackers and ads to help get you where you\'re going faster. If there\'s a speed bump – like a site that isn\'t behaving the way you expect – just turn Turbo Mode off.</string>
     <string name="onboarding_turbo_mode_button_on">Keep Turbo Mode Enabled</string>
     <string name="onboarding_turbo_mode_button_off">Turn Turbo Mode Off</string>
+
 </resources>
