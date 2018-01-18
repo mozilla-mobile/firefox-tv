@@ -125,4 +125,14 @@
             android:layout_height="1dp"
             android:layout_weight="1" />
     </LinearLayout>
+
+    <Switch
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:paddingTop="20dp"
+        android:text="@string/menu_drawer_tracking"
+        android:drawableLeft="@drawable/turbo"
+        android:drawablePadding="32dp"
+        android:drawableTint="@color/colorTextInactive"/>
 </LinearLayout>
