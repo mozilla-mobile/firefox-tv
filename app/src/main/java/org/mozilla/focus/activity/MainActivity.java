@@ -5,7 +5,6 @@
 
 package org.mozilla.focus.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -45,6 +44,7 @@ import org.mozilla.focus.session.Session;
 import org.mozilla.focus.session.SessionManager;
 import org.mozilla.focus.session.Source;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
+import org.mozilla.focus.telemetry.UrlTextInputLocation;
 import org.mozilla.focus.utils.Direction;
 import org.mozilla.focus.utils.OnUrlEnteredListener;
 import org.mozilla.focus.utils.SafeIntent;
@@ -53,7 +53,6 @@ import org.mozilla.focus.utils.UrlUtils;
 import org.mozilla.focus.utils.ViewUtils;
 import org.mozilla.focus.web.IWebView;
 import org.mozilla.focus.web.WebViewProvider;
-import org.mozilla.focus.webview.SystemWebView;
 import org.mozilla.focus.widget.InlineAutocompleteEditText;
 
 import java.util.List;
@@ -199,8 +198,10 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             public void onCommit() {
                 final String userInput = drawerUrlInput.getText().toString();
                 if (!TextUtils.isEmpty(userInput)) {
+                    // getLastAutocompleteResult must be called before closeDrawer: closeDrawer clears the text input,
+                    // which clears the last autocomplete result.
+                    onTextInputUrlEntered(userInput, drawerUrlInput.getLastAutocompleteResult(), UrlTextInputLocation.MENU);
                     drawer.closeDrawer(GravityCompat.START);
-                    onUrlEntered(userInput);
                 }
             }
         });
@@ -535,25 +536,42 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         browserFragment.setCursorEnabled(toEnable);
     }
 
+    @Override
+    public void onNonTextInputUrlEntered(@NotNull final String urlStr) {
+        onUrlEnteredInner(urlStr, false, null, null);
+    }
+
+    @Override
+    public void onTextInputUrlEntered(@NotNull final String urlStr,
+            @NotNull final InlineAutocompleteEditText.AutocompleteResult autocompleteResult,
+            @NotNull final UrlTextInputLocation inputLocation) {
+        // It'd be much cleaner/safer to do this with a kotlin callback.
+        onUrlEnteredInner(urlStr, true, autocompleteResult, inputLocation);
+    }
+
     // todo: naming
     // todo: to make MainActivity smaller, this should move to a single responsibility class like FragmentDispatcher
-    @Override
-    public void onUrlEntered(@NotNull final String userQuery) {
-        if (TextUtils.isEmpty(userQuery.trim())) {
+    /**
+     * Loads the given url. If isTextInput is true, there should be no null parameters.
+     */
+    private void onUrlEnteredInner(final String urlStr, final boolean isTextInput,
+            @Nullable final InlineAutocompleteEditText.AutocompleteResult autocompleteResult,
+            @Nullable final UrlTextInputLocation inputLocation) {
+        if (TextUtils.isEmpty(urlStr.trim())) {
             return;
         }
 
         ViewUtils.hideKeyboard(fragmentContainer);
 
-        final boolean isUrl = UrlUtils.isUrl(userQuery);
-        final String urlStr;
+        final boolean isUrl = UrlUtils.isUrl(urlStr);
+        final String updatedUrlStr;
         final String searchTerms;
         if (isUrl) {
-            urlStr = UrlUtils.normalize(userQuery);
+            updatedUrlStr = UrlUtils.normalize(urlStr);
             searchTerms = null;
         } else {
-            urlStr = UrlUtils.createSearchUrl(this, userQuery);
-            searchTerms = userQuery.trim();
+            updatedUrlStr = UrlUtils.createSearchUrl(this, urlStr);
+            searchTerms = urlStr.trim();
         }
 
         if (sessionManager.hasSession()) sessionManager.getCurrentSession().setSearchTerms(searchTerms); // todo: correct?
@@ -562,11 +580,12 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
         // TODO: could this ever happen where browserFragment is on top? and do we need to do anything special for it?
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
+        final boolean isSearch = !TextUtils.isEmpty(searchTerms);
         if (browserFragment != null && browserFragment.isVisible()) {
             // Reuse existing visible fragment - in this case we know the user is already browsing.
             // The fragment might exist if we "erased" a browsing session, hence we need to check
             // for visibility in addition to existence.
-            browserFragment.loadUrl(urlStr);
+            browserFragment.loadUrl(updatedUrlStr);
 
             // And this fragment can be removed again.
             fragmentManager.beginTransaction()
@@ -574,11 +593,19 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                     .addToBackStack(null)
                     .commit();
         } else {
-            if (!TextUtils.isEmpty(searchTerms)) {
-                SessionManager.getInstance().createSearchSession(Source.USER_ENTERED, urlStr, searchTerms);
+            if (isSearch) {
+                SessionManager.getInstance().createSearchSession(Source.USER_ENTERED, updatedUrlStr, searchTerms);
             } else {
-                SessionManager.getInstance().createSession(Source.USER_ENTERED, urlStr);
+                SessionManager.getInstance().createSession(Source.USER_ENTERED, updatedUrlStr);
             }
+        }
+
+        if (isTextInput) {
+            // Non-text input events are handled at the source, e.g. home tile click events.
+            if (autocompleteResult == null) { throw new IllegalArgumentException("Expected non-null autocomplete result for text input"); }
+            if (inputLocation == null) { throw new IllegalArgumentException("Expected non-null input location for text input"); }
+
+            TelemetryWrapper.urlBarEvent(!isSearch, autocompleteResult, inputLocation);
         }
     }
 
