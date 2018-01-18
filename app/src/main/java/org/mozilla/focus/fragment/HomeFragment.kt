@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import org.mozilla.focus.R
 import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
+import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.OnUrlEnteredListener
 
 private const val COL_COUNT = 5
@@ -101,7 +102,10 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener) :
         val item = tiles[position]
         titleView.setText(item.titleRes)
         iconView.setImageResource(item.imageRes)
-        itemView.setOnClickListener { onUrlEnteredListener.onUrlEntered(item.url) }
+        itemView.setOnClickListener {
+            onUrlEnteredListener.onUrlEntered(item.url)
+            TelemetryWrapper.homeTileClickEvent()
+        }
         itemView.setOnFocusChangeListener { v, hasFocus ->
             val backgroundResource: Int
             val textColor: Int
