@@ -101,6 +101,7 @@ object TelemetryWrapper {
         val ADD_SEARCH_ENGINE_LEARN_MORE = "search_engine_learn_more"
         val CUSTOM_SEARCH_ENGINE = "custom_search_engine"
         val REMOVE_SEARCH_ENGINES = "remove_search_engines"
+        const val HOME_TILE = "home_tile"
     }
 
     private object Value {
@@ -672,5 +673,10 @@ object TelemetryWrapper {
     @JvmStatic
     fun addSearchEngineLearnMoreEvent() {
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.ADD_SEARCH_ENGINE_LEARN_MORE).queue()
+    }
+
+    @JvmStatic
+    fun homeTileClickEvent() {
+        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE).queue()
     }
 }
