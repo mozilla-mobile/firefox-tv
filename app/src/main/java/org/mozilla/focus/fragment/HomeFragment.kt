@@ -22,6 +22,7 @@ import org.mozilla.focus.R
 import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.telemetry.TelemetryWrapper
+import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.OnUrlEnteredListener
 
 private const val COL_COUNT = 5
@@ -66,7 +67,7 @@ class HomeFragment : Fragment() {
 
     private fun initUrlInputView() = with (urlInputView) {
         setOnCommitListener {
-            onUrlEnteredListener.onUrlEntered(text.toString())
+            onUrlEnteredListener.onTextInputUrlEntered(text.toString(), urlInputView.lastAutocompleteResult, UrlTextInputLocation.HOME)
         }
         setOnFilterListener { searchText, view -> urlAutoCompleteFilter.onFilter(searchText, view) }
     }
@@ -103,7 +104,7 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener) :
         titleView.setText(item.titleRes)
         iconView.setImageResource(item.imageRes)
         itemView.setOnClickListener {
-            onUrlEnteredListener.onUrlEntered(item.url)
+            onUrlEnteredListener.onNonTextInputUrlEntered(item.url)
             TelemetryWrapper.homeTileClickEvent()
         }
         itemView.setOnFocusChangeListener { v, hasFocus ->

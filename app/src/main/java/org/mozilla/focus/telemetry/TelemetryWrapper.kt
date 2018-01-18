@@ -139,6 +139,10 @@ object TelemetryWrapper {
         val SOURCE = "source"
         val SUCCESS = "success"
         val ERROR_CODE = "error_code"
+
+        // We need this second source key because we use SOURCE when using this key.
+        // For the value, "autocomplete_source" exceeds max extra key length.
+        val AUTOCOMPLETE_SOURCE = "autocompl_src"
     }
 
     @JvmStatic
@@ -260,21 +264,22 @@ object TelemetryWrapper {
     }
 
     @JvmStatic
-    fun urlBarEvent(isUrl: Boolean, autocompleteResult: AutocompleteResult) {
+    fun urlBarEvent(isUrl: Boolean, autocompleteResult: AutocompleteResult, inputLocation: UrlTextInputLocation) {
         if (isUrl) {
-            TelemetryWrapper.browseEvent(autocompleteResult)
+            TelemetryWrapper.browseEvent(autocompleteResult, inputLocation)
         } else {
-            TelemetryWrapper.searchEnterEvent()
+            TelemetryWrapper.searchEnterEvent(inputLocation)
         }
     }
 
-    private fun browseEvent(autocompleteResult: AutocompleteResult) {
+    private fun browseEvent(autocompleteResult: AutocompleteResult, inputLocation: UrlTextInputLocation) {
         val event = TelemetryEvent.create(Category.ACTION, Method.TYPE_URL, Object.SEARCH_BAR)
                 .extra(Extra.AUTOCOMPLETE, (!autocompleteResult.isEmpty).toString())
+                .extra(Extra.SOURCE, inputLocation.extra)
 
         if (!autocompleteResult.isEmpty) {
             event.extra(Extra.TOTAL, autocompleteResult.totalItems.toString())
-            event.extra(Extra.SOURCE, autocompleteResult.source)
+            event.extra(Extra.AUTOCOMPLETE_SOURCE, autocompleteResult.source)
         }
 
         event.queue()
@@ -345,10 +350,12 @@ object TelemetryWrapper {
         TelemetryEvent.create(Category.ACTION, Method.TEXT_SELECTION_INTENT, Object.APP).queue()
     }
 
-    private fun searchEnterEvent() {
+    private fun searchEnterEvent(inputLocation: UrlTextInputLocation) {
         val telemetry = TelemetryHolder.get()
 
-        TelemetryEvent.create(Category.ACTION, Method.TYPE_QUERY, Object.SEARCH_BAR).queue()
+        TelemetryEvent.create(Category.ACTION, Method.TYPE_QUERY, Object.SEARCH_BAR)
+                .extra(Extra.SOURCE, inputLocation.extra)
+                .queue()
 
         val searchEngine = SearchEngineManager.getInstance().getDefaultSearchEngine(
                 telemetry.configuration.context)
@@ -679,4 +686,10 @@ object TelemetryWrapper {
     fun homeTileClickEvent() {
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE).queue()
     }
+}
+
+enum class UrlTextInputLocation(internal val extra: String) {
+    // We hardcode the Strings so we can change the enum
+    HOME("home"),
+    MENU("menu"),
 }
