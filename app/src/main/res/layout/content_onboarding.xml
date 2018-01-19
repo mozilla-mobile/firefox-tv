@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="#ffffff"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -22,47 +23,71 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/editText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="350dp"
-                android:layout_marginTop="153dp"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Name" />
+                android:layout_marginStart="124dp"
+                android:adjustViewBounds="false"
+                android:cropToPadding="false"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/ic_turbo_illustration" />
 
-            <EditText
-                android:id="@+id/editText2"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#e7000000">
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/turbo_mode_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/editText"
-                android:layout_centerVertical="true"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Name" />
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/turbo_mode_caption"
+                android:layout_marginTop="145dp"
+                android:text="@string/onboarding_turbo_mode_title"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                tools:text="@string/onboarding_turbo_mode_title" />
+
+            <TextView
+                android:id="@+id/turbo_mode_caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/turbo_mode_title"
+                android:layout_marginStart="306dp"
+                android:layout_marginTop="30dp"
+                android:text="@string/onboarding_turbo_mode_body"
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                tools:text="@string/onboarding_turbo_mode_body" />
         </RelativeLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="250dp"
             android:layout_height="match_parent"
             android:background="@drawable/drawer_background"
-            android:gravity="center_vertical|center_horizontal">
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/enable_turbo_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp" />
+                android:text="@string/onboarding_turbo_mode_button_on"
+                tools:text="@string/onboarding_turbo_mode_button_on">
+
+                <requestFocus />
+            </Button>
 
             <Button
                 android:id="@+id/disable_turbo_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/enable_turbo_mode"
-                android:layout_below="@+id/enable_turbo_mode" />
-        </RelativeLayout>
+                android:text="@string/onboarding_turbo_mode_button_off"
+                tools:text="@string/onboarding_turbo_mode_button_off" />
+        </LinearLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

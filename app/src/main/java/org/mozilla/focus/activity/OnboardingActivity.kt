@@ -1,7 +1,6 @@
 package org.mozilla.focus.activity
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import org.mozilla.focus.R
 
