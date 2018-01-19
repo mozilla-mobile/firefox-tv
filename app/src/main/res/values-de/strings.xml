@@ -185,4 +185,11 @@
   <string name="menu_drawer_home">Startseite</string>
   <string name="settings_cookies_dialog_title">Alle Cookies und Websitedaten entfernen</string>
   <string name="settings_cookies_dialog_content">"Jetzt leeren" löscht alle Cookies und Websitedaten, die Firefox gespeichert hat. Dadurch werden Sie wahrscheinlich von Websites abgemeldet und Offline-Webinhalte werden gelöscht.</string>
+
+    <!-- Appended by save_robotranslations.py -->
+    <string name="turbo_mode">Turbo-Modus</string>
+    <string name="onboarding_turbo_mode_title">Der Turbo-Modus hilft Ihnen, schneller zu surfen</string>
+    <string name="onboarding_turbo_mode_body">Der Turbo-Modus blockiert automatisch Tracker und Anzeigen, damit Sie schneller ans Ziel kommen. Wenn es einen Geschwindigkeitsschub gibt - wie bei einer Website, die sich nicht so verhält, wie Sie es erwarten - schalten Sie einfach den Turbo-Modus aus.</string>
+    <string name="onboarding_turbo_mode_button_on">Verlassen des Turbo-Modus aktiviert</string>
+    <string name="onboarding_turbo_mode_button_off">Turbo-Modus deaktivieren</string>
 </resources>

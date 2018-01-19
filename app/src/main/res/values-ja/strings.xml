@@ -185,4 +185,11 @@
   <string name="menu_drawer_home">ホーム</string>
   <string name="settings_cookies_dialog_title">すべての Cookie とサイトデータの消去</string>
   <string name="settings_cookies_dialog_content">‘今すぐ消去’ を選択すると Firefox に保存されたすべての Cookie とサイトデータが消去されます。ウェブサイトからログアウトし、オフライン作業用のウェブページが削除されます。</string>
+
+    <!-- Appended by save_robotranslations.py -->
+    <string name="turbo_mode">ターボモード</string>
+    <string name="onboarding_turbo_mode_title">ターボモードはより速くブラウズするのに役立ちます</string>
+    <string name="onboarding_turbo_mode_body">ターボモードは自動的にトラッカーと広告をブロックし、より速く進む場所を手助けします。 あなたが期待どおりに動作しないサイトのようなスピードバンプがある場合は、ターボモードをオフにしてください。</string>
+    <string name="onboarding_turbo_mode_button_on">ターボモードを有効にする</string>
+    <string name="onboarding_turbo_mode_button_off">ターボモードをオフにする</string>
 </resources>

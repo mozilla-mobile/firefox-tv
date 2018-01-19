@@ -160,4 +160,11 @@
   <string name="menu_drawer_home">घर</string>
   <string name="settings_cookies_dialog_title">सभी कुकीज और साइट आँकड़े साफ़ करें</string>
   <string name="settings_cookies_dialog_content">‘अब साफ़ करें’ का चयन करने से Firefox द्वारा संग्रहीत सभी कुकीज़ और साइट डेटा साफ हो जाएँगे. इससे आप वेबसाइटों से साइन आउट कर सकते हैं और ऑफ़लाइन वेब सामग्री को हटा सकते हैं.</string>
+
+    <!-- Appended by save_robotranslations.py -->
+    <string name="turbo_mode">टर्बो मोड</string>
+    <string name="onboarding_turbo_mode_title">टर्बो मोड आपको तेजी से ब्राउज़ करने में सहायता करता है</string>
+    <string name="onboarding_turbo_mode_body">टर्बो मोड स्वचालित रूप से ट्रैकर और विज्ञापनों को अवरुद्ध करता है जिससे आप तेजी से आगे बढ़ सकते हैं। यदि कोई गति बाँध है - ऐसी साइट की तरह जो आपकी अपेक्षा के अनुरूप नहीं है - बस टर्बो मोड बंद करें</string>
+    <string name="onboarding_turbo_mode_button_on">टर्बो मोड को सक्षम रखें</string>
+    <string name="onboarding_turbo_mode_button_off">टर्बो मोड बंद करें</string>
 </resources>

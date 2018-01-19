@@ -185,4 +185,11 @@
   <string name="menu_drawer_home">主页</string>
   <string name="settings_cookies_dialog_title">清除所有 Cookie 和站点数据</string>
   <string name="settings_cookies_dialog_content">选择“立即清除”将清除 Firefox 存储的所有 Cookie 和站点数据。这可能使您退出网站的登录，以及删除离线的网站内容。</string>
+
+    <!-- Appended by save_robotranslations.py -->
+    <string name="turbo_mode">加速模式</string>
+    <string name="onboarding_turbo_mode_title">加速模式可以帮助您更快地浏览</string>
+    <string name="onboarding_turbo_mode_body">加速模式会自动阻止跟踪器和广告，帮助您快速找到自己的位置。 如果出现速度颠簸 - 就像一个不像您期望的那样的网站 - 只需关闭加速模式即可。</string>
+    <string name="onboarding_turbo_mode_button_on">保持加速模式启用</string>
+    <string name="onboarding_turbo_mode_button_off">关闭加速模式</string>
 </resources>
