@@ -575,5 +575,5 @@ be temporary, and you can try again later.</li>
     <string name="onboarding_turbo_mode_body">Turbo Mode automatically blocks trackers and ads to help get you where you\'re going faster. If there\'s a speed bump – like a site that isn\'t behaving the way you expect – just turn Turbo Mode off.</string>
     <string name="onboarding_turbo_mode_button_on">Keep Turbo Mode Enabled</string>
     <string name="onboarding_turbo_mode_button_off">Turn Turbo Mode Off</string>
-
+    
 </resources>
