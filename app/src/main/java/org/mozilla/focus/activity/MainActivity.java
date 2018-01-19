@@ -46,6 +46,7 @@ import org.mozilla.focus.locale.LocaleAwareAppCompatActivity;
 import org.mozilla.focus.session.Session;
 import org.mozilla.focus.session.SessionManager;
 import org.mozilla.focus.session.Source;
+import org.mozilla.focus.telemetry.MenuAppNavButton;
 import org.mozilla.focus.telemetry.MenuBrowserNavButton;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.telemetry.UrlTextInputLocation;
@@ -165,12 +166,15 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         fragmentNavigationBar.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
+                final MenuAppNavButton button;
                 switch (item.getItemId()) {
                     case R.id.drawer_home:
+                        button = MenuAppNavButton.HOME;
                         showHomeScreen();
                         break;
 
                     case R.id.drawer_settings:
+                        button = MenuAppNavButton.SETTINGS;
                         showSettingsScreen();
                         break;
 
@@ -178,6 +182,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                         return false;
                 }
 
+                TelemetryWrapper.menuAppNavEvent(button);
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             }

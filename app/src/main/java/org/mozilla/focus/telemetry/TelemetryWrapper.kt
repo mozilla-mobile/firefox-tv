@@ -131,6 +131,8 @@ object TelemetryWrapper {
         val CLEAR_DATA = "clear_data"
         val BACK = "back"
         val FORWARD = "forward"
+        val HOME = "home"
+        val SETTINGS = "settings"
     }
 
     private object Extra {
@@ -709,6 +711,11 @@ object TelemetryWrapper {
     }
 
     @JvmStatic
+    fun menuAppNavEvent(button: MenuAppNavButton) {
+        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.MENU, button.value).queue()
+    }
+
+    @JvmStatic
     fun controllerBackEvent(location: ControllerBackLocation) {
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.CONTROLLER, Value.BACK)
                 .extra(Extra.SOURCE, location.extra)
@@ -727,6 +734,12 @@ enum class MenuBrowserNavButton(val value: String) {
     REFRESH(TelemetryWrapper.Value.RELOAD),
     BACK(TelemetryWrapper.Value.BACK),
     FORWARD(TelemetryWrapper.Value.FORWARD),
+}
+
+enum class MenuAppNavButton(val value: String) {
+    // We define separate `value`s so we can rename the enum without interfering.
+    HOME(TelemetryWrapper.Value.HOME),
+    SETTINGS(TelemetryWrapper.Value.SETTINGS),
 }
 
 enum class ControllerBackLocation(val extra: String) {
