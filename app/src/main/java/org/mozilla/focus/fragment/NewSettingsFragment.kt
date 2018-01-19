@@ -54,6 +54,7 @@ class NewSettingsFragment : Fragment() {
                         settingsWebView.cleanup()
                         SessionManager.getInstance().removeAllSessions()
                         dialog.cancel()
+                        TelemetryWrapper.clearDataEvent()
                     })
 
             builder1.setNegativeButton(

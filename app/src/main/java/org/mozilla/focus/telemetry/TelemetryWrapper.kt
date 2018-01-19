@@ -127,6 +127,7 @@ object TelemetryWrapper {
         val WHATS_NEW = "whats_new"
         val RESUME = "resume"
         val RELOAD = "refresh"
+        val CLEAR_DATA = "clear_data"
     }
 
     private object Extra {
@@ -685,6 +686,11 @@ object TelemetryWrapper {
     @JvmStatic
     fun homeTileClickEvent() {
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE).queue()
+    }
+
+    @JvmStatic
+    fun clearDataEvent() {
+        TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.SETTING, Value.CLEAR_DATA).queue()
     }
 }
 
