@@ -127,6 +127,7 @@
     </LinearLayout>
 
     <Switch
+        android:id="@+id/tracking_protection_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dp"
