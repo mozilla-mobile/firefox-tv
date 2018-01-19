@@ -102,6 +102,7 @@ object TelemetryWrapper {
         val CUSTOM_SEARCH_ENGINE = "custom_search_engine"
         val REMOVE_SEARCH_ENGINES = "remove_search_engines"
         const val HOME_TILE = "home_tile"
+        val CONTROLLER = "controller"
     }
 
     internal object Value {
@@ -706,6 +707,13 @@ object TelemetryWrapper {
     fun menuBrowserNavEvent(button: MenuBrowserNavButton) {
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.MENU, button.value).queue()
     }
+
+    @JvmStatic
+    fun controllerBackEvent(location: ControllerBackLocation) {
+        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.CONTROLLER, Value.BACK)
+                .extra(Extra.SOURCE, location.extra)
+                .queue()
+    }
 }
 
 enum class UrlTextInputLocation(internal val extra: String) {
@@ -719,4 +727,9 @@ enum class MenuBrowserNavButton(val value: String) {
     REFRESH(TelemetryWrapper.Value.RELOAD),
     BACK(TelemetryWrapper.Value.BACK),
     FORWARD(TelemetryWrapper.Value.FORWARD),
+}
+
+enum class ControllerBackLocation(val extra: String) {
+    // We define separate `extra`s so we can rename the enum without interfering.
+    BROWSER("browser"),
 }
