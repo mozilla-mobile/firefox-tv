@@ -104,7 +104,7 @@ object TelemetryWrapper {
         const val HOME_TILE = "home_tile"
     }
 
-    private object Value {
+    internal object Value {
         val DEFAULT = "default"
         val FIREFOX = "firefox"
         val SELECTION = "selection"
@@ -128,6 +128,8 @@ object TelemetryWrapper {
         val RESUME = "resume"
         val RELOAD = "refresh"
         val CLEAR_DATA = "clear_data"
+        val BACK = "back"
+        val FORWARD = "forward"
     }
 
     private object Extra {
@@ -699,10 +701,22 @@ object TelemetryWrapper {
         val method = if (isShowing) Method.SHOW else Method.HIDE
         TelemetryEvent.create(Category.ACTION, method, Object.MENU).queue()
     }
+
+    @JvmStatic
+    fun menuBrowserNavEvent(button: MenuBrowserNavButton) {
+        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.MENU, button.value).queue()
+    }
 }
 
 enum class UrlTextInputLocation(internal val extra: String) {
     // We hardcode the Strings so we can change the enum
     HOME("home"),
     MENU("menu"),
+}
+
+enum class MenuBrowserNavButton(val value: String) {
+    // We define separate `value`s so we can rename the enum without interfering.
+    REFRESH(TelemetryWrapper.Value.RELOAD),
+    BACK(TelemetryWrapper.Value.BACK),
+    FORWARD(TelemetryWrapper.Value.FORWARD),
 }

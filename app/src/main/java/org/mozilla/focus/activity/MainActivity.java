@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -47,6 +46,7 @@ import org.mozilla.focus.locale.LocaleAwareAppCompatActivity;
 import org.mozilla.focus.session.Session;
 import org.mozilla.focus.session.SessionManager;
 import org.mozilla.focus.session.Source;
+import org.mozilla.focus.telemetry.MenuBrowserNavButton;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.telemetry.UrlTextInputLocation;
 import org.mozilla.focus.utils.Direction;
@@ -311,16 +311,21 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         if (fragment == null || !fragment.isVisible()) {
             return;
         }
+
+        final MenuBrowserNavButton navButton;
         switch (view.getId()) {
             case R.id.drawer_refresh_button:
+                navButton = MenuBrowserNavButton.REFRESH;
                 fragment.reload();
                 break;
             case R.id.drawer_back_button:
+                navButton = MenuBrowserNavButton.BACK;
                 if (fragment.canGoBack()) {
                     fragment.goBack();
                 }
                 break;
             case R.id.drawer_forward_button:
+                navButton = MenuBrowserNavButton.FORWARD;
                 if (fragment.canGoForward()) {
                     fragment.goForward();
                 }
@@ -329,6 +334,8 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 // Return so that we don't try to close the drawer
                 return;
         }
+
+        TelemetryWrapper.menuBrowserNavEvent(navButton);
         drawer.closeDrawer(GravityCompat.START);
     }
 
