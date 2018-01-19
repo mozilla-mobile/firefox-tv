@@ -90,6 +90,12 @@
             <include android:id="@+id/custom_button_layout"
                 layout="@layout/custom_drawer_item" />
 
+            <View android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorTextInactive"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"/>
+
             <!-- Double navigation view is a workaround so that we could add the custom layout above -->
             <android.support.design.widget.NavigationView
                 android:paddingTop="48dp"
