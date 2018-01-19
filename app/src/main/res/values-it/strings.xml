@@ -182,4 +182,11 @@
   <string name="your_rights_content3"><![CDATA["Mozilla non attribuisce all’utente alcun diritto o licenza relativamente all’utilizzo dei marchi registrati da Mozilla Foundation o da altri soggetti, inclusi i nomi Mozilla, Firefox, %1$s e i logo associati. Ulteriori informazioni sono disponibili in "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">questa pagina</a>.]]></string>
   <string name="your_rights_content4"><![CDATA["Codice sorgente aggiuntivo per %1$s è disponibile nei termini di altre "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">licenze</a>" libere e Open Source."]]></string>
   <string name="your_rights_content5"><![CDATA["%1$s utilizza un servizio di "<em xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">blocklist</em>" fornito da Disconnect, Inc. in qualità di opera aggiuntiva e separata, distribuita nei termini della "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>" e disponibile "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">qui</a>.]]></string>
+
+    <!-- Appended by save_robotranslations.py -->
+    <string name="turbo_mode">Modalità turbo</string>
+    <string name="onboarding_turbo_mode_title">La modalità turbo ti permette di navigare più velocemente</string>
+    <string name="onboarding_turbo_mode_body">La modalità turbo blocca in automatico elementi traccianti e pubblicità per caricare le pagine più rapidamente. Se incontri un problema, come un sito che non funziona come dovrebbe, basterà disattivare la modalità turbo.</string>
+    <string name="onboarding_turbo_mode_button_on">Mantieni attiva modalità turbo</string>
+    <string name="onboarding_turbo_mode_button_off">Disattiva modalità turbo</string>
 </resources>

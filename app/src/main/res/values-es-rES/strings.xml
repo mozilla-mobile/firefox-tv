@@ -185,4 +185,11 @@
   <string name="menu_drawer_home">Inicio</string>
   <string name="settings_cookies_dialog_title">Limpiar todas las cookies y datos del sitio</string>
   <string name="settings_cookies_dialog_content">Seleccionar \"Limpiar ahora\" limpiará todas las cookies y datos del sitio guardados por Firefox. Esto puede desconectarle de sitios web y eliminar el contenido web sin conexión.</string>
+
+    <!-- Appended by save_robotranslations.py -->
+    <string name="turbo_mode">Modo Turbo</string>
+    <string name="onboarding_turbo_mode_title">Modo Turbo te ayuda a navegar más rápido</string>
+    <string name="onboarding_turbo_mode_body">El modo Turbo bloquea automáticamente los rastreadores y anuncios para ayudarte a llegar más rápido a donde vas. Si hay un bache de velocidad -como un sitio que no se comporta como esperabas-, sólo tienes que desactivar el modo Turbo Mode.</string>
+    <string name="onboarding_turbo_mode_button_on">Mantener habilitado el modo Turbo</string>
+    <string name="onboarding_turbo_mode_button_off">Apague el modo Turbo</string>
 </resources>

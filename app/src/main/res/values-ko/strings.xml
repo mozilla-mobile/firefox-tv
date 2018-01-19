@@ -185,4 +185,11 @@
   <string name="menu_drawer_home">홈</string>
   <string name="settings_cookies_dialog_title">모든 쿠키와 사이트 데이터 삭제</string>
   <string name="settings_cookies_dialog_content">‘지금 삭제’를 선택하면 Firefox에 저장되어 있는 모든 쿠키와 사이트 데이터가 삭제됩니다. 웹사이트에서 로그아웃될 수 있고 오프라인 웹 콘텐츠를 삭제할 것입니다.</string>
+
+    <!-- Appended by save_robotranslations.py -->
+    <string name="turbo_mode">터보 모드</string>
+    <string name="onboarding_turbo_mode_title">터보 모드를 사용하면 더 빨리 탐색할 수 있습니다.</string>
+    <string name="onboarding_turbo_mode_body">터보 모드는 자동으로 추적기와 광고를 차단하여 더 빨리 목적지로 이동할 수 있도록 도와줍니다. 속도가 느려지거나, 예상대로 작동하지 않는 사이트의 경우 터보 모드를 해제하십시오.</string>
+    <string name="onboarding_turbo_mode_button_on">터보 모드 사용 유지</string>
+    <string name="onboarding_turbo_mode_button_off">터보 모드 끄기</string>
 </resources>

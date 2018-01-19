@@ -185,4 +185,11 @@
   <string name="menu_drawer_home">Домой</string>
   <string name="settings_cookies_dialog_title">Удалить все куки и данные сайтов</string>
   <string name="settings_cookies_dialog_content">Выбрав «Удалить сейчас», вы удалите все куки и данные сайтов, хранящиеся в Firefox. Это может привести к разрегистрации вас на веб-сайтах и удалению данных автономных веб-сайтов.</string>
+
+    <!-- Appended by save_robotranslations.py -->
+    <string name="turbo_mode">Режим Turbo</string>
+    <string name="onboarding_turbo_mode_title">Режим Turbo помогает вам быстрее просматривать</string>
+    <string name="onboarding_turbo_mode_body">Режим Turbo автоматически блокирует отслеживание и рекламу, чтобы помочь вам, когда вы будете быстрее. Если есть ошибка скорости - как сайт, который не ведет себя так, как вы ожидаете, просто выключите Режим Turbo.</string>
+    <string name="onboarding_turbo_mode_button_on">Включить режим Turbo</string>
+    <string name="onboarding_turbo_mode_button_off">Выключить режим Turbo</string>
 </resources>
