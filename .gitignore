@@ -58,3 +58,5 @@ Screengrabfile
 # Adjust token file
 .adjust_token
 
+# robotranslations file
+tools/l10n/robotranslations/locales.yaml
