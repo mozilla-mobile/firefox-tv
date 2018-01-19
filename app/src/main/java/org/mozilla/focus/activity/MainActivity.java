@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -26,9 +27,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
+
 import com.amazon.android.webkit.AmazonWebKitFactories;
 import com.amazon.android.webkit.AmazonWebKitFactory;
 import org.jetbrains.annotations.NotNull;
@@ -53,6 +57,7 @@ import org.mozilla.focus.utils.UrlUtils;
 import org.mozilla.focus.utils.ViewUtils;
 import org.mozilla.focus.web.IWebView;
 import org.mozilla.focus.web.WebViewProvider;
+import org.mozilla.focus.webview.TrackingProtectionWebViewClient;
 import org.mozilla.focus.widget.InlineAutocompleteEditText;
 
 import java.util.List;
@@ -80,6 +85,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private ImageButton drawerRefresh;
     private ImageButton drawerForward;
     private ImageButton drawerBack;
+    private Switch drawerTrackingProtectionSwitch;
     private ImageView hintSettings;
     private LinearLayout customNavItem;
     private boolean isDrawerOpen = false;
@@ -127,6 +133,17 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         drawerForward.setOnClickListener(this);
         drawerBack = findViewById(R.id.drawer_back_button);
         drawerBack.setOnClickListener(this);
+        drawerTrackingProtectionSwitch = findViewById(R.id.tracking_protection_switch);
+        drawerTrackingProtectionSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit()
+                        .putBoolean(TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_PREF, b).apply();
+            }
+        });
+        drawerTrackingProtectionSwitch.setChecked(PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_PREF,
+                        TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_DEFAULT));
 
         hintSettings = findViewById(R.id.hint_settings);
         hintSettings.setImageResource(R.drawable.ic_settings);
