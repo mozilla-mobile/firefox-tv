@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -21,7 +22,9 @@ import org.mozilla.focus.R;
 import org.mozilla.focus.locale.LocaleAwareFragment;
 import org.mozilla.focus.locale.LocaleManager;
 import org.mozilla.focus.session.Session;
+import org.mozilla.focus.utils.Settings;
 import org.mozilla.focus.web.IWebView;
+import org.mozilla.focus.webview.TrackingProtectionWebViewClient;
 
 import java.util.Locale;
 
@@ -60,7 +63,10 @@ public abstract class WebFragment extends LocaleAwareFragment {
         final Session session = getSession();
 
         if (session != null) {
-            webView.setBlockingEnabled(session.isBlockingEnabled());
+            // Update blocking enabled state
+            final boolean isBlockingEnabled = Settings.getInstance(getContext()).isBlockingEnabled();
+            session.setBlockingEnabled(isBlockingEnabled);
+            webView.setBlockingEnabled(isBlockingEnabled);
         }
 
         if (session == null || !session.hasWebViewState()) {

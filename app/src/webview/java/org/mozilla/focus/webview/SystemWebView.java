@@ -24,6 +24,7 @@ import com.amazon.android.webkit.AmazonWebKitFactory;
 import com.amazon.android.webkit.AmazonWebView;
 import org.mozilla.focus.session.Session;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
+import org.mozilla.focus.utils.Settings;
 import org.mozilla.focus.utils.UrlUtils;
 import org.mozilla.focus.utils.ViewUtils;
 import org.mozilla.focus.web.IWebView;
@@ -101,9 +102,7 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         WebViewProvider.applyAppSettings(getContext(), getSettings());
         if (key.equals(TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_PREF)) {
-            setBlockingEnabled(sharedPreferences.getBoolean(
-                    TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_PREF,
-                    TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_DEFAULT));
+            setBlockingEnabled(Settings.getInstance(getContext()).isBlockingEnabled());
         }
     }
 

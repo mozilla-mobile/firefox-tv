@@ -141,9 +141,9 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                         .putBoolean(TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_PREF, b).apply();
             }
         });
-        drawerTrackingProtectionSwitch.setChecked(PreferenceManager.getDefaultSharedPreferences(this)
-                .getBoolean(TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_PREF,
-                        TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_DEFAULT));
+        // For now, the only place to change "blocking state" is through this UI switch, so we don't need to set a Preference listener.
+        final boolean blockingEnabled = Settings.getInstance(this).isBlockingEnabled();
+        drawerTrackingProtectionSwitch.setChecked(blockingEnabled);
 
         hintSettings = findViewById(R.id.hint_settings);
         hintSettings.setImageResource(R.drawable.ic_settings);
@@ -247,7 +247,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
         customNavItem = findViewById(R.id.custom_button_layout);
 
-        sessionManager.handleIntent(this, intent, savedInstanceState);
+        sessionManager.handleIntent(this, intent, savedInstanceState, blockingEnabled);
 
         sessionManager.getSessions().observe(this,  new NonNullObserver<List<Session>>() {
             private boolean wasSessionsEmpty = false;
@@ -404,7 +404,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     protected void onNewIntent(Intent unsafeIntent) {
         final SafeIntent intent = new SafeIntent(unsafeIntent);
 
-        sessionManager.handleNewIntent(this, intent);
+        sessionManager.handleNewIntent(this, intent, Settings.getInstance(this).isBlockingEnabled());
 
         final String action = intent.getAction();
 
@@ -610,10 +610,11 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                     .addToBackStack(null)
                     .commit();
         } else {
+            final boolean blockingEnabled = Settings.getInstance(this).isBlockingEnabled();
             if (isSearch) {
-                SessionManager.getInstance().createSearchSession(Source.USER_ENTERED, updatedUrlStr, searchTerms);
+                SessionManager.getInstance().createSearchSession(Source.USER_ENTERED, updatedUrlStr, searchTerms, blockingEnabled);
             } else {
-                SessionManager.getInstance().createSession(Source.USER_ENTERED, updatedUrlStr);
+                SessionManager.getInstance().createSession(Source.USER_ENTERED, updatedUrlStr, blockingEnabled);
             }
         }
 

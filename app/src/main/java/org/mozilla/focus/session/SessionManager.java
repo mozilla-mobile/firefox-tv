@@ -13,7 +13,6 @@ import android.text.TextUtils;
 
 import org.mozilla.focus.architecture.NonNullLiveData;
 import org.mozilla.focus.architecture.NonNullMutableLiveData;
-import org.mozilla.focus.shortcut.HomeScreen;
 import org.mozilla.focus.utils.SafeIntent;
 import org.mozilla.focus.utils.UrlUtils;
 
@@ -42,7 +41,7 @@ public class SessionManager {
     /**
      * Handle this incoming intent (via onCreate()) and create a new session if required.
      */
-    public void handleIntent(final Context context, final SafeIntent intent, final Bundle savedInstanceState) {
+    public void handleIntent(final Context context, final SafeIntent intent, final Bundle savedInstanceState, boolean blockingEnabled) {
         if ((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0) {
             // This Intent was launched from history (recent apps). Android will redeliver the
             // original Intent (which might be a VIEW intent). However if there's no active browsing
@@ -56,17 +55,17 @@ public class SessionManager {
             return;
         }
 
-        createSessionFromIntent(context, intent);
+        createSessionFromIntent(context, intent, blockingEnabled);
     }
 
     /**
      * Handle this incoming intent (via onNewIntent()) and create a new session if required.
      */
-    public void handleNewIntent(final Context context, final SafeIntent intent) {
-        createSessionFromIntent(context, intent);
+    public void handleNewIntent(final Context context, final SafeIntent intent, boolean blockingEnabled) {
+        createSessionFromIntent(context, intent, blockingEnabled);
     }
 
-    private void createSessionFromIntent(Context context, SafeIntent intent) {
+    private void createSessionFromIntent(Context context, SafeIntent intent, boolean blockingEnabled) {
         final String action = intent.getAction();
 
         if (Intent.ACTION_VIEW.equals(action)) {
@@ -75,12 +74,7 @@ public class SessionManager {
                 return; // If there's no URL in the Intent then we can't create a session.
             }
 
-            if (intent.hasExtra(HomeScreen.ADD_TO_HOMESCREEN_TAG)) {
-                final boolean blockingEnabled = intent.getBooleanExtra(HomeScreen.BLOCKING_ENABLED, true);
-                createSession(context, Source.HOME_SCREEN, intent, intent.getDataString(), blockingEnabled);
-            } else {
-                createSession(context, Source.VIEW, intent, intent.getDataString());
-            }
+            createSession(Source.VIEW, intent.getDataString(), blockingEnabled);
         } else if (Intent.ACTION_SEND.equals(action)) {
             final String dataString = intent.getStringExtra(Intent.EXTRA_TEXT);
             if (TextUtils.isEmpty(dataString)) {
@@ -94,9 +88,9 @@ public class SessionManager {
                     : dataString;
 
             if (isSearch) {
-                createSearchSession(Source.SHARE, url, dataString);
+                createSearchSession(Source.SHARE, url, dataString, blockingEnabled);
             } else {
-                createSession(Source.SHARE, url);
+                createSession(Source.SHARE, url, blockingEnabled);
             }
         }
     }
@@ -167,25 +161,14 @@ public class SessionManager {
         return sessions;
     }
 
-    public void createSession(@NonNull Source source, @NonNull String url) {
-        final Session session = new Session(source, url);
+    public void createSession(@NonNull Source source, @NonNull String url, boolean blockingEnabled) {
+        final Session session = new Session(source, url, blockingEnabled);
         addSession(session);
     }
 
-    public void createSearchSession(@NonNull Source source, @NonNull String url, String searchTerms) {
-        final Session session = new Session(source, url);
+    public void createSearchSession(@NonNull Source source, @NonNull String url, String searchTerms, boolean blockingEnabled) {
+        final Session session = new Session(source, url, blockingEnabled);
         session.setSearchTerms(searchTerms);
-        addSession(session);
-    }
-
-    private void createSession(Context context, Source source, SafeIntent intent, String url) {
-        final Session session = new Session(source, url);
-        addSession(session);
-    }
-
-    private void createSession(Context context, Source source, SafeIntent intent, String url, boolean blockingEnabled) {
-        final Session session = new Session(source, url);
-        session.setBlockingEnabled(blockingEnabled);
         addSession(session);
     }
 
