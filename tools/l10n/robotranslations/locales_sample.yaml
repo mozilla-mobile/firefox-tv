@@ -1,0 +1,76 @@
+titles:
+    - turbo_mode
+    - onboarding_turbo_mode_title
+    - onboarding_turbo_mode_body
+    - onboarding_turbo_mode_button_on
+    - onboarding_turbo_mode_button_off
+
+en-US:
+    - Turbo Mode
+    - Turbo Mode helps you browse faster
+    - Turbo Mode automatically blocks trackers and ads to help get you where you're going faster. If there's a speed bump – like a site that isn't behaving the way you expect – just turn Turbo Mode off.
+    - Keep Turbo Mode Enabled
+    - Turn Turbo Mode Off
+
+zh-rCN:
+    - 加速模式
+    - 加速模式可以帮助您更快地浏览
+    - 加速模式会自动阻止跟踪器和广告，帮助您快速找到自己的位置。 如果出现速度颠簸 - 就像一个不像您期望的那样的网站 - 只需关闭加速模式即可。
+    - 保持加速模式启用
+    - 关闭加速模式
+
+fr:
+    - Mode turbo
+    - Le mode turbo vous permet de naviguer plus rapidement
+    - Le mode turbo bloque automatiquement les traqueurs et les publicités pour que les pages web se chargent plus vite. S’il y a un hic (comme un site web qui ne fonctionne pas comme vous l’espériez), il vous suffit de désactiver le mode turbo.
+    - Laisser le mode turbo activé
+    - Désactiver le mode turbo
+
+de:
+    - Turbo-Modus
+    - Der Turbo-Modus hilft Ihnen, schneller zu surfen
+    - Der Turbo-Modus blockiert automatisch Tracker und Anzeigen, damit Sie schneller ans Ziel kommen. Wenn es einen Geschwindigkeitsschub gibt - wie bei einer Website, die sich nicht so verhält, wie Sie es erwarten - schalten Sie einfach den Turbo-Modus aus.
+    - Verlassen des Turbo-Modus aktiviert
+    - Turbo-Modus deaktivieren
+
+hi-rIN:
+    - टर्बो मोड
+    - टर्बो मोड आपको तेजी से ब्राउज़ करने में सहायता करता है
+    - टर्बो मोड स्वचालित रूप से ट्रैकर और विज्ञापनों को अवरुद्ध करता है जिससे आप तेजी से आगे बढ़ सकते हैं। यदि कोई गति बाँध है - ऐसी साइट की तरह जो आपकी अपेक्षा के अनुरूप नहीं है - बस टर्बो मोड बंद करें
+    - टर्बो मोड को सक्षम रखें
+    - टर्बो मोड बंद करें
+
+ja:
+    - ターボモード
+    - ターボモードはより速くブラウズするのに役立ちます
+    - ターボモードは自動的にトラッカーと広告をブロックし、より速く進む場所を手助けします。 あなたが期待どおりに動作しないサイトのようなスピードバンプがある場合は、ターボモードをオフにしてください。
+    - ターボモードを有効にする
+    - ターボモードをオフにする
+
+ko:
+    - 터보 모드
+    - 터보 모드를 사용하면 더 빨리 탐색할 수 있습니다.
+    - 터보 모드는 자동으로 추적기와 광고를 차단하여 더 빨리 목적지로 이동할 수 있도록 도와줍니다. 속도가 느려지거나, 예상대로 작동하지 않는 사이트의 경우 터보 모드를 해제하십시오.
+    - 터보 모드 사용 유지
+    - 터보 모드 끄기
+
+ru:
+    - Режим Turbo
+    - Режим Turbo помогает вам быстрее просматривать
+    - Режим Turbo автоматически блокирует отслеживание и рекламу, чтобы помочь вам, когда вы будете быстрее. Если есть ошибка скорости - как сайт, который не ведет себя так, как вы ожидаете, просто выключите Режим Turbo.
+    - Включить режим Turbo
+    - Выключить режим Turbo
+
+es-rES:
+    - Modo Turbo
+    - Modo Turbo te ayuda a navegar más rápido
+    - El modo Turbo bloquea automáticamente los rastreadores y anuncios para ayudarte a llegar más rápido a donde vas. Si hay un bache de velocidad -como un sitio que no se comporta como esperabas-, sólo tienes que desactivar el modo Turbo Mode.
+    - Mantener habilitado el modo Turbo
+    - Apague el modo Turbo
+
+it:
+    - Modalità turbo
+    - La modalità turbo ti permette di navigare più velocemente
+    - La modalità turbo blocca in automatico elementi traccianti e pubblicità per caricare le pagine più rapidamente. Se incontri un problema, come un sito che non funziona come dovrebbe, basterà disattivare la modalità turbo.
+    - Mantieni attiva modalità turbo
+    - Disattiva modalità turbo
