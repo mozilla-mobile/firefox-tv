@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="org.mozilla.focus.activity.OnboardingActivity"
+    tools:showIn="@layout/activity_onboarding">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="end"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="350dp"
+                android:layout_marginTop="153dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+
+            <EditText
+                android:id="@+id/editText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/editText"
+                android:layout_centerVertical="true"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="250dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/drawer_background"
+            android:gravity="center_vertical|center_horizontal">
+
+            <Button
+                android:id="@+id/enable_turbo_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp" />
+
+            <Button
+                android:id="@+id/disable_turbo_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/enable_turbo_mode"
+                android:layout_below="@+id/enable_turbo_mode" />
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

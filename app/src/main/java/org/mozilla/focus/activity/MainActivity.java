@@ -292,7 +292,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 }
 
                 if (Settings.getInstance(MainActivity.this).shouldShowFirstRun()) {
-                    Log.e("shouldshow", "firstrun");
+                    showOnboardingScreen();
                 }
             }
         });
@@ -501,6 +501,11 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 .replace(R.id.container, settingsFragment, NewSettingsFragment.FRAGMENT_TAG)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    private void showOnboardingScreen() {
+        final Intent intent = new Intent(this, OnboardingActivity.class);
+        startActivity(intent);
     }
 
     private void showBrowserScreenForCurrentSession() {
