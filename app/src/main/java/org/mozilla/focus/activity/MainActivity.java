@@ -21,7 +21,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -76,6 +75,8 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     public static final String EXTRA_NOTIFICATION = "notification";
 
     private static final String EXTRA_SHORTCUT = "shortcut";
+
+    private static final int ONBOARDING_REQ_CODE = 1;
 
     private final SessionManager sessionManager;
     private final UrlAutoCompleteFilter drawerUrlAutoCompleteFilter = new UrlAutoCompleteFilter();
@@ -506,7 +507,17 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
     private void showOnboardingScreen() {
         final Intent intent = new Intent(this, OnboardingActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, ONBOARDING_REQ_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ONBOARDING_REQ_CODE) {
+            if (resultCode == RESULT_OK) {
+                // We don't need to check the result because it is only RESULT_OK in one case.
+                drawerTrackingProtectionSwitch.setChecked(false);
+            }
+        }
     }
 
     private void showBrowserScreenForCurrentSession() {

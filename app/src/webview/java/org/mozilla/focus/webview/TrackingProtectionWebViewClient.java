@@ -25,7 +25,7 @@ public class TrackingProtectionWebViewClient extends AmazonWebViewClient
         implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static volatile UrlMatcher MATCHER;
     public static final String TRACKING_PROTECTION_ENABLED_PREF = "tracking_protection_enabled";
-    public static final boolean TRACKING_PROTECTION_ENABLED_DEFAULT = false;
+    public static final boolean TRACKING_PROTECTION_ENABLED_DEFAULT = true;
 
     public static void triggerPreload(final Context context) {
         // Only trigger loading if MATCHER is null. (If it's null, MATCHER could already be loading,

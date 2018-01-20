@@ -4,12 +4,13 @@
 
 package org.mozilla.focus.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import org.mozilla.focus.R
 
-import kotlinx.android.synthetic.main.activity_onboarding.*
 import kotlinx.android.synthetic.main.content_onboarding.*
 import org.mozilla.focus.webview.TrackingProtectionWebViewClient
 
@@ -26,6 +27,7 @@ class OnboardingActivity : AppCompatActivity() {
 
         disable_turbo_mode.setOnClickListener { _ ->
             setTurboMode(false)
+            setResult(Activity.RESULT_OK, Intent())
             finish()
         }
 
