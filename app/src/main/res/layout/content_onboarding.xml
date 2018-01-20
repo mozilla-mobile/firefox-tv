@@ -2,7 +2,6 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#ffffff"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -31,15 +30,10 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="124dp"
                 android:adjustViewBounds="false"
+                android:alpha="0.1"
                 android:cropToPadding="false"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_turbo_illustration" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#e7000000">
-            </RelativeLayout>
 
             <TextView
                 android:id="@+id/turbo_mode_title"
@@ -47,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignStart="@+id/turbo_mode_caption"
-                android:layout_marginTop="145dp"
+                android:layout_marginTop="200dp"
                 android:text="@string/onboarding_turbo_mode_title"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 tools:text="@string/onboarding_turbo_mode_title" />
@@ -60,7 +54,12 @@
                 android:layout_below="@+id/turbo_mode_title"
                 android:layout_marginStart="306dp"
                 android:layout_marginTop="30dp"
+<<<<<<< HEAD
                 android:text="@string/onboarding_turbo_mode_body"
+=======
+                android:paddingEnd="20dp"
+                android:text="@string/onboarding_turbo_mode_caption"
+>>>>>>> button styles
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                 tools:text="@string/onboarding_turbo_mode_body" />
         </RelativeLayout>
@@ -74,6 +73,7 @@
 
             <Button
                 android:id="@+id/enable_turbo_mode"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/onboarding_turbo_mode_button_on"
@@ -84,10 +84,17 @@
 
             <Button
                 android:id="@+id/disable_turbo_mode"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+<<<<<<< HEAD
                 android:text="@string/onboarding_turbo_mode_button_off"
                 tools:text="@string/onboarding_turbo_mode_button_off" />
+=======
+                android:layout_marginTop="8dp"
+                android:text="@string/onboarding_turbo_mode_button_disable"
+                tools:text="@string/onboarding_turbo_mode_button_disable" />
+>>>>>>> button styles
         </LinearLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
