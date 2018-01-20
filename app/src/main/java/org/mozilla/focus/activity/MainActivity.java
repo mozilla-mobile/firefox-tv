@@ -305,6 +305,13 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
+            // Duplicates logic in toggleDrawer but since we only want to record telemetry for user input,
+            // we can't put this inside toggleDrawer, which could be used internally.
+            //
+            // We record the drawer open telemetry elsewhere.
+            if (isDrawerOpen) {
+                TelemetryWrapper.drawerShowHideEvent(false);
+            }
             toggleDrawer();
             return true;
         }
@@ -499,6 +506,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
         if (isDrawerOpen) {
             drawer.closeDrawer(GravityCompat.START);
+            TelemetryWrapper.drawerShowHideEvent(false);
             return;
         }
 
