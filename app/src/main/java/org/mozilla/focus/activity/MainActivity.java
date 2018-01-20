@@ -139,8 +139,8 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         drawerBack.setOnClickListener(this);
         drawerTrackingProtectionSwitch = findViewById(R.id.tracking_protection_switch);
 
-        // setChecked must be called by we add the listener, otherwise the listener will fired when we
-        // set the new value. In particular, this makes the telemetry inaccurate.
+        // setChecked must be called before we add the listener, otherwise the listener will fired when we
+        // call setChecked this first time. In particular, this would make telemetry inaccurate.
         drawerTrackingProtectionSwitch.setChecked(PreferenceManager.getDefaultSharedPreferences(this)
                 .getBoolean(TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_PREF,
                         TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_DEFAULT));
