@@ -692,6 +692,13 @@ object TelemetryWrapper {
     fun clearDataEvent() {
         TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.SETTING, Value.CLEAR_DATA).queue()
     }
+
+    /** @param isShowing true if the drawer is opening, close otherwise. */
+    @JvmStatic
+    fun drawerShowHideEvent(isShowing: Boolean) {
+        val method = if (isShowing) Method.SHOW else Method.HIDE
+        TelemetryEvent.create(Category.ACTION, method, Object.MENU).queue()
+    }
 }
 
 enum class UrlTextInputLocation(internal val extra: String) {
