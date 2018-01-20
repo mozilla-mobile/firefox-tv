@@ -10,6 +10,7 @@ import android.content.res.Resources
 import android.preference.PreferenceManager
 
 import org.mozilla.focus.R
+import org.mozilla.focus.activity.OnboardingActivity
 import org.mozilla.focus.search.SearchEngine
 
 /**
@@ -43,7 +44,7 @@ class Settings private constructor(context: Context) {
             false
 
     fun shouldShowFirstRun(): Boolean =
-            true // !preferences.getBoolean(FirstrunFragment.FIRSTRUN_PREF, false)
+            preferences.getBoolean(OnboardingActivity.ONBOARD_PREF, false)
 
     fun shouldUseSecureMode(): Boolean =
             preferences.getBoolean(getPreferenceKey(R.string.pref_key_secure), false)
