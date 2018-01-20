@@ -36,7 +36,6 @@ import org.mozilla.focus.session.NullSession;
 import org.mozilla.focus.session.Session;
 import org.mozilla.focus.session.SessionCallbackProxy;
 import org.mozilla.focus.session.SessionManager;
-import org.mozilla.focus.telemetry.ControllerBackLocation;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.Browsers;
 import org.mozilla.focus.utils.Direction;
@@ -428,7 +427,7 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
             SessionManager.getInstance().removeCurrentSession();
         }
 
-        TelemetryWrapper.controllerBackEvent(ControllerBackLocation.BROWSER);
+        TelemetryWrapper.browserBackControllerEvent();
         return true;
     }
 
