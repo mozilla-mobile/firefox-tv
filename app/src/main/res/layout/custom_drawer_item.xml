@@ -133,6 +133,8 @@
         android:layout_marginLeft="6dp"
         android:paddingTop="20dp"
         android:text="@string/menu_drawer_tracking"
+        android:theme="@style/SwitchStyle"
+        android:textColor="@android:color/white"
         android:drawableLeft="@drawable/turbo"
         android:drawablePadding="32dp"
         android:drawableTint="@color/colorTextInactive"/>
