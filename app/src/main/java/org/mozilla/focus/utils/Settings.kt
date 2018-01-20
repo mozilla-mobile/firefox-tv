@@ -11,6 +11,7 @@ import android.preference.PreferenceManager
 
 import org.mozilla.focus.R
 import org.mozilla.focus.search.SearchEngine
+import org.mozilla.focus.webview.TrackingProtectionWebViewClient
 
 /**
  * A simple wrapper for SharedPreferences that makes reading preference a little bit easier.
@@ -63,4 +64,8 @@ class Settings private constructor(context: Context) {
 
     private fun getPreferenceKey(resourceId: Int): String =
             resources.getString(resourceId)
+
+    fun isBlockingEnabled() =
+            preferences.getBoolean(TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_PREF,
+                    TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_DEFAULT)
 }

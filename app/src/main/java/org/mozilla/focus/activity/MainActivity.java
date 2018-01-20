@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -26,9 +27,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
+
 import com.amazon.android.webkit.AmazonWebKitFactories;
 import com.amazon.android.webkit.AmazonWebKitFactory;
 import org.jetbrains.annotations.NotNull;
@@ -49,10 +53,12 @@ import org.mozilla.focus.utils.Direction;
 import org.mozilla.focus.utils.OnUrlEnteredListener;
 import org.mozilla.focus.utils.SafeIntent;
 import org.mozilla.focus.utils.Settings;
+import org.mozilla.focus.utils.ThreadUtils;
 import org.mozilla.focus.utils.UrlUtils;
 import org.mozilla.focus.utils.ViewUtils;
 import org.mozilla.focus.web.IWebView;
 import org.mozilla.focus.web.WebViewProvider;
+import org.mozilla.focus.webview.TrackingProtectionWebViewClient;
 import org.mozilla.focus.widget.InlineAutocompleteEditText;
 
 import java.util.List;
@@ -80,6 +86,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private ImageButton drawerRefresh;
     private ImageButton drawerForward;
     private ImageButton drawerBack;
+    private Switch drawerTrackingProtectionSwitch;
     private ImageView hintSettings;
     private LinearLayout customNavItem;
     private boolean isDrawerOpen = false;
@@ -127,6 +134,28 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         drawerForward.setOnClickListener(this);
         drawerBack = findViewById(R.id.drawer_back_button);
         drawerBack.setOnClickListener(this);
+        drawerTrackingProtectionSwitch = findViewById(R.id.tracking_protection_switch);
+        drawerTrackingProtectionSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit()
+                        .putBoolean(TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_PREF, b).apply();
+
+                ThreadUtils.postToMainThreadDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        final BrowserFragment browserFragment = (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
+                        if (browserFragment != null) {
+                            browserFragment.reload();
+                        }
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                }, /* Switch.THUMB_ANIMATION_DURATION */ 250);
+            }
+        });
+        // For now, the only place to change "blocking state" is through this UI switch, so we don't need to set a Preference listener.
+        final boolean blockingEnabled = Settings.getInstance(this).isBlockingEnabled();
+        drawerTrackingProtectionSwitch.setChecked(blockingEnabled);
 
         hintSettings = findViewById(R.id.hint_settings);
         hintSettings.setImageResource(R.drawable.ic_settings);
@@ -230,7 +259,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
         customNavItem = findViewById(R.id.custom_button_layout);
 
-        sessionManager.handleIntent(this, intent, savedInstanceState);
+        sessionManager.handleIntent(this, intent, savedInstanceState, blockingEnabled);
 
         sessionManager.getSessions().observe(this,  new NonNullObserver<List<Session>>() {
             private boolean wasSessionsEmpty = false;
@@ -387,7 +416,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     protected void onNewIntent(Intent unsafeIntent) {
         final SafeIntent intent = new SafeIntent(unsafeIntent);
 
-        sessionManager.handleNewIntent(this, intent);
+        sessionManager.handleNewIntent(this, intent, Settings.getInstance(this).isBlockingEnabled());
 
         final String action = intent.getAction();
 
@@ -593,10 +622,11 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                     .addToBackStack(null)
                     .commit();
         } else {
+            final boolean blockingEnabled = Settings.getInstance(this).isBlockingEnabled();
             if (isSearch) {
-                SessionManager.getInstance().createSearchSession(Source.USER_ENTERED, updatedUrlStr, searchTerms);
+                SessionManager.getInstance().createSearchSession(Source.USER_ENTERED, updatedUrlStr, searchTerms, blockingEnabled);
             } else {
-                SessionManager.getInstance().createSession(Source.USER_ENTERED, updatedUrlStr);
+                SessionManager.getInstance().createSession(Source.USER_ENTERED, updatedUrlStr, blockingEnabled);
             }
         }
 

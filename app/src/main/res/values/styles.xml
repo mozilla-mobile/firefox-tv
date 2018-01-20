@@ -93,4 +93,8 @@
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
+
+    <style name="SwitchStyle" parent="AppTheme">
+       <item name="colorAccent">@android:color/white</item>
+    </style>
 </resources>

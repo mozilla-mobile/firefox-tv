@@ -125,4 +125,17 @@
             android:layout_height="1dp"
             android:layout_weight="1" />
     </LinearLayout>
+
+    <Switch
+        android:id="@+id/tracking_protection_switch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:paddingTop="20dp"
+        android:text="@string/menu_drawer_tracking"
+        android:theme="@style/SwitchStyle"
+        android:textColor="@android:color/white"
+        android:drawableLeft="@drawable/turbo"
+        android:drawablePadding="32dp"
+        android:drawableTint="@color/colorTextInactive"/>
 </LinearLayout>

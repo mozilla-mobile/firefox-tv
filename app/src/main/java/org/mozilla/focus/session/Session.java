@@ -30,7 +30,7 @@ public class Session {
     private boolean isRecorded;
     private boolean isBlockingEnabled;
 
-    /* package */ Session(Source source, String url) {
+    /* package */ Session(Source source, String url, boolean blockingEnabled) {
         this.uuid = UUID.randomUUID().toString();
         this.source = source;
 
@@ -40,12 +40,12 @@ public class Session {
         this.loading = new NonNullMutableLiveData<>(false);
         this.trackersBlocked = new NonNullMutableLiveData<>(0);
 
-        this.isBlockingEnabled = true;
+        this.isBlockingEnabled = blockingEnabled;
         this.isRecorded = false;
     }
 
-    /* package */ Session(String url) {
-        this(Source.CUSTOM_TAB, url);
+    /* package */ Session(String url, boolean blockingEnabled) {
+        this(Source.CUSTOM_TAB, url, blockingEnabled);
     }
 
     public Source getSource() {

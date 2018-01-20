@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.annotation.WorkerThread;
 
 import com.amazon.android.webkit.AmazonWebResourceResponse;
@@ -20,6 +21,8 @@ import org.mozilla.focus.web.IWebView;
 
 public class TrackingProtectionWebViewClient extends AmazonWebViewClient {
     private static volatile UrlMatcher MATCHER;
+    public static final String TRACKING_PROTECTION_ENABLED_PREF = "tracking_protection_enabled";
+    public static final boolean TRACKING_PROTECTION_ENABLED_DEFAULT = false;
 
     public static void triggerPreload(final Context context) {
         // Only trigger loading if MATCHER is null. (If it's null, MATCHER could already be loading,
