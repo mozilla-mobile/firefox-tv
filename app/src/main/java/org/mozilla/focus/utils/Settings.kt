@@ -31,7 +31,7 @@ class Settings private constructor(context: Context) {
         }
     }
 
-    private val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     private val resources: Resources = context.resources
 
     val defaultSearchEngineName: String?
