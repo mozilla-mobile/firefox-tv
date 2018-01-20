@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 package org.mozilla.focus.activity
 
 import android.os.Bundle
@@ -17,15 +21,15 @@ class OnboardingActivity : AppCompatActivity() {
 
         enable_turbo_mode.setOnClickListener { _ ->
             setTurboMode(true)
-            setOnboardShown()
             finish()
         }
 
         disable_turbo_mode.setOnClickListener { _ ->
             setTurboMode(false)
-            setOnboardShown()
             finish()
         }
+
+        setOnboardShown()
     }
 
     private fun setTurboMode(turboModeEnabled: Boolean) {
@@ -38,11 +42,11 @@ class OnboardingActivity : AppCompatActivity() {
     private fun setOnboardShown() {
         PreferenceManager.getDefaultSharedPreferences(this)
                 .edit()
-                .putBoolean(ONBOARD_PREF, true)
+                .putBoolean(ONBOARD_SHOWN_PREF, true)
                 .apply();
     }
 
     companion object {
-        const val ONBOARD_PREF = "onboard_shown"
+        const val ONBOARD_SHOWN_PREF = "onboard_shown"
     }
 }
