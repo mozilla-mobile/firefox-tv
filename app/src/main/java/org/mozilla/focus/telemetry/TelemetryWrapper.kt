@@ -104,6 +104,7 @@ object TelemetryWrapper {
         val REMOVE_SEARCH_ENGINES = "remove_search_engines"
         const val HOME_TILE = "home_tile"
         val CONTROLLER = "controller"
+        val TURBO_MODE = "turbo_mode"
     }
 
     internal object Value {
@@ -134,6 +135,8 @@ object TelemetryWrapper {
         val FORWARD = "forward"
         val HOME = "home"
         val SETTINGS = "settings"
+        val ON = "on"
+        val OFF = "off"
     }
 
     private object Extra {
@@ -727,6 +730,13 @@ object TelemetryWrapper {
         TelemetryEvent.create(Category.ACTION, Method.PAGE, Object.BROWSER, Value.BACK)
                 .extra(Extra.SOURCE, "controller")
                 .queue()
+    }
+
+    /** @param isSwitchedOn true if the switch was turned on, false otherwise. */
+    @JvmStatic
+    fun turboModeSwitchEvent(isSwitchedOn: Boolean) {
+        val value = if (isSwitchedOn) Value.ON else Value.OFF
+        TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.TURBO_MODE, value).queue()
     }
 }
 
