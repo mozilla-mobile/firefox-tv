@@ -153,10 +153,11 @@ dependencies {
     compile "com.android.support:design:$support_libraries_version"
     compile "com.android.support:cardview-v7:$support_libraries_version"
     compile "com.android.support:recyclerview-v7:$support_libraries_version"
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     compile "android.arch.lifecycle:extensions:$architecture_components_version"
 
-    compile("com.google.code.findbugs:annotations:3.0.1") {
+    compile ("com.google.code.findbugs:annotations:3.0.1") {
         // We really only need the SuppressFBWarnings annotation, everything else can be ignored.
         // Without this we get weird failures due to dependencies.
         transitive = false
@@ -167,7 +168,6 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.19.3"
 
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     geckoCompile(name: 'geckoview-latest', ext: 'aar')
 
     testCompile 'junit:junit:4.12'
@@ -190,7 +190,7 @@ dependencies {
     androidTestCompile "tools.fastlane:screengrab:1.1.0", {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-
+    
     compile files('libs/awv_api/awv_interface.jar')
     compile files('libs/awv_api/awv_android_factory.jar')
 }
@@ -216,7 +216,7 @@ android.applicationVariants.all { variant ->
 
 def blockListOutputDir = 'src/webview/res/raw'
 
-task buildBlocklists(type: Copy) {
+task buildBlocklists(type:Copy) {
     from('../shavar-prod-lists') {
         include '*.json'
     }
@@ -282,13 +282,13 @@ def getEnabledLocales() {
     def langs = potentialLanguageDirs.findAll {
         // Only select locales where strings.xml exists
         // Some locales might only contain e.g. sumo URLS in urls.xml, and should be skipped (see es vs es-ES/es-MX/etc)
-        return file(new File(it, "strings.xml")).exists()
-    }.collect {
+        return  file(new File(it, "strings.xml")).exists()
+    } .collect {
         // And reduce down to actual values-* names
         return it.name
-    }.collect {
+    } .collect {
         return it.substring("values-".length())
-    }.collect {
+    } .collect {
         if (it.length() > 3 && it.contains("-r")) {
             // Android resource dirs add an "r" prefix to the region - we need to strip that for java usage
             // Add 1 to have the index of the r, without the dash
