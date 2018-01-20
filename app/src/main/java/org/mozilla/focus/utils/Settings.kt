@@ -44,7 +44,7 @@ class Settings private constructor(context: Context) {
             false
 
     fun shouldShowFirstRun(): Boolean =
-            preferences.getBoolean(OnboardingActivity.ONBOARD_PREF, false)
+            !preferences.getBoolean(OnboardingActivity.ONBOARD_PREF, false)
 
     fun shouldUseSecureMode(): Boolean =
             preferences.getBoolean(getPreferenceKey(R.string.pref_key_secure), false)
