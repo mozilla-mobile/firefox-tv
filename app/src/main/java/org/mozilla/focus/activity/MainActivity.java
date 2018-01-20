@@ -53,6 +53,7 @@ import org.mozilla.focus.utils.Direction;
 import org.mozilla.focus.utils.OnUrlEnteredListener;
 import org.mozilla.focus.utils.SafeIntent;
 import org.mozilla.focus.utils.Settings;
+import org.mozilla.focus.utils.ThreadUtils;
 import org.mozilla.focus.utils.UrlUtils;
 import org.mozilla.focus.utils.ViewUtils;
 import org.mozilla.focus.web.IWebView;
@@ -139,6 +140,17 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit()
                         .putBoolean(TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_PREF, b).apply();
+
+                ThreadUtils.postToMainThreadDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        final BrowserFragment browserFragment = (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
+                        if (browserFragment != null) {
+                            browserFragment.reload();
+                        }
+                        drawer.closeDrawer(GravityCompat.START);
+                    }
+                }, /* Switch.THUMB_ANIMATION_DURATION */ 250);
             }
         });
         // For now, the only place to change "blocking state" is through this UI switch, so we don't need to set a Preference listener.
