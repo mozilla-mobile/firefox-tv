@@ -715,10 +715,14 @@ object TelemetryWrapper {
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.MENU, button.value).queue()
     }
 
+    /**
+     * The browser goes back from a controller press. Another way to track back presses is
+     * [menuBrowserNavEvent] with [MenuBrowserNavButton.BACK].
+     */
     @JvmStatic
-    fun controllerBackEvent(location: ControllerBackLocation) {
-        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.CONTROLLER, Value.BACK)
-                .extra(Extra.SOURCE, location.extra)
+    fun browserBackControllerEvent() {
+        TelemetryEvent.create(Category.ACTION, Method.PAGE, Object.BROWSER, Value.BACK)
+                .extra(Extra.SOURCE, "controller")
                 .queue()
     }
 }
@@ -740,9 +744,4 @@ enum class MenuAppNavButton(val value: String) {
     // We define separate `value`s so we can rename the enum without interfering.
     HOME(TelemetryWrapper.Value.HOME),
     SETTINGS(TelemetryWrapper.Value.SETTINGS),
-}
-
-enum class ControllerBackLocation(val extra: String) {
-    // We define separate `extra`s so we can rename the enum without interfering.
-    BROWSER("browser"),
 }
