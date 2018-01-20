@@ -21,6 +21,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -289,6 +290,10 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                     // We have at least one session. Show a fragment for the current session.
                     showBrowserScreenForCurrentSession();
                 }
+
+                if (Settings.getInstance(MainActivity.this).shouldShowOnboarding()) {
+                    showOnboardingScreen();
+                }
             }
         });
 
@@ -496,6 +501,11 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 .replace(R.id.container, settingsFragment, NewSettingsFragment.FRAGMENT_TAG)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    private void showOnboardingScreen() {
+        final Intent intent = new Intent(this, OnboardingActivity.class);
+        startActivity(intent);
     }
 
     private void showBrowserScreenForCurrentSession() {
