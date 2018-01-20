@@ -15,6 +15,7 @@ import org.mozilla.focus.R
 import org.mozilla.focus.search.SearchEngineManager
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.utils.AppConstants
+import org.mozilla.focus.webview.TrackingProtectionWebViewClient
 import org.mozilla.focus.widget.InlineAutocompleteEditText.AutocompleteResult
 import org.mozilla.telemetry.Telemetry
 import org.mozilla.telemetry.TelemetryHolder
@@ -206,7 +207,9 @@ object TelemetryWrapper {
                             resources.getString(R.string.pref_key_secure),
                             resources.getString(R.string.pref_key_default_browser),
                             resources.getString(R.string.pref_key_autocomplete_preinstalled),
-                            resources.getString(R.string.pref_key_autocomplete_custom))
+                            resources.getString(R.string.pref_key_autocomplete_custom),
+                            TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_PREF
+                            )
                     .setSettingsProvider(TelemetrySettingsProvider(context))
                     .setCollectionEnabled(telemetryEnabled)
                     .setUploadEnabled(telemetryEnabled)
