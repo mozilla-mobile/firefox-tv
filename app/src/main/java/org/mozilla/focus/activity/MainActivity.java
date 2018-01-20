@@ -197,6 +197,8 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                     browserFragment.stopMoving(Direction.RIGHT);
                     browserFragment.stopMoving(Direction.UP);
                 }
+
+                TelemetryWrapper.drawerShowHideEvent(true);
             }
 
             @Override
