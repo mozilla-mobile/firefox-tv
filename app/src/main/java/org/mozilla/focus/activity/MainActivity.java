@@ -141,14 +141,11 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
         // setChecked must be called before we add the listener, otherwise the listener will fired when we
         // call setChecked this first time. In particular, this would make telemetry inaccurate.
-        drawerTrackingProtectionSwitch.setChecked(PreferenceManager.getDefaultSharedPreferences(this)
-                .getBoolean(TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_PREF,
-                        TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_DEFAULT));
+        drawerTrackingProtectionSwitch.setChecked(Settings.getInstance(this).isBlockingEnabled());
         drawerTrackingProtectionSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit()
-                        .putBoolean(TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_PREF, b).apply();
+                Settings.getInstance(MainActivity.this).setBlockingEnabled(b);
                 TelemetryWrapper.turboModeSwitchEvent(b);
 
                 ThreadUtils.postToMainThreadDelayed(new Runnable() {
