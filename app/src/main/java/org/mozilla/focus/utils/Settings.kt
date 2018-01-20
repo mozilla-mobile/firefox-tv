@@ -43,7 +43,7 @@ class Settings private constructor(context: Context) {
                     false); */
             false
 
-    fun shouldShowFirstRun(): Boolean =
+    fun shouldShowOnboarding(): Boolean =
             !preferences.getBoolean(OnboardingActivity.ONBOARD_PREF, false)
 
     fun shouldUseSecureMode(): Boolean =

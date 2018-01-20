@@ -285,7 +285,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                     showBrowserScreenForCurrentSession();
                 }
 
-                if (Settings.getInstance(MainActivity.this).shouldShowFirstRun()) {
+                if (Settings.getInstance(MainActivity.this).shouldShowOnboarding()) {
                     showOnboardingScreen();
                 }
             }
