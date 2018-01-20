@@ -552,7 +552,6 @@ be temporary, and you can try again later.</li>
     <string name="your_rights_content5"><![CDATA[%1$s also uses blocklists provided by Disconnect, Inc. as separate and independent works under the <a href="%2$s">GNU General Public License v3</a>, and available <a href="%3$s">here</a>.]]></string>
 
     <!-- Focus video strings -->
-    <string name="menu_drawer_tracking">Turbo Mode</string>
     <string name="menu_drawer_home">Home</string>
 
     <!-- Home tile strings -->

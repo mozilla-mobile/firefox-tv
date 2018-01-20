@@ -132,7 +132,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dp"
         android:paddingTop="20dp"
-        android:text="@string/menu_drawer_tracking"
+        android:text="@string/turbo_mode"
         android:theme="@style/SwitchStyle"
         android:textColor="@android:color/white"
         android:drawableLeft="@drawable/turbo"
