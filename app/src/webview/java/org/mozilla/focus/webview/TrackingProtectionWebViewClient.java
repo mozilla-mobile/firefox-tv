@@ -5,6 +5,7 @@
 package org.mozilla.focus.webview;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -14,12 +15,14 @@ import android.support.annotation.WorkerThread;
 import com.amazon.android.webkit.AmazonWebResourceResponse;
 import com.amazon.android.webkit.AmazonWebView;
 import com.amazon.android.webkit.AmazonWebViewClient;
+import org.mozilla.focus.utils.Settings;
 import org.mozilla.focus.webview.matcher.UrlMatcher;
 
 import org.mozilla.focus.R;
 import org.mozilla.focus.web.IWebView;
 
-public class TrackingProtectionWebViewClient extends AmazonWebViewClient {
+public class TrackingProtectionWebViewClient extends AmazonWebViewClient
+        implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static volatile UrlMatcher MATCHER;
     public static final String TRACKING_PROTECTION_ENABLED_PREF = "tracking_protection_enabled";
     public static final boolean TRACKING_PROTECTION_ENABLED_DEFAULT = false;
@@ -47,6 +50,13 @@ public class TrackingProtectionWebViewClient extends AmazonWebViewClient {
         return MATCHER;
     }
 
+    /**
+     * true if blocking is enabled, false otherwise.
+     *
+     * We cache the SharedPreferences value in a field here to pre-emptively improve performance,
+     * rather than calling into SharedPreferences directly, or accessing a global getter (which
+     * delegates to shared prefs). The value is updated via a shared preference change listener.
+     */
     private boolean blockingEnabled;
     /* package */ String currentPageURL;
     protected IWebView.Callback callback;
@@ -56,7 +66,10 @@ public class TrackingProtectionWebViewClient extends AmazonWebViewClient {
         // background loading of the lists as early as possible.
         triggerPreload(context);
 
-        this.blockingEnabled = true;
+        final Settings settings = Settings.getInstance(context);
+        settings.getPreferences().registerOnSharedPreferenceChangeListener(this);
+        this.blockingEnabled = settings.isBlockingEnabled();
+
     }
 
     public void setCallback(IWebView.Callback callback) {
@@ -64,7 +77,8 @@ public class TrackingProtectionWebViewClient extends AmazonWebViewClient {
     }
 
     public void setBlockingEnabled(boolean enabled) {
-        this.blockingEnabled = enabled;
+        // We manage this globally with Shared Prefs now.
+        //this.blockingEnabled = enabled;
     }
 
     public boolean isBlockingEnabled() {
@@ -144,5 +158,12 @@ public class TrackingProtectionWebViewClient extends AmazonWebViewClient {
         currentPageURL = url;
 
         super.onPageStarted(view, url, favicon);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
+        if (TRACKING_PROTECTION_ENABLED_PREF.equals(key)) {
+            blockingEnabled = sharedPreferences.getBoolean(TRACKING_PROTECTION_ENABLED_PREF, TRACKING_PROTECTION_ENABLED_DEFAULT);
+        }
     }
 }
