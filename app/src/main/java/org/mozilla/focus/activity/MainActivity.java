@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -60,7 +59,6 @@ import org.mozilla.focus.utils.UrlUtils;
 import org.mozilla.focus.utils.ViewUtils;
 import org.mozilla.focus.web.IWebView;
 import org.mozilla.focus.web.WebViewProvider;
-import org.mozilla.focus.webview.TrackingProtectionWebViewClient;
 import org.mozilla.focus.widget.InlineAutocompleteEditText;
 
 import java.util.List;
@@ -142,11 +140,14 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
         // setChecked must be called before we add the listener, otherwise the listener will fired when we
         // call setChecked this first time. In particular, this would make telemetry inaccurate.
-        drawerTrackingProtectionSwitch.setChecked(Settings.getInstance(this).isBlockingEnabled());
+        final boolean trackingProtectionEnabled = Settings.getInstance(this).isBlockingEnabled();
+        drawerTrackingProtectionSwitch.setChecked(trackingProtectionEnabled);
+        setTrackingProtectionSwitchOn(trackingProtectionEnabled);
         drawerTrackingProtectionSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 Settings.getInstance(MainActivity.this).setBlockingEnabled(b);
+                setTrackingProtectionSwitchOn(b);
                 TelemetryWrapper.turboModeSwitchEvent(b);
 
                 ThreadUtils.postToMainThreadDelayed(new Runnable() {
@@ -300,6 +301,14 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         });
 
         WebViewProvider.preload(this);
+    }
+
+    private void setTrackingProtectionSwitchOn(boolean isEnabled) {
+        if (isEnabled) {
+            drawerTrackingProtectionSwitch.setAlpha(1f);
+        } else {
+            drawerTrackingProtectionSwitch.setAlpha(.6f);
+        }
     }
 
     private void updateCursorState() {
