@@ -138,6 +138,12 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         drawerBack = findViewById(R.id.drawer_back_button);
         drawerBack.setOnClickListener(this);
         drawerTrackingProtectionSwitch = findViewById(R.id.tracking_protection_switch);
+
+        // setChecked must be called by we add the listener, otherwise the listener will fired when we
+        // set the new value. In particular, this makes the telemetry inaccurate.
+        drawerTrackingProtectionSwitch.setChecked(PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_PREF,
+                        TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_DEFAULT));
         drawerTrackingProtectionSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -157,9 +163,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 }, /* Switch.THUMB_ANIMATION_DURATION */ 250);
             }
         });
-        drawerTrackingProtectionSwitch.setChecked(PreferenceManager.getDefaultSharedPreferences(this)
-                .getBoolean(TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_PREF,
-                        TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_DEFAULT));
 
         hintSettings = findViewById(R.id.hint_settings);
         hintSettings.setImageResource(R.drawable.ic_settings);
