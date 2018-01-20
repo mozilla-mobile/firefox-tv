@@ -143,6 +143,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 PreferenceManager.getDefaultSharedPreferences(MainActivity.this).edit()
                         .putBoolean(TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_PREF, b).apply();
+                TelemetryWrapper.turboModeSwitchEvent(b);
 
                 ThreadUtils.postToMainThreadDelayed(new Runnable() {
                     @Override
