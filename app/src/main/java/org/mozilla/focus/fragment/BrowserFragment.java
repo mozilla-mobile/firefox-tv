@@ -422,12 +422,12 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
         if (canGoBack()) {
             // Go back in web history
             goBack();
+            TelemetryWrapper.browserBackControllerEvent();
         } else {
             getFragmentManager().popBackStack();
             SessionManager.getInstance().removeCurrentSession();
         }
 
-        TelemetryWrapper.browserBackControllerEvent();
         return true;
     }
 
