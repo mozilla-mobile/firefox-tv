@@ -40,8 +40,8 @@ android {
         }
         beta {
             initWith debug
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false // AmazonWebView is not configured properly.
+            shrinkResources false // Doesn't work properly
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationIdSuffix ".beta"
         }
