@@ -90,24 +90,9 @@ class NewSettingsFragment : Fragment() {
      * See the comment at the declaration of these views in XML for more details.
      */
     private fun updateForAccessibility() {
-        telemetryButton.contentDescription = telemetryDescriptionView.text
-
-        val viewToFocus: View
-        val viewToDisableFocus: View
-        if (context.isVoiceViewEnabled()) {
-            viewToFocus = telemetryButton
-            viewToDisableFocus = telemetryView
-        } else {
-            viewToFocus = telemetryView
-            viewToDisableFocus = telemetryButton
-        }
-
-        val isFocused = telemetryButton.isFocused || telemetryView.isFocused
-        viewToFocus.isFocusable = true
-        viewToDisableFocus.isFocusable = false
-        if (isFocused) {
-            viewToFocus.requestFocus()
-        }
+        val shouldFocus = !context.isVoiceViewEnabled()
+        telemetryView.isFocusable = shouldFocus
+        if (!shouldFocus) { telemetryView.clearFocus() }
     }
 
     override fun onResume() {
