@@ -47,7 +47,6 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:id="@+id/telemetryView"
-            android:nextFocusRight="@+id/aboutButton"
             android:background="@drawable/settings_item_selector"
             android:focusable="true"
             android:layout_gravity="center_vertical">
@@ -72,9 +71,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@id/aboutButton"
-            android:nextFocusRight="@+id/privacyNoticeButton"
-            android:nextFocusLeft="@id/telemetryView"
+            android:id="@+id/aboutButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -99,7 +96,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@id/privacyNoticeButton"
+            android:id="@+id/privacyNoticeButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -107,8 +104,6 @@
             android:background="@drawable/settings_item_selector"
             android:clickable="true"
             android:focusable="true"
-            android:nextFocusLeft="@id/aboutButton"
-            android:nextFocusRight="@+id/deleteButton"
             android:orientation="vertical">
             <TextView
                     android:layout_width="wrap_content"
@@ -128,9 +123,8 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@id/deleteButton"
+            android:id="@+id/deleteButton"
             android:nextFocusRight="@id/telemetryView"
-            android:nextFocusLeft="@id/privacyNoticeButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
