@@ -97,8 +97,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private final AccessibilityManager.TouchExplorationStateChangeListener voiceViewStateChangeListener = new AccessibilityManager.TouchExplorationStateChangeListener() {
         @Override
         public void onTouchExplorationStateChanged(final boolean enabled) {
-            // The user can turn on/off VoiceView, at which point we may want to change the cursor visibility.
-            updateCursorState();
+            updateForVoiceView(enabled);
         }
     };
 
@@ -311,6 +310,14 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         }
     }
 
+    private void updateForVoiceView(final boolean isVoiceViewEnabled) {
+        // The user can turn on/off VoiceView, at which point we may want to change the cursor visibility.
+        updateCursorState();
+
+        // See declaration of hintNavigationBar in XML for details.
+        hintNavigationBar.setFocusable(!isVoiceViewEnabled);
+    }
+
     private void updateCursorState() {
         final BrowserFragment browserFragment =
                 (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
@@ -323,7 +330,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     protected void onStart() {
         super.onStart();
         ContextKt.getAccessibilityManager(this).addTouchExplorationStateChangeListener(voiceViewStateChangeListener);
-        updateCursorState(); // VoiceView could be disabled when we're outside the app.
+        updateForVoiceView(ContextKt.isVoiceViewEnabled(this));
     }
 
     @Override

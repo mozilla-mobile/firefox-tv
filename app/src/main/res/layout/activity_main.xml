@@ -38,7 +38,12 @@
         </LinearLayout>
 
         <!-- A view that hints to the user that they can click left to get to the navigation bar.
-             We make this focusable so that we can open the real navigation bar when this is selected. -->
+             We make this focusable so that we can open the real navigation bar when this is selected.
+
+             a11y: However, non-visual users will find it unintuitive to open the menu, a new modal
+             state, by pressing left, especially if it cannot be undone by pressing the reverse
+             direction (as is the case now) so we dynamically disable focusability in code when
+             VoiceView is enabled: users can explicitly use the menu button to open the menu. -->
         <LinearLayout
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
