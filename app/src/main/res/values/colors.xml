@@ -72,4 +72,5 @@
 
     <color name="onboarding_background">#ffffff</color>
     <color name="onboarding_overlay">#cc000000</color>
+    <color name="onboarding_button_highlight">#500060df</color>
 </resources>
