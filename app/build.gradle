@@ -66,18 +66,14 @@ android {
         }
     }
 
-    flavorDimensions "product", "engine"
+    flavorDimensions "engine"
 
     productFlavors {
-        focus {
-            dimension "product"
-
-            applicationIdSuffix ".firefox"
-        }
-
         // We can build with two engines: webview or gecko
         webview {
             dimension "engine"
+
+            applicationIdSuffix ".firefox"
         }
 
         gecko {
@@ -105,15 +101,15 @@ android {
             }
         }
 
-        focusWebviewRelease {
+        webviewRelease {
             java.srcDir 'src/focusRelease/java'
             manifest.srcFile 'src/focusRelease/AndroidManifest.xml'
             res.srcDir 'src/focusRelease/res'
         }
-        focusWebviewBeta {
+        webviewBeta {
             res.srcDir 'src/focusBeta/res'
         }
-        focusWebviewDebug {
+        webviewDebug {
             res.srcDir 'src/focusDebug/res'
         }
     }

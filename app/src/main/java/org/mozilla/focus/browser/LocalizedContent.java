@@ -65,8 +65,8 @@ public class LocalizedContent {
         substitutionMap.put("%about-title%", appNameExtended);
 
 
-        final String wordmark = HtmlLoader.loadPngAsDataURI(context, R.drawable.wordmark);
-        substitutionMap.put("%wordmark%", wordmark);
+        //final String wordmark = HtmlLoader.loadPngAsDataURI(context, R.drawable.wordmark);
+        //substitutionMap.put("%wordmark%", wordmark);
 
         putLayoutDirectionIntoMap(webView, substitutionMap);
 
