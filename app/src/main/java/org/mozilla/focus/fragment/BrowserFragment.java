@@ -86,11 +86,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
      */
     private View browserContainer;
 
-    private View forwardButton;
-    private View backButton;
-    private View refreshButton;
-    private View stopButton;
-
     private IWebView.FullscreenCallback fullscreenCallback;
 
     private SessionManager sessionManager;
@@ -198,8 +193,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
                     }
                 }
 
-                updateToolbarButtonStates(loading);
-
                 final BrowserMenu menu = menuWeakReference.get();
                 if (menu != null) {
                     menu.updateLoading(loading);
@@ -218,22 +211,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
                 }
             }
         });
-
-        if ((refreshButton = view.findViewById(R.id.refresh)) != null) {
-            refreshButton.setOnClickListener(this);
-        }
-
-        if ((stopButton = view.findViewById(R.id.stop)) != null) {
-            stopButton.setOnClickListener(this);
-        }
-
-        if ((forwardButton = view.findViewById(R.id.forward)) != null) {
-            forwardButton.setOnClickListener(this);
-        }
-
-        if ((backButton = view.findViewById(R.id.back)) != null) {
-            backButton.setOnClickListener(this);
-        }
 
         lockView = (ImageView) view.findViewById(R.id.lock);
         session.getSecure().observe(this, new Observer<Boolean>() {
@@ -585,28 +562,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
             default:
                 throw new IllegalArgumentException("Unhandled menu item in BrowserFragment");
         }
-    }
-
-    private void updateToolbarButtonStates(boolean isLoading) {
-        if (forwardButton == null || backButton == null || refreshButton == null || stopButton == null) {
-            return;
-        }
-
-        final IWebView webView = getWebView();
-        if (webView == null) {
-            return;
-        }
-
-        final boolean canGoForward = webView.canGoForward();
-        final boolean canGoBack = webView.canGoBack();
-
-        forwardButton.setEnabled(canGoForward);
-        forwardButton.setAlpha(canGoForward ? 1.0f : 0.5f);
-        backButton.setEnabled(canGoBack);
-        backButton.setAlpha(canGoBack ? 1.0f : 0.5f);
-
-        refreshButton.setVisibility(isLoading ? View.GONE : View.VISIBLE);
-        stopButton.setVisibility(isLoading ? View.VISIBLE : View.GONE);
     }
 
     @NonNull
