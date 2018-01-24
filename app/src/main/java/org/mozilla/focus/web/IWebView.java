@@ -12,6 +12,9 @@ import android.view.View;
 import org.mozilla.focus.session.Session;
 
 public interface IWebView {
+    String TRACKING_PROTECTION_ENABLED_PREF = "tracking_protection_enabled";
+    boolean TRACKING_PROTECTION_ENABLED_DEFAULT = true;
+
     class HitTarget {
         public final boolean isLink;
         public final String linkURL;
