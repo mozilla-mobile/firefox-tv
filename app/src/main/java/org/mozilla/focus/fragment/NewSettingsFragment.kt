@@ -90,6 +90,14 @@ class NewSettingsFragment : Fragment() {
      * See the comment at the declaration of these views in XML for more details.
      */
     private fun updateForAccessibility() {
+        // When VoiceView is enabled, since the parent is initially focusable in the XML, focus is
+        // given to the parent when the Settings opens. Here, after we set focusable to false, we
+        // must also explicitly clear focus in order to give focus to the child.
+        //
+        // When we change VoiceView from enabled -> disabled and this setting is focused, focus is
+        // cleared from this setting and nothing is selected. This is fine: the user can press
+        // left-right to focus something else and it's an edge case that I don't think it is worth
+        // adding code to fix.
         val shouldFocus = !context.isVoiceViewEnabled()
         telemetryView.isFocusable = shouldFocus
         if (!shouldFocus) { telemetryView.clearFocus() }
