@@ -69,8 +69,8 @@ android {
     flavorDimensions "engine"
 
     productFlavors {
-        // We can build with two engines: webview or gecko
-        webview {
+        // We can build with two engines: amazonWebview or gecko. #399 to restore native Webview.
+        amazonWebview {
             dimension "engine"
 
             applicationIdSuffix ".firefox"
@@ -101,15 +101,15 @@ android {
             }
         }
 
-        webviewRelease {
+        amazonWebviewRelease {
             java.srcDir 'src/focusRelease/java'
             manifest.srcFile 'src/focusRelease/AndroidManifest.xml'
             res.srcDir 'src/focusRelease/res'
         }
-        webviewBeta {
+        amazonWebviewBeta {
             res.srcDir 'src/focusBeta/res'
         }
-        webviewDebug {
+        amazonWebviewDebug {
             res.srcDir 'src/focusDebug/res'
         }
     }
@@ -199,7 +199,7 @@ android.applicationVariants.all { variant ->
 // Generate blocklists
 // -------------------------------------------------------------------------------------------------
 
-def blockListOutputDir = 'src/webview/res/raw'
+def blockListOutputDir = 'src/amazonWebview/res/raw'
 
 task buildBlocklists(type:Copy) {
     from('../shavar-prod-lists') {
