@@ -24,6 +24,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import org.mozilla.focus.R;
 import org.mozilla.focus.activity.InfoActivity;
 import org.mozilla.focus.activity.InstallFirefoxActivity;
@@ -31,7 +32,6 @@ import org.mozilla.focus.activity.MainActivity;
 import org.mozilla.focus.architecture.NonNullObserver;
 import org.mozilla.focus.ext.ContextKt;
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity;
-import org.mozilla.focus.menu.browser.BrowserMenu;
 import org.mozilla.focus.open.OpenWithFragment;
 import org.mozilla.focus.session.NullSession;
 import org.mozilla.focus.session.Session;
@@ -47,15 +47,11 @@ import org.mozilla.focus.widget.AnimatedProgressBar;
 import org.mozilla.focus.widget.Cursor;
 import org.mozilla.focus.widget.CursorEvent;
 
-import java.lang.ref.WeakReference;
-
 /**
  * Fragment for displaying the browser UI.
  */
 public class BrowserFragment extends WebFragment implements View.OnClickListener, CursorEvent {
     public static final String FRAGMENT_TAG = "browser";
-
-    private static final int ANIMATION_DURATION = 300;
 
     private static final String ARGUMENT_SESSION_UUID = "sessionUUID";
     private static final int SCROLL_MULTIPLIER = 45;
@@ -74,7 +70,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
     private AnimatedProgressBar progressView;
     private ImageView lockView;
     private Cursor cursor;
-    private WeakReference<BrowserMenu> menuWeakReference = new WeakReference<>(null);
 
     /**
      * Container for custom video views shown in fullscreen mode.
@@ -107,22 +102,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
         session = sessionManager.hasSessionWithUUID(sessionUUID)
                 ? sessionManager.getSessionByUUID(sessionUUID)
                 : new NullSession();
-
-        session.getBlockedTrackers().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable Integer blockedTrackers) {
-                if (menuWeakReference == null) {
-                    return;
-                }
-
-                final BrowserMenu menu = menuWeakReference.get();
-
-                if (menu != null) {
-                    //noinspection ConstantConditions - Not null
-                    menu.updateTrackers(blockedTrackers);
-                }
-            }
-        });
     }
 
     @Override
@@ -141,18 +120,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
     @Override
     public String getInitialUrl() {
         return session.getUrl().getValue();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        final BrowserMenu menu = menuWeakReference.get();
-        if (menu != null) {
-            menu.dismiss();
-
-            menuWeakReference.clear();
-        }
     }
 
     @Override
@@ -191,11 +158,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
                         progressView.setProgress(progressView.getMax());
                         progressView.setVisibility(View.GONE);
                     }
-                }
-
-                final BrowserMenu menu = menuWeakReference.get();
-                if (menu != null) {
-                    menu.updateLoading(loading);
                 }
 
                 final MainActivity activity = (MainActivity)getActivity();
