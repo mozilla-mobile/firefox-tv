@@ -62,7 +62,7 @@ public class InfoActivity extends AppCompatActivity {
 
     public static Intent getPrivacyNoticeIntent(final Context context) {
         final Resources resources = Locales.getLocalizedResources(context);
-        return getIntentFor(context, AppConstants.isKlarBuild() ? PRIVACY_NOTICE_KLAR_URL : PRIVACY_NOTICE_URL, resources.getString(R.string.preference_privacy_notice));
+        return getIntentFor(context, PRIVACY_NOTICE_URL, resources.getString(R.string.preference_privacy_notice));
     }
 
     public static Intent getTrackerHelpIntent(final Context context) {

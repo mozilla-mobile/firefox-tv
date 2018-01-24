@@ -49,14 +49,9 @@ public class InstallFirefoxActivity extends Activity {
     }
 
     public static void open(Context context) {
-        if (AppConstants.isKlarBuild()) {
-            // Redirect to Google Play directly
-            context.startActivity(createStoreIntent());
-        } else {
-            // Start this activity to load the redirect URL in a WebView.
-            final Intent intent = new Intent(context, InstallFirefoxActivity.class);
-            context.startActivity(intent);
-        }
+        // Start this activity to load the redirect URL in a WebView.
+        final Intent intent = new Intent(context, InstallFirefoxActivity.class);
+        context.startActivity(intent);
 
         TelemetryWrapper.installFirefoxEvent();
     }
