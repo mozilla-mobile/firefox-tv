@@ -24,7 +24,7 @@ class ScreenshotHandler(BaseHTTPRequestHandler):
 
     	print " * Taking screenshot"
         
-        command = "adb shell screencap -p /data/data/org.mozilla.focus.debug/files/temp_screen.png"
+        command = "adb shell screencap -p /data/data/org.mozilla.tv.firefox.debug/files/temp_screen.png"
         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
         process.wait()
 
