@@ -100,18 +100,6 @@ android {
                 srcDir "${projectDir}/src/main/assets/"
             }
         }
-
-        amazonWebviewRelease {
-            java.srcDir 'src/focusRelease/java'
-            manifest.srcFile 'src/focusRelease/AndroidManifest.xml'
-            res.srcDir 'src/focusRelease/res'
-        }
-        amazonWebviewBeta {
-            res.srcDir 'src/focusBeta/res'
-        }
-        amazonWebviewDebug {
-            res.srcDir 'src/focusDebug/res'
-        }
     }
 }
 
