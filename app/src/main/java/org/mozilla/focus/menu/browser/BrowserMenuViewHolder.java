@@ -35,9 +35,5 @@ public abstract class BrowserMenuViewHolder extends RecyclerView.ViewHolder impl
         if (menu != null) {
             menu.dismiss();
         }
-
-        if (browserFragment != null) {
-            browserFragment.onClick(view);
-        }
     }
 }

@@ -6,10 +6,7 @@ package org.mozilla.focus.fragment;
 
 import android.app.Activity;
 import android.arch.lifecycle.Observer;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.graphics.Point;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,19 +23,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.mozilla.focus.R;
-import org.mozilla.focus.activity.InfoActivity;
-import org.mozilla.focus.activity.InstallFirefoxActivity;
 import org.mozilla.focus.activity.MainActivity;
 import org.mozilla.focus.architecture.NonNullObserver;
 import org.mozilla.focus.ext.ContextKt;
-import org.mozilla.focus.locale.LocaleAwareAppCompatActivity;
-import org.mozilla.focus.open.OpenWithFragment;
 import org.mozilla.focus.session.NullSession;
 import org.mozilla.focus.session.Session;
 import org.mozilla.focus.session.SessionCallbackProxy;
 import org.mozilla.focus.session.SessionManager;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
-import org.mozilla.focus.utils.Browsers;
 import org.mozilla.focus.utils.Direction;
 import org.mozilla.focus.utils.Edge;
 import org.mozilla.focus.utils.UrlUtils;
@@ -50,7 +42,7 @@ import org.mozilla.focus.widget.CursorEvent;
 /**
  * Fragment for displaying the browser UI.
  */
-public class BrowserFragment extends WebFragment implements View.OnClickListener, CursorEvent {
+public class BrowserFragment extends WebFragment implements CursorEvent {
     public static final String FRAGMENT_TAG = "browser";
 
     private static final String ARGUMENT_SESSION_UUID = "sessionUUID";
@@ -189,8 +181,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
             }
         });
 
-        initialiseNormalBrowserUi(view);
-
         return view;
     }
 
@@ -213,10 +203,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
                 getContext() != null &&
                 !ContextKt.isVoiceViewEnabled(getContext()); // VoiceView has its own navigation controls.
         activity.setCursorEnabled(enableCursor);
-    }
-
-    private void initialiseNormalBrowserUi(final @NonNull View view) {
-        urlView.setOnClickListener(this);
     }
 
     @Override
@@ -387,143 +373,6 @@ public class BrowserFragment extends WebFragment implements View.OnClickListener
         }
 
         SessionManager.getInstance().removeCurrentSession();
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.display_url: {
-                // do nothing so don't crash.
-                break;
-            }
-
-            case R.id.erase: {
-                break;
-            }
-
-            case R.id.tabs:
-                TelemetryWrapper.openTabsTrayEvent();
-                break;
-
-            case R.id.back: {
-                goBack();
-                break;
-            }
-
-            case R.id.forward: {
-                goForward();
-                break;
-            }
-
-            case R.id.refresh: {
-                reload();
-
-                TelemetryWrapper.menuReloadEvent();
-                break;
-            }
-
-            case R.id.stop: {
-                stop();
-                break;
-            }
-
-            case R.id.share: {
-                final String url = getUrl();
-                final Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, url);
-                // Use title from webView if it's content matches the url
-                final IWebView webView = getWebView();
-                if (webView != null) {
-                    final String contentUrl = webView.getUrl();
-                    if (contentUrl != null && contentUrl.equals(url)) {
-                        final String contentTitle = webView.getTitle();
-                        shareIntent.putExtra(Intent.EXTRA_SUBJECT, contentTitle);
-                    }
-                }
-                startActivity(Intent.createChooser(shareIntent, getString(R.string.share_dialog_title)));
-
-                TelemetryWrapper.shareEvent();
-                break;
-            }
-
-            case R.id.settings:
-                ((LocaleAwareAppCompatActivity) getActivity()).openPreferences();
-                break;
-
-            case R.id.open_default: {
-                final Browsers browsers = new Browsers(getContext(), getUrl());
-
-                final ActivityInfo defaultBrowser = browsers.getDefaultBrowser();
-
-                if (defaultBrowser == null) {
-                    // We only add this menu item when a third party default exists, in
-                    // BrowserMenuAdapter.initializeMenu()
-                    throw new IllegalStateException("<Open with $Default> was shown when no default browser is set");
-                }
-
-                final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getUrl()));
-                intent.setPackage(defaultBrowser.packageName);
-                startActivity(intent);
-
-                if (browsers.isFirefoxDefaultBrowser()) {
-                    TelemetryWrapper.openFirefoxEvent();
-                } else {
-                    TelemetryWrapper.openDefaultAppEvent();
-                }
-                break;
-            }
-
-            case R.id.open_select_browser: {
-                final Browsers browsers = new Browsers(getContext(), getUrl());
-
-                final ActivityInfo[] apps = browsers.getInstalledBrowsers();
-                final ActivityInfo store = browsers.hasFirefoxBrandedBrowserInstalled()
-                        ? null
-                        : InstallFirefoxActivity.resolveAppStore(getContext());
-
-                final OpenWithFragment fragment = OpenWithFragment.newInstance(
-                        apps,
-                        getUrl(),
-                        store);
-                fragment.show(getFragmentManager(), OpenWithFragment.FRAGMENT_TAG);
-
-                TelemetryWrapper.openSelectionEvent();
-                break;
-            }
-
-            case R.id.customtab_close: {
-                erase();
-                getActivity().finish();
-
-                TelemetryWrapper.closeCustomTabEvent();
-                break;
-            }
-
-            case R.id.help:
-                Intent helpIntent = InfoActivity.getHelpIntent(getActivity());
-                startActivity(helpIntent);
-                break;
-
-            case R.id.help_trackers:
-                Intent trackerHelpIntent = InfoActivity.getTrackerHelpIntent(getActivity());
-                startActivity(trackerHelpIntent);
-                break;
-
-            case R.id.add_to_homescreen:
-                final IWebView webView = getWebView();
-                if (webView == null) {
-                    break;
-                }
-
-                final String url = webView.getUrl();
-                final String title = webView.getTitle();
-                showAddToHomescreenDialog(url, title);
-                break;
-
-            default:
-                throw new IllegalArgumentException("Unhandled menu item in BrowserFragment");
-        }
     }
 
     @NonNull

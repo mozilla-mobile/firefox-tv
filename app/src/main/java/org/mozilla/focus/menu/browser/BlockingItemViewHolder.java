@@ -30,16 +30,6 @@ import org.mozilla.focus.utils.ThreadUtils;
         switchView.setChecked(fragment.getSession().isBlockingEnabled());
         switchView.setOnCheckedChangeListener(this);
 
-        final View helpView = itemView.findViewById(R.id.help_trackers);
-        helpView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (browserFragment != null) {
-                    browserFragment.onClick(view);
-                }
-            }
-        });
-
         trackerCounter = itemView.findViewById(R.id.trackers_count);
 
         updateTrackers(fragment.getSession().getBlockedTrackers().getValue());
