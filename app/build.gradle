@@ -30,7 +30,7 @@ android {
     }
 
     // We have a three dimensional build configuration:
-    // BUILD TYPE (debug, beta, release) X PRODUCT FLAVOR (focus, klar) X ENGINE FLAVOR (webview, gecko)
+    // BUILD TYPE (debug, beta, release) X PRODUCT FLAVOR (focus) X ENGINE FLAVOR (webview, gecko)
 
     buildTypes {
         release {
@@ -69,7 +69,6 @@ android {
     flavorDimensions "product", "engine"
 
     productFlavors {
-        // In most countries we are Firefox Focus - but in some we need to be Firefox Klar
         focus {
             dimension "product"
 
@@ -91,7 +90,7 @@ android {
     variantFilter { variant ->
         def flavors = variant.flavors*.name
         // We only need a gecko debug and beta build for now.
-        if (flavors.contains("gecko") && ((variant.buildType.name != "debug" && variant.buildType.name != "beta") || flavors.contains("klar"))) {
+        if (flavors.contains("gecko") && ((variant.buildType.name != "debug" && variant.buildType.name != "beta"))) {
             setIgnore(true)
         }
     }
@@ -111,21 +110,11 @@ android {
             manifest.srcFile 'src/focusRelease/AndroidManifest.xml'
             res.srcDir 'src/focusRelease/res'
         }
-        klarWebviewRelease {
-            java.srcDir 'src/klarRelease/java'
-            res.srcDir 'src/klarRelease/res'
-        }
         focusWebviewBeta {
             res.srcDir 'src/focusBeta/res'
         }
-        klarWebviewBeta {
-            res.srcDir 'src/klarBeta/res'
-        }
         focusWebviewDebug {
             res.srcDir 'src/focusDebug/res'
-        }
-        klarWebviewDebug {
-            res.srcDir 'src/klarDebug/res'
         }
     }
 }
