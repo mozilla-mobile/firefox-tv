@@ -10,6 +10,8 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.amazon.android.webkit.AmazonWebKitFactory;
+
 import org.mozilla.focus.session.Session;
 import org.mozilla.gecko.GeckoView;
 import org.mozilla.gecko.GeckoViewSettings;
@@ -30,6 +32,18 @@ public class WebViewProvider {
         final GeckoView geckoView = new GeckoWebView(context, attrs, settings);
 
         return geckoView;
+    }
+
+    public static View create(Context context, AttributeSet attrs, Object factory) {
+        return create(context, attrs);
+    }
+
+    public static void performCleanup(final Context context) {
+        // Nothing: does Gecko need extra private mode cleanup?
+    }
+
+    public static void performNewBrowserSessionCleanup() {
+        // Nothing: a WebKit work-around.
     }
 
     public static class GeckoWebView extends NestedGeckoView implements IWebView {
@@ -61,6 +75,11 @@ public class WebViewProvider {
 
         @Override
         public void onResume() {
+
+        }
+
+        @Override
+        public void flingScroll(int vx, int vy) {
 
         }
 

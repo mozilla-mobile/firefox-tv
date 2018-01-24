@@ -12,7 +12,7 @@ import android.support.v7.app.AppCompatActivity
 import org.mozilla.focus.R
 
 import kotlinx.android.synthetic.main.content_onboarding.*
-import org.mozilla.focus.webview.TrackingProtectionWebViewClient
+import org.mozilla.focus.web.IWebView
 
 class OnboardingActivity : AppCompatActivity() {
 
@@ -37,7 +37,7 @@ class OnboardingActivity : AppCompatActivity() {
     private fun setTurboMode(turboModeEnabled: Boolean) {
         PreferenceManager.getDefaultSharedPreferences(this)
                 .edit()
-                .putBoolean(TrackingProtectionWebViewClient.TRACKING_PROTECTION_ENABLED_PREF, turboModeEnabled)
+                .putBoolean(IWebView.TRACKING_PROTECTION_ENABLED_PREF, turboModeEnabled)
                 .apply();
     }
 

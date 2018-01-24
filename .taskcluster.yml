@@ -36,15 +36,15 @@ tasks:
           && git config advice.detachedHead false
           && git checkout {{event.head.sha}}
           && echo "--" > .adjust_token
-          && ./gradlew clean assemble detektCheck ktlint lint pmd checkstyle findbugs test
+          && ./gradlew clean assemble detektCheck lint pmd test
       artifacts:
         'public':
           type: 'directory'
-          path: '/opt/focus-android/app/build/reports'
+          path: '/opt/firefox-tv/app/build/reports'
           expires: "{{ '1 week' | $fromNow }}"
     metadata:
-      name: Focus for Android - Build - Pull Request
-      description: Building Focus for Android (via Gradle) - triggered by a pull request.
+      name: Firefox for Amazon's Fire TV - Build - Pull Request
+      description: Building Firefox for Amazon's Fire TV (via Gradle) - triggered by a pull request.
       owner: '{{ event.head.user.email }}'
       source: '{{ event.head.repo.url }}'
 ###############################################################################
@@ -77,57 +77,14 @@ tasks:
           && git config advice.detachedHead false
           && git checkout {{event.head.sha}}
           && echo "--" > .adjust_token
-          && ./gradlew clean assemble detektCheck ktlint lint pmd checkstyle findbugs test
+          && ./gradlew clean assemble detektCheck lint pmd test
       artifacts:
         'public':
           type: 'directory'
-          path: '/opt/focus-android/app/build/reports'
+          path: '/opt/firefox-tv/app/build/reports'
           expires: "{{ '1 week' | $fromNow }}"
     metadata:
-      name: Focus for Android - Build - Master
-      description: Building Focus for Android (via Gradle) - Master
-      owner: '{{ event.head.user.email }}'
-      source: '{{ event.head.repo.url }}'
-###############################################################################
-# Task: Release builds
-#
-# Triggered when a new tag or release is published (in any branch)
-#
-# - Build (unsigned) release versions of the app with release translations and
-#   adjust token.
-###############################################################################
-  - provisionerId: '{{ taskcluster.docker.provisionerId }}'
-    workerType: '{{ taskcluster.docker.workerType }}'
-    extra:
-      github:
-        events:
-          - release
-    scopes:
-      - "secrets:get:project/focus/tokens"
-    payload:
-      maxRunTime: 3600
-      deadline: "{{ '2 hours' | $fromNow }}"
-      image: 'mozillamobile/focus-android'
-      command:
-        - /bin/bash
-        - '--login'
-        - '-cx'
-        - >-
-          git fetch origin --tags
-          && git config advice.detachedHead false
-          && git checkout {{ event.version }}
-          && python tools/taskcluster/get-adjust-token.py
-          && python tools/l10n/filter-release-translations.py
-          && ./gradlew clean test assembleRelease
-      artifacts:
-        'public':
-          type: 'directory'
-          path: '/opt/focus-android/app/build/outputs/apk'
-          expires: "{{ '1 week' | $fromNow }}"
-      features:
-        taskclusterProxy: true
-    metadata:
-      name: Focus for Android - Release build ({{ event.version }})
-      description: Building release versions of Firefox Focus/Klar
+      name: Firefox for Amazon's Fire TV - Build - Master
+      description: Building Firefox for Amazon's Fire TV (via Gradle) - Master
       owner: '{{ event.head.user.email }}'
       source: '{{ event.head.repo.url }}'
