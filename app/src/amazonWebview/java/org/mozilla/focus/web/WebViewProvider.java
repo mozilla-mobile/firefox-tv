@@ -17,6 +17,7 @@ import com.amazon.android.webkit.AmazonWebKitFactory;
 import com.amazon.android.webkit.AmazonWebSettings;
 import com.amazon.android.webkit.AmazonWebView;
 import org.mozilla.focus.R;
+import org.mozilla.focus.browser.UserAgent;
 import org.mozilla.focus.utils.Settings;
 import org.mozilla.focus.webview.SystemWebView;
 import org.mozilla.focus.webview.TrackingProtectionWebViewClient;
@@ -101,7 +102,7 @@ public class WebViewProvider {
         settings.setAllowUniversalAccessFromFileURLs(false);
 
         final String appName = context.getResources().getString(R.string.useragent_appname);
-        settings.setUserAgentString(buildUserAgentString(context, settings, appName));
+        settings.setUserAgentString(UserAgent.buildUserAgentString(context, settings, appName));
 
         // Right now I do not know why we should allow loading content from a content provider
         settings.setAllowContentAccess(false);
@@ -123,70 +124,5 @@ public class WebViewProvider {
     public static void applyAppSettings(Context context, AmazonWebSettings settings) {
         // We could consider calling setLoadsImagesAutomatically() here too (This will block images not loaded over the network too)
         settings.setBlockNetworkImage(Settings.getInstance(context).shouldBlockImages());
-    }
-
-    /**
-     * Build the browser specific portion of the UA String, based on the webview's existing UA String.
-     */
-    @VisibleForTesting static String getUABrowserString(final String existingUAString, final String focusToken) {
-        // Use the default WebView agent string here for everything after the platform, but insert
-        // Focus in front of Chrome.
-        // E.g. a default webview UA string might be:
-        // Mozilla/5.0 (Linux; Android 7.1.1; Pixel XL Build/NOF26V; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/56.0.2924.87 Mobile Safari/537.36
-        // And we reuse everything from AppleWebKit onwards, except for adding Focus.
-        int start = existingUAString.indexOf("AppleWebKit");
-        if (start == -1) {
-            // I don't know if any devices don't include AppleWebKit, but given the diversity of Android
-            // devices we should have a fallback: we search for the end of the platform String, and
-            // treat the next token as the start:
-            start = existingUAString.indexOf(")") + 2;
-
-            // If this was located at the very end, then there's nothing we can do, so let's just
-            // return focus:
-            if (start >= existingUAString.length()) {
-                return focusToken;
-            }
-        }
-
-        final String[] tokens = existingUAString.substring(start).split(" ");
-
-        for (int i = 0; i < tokens.length; i++) {
-            if (tokens[i].startsWith("Chrome")) {
-                tokens[i] = focusToken + " " + tokens[i];
-
-                return TextUtils.join(" ", tokens);
-            }
-        }
-
-        // If we didn't find a chrome token, we just append the focus token at the end:
-        return TextUtils.join(" ", tokens) + " " + focusToken;
-    }
-
-    @VisibleForTesting static String buildUserAgentString(final Context context, final AmazonWebSettings settings, final String appName) {
-        final StringBuilder uaBuilder = new StringBuilder();
-
-        uaBuilder.append("Mozilla/5.0");
-
-        // WebView by default includes "; wv" as part of the platform string, but we're a full browser
-        // so we shouldn't include that.
-        // Most webview based browsers (and chrome), include the device name AND build ID, e.g.
-        // "Pixel XL Build/NOF26V", that seems unnecessary (and not great from a privacy perspective),
-        // so we skip that too.
-        uaBuilder.append(" (Linux; Android ").append(Build.VERSION.RELEASE).append(") ");
-
-        final String existingWebViewUA = settings.getUserAgentString();
-
-        final String appVersion;
-        try {
-            appVersion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
-        } catch (PackageManager.NameNotFoundException e) {
-            // This should be impossible - we should always be able to get information about ourselves:
-            throw new IllegalStateException("Unable find package details for Focus", e);
-        }
-
-        final String focusToken = appName + "/" + appVersion;
-        uaBuilder.append(getUABrowserString(existingWebViewUA, focusToken));
-
-        return uaBuilder.toString();
     }
 }
