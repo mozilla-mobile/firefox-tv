@@ -20,6 +20,8 @@ interface IWebView {
     val title: String? // nullable because WebView overrides it.
     val url: String? // nullable because WebView overrides it.
 
+    var callback: Callback?
+
     fun onPause()
     fun onResume()
 
@@ -46,8 +48,6 @@ interface IWebView {
      * enabled in the app's settings will be turned on/off).
      */
     fun setBlockingEnabled(enabled: Boolean)
-
-    fun setCallback(callback: Callback?)
 
     class HitTarget(isLink: Boolean, linkURL: String?, isImage: Boolean, imageURL: String?) {
         init {
