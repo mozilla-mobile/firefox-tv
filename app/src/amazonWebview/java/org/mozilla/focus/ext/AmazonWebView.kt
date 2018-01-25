@@ -25,7 +25,7 @@ fun AmazonWebView.deleteData() {
     deleteContentFromKnownLocations(context);
 }
 
-fun deleteContentFromKnownLocations(context: Context) {
+private fun deleteContentFromKnownLocations(context: Context) {
     /*
     ThreadUtils.postToBackgroundThread(new Runnable() {
         @Override
