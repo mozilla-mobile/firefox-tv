@@ -14,7 +14,9 @@ import com.amazon.android.webkit.AmazonWebSettings
 import com.amazon.android.webkit.AmazonWebView
 import org.mozilla.focus.R
 import org.mozilla.focus.browser.UserAgent
+import org.mozilla.focus.webview.FirefoxAmazonWebChromeClient
 import org.mozilla.focus.webview.FirefoxAmazonWebView
+import org.mozilla.focus.webview.FocusWebViewClient
 import org.mozilla.focus.webview.TrackingProtectionWebViewClient
 
 /** Creates a WebView-based IWebView implementation. */
@@ -31,7 +33,16 @@ object WebViewProvider {
 
     @JvmStatic
     fun create(context: Context, attrs: AttributeSet, factory: AmazonWebKitFactory): View {
-        return FirefoxAmazonWebView(context, attrs, factory).apply {
+        val client = FocusWebViewClient(context.applicationContext)
+        val chromeClient = FirefoxAmazonWebChromeClient()
+
+        return FirefoxAmazonWebView(context, attrs, client, chromeClient).apply {
+            // We experienced crashes if factory init occurs after clients are set.
+            factory.initializeWebView(this, 0xFFFFFF, false, null)
+
+            setWebViewClient(client)
+            setWebChromeClient(chromeClient)
+
             initWebview(this)
             initWebSettings(context, settings)
         }

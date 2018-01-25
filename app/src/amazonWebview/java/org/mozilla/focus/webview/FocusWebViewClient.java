@@ -27,7 +27,7 @@ import org.mozilla.focus.web.IWebView;
  * WebViewClient layer that handles browser specific WebViewClient functionality, such as error pages
  * and external URL handling.
  */
-/* package */ class FocusWebViewClient extends TrackingProtectionWebViewClient {
+public class FocusWebViewClient extends TrackingProtectionWebViewClient {
     private static final String ERROR_PROTOCOL = "error:";
     private static final String STATE_KEY_URL = "client_last_url";
     private static final String STATE_KEY_CERTIFICATE = "client_last_certificate";
@@ -36,7 +36,7 @@ import org.mozilla.focus.web.IWebView;
     private SslCertificate restoredCertificate;
     private boolean errorReceived;
 
-    /* package */ FocusWebViewClient(Context context) {
+    public FocusWebViewClient(Context context) {
         super(context);
     }
 
