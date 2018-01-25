@@ -694,10 +694,10 @@ object TelemetryWrapper {
         TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.SETTING, Value.CLEAR_DATA).queue()
     }
 
-    /** @param isShowing true if the drawer is opening, close otherwise. */
+    /** @param isOpening true if the drawer is opening, close otherwise. */
     @JvmStatic
-    fun drawerShowHideEvent(isShowing: Boolean) {
-        val method = if (isShowing) Method.SHOW else Method.HIDE
+    fun drawerShowHideEvent(isOpening: Boolean) {
+        val method = if (isOpening) Method.SHOW else Method.HIDE
         TelemetryEvent.create(Category.ACTION, method, Object.MENU).queue()
     }
 
