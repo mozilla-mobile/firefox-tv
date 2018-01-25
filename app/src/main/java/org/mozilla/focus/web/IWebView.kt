@@ -17,8 +17,8 @@ interface IWebView {
     }
 
     /** Get the title of the currently displayed website. */
-    val title: String? // nullable because WebView overrides it.
-    val url: String? // nullable because WebView overrides it.
+    val title: String? // nullable because WebView overrides it. #407
+    val url: String? // nullable because WebView overrides it. #407
 
     var callback: Callback?
 
