@@ -64,7 +64,6 @@ public class WebViewProvider {
         final AmazonWebSettings settings = webkitView.getSettings();
         setupView(webkitView);
         configureDefaultSettings(context, settings);
-        applyAppSettings(context, settings);
 
         return webkitView;
     }
@@ -119,10 +118,5 @@ public class WebViewProvider {
         settings.setSaveFormData(false);
         //noinspection deprecation - This method is deprecated but let's call it in case WebView implementations still obey it.
         settings.setSavePassword(false);
-    }
-
-    public static void applyAppSettings(Context context, AmazonWebSettings settings) {
-        // We could consider calling setLoadsImagesAutomatically() here too (This will block images not loaded over the network too)
-        settings.setBlockNetworkImage(Settings.getInstance(context).shouldBlockImages());
     }
 }

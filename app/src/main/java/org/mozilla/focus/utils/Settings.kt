@@ -37,13 +37,6 @@ class Settings private constructor(context: Context) {
     val defaultSearchEngineName: String?
         get() = preferences.getString(getPreferenceKey(R.string.pref_key_search_engine), null)
 
-    fun shouldBlockImages(): Boolean =
-            // Not shipping in v1 (#188)
-            /* preferences.getBoolean(
-                    resources.getString(R.string.pref_key_performance_block_images),
-                    false); */
-            false
-
     fun shouldShowOnboarding(): Boolean =
             !preferences.getBoolean(OnboardingActivity.ONBOARD_SHOWN_PREF, false)
 
