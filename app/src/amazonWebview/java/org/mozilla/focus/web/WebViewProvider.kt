@@ -41,6 +41,11 @@ object WebViewProvider {
 private fun initWebview(webView: AmazonWebView) = with (webView) {
     isVerticalScrollBarEnabled = true
     isHorizontalScrollBarEnabled = true
+
+    // TODO This does not exist with the AmazonWebView
+    //if (BuildConfig.DEBUG) {
+    //    setWebContentsDebuggingEnabled(true);
+    //}
 }
 
 @SuppressLint("SetJavaScriptEnabled") // We explicitly want to enable JavaScript
