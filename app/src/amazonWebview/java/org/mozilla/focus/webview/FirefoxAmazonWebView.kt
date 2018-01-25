@@ -10,18 +10,12 @@ import android.os.Bundle
 import android.support.annotation.VisibleForTesting
 import android.util.AttributeSet
 import android.view.View
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputConnection
 import com.amazon.android.webkit.AmazonWebChromeClient
 import com.amazon.android.webkit.AmazonWebView
-
 import org.mozilla.focus.ext.deleteData
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.utils.UrlUtils
-import org.mozilla.focus.utils.ViewUtils
 import org.mozilla.focus.web.IWebView
-
-import java.util.HashMap
 
 /**
  * An IWebView implementation using AmazonWebView.
@@ -53,11 +47,7 @@ internal class FirefoxAmazonWebView(
     override fun restoreWebViewState(session: Session) {
         val stateData = session.webViewState
 
-        val backForwardList = if (stateData != null)
-            super.restoreState(stateData)
-        else
-            null
-
+        val backForwardList = if (stateData != null) super.restoreState(stateData) else null
         val desiredURL = session.url.value
 
         client.restoreState(stateData)
@@ -71,13 +61,12 @@ internal class FirefoxAmazonWebView(
         // WebView.getUrl() always returns the currently loading or loaded page).
         // If the app is paused/killed before the initial page finished loading, then the entire
         // list will be null - so we need to additionally check whether the list even exists.
-
         if (backForwardList != null && backForwardList.currentItem.url == desiredURL) {
             // restoreState doesn't actually load the current page, it just restores navigation history,
             // so we also need to explicitly reload in this case:
             reload()
         } else {
-            loadUrl(desiredURL!!)
+            loadUrl(desiredURL)
         }
     }
 
@@ -95,10 +84,7 @@ internal class FirefoxAmazonWebView(
 
     override fun setBlockingEnabled(enabled: Boolean) {
         client.isBlockingEnabled = enabled
-
-        if (this.callback != null) {
-            this.callback!!.onBlockingStateChanged(enabled)
-        }
+        this.callback?.onBlockingStateChanged(enabled)
     }
 
     override fun loadUrl(url: String) {
@@ -106,10 +92,7 @@ internal class FirefoxAmazonWebView(
         // called by webview when clicking on a link, and not when opening a new page for the
         // first time using loadUrl().
         if (!client.shouldOverrideUrlLoading(this, url)) {
-            val additionalHeaders = HashMap<String, String>()
-            additionalHeaders["X-Requested-With"] = ""
-
-            super.loadUrl(url, additionalHeaders)
+            super.loadUrl(url, mapOf("X-Requested-With" to ""))
         }
 
         client.notifyCurrentURL(url)
@@ -141,7 +124,7 @@ internal class FirefoxAmazonWebChromeClient : AmazonWebChromeClient() {
     override fun onShowCustomView(view: View?, webviewCallback: AmazonWebChromeClient.CustomViewCallback?) {
         val fullscreenCallback = object : IWebView.FullscreenCallback {
             override fun fullScreenExited() {
-                webviewCallback!!.onCustomViewHidden()
+                webviewCallback?.onCustomViewHidden()
             }
         }
 
