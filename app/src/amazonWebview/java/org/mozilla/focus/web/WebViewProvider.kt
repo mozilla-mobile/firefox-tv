@@ -44,6 +44,7 @@ private fun initWebview(webView: AmazonWebView) = with (webView) {
 }
 
 @SuppressLint("SetJavaScriptEnabled") // We explicitly want to enable JavaScript
+@Suppress("DEPRECATION") // To be safe, we'll use delete methods as long as they're there.
 private fun initWebSettings(context: Context, settings: AmazonWebSettings) = with (settings) {
     val appName = context.resources.getString(R.string.useragent_appname)
     userAgentString = UserAgent.buildUserAgentString(context, settings, appName)
