@@ -8,7 +8,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
-        android:id="@+id/browser_container"
+        android:id="@+id/browserContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -34,7 +34,7 @@
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/video_container"
+        android:id="@+id/videoContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/black"
