@@ -57,9 +57,6 @@ public class BrowserFragment extends WebFragment implements CursorEvent {
         return fragment;
     }
 
-    private TextView urlView;
-    private AnimatedProgressBar progressView;
-    private ImageView lockView;
     private Cursor cursor;
 
     /**
@@ -74,6 +71,7 @@ public class BrowserFragment extends WebFragment implements CursorEvent {
 
     private IWebView.FullscreenCallback fullscreenCallback;
 
+    private String url;
     private SessionManager sessionManager;
     private Session session;
 
@@ -123,14 +121,10 @@ public class BrowserFragment extends WebFragment implements CursorEvent {
         videoContainer = (ViewGroup) view.findViewById(R.id.video_container);
         browserContainer = view.findViewById(R.id.browser_container);
 
-        urlView = (TextView) view.findViewById(R.id.display_url);
-
-        progressView = (AnimatedProgressBar) view.findViewById(R.id.progress);
-
         session.getUrl().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String url) {
-                urlView.setText(UrlUtils.stripUserInfo(url));
+                BrowserFragment.this.url = url;
             }
         });
 
@@ -139,18 +133,6 @@ public class BrowserFragment extends WebFragment implements CursorEvent {
         session.getLoading().observe(this, new NonNullObserver<Boolean>() {
             @Override
             public void onValueChanged(@NonNull Boolean loading) {
-                if (loading) {
-                    progressView.setProgress(5);
-                    progressView.setVisibility(View.VISIBLE);
-                } else {
-                    if (progressView.getVisibility() == View.VISIBLE) {
-                        // We start a transition only if a page was just loading before
-                        // allowing to avoid issue #1179
-                        progressView.setProgress(progressView.getMax());
-                        progressView.setVisibility(View.GONE);
-                    }
-                }
-
                 final MainActivity activity = (MainActivity)getActivity();
                 updateCursorState();
                 if (!loading && activity.isReloadingForYoutubeDrawerClosed) {
@@ -162,21 +144,6 @@ public class BrowserFragment extends WebFragment implements CursorEvent {
                     // we don't just see a black screen.
                     activity.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
                 }
-            }
-        });
-
-        lockView = (ImageView) view.findViewById(R.id.lock);
-        session.getSecure().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean secure) {
-                lockView.setVisibility(secure ? View.VISIBLE : View.GONE);
-            }
-        });
-
-        session.getProgress().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(Integer progress) {
-                progressView.setProgress(progress);
             }
         });
 
@@ -344,7 +311,10 @@ public class BrowserFragment extends WebFragment implements CursorEvent {
         // but sometimes it's null, and sometimes it returns a null URL. Sometimes it returns a data:
         // URL for error pages. The URL we show in the toolbar is (A) always correct and (B) what the
         // user is probably expecting to share, so lets use that here:
-        return urlView.getText().toString();
+        //
+        // Note: when refactoring, I removed the url view and replaced urlView.setText with assignment
+        // to this url variable - should be equivalent.
+        return url;
     }
 
     public boolean canGoForward() {
