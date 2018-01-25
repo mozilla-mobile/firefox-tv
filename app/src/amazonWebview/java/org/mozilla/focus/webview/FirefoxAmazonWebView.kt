@@ -50,12 +50,6 @@ internal class FirefoxAmazonWebView(
         setOnLongClickListener(it)
     }
 
-    override fun onCreateInputConnection(outAttrs: EditorInfo): InputConnection {
-        val connection = super.onCreateInputConnection(outAttrs)
-        outAttrs.imeOptions = outAttrs.imeOptions or ViewUtils.IME_FLAG_NO_PERSONALIZED_LEARNING
-        return connection
-    }
-
     override fun restoreWebViewState(session: Session) {
         val stateData = session.webViewState
 
