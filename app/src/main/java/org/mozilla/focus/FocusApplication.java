@@ -17,7 +17,6 @@ import org.mozilla.focus.session.VisibilityLifeCycleCallback;
 import org.mozilla.focus.telemetry.TelemetrySessionObserver;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.AppConstants;
-import org.mozilla.focus.web.CleanupSessionObserver;
 
 import java.util.List;
 
@@ -40,7 +39,6 @@ public class FocusApplication extends LocaleAwareApplication {
 
         final LiveData<List<Session>> sessions = SessionManager.getInstance().getSessions();
         sessions.observeForever(new TelemetrySessionObserver());
-        sessions.observeForever(new CleanupSessionObserver(this));
     }
 
     public VisibilityLifeCycleCallback getVisibilityLifeCycleCallback() {
