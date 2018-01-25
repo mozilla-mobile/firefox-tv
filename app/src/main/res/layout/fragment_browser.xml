@@ -30,9 +30,6 @@
                     <requestFocus />
                 </org.mozilla.focus.web.IWebView>
 
-            <include
-                layout="@layout/browser_display_toolbar"/>
-
         </org.mozilla.focus.widget.ResizableKeyboardCoordinatorLayout>
     </LinearLayout>
 
