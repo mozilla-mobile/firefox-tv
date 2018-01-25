@@ -165,7 +165,7 @@ import org.mozilla.focus.web.IWebView;
         super.onPageStarted(view, url, favicon);
     }
 
-    /* package */ void saveState(SystemWebView view, Bundle bundle) {
+    /* package */ void saveState(FirefoxAmazonWebView view, Bundle bundle) {
         final SslCertificate certificate = view.getCertificate();
         if (certificate != null) {
             bundle.putString(STATE_KEY_URL, view.getUrl());
