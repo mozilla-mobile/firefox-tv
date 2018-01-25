@@ -33,7 +33,7 @@ import android.webkit.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SystemWebView extends NestedWebView implements IWebView, SharedPreferences.OnSharedPreferenceChangeListener {
+public class SystemWebView extends NestedWebView implements IWebView {
     private static final String TAG = "WebkitView";
 
     private Callback callback;
@@ -72,8 +72,6 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-        PreferenceManager.getDefaultSharedPreferences(getContext()).registerOnSharedPreferenceChangeListener(this);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             TelemetryAutofillCallback.INSTANCE.register(getContext());
         }
@@ -82,8 +80,6 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-
-        PreferenceManager.getDefaultSharedPreferences(getContext()).unregisterOnSharedPreferenceChangeListener(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             TelemetryAutofillCallback.INSTANCE.unregister(getContext());
@@ -95,11 +91,6 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
         final InputConnection connection = super.onCreateInputConnection(outAttrs);
         outAttrs.imeOptions |= ViewUtils.IME_FLAG_NO_PERSONALIZED_LEARNING;
         return connection;
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        WebViewProvider.applyAppSettings(getContext(), getSettings());
     }
 
     @Override
