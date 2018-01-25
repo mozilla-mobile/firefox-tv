@@ -6,55 +6,47 @@
 package org.mozilla.focus.webview
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.support.annotation.VisibleForTesting
 import android.util.AttributeSet
-import android.util.SparseArray
 import android.view.View
-import android.view.autofill.AutofillValue
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
-import com.amazon.android.webkit.AmazonWebBackForwardList
 import com.amazon.android.webkit.AmazonWebChromeClient
 import com.amazon.android.webkit.AmazonWebKitFactory
 import com.amazon.android.webkit.AmazonWebView
 
 import org.mozilla.focus.ext.*
 import org.mozilla.focus.session.Session
-import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.UrlUtils
 import org.mozilla.focus.utils.ViewUtils
 import org.mozilla.focus.web.IWebView
-import org.mozilla.focus.web.WebViewProvider
-import android.webkit.*
 
 import java.util.HashMap
 
-class FirefoxAmazonWebView(context: Context, attrs: AttributeSet, factory: AmazonWebKitFactory) : NestedWebView(context, attrs), IWebView {
+internal class FirefoxAmazonWebView(context: Context, attrs: AttributeSet, factory: AmazonWebKitFactory) : NestedWebView(context, attrs), IWebView {
 
     @get:VisibleForTesting
     override var callback: IWebView.Callback? = null
         set(callback) {
             field = callback
             client.setCallback(callback)
+            chromeClient.callback = callback
             linkHandler.setCallback(callback)
         }
 
     private val client: FocusWebViewClient
+    private val chromeClient = FirefoxAmazonWebChromeClient()
     private val linkHandler: LinkHandler
 
     init {
-
-        // I think you need to initialize with the factory before initializing the client
+        // I think you need to initialize with the factory before initializing the client.
         factory.initializeWebView(this, 0xFFFFFF, false, null)
 
         client = FocusWebViewClient(getContext().applicationContext)
 
         setWebViewClient(client)
-        setWebChromeClient(createWebChromeClient())
+        setWebChromeClient(chromeClient)
 
         // TODO This does not exist with the AmazonWebView
         //        if (BuildConfig.DEBUG) {
@@ -141,36 +133,37 @@ class FirefoxAmazonWebView(context: Context, attrs: AttributeSet, factory: Amazo
     override fun cleanup() {
         this.deleteData()
     }
+}
 
-    private fun createWebChromeClient(): AmazonWebChromeClient {
-        return object : AmazonWebChromeClient() {
-            override fun onProgressChanged(view: AmazonWebView?, newProgress: Int) {
-                callback?.let { callback ->
-                    // This is the earliest point where we might be able to confirm a redirected
-                    // URL: we don't necessarily get a shouldInterceptRequest() after a redirect,
-                    // so we can only check the updated url in onProgressChanges(), or in onPageFinished()
-                    // (which is even later).
-                    val viewURL = view!!.url
-                    if (!UrlUtils.isInternalErrorURL(viewURL) && viewURL != null) {
-                        callback.onURLChanged(viewURL)
-                    }
-                    callback.onProgress(newProgress)
-                }
+// todo: move into WebClients file with FocusWebViewClient.
+private class FirefoxAmazonWebChromeClient : AmazonWebChromeClient() {
+    var callback: IWebView.Callback? = null
+
+    override fun onProgressChanged(view: AmazonWebView?, newProgress: Int) {
+        callback?.let { callback ->
+            // This is the earliest point where we might be able to confirm a redirected
+            // URL: we don't necessarily get a shouldInterceptRequest() after a redirect,
+            // so we can only check the updated url in onProgressChanges(), or in onPageFinished()
+            // (which is even later).
+            val viewURL = view!!.url
+            if (!UrlUtils.isInternalErrorURL(viewURL) && viewURL != null) {
+                callback.onURLChanged(viewURL)
             }
+            callback.onProgress(newProgress)
+        }
+    }
 
-            override fun onShowCustomView(view: View?, webviewCallback: AmazonWebChromeClient.CustomViewCallback?) {
-                val fullscreenCallback = object : IWebView.FullscreenCallback {
-                    override fun fullScreenExited() {
-                        webviewCallback!!.onCustomViewHidden()
-                    }
-                }
-
-                callback?.onEnterFullScreen(fullscreenCallback, view)
-            }
-
-            override fun onHideCustomView() {
-                callback?.onExitFullScreen()
+    override fun onShowCustomView(view: View?, webviewCallback: AmazonWebChromeClient.CustomViewCallback?) {
+        val fullscreenCallback = object : IWebView.FullscreenCallback {
+            override fun fullScreenExited() {
+                webviewCallback!!.onCustomViewHidden()
             }
         }
+
+        callback?.onEnterFullScreen(fullscreenCallback, view)
+    }
+
+    override fun onHideCustomView() {
+        callback?.onExitFullScreen()
     }
 }
