@@ -33,7 +33,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.mozilla.focus.activity.TestHelper.waitingTime;
-import static org.mozilla.focus.fragment.FirstrunFragment.FIRSTRUN_PREF;
+
 
 // This test opens enters and invalid URL, and Focus should provide an appropriate error message
 @RunWith(AndroidJUnit4.class)
@@ -48,15 +48,6 @@ public class SwitchContextTest {
         @Override
         protected void beforeActivityLaunched() {
             super.beforeActivityLaunched();
-
-            appContext = InstrumentationRegistry.getInstrumentation()
-                    .getTargetContext()
-                    .getApplicationContext();
-
-            PreferenceManager.getDefaultSharedPreferences(appContext)
-                    .edit()
-                    .putBoolean(FIRSTRUN_PREF, true)
-                    .apply();
 
             webServer = new MockWebServer();
 

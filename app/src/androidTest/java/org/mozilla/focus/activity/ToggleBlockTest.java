@@ -32,7 +32,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.not;
-import static org.mozilla.focus.fragment.FirstrunFragment.FIRSTRUN_PREF;
+
 
 // This test toggles blocking within the browser view
 // mozilla.org site has one google analytics tracker - tests will see whether this gets blocked properly
@@ -43,15 +43,6 @@ public class ToggleBlockTest {
         @Override
         protected void beforeActivityLaunched() {
             super.beforeActivityLaunched();
-
-            Context appContext = InstrumentationRegistry.getInstrumentation()
-                    .getTargetContext()
-                    .getApplicationContext();
-
-            PreferenceManager.getDefaultSharedPreferences(appContext)
-                    .edit()
-                    .putBoolean(FIRSTRUN_PREF, true)
-                    .apply();
         }
     };
 

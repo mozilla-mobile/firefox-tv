@@ -22,7 +22,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertFalse;
 import static org.mozilla.focus.activity.TestHelper.waitingTime;
-import static org.mozilla.focus.fragment.FirstrunFragment.FIRSTRUN_PREF;
+
 
 // This test checks basic ad blocking capability
 // Disabled with @Suppress, because this does not run in Google Test Cloud properly.
@@ -37,15 +37,6 @@ public class AdBlockingTest {
         @Override
         protected void beforeActivityLaunched() {
             super.beforeActivityLaunched();
-
-            Context appContext = InstrumentationRegistry.getInstrumentation()
-                    .getTargetContext()
-                    .getApplicationContext();
-
-            PreferenceManager.getDefaultSharedPreferences(appContext)
-                    .edit()
-                    .putBoolean(FIRSTRUN_PREF, true)
-                    .apply();
         }
     };
 
