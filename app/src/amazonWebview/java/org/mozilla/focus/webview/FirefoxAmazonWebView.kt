@@ -48,11 +48,6 @@ internal class FirefoxAmazonWebView(context: Context, attrs: AttributeSet, facto
         setWebViewClient(client)
         setWebChromeClient(chromeClient)
 
-        // TODO This does not exist with the AmazonWebView
-        //        if (BuildConfig.DEBUG) {
-        //            setWebContentsDebuggingEnabled(true);
-        //        }
-
         isLongClickable = true
 
         linkHandler = LinkHandler(this)
