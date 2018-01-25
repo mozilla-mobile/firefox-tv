@@ -41,7 +41,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mozilla.focus.activity.TestHelper.waitingTime;
-import static org.mozilla.focus.fragment.FirstrunFragment.FIRSTRUN_PREF;
+
 
 /**
  * This test browses to a test site and makes sure that no traces are left on disk.
@@ -134,11 +134,6 @@ public class WebViewDataTest {
             appContext = InstrumentationRegistry.getInstrumentation()
                     .getTargetContext()
                     .getApplicationContext();
-
-            PreferenceManager.getDefaultSharedPreferences(appContext)
-                    .edit()
-                    .putBoolean(FIRSTRUN_PREF, true)
-                    .apply();
 
             webServer = new MockWebServer();
 

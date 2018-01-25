@@ -28,7 +28,7 @@ import okhttp3.mockwebserver.MockWebServer;
 import static android.support.test.espresso.action.ViewActions.click;
 import static org.junit.Assert.assertTrue;
 import static org.mozilla.focus.activity.TestHelper.waitingTime;
-import static org.mozilla.focus.fragment.FirstrunFragment.FIRSTRUN_PREF;
+
 
 @RunWith(AndroidJUnit4.class)
 public class LocalSessionStorageTest {
@@ -41,15 +41,6 @@ public class LocalSessionStorageTest {
         @Override
         protected void beforeActivityLaunched() {
             super.beforeActivityLaunched();
-
-            final Context appContext = InstrumentationRegistry.getInstrumentation()
-                    .getTargetContext()
-                    .getApplicationContext();
-
-            PreferenceManager.getDefaultSharedPreferences(appContext)
-                    .edit()
-                    .putBoolean(FIRSTRUN_PREF, true)
-                    .apply();
 
             webServer = new MockWebServer();
 

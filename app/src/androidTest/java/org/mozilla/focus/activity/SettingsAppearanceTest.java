@@ -22,7 +22,7 @@ import org.junit.runner.RunWith;
 import static junit.framework.Assert.assertTrue;
 import static org.mozilla.focus.activity.TestHelper.waitingTime;
 import static org.mozilla.focus.activity.helpers.EspressoHelper.openSettings;
-import static org.mozilla.focus.fragment.FirstrunFragment.FIRSTRUN_PREF;
+
 
 // This test checks all the headings in the Settings menu are there
 @RunWith(AndroidJUnit4.class)
@@ -35,15 +35,6 @@ public class SettingsAppearanceTest {
         @Override
         protected void beforeActivityLaunched() {
             super.beforeActivityLaunched();
-
-            Context appContext = InstrumentationRegistry.getInstrumentation()
-                    .getTargetContext()
-                    .getApplicationContext();
-
-            PreferenceManager.getDefaultSharedPreferences(appContext)
-                    .edit()
-                    .putBoolean(FIRSTRUN_PREF, true)
-                    .apply();
         }
     };
 

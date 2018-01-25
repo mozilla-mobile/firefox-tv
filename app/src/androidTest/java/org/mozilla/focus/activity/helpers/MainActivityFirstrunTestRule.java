@@ -14,7 +14,6 @@ import org.mozilla.focus.activity.MainActivity;
 import org.mozilla.focus.session.SessionManager;
 import org.mozilla.focus.utils.ThreadUtils;
 
-import static org.mozilla.focus.fragment.FirstrunFragment.FIRSTRUN_PREF;
 
 public class MainActivityFirstrunTestRule extends ActivityTestRule<MainActivity> {
     private boolean showFirstRun;
@@ -29,15 +28,6 @@ public class MainActivityFirstrunTestRule extends ActivityTestRule<MainActivity>
     @Override
     protected void beforeActivityLaunched() {
         super.beforeActivityLaunched();
-
-        Context appContext = InstrumentationRegistry.getInstrumentation()
-                .getTargetContext()
-                .getApplicationContext();
-
-        PreferenceManager.getDefaultSharedPreferences(appContext)
-                .edit()
-                .putBoolean(FIRSTRUN_PREF, !showFirstRun)
-                .apply();
     }
 
     @Override
