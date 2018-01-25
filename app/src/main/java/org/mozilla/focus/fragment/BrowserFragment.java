@@ -10,7 +10,6 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -206,11 +205,6 @@ public class BrowserFragment extends WebFragment implements CursorEvent {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
     public IWebView.Callback createCallback() {
         return new SessionCallbackProxy(session, new IWebView.Callback() {
             @Override
@@ -331,28 +325,6 @@ public class BrowserFragment extends WebFragment implements CursorEvent {
         exitImmersiveModeIfNeeded();
     }
 
-    void showAddToHomescreenDialog(String url, String title) {
-        final FragmentManager fragmentManager = getFragmentManager();
-
-        if (fragmentManager.findFragmentByTag(AddToHomescreenDialogFragment.FRAGMENT_TAG) != null) {
-            // We are already displaying a homescreen dialog fragment (Probably a restored fragment).
-            // No need to show another one.
-            return;
-        }
-
-        final AddToHomescreenDialogFragment addToHomescreenDialogFragment = AddToHomescreenDialogFragment.newInstance(url, title, session.isBlockingEnabled());
-        addToHomescreenDialogFragment.setTargetFragment(BrowserFragment.this, 300);
-
-        try {
-            addToHomescreenDialogFragment.show(fragmentManager, AddToHomescreenDialogFragment.FRAGMENT_TAG);
-        } catch (IllegalStateException e) {
-            // It can happen that at this point in time the activity is already in the background
-            // and onSaveInstanceState() has already been called. Fragment transactions are not
-            // allowed after that anymore. It's probably safe to guess that the user might not
-            // be interested in adding to homescreen now.
-        }
-    }
-
     public boolean onBackPressed() {
         if (canGoBack()) {
             // Go back in web history
@@ -364,15 +336,6 @@ public class BrowserFragment extends WebFragment implements CursorEvent {
         }
 
         return true;
-    }
-
-    public void erase() {
-        final IWebView webView = getWebView();
-        if (webView != null) {
-            webView.cleanup();
-        }
-
-        SessionManager.getInstance().removeCurrentSession();
     }
 
     @NonNull
@@ -419,13 +382,6 @@ public class BrowserFragment extends WebFragment implements CursorEvent {
         final IWebView webView = getWebView();
         if (webView != null) {
             webView.reload();
-        }
-    }
-
-    public void stop() {
-        final IWebView webView = getWebView();
-        if (webView != null) {
-            webView.stopLoading();
         }
     }
 
