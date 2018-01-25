@@ -32,14 +32,6 @@ public class WebViewProvider {
         return geckoView;
     }
 
-    public static void performCleanup(final Context context) {
-        // Nothing: does Gecko need extra private mode cleanup?
-    }
-
-    public static void performNewBrowserSessionCleanup() {
-        // Nothing: a WebKit work-around.
-    }
-
     public static class GeckoWebView extends NestedGeckoView implements IWebView {
         private Callback callback;
         private String currentUrl = "about:blank";

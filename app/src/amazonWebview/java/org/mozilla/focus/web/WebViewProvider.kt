@@ -30,11 +30,6 @@ object WebViewProvider {
     }
 
     @JvmStatic
-    fun performCleanup(context: Context) {
-        SystemWebView.deleteContentFromKnownLocations(context)
-    }
-
-    @JvmStatic
     fun create(context: Context, attrs: AttributeSet, factory: AmazonWebKitFactory): View {
         return SystemWebView(context, attrs, factory).apply {
             initWebview(this)

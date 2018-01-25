@@ -441,10 +441,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
     @Override
     protected void onPause() {
-        if (isFinishing()) {
-            WebViewProvider.performCleanup(this);
-        }
-
         super.onPause();
 
         TelemetryWrapper.stopSession();
