@@ -69,24 +69,6 @@ public class SystemWebView extends NestedWebView implements IWebView {
     }
 
     @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            TelemetryAutofillCallback.INSTANCE.register(getContext());
-        }
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            TelemetryAutofillCallback.INSTANCE.unregister(getContext());
-        }
-    }
-
-    @Override
     public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
         final InputConnection connection = super.onCreateInputConnection(outAttrs);
         outAttrs.imeOptions |= ViewUtils.IME_FLAG_NO_PERSONALIZED_LEARNING;
@@ -196,13 +178,6 @@ public class SystemWebView extends NestedWebView implements IWebView {
         webViewDatabase.clearHttpAuthUsernamePassword();
 
         deleteContentFromKnownLocations(getContext());
-    }
-
-    @Override
-    public void autofill(SparseArray<AutofillValue> values) {
-        super.autofill(values);
-
-        TelemetryWrapper.autofillPerformedEvent();
     }
 
     public static void deleteContentFromKnownLocations(final Context context) {
