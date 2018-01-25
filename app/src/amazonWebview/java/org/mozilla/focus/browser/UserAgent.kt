@@ -63,7 +63,7 @@ object UserAgent {
 
         val existingWebViewUA = settings.userAgentString
 
-        val appVersion: String
+        val appVersion: String? // null during testing - unknown if ever null during application.
         try {
             appVersion = context.packageManager.getPackageInfo(context.packageName, 0).versionName
         } catch (e: PackageManager.NameNotFoundException) {
