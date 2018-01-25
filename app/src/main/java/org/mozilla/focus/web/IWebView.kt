@@ -16,63 +16,9 @@ interface IWebView {
         const val TRACKING_PROTECTION_ENABLED_DEFAULT = true
     }
 
-    /** Get the title of the currently displayed website.  */
-    val title: String
-    val url: String
-
-    class HitTarget(val isLink: Boolean, val linkURL: String?, val isImage: Boolean, val imageURL: String?) {
-
-        init {
-            if (isLink && linkURL == null) {
-                throw IllegalStateException("link hittarget must contain URL")
-            }
-
-            if (isImage && imageURL == null) {
-                throw IllegalStateException("image hittarget must contain URL")
-            }
-        }
-    }
-
-    interface Callback {
-        fun onPageStarted(url: String)
-
-        fun onPageFinished(isSecure: Boolean)
-        fun onProgress(progress: Int)
-
-        fun onURLChanged(url: String)
-
-        fun onRequest(isTriggeredByUserGesture: Boolean)
-
-        fun onLongPress(hitTarget: HitTarget)
-
-        /**
-         * Notify the host application that the current page has entered full screen mode.
-         *
-         * The callback needs to be invoked to request the page to exit full screen mode.
-         *
-         * Some IWebView implementations may pass a custom View which contains the web contents in
-         * full screen mode.
-         */
-        fun onEnterFullScreen(callback: FullscreenCallback, view: View?)
-
-        /**
-         * Notify the host application that the current page has exited full screen mode.
-         *
-         * If a View was passed when the application entered full screen mode then this view must
-         * be hidden now.
-         */
-        fun onExitFullScreen()
-
-        fun countBlockedTracker()
-
-        fun resetBlockedTrackers()
-
-        fun onBlockingStateChanged(isBlockingEnabled: Boolean)
-    }
-
-    interface FullscreenCallback {
-        fun fullScreenExited()
-    }
+    /** Get the title of the currently displayed website. */
+    val title: String? // nullable because WebView overrides it.
+    val url: String? // nullable because WebView overrides it.
 
     fun onPause()
     fun onResume()
@@ -101,5 +47,54 @@ interface IWebView {
      */
     fun setBlockingEnabled(enabled: Boolean)
 
-    fun setCallback(callback: Callback)
+    fun setCallback(callback: Callback?)
+
+    class HitTarget(isLink: Boolean, linkURL: String?, isImage: Boolean, imageURL: String?) {
+        init {
+            if (isLink && linkURL == null) {
+                throw IllegalStateException("link hittarget must contain URL")
+            } else if (isImage && imageURL == null) {
+                throw IllegalStateException("image hittarget must contain URL")
+            }
+        }
+    }
+
+    interface Callback {
+        fun onPageStarted(url: String)
+        fun onPageFinished(isSecure: Boolean)
+        fun onProgress(progress: Int)
+
+        fun onURLChanged(url: String)
+
+        fun onRequest(isTriggeredByUserGesture: Boolean)
+
+        fun onLongPress(hitTarget: HitTarget)
+
+        /**
+         * Notify the host application that the current page has entered full screen mode.
+         *
+         * The callback needs to be invoked to request the page to exit full screen mode.
+         *
+         * Some IWebView implementations may pass a custom View which contains the web contents in
+         * full screen mode.
+         */
+        fun onEnterFullScreen(callback: FullscreenCallback, view: View?)
+
+        /**
+         * Notify the host application that the current page has exited full screen mode.
+         *
+         * If a View was passed when the application entered full screen mode then this view must
+         * be hidden now.
+         */
+        fun onExitFullScreen()
+
+        fun countBlockedTracker()
+        fun resetBlockedTrackers()
+
+        fun onBlockingStateChanged(isBlockingEnabled: Boolean)
+    }
+
+    interface FullscreenCallback {
+        fun fullScreenExited()
+    }
 }
