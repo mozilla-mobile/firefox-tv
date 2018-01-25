@@ -97,7 +97,6 @@ object TelemetryWrapper {
         val RECENT_APPS = "recent_apps"
         val APP_ICON = "app_icon"
         val AUTOCOMPLETE_DOMAIN = "autocomplete_domain"
-        val AUTOFILL = "autofill"
         val SEARCH_ENGINE_SETTING = "search_engine_setting"
         val ADD_SEARCH_ENGINE_LEARN_MORE = "search_engine_learn_more"
         val CUSTOM_SEARCH_ENGINE = "custom_search_engine"
@@ -637,15 +636,6 @@ object TelemetryWrapper {
                 .extra(Extra.FROM, from.toString())
                 .extra(Extra.TO, to.toString())
                 .queue()
-    }
-
-    fun autofillShownEvent() {
-        TelemetryEvent.create(Category.ACTION, Method.SHOW, Object.AUTOFILL).queue()
-    }
-
-    @JvmStatic
-    fun autofillPerformedEvent() {
-        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.AUTOFILL).queue()
     }
 
     @JvmStatic
