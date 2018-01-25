@@ -22,6 +22,8 @@ import com.amazon.android.webkit.AmazonWebBackForwardList;
 import com.amazon.android.webkit.AmazonWebChromeClient;
 import com.amazon.android.webkit.AmazonWebKitFactory;
 import com.amazon.android.webkit.AmazonWebView;
+
+import org.mozilla.focus.ext.AmazonWebViewKt;
 import org.mozilla.focus.session.Session;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.UrlUtils;
@@ -32,6 +34,8 @@ import android.webkit.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.mozilla.focus.ext.AmazonWebViewKt.deleteContentFromKnownLocations;
 
 public class FirefoxAmazonWebView extends NestedWebView implements IWebView {
     private Callback callback;
@@ -158,40 +162,7 @@ public class FirefoxAmazonWebView extends NestedWebView implements IWebView {
 
     @Override
     public void cleanup() {
-        clearFormData();
-        clearHistory();
-        clearMatches();
-        clearSslPreferences();
-        clearCache(true);
-
-        // We don't care about the callback - we just want to make sure cookies are gone
-        CookieManager.getInstance().removeAllCookies(null);
-
-        WebStorage.getInstance().deleteAllData();
-
-        final WebViewDatabase webViewDatabase = WebViewDatabase.getInstance(getContext());
-        // It isn't entirely clear how this differs from WebView.clearFormData()
-        webViewDatabase.clearFormData();
-        webViewDatabase.clearHttpAuthUsernamePassword();
-
-        deleteContentFromKnownLocations(getContext());
-    }
-
-    public static void deleteContentFromKnownLocations(final Context context) {
-        /*
-        ThreadUtils.postToBackgroundThread(new Runnable() {
-            @Override
-            public void run() {
-                // We call all methods on WebView to delete data. But some traces still remain
-                // on disk. This will wipe the whole webview directory.
-                FileUtils.deleteWebViewDirectory(context);
-
-                // WebView stores some files in the cache directory. We do not use it ourselves
-                // so let's truncate it.
-                FileUtils.truncateCacheDirectory(context);
-            }
-        });
-        */
+        AmazonWebViewKt.deleteData(this);
     }
 
     private AmazonWebChromeClient createWebChromeClient() {
