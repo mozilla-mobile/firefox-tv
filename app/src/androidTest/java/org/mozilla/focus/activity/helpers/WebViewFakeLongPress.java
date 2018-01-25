@@ -8,7 +8,7 @@ import android.view.View;
 import org.hamcrest.Matcher;
 import org.mozilla.focus.R;
 import org.mozilla.focus.web.IWebView;
-import org.mozilla.focus.webview.SystemWebView;
+import org.mozilla.focus.webview.FirefoxAmazonWebView;
 
 public class WebViewFakeLongPress implements ViewAction {
     public static ViewAction injectHitTarget(IWebView.HitTarget hitTarget) {
@@ -33,7 +33,7 @@ public class WebViewFakeLongPress implements ViewAction {
 
     @Override
     public void perform(UiController uiController, View view) {
-        final SystemWebView webView = (SystemWebView) view;
+        final FirefoxAmazonWebView webView = (FirefoxAmazonWebView) view;
 
         webView.getCallback()
                 .onLongPress(hitTarget);

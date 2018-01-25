@@ -33,15 +33,12 @@ import android.webkit.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SystemWebView extends NestedWebView implements IWebView {
-    private static final String TAG = "WebkitView";
-
+public class FirefoxAmazonWebView extends NestedWebView implements IWebView {
     private Callback callback;
     private FocusWebViewClient client;
     private final LinkHandler linkHandler;
-    
 
-    public SystemWebView(Context context, AttributeSet attrs, AmazonWebKitFactory factory) {
+    public FirefoxAmazonWebView(Context context, AttributeSet attrs, AmazonWebKitFactory factory) {
         super(context, attrs);
 
         // I think you need to initialize with the factory before initializing the client

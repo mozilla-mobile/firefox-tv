@@ -14,7 +14,7 @@ import com.amazon.android.webkit.AmazonWebSettings
 import com.amazon.android.webkit.AmazonWebView
 import org.mozilla.focus.R
 import org.mozilla.focus.browser.UserAgent
-import org.mozilla.focus.webview.SystemWebView
+import org.mozilla.focus.webview.FirefoxAmazonWebView
 import org.mozilla.focus.webview.TrackingProtectionWebViewClient
 
 /** Creates a WebView-based IWebView implementation. */
@@ -31,7 +31,7 @@ object WebViewProvider {
 
     @JvmStatic
     fun create(context: Context, attrs: AttributeSet, factory: AmazonWebKitFactory): View {
-        return SystemWebView(context, attrs, factory).apply {
+        return FirefoxAmazonWebView(context, attrs, factory).apply {
             initWebview(this)
             initWebSettings(context, settings)
         }
