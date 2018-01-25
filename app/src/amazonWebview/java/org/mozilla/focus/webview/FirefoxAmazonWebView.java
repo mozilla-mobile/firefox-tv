@@ -35,8 +35,6 @@ import android.webkit.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.mozilla.focus.ext.AmazonWebViewKt.deleteContentFromKnownLocations;
-
 public class FirefoxAmazonWebView extends NestedWebView implements IWebView {
     private Callback callback;
     private FocusWebViewClient client;
@@ -149,15 +147,6 @@ public class FirefoxAmazonWebView extends NestedWebView implements IWebView {
         }
 
         client.notifyCurrentURL(url);
-    }
-
-    @Override
-    public void destroy() {
-        super.destroy();
-
-        // WebView might save data to disk once it gets destroyed. In this case our cleanup call
-        // might not have been able to see this data. Let's do it again.
-        deleteContentFromKnownLocations(getContext());
     }
 
     @Override
