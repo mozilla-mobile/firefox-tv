@@ -13,10 +13,9 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import com.amazon.android.webkit.AmazonWebChromeClient
-import com.amazon.android.webkit.AmazonWebKitFactory
 import com.amazon.android.webkit.AmazonWebView
 
-import org.mozilla.focus.ext.*
+import org.mozilla.focus.ext.deleteData
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.utils.UrlUtils
 import org.mozilla.focus.utils.ViewUtils
@@ -24,7 +23,17 @@ import org.mozilla.focus.web.IWebView
 
 import java.util.HashMap
 
-internal class FirefoxAmazonWebView(context: Context, attrs: AttributeSet, factory: AmazonWebKitFactory) : NestedWebView(context, attrs), IWebView {
+/**
+ * An IWebView implementation using AmazonWebView.
+ *
+ * Initialization for this class should primarily occur in WebViewProvider,
+ * which is visible by the main code base and constructs this class.
+ */
+internal class FirefoxAmazonWebView(
+        context: Context, attrs: AttributeSet,
+        private val client: FocusWebViewClient,
+        private val chromeClient: FirefoxAmazonWebChromeClient
+) : NestedWebView(context, attrs), IWebView {
 
     @get:VisibleForTesting
     override var callback: IWebView.Callback? = null
@@ -35,23 +44,10 @@ internal class FirefoxAmazonWebView(context: Context, attrs: AttributeSet, facto
             linkHandler.setCallback(callback)
         }
 
-    private val client: FocusWebViewClient
-    private val chromeClient = FirefoxAmazonWebChromeClient()
-    private val linkHandler: LinkHandler
-
-    init {
-        // I think you need to initialize with the factory before initializing the client.
-        factory.initializeWebView(this, 0xFFFFFF, false, null)
-
-        client = FocusWebViewClient(getContext().applicationContext)
-
-        setWebViewClient(client)
-        setWebChromeClient(chromeClient)
-
+    // Init for link handler must occur here if we want immutability because they have cyclic references.
+    private val linkHandler = LinkHandler(this).also {
         isLongClickable = true
-
-        linkHandler = LinkHandler(this)
-        setOnLongClickListener(linkHandler)
+        setOnLongClickListener(it)
     }
 
     override fun onCreateInputConnection(outAttrs: EditorInfo): InputConnection {
@@ -131,7 +127,7 @@ internal class FirefoxAmazonWebView(context: Context, attrs: AttributeSet, facto
 }
 
 // todo: move into WebClients file with FocusWebViewClient.
-private class FirefoxAmazonWebChromeClient : AmazonWebChromeClient() {
+internal class FirefoxAmazonWebChromeClient : AmazonWebChromeClient() {
     var callback: IWebView.Callback? = null
 
     override fun onProgressChanged(view: AmazonWebView?, newProgress: Int) {
