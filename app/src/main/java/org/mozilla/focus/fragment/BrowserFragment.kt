@@ -14,6 +14,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
+import kotlinx.android.synthetic.main.fragment_browser.*
+import kotlinx.android.synthetic.main.fragment_browser.view.*
 import org.mozilla.focus.R
 import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.architecture.NonNullObserver
@@ -26,7 +28,6 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.Direction
 import org.mozilla.focus.utils.Edge
 import org.mozilla.focus.web.IWebView
-import org.mozilla.focus.widget.Cursor
 import org.mozilla.focus.widget.CursorEvent
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
@@ -51,18 +52,6 @@ class BrowserFragment : WebFragment(), CursorEvent {
         }
     }
 
-    private var cursor: Cursor? = null
-
-    /**
-     * Container for custom video views shown in fullscreen mode.
-     */
-    private var videoContainer: ViewGroup? = null
-
-    /**
-     * Container containing the browser chrome and web content.
-     */
-    private var browserContainer: View? = null
-
     private var fullscreenCallback: IWebView.FullscreenCallback? = null
 
     // getUrl() is used for things like sharing the current URL. We could try to use the webview,
@@ -78,11 +67,11 @@ class BrowserFragment : WebFragment(), CursorEvent {
     private var session: Session? = null
 
     val cursorLocation: Point
-        get() = cursor!!.location
+        get() = cursor.location
 
     private val scrollVelocity: Int
         get() {
-            val speed = cursor!!.speed.toInt()
+            val speed = cursor.speed.toInt()
             return speed * SCROLL_MULTIPLIER
         }
 
@@ -117,13 +106,9 @@ class BrowserFragment : WebFragment(), CursorEvent {
     }
 
     override fun inflateLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val view = inflater.inflate(R.layout.fragment_browser, container, false)
-
-        cursor = view.findViewById<View>(R.id.cursor) as Cursor
-        cursor!!.cursorEvent = this
-
-        videoContainer = view.findViewById<View>(R.id.video_container) as ViewGroup
-        browserContainer = view.findViewById(R.id.browser_container)
+        val view = inflater.inflate(R.layout.fragment_browser, container, false).apply {
+            cursor.cursorEvent = this@BrowserFragment
+        }
 
         session!!.url.observe(this, Observer { url -> this@BrowserFragment.url = url })
 
@@ -173,13 +158,13 @@ class BrowserFragment : WebFragment(), CursorEvent {
 
                 if (view != null) {
                     // Hide browser UI and web content
-                    browserContainer!!.visibility = View.INVISIBLE
+                    browserContainer.visibility = View.INVISIBLE
 
                     // Add view to video container and make it visible
                     val params = FrameLayout.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                    videoContainer!!.addView(view, params)
-                    videoContainer!!.visibility = View.VISIBLE
+                    videoContainer.addView(view, params)
+                    videoContainer.visibility = View.VISIBLE
 
                     // Switch to immersive mode: Hide system bars other UI controls
                     switchToImmersiveMode()
@@ -188,11 +173,11 @@ class BrowserFragment : WebFragment(), CursorEvent {
 
             override fun onExitFullScreen() {
                 // Remove custom video views and hide container
-                videoContainer!!.removeAllViews()
-                videoContainer!!.visibility = View.GONE
+                videoContainer.removeAllViews()
+                videoContainer.visibility = View.GONE
 
                 // Show browser UI and web content again
-                browserContainer!!.visibility = View.VISIBLE
+                browserContainer.visibility = View.VISIBLE
 
                 exitImmersiveModeIfNeeded()
 
@@ -320,15 +305,15 @@ class BrowserFragment : WebFragment(), CursorEvent {
     }
 
     fun moveCursor(direction: Direction) {
-        cursor!!.moveCursor(direction)
+        cursor.moveCursor(direction)
     }
 
     fun stopMoving(direction: Direction) {
-        cursor!!.stopMoving(direction)
+        cursor.stopMoving(direction)
     }
 
     fun setCursorEnabled(toEnable: Boolean) {
-        cursor!!.visibility = if (toEnable) View.VISIBLE else View.GONE
+        cursor.visibility = if (toEnable) View.VISIBLE else View.GONE
     }
 
     override fun cursorHitEdge(edge: Edge) {
