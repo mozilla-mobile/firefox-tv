@@ -76,45 +76,35 @@ public interface IWebView {
         void fullScreenExited();
     }
 
-    /**
-     * Enable/Disable content blocking for this session (Only the blockers that are enabled in the app's settings will be turned on/off).
-     */
-    void setBlockingEnabled(boolean enabled);
-
-    void setCallback(Callback callback);
-
-    void onPause();
-
-    void onResume();
-
-    void destroy();
-
-    void reload();
-
-    void stopLoading();
-
+    /** Get the title of the currently displayed website. */
+    String getTitle();
     String getUrl();
 
-    void loadUrl(String url);
+    void onPause();
+    void onResume();
 
-    void cleanup();
+    void loadUrl(String url);
+    void stopLoading();
+    void reload();
 
     void goForward();
-
     void goBack();
 
     boolean canGoForward();
-
     boolean canGoBack();
-
-    void restoreWebViewState(Session session);
-
-    void saveWebViewState(@NonNull Session session);
 
     void flingScroll(int vx, int vy);
 
+    void cleanup();
+
+    void restoreWebViewState(Session session);
+    void saveWebViewState(@NonNull Session session);
+    void destroy();
+
     /**
-     * Get the title of the currently displayed website.
+     * Enable/Disable content blocking for this session (Only the blockers that are
+     * enabled in the app's settings will be turned on/off).
      */
-    String getTitle();
+    void setBlockingEnabled(boolean enabled);
+    void setCallback(Callback callback);
 }
