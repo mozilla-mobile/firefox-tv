@@ -6,6 +6,7 @@ import android.webkit.WebStorage
 import android.webkit.WebViewDatabase
 import com.amazon.android.webkit.AmazonWebView
 
+@Suppress("DEPRECATION") // To be safe, we'll use delete methods as long as they're there.
 fun AmazonWebView.deleteData() {
     clearFormData();
     clearHistory();
