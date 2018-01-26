@@ -22,7 +22,7 @@ public class SessionCallbackProxy implements IWebView.Callback {
     }
 
     @Override
-    public void onPageStarted(String url) {
+    public void onPageStarted(@NonNull String url) {
         session.setLoading(true);
         session.setSecure(false);
 
@@ -53,7 +53,7 @@ public class SessionCallbackProxy implements IWebView.Callback {
     }
 
     @Override
-    public void onURLChanged(String url) {
+    public void onURLChanged(@NonNull String url) {
         session.setUrl(url);
     }
 
@@ -83,7 +83,7 @@ public class SessionCallbackProxy implements IWebView.Callback {
     }
 
     @Override
-    public void onLongPress(IWebView.HitTarget hitTarget) {
+    public void onLongPress(@NonNull IWebView.HitTarget hitTarget) {
         // TODO: Replace with session property
         delegate.onLongPress(hitTarget);
     }
