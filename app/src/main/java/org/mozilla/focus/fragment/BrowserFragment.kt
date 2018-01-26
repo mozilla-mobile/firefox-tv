@@ -5,7 +5,6 @@
 package org.mozilla.focus.fragment
 
 import android.arch.lifecycle.Observer
-import android.graphics.Point
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.KeyEvent
@@ -65,7 +64,10 @@ class BrowserFragment : WebFragment(), CursorEvent {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initSession()
+    }
 
+    private fun initSession() {
         val sessionUUID = arguments.getString(ARGUMENT_SESSION_UUID)
                 ?: throw IllegalAccessError("No session exists")
         session = if (sessionManager.hasSessionWithUUID(sessionUUID))
@@ -73,7 +75,23 @@ class BrowserFragment : WebFragment(), CursorEvent {
         else
             NullSession()
 
+        setBlockingEnabled(session.isBlockingEnabled)
         session.url.observe(this, Observer { url -> this@BrowserFragment.url = url })
+        session.loading.observe(this, object : NonNullObserver<Boolean>() {
+            public override fun onValueChanged(loading: Boolean) {
+                val activity = activity as MainActivity
+                updateCursorState()
+                if (!loading && activity.isReloadingForYoutubeDrawerClosed) {
+                    activity.isReloadingForYoutubeDrawerClosed = false
+
+                    // We send a play event which:
+                    // - If we're on the video selection page, does nothing.
+                    // - If we're in a fullscreen video, will show the play/pause controls on the screen so
+                    // we don't just see a black screen.
+                    activity.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE))
+                }
+            }
+        })
     }
 
     override fun onResume() {
@@ -90,31 +108,10 @@ class BrowserFragment : WebFragment(), CursorEvent {
         return session.url.value
     }
 
-    override fun inflateLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val view = inflater.inflate(R.layout.fragment_browser, container, false).apply {
-            cursor.cursorEvent = this@BrowserFragment
-        }
-
-        setBlockingEnabled(session.isBlockingEnabled)
-
-        session.loading.observe(this, object : NonNullObserver<Boolean>() {
-            public override fun onValueChanged(loading: Boolean) {
-                val activity = activity as MainActivity
-                updateCursorState()
-                if (!loading && activity.isReloadingForYoutubeDrawerClosed) {
-                    activity.isReloadingForYoutubeDrawerClosed = false
-
-                    // We send a play event which:
-                    // - If we're on the video selection page, does nothing.
-                    // - If we're in a fullscreen video, will show the play/pause controls on the screen so
-                    // we don't just see a black screen.
-                    activity.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE))
-                }
+    override fun inflateLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+            inflater.inflate(R.layout.fragment_browser, container, false).apply {
+                cursor.cursorEvent = this@BrowserFragment
             }
-        })
-
-        return view
-    }
 
     override fun createCallback(): IWebView.Callback {
         return SessionCallbackProxy(session, object : IWebView.Callback {
