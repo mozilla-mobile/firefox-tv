@@ -41,14 +41,8 @@ class BrowserFragment : WebFragment(), CursorEvent {
         const val FRAGMENT_TAG = "browser"
 
         @JvmStatic
-        fun createForSession(session: Session): BrowserFragment {
-            val arguments = Bundle()
-            arguments.putString(ARGUMENT_SESSION_UUID, session.uuid)
-
-            val fragment = BrowserFragment()
-            fragment.arguments = arguments
-
-            return fragment
+        fun createForSession(session: Session) = BrowserFragment().apply {
+            arguments = Bundle().apply { putString(ARGUMENT_SESSION_UUID, session.uuid) }
         }
     }
 
@@ -63,46 +57,37 @@ class BrowserFragment : WebFragment(), CursorEvent {
     // to this url variable - should be equivalent.
     var url: String? = null
         private set
-    private val sessionManager: SessionManager
-    private var session: Session? = null
+    private val sessionManager = SessionManager.getInstance()
+    private lateinit var session: Session
 
-    val cursorLocation: Point
-        get() = cursor.location
-
-    private val scrollVelocity: Int
-        get() {
-            val speed = cursor.speed.toInt()
-            return speed * SCROLL_MULTIPLIER
-        }
-
-    init {
-        sessionManager = SessionManager.getInstance()
-    }
+    val cursorLocation get() = cursor.location
+    private val scrollVelocity get() = cursor.speed.toInt() * SCROLL_MULTIPLIER
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val sessionUUID = arguments.getString(ARGUMENT_SESSION_UUID)
                 ?: throw IllegalAccessError("No session exists")
-
         session = if (sessionManager.hasSessionWithUUID(sessionUUID))
             sessionManager.getSessionByUUID(sessionUUID)
         else
             NullSession()
+
+        session.url.observe(this, Observer { url -> this@BrowserFragment.url = url })
     }
 
     override fun onResume() {
         super.onResume()
-        val activity = activity
         (activity as? MainActivity)?.updateHintNavigationVisibility(MainActivity.VideoPlayerState.BROWSER)
     }
 
-    override fun getSession(): Session? {
+    // TODO: if we convert WebFragment to kotlin, these can become abstract properties
+    override fun getSession(): Session {
         return session
     }
 
     override fun getInitialUrl(): String? {
-        return session!!.url.value
+        return session.url.value
     }
 
     override fun inflateLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -110,11 +95,9 @@ class BrowserFragment : WebFragment(), CursorEvent {
             cursor.cursorEvent = this@BrowserFragment
         }
 
-        session!!.url.observe(this, Observer { url -> this@BrowserFragment.url = url })
+        setBlockingEnabled(session.isBlockingEnabled)
 
-        setBlockingEnabled(session!!.isBlockingEnabled)
-
-        session!!.loading.observe(this, object : NonNullObserver<Boolean>() {
+        session.loading.observe(this, object : NonNullObserver<Boolean>() {
             public override fun onValueChanged(loading: Boolean) {
                 val activity = activity as MainActivity
                 updateCursorState()
@@ -182,10 +165,8 @@ class BrowserFragment : WebFragment(), CursorEvent {
                 exitImmersiveModeIfNeeded()
 
                 // Notify renderer that we left fullscreen mode.
-                if (fullscreenCallback != null) {
-                    fullscreenCallback!!.fullScreenExited()
-                    fullscreenCallback = null
-                }
+                fullscreenCallback?.fullScreenExited()
+                fullscreenCallback = null
             }
         })
     }
@@ -196,16 +177,15 @@ class BrowserFragment : WebFragment(), CursorEvent {
      * degree of transparency, and will automatically hide after a short timeout.
      */
     private fun switchToImmersiveMode() {
-        val activity = activity ?: return
-
-        val window = activity.window
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+        activity?.window?.let {
+            it.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            it.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    or View.SYSTEM_UI_FLAG_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+        }
     }
 
     /**
@@ -245,25 +225,11 @@ class BrowserFragment : WebFragment(), CursorEvent {
         return true
     }
 
-    fun canGoForward(): Boolean {
-        val webView = webView
-        return webView != null && webView.canGoForward()
-    }
-
-    fun canGoBack(): Boolean {
-        val webView = webView
-        return webView != null && webView.canGoBack()
-    }
-
-    fun goBack() {
-        val webView = webView
-        webView?.goBack()
-    }
-
-    fun goForward() {
-        val webView = webView
-        webView?.goForward()
-    }
+    // TODO: When all calling code is kotlin, rm these - they're unnecessary with cascading nulls.
+    fun canGoForward() = webview?.canGoForward() ?: false
+    fun canGoBack() = webview?.canGoBack() ?: false
+    fun goBack() = webview?.goBack()
+    fun goForward() = webview?.goForward()
 
     fun loadUrl(url: String) {
         val webView = webView
@@ -272,15 +238,8 @@ class BrowserFragment : WebFragment(), CursorEvent {
         }
     }
 
-    fun reload() {
-        val webView = webView
-        webView?.reload()
-    }
-
-    fun setBlockingEnabled(enabled: Boolean) {
-        val webView = webView
-        webView?.setBlockingEnabled(enabled)
-    }
+    fun reload() = webView?.reload()
+    fun setBlockingEnabled(enabled: Boolean) = webview?.setBlockingEnabled(enabled)
 
     // --- TODO: CURSOR CODE - MODULARIZE IN #412. --- //
     /**
