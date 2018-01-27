@@ -39,9 +39,10 @@ internal class FirefoxAmazonWebView(
         }
 
     // Init for link handler must occur here if we want immutability because they have cyclic references.
-    private val linkHandler = LinkHandler(this).also {
+    private val linkHandler = LinkHandler(this)
+    init {
+        setOnLongClickListener(linkHandler)
         isLongClickable = true
-        setOnLongClickListener(it)
     }
 
     override fun restoreWebViewState(session: Session) {
