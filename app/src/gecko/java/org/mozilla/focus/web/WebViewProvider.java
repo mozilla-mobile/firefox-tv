@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.amazon.android.webkit.AmazonWebKitFactory;
 
+import org.jetbrains.annotations.Nullable;
 import org.mozilla.focus.session.Session;
 import org.mozilla.gecko.GeckoView;
 import org.mozilla.gecko.GeckoViewSettings;
@@ -61,6 +62,12 @@ public class WebViewProvider {
             setNavigationListener(createNavigationListener());
 
             // TODO: set long press listener, call through to callback.onLinkLongPress()
+        }
+
+        @Nullable
+        @Override
+        public Callback getCallback() {
+            return callback;
         }
 
         @Override
