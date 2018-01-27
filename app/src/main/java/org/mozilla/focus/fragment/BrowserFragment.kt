@@ -11,7 +11,6 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.android.synthetic.main.fragment_browser.view.*
@@ -145,9 +144,6 @@ class BrowserFragment : WebFragment(), CursorEvent {
                             ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
                     videoContainer.addView(view, params)
                     videoContainer.visibility = View.VISIBLE
-
-                    // Switch to immersive mode: Hide system bars other UI controls
-                    switchToImmersiveMode()
                 }
             }
 
@@ -159,54 +155,11 @@ class BrowserFragment : WebFragment(), CursorEvent {
                 // Show browser UI and web content again
                 browserContainer.visibility = View.VISIBLE
 
-                exitImmersiveModeIfNeeded()
-
                 // Notify renderer that we left fullscreen mode.
                 fullscreenCallback?.fullScreenExited()
                 fullscreenCallback = null
             }
         })
-    }
-
-    /**
-     * Hide system bars. They can be revealed temporarily with system gestures, such as swiping from
-     * the top of the screen. These transient system bars will overlay app’s content, may have some
-     * degree of transparency, and will automatically hide after a short timeout.
-     */
-    private fun switchToImmersiveMode() {
-        activity?.window?.let {
-            it.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            it.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-        }
-    }
-
-    /**
-     * Show the system bars again.
-     */
-    private fun exitImmersiveModeIfNeeded() {
-        val activity = activity ?: return
-
-        if (WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON and activity.window.attributes.flags == 0) {
-            // We left immersive mode already.
-            return
-        }
-
-        val window = activity.window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        // This fragment might get destroyed before the user left immersive mode (e.g. by opening another URL from an app).
-        // In this case let's leave immersive mode now when the fragment gets destroyed.
-        exitImmersiveModeIfNeeded()
     }
 
     fun onBackPressed(): Boolean {
