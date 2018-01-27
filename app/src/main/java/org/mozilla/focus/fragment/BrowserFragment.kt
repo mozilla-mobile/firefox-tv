@@ -44,8 +44,6 @@ class BrowserFragment : WebFragment(), CursorEvent {
         }
     }
 
-    private var fullscreenCallback: IWebView.FullscreenCallback? = null
-
     // getUrl() is used for things like sharing the current URL. We could try to use the webview,
     // but sometimes it's null, and sometimes it returns a null URL. Sometimes it returns a data:
     // URL for error pages. The URL we show in the toolbar is (A) always correct and (B) what the
@@ -112,55 +110,7 @@ class BrowserFragment : WebFragment(), CursorEvent {
                 cursor.cursorEvent = this@BrowserFragment
             }
 
-    override fun createCallback(): IWebView.Callback {
-        return SessionCallbackProxy(session, object : IWebView.Callback {
-            override fun onPageStarted(url: String) {}
-
-            override fun onPageFinished(isSecure: Boolean) {}
-
-            override fun onURLChanged(url: String) {}
-
-            override fun onRequest(isTriggeredByUserGesture: Boolean) {}
-
-            override fun onProgress(progress: Int) {}
-
-            override fun countBlockedTracker() {}
-
-            override fun resetBlockedTrackers() {}
-
-            override fun onBlockingStateChanged(isBlockingEnabled: Boolean) {}
-
-            override fun onLongPress(hitTarget: IWebView.HitTarget) {}
-
-            override fun onEnterFullScreen(callback: IWebView.FullscreenCallback, view: View?) {
-                fullscreenCallback = callback
-
-                if (view != null) {
-                    // Hide browser UI and web content
-                    browserContainer.visibility = View.INVISIBLE
-
-                    // Add view to video container and make it visible
-                    val params = FrameLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                    videoContainer.addView(view, params)
-                    videoContainer.visibility = View.VISIBLE
-                }
-            }
-
-            override fun onExitFullScreen() {
-                // Remove custom video views and hide container
-                videoContainer.removeAllViews()
-                videoContainer.visibility = View.GONE
-
-                // Show browser UI and web content again
-                browserContainer.visibility = View.VISIBLE
-
-                // Notify renderer that we left fullscreen mode.
-                fullscreenCallback?.fullScreenExited()
-                fullscreenCallback = null
-            }
-        })
-    }
+    override fun createCallback() = SessionCallbackProxy(session, BrowserIWebViewCallback(this))
 
     fun onBackPressed(): Boolean {
         if (canGoBack()) {
@@ -234,5 +184,52 @@ class BrowserFragment : WebFragment(), CursorEvent {
             Edge.LEFT -> webView.flingScroll(-scrollVelocity, 0)
             Edge.RIGHT -> webView.flingScroll(scrollVelocity, 0)
         }
+    }
+}
+
+private class BrowserIWebViewCallback(
+        private val browserFragment: BrowserFragment
+): IWebView.Callback {
+
+    private var fullscreenCallback: IWebView.FullscreenCallback? = null
+
+    override fun onPageStarted(url: String) {}
+    override fun onPageFinished(isSecure: Boolean) {}
+    override fun onProgress(progress: Int) {}
+
+    override fun onURLChanged(url: String) {}
+    override fun onRequest(isTriggeredByUserGesture: Boolean) {}
+
+    override fun countBlockedTracker() {}
+    override fun resetBlockedTrackers() {}
+
+    override fun onBlockingStateChanged(isBlockingEnabled: Boolean) {}
+
+    override fun onLongPress(hitTarget: IWebView.HitTarget) {}
+
+    override fun onEnterFullScreen(callback: IWebView.FullscreenCallback, view: View?) {
+        fullscreenCallback = callback
+        if (view == null) return
+
+        with (browserFragment) {
+            browserContainer.visibility = View.INVISIBLE
+
+            val params = FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            videoContainer.addView(view, params)
+            videoContainer.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onExitFullScreen() {
+        with (browserFragment) {
+            videoContainer.removeAllViews()
+            videoContainer.visibility = View.GONE
+
+            browserContainer.visibility = View.VISIBLE
+        }
+
+        fullscreenCallback?.fullScreenExited()
+        fullscreenCallback = null
     }
 }
