@@ -31,7 +31,7 @@ abstract class WebFragment : LocaleAwareFragment() {
         get() = if (isWebViewAvailable) field else null
     private var isWebViewAvailable: Boolean = false
 
-    abstract fun getSession(): Session
+    abstract val session: Session
 
     /**
      * Get the initial URL to load after the view has been created.
@@ -49,17 +49,13 @@ abstract class WebFragment : LocaleAwareFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflateLayout(inflater, container, savedInstanceState)
 
-        webView = view.findViewById<View>(R.id.webview) as IWebView
-        isWebViewAvailable = true
-        webView!!.callback = createCallback()
-
-        val session = getSession()
-
-        if (session != null) {
-            webView!!.setBlockingEnabled(session.isBlockingEnabled)
+        webView = (view.findViewById<View>(R.id.webview) as IWebView).apply {
+            callback = createCallback()
+            setBlockingEnabled(session.isBlockingEnabled)
         }
+        isWebViewAvailable = true
 
-        if (session == null || !session.hasWebViewState()) {
+        if (!session.hasWebViewState()) {
             val url = getInitialUrl()
             if (!TextUtils.isEmpty(url)) {
                 webView!!.loadUrl(url!!)
@@ -89,11 +85,7 @@ abstract class WebFragment : LocaleAwareFragment() {
     }
 
     override fun onPause() {
-        val session = getSession()
-        if (session != null) {
-            webView!!.saveWebViewState(session)
-        }
-
+        webView!!.saveWebViewState(session)
         webView!!.onPause()
 
         super.onPause()

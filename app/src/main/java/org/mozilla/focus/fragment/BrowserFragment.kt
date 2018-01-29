@@ -60,7 +60,7 @@ class BrowserFragment : WebFragment(), BrowserNavigationOverlay.NavigationEventH
     var url: String? = null
         private set
     private val sessionManager = SessionManager.getInstance()
-    private lateinit var session: Session
+    override lateinit var session: Session // WebFragment expects this initialized before onCreateView.
 
     private val cursorViewModel = CursorViewModel(simulateTouchEvent = { activity.dispatchTouchEvent(it) })
 
@@ -110,10 +110,6 @@ class BrowserFragment : WebFragment(), BrowserNavigationOverlay.NavigationEventH
             NavigationEvent.SETTINGS -> (activity as MainActivity).showSettingsScreen()
             NavigationEvent.LOAD -> (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
         }
-    }
-    // TODO: if we convert WebFragment to kotlin, these can become abstract properties
-    override fun getSession(): Session {
-        return session
     }
 
     override fun getInitialUrl(): String? {
