@@ -27,39 +27,40 @@ import java.util.Locale
  * Base implementation for fragments that use an IWebView instance. Based on Android's WebViewFragment.
  */
 abstract class WebFragment : LocaleAwareFragment() {
-    private var webView: IWebView? = null
+    var webView: IWebView? = null
+        get() = if (isWebViewAvailable) field else null
     private var isWebViewAvailable: Boolean = false
 
-    abstract val session: Session?
+    abstract fun getSession(): Session
 
     /**
      * Get the initial URL to load after the view has been created.
      */
-    abstract val initialUrl: String?
+    abstract fun getInitialUrl(): String?
 
     /**
      * Inflate a layout for this fragment. The layout needs to contain a view implementing IWebView
      * with the id set to "webview".
      */
-    abstract fun inflateLayout(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View
+    abstract fun inflateLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View
 
     abstract fun createCallback(): IWebView.Callback
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflateLayout(inflater, container, savedInstanceState)
 
-        webView = view.findViewById<View>(R.id.webview)
+        webView = view.findViewById<View>(R.id.webview) as IWebView
         isWebViewAvailable = true
         webView!!.callback = createCallback()
 
-        val session = session
+        val session = getSession()
 
         if (session != null) {
             webView!!.setBlockingEnabled(session.isBlockingEnabled)
         }
 
         if (session == null || !session.hasWebViewState()) {
-            val url = initialUrl
+            val url = getInitialUrl()
             if (!TextUtils.isEmpty(url)) {
                 webView!!.loadUrl(url!!)
             }
@@ -88,7 +89,7 @@ abstract class WebFragment : LocaleAwareFragment() {
     }
 
     override fun onPause() {
-        val session = session
+        val session = getSession()
         if (session != null) {
             webView!!.saveWebViewState(session)
         }
@@ -118,9 +119,5 @@ abstract class WebFragment : LocaleAwareFragment() {
         isWebViewAvailable = false
 
         super.onDestroyView()
-    }
-
-    fun getWebView(): IWebView? {
-        return if (isWebViewAvailable) webView else null
     }
 }
