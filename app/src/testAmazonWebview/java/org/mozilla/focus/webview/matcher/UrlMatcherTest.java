@@ -66,7 +66,7 @@ public class UrlMatcherTest {
         // Number of categories we want to test with.
         final int CAT_COUNT = 4;
 
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(RuntimeEnvironment.application);
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(RuntimeEnvironment.application.getApplicationContext());
 
         { // Setup for category tests
             final SharedPreferences.Editor editor = preferences.edit();
@@ -84,7 +84,7 @@ public class UrlMatcherTest {
 
                 categoryPrefMap.put(categoryName, categoryName);
             }
-            editor.commit();
+            editor.apply();
         }
 
         final UrlMatcher matcher = new UrlMatcher(RuntimeEnvironment.application, categoryPrefMap, categories, null);
@@ -121,7 +121,7 @@ public class UrlMatcherTest {
                     }
                 }
             }
-            editor.commit();
+            editor.apply();
 
             for (int currentCategory = 0; currentCategory < CAT_COUNT; currentCategory++) {
                 final int currentBit = 1 << currentCategory;
