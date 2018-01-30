@@ -207,20 +207,11 @@ public class SessionManagerTest {
 
         sessionManager.createSession(Source.USER_ENTERED, TEST_URL);
         sessionManager.createSession(Source.VIEW, TEST_URL_2);
-        sessionManager.createSession(Source.CUSTOM_TAB, TEST_URL_3);
 
         {
             final List<Session> sessions = sessionManager.getSessions().getValue();
-            assertEquals(3, sessions.size());
+            assertEquals(2, sessions.size());
         }
-
-        {
-            final Session currentSession = sessionManager.getCurrentSession();
-            assertEquals(Source.CUSTOM_TAB, currentSession.getSource());
-            assertEquals(TEST_URL_3, currentSession.getUrl().getValue());
-        }
-
-        sessionManager.removeCurrentSession();
 
         {
             final Session currentSession = sessionManager.getCurrentSession();
@@ -248,10 +239,9 @@ public class SessionManagerTest {
 
         sessionManager.createSession(Source.USER_ENTERED, TEST_URL);
         sessionManager.createSession(Source.VIEW, TEST_URL_2);
-        sessionManager.createSession(Source.CUSTOM_TAB, TEST_URL_3);
 
         assertTrue(sessionManager.hasSession());
-        assertEquals(3, sessionManager.getSessions().getValue().size());
+        assertEquals(2, sessionManager.getSessions().getValue().size());
 
         sessionManager.removeAllSessions();
 
