@@ -212,6 +212,7 @@ private class BrowserIWebViewCallback(
         if (view == null) return
 
         with (browserFragment) {
+            // Hide browser UI and web content
             browserContainer.visibility = View.INVISIBLE
 
             val params = FrameLayout.LayoutParams(
