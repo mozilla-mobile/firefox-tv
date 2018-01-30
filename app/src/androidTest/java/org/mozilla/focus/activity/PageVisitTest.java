@@ -6,7 +6,6 @@
 package org.mozilla.focus.activity;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
 import android.support.annotation.IdRes;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.IdlingRegistry;

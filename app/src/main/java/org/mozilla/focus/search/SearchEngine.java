@@ -8,12 +8,13 @@ package org.mozilla.focus.search;
 import android.graphics.Bitmap;
 import android.net.Uri;
 
+import org.mozilla.focus.utils.UrlUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.mozilla.focus.utils.UrlUtils;
 
 public class SearchEngine {
 

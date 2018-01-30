@@ -5,19 +5,14 @@
 package org.mozilla.focus.browser
 
 import android.os.Build
-import android.webkit.WebSettings
-
 import com.amazon.android.webkit.AmazonWebSettings
-
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mozilla.focus.web.WebViewProvider
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
-
-import org.junit.Assert.assertEquals
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.`when`
 
 @RunWith(RobolectricTestRunner::class)
 class UserAgentTest {

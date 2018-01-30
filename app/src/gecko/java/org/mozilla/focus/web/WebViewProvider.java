@@ -10,8 +10,6 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.amazon.android.webkit.AmazonWebKitFactory;
-
 import org.jetbrains.annotations.Nullable;
 import org.mozilla.focus.session.Session;
 import org.mozilla.gecko.GeckoView;

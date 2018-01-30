@@ -9,9 +9,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
-import org.mozilla.focus.R
-
 import kotlinx.android.synthetic.main.content_onboarding.*
+import org.mozilla.focus.R
 import org.mozilla.focus.web.IWebView
 
 class OnboardingActivity : AppCompatActivity() {

@@ -7,8 +7,6 @@ package org.mozilla.focus.webview;
 import android.content.res.Resources;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.util.Pair;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import com.amazon.android.webkit.AmazonWebView;
 import com.amazon.android.webkit.AmazonWebViewClient;

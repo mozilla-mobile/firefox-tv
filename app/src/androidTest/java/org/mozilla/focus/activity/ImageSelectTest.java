@@ -5,10 +5,7 @@
 
 package org.mozilla.focus.activity;
 
-import android.content.Context;
 import android.os.Build;
-import android.preference.PreferenceManager;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiObject;

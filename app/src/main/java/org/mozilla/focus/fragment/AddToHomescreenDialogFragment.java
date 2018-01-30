@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import org.mozilla.focus.R;
 import org.mozilla.focus.shortcut.HomeScreen;
 import org.mozilla.focus.shortcut.IconGenerator;
@@ -88,7 +89,8 @@ public class AddToHomescreenDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 TelemetryWrapper.cancelAddToHomescreenShortcutEvent();
                 dismiss();
-            }});
+            }
+        });
 
         addToHomescreenDialogConfirmButton.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -97,7 +99,8 @@ public class AddToHomescreenDialogFragment extends DialogFragment {
                         editableTitle.getText().toString().trim(), blockingEnabled);
                 TelemetryWrapper.addToHomescreenShortcutEvent();
                 dismiss();
-            }});
+            }
+        });
 
         return builder.create();
     }
