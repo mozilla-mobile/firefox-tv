@@ -59,6 +59,8 @@ class BrowserFragment : WebFragment(), BrowserNavigationOverlay.NavigationEventH
     // to this url variable - should be equivalent.
     var url: String? = null
         private set
+    override val initialUrl get() = session.url.value // Use getter b/c session is lateinit.
+
     private val sessionManager = SessionManager.getInstance()
     override lateinit var session: Session // WebFragment expects this initialized before onCreateView.
 
@@ -110,10 +112,6 @@ class BrowserFragment : WebFragment(), BrowserNavigationOverlay.NavigationEventH
             NavigationEvent.SETTINGS -> (activity as MainActivity).showSettingsScreen()
             NavigationEvent.LOAD -> (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
         }
-    }
-
-    override fun getInitialUrl(): String? {
-        return session.url.value
     }
 
     override fun inflateLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
