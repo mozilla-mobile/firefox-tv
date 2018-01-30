@@ -20,6 +20,7 @@ import org.mozilla.focus.locale.LocaleAwareFragment
 import org.mozilla.focus.locale.LocaleManager
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.web.IWebView
+import java.security.AccessController.getContext
 
 import java.util.Locale
 
@@ -31,12 +32,9 @@ abstract class WebFragment : LocaleAwareFragment() {
         get() = if (isWebViewAvailable) field else null
     private var isWebViewAvailable: Boolean = false
 
+    /** Get the initial URL to load after the view has been created. */
+    abstract val initialUrl: String
     abstract val session: Session
-
-    /**
-     * Get the initial URL to load after the view has been created.
-     */
-    abstract fun getInitialUrl(): String?
 
     /**
      * Inflate a layout for this fragment. The layout needs to contain a view implementing IWebView
@@ -56,9 +54,8 @@ abstract class WebFragment : LocaleAwareFragment() {
         isWebViewAvailable = true
 
         if (!session.hasWebViewState()) {
-            val url = getInitialUrl()
-            if (!TextUtils.isEmpty(url)) {
-                webView!!.loadUrl(url!!)
+            if (!initialUrl.isEmpty()) {
+                webView!!.loadUrl(initialUrl)
             }
         } else {
             webView!!.restoreWebViewState(session)
