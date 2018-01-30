@@ -76,7 +76,7 @@ public abstract class WebFragment extends LocaleAwareFragment {
     }
 
     @Override
-    public void applyLocale() {
+    public void onApplyLocale() {
         Context context = getContext();
         final LocaleManager localeManager = LocaleManager.getInstance();
         if (!localeManager.isMirroringSystemLocale(context)) {

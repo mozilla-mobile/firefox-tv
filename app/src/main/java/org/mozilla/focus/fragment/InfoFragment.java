@@ -48,7 +48,7 @@ public class InfoFragment extends WebFragment {
             webView.setVisibility(View.INVISIBLE);
         }
 
-        applyLocale();
+        onApplyLocale();
 
         return view;
     }
