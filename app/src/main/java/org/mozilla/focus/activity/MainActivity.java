@@ -12,13 +12,11 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -56,7 +54,7 @@ import org.mozilla.focus.widget.InlineAutocompleteEditText;
 
 import java.util.List;
 
-public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlEnteredListener, View.OnClickListener {
+public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlEnteredListener, DrawerManager.NavigationCallback {
 
     public static final String ACTION_ERASE = "erase";
     public static final String ACTION_OPEN = "open";
@@ -72,7 +70,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private final UrlAutoCompleteFilter drawerUrlAutoCompleteFilter = new UrlAutoCompleteFilter();
 
     private DrawerManager drawerManager;
-    private NavigationView fragmentNavigationBar;
     private View fragmentContainer;
     private View hintNavigationBar;
 
@@ -118,37 +115,11 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         fragmentContainer = findViewById(R.id.container);
         drawerUrlAutoCompleteFilter.load(getApplicationContext(), true);
         drawerManager = new DrawerManager((DrawerLayout) findViewById(R.id.drawer_layout), drawerUrlAutoCompleteFilter);
+        drawerManager.setNavigationCallback(this);
+
         hintNavigationBar = findViewById(R.id.hint_navigation_bar);
         hintSettings = findViewById(R.id.hint_settings);
         hintSettings.setImageResource(R.drawable.ic_settings);
-
-        // todo: remove amiguity between navigation bars.
-        fragmentNavigationBar = findViewById(R.id.fragment_navigation);
-        fragmentNavigationBar.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
-                final MenuNavButton button;
-                switch (item.getItemId()) {
-                    case R.id.drawer_home:
-                        button = MenuNavButton.HOME;
-                        showHomeScreen();
-                        break;
-
-                    case R.id.drawer_settings:
-                        button = MenuNavButton.SETTINGS;
-                        showSettingsScreen();
-                        break;
-
-                    default:
-                        return false;
-                }
-
-                TelemetryWrapper.menuNavEvent(button);
-                drawerManager.closeDrawerAutomatically();
-                return true;
-            }
-        });
-
         hintNavigationBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(final View v, final boolean hasFocus) {
@@ -213,35 +184,35 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     }
 
     @Override
-    public void onClick(View view) {
+    public void onNavigationEvent(@NotNull MenuNavButton event) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final BrowserFragment fragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
         if (fragment == null || !fragment.isVisible()) {
             return;
         }
 
-        // TODO: handle NAV EVENTS from DrawerManager
-        final MenuNavButton navButton;
-        switch (view.getId()) {
-            case R.id.drawer_refresh_button:
-                navButton = MenuNavButton.REFRESH;
-                fragment.reload();
-                break;
-            case R.id.drawer_back_button:
-                navButton = MenuNavButton.BACK;
+        switch (event) {
+            case BACK:
                 if (fragment.canGoBack()) {
                     fragment.goBack();
                 }
                 break;
-            case R.id.drawer_forward_button:
-                navButton = MenuNavButton.FORWARD;
+            case FORWARD:
                 if (fragment.canGoForward()) {
                     fragment.goForward();
                 }
                 break;
+            case REFRESH:
+                fragment.reload();
+                break;
+            case HOME:
+                showHomeScreen();
+                break;
+            case SETTINGS:
+                showSettingsScreen();
+                break;
             default:
-                // Return so that we don't try to close the drawer
-                return;
+                break;
         }
 
     }

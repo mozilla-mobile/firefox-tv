@@ -9,6 +9,7 @@ import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.text.TextUtils
 import android.view.View
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.custom_drawer_item.view.*
 
 import org.mozilla.focus.R
@@ -19,6 +20,10 @@ import org.mozilla.focus.utils.ViewUtils
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 
 class DrawerManager(drawerLayout: DrawerLayout, drawerUrlAutoCompleteFilter: UrlAutoCompleteFilter) {
+    interface NavigationCallback {
+        fun onNavigationEvent(button: MenuNavButton)
+    }
+
     private val drawerLayout = drawerLayout.apply {
         addDrawerListener(object : DrawerLayout.SimpleDrawerListener() {
             override fun onDrawerOpened(v: View?) {
@@ -27,12 +32,11 @@ class DrawerManager(drawerLayout: DrawerLayout, drawerUrlAutoCompleteFilter: Url
         })
     }
 
-    private val urlInput = drawerLayout.urlView.also {
-        setupUrlInput(it, drawerUrlAutoCompleteFilter)
-    }
-    private val backButton = drawerLayout.drawer_back_button.apply { setOnClickListener(navigationClickListener) }
-    private val forwardButton = drawerLayout.drawer_forward_button.apply { setOnClickListener(navigationClickListener) }
-    private val refreshButton = drawerLayout.drawer_refresh_button.apply { setOnClickListener(navigationClickListener) }
+    private val urlInput = drawerLayout.urlView
+
+    private val backButton = drawerLayout.drawer_back_button
+    private val forwardButton = drawerLayout.drawer_forward_button
+    private val refreshButton = drawerLayout.drawer_refresh_button
 
     // TODO: set default value from sharedPrefs, update SharedPrefs on change
     private val trackingProtectionSwitch = drawerLayout.tracking_protection_switch.apply {
@@ -41,14 +45,24 @@ class DrawerManager(drawerLayout: DrawerLayout, drawerUrlAutoCompleteFilter: Url
         }
     }
 
-    private val navigationClickListener = View.OnClickListener { view ->
-        val navAction = when (view.id) {
-            R.id.drawer_back_button -> MenuNavButton.BACK
-            R.id.drawer_forward_button -> MenuNavButton.FORWARD
-            R.id.drawer_refresh_button -> MenuNavButton.REFRESH
-            else -> throw IllegalStateException("Unknown MenuBrowserNavButton")
+    private var navigationCallback: NavigationCallback? = null
+
+    init {
+        drawerLayout.fragment_navigation.setNavigationItemSelectedListener { view ->
+            when (view.itemId) {
+                R.id.drawer_home -> sendBrowserAction(MenuNavButton.HOME)
+                R.id.drawer_settings -> sendBrowserAction(MenuNavButton.SETTINGS)
+                else -> false
+            }
+            true
         }
-        sendBrowserAction(navAction)
+
+        setupUrlInput(urlInput, drawerUrlAutoCompleteFilter)
+
+        val navClickListener = NavButtonClickListener()
+        listOf(backButton, forwardButton, refreshButton).forEach {
+            it.setOnClickListener(navClickListener)
+        }
     }
 
     private fun setupUrlInput(urlInputView: InlineAutocompleteEditText, drawerUrlAutoCompleteFilter: UrlAutoCompleteFilter) {
@@ -73,15 +87,31 @@ class DrawerManager(drawerLayout: DrawerLayout, drawerUrlAutoCompleteFilter: Url
         })
     }
 
+    inner class NavButtonClickListener : View.OnClickListener {
+        override fun onClick(view: View?) {
+            val navAction = when (view?.id) {
+                R.id.drawer_back_button -> MenuNavButton.BACK
+                R.id.drawer_forward_button -> MenuNavButton.FORWARD
+                R.id.drawer_refresh_button -> MenuNavButton.REFRESH
+                else -> throw IllegalStateException("Unknown MenuNavButton")
+            }
+            sendBrowserAction(navAction)
+        }
+    }
+
+    private fun sendBrowserAction(action: MenuNavButton) {
+        navigationCallback?.onNavigationEvent(action)
+        TelemetryWrapper.menuNavEvent(action)
+        closeDrawerAutomatically()
+    }
+
+    fun setNavigationCallback(callback: NavigationCallback) {
+        navigationCallback = callback
+    }
+
     // TODO: Is there a better way to do this?
     fun turnOffTrackingProtectionFromOnboarding() {
         trackingProtectionSwitch.isChecked = false
-    }
-
-    fun sendBrowserAction(action: MenuNavButton) {
-        // TODO: Send event to MainActivity
-        TelemetryWrapper.menuNavEvent(action)
-        closeDrawerAutomatically()
     }
 
     fun toggleDrawerByUser() {
@@ -114,6 +144,4 @@ class DrawerManager(drawerLayout: DrawerLayout, drawerUrlAutoCompleteFilter: Url
     fun isDrawerOpen(): Boolean {
         return drawerLayout.isDrawerOpen(GravityCompat.START)
     }
-
-
 }
