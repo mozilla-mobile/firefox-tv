@@ -53,10 +53,10 @@ class BrowserFragment : LocaleAwareFragment(), CursorEvent {
     //
     // Note: when refactoring, I removed the url view and replaced urlView.setText with assignment
     // to this url variable - should be equivalent.
-    var url: String? = null
+    lateinit var url: String
         private set
     private val sessionManager = SessionManager.getInstance()
-    private lateinit var session: Session
+    lateinit var session: Session
 
     val cursorLocation get() = cursor.location
     private val scrollVelocity get() = cursor.speed.toInt() * SCROLL_MULTIPLIER
@@ -69,6 +69,7 @@ class BrowserFragment : LocaleAwareFragment(), CursorEvent {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSession()
+        url = session.url.value
         iWebViewLifecycleManager = IWebViewLifecycleManager(session,
                 SessionCallbackProxy(session, BrowserIWebViewCallback(this)))
         lifecycle.addObserver(iWebViewLifecycleManager)
@@ -83,7 +84,7 @@ class BrowserFragment : LocaleAwareFragment(), CursorEvent {
             NullSession()
 
         setBlockingEnabled(session.isBlockingEnabled)
-        session.url.observe(this, Observer { url -> this@BrowserFragment.url = url })
+        session.url.observe(this, Observer { url -> this@BrowserFragment.url = url!! })
         session.loading.observe(this, object : NonNullObserver<Boolean>() {
             public override fun onValueChanged(loading: Boolean) {
                 val activity = activity as MainActivity
@@ -106,19 +107,10 @@ class BrowserFragment : LocaleAwareFragment(), CursorEvent {
         (activity as? MainActivity)?.updateHintNavigationVisibility(MainActivity.VideoPlayerState.BROWSER)
     }
 
-    // TODO: if we convert WebFragment to kotlin, these can become abstract properties
-    fun getSession(): Session {
-        return session
-    }
-
-    fun getInitialUrl(): String? {
-        return session.url.value
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val webViewContainer = inflater.inflate(R.layout.fragment_browser, container, false) as ViewGroup
         webViewContainer.cursor.cursorEvent = this@BrowserFragment
-        iWebViewLifecycleManager.onCreateView(webViewContainer, getInitialUrl()!!)
+        iWebViewLifecycleManager.onCreateView(webViewContainer, url)
         return webViewContainer
     }
 
