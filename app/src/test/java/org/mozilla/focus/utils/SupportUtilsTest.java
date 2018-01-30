@@ -2,6 +2,7 @@ package org.mozilla.focus.utils;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mozilla.focus.BuildConfig;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
@@ -25,12 +26,13 @@ public class SupportUtilsTest {
      */
     @Test
     public void getSumoURLForTopic() throws Exception {
+        final String version = BuildConfig.VERSION_NAME;
         Locale.setDefault(Locale.GERMANY);
-        assertEquals("https://support.mozilla.org/1/mobile/null/Android/de-DE/foobar",
+        assertEquals("https://support.mozilla.org/1/mobile/" + version + "/Android/de-DE/foobar",
                 SupportUtils.getSumoURLForTopic(RuntimeEnvironment.application, "foobar"));
 
         Locale.setDefault(Locale.CANADA_FRENCH);
-        assertEquals("https://support.mozilla.org/1/mobile/null/Android/fr-CA/foobar",
+        assertEquals("https://support.mozilla.org/1/mobile/" + version + "/Android/fr-CA/foobar",
                 SupportUtils.getSumoURLForTopic(RuntimeEnvironment.application, "foobar"));
     }
 
