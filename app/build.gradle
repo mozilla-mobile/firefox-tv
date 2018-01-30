@@ -12,7 +12,6 @@ apply from: "$project.rootDir/tools/gradle/versionCode.gradle"
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "org.mozilla.tv"
         minSdkVersion 22
