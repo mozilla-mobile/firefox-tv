@@ -694,20 +694,15 @@ object TelemetryWrapper {
         TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.SETTING, Value.CLEAR_DATA).queue()
     }
 
-    /** @param isShowing true if the drawer is opening, close otherwise. */
+    /** @param isOpening true if the drawer is opening, close otherwise. */
     @JvmStatic
-    fun drawerShowHideEvent(isShowing: Boolean) {
-        val method = if (isShowing) Method.SHOW else Method.HIDE
+    fun drawerShowHideEvent(isOpening: Boolean) {
+        val method = if (isOpening) Method.SHOW else Method.HIDE
         TelemetryEvent.create(Category.ACTION, method, Object.MENU).queue()
     }
 
     @JvmStatic
-    fun menuBrowserNavEvent(button: MenuBrowserNavButton) {
-        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.MENU, button.value).queue()
-    }
-
-    @JvmStatic
-    fun menuAppNavEvent(button: MenuAppNavButton) {
+    fun menuNavEvent(button: MenuNavButton) {
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.MENU, button.value).queue()
     }
 
@@ -736,15 +731,11 @@ enum class UrlTextInputLocation(internal val extra: String) {
     MENU("menu"),
 }
 
-enum class MenuBrowserNavButton(val value: String) {
+enum class MenuNavButton(val value: String) {
     // We define separate `value`s so we can rename the enum without interfering.
     REFRESH(TelemetryWrapper.Value.RELOAD),
     BACK(TelemetryWrapper.Value.BACK),
     FORWARD(TelemetryWrapper.Value.FORWARD),
-}
-
-enum class MenuAppNavButton(val value: String) {
-    // We define separate `value`s so we can rename the enum without interfering.
     HOME(TelemetryWrapper.Value.HOME),
     SETTINGS(TelemetryWrapper.Value.SETTINGS),
 }

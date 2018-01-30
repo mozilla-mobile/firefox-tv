@@ -7,30 +7,22 @@ package org.mozilla.focus.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
-import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 
 import com.amazon.android.webkit.AmazonWebKitFactories;
 import com.amazon.android.webkit.AmazonWebKitFactory;
@@ -43,18 +35,17 @@ import org.mozilla.focus.fragment.BrowserFragment;
 import org.mozilla.focus.fragment.HomeFragment;
 import org.mozilla.focus.fragment.NewSettingsFragment;
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity;
+import org.mozilla.focus.menu.drawer.DrawerManager;
 import org.mozilla.focus.session.Session;
 import org.mozilla.focus.session.SessionManager;
 import org.mozilla.focus.session.Source;
-import org.mozilla.focus.telemetry.MenuAppNavButton;
-import org.mozilla.focus.telemetry.MenuBrowserNavButton;
+import org.mozilla.focus.telemetry.MenuNavButton;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.telemetry.UrlTextInputLocation;
 import org.mozilla.focus.utils.Direction;
 import org.mozilla.focus.utils.OnUrlEnteredListener;
 import org.mozilla.focus.utils.SafeIntent;
 import org.mozilla.focus.utils.Settings;
-import org.mozilla.focus.utils.ThreadUtils;
 import org.mozilla.focus.utils.UrlUtils;
 import org.mozilla.focus.utils.ViewUtils;
 import org.mozilla.focus.web.IWebView;
@@ -63,8 +54,7 @@ import org.mozilla.focus.widget.InlineAutocompleteEditText;
 
 import java.util.List;
 
-
-public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlEnteredListener, View.OnClickListener {
+public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlEnteredListener, DrawerManager.NavigationCallback {
 
     public static final String ACTION_ERASE = "erase";
     public static final String ACTION_OPEN = "open";
@@ -79,19 +69,12 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private final SessionManager sessionManager;
     private final UrlAutoCompleteFilter drawerUrlAutoCompleteFilter = new UrlAutoCompleteFilter();
 
-    private DrawerLayout drawer;
-    private NavigationView fragmentNavigationBar;
+    private DrawerManager drawerManager;
     private View fragmentContainer;
-    private InlineAutocompleteEditText drawerUrlInput;
     private View hintNavigationBar;
 
-    private ImageButton drawerRefresh;
-    private ImageButton drawerForward;
-    private ImageButton drawerBack;
-    private Switch drawerTrackingProtectionSwitch;
     private ImageView hintSettings;
     private LinearLayout customNavItem;
-    private boolean isDrawerOpen = false;
     private boolean isCursorEnabled = true;
 
     private final AccessibilityManager.TouchExplorationStateChangeListener voiceViewStateChangeListener = new AccessibilityManager.TouchExplorationStateChangeListener() {
@@ -130,145 +113,19 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         setContentView(R.layout.activity_main);
 
         fragmentContainer = findViewById(R.id.container);
-        drawer = findViewById(R.id.drawer_layout);
+        drawerUrlAutoCompleteFilter.load(getApplicationContext(), true);
+        drawerManager = new DrawerManager((DrawerLayout) findViewById(R.id.drawer_layout), drawerUrlAutoCompleteFilter);
+        drawerManager.setNavigationCallback(this);
+
         hintNavigationBar = findViewById(R.id.hint_navigation_bar);
-        drawerRefresh = findViewById(R.id.drawer_refresh_button);
-        drawerRefresh.setOnClickListener(this);
-        drawerForward = findViewById(R.id.drawer_forward_button);
-        drawerForward.setOnClickListener(this);
-        drawerBack = findViewById(R.id.drawer_back_button);
-        drawerBack.setOnClickListener(this);
-        drawerTrackingProtectionSwitch = findViewById(R.id.tracking_protection_switch);
-
-        // setChecked must be called before we add the listener, otherwise the listener will fired when we
-        // call setChecked this first time. In particular, this would make telemetry inaccurate.
-        final boolean trackingProtectionEnabled = Settings.getInstance(this).isBlockingEnabled();
-        drawerTrackingProtectionSwitch.setChecked(trackingProtectionEnabled);
-        setTrackingProtectionSwitchOn(trackingProtectionEnabled);
-        drawerTrackingProtectionSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Settings.getInstance(MainActivity.this).setBlockingEnabled(b);
-                setTrackingProtectionSwitchOn(b);
-                TelemetryWrapper.turboModeSwitchEvent(b);
-
-                ThreadUtils.postToMainThreadDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        final BrowserFragment browserFragment = (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-                        if (browserFragment != null) {
-                            browserFragment.reload();
-                        }
-                        drawer.closeDrawer(GravityCompat.START);
-                    }
-                }, /* Switch.THUMB_ANIMATION_DURATION */ 250);
-            }
-        });
-
         hintSettings = findViewById(R.id.hint_settings);
         hintSettings.setImageResource(R.drawable.ic_settings);
-
-        // todo: remove amiguity between navigation bars.
-        fragmentNavigationBar = findViewById(R.id.fragment_navigation);
-        fragmentNavigationBar.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
-                final MenuAppNavButton button;
-                switch (item.getItemId()) {
-                    case R.id.drawer_home:
-                        button = MenuAppNavButton.HOME;
-                        showHomeScreen();
-                        break;
-
-                    case R.id.drawer_settings:
-                        button = MenuAppNavButton.SETTINGS;
-                        showSettingsScreen();
-                        break;
-
-                    default:
-                        return false;
-                }
-
-                TelemetryWrapper.menuAppNavEvent(button);
-                drawer.closeDrawer(GravityCompat.START);
-                return true;
-            }
-        });
-        drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
-            @Override
-            public void onDrawerOpened(final View drawerView) {
-                findViewById(R.id.urlView).requestFocus();
-                isDrawerOpen = true;
-
-                // Stop cursor movement upon drawer opening
-                // Need to fix follow-up issue https://github.com/mozilla-mobile/focus-video/issues/219
-                final BrowserFragment browserFragment = (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-                if (browserFragment != null) {
-                    browserFragment.stopMoving(Direction.DOWN);
-                    browserFragment.stopMoving(Direction.LEFT);
-                    browserFragment.stopMoving(Direction.RIGHT);
-                    browserFragment.stopMoving(Direction.UP);
-                }
-
-                TelemetryWrapper.drawerShowHideEvent(true);
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                isDrawerOpen = false;
-
-                // If you open and close the menu on youtube, dpad navigation stops working for an unknown reason.
-                // One workaround is to reload the page, which we do here.
-                final BrowserFragment browserFragment = (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-                if (browserFragment != null && browserFragment.isVisible() && browserFragment.getUrl().contains("youtube.com/tv")) {
-                    browserFragment.reload();
-                    isReloadingForYoutubeDrawerClosed = true;
-                }
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-                updateDrawerNavUI();
-            }
-        });
-
         hintNavigationBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(final View v, final boolean hasFocus) {
                 if (hasFocus) {
-                    drawer.openDrawer(GravityCompat.START);
-                }
-            }
-        });
-
-        drawerUrlInput = findViewById(R.id.urlView);
-        drawerUrlInput.setImeOptions(drawerUrlInput.getImeOptions() | ViewUtils.IME_FLAG_NO_PERSONALIZED_LEARNING);
-        drawerUrlInput.setOnCommitListener(new InlineAutocompleteEditText.OnCommitListener() {
-            @Override
-            public void onCommit() {
-                final String userInput = drawerUrlInput.getText().toString();
-                if (!TextUtils.isEmpty(userInput)) {
-                    // getLastAutocompleteResult must be called before closeDrawer: closeDrawer clears the text input,
-                    // which clears the last autocomplete result.
-                    onTextInputUrlEntered(userInput, drawerUrlInput.getLastAutocompleteResult(), UrlTextInputLocation.MENU);
-                    drawer.closeDrawer(GravityCompat.START);
-                }
-            }
-        });
-        drawerUrlInput.setOnFilterListener(new InlineAutocompleteEditText.OnFilterListener() {
-            @Override
-            public void onFilter(final String searchText, final InlineAutocompleteEditText view) {
-                drawerUrlAutoCompleteFilter.onFilter(searchText, view);
-            }
-        });
-
-        drawerUrlInput.setOnBackPressedListener(new InlineAutocompleteEditText.OnBackPressedListener() {
-            @Override
-            public void onBackPressed() {
-                if (isDrawerOpen) {
-                    drawer.requestFocus();
-                    drawerUrlInput.requestFocus();
+                    // TODO: Is this always correct?
+                    drawerManager.toggleDrawerByUser();
                 }
             }
         });
@@ -303,14 +160,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         WebViewProvider.preload(this);
     }
 
-    private void setTrackingProtectionSwitchOn(boolean isEnabled) {
-        if (isEnabled) {
-            drawerTrackingProtectionSwitch.setAlpha(1f);
-        } else {
-            drawerTrackingProtectionSwitch.setAlpha(.6f);
-        }
-    }
-
     private void updateForVoiceView(final boolean isVoiceViewEnabled) {
         // The user can turn on/off VoiceView, at which point we may want to change the cursor visibility.
         updateCursorState();
@@ -335,87 +184,55 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     }
 
     @Override
-    public void onClick(View view) {
+    public void onNavigationEvent(@NotNull MenuNavButton event) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final BrowserFragment fragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
         if (fragment == null || !fragment.isVisible()) {
             return;
         }
 
-        final MenuBrowserNavButton navButton;
-        switch (view.getId()) {
-            case R.id.drawer_refresh_button:
-                navButton = MenuBrowserNavButton.REFRESH;
-                fragment.reload();
-                break;
-            case R.id.drawer_back_button:
-                navButton = MenuBrowserNavButton.BACK;
+        switch (event) {
+            case BACK:
                 if (fragment.canGoBack()) {
                     fragment.goBack();
                 }
                 break;
-            case R.id.drawer_forward_button:
-                navButton = MenuBrowserNavButton.FORWARD;
+            case FORWARD:
                 if (fragment.canGoForward()) {
                     fragment.goForward();
                 }
                 break;
+            case REFRESH:
+                fragment.reload();
+                break;
+            case HOME:
+                showHomeScreen();
+                break;
+            case SETTINGS:
+                showSettingsScreen();
+                break;
             default:
-                // Return so that we don't try to close the drawer
-                return;
+                break;
         }
 
-        TelemetryWrapper.menuBrowserNavEvent(navButton);
-        drawer.closeDrawer(GravityCompat.START);
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
-            // Duplicates logic in toggleDrawer but since we only want to record telemetry for user input,
-            // we can't put this inside toggleDrawer, which could be used internally.
-            //
-            // We record the drawer open telemetry elsewhere.
-            if (isDrawerOpen) {
-                TelemetryWrapper.drawerShowHideEvent(false);
-            }
-            toggleDrawer();
+            drawerManager.toggleDrawerByUser();
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
 
-    private void toggleDrawer() {
-        updateDrawerNavUI();
-
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            drawer.openDrawer(GravityCompat.START);
-        }
-    }
-    
+    // TODO: Provide a way to get these values from BrowserFragment
     private void updateDrawerNavUI() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
         if (customNavItem.getVisibility() == View.VISIBLE && browserFragment != null && browserFragment.isVisible()) {
-            drawerForward.setFocusable(browserFragment.canGoForward());
-            drawerForward.setColorFilter((browserFragment.canGoForward() ? Color.WHITE : ContextCompat.getColor(this, R.color.colorTextInactive)), android.graphics.PorterDuff.Mode.SRC_IN);
-            drawerBack.setColorFilter((browserFragment.canGoBack() ? Color.WHITE : ContextCompat.getColor(this, R.color.colorTextInactive)), android.graphics.PorterDuff.Mode.SRC_IN);
-            drawerBack.setFocusable(browserFragment.canGoBack());
-            drawerUrlInput.setText(browserFragment.getUrl());
-            drawerRefresh.setFocusable(true);
-            drawerRefresh.setColorFilter(Color.WHITE);
+            drawerManager.updateDrawerUIState(browserFragment.getUrl(), browserFragment.canGoBack(), browserFragment.canGoForward(), true);
         } else {
-            drawerForward.setFocusable(false);
-            drawerForward.setColorFilter(ContextCompat.getColor(this, R.color.colorTextInactive), android.graphics.PorterDuff.Mode.SRC_IN);
-            drawerBack.setColorFilter(ContextCompat.getColor(this, R.color.colorTextInactive), android.graphics.PorterDuff.Mode.SRC_IN);
-            drawerBack.setFocusable(false);
-            drawerRefresh.setFocusable(false);
-            drawerRefresh.setColorFilter(ContextCompat.getColor(this, R.color.colorTextInactive), android.graphics.PorterDuff.Mode.SRC_IN);
-        }
-        final HomeFragment homeFragment = (HomeFragment) fragmentManager.findFragmentByTag (HomeFragment.FRAGMENT_TAG);
-        if (homeFragment != null && homeFragment.isVisible()) {
-            drawerUrlInput.setText("");
+            drawerManager.updateDrawerUIState("", false, false, false);
         }
     }
 
@@ -435,8 +252,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
         }
-
-        drawerUrlAutoCompleteFilter.load(getApplicationContext(), /* using kotlin default value */ true);
     }
 
     @Override
@@ -528,7 +343,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         if (requestCode == ONBOARDING_REQ_CODE) {
             if (resultCode == RESULT_OK) {
                 // We don't need to check the result because it is only RESULT_OK in one case.
-                drawerTrackingProtectionSwitch.setChecked(false);
+                drawerManager.turnOffTrackingProtectionFromOnboarding();
             }
         }
     }
@@ -581,9 +396,9 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
         // todo: homefragment?
 
-        if (isDrawerOpen) {
-            drawer.closeDrawer(GravityCompat.START);
-            TelemetryWrapper.drawerShowHideEvent(false);
+        // TODO: Add key event handling into DrawerManager, in key event chain
+        if (drawerManager.isDrawerOpen()) {
+            drawerManager.toggleDrawerByUser();
             return;
         }
 
@@ -706,12 +521,12 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         // - We're on youtube (i.e. the cursor is disabled).
         // - The drawer isn't open
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && browserFragment != null && browserFragment.isVisible() &&
-                browserFragment.getUrl().contains("youtube.com/tv") && !isDrawerOpen) {
+                browserFragment.getUrl().contains("youtube.com/tv") && !drawerManager.isDrawerOpen()) {
             KeyEvent keyEvent = new KeyEvent(event.getAction(), KeyEvent.KEYCODE_ESCAPE);
             dispatchKeyEvent(keyEvent);
             return true;
         }
-        if (browserFragment == null || !browserFragment.isVisible() || isDrawerOpen || !isCursorEnabled) {
+        if (browserFragment == null || !browserFragment.isVisible() || drawerManager.isDrawerOpen() || !isCursorEnabled) {
             return super.dispatchKeyEvent(event);
         }
 
