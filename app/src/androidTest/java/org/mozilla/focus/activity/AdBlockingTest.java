@@ -5,9 +5,6 @@
 
 package org.mozilla.focus.activity;
 
-import android.content.Context;
-import android.preference.PreferenceManager;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.Suppress;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.uiautomator.UiObject;

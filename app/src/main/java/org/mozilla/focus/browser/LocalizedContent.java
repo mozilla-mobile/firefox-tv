@@ -12,7 +12,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
-import android.webkit.WebView;
 
 import com.amazon.android.webkit.AmazonWebView;
 

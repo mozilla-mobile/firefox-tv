@@ -16,7 +16,6 @@ import android.support.annotation.Nullable;
 import android.webkit.WebView;
 
 import org.mozilla.focus.telemetry.TelemetryWrapper;
-import org.mozilla.focus.utils.AppConstants;
 import org.mozilla.focus.utils.Browsers;
 
 /**

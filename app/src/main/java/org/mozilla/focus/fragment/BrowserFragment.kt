@@ -7,10 +7,7 @@ package org.mozilla.focus.fragment
 import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.text.TextUtils
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.android.synthetic.main.fragment_browser.view.*

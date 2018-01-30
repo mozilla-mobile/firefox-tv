@@ -4,10 +4,7 @@
 
 package org.mozilla.focus.activity.helpers;
 
-import android.content.Context;
-import android.preference.PreferenceManager;
 import android.support.annotation.CallSuper;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 
 import org.mozilla.focus.activity.MainActivity;

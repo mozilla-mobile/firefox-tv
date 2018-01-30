@@ -129,7 +129,9 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         mFilterListener = listener;
     }
 
-    public void setOnBackPressedListener(OnBackPressedListener listener) { mOnBackPressedListener = listener; }
+    public void setOnBackPressedListener(OnBackPressedListener listener) {
+        mOnBackPressedListener = listener;
+    }
 
     void setOnSearchStateChangeListener(OnSearchStateChangeListener listener) {
         mSearchStateChangeListener = listener;

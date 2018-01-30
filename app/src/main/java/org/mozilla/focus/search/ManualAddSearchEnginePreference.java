@@ -15,8 +15,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-
 import android.widget.ProgressBar;
+
 import org.mozilla.focus.R;
 import org.mozilla.focus.utils.UrlUtils;
 

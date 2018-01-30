@@ -6,15 +6,14 @@
 package org.mozilla.focus.activity;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
-
 import android.util.Log;
+
 import junit.framework.Assert;
 
 import org.junit.After;

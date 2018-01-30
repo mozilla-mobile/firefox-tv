@@ -34,6 +34,7 @@ import android.widget.Switch;
 
 import com.amazon.android.webkit.AmazonWebKitFactories;
 import com.amazon.android.webkit.AmazonWebKitFactory;
+
 import org.jetbrains.annotations.NotNull;
 import org.mozilla.focus.R;
 import org.mozilla.focus.architecture.NonNullObserver;
@@ -393,7 +394,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             drawer.openDrawer(GravityCompat.START);
         }
     }
-    
     private void updateDrawerNavUI() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
@@ -661,7 +661,9 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             searchTerms = urlStr.trim();
         }
 
-        if (sessionManager.hasSession()) sessionManager.getCurrentSession().setSearchTerms(searchTerms); // todo: correct?
+        if (sessionManager.hasSession()) {
+            sessionManager.getCurrentSession().setSearchTerms(searchTerms); // todo: correct?
+        }
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -689,8 +691,12 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
         if (isTextInput) {
             // Non-text input events are handled at the source, e.g. home tile click events.
-            if (autocompleteResult == null) { throw new IllegalArgumentException("Expected non-null autocomplete result for text input"); }
-            if (inputLocation == null) { throw new IllegalArgumentException("Expected non-null input location for text input"); }
+            if (autocompleteResult == null) {
+                throw new IllegalArgumentException("Expected non-null autocomplete result for text input");
+            }
+            if (inputLocation == null) {
+                throw new IllegalArgumentException("Expected non-null input location for text input");
+            }
 
             TelemetryWrapper.urlBarEvent(!isSearch, autocompleteResult, inputLocation);
         }

@@ -16,6 +16,15 @@ import org.mozilla.focus.widget.InlineAutocompleteEditText
 import org.mozilla.focus.widget.InlineAutocompleteEditText.AutocompleteResult
 import java.io.IOException
 import java.util.Locale
+import kotlin.collections.LinkedHashSet
+import kotlin.collections.List
+import kotlin.collections.MutableSet
+import kotlin.collections.Set
+import kotlin.collections.addAll
+import kotlin.collections.asSequence
+import kotlin.collections.emptyList
+import kotlin.collections.forEach
+import kotlin.collections.toList
 
 class UrlAutoCompleteFilter : InlineAutocompleteEditText.OnFilterListener {
     companion object {

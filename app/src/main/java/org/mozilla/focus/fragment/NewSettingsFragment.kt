@@ -8,14 +8,12 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat.startActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityManager
 import kotlinx.android.synthetic.main.fragment_new_settings.*
 import org.mozilla.focus.R
-import org.mozilla.focus.R.id.*
 import org.mozilla.focus.activity.InfoActivity
 import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.ext.getAccessibilityManager

@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;

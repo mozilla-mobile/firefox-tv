@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.webkit.WebView;
 
 import com.amazon.android.webkit.AmazonWebView;
 
