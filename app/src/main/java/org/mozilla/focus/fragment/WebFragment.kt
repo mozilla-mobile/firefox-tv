@@ -5,23 +5,16 @@
 
 package org.mozilla.focus.fragment
 
-import android.content.Context
-import android.content.res.Configuration
-import android.content.res.Resources
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
-
 import org.mozilla.focus.R
 import org.mozilla.focus.locale.LocaleAwareFragment
 import org.mozilla.focus.locale.LocaleManager
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.web.IWebView
-import java.security.AccessController.getContext
-
 import java.util.Locale
 
 /**
@@ -30,7 +23,7 @@ import java.util.Locale
 abstract class WebFragment : LocaleAwareFragment() {
     var webView: IWebView? = null
         get() = if (isWebViewAvailable) field else null
-    private var isWebViewAvailable: Boolean = false
+    private var isWebViewAvailable = false
 
     /** Get the initial URL to load after the view has been created. */
     abstract val initialUrl: String
@@ -41,7 +34,6 @@ abstract class WebFragment : LocaleAwareFragment() {
      * with the id set to "webview".
      */
     abstract fun inflateLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View
-
     abstract fun createCallback(): IWebView.Callback
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -52,16 +44,17 @@ abstract class WebFragment : LocaleAwareFragment() {
             setBlockingEnabled(session.isBlockingEnabled)
         }
         isWebViewAvailable = true
-
-        if (!session.hasWebViewState()) {
-            if (!initialUrl.isEmpty()) {
-                webView!!.loadUrl(initialUrl)
-            }
-        } else {
-            webView!!.restoreWebViewState(session)
-        }
+        restoreWebViewOrLoadInitialUrl(webView!!)
 
         return view
+    }
+
+    private fun restoreWebViewOrLoadInitialUrl(webView: IWebView) {
+        if (session.hasWebViewState()) {
+            webView.restoreWebViewState(session)
+        } else if (!initialUrl.isEmpty()) {
+            webView.loadUrl(initialUrl)
+        }
     }
 
     override fun applyLocale() {
@@ -70,13 +63,14 @@ abstract class WebFragment : LocaleAwareFragment() {
         if (!localeManager.isMirroringSystemLocale(context)) {
             val currentLocale = localeManager.getCurrentLocale(context)
             Locale.setDefault(currentLocale)
+
             val resources = context.resources
             val config = resources.configuration
             config.setLocale(currentLocale)
-            context.resources.updateConfiguration(config, null)
+            resources.updateConfiguration(config, null)
         }
         // We create and destroy a new WebView here to force the internal state of WebView to know
-        // about the new language. See issue #666.
+        // about the new language. See focus-android issue #666.
         val unneeded = WebView(getContext())
         unneeded.destroy()
     }
