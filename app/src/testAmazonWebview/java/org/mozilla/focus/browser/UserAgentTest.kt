@@ -5,19 +5,15 @@
 package org.mozilla.focus.browser
 
 import android.os.Build
-import android.webkit.WebSettings
-
 import com.amazon.android.webkit.AmazonWebSettings
-
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mozilla.focus.web.WebViewProvider
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
+import org.mozilla.focus.BuildConfig
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
-
-import org.junit.Assert.assertEquals
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.`when`
 
 @RunWith(RobolectricTestRunner::class)
 class UserAgentTest {
@@ -63,7 +59,7 @@ class UserAgentTest {
         val testSettings = mock(AmazonWebSettings::class.java)
         `when`(testSettings.userAgentString).thenReturn("Mozilla/5.0 (Linux; U; Android 4.0.3; ko-kr; LG-L160L Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30")
 
-        assertEquals("Mozilla/5.0 (Linux; Android " + Build.VERSION.RELEASE + ") AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30 fakeappname/null",
+        assertEquals("Mozilla/5.0 (Linux; Android " + Build.VERSION.RELEASE + ") AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30 fakeappname/${BuildConfig.VERSION_NAME}",
                 UserAgent.buildUserAgentString(RuntimeEnvironment.application, testSettings, "fakeappname"))
     }
 }
