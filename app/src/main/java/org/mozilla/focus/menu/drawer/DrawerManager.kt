@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.custom_drawer_item.view.*
 
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
-import org.mozilla.focus.telemetry.MenuBrowserNavButton
+import org.mozilla.focus.telemetry.MenuNavButton
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.ViewUtils
 import org.mozilla.focus.widget.InlineAutocompleteEditText
@@ -43,9 +43,9 @@ class DrawerManager(drawerLayout: DrawerLayout, drawerUrlAutoCompleteFilter: Url
 
     private val navigationClickListener = View.OnClickListener { view ->
         val navAction = when (view.id) {
-            R.id.drawer_back_button -> MenuBrowserNavButton.BACK
-            R.id.drawer_forward_button -> MenuBrowserNavButton.FORWARD
-            R.id.drawer_refresh_button -> MenuBrowserNavButton.REFRESH
+            R.id.drawer_back_button -> MenuNavButton.BACK
+            R.id.drawer_forward_button -> MenuNavButton.FORWARD
+            R.id.drawer_refresh_button -> MenuNavButton.REFRESH
             else -> throw IllegalStateException("Unknown MenuBrowserNavButton")
         }
         sendBrowserAction(navAction)
@@ -78,9 +78,9 @@ class DrawerManager(drawerLayout: DrawerLayout, drawerUrlAutoCompleteFilter: Url
         trackingProtectionSwitch.isChecked = false
     }
 
-    fun sendBrowserAction(action: MenuBrowserNavButton) {
+    fun sendBrowserAction(action: MenuNavButton) {
         // TODO: Send event to MainActivity
-        TelemetryWrapper.menuBrowserNavEvent(action)
+        TelemetryWrapper.menuNavEvent(action)
         closeDrawerAutomatically()
     }
 

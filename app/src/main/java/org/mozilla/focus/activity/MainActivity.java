@@ -41,8 +41,7 @@ import org.mozilla.focus.menu.drawer.DrawerManager;
 import org.mozilla.focus.session.Session;
 import org.mozilla.focus.session.SessionManager;
 import org.mozilla.focus.session.Source;
-import org.mozilla.focus.telemetry.MenuAppNavButton;
-import org.mozilla.focus.telemetry.MenuBrowserNavButton;
+import org.mozilla.focus.telemetry.MenuNavButton;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.telemetry.UrlTextInputLocation;
 import org.mozilla.focus.utils.Direction;
@@ -128,15 +127,15 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         fragmentNavigationBar.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
-                final MenuAppNavButton button;
+                final MenuNavButton button;
                 switch (item.getItemId()) {
                     case R.id.drawer_home:
-                        button = MenuAppNavButton.HOME;
+                        button = MenuNavButton.HOME;
                         showHomeScreen();
                         break;
 
                     case R.id.drawer_settings:
-                        button = MenuAppNavButton.SETTINGS;
+                        button = MenuNavButton.SETTINGS;
                         showSettingsScreen();
                         break;
 
@@ -144,7 +143,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                         return false;
                 }
 
-                TelemetryWrapper.menuAppNavEvent(button);
+                TelemetryWrapper.menuNavEvent(button);
                 drawerManager.closeDrawerAutomatically();
                 return true;
             }
@@ -222,20 +221,20 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         }
 
         // TODO: handle NAV EVENTS from DrawerManager
-        final MenuBrowserNavButton navButton;
+        final MenuNavButton navButton;
         switch (view.getId()) {
             case R.id.drawer_refresh_button:
-                navButton = MenuBrowserNavButton.REFRESH;
+                navButton = MenuNavButton.REFRESH;
                 fragment.reload();
                 break;
             case R.id.drawer_back_button:
-                navButton = MenuBrowserNavButton.BACK;
+                navButton = MenuNavButton.BACK;
                 if (fragment.canGoBack()) {
                     fragment.goBack();
                 }
                 break;
             case R.id.drawer_forward_button:
-                navButton = MenuBrowserNavButton.FORWARD;
+                navButton = MenuNavButton.FORWARD;
                 if (fragment.canGoForward()) {
                     fragment.goForward();
                 }
