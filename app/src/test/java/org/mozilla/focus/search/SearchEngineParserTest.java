@@ -84,6 +84,8 @@ public class SearchEngineParserTest {
     }
 
     private static File getBasePath() {
+        // Ordinarily, we could use RuntimeEnvironment.application to get the resources but
+        // this appears to run before that is initialized so we use the class loader instead.
         final ClassLoader classLoader = SearchEngineParserTest.class.getClassLoader();
         return new File(classLoader.getResource("search").getFile());
     }
