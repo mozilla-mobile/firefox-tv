@@ -7,7 +7,12 @@ package org.mozilla.focus.autocomplete
 import android.app.Fragment
 import android.content.Context
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.Menu
+import android.view.MenuItem
 import kotlinx.android.synthetic.main.fragment_autocomplete_add_domain.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch

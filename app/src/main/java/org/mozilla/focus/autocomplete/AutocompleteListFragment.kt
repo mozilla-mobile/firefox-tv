@@ -12,8 +12,14 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.support.v7.widget.helper.ItemTouchHelper.SimpleCallback
-import android.view.*
 import android.widget.CheckBox
+import android.view.LayoutInflater
+import android.view.MenuInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.Menu
+import android.view.MenuItem
+import android.view.MotionEvent
 import android.widget.CompoundButton
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_autocomplete_customdomains.*
@@ -24,7 +30,7 @@ import kotlinx.coroutines.experimental.launch
 import org.mozilla.focus.R
 import org.mozilla.focus.settings.SettingsFragment
 import org.mozilla.focus.telemetry.TelemetryWrapper
-import java.util.*
+import java.util.Collections
 
 /**
  * Fragment showing settings UI listing all custom autocomplete domains entered by the user.

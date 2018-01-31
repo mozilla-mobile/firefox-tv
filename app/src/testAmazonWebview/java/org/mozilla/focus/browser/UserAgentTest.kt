@@ -45,7 +45,6 @@ class UserAgentTest {
         val chromelessImaginaryKit = "Mozilla/5.0 (Linux) ImaginaryKit/-10 (KHTML, like Gecko) Version/4.0 Imaginary/37.0.0.0 Mobile Safari/537.36"
         assertEquals("ImaginaryKit/-10 (KHTML, like Gecko) Version/4.0 Imaginary/37.0.0.0 Mobile Safari/537.36 " + focusToken,
                 UserAgent.getUABrowserString(chromelessImaginaryKit, focusToken))
-
     }
 
     @Test

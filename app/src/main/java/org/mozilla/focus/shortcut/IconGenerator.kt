@@ -5,7 +5,11 @@
 package org.mozilla.focus.shortcut
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.support.v4.content.ContextCompat

@@ -37,14 +37,14 @@ class OnboardingActivity : AppCompatActivity() {
         PreferenceManager.getDefaultSharedPreferences(this)
                 .edit()
                 .putBoolean(IWebView.TRACKING_PROTECTION_ENABLED_PREF, turboModeEnabled)
-                .apply();
+                .apply()
     }
 
     private fun setOnboardShown() {
         PreferenceManager.getDefaultSharedPreferences(this)
                 .edit()
                 .putBoolean(ONBOARD_SHOWN_PREF, true)
-                .apply();
+                .apply()
     }
 
     companion object {
