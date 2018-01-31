@@ -26,6 +26,7 @@ interface IWebView {
     fun onResume()
 
     fun loadUrl(url: String)
+    fun executeJS(js: String)
     fun stopLoading()
     fun reload()
 

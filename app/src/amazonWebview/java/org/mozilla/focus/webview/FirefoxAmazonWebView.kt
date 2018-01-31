@@ -99,6 +99,10 @@ internal class FirefoxAmazonWebView(
         client.notifyCurrentURL(url)
     }
 
+    override fun executeJS(js: String) {
+        super.loadUrl("javascript:$js")
+    }
+
     override fun cleanup() {
         this.deleteData()
     }
