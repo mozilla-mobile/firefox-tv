@@ -29,7 +29,7 @@ private const val COL_COUNT = 5
 
 /** The home fragment which displays the navigation tiles of the app. */
 class HomeFragment : Fragment() {
-    lateinit var urlBar: LinearLayout;
+    lateinit var urlBar: LinearLayout
     var onUrlEnteredListener = object : OnUrlEnteredListener {} // default impl does nothing.
     val urlAutoCompleteFilter = UrlAutoCompleteFilter()
 
@@ -84,7 +84,7 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener) :
         RecyclerView.Adapter<TileViewHolder>() {
 
     val tiles = listOf(
-            HomeTile("https://youtube.com/tv", R.string.tile_youtube_tv,R.drawable.tile_youtube),
+            HomeTile("https://youtube.com/tv", R.string.tile_youtube_tv, R.drawable.tile_youtube),
             HomeTile("https://www.google.com/search?tbm=vid", R.string.tile_google_video_search, R.drawable.tile_google),
             HomeTile("http://imdb.com", R.string.tile_imdb, R.drawable.tile_imdb),
             HomeTile("https://www.rottentomatoes.com", R.string.tile_rottentomatoes, R.drawable.tile_rotten_tomatoes),

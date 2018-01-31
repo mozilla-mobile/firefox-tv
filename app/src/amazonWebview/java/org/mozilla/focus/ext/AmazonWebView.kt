@@ -12,22 +12,22 @@ import com.amazon.android.webkit.AmazonWebView
 
 @Suppress("DEPRECATION") // To be safe, we'll use delete methods as long as they're there.
 fun AmazonWebView.deleteData() {
-    clearFormData();
-    clearHistory();
-    clearMatches();
-    clearSslPreferences();
-    clearCache(true);
+    clearFormData()
+    clearHistory()
+    clearMatches()
+    clearSslPreferences()
+    clearCache(true)
 
     // We don't care about the callback - we just want to make sure cookies are gone
-    CookieManager.getInstance().removeAllCookies(null);
+    CookieManager.getInstance().removeAllCookies(null)
 
-    WebStorage.getInstance().deleteAllData();
+    WebStorage.getInstance().deleteAllData()
 
-    val webViewDatabase = WebViewDatabase.getInstance(context);
-    webViewDatabase.clearFormData(); // Unclear how this differs from WebView.clearFormData()
-    webViewDatabase.clearHttpAuthUsernamePassword();
+    val webViewDatabase = WebViewDatabase.getInstance(context)
+    webViewDatabase.clearFormData() // Unclear how this differs from WebView.clearFormData()
+    webViewDatabase.clearHttpAuthUsernamePassword()
 
-    deleteContentFromKnownLocations(context);
+    deleteContentFromKnownLocations(context)
 }
 
 private fun deleteContentFromKnownLocations(context: Context) {
