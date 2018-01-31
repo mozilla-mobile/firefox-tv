@@ -12,7 +12,6 @@ apply from: "$project.rootDir/tools/gradle/versionCode.gradle"
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
     defaultConfig {
         applicationId "org.mozilla.tv"
         minSdkVersion 22
@@ -64,6 +63,7 @@ android {
                 includeNoLocationClasses = true
             }
         }
+        unitTests.includeAndroidResources true // for robolectric.
     }
 
     flavorDimensions "engine"
@@ -94,9 +94,9 @@ android {
     sourceSets {
         test {
             resources {
-                // Make the default asset folder available as test resource folder. Robolectric seems
-                // to fail to read assets for our setup. With this we can just read the files directly
-                // and do not need to rely on Robolectric.
+                // Make the default asset folder available as test resource folder. This is only
+                // necessary for SearchEngineParserTest.getBasePath, which access the test resources
+                // before RuntimeEnvironment.application is available.
                 srcDir "${projectDir}/src/main/assets/"
             }
         }
@@ -144,7 +144,7 @@ dependencies {
     geckoCompile(name: 'geckoview-latest', ext: 'aar')
 
     testCompile 'junit:junit:4.12'
-    testCompile "org.robolectric:robolectric:3.5.1"
+    testCompile "org.robolectric:robolectric:3.6.1"
     testCompile 'org.mockito:mockito-core:2.12.0'
 
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
