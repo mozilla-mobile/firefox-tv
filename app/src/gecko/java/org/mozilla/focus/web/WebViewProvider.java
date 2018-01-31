@@ -10,10 +10,13 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mozilla.focus.session.Session;
 import org.mozilla.gecko.GeckoView;
 import org.mozilla.gecko.GeckoViewSettings;
+
+import kotlin.NotImplementedError;
 
 /**
  * WebViewProvider implementation for creating a Gecko based implementation of IWebView.
@@ -103,6 +106,11 @@ public class WebViewProvider {
         public void loadUrl(final String url) {
             currentUrl = url;
             loadUri(currentUrl);
+        }
+
+        @Override
+        public void executeJS(@NotNull String js) {
+            throw new NotImplementedError();
         }
 
         @Override
