@@ -15,7 +15,6 @@ import android.view.accessibility.AccessibilityManager
 import kotlinx.android.synthetic.main.fragment_new_settings.*
 import org.mozilla.focus.R
 import org.mozilla.focus.activity.InfoActivity
-import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.ext.getAccessibilityManager
 import org.mozilla.focus.ext.isVoiceViewEnabled
 import org.mozilla.focus.session.SessionManager
@@ -99,14 +98,6 @@ class NewSettingsFragment : Fragment() {
         val shouldFocus = !context.isVoiceViewEnabled()
         telemetryView.isFocusable = shouldFocus
         if (!shouldFocus) { telemetryView.clearFocus() }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val a = activity
-        if (a is MainActivity) {
-            a.updateHintNavigationVisibility(MainActivity.VideoPlayerState.SETTINGS)
-        }
     }
 
     companion object {
