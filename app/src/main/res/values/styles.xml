@@ -97,4 +97,10 @@
     <style name="SwitchStyle" parent="AppTheme">
        <item name="colorAccent">@android:color/white</item>
     </style>
+
+    <style name="NavigationButton" parent="Widget.AppCompat.ImageButton">
+        <item name="android:tint">@color/colorTextInactive</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+    </style>
 </resources>

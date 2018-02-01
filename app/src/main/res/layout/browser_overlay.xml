@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/browser_overlay_background"
+    android:orientation="vertical"
+    android:paddingStart="20dp">
+
+    <LinearLayout
+        android:id="@+id/topButtonRow"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/navButtonBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/NavigationButton"
+            android:src="@drawable/ic_back"
+            android:contentDescription="@string/content_description_back"/>
+
+        <ImageButton
+            android:id="@+id/navButtonForward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/NavigationButton"
+            android:src="@drawable/ic_forward"
+            android:contentDescription="@string/content_description_forward"/>
+
+        <ImageButton
+            android:id="@+id/navButtonReload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/NavigationButton"
+            android:src="@drawable/ic_refresh"
+            android:contentDescription="@string/content_description_reload"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+        <ImageButton
+            android:id="@+id/navButtonHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/NavigationButton"
+            android:src="@drawable/ic_home"
+            android:contentDescription="@string/menu_drawer_home"/>
+
+        <ImageButton
+            android:id="@+id/navButtonSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/NavigationButton"
+            android:src="@drawable/ic_settings"
+            android:contentDescription="@string/menu_settings"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/NavigationButton"
+            android:src="@drawable/ic_search"
+            android:importantForAccessibility="no"/>
+
+        <org.mozilla.focus.widget.InlineAutocompleteEditText
+            android:layout_width="400dp"
+            android:layout_height="40dp"
+            android:background="@color/homeUrlBarBackground"
+            android:hint="@string/urlbar_hint"
+            android:imeOptions="actionGo|flagNoExtractUi|flagNoFullscreen"
+            android:paddingStart="10dp"
+            android:inputType="textUri"
+            android:lines="1"
+            android:selectAllOnFocus="true"
+            android:textCursorDrawable="@drawable/cursor"
+            android:importantForAutofill="no"/>
+    </LinearLayout>
+
+</LinearLayout>
