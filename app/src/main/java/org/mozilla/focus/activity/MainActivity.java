@@ -28,7 +28,6 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 
@@ -84,13 +83,11 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private NavigationView fragmentNavigationBar;
     private View fragmentContainer;
     private InlineAutocompleteEditText drawerUrlInput;
-    private View hintNavigationBar;
 
     private ImageButton drawerRefresh;
     private ImageButton drawerForward;
     private ImageButton drawerBack;
     private Switch drawerTrackingProtectionSwitch;
-    private ImageView hintSettings;
     private LinearLayout customNavItem;
     private boolean isDrawerOpen = false;
     private boolean isCursorEnabled = true;
@@ -132,7 +129,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
         fragmentContainer = findViewById(R.id.container);
         drawer = findViewById(R.id.drawer_layout);
-        hintNavigationBar = findViewById(R.id.hint_navigation_bar);
         drawerRefresh = findViewById(R.id.drawer_refresh_button);
         drawerRefresh.setOnClickListener(this);
         drawerForward = findViewById(R.id.drawer_forward_button);
@@ -165,9 +161,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 }, /* Switch.THUMB_ANIMATION_DURATION */ 250);
             }
         });
-
-        hintSettings = findViewById(R.id.hint_settings);
-        hintSettings.setImageResource(R.drawable.ic_settings);
 
         // todo: remove amiguity between navigation bars.
         fragmentNavigationBar = findViewById(R.id.fragment_navigation);
@@ -231,15 +224,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             @Override
             public void onDrawerStateChanged(int newState) {
                 updateDrawerNavUI();
-            }
-        });
-
-        hintNavigationBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(final View v, final boolean hasFocus) {
-                if (hasFocus) {
-                    drawer.openDrawer(GravityCompat.START);
-                }
             }
         });
 
@@ -315,9 +299,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private void updateForVoiceView(final boolean isVoiceViewEnabled) {
         // The user can turn on/off VoiceView, at which point we may want to change the cursor visibility.
         updateCursorState();
-
-        // See declaration of hintNavigationBar in XML for details.
-        hintNavigationBar.setFocusable(!isVoiceViewEnabled);
     }
 
     private void updateCursorState() {
@@ -549,20 +530,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                         BrowserFragment.createForSession(currentSession), BrowserFragment.FRAGMENT_TAG)
                 .addToBackStack(null)
                 .commit();
-    }
-
-    public void updateHintNavigationVisibility(VideoPlayerState state) {
-        switch (state) {
-            case HOME:
-            case SETTINGS:
-                hintNavigationBar.setVisibility(View.VISIBLE);
-                break;
-            case BROWSER:
-                hintNavigationBar.setVisibility(View.GONE);
-                break;
-            default:
-                hintNavigationBar.setVisibility(View.GONE);
-        }
     }
 
     @Override
