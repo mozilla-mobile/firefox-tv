@@ -44,4 +44,7 @@
         android:id="@+id/cursor"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <include android:id="@+id/browserOverlay"
+        layout="@layout/browser_overlay"/>
 </FrameLayout>
