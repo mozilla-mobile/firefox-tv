@@ -91,11 +91,6 @@ class BrowserFragment : WebFragment(), CursorEvent {
         })
     }
 
-    override fun onResume() {
-        super.onResume()
-        (activity as? MainActivity)?.updateHintNavigationVisibility(MainActivity.VideoPlayerState.BROWSER)
-    }
-
     // TODO: if we convert WebFragment to kotlin, these can become abstract properties
     override fun getSession(): Session {
         return session
