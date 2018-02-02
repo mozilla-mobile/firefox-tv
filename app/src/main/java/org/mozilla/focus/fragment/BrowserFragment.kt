@@ -5,18 +5,21 @@
 package org.mozilla.focus.fragment
 
 import android.arch.lifecycle.Observer
+import android.graphics.PointF
 import android.os.Bundle
+import android.support.annotation.UiThread
 import android.text.TextUtils
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.KeyEvent
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.android.synthetic.main.fragment_browser.view.*
 import org.mozilla.focus.R
 import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.architecture.NonNullObserver
+import org.mozilla.focus.browser.CursorViewModel
 import org.mozilla.focus.ext.isVoiceViewEnabled
 import org.mozilla.focus.session.NullSession
 import org.mozilla.focus.session.Session
@@ -28,6 +31,7 @@ import org.mozilla.focus.utils.Direction
 import org.mozilla.focus.utils.Edge
 import org.mozilla.focus.web.IWebView
 import org.mozilla.focus.widget.BrowserNavigationOverlay
+import org.mozilla.focus.widget.Cursor
 import org.mozilla.focus.widget.CursorEvent
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 import org.mozilla.focus.widget.NavigationEvent
@@ -60,7 +64,8 @@ class BrowserFragment : WebFragment(), CursorEvent, BrowserNavigationOverlay.Nav
     private val sessionManager = SessionManager.getInstance()
     private lateinit var session: Session
 
-    val cursorLocation get() = cursor.location
+    private val cursorViewModel = CursorViewModel(simulateTouchEvent = { activity.dispatchTouchEvent(it) })
+
     private val scrollVelocity get() = cursor.speed.toInt() * SCROLL_MULTIPLIER
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -122,7 +127,16 @@ class BrowserFragment : WebFragment(), CursorEvent, BrowserNavigationOverlay.Nav
     override fun inflateLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
             inflater.inflate(R.layout.fragment_browser, container, false).apply {
                 cursor.cursorEvent = this@BrowserFragment
+                connectCursorToViewModel(cursor)
             }
+
+    @UiThread // CursorViewModel.onUpdate requires.
+    private fun connectCursorToViewModel(cursor: Cursor) {
+        cursorViewModel.onUpdate = { x, y -> cursor.updatePosition(x, y) }
+        cursor.onLayout = { width, height ->
+            cursorViewModel.maxBounds = PointF(width.toFloat(), height.toFloat())
+        }
+    }
 
     override fun createCallback() = SessionCallbackProxy(session, BrowserIWebViewCallback(this))
 
@@ -156,6 +170,8 @@ class BrowserFragment : WebFragment(), CursorEvent, BrowserNavigationOverlay.Nav
     fun setBlockingEnabled(enabled: Boolean) = webview?.setBlockingEnabled(enabled)
 
     // --- TODO: CURSOR CODE - MODULARIZE IN #412. --- //
+    fun dispatchKeyEvent(event: KeyEvent) = cursorViewModel.dispatchKeyEvent(event)
+
     /**
      * Gets the current state of the application and updates the cursor state accordingly.
      *
@@ -175,10 +191,6 @@ class BrowserFragment : WebFragment(), CursorEvent, BrowserNavigationOverlay.Nav
                 context != null &&
                 !context.isVoiceViewEnabled() // VoiceView has its own navigation controls.
         activity.setCursorEnabled(enableCursor)
-    }
-
-    fun moveCursor(direction: Direction) {
-        cursor.moveCursor(direction)
     }
 
     fun stopMoving(direction: Direction) {
