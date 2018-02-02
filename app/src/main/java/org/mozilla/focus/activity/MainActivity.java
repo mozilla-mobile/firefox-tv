@@ -469,7 +469,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         }
     }
 
-    private void showHomeScreen() {
+    public void showHomeScreen() {
         // TODO: animations if fragment is found.
         final HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HomeFragment.FRAGMENT_TAG);
         if (homeFragment != null && homeFragment.isVisible()) {
@@ -489,7 +489,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 .commit();
     }
 
-    private void showSettingsScreen() {
+    public void showSettingsScreen() {
         // TODO: animations if fragment is found.
         final NewSettingsFragment settingsFragment = NewSettingsFragment.create();
         getSupportFragmentManager()
