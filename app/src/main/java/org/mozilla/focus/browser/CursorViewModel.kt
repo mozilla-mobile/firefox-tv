@@ -59,8 +59,14 @@ class CursorViewModel(
         @UiThread set(value) {
             field = value
             clampPos(pos, value)
+            if (!isInitialPosSet) {
+                isInitialPosSet = true
+                pos.set(value.x / 2, value.y / 2) // Center.
+                onUpdate(pos.x, pos.y, getScrollVel())
+            }
         }
 
+    private var isInitialPosSet = false
     private val pos = PointF(0f, 0f)
     private var vel = 0f
 

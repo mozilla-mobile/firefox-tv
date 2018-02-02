@@ -38,12 +38,9 @@ class Cursor(context: Context, attrs: AttributeSet) : View(context, attrs) {
         private set
     private val activeDirections = HashSet<Direction>()
 
-    private var isInit: Boolean = false
     private var moving: Boolean = false
 
     init {
-
-        isInit = true
         // create the Paint and set its color
         paint = Paint()
         paint.style = Paint.Style.FILL
@@ -72,8 +69,7 @@ class Cursor(context: Context, attrs: AttributeSet) : View(context, attrs) {
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
 
-        if (changed && isInit) {
-            isInit = false
+        if (changed) {
             onLayout(right, bottom)
         }
     }
