@@ -23,10 +23,13 @@ import org.mozilla.focus.session.Session
 import org.mozilla.focus.session.SessionCallbackProxy
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
+import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.Direction
 import org.mozilla.focus.utils.Edge
 import org.mozilla.focus.web.IWebView
+import org.mozilla.focus.widget.BrowserNavigationOverlay
 import org.mozilla.focus.widget.CursorEvent
+import org.mozilla.focus.widget.InlineAutocompleteEditText
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 private const val SCROLL_MULTIPLIER = 45
@@ -34,7 +37,7 @@ private const val SCROLL_MULTIPLIER = 45
 /**
  * Fragment for displaying the browser UI.
  */
-class BrowserFragment : WebFragment(), CursorEvent {
+class BrowserFragment : WebFragment(), CursorEvent, BrowserNavigationOverlay.NavigationEventHandler {
     companion object {
         const val FRAGMENT_TAG = "browser"
 
@@ -64,6 +67,12 @@ class BrowserFragment : WebFragment(), CursorEvent {
         initSession()
     }
 
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+        view?.browserOverlay?.setNavigationEventHandler(this)
+        return view
+    }
+
     private fun initSession() {
         val sessionUUID = arguments.getString(ARGUMENT_SESSION_UUID)
                 ?: throw IllegalAccessError("No session exists")
@@ -91,11 +100,16 @@ class BrowserFragment : WebFragment(), CursorEvent {
         })
     }
 
-    override fun onResume() {
-        super.onResume()
-        (activity as? MainActivity)?.updateHintNavigationVisibility(MainActivity.VideoPlayerState.BROWSER)
+    override fun onEvent(event: BrowserNavigationOverlay.NavigationEvent, value: String?, autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?) {
+        when (event) {
+            BrowserNavigationOverlay.NavigationEvent.BACK -> if (canGoBack()) goBack()
+            BrowserNavigationOverlay.NavigationEvent.FORWARD -> if (canGoForward()) goForward()
+            BrowserNavigationOverlay.NavigationEvent.RELOAD -> reload()
+            BrowserNavigationOverlay.NavigationEvent.HOME -> (activity as MainActivity).showHomeScreen()
+            BrowserNavigationOverlay.NavigationEvent.SETTINGS -> (activity as MainActivity).showSettingsScreen()
+            BrowserNavigationOverlay.NavigationEvent.LOAD -> (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
+        }
     }
-
     // TODO: if we convert WebFragment to kotlin, these can become abstract properties
     override fun getSession(): Session {
         return session

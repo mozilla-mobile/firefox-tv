@@ -19,7 +19,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_home.*
 import org.mozilla.focus.R
-import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
@@ -48,10 +47,6 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         urlAutoCompleteFilter.load(context)
-        val a = activity
-        if (a is MainActivity) {
-            a.updateHintNavigationVisibility(MainActivity.VideoPlayerState.HOME)
-        }
     }
 
     override fun onAttachFragment(childFragment: Fragment?) {

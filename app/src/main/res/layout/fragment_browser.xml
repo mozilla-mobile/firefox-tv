@@ -44,4 +44,9 @@
         android:id="@+id/cursor"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <org.mozilla.focus.widget.BrowserNavigationOverlay
+        android:id="@+id/browserOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </FrameLayout>

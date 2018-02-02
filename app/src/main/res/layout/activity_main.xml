@@ -21,9 +21,7 @@
         <!-- This view must be specified first so that it's focused first when other views (e.g. menu drawer)
              lose focus. This is important for VoiceTalk: when links are clicked, we must continue to focus
              the WebView, otherwise users in Review Mode will stop having WebView-specific options (like
-             navigating by links).
-
-             We align with parent when missing because the hint navigation bar is sometimes hidden. -->
+             navigating by links). -->
         <LinearLayout
             android:orientation="vertical"
             android:id="@+id/container"
@@ -31,49 +29,9 @@
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_toEndOf="@+id/hint_navigation_bar"
-            android:layout_alignWithParentIfMissing="true"
+            android:layout_alignParentStart="true"
             android:focusable="true"
             android:descendantFocusability="afterDescendants">
-        </LinearLayout>
-
-        <!-- A view that hints to the user that they can click left to get to the navigation bar.
-             We make this focusable so that we can open the real navigation bar when this is selected.
-
-             a11y: However, non-visual users will find it unintuitive to open the menu, a new modal
-             state, by pressing left, especially if it cannot be undone by pressing the reverse
-             direction (as is the case now) so we dynamically disable focusability in code when
-             VoiceView is enabled: users can explicitly use the menu button to open the menu. -->
-        <LinearLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:id="@id/hint_navigation_bar"
-                android:layout_width="67dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:gravity="end|center_vertical"
-                android:orientation="vertical"
-                android:background="@drawable/drawer_background"
-                android:focusable="true">
-
-            <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="24dp"
-                    android:src="@drawable/ic_home"
-                    tools:ignore="ContentDescription"/>
-
-            <!-- We set the image resource dynamically because on lower API versions
-                   it turns out distorted when set in the XML -->
-            <ImageView
-                    android:id="@+id/hint_settings"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="20dp"
-                    tools:ignore="ContentDescription" />
-
         </LinearLayout>
     </RelativeLayout>
 
