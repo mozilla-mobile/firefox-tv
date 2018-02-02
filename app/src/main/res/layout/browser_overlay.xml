@@ -69,6 +69,7 @@
             android:importantForAccessibility="no"/>
 
         <org.mozilla.focus.widget.InlineAutocompleteEditText
+            android:id="@+id/navUrlInput"
             android:layout_width="400dp"
             android:layout_height="40dp"
             android:background="@color/homeUrlBarBackground"
