@@ -6,6 +6,7 @@ package org.mozilla.focus.browser
 
 import android.graphics.PointF
 import android.os.SystemClock
+import android.provider.SyncStateContract.Helpers.update
 import android.support.annotation.UiThread
 import android.support.v4.math.MathUtils
 import android.view.KeyEvent
@@ -48,8 +49,10 @@ class CursorViewModel(
      *
      * This will always be called from the UIThread.
      */
-    var onUpdate: (x: Float, y: Float) -> Unit = { _, _ -> }
+    var onUpdate: (x: Float, y: Float, scrollVel: PointF) -> Unit = { _, _, _ -> }
+        @UiThread get
         @UiThread set
+    private val scrollVelReturnVal = PointF()
 
     /** The bounds inside which this cursor should remain, i.e. the screen bounds. */
     var maxBounds = PointF(0f, 0f)
@@ -78,7 +81,7 @@ class CursorViewModel(
         }
 
         clampPos(pos, maxBounds)
-        onUpdate(pos.x, pos.y)
+        onUpdate(pos.x, pos.y, getScrollVel())
     }
 
     private fun updatePosForVel(dir: Direction, vel: Float) {
@@ -88,6 +91,24 @@ class CursorViewModel(
             Direction.LEFT -> pos.x -= vel
             Direction.RIGHT -> pos.x += vel
         }
+    }
+
+    private fun getScrollVel(): PointF {
+        scrollVelReturnVal.set(0f, 0f)
+        if (vel > 0f) {
+            if (pos.x == 0f && pressedDirections.contains(Direction.LEFT)) {
+                scrollVelReturnVal.x = -vel
+            } else if (pos.x == maxBounds.x && pressedDirections.contains(Direction.RIGHT)) {
+                scrollVelReturnVal.x = vel
+            }
+
+            if (pos.y == 0f && pressedDirections.contains(Direction.UP)) {
+                scrollVelReturnVal.y = -vel
+            } else if (pos.y == maxBounds.y && pressedDirections.contains(Direction.DOWN)) {
+                scrollVelReturnVal.y = vel
+            }
+        }
+        return scrollVelReturnVal
     }
 
     // TODO: stop when new views (e.g. overlay) are opened.

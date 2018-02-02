@@ -31,7 +31,6 @@ class Cursor(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private val VIEW_MIN_ALPHA = 0f
     private val VIEW_MAX_ALPHA = 1f
 
-    var cursorEvent: CursorEvent? = null
     private val paint: Paint
     private val pos = PointF()
 
