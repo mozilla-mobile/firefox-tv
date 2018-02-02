@@ -7,6 +7,8 @@ package org.mozilla.focus.locale;
 
 import android.support.v4.app.Fragment;
 
+import org.mozilla.focus.ext.LocaleManagerKt;
+
 import java.util.Locale;
 
 public abstract class LocaleAwareFragment extends Fragment {
@@ -16,7 +18,12 @@ public abstract class LocaleAwareFragment extends Fragment {
      * Is called whenever the application locale has changed. Your fragment must either update
      * all localised Strings, or replace itself with an updated version.
      */
-    public abstract void applyLocale();
+    public abstract void onApplyLocale();
+
+    public void applyLocale() {
+        LocaleManagerKt.maybeApplyNonSystemLocale(LocaleManager.getInstance(), getContext());
+        onApplyLocale();
+    }
 
     @Override
     public void onResume() {

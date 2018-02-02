@@ -18,6 +18,7 @@ import org.mozilla.focus.R
 import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.ext.isVoiceViewEnabled
+import org.mozilla.focus.locale.LocaleAwareFragment
 import org.mozilla.focus.session.NullSession
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.session.SessionCallbackProxy
@@ -26,6 +27,7 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.Direction
 import org.mozilla.focus.utils.Edge
 import org.mozilla.focus.web.IWebView
+import org.mozilla.focus.web.IWebViewLifecycleManager
 import org.mozilla.focus.widget.CursorEvent
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
@@ -34,7 +36,7 @@ private const val SCROLL_MULTIPLIER = 45
 /**
  * Fragment for displaying the browser UI.
  */
-class BrowserFragment : WebFragment(), CursorEvent {
+class BrowserFragment : LocaleAwareFragment(), CursorEvent {
     companion object {
         const val FRAGMENT_TAG = "browser"
 
@@ -51,17 +53,26 @@ class BrowserFragment : WebFragment(), CursorEvent {
     //
     // Note: when refactoring, I removed the url view and replaced urlView.setText with assignment
     // to this url variable - should be equivalent.
-    var url: String? = null
+    lateinit var url: String
         private set
     private val sessionManager = SessionManager.getInstance()
-    private lateinit var session: Session
+    lateinit var session: Session
 
     val cursorLocation get() = cursor.location
     private val scrollVelocity get() = cursor.speed.toInt() * SCROLL_MULTIPLIER
 
+    var webView: IWebView? = null
+        get() = iWebViewLifecycleManager.webView
+        private set
+    private lateinit var iWebViewLifecycleManager: IWebViewLifecycleManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSession()
+        url = session.url.value
+        iWebViewLifecycleManager = IWebViewLifecycleManager(session,
+                SessionCallbackProxy(session, BrowserIWebViewCallback(this)))
+        lifecycle.addObserver(iWebViewLifecycleManager)
     }
 
     private fun initSession() {
@@ -73,7 +84,7 @@ class BrowserFragment : WebFragment(), CursorEvent {
             NullSession()
 
         setBlockingEnabled(session.isBlockingEnabled)
-        session.url.observe(this, Observer { url -> this@BrowserFragment.url = url })
+        session.url.observe(this, Observer { url -> this@BrowserFragment.url = url!! })
         session.loading.observe(this, object : NonNullObserver<Boolean>() {
             public override fun onValueChanged(loading: Boolean) {
                 val activity = activity as MainActivity
@@ -96,21 +107,17 @@ class BrowserFragment : WebFragment(), CursorEvent {
         (activity as? MainActivity)?.updateHintNavigationVisibility(MainActivity.VideoPlayerState.BROWSER)
     }
 
-    // TODO: if we convert WebFragment to kotlin, these can become abstract properties
-    override fun getSession(): Session {
-        return session
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val webViewContainer = inflater.inflate(R.layout.fragment_browser, container, false) as ViewGroup
+        webViewContainer.cursor.cursorEvent = this@BrowserFragment
+        iWebViewLifecycleManager.onCreateView(webViewContainer, url)
+        return webViewContainer
     }
 
-    override fun getInitialUrl(): String? {
-        return session.url.value
+    override fun onDestroyView() {
+        super.onDestroyView()
+        iWebViewLifecycleManager.onDestroyView()
     }
-
-    override fun inflateLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fragment_browser, container, false).apply {
-                cursor.cursorEvent = this@BrowserFragment
-            }
-
-    override fun createCallback() = SessionCallbackProxy(session, BrowserIWebViewCallback(this))
 
     fun onBackPressed(): Boolean {
         if (canGoBack()) {
@@ -140,6 +147,10 @@ class BrowserFragment : WebFragment(), CursorEvent {
 
     fun reload() = webView?.reload()
     fun setBlockingEnabled(enabled: Boolean) = webview?.setBlockingEnabled(enabled)
+
+    override fun onApplyLocale() {
+        iWebViewLifecycleManager.onApplyLocale(context)
+    }
 
     // --- TODO: CURSOR CODE - MODULARIZE IN #412. --- //
     /**

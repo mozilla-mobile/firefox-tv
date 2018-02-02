@@ -13,12 +13,16 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import org.mozilla.focus.R;
-import org.mozilla.focus.session.Session;
+import org.mozilla.focus.locale.LocaleAwareFragment;
+import org.mozilla.focus.session.NullSession;
 import org.mozilla.focus.web.IWebView;
+import org.mozilla.focus.web.IWebViewLifecycleManager;
 
-public class InfoFragment extends WebFragment {
+public class InfoFragment extends LocaleAwareFragment {
     private ProgressBar progressView;
     private View webView;
+
+    private IWebViewLifecycleManager iWebViewLifecycleManager;
 
     private static final String ARGUMENT_URL = "url";
 
@@ -32,10 +36,18 @@ public class InfoFragment extends WebFragment {
         return fragment;
     }
 
-    @NonNull
     @Override
-    public View inflateLayout(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_info, container, false);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        iWebViewLifecycleManager = new IWebViewLifecycleManager(new NullSession(), createCallback());
+        getLifecycle().addObserver(iWebViewLifecycleManager);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_info, container, false);
+        iWebViewLifecycleManager.onCreateView(view, getInitialUrl());
         progressView = view.findViewById(R.id.progress);
         webView = view.findViewById(R.id.webview);
 
@@ -48,12 +60,17 @@ public class InfoFragment extends WebFragment {
             webView.setVisibility(View.INVISIBLE);
         }
 
-        applyLocale();
+        onApplyLocale();
 
         return view;
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        iWebViewLifecycleManager.onDestroyView();
+    }
+
     public IWebView.Callback createCallback() {
         return new IWebView.Callback() {
             @Override
@@ -105,14 +122,13 @@ public class InfoFragment extends WebFragment {
         };
     }
 
-    @Override
-    public Session getSession() {
-        return null;
-    }
-
     @Nullable
-    @Override
     public String getInitialUrl() {
         return getArguments().getString(ARGUMENT_URL);
+    }
+
+    @Override
+    public void onApplyLocale() {
+        iWebViewLifecycleManager.onApplyLocale(getContext());
     }
 }

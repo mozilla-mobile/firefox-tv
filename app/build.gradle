@@ -129,6 +129,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 
     compile "android.arch.lifecycle:extensions:$architecture_components_version"
+    annotationProcessor "android.arch.lifecycle:compiler:$architecture_components_version"
 
     compile ("com.google.code.findbugs:annotations:3.0.1") {
         // We really only need the SuppressFBWarnings annotation, everything else can be ignored.
