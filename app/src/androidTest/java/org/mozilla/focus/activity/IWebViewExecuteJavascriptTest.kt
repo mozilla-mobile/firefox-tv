@@ -50,8 +50,8 @@ class IWebViewExecuteJavascriptTest {
 
     @After
     fun tearDown() {
-        IdlingRegistry.getInstance().unregister(loadingIdlingResource);
-        activityTestRule.getActivity().finishAndRemoveTask();
+        IdlingRegistry.getInstance().unregister(loadingIdlingResource)
+        activityTestRule.getActivity().finishAndRemoveTask()
     }
 
     @Test
@@ -88,4 +88,3 @@ class IWebViewExecuteJavascriptTest {
                 .check(webMatches(getText(), equalTo(expected)))
     }
 }
-
