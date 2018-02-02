@@ -7,26 +7,24 @@ package org.mozilla.focus.widget
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.Point
+import android.graphics.PointF
 import android.graphics.RadialGradient
 import android.graphics.Shader
-import android.os.Handler
+import android.support.annotation.UiThread
 import android.util.AttributeSet
 import android.view.View
-
 import org.mozilla.focus.R
 import org.mozilla.focus.utils.Direction
-import org.mozilla.focus.utils.Edge
-
 import java.util.HashSet
 import java.util.concurrent.TimeUnit
 
+/** A drawn Cursor: see [CursorViewModel] for responding to keys and setting position. */
 class Cursor(context: Context, attrs: AttributeSet) : View(context, attrs) {
+
+    var onLayout: (width: Int, height: Int) -> Unit = { _, _ -> }
 
     private val CURSOR_SIZE = 45f
 
-    private val MAX_SPEED = 25
-    private val FRICTION = 0.98
     private val CURSOR_ALPHA = 102
     private val CURSOR_ANIMATION_DURATION = 250
     private val CURSOR_HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3)
@@ -35,28 +33,14 @@ class Cursor(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     var cursorEvent: CursorEvent? = null
     private val paint: Paint
-    private var x: Int = 0
-    private var y: Int = 0
+    private val pos = PointF()
+
     var speed = 0f
         private set
     private val activeDirections = HashSet<Direction>()
-    private var maxHeight: Int = 0
-    private var maxWidth: Int = 0
 
     private var isInit: Boolean = false
     private var moving: Boolean = false
-
-    // Make sure we run the update on the main thread
-    private val handler = Handler()
-    private val tick = object : Runnable {
-        override fun run() {
-            move()
-            handler.postDelayed(this, 20)
-        }
-    }
-
-    val location: Point
-        get() = Point(x, y)
 
     init {
 
@@ -68,24 +52,16 @@ class Cursor(context: Context, attrs: AttributeSet) : View(context, attrs) {
         paint.isAntiAlias = true
     }
 
-    fun moveCursor(direction: Direction) {
-        activeDirections.add(direction)
-
-        // If the cursor isn't moving start the move loop
-        if (!moving) {
-            animate().cancel()
-            alpha = VIEW_MAX_ALPHA
-
-            moving = true
-            handler.post(tick)
-        }
+    @UiThread
+    fun updatePosition(x: Float, y: Float) {
+        pos.set(x, y)
+        invalidate()
     }
 
     fun stopMoving(direction: Direction) {
         activeDirections.remove(direction)
 
         if (activeDirections.size == 0) {
-            handler.removeCallbacks(tick)
             moving = false
             speed = 0f
 
@@ -94,73 +70,20 @@ class Cursor(context: Context, attrs: AttributeSet) : View(context, attrs) {
         }
     }
 
-    private fun move() {
-        speed++
-        speed *= FRICTION.toFloat()
-        speed = Math.min(MAX_SPEED.toFloat(), speed)
-        val isMovingDiagonal = activeDirections.size > 1
-        val moveSpeed = if (isMovingDiagonal) speed / 2 else speed
-
-        for (direction in activeDirections) {
-            moveOneDirection(direction, Math.round(moveSpeed))
-        }
-
-        invalidate()
-    }
-
-    private fun moveOneDirection(direction: Direction, amount: Int) {
-        when (direction) {
-            Direction.DOWN -> {
-                if (y >= maxHeight - CURSOR_SIZE) {
-                    cursorEvent!!.cursorHitEdge(Edge.BOTTOM)
-                    return
-                }
-
-                y = y + amount
-            }
-            Direction.LEFT -> {
-                if (x <= 0 + CURSOR_SIZE) {
-                    cursorEvent!!.cursorHitEdge(Edge.LEFT)
-                    return
-                }
-
-                x = x - amount
-            }
-            Direction.RIGHT -> {
-                if (x >= maxWidth - CURSOR_SIZE) {
-                    cursorEvent!!.cursorHitEdge(Edge.RIGHT)
-                    return
-                }
-                x = x + amount
-            }
-            Direction.UP -> {
-                if (y <= 0 + CURSOR_SIZE) {
-                    cursorEvent!!.cursorHitEdge(Edge.TOP)
-                    return
-                }
-
-                y = y - amount
-            }
-        }
-    }
-
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
 
-        if (isInit) {
-            maxHeight = height
-            maxWidth = width
-            x = maxWidth / 2
-            y = maxHeight / 2
+        if (changed && isInit) {
             isInit = false
+            onLayout(right, bottom)
         }
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        paint.shader = RadialGradient(x.toFloat(), y.toFloat(), 45f, resources.getColor(R.color.teal50), resources.getColor(R.color.photonBlue50), Shader.TileMode.CLAMP)
-        canvas.drawCircle(x.toFloat(), y.toFloat(), CURSOR_SIZE, paint)
+        paint.shader = RadialGradient(pos.x, pos.y, 45f, resources.getColor(R.color.teal50), resources.getColor(R.color.photonBlue50), Shader.TileMode.CLAMP)
+        canvas.drawCircle(pos.x, pos.y, CURSOR_SIZE, paint)
     }
 
 }

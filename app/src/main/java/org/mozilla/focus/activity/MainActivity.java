@@ -8,9 +8,7 @@ package org.mozilla.focus.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -22,7 +20,6 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityManager;
@@ -684,69 +681,11 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             dispatchKeyEvent(keyEvent);
             return true;
         }
+
         if (browserFragment == null || !browserFragment.isVisible() || isDrawerOpen || !isCursorEnabled) {
             return super.dispatchKeyEvent(event);
         }
 
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            switch (event.getKeyCode()) {
-                case KeyEvent.KEYCODE_DPAD_UP:
-                    browserFragment.moveCursor(Direction.UP);
-                    break;
-                case KeyEvent.KEYCODE_DPAD_DOWN:
-                    browserFragment.moveCursor(Direction.DOWN);
-                    break;
-                case KeyEvent.KEYCODE_DPAD_LEFT:
-                    browserFragment.moveCursor(Direction.LEFT);
-                    break;
-                case KeyEvent.KEYCODE_DPAD_RIGHT:
-                    browserFragment.moveCursor(Direction.RIGHT);
-                    break;
-                case KeyEvent.KEYCODE_DPAD_CENTER:
-                    Point point = browserFragment.getCursorLocation();
-
-                    // Obtain MotionEvent object
-                    long downTime = SystemClock.uptimeMillis();
-                    long eventTime = downTime + 100;
-
-                    MotionEvent ev = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, point.x, point.y, 0);
-                    dispatchTouchEvent(ev);
-
-                    break;
-                default:
-                    return super.dispatchKeyEvent(event);
-            }
-        } else if (event.getAction() == KeyEvent.ACTION_UP) {
-            switch (event.getKeyCode()) {
-                case KeyEvent.KEYCODE_DPAD_UP:
-                    browserFragment.stopMoving(Direction.UP);
-                    break;
-                case KeyEvent.KEYCODE_DPAD_DOWN:
-                    browserFragment.stopMoving(Direction.DOWN);
-                    break;
-                case KeyEvent.KEYCODE_DPAD_LEFT:
-                    browserFragment.stopMoving(Direction.LEFT);
-                    break;
-                case KeyEvent.KEYCODE_DPAD_RIGHT:
-                    browserFragment.stopMoving(Direction.RIGHT);
-                    break;
-                case KeyEvent.KEYCODE_DPAD_CENTER:
-                    Point point = browserFragment.getCursorLocation();
-
-                    // Obtain MotionEvent object
-                    long downTime = SystemClock.uptimeMillis();
-                    long eventTime = downTime + 100;
-
-
-                    MotionEvent ev = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_UP, point.x, point.y, 0);
-                    dispatchTouchEvent(ev);
-
-                    break;
-                default:
-                    return super.dispatchKeyEvent(event);
-            }
-        }
-
-        return true;
+        return browserFragment.dispatchKeyEvent(event) || super.dispatchKeyEvent(event);
     }
 }
