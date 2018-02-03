@@ -6,9 +6,8 @@
 package org.mozilla.focus.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
+import android.support.annotation.UiThread
 import android.view.View
-import android.view.ViewGroup
 import android.webkit.WebView
 import org.mozilla.focus.R
 import org.mozilla.focus.locale.LocaleAwareFragment
@@ -21,15 +20,20 @@ import java.util.Locale
  * Base implementation for fragments that use an IWebView instance. Based on Android's WebViewFragment.
  */
 abstract class WebFragment : LocaleAwareFragment() {
-    var webView: IWebView? = null
-        get() = if (isWebViewAvailable) field else null
-    private var isWebViewAvailable = false
 
     /** Get the initial URL to load after the view has been created. */
     abstract val initialUrl: String
     abstract val session: Session
 
     abstract fun createCallback(): IWebView.Callback
+
+    /**
+     * The [IWebView] in use by this fragment. If the value is non-null, the WebView is present
+     * in the view hierarchy, null otherwise.
+     */
+    var webView: IWebView? = null
+        @UiThread get // On a background thread, it may have been removed from the view hierarchy.
+        private set
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,7 +42,6 @@ abstract class WebFragment : LocaleAwareFragment() {
             setBlockingEnabled(session.isBlockingEnabled)
             restoreWebViewOrLoadInitialUrl(this)
         }
-        isWebViewAvailable = true
     }
 
     private fun restoreWebViewOrLoadInitialUrl(webView: IWebView) {
@@ -80,18 +83,10 @@ abstract class WebFragment : LocaleAwareFragment() {
         super.onResume()
     }
 
-    override fun onDestroy() {
-        if (webView != null) {
-            webView!!.callback = null
-            webView!!.destroy()
-            webView = null
-        }
-
-        super.onDestroy()
-    }
-
     override fun onDestroyView() {
-        isWebViewAvailable = false
+        webView!!.callback = null
+        webView!!.destroy()
+        webView = null
 
         super.onDestroyView()
     }
