@@ -50,6 +50,12 @@ class BrowserFragment : WebFragment(), BrowserNavigationOverlay.NavigationEventH
         }
     }
 
+    // WebFragment expects a value for these properties before onViewCreated. We use a getter
+    // for the properties that reference session because it is lateinit.
+    override lateinit var session: Session
+    override val initialUrl get() = session.url.value
+    override val iWebViewCallback get() = SessionCallbackProxy(session, BrowserIWebViewCallback(this))
+
     // getUrl() is used for things like sharing the current URL. We could try to use the webview,
     // but sometimes it's null, and sometimes it returns a null URL. Sometimes it returns a data:
     // URL for error pages. The URL we show in the toolbar is (A) always correct and (B) what the
@@ -59,10 +65,8 @@ class BrowserFragment : WebFragment(), BrowserNavigationOverlay.NavigationEventH
     // to this url variable - should be equivalent.
     var url: String? = null
         private set
-    override val initialUrl get() = session.url.value // Use getter b/c session is lateinit.
 
     private val sessionManager = SessionManager.getInstance()
-    override lateinit var session: Session // WebFragment expects a value before onViewCreated.
 
     private val cursorViewModel = CursorViewModel(simulateTouchEvent = { activity.dispatchTouchEvent(it) })
 
@@ -130,8 +134,6 @@ class BrowserFragment : WebFragment(), BrowserNavigationOverlay.NavigationEventH
             cursorViewModel.maxBounds = PointF(width.toFloat(), height.toFloat())
         }
     }
-
-    override fun createCallback() = SessionCallbackProxy(session, BrowserIWebViewCallback(this))
 
     fun onBackPressed(): Boolean {
         if (canGoBack()) {

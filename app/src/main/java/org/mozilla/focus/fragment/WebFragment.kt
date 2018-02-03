@@ -17,15 +17,24 @@ import org.mozilla.focus.web.IWebView
 import java.util.Locale
 
 /**
- * Base implementation for fragments that use an IWebView instance. Based on Android's WebViewFragment.
+ * Initializes and manages the lifecycle of an IWebView instance inflated by the super class.
+ * It was originally inspired by Android's WebViewFragment.
+ *
+ * To use this class, override it with a super-class that inflates a layout with an IWebView with
+ * @id=webview. Be sure to follow the additional initialization requirements on the [onViewCreated]
+ * kdoc.
+ *
+ * Notes on alternative implementations: while composability is generally preferred over
+ * inheritance, there are too many entry points to use this with composition (i.e. all lifecycle
+ * methods) so it's more error-prone and we stuck with this implementation. Composability was
+ * tried in PR #428.
  */
 abstract class WebFragment : LocaleAwareFragment() {
 
     /** Get the initial URL to load after the view has been created. */
     abstract val initialUrl: String
     abstract val session: Session
-
-    abstract fun createCallback(): IWebView.Callback
+    abstract val iWebViewCallback: IWebView.Callback
 
     /**
      * The [IWebView] in use by this fragment. If the value is non-null, the WebView is present
@@ -35,10 +44,14 @@ abstract class WebFragment : LocaleAwareFragment() {
         @UiThread get // On a background thread, it may have been removed from the view hierarchy.
         private set
 
+    /**
+     * Initializes the WebView. By the time this method is called, [session], [initialUrl],
+     * and [iWebViewCallback] are expected to be initialized.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         webView = (view.findViewById<View>(R.id.webview) as IWebView).apply {
-            callback = createCallback()
+            callback = iWebViewCallback
             setBlockingEnabled(session.isBlockingEnabled)
             restoreWebViewOrLoadInitialUrl(this)
         }
