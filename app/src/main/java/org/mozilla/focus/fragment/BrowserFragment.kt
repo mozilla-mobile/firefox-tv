@@ -30,6 +30,7 @@ import org.mozilla.focus.web.IWebView
 import org.mozilla.focus.widget.BrowserNavigationOverlay
 import org.mozilla.focus.widget.CursorEvent
 import org.mozilla.focus.widget.InlineAutocompleteEditText
+import org.mozilla.focus.widget.NavigationEvent
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 private const val SCROLL_MULTIPLIER = 45
@@ -67,10 +68,9 @@ class BrowserFragment : WebFragment(), CursorEvent, BrowserNavigationOverlay.Nav
         initSession()
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = super.onCreateView(inflater, container, savedInstanceState)
-        view?.browserOverlay?.setNavigationEventHandler(this)
-        return view
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        view?.browserOverlay!!.setNavigationEventHandler(this)
+        super.onViewCreated(view, savedInstanceState)
     }
 
     private fun initSession() {
@@ -100,14 +100,14 @@ class BrowserFragment : WebFragment(), CursorEvent, BrowserNavigationOverlay.Nav
         })
     }
 
-    override fun onEvent(event: BrowserNavigationOverlay.NavigationEvent, value: String?, autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?) {
+    override fun onEvent(event: NavigationEvent, value: String?, autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?) {
         when (event) {
-            BrowserNavigationOverlay.NavigationEvent.BACK -> if (canGoBack()) goBack()
-            BrowserNavigationOverlay.NavigationEvent.FORWARD -> if (canGoForward()) goForward()
-            BrowserNavigationOverlay.NavigationEvent.RELOAD -> reload()
-            BrowserNavigationOverlay.NavigationEvent.HOME -> (activity as MainActivity).showHomeScreen()
-            BrowserNavigationOverlay.NavigationEvent.SETTINGS -> (activity as MainActivity).showSettingsScreen()
-            BrowserNavigationOverlay.NavigationEvent.LOAD -> (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
+            NavigationEvent.BACK -> if (canGoBack()) goBack()
+            NavigationEvent.FORWARD -> if (canGoForward()) goForward()
+            NavigationEvent.RELOAD -> reload()
+            NavigationEvent.HOME -> (activity as MainActivity).showHomeScreen()
+            NavigationEvent.SETTINGS -> (activity as MainActivity).showSettingsScreen()
+            NavigationEvent.LOAD -> (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
         }
     }
     // TODO: if we convert WebFragment to kotlin, these can become abstract properties

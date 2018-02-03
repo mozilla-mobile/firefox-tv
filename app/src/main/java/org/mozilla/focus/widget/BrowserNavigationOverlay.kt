@@ -5,7 +5,6 @@
 package org.mozilla.focus.widget
 
 import android.content.Context
-import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -13,15 +12,25 @@ import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.browser_overlay.view.*
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
-import org.mozilla.focus.utils.ViewUtils
+
+enum class NavigationEvent {
+    HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD;
+
+    companion object {
+        fun fromViewClick(viewId: Int?) = when (viewId) {
+            R.id.navButtonBack -> BACK
+            R.id.navButtonForward -> FORWARD
+            R.id.navButtonReload -> RELOAD
+            R.id.navButtonHome -> HOME
+            R.id.navButtonSettings -> SETTINGS
+            else -> null
+        }
+    }
+}
 
 class BrowserNavigationOverlay @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyle: Int = 0 )
     : LinearLayout(context, attrs, defStyle), View.OnClickListener {
-
-    enum class NavigationEvent {
-        HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD
-    }
 
     interface NavigationEventHandler {
         fun onEvent(event: NavigationEvent, value: String? = null,
@@ -38,40 +47,29 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         setupUrlInput()
     }
 
-    private fun setupUrlInput() {
-        navUrlInput.imeOptions = navUrlInput.imeOptions or ViewUtils.IME_FLAG_NO_PERSONALIZED_LEARNING
-        navUrlInput.setOnCommitListener {
-            val userInput = navUrlInput.text.toString()
-            if (!TextUtils.isEmpty(userInput)) {
+    private fun setupUrlInput() = with (navUrlInput) {
+        setOnCommitListener {
+            val userInput = text.toString()
+            if (userInput.isNotEmpty()) {
                 // getLastAutocompleteResult must be called before closeDrawer: closeDrawer clears the text input,
                 // which clears the last autocomplete result.
-                eventHandler?.onEvent(NavigationEvent.LOAD, userInput, navUrlInput.lastAutocompleteResult)
+                eventHandler?.onEvent(NavigationEvent.LOAD, userInput, lastAutocompleteResult)
             }
         }
         val autocompleteFilter = UrlAutoCompleteFilter()
         autocompleteFilter.load(context.applicationContext)
-        navUrlInput.setOnFilterListener { searchText, view -> autocompleteFilter.onFilter(searchText, view) }
+        setOnFilterListener { searchText, view -> autocompleteFilter.onFilter(searchText, view) }
 
-        navUrlInput.setOnBackPressedListener {
+        setOnBackPressedListener {
             if (visibility == View.VISIBLE) {
                 requestFocus()
-                navUrlInput.requestFocus()
             }
         }
     }
 
     override fun onClick(view: View?) {
-        val event = when (view?.id) {
-            R.id.navButtonBack -> NavigationEvent.BACK
-            R.id.navButtonForward -> NavigationEvent.FORWARD
-            R.id.navButtonReload -> NavigationEvent.RELOAD
-            R.id.navButtonHome -> NavigationEvent.HOME
-            R.id.navButtonSettings -> NavigationEvent.SETTINGS
-            else -> null
-        }
-        if (event != null) {
-            eventHandler?.onEvent(event)
-        }
+        val event = NavigationEvent.fromViewClick(view?.id) ?: return
+        eventHandler?.onEvent(event)
     }
 
     fun setNavigationEventHandler(handler: NavigationEventHandler) {
