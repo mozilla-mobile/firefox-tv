@@ -29,7 +29,7 @@ import java.util.Locale
  * methods) so it's more error-prone and we stuck with this implementation. Composability was
  * tried in PR #428.
  */
-abstract class WebFragment : LocaleAwareFragment() {
+abstract class IWebViewLifecycleFragment : LocaleAwareFragment() {
 
     /** Get the initial URL to load after the view has been created. */
     abstract val initialUrl: String
