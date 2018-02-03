@@ -40,7 +40,7 @@ private const val SCROLL_MULTIPLIER = 45
 /**
  * Fragment for displaying the browser UI.
  */
-class BrowserFragment : WebFragment(), BrowserNavigationOverlay.NavigationEventHandler {
+class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.NavigationEventHandler {
     companion object {
         const val FRAGMENT_TAG = "browser"
 
@@ -50,7 +50,7 @@ class BrowserFragment : WebFragment(), BrowserNavigationOverlay.NavigationEventH
         }
     }
 
-    // WebFragment expects a value for these properties before onViewCreated. We use a getter
+    // IWebViewLifecycleFragment expects a value for these properties before onViewCreated. We use a getter
     // for the properties that reference session because it is lateinit.
     override lateinit var session: Session
     override val initialUrl get() = session.url.value

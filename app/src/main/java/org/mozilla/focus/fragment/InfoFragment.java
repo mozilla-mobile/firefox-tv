@@ -17,7 +17,7 @@ import org.mozilla.focus.session.NullSession;
 import org.mozilla.focus.session.Session;
 import org.mozilla.focus.web.IWebView;
 
-public class InfoFragment extends WebFragment {
+public class InfoFragment extends IWebViewLifecycleFragment {
     private ProgressBar progressView;
     private View webView;
 
