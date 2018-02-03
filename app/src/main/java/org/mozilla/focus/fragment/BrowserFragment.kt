@@ -62,7 +62,7 @@ class BrowserFragment : WebFragment(), BrowserNavigationOverlay.NavigationEventH
     override val initialUrl get() = session.url.value // Use getter b/c session is lateinit.
 
     private val sessionManager = SessionManager.getInstance()
-    override lateinit var session: Session // WebFragment expects this initialized before onCreateView.
+    override lateinit var session: Session // WebFragment expects a value before onViewCreated.
 
     private val cursorViewModel = CursorViewModel(simulateTouchEvent = { activity.dispatchTouchEvent(it) })
 
@@ -114,10 +114,11 @@ class BrowserFragment : WebFragment(), BrowserNavigationOverlay.NavigationEventH
         }
     }
 
-    override fun inflateLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fragment_browser, container, false).apply {
-                connectCursorToViewModel(cursor)
-            }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_browser, container, false).apply {
+            connectCursorToViewModel(cursor)
+        }
+    }
 
     @UiThread // CursorViewModel.onUpdate requires.
     private fun connectCursorToViewModel(cursor: Cursor) {

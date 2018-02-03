@@ -29,24 +29,16 @@ abstract class WebFragment : LocaleAwareFragment() {
     abstract val initialUrl: String
     abstract val session: Session
 
-    /**
-     * Inflate a layout for this fragment. The layout needs to contain a view implementing IWebView
-     * with the id set to "webview".
-     */
-    abstract fun inflateLayout(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View
     abstract fun createCallback(): IWebView.Callback
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflateLayout(inflater, container, savedInstanceState)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         webView = (view.findViewById<View>(R.id.webview) as IWebView).apply {
             callback = createCallback()
             setBlockingEnabled(session.isBlockingEnabled)
+            restoreWebViewOrLoadInitialUrl(this)
         }
         isWebViewAvailable = true
-        restoreWebViewOrLoadInitialUrl(webView!!)
-
-        return view
     }
 
     private fun restoreWebViewOrLoadInitialUrl(webView: IWebView) {

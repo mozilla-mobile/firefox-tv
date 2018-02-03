@@ -35,7 +35,7 @@ public class InfoFragment extends WebFragment {
 
     @NonNull
     @Override
-    public View inflateLayout(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_info, container, false);
         progressView = view.findViewById(R.id.progress);
         webView = view.findViewById(R.id.webview);
