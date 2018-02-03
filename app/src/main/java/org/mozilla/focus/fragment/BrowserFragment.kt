@@ -29,6 +29,7 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.Direction
 import org.mozilla.focus.web.IWebView
+import org.mozilla.focus.web.IWebViewLifecycleFragment
 import org.mozilla.focus.widget.BrowserNavigationOverlay
 import org.mozilla.focus.widget.Cursor
 import org.mozilla.focus.widget.InlineAutocompleteEditText
