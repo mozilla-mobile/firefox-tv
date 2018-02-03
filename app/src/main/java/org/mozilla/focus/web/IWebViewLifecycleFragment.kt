@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.focus.fragment
+package org.mozilla.focus.web
 
 import android.os.Bundle
 import android.support.annotation.UiThread
@@ -13,7 +13,6 @@ import org.mozilla.focus.R
 import org.mozilla.focus.locale.LocaleAwareFragment
 import org.mozilla.focus.locale.LocaleManager
 import org.mozilla.focus.session.Session
-import org.mozilla.focus.web.IWebView
 import java.util.Locale
 
 /**
