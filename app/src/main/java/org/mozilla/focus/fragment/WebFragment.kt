@@ -52,24 +52,6 @@ abstract class WebFragment : LocaleAwareFragment() {
         }
     }
 
-    override fun applyLocale() {
-        val context = context
-        val localeManager = LocaleManager.getInstance()
-        if (!localeManager.isMirroringSystemLocale(context)) {
-            val currentLocale = localeManager.getCurrentLocale(context)
-            Locale.setDefault(currentLocale)
-
-            val resources = context.resources
-            val config = resources.configuration
-            config.setLocale(currentLocale)
-            resources.updateConfiguration(config, null)
-        }
-        // We create and destroy a new WebView here to force the internal state of WebView to know
-        // about the new language. See focus-android issue #666.
-        val unneeded = WebView(getContext())
-        unneeded.destroy()
-    }
-
     override fun onPause() {
         webView!!.saveWebViewState(session)
         webView!!.onPause()
@@ -89,5 +71,23 @@ abstract class WebFragment : LocaleAwareFragment() {
         webView = null
 
         super.onDestroyView()
+    }
+
+    override fun applyLocale() {
+        val context = context
+        val localeManager = LocaleManager.getInstance()
+        if (!localeManager.isMirroringSystemLocale(context)) {
+            val currentLocale = localeManager.getCurrentLocale(context)
+            Locale.setDefault(currentLocale)
+
+            val resources = context.resources
+            val config = resources.configuration
+            config.setLocale(currentLocale)
+            resources.updateConfiguration(config, null)
+        }
+        // We create and destroy a new WebView here to force the internal state of WebView to know
+        // about the new language. See focus-android issue #666.
+        val unneeded = WebView(getContext())
+        unneeded.destroy()
     }
 }
