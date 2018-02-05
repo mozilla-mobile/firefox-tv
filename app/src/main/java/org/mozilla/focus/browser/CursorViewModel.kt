@@ -46,6 +46,7 @@ class CursorViewModel(
 ) {
     /**
      * Called when the cursor position is updated: this should be connected to the View.
+     * Must be set by the caller.
      *
      * This will always be called from the UIThread.
      */
@@ -54,7 +55,10 @@ class CursorViewModel(
         @UiThread set
     private val scrollVelReturnVal = PointF()
 
-    /** The bounds inside which this cursor should remain, i.e. the screen bounds. */
+    /**
+     * The bounds inside which this cursor should remain, i.e. the screen bounds.
+     * Must be set by the caller.
+     */
     var maxBounds = PointF(0f, 0f)
         @UiThread set(value) {
             field = value
