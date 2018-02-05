@@ -6,10 +6,10 @@ package org.mozilla.focus.ext
 
 import android.view.MotionEvent
 
-/** Calls the block and then [MotionEvent.recycle]s this. Inspired by [AutoCloseable.use]. */
-inline fun <R> MotionEvent.use(block: (MotionEvent) -> R): R {
+/** Calls the functionBlock and then [MotionEvent.recycle]s this. Inspired by [AutoCloseable.use]. */
+inline fun <R> MotionEvent.use(functionBlock: (MotionEvent) -> R): R {
     try {
-        return block(this)
+        return functionBlock(this)
     } finally {
         recycle()
     }
