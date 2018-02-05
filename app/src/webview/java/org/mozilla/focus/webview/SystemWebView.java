@@ -39,7 +39,6 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
     private Callback callback;
     private FocusWebViewClient client;
     private final LinkHandler linkHandler;
-    
 
     public SystemWebView(Context context, AttributeSet attrs, AmazonWebKitFactory factory) {
         super(context, attrs);
@@ -175,6 +174,14 @@ public class SystemWebView extends NestedWebView implements IWebView, SharedPref
         }
 
         client.notifyCurrentURL(url);
+    }
+
+    @Override
+    public void onPause() {
+        // #460 - Ensure any videos that are playing get dismissed before we background the application.
+        callback.onExitFullScreen();
+
+        super.onPause();
     }
 
     @Override
