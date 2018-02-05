@@ -80,5 +80,4 @@ class Cursor(context: Context, attrs: AttributeSet) : View(context, attrs) {
         paint.shader = RadialGradient(pos.x, pos.y, 45f, resources.getColor(R.color.teal50), resources.getColor(R.color.photonBlue50), Shader.TileMode.CLAMP)
         canvas.drawCircle(pos.x, pos.y, CURSOR_SIZE, paint)
     }
-
 }
