@@ -14,4 +14,3 @@ inline fun <R> MotionEvent.use(functionBlock: (MotionEvent) -> R): R {
         recycle()
     }
 }
-
