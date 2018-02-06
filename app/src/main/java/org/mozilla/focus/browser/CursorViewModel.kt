@@ -18,6 +18,7 @@ import kotlinx.coroutines.experimental.delay
 import org.mozilla.focus.ext.use
 import org.mozilla.focus.utils.Direction
 import org.mozilla.focus.utils.RemoteKey
+import java.util.EnumSet
 import java.util.concurrent.TimeUnit
 
 private const val UPDATE_DELAY_MILLIS = 20L
@@ -70,7 +71,7 @@ class CursorViewModel(
     private val pos = PointF(0f, 0f)
     private var vel = 0f
 
-    private val pressedDirections = mutableSetOf<Direction>()
+    private val pressedDirections = EnumSet.noneOf(Direction::class.java)
 
     private var updateLoop: Deferred<Unit>? = null
 
