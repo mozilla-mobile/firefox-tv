@@ -76,8 +76,8 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
         initSession()
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        view?.browserOverlay!!.setNavigationEventHandler(this)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        view.browserOverlay!!.setNavigationEventHandler(this)
         super.onViewCreated(view, savedInstanceState)
     }
 
