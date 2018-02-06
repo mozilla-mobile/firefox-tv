@@ -107,7 +107,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
         })
     }
 
-    override fun onEvent(event: NavigationEvent, value: String?, autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?) {
+    override fun onNavigationEvent(event: NavigationEvent, value: String?, autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?) {
         when (event) {
             NavigationEvent.BACK -> if (canGoBack()) goBack()
             NavigationEvent.FORWARD -> if (canGoForward()) goForward()
