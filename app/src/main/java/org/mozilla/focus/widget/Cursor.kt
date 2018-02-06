@@ -46,6 +46,13 @@ class Cursor(context: Context, attrs: AttributeSet) : View(context, attrs) {
         invalidate()
     }
 
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        paint.shader = RadialGradient(pos.x, pos.y, 45f, resources.getColor(R.color.teal50), resources.getColor(R.color.photonBlue50), Shader.TileMode.CLAMP)
+        canvas.drawCircle(pos.x, pos.y, CURSOR_SIZE, paint)
+    }
+
     // TODO: revive this fn.
     fun stopMoving(direction: Direction) {
         /*
@@ -64,12 +71,5 @@ class Cursor(context: Context, attrs: AttributeSet) : View(context, attrs) {
         if (changed) {
             onLayoutChanged(right, bottom)
         }
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-
-        paint.shader = RadialGradient(pos.x, pos.y, 45f, resources.getColor(R.color.teal50), resources.getColor(R.color.photonBlue50), Shader.TileMode.CLAMP)
-        canvas.drawCircle(pos.x, pos.y, CURSOR_SIZE, paint)
     }
 }
