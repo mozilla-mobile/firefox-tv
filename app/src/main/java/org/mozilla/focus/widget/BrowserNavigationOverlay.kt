@@ -43,7 +43,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         LayoutInflater.from(context)
                 .inflate(R.layout.browser_overlay, this, true)
         listOf(navButtonBack, navButtonForward, navButtonReload, navButtonHome, navButtonSettings)
-                .forEach { setOnClickListener(this) }
+                .forEach { it.setOnClickListener(this) }
         setupUrlInput()
     }
 
@@ -54,6 +54,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 // getLastAutocompleteResult must be called before closeDrawer: closeDrawer clears the text input,
                 // which clears the last autocomplete result.
                 eventHandler?.onEvent(NavigationEvent.LOAD, userInput, lastAutocompleteResult)
+                setText(lastAutocompleteResult.text)
             }
         }
         val autocompleteFilter = UrlAutoCompleteFilter()

@@ -184,6 +184,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
         val enableCursor = webView != null &&
                 webView.getUrl() != null &&
                 !webView.getUrl()!!.contains("youtube.com/tv") &&
+                browserOverlay.visibility != View.VISIBLE &&
                 context != null &&
                 !context.isVoiceViewEnabled() // VoiceView has its own navigation controls.
         activity.setCursorEnabled(enableCursor)
