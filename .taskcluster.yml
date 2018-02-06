@@ -55,6 +55,9 @@ tasks:
 # - Build the app (all flavors)
 # - Run unit tests
 # - Run code quality tools (findbugs, lint, checkstyle etc.)
+#
+# - HACK: Used {{ event.head.repo.url }} instead of origin because origin routes to
+#   the Focus Android repo
 ###############################################################################
   - provisionerId: '{{ taskcluster.docker.provisionerId }}'
     workerType: '{{ taskcluster.docker.workerType }}'
@@ -73,7 +76,7 @@ tasks:
         - '--login'
         - '-cx'
         - >-
-          git fetch origin
+          git fetch {{ event.head.repo.url }}
           && git config advice.detachedHead false
           && git checkout {{event.head.sha}}
           && echo "--" > .adjust_token
