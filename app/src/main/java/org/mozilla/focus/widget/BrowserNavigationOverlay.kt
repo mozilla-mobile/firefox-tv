@@ -5,6 +5,8 @@
 package org.mozilla.focus.widget
 
 import android.content.Context
+import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -12,9 +14,11 @@ import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.browser_overlay.view.*
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
+import org.mozilla.focus.telemetry.TelemetryWrapper
+import org.mozilla.focus.utils.Settings
 
 enum class NavigationEvent {
-    HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD;
+    HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD, TURBO;
 
     companion object {
         fun fromViewClick(viewId: Int?) = when (viewId) {
@@ -23,6 +27,7 @@ enum class NavigationEvent {
             R.id.navButtonReload -> RELOAD
             R.id.navButtonHome -> HOME
             R.id.navButtonSettings -> SETTINGS
+            R.id.turboButton -> TURBO
             else -> null
         }
     }
@@ -42,9 +47,17 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     init {
         LayoutInflater.from(context)
                 .inflate(R.layout.browser_overlay, this, true)
-        listOf(navButtonBack, navButtonForward, navButtonReload, navButtonHome, navButtonSettings)
-                .forEach { it.setOnClickListener(this) }
+        listOf(navButtonBack, navButtonForward, navButtonReload, navButtonHome, navButtonSettings,
+                turboButton)
+                .forEach {
+                    it.setOnClickListener(this)
+                    DrawableCompat.setTintList(it.drawable.mutate(),
+                            ContextCompat.getColorStateList(context, R.color.overlay_button_selector))
+                    // Inactive state is used for Turbo mode
+                    it.isActivated = true
+                }
         setupUrlInput()
+        turboButton.isActivated = Settings.getInstance(context).isBlockingEnabled
     }
 
     private fun setupUrlInput() = with (navUrlInput) {
@@ -69,11 +82,21 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     }
 
     override fun onClick(view: View?) {
-        val event = NavigationEvent.fromViewClick(view?.id) ?: return
+        var event = NavigationEvent.fromViewClick(view?.id) ?: return
+        if (event == NavigationEvent.TURBO) {
+            updateTurboState(!turboButton.isActivated)
+            event = NavigationEvent.RELOAD
+        }
         eventHandler?.onEvent(event)
     }
 
     fun setNavigationEventHandler(handler: NavigationEventHandler) {
         eventHandler = handler
+    }
+
+    private fun updateTurboState(toEnableBlocking: Boolean) = with (turboButton) {
+        Settings.getInstance(context).isBlockingEnabled = toEnableBlocking
+        isActivated = toEnableBlocking
+        TelemetryWrapper.blockingSwitchEvent(toEnableBlocking)
     }
 }

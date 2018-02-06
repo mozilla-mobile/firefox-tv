@@ -40,6 +40,14 @@
             android:src="@drawable/ic_refresh"
             android:contentDescription="@string/content_description_reload"/>
 
+        <ImageButton
+            android:id="@+id/turboButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/NavigationButton"
+            android:src="@drawable/turbo"
+            android:contentDescription="@string/turbo_mode"/>
+
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
