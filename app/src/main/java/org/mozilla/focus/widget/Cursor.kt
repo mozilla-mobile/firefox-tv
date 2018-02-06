@@ -18,34 +18,26 @@ import org.mozilla.focus.utils.Direction
 import java.util.HashSet
 import java.util.concurrent.TimeUnit
 
+private const val CURSOR_SIZE = 45f
+private const val CURSOR_ALPHA = 102
+
+private const val CURSOR_ANIMATION_DURATION = 250
+private val CURSOR_HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3)
+private const val VIEW_MIN_ALPHA = 0f
+
+
 /** A drawn Cursor: see [CursorViewModel] for responding to keys and setting position. */
 class Cursor(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
-    var onLayout: (width: Int, height: Int) -> Unit = { _, _ -> }
+    /** A callback when layout for this view occurs. */
+    var onLayoutChanged: (width: Int, height: Int) -> Unit = { _, _ -> }
 
-    private val CURSOR_SIZE = 45f
-
-    private val CURSOR_ALPHA = 102
-    private val CURSOR_ANIMATION_DURATION = 250
-    private val CURSOR_HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3)
-    private val VIEW_MIN_ALPHA = 0f
-    private val VIEW_MAX_ALPHA = 1f
-
-    private val paint: Paint
     private val pos = PointF()
 
-    var speed = 0f
-        private set
-    private val activeDirections = HashSet<Direction>()
-
-    private var moving: Boolean = false
-
-    init {
-        // create the Paint and set its color
-        paint = Paint()
-        paint.style = Paint.Style.FILL
-        paint.alpha = CURSOR_ALPHA
-        paint.isAntiAlias = true
+    private val paint = Paint().apply {
+        style = Paint.Style.FILL
+        alpha = CURSOR_ALPHA
+        isAntiAlias = true
     }
 
     @UiThread
@@ -54,23 +46,23 @@ class Cursor(context: Context, attrs: AttributeSet) : View(context, attrs) {
         invalidate()
     }
 
+    // TODO: revive this fn.
     fun stopMoving(direction: Direction) {
+        /*
         activeDirections.remove(direction)
 
-        if (activeDirections.size == 0) {
-            moving = false
-            speed = 0f
-
+        if (activeDirections.isEmpty()) {
             animate().alpha(VIEW_MIN_ALPHA)
                     .setDuration(CURSOR_ANIMATION_DURATION.toLong()).startDelay = CURSOR_HIDE_AFTER_MILLIS
         }
+        */
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
 
         if (changed) {
-            onLayout(right, bottom)
+            onLayoutChanged(right, bottom)
         }
     }
 

@@ -131,7 +131,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
             cursor.updatePosition(x, y)
             scrollWebView(scrollVel)
         }
-        cursor.onLayout = { width, height ->
+        cursor.onLayoutChanged = { width, height ->
             cursorViewModel.maxBounds = PointF(width.toFloat(), height.toFloat())
         }
     }
