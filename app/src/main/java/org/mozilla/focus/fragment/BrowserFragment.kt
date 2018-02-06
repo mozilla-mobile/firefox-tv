@@ -69,7 +69,15 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
 
     private val sessionManager = SessionManager.getInstance()
 
-    private val cursorViewModel = CursorViewModel(simulateTouchEvent = { activity.dispatchTouchEvent(it) })
+    /**
+     * ViewModel for the cursor. Te simplify state-handling, we (unconventionally)
+     * make the lifecycle of the ViewModel the same as its View: this value will be
+     * null when the BrowserFragment View is detached.
+     *
+     * This should only be accessed from the UI thread to simplify concurrency in get/set.
+     */
+    private var cursorViewModel: CursorViewModel? = null
+        @UiThread get set
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,14 +133,21 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
         }
     }
 
-    @UiThread // CursorViewModel.onUpdate requires.
+    override fun onDestroyView() {
+        super.onDestroyView()
+        cursorViewModel = null // TODO: stop async operations.
+    }
+
+    @UiThread // cursorViewModel can only be accessed from the UiThread.
     private fun connectCursorToViewModel(cursor: Cursor) {
-        cursorViewModel.onUpdate = { x, y, scrollVel ->
+        cursorViewModel = CursorViewModel(onUpdate = { x, y, scrollVel ->
             cursor.updatePosition(x, y)
             scrollWebView(scrollVel)
-        }
+        }, simulateTouchEvent = { activity.dispatchTouchEvent(it) })
+
         cursor.onLayoutChanged = { width, height ->
-            cursorViewModel.maxBounds = PointF(width.toFloat(), height.toFloat())
+            // Bind to the nullable reference to allow nulling and thus GC.
+            cursorViewModel?.maxBounds = PointF(width.toFloat(), height.toFloat())
         }
     }
 
@@ -166,7 +181,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     fun setBlockingEnabled(enabled: Boolean) = webview?.setBlockingEnabled(enabled)
 
     // --- TODO: CURSOR CODE - MODULARIZE IN #412. --- //
-    fun dispatchKeyEvent(event: KeyEvent) = cursorViewModel.dispatchKeyEvent(event)
+    fun dispatchKeyEvent(event: KeyEvent): Boolean = cursorViewModel?.dispatchKeyEvent(event) ?: false
 
     /**
      * Gets the current state of the application and updates the cursor state accordingly.

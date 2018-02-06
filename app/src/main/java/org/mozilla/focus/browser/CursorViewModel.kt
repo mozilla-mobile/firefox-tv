@@ -37,22 +37,18 @@ private const val DOWN_TIME_OFFSET_MILLIS = 100
  * - Update: updates & clamps (to argument bounds) the Cursor data from the event loop
  * - Notify: tell listeners about data updates, including scroll events
  *
- * When using this class, be sure to update the public properties, e.g. [onUpdate] and [maxBounds].
+ * When using this class, be sure to update the public properties, e.g. [maxBounds].
  *
  * We could further modularize this class by splitting out its responsibilities.
+ *
+ * @param onUpdate Callback when the state of the cursor is updated: this will be called from the UI thread.
+ * @param simulateTouchEvent Takes the given touch event and simulates a touch to the screen.
  */
 class CursorViewModel(
+        private val onUpdate: (x: Float, y: Float, scrollVel: PointF) -> Unit,
         private val simulateTouchEvent: (MotionEvent) -> Unit
 ) {
-    /**
-     * Called when the cursor position is updated: this should be connected to the View.
-     * Must be set by the caller.
-     *
-     * This will always be called from the UIThread.
-     */
-    var onUpdate: (x: Float, y: Float, scrollVel: PointF) -> Unit = { _, _, _ -> }
-        @UiThread get
-        @UiThread set
+
     private val scrollVelReturnVal = PointF()
 
     /**
