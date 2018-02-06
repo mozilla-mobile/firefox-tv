@@ -38,8 +38,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     : LinearLayout(context, attrs, defStyle), View.OnClickListener {
 
     interface NavigationEventHandler {
-        fun onEvent(event: NavigationEvent, value: String? = null,
-                    autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? = null)
+        fun onNavigationEvent(event: NavigationEvent, value: String? = null,
+                              autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? = null)
     }
 
     private var eventHandler: NavigationEventHandler? = null
@@ -66,7 +66,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             if (userInput.isNotEmpty()) {
                 // getLastAutocompleteResult must be called before closeDrawer: closeDrawer clears the text input,
                 // which clears the last autocomplete result.
-                eventHandler?.onEvent(NavigationEvent.LOAD, userInput, lastAutocompleteResult)
+                eventHandler?.onNavigationEvent(NavigationEvent.LOAD, userInput, lastAutocompleteResult)
                 setText(lastAutocompleteResult.text)
             }
         }
@@ -87,7 +87,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             updateTurboState(!turboButton.isActivated)
             event = NavigationEvent.RELOAD
         }
-        eventHandler?.onEvent(event)
+        eventHandler?.onNavigationEvent(event)
     }
 
     fun setNavigationEventHandler(handler: NavigationEventHandler) {
