@@ -195,24 +195,11 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     // --- TODO: CURSOR CODE - MODULARIZE IN #412. --- //
     fun dispatchKeyEvent(event: KeyEvent): Boolean = cursor?.keyDispatcher?.dispatchKeyEvent(event) ?: false
 
-    /**
-     * Gets the current state of the application and updates the cursor state accordingly.
-     *
-     * Note that this pattern could use some improvements:
-     * - It's a little weird to get the current state from globals, rather than get passed in relevant values.
-     * - BrowserFragment.setCursorEnabled should be called from this code path, but that's unclear
-     * - BrowserFragment should use a listener to talk to MainActivity and shouldn't know about it directly.
-     * - BrowserFragment calls MainActivity which calls BrowserFragment again - this is unnecessary.
-     */
+    /** Gets the current state of the browser and updates the cursor state accordingly. */
     fun updateCursorState() {
-        val webView = webView
-        // Bandaid null checks, underlying issue #249
-        val enableCursor = webView != null &&
-                webView.getUrl() != null &&
-                !webView.getUrl()!!.contains("youtube.com/tv") &&
-                context != null &&
-                !context.isVoiceViewEnabled() // VoiceView has its own navigation controls.
-        cursor?.isEnabled = enableCursor
+        // These sources have their own navigation controls.
+        val isYoutubeTV = webview?.getUrl()?.contains("youtube.com/tv") ?: false
+        cursor?.isEnabled = !isYoutubeTV && !context.isVoiceViewEnabled()
     }
 }
 
