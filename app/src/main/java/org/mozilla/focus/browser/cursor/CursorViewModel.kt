@@ -72,11 +72,18 @@ class CursorViewModel(
 
     private var updateLoop: Deferred<Unit>? = null
 
-    // TODO: Distances should update as a function of time to prevent lag.
-    // TODO: Describe algorithm more naturally as velocity and acceleration vectors.
     private fun update(deltaMillis: Long) {
-        vel = (vel + 1) * FRICTION
-        vel = Math.min(MAX_SPEED, vel)
+        // Frames aren't guaranteed to occur at perfect intervals so we adjust the distance
+        // travelled by the amount of time that has actually passed between frames (as
+        // opposed to the amount of time we expect to pass between frames): this should
+        // increase smoothness when the system can't keep up with our desired framerate.
+        //
+        // This adjustment could be expressed more naturally if this algorithm was expressed
+        // as a series of kinematic equations, i.e. vnew = vold + accel * deltaTime.
+        val deltaVel = (vel + 1) * FRICTION - vel
+        val timeAdjustedDeltaVel = deltaVel * (deltaMillis / UPDATE_DELAY_MILLIS.toFloat())
+        vel = Math.min(MAX_SPEED, vel + timeAdjustedDeltaVel)
+
         val isMovingDiagonal = pressedDirections.size > 1
         val finalVel = if (isMovingDiagonal) vel / 2 else vel
 
