@@ -6,11 +6,13 @@ package org.mozilla.focus.browser
 
 import android.support.annotation.UiThread
 import android.view.KeyEvent
+import org.mozilla.focus.fragment.CursorController
 import org.mozilla.focus.utils.Direction
 import org.mozilla.focus.utils.RemoteKey
 
 /** Converts raw key events into high-level commands the view model can recognize. */
-class CursorKeyDispatcher(private val viewModel: CursorViewModel) {
+class CursorKeyDispatcher(var isEnabled: Boolean, private val viewModel: CursorViewModel) {
+
     /**
      * Converts key events into Cursor actions; an analog to [Activity.dispatchKeyEvent].
      *
@@ -18,6 +20,7 @@ class CursorKeyDispatcher(private val viewModel: CursorViewModel) {
      */
     @UiThread
     fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (!isEnabled) return false
         if (event.action != KeyEvent.ACTION_DOWN
                 && event.action != KeyEvent.ACTION_UP) return false
 
