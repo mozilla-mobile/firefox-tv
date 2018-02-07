@@ -213,11 +213,6 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
                 context != null &&
                 !context.isVoiceViewEnabled() // VoiceView has its own navigation controls.
         cursor?.isEnabled = enableCursor
-        setCursorEnabled(enableCursor)
-    }
-
-    fun setCursorEnabled(toEnable: Boolean) {
-        cursorView.visibility = if (toEnable) View.VISIBLE else View.GONE
     }
 }
 
@@ -287,6 +282,7 @@ class CursorController(
         set(value) {
             field = value
             keyDispatcher.isEnabled = value
+            view.visibility = if (value) View.VISIBLE else View.GONE
         }
 
     val viewModel = CursorViewModel(onUpdate = { x, y, scrollVel ->
