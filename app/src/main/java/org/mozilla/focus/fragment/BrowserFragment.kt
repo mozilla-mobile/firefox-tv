@@ -104,7 +104,6 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
         session.loading.observe(this, object : NonNullObserver<Boolean>() {
             public override fun onValueChanged(loading: Boolean) {
                 val activity = activity as MainActivity
-                cursor?.setEnabledForCurrentState()
                 if (!loading && activity.isReloadingForYoutubeDrawerClosed) {
                     activity.isReloadingForYoutubeDrawerClosed = false
 
@@ -252,6 +251,8 @@ class CursorController(
 
     val keyDispatcher = CursorKeyDispatcher(isEnabled, viewModel)
 
+    private val isLoadingObserver = CursorIsLoadingObserver()
+
     init {
         view.onLayoutChanged = { width, height ->
             viewModel.maxBounds = PointF(width.toFloat(), height.toFloat())
@@ -259,7 +260,7 @@ class CursorController(
     }
 
     /** Gets the current state of the browser and updates the cursor enabled state accordingly. */
-    fun setEnabledForCurrentState() {
+    private fun setEnabledForCurrentState() {
         // These sources have their own navigation controls.
         val isYoutubeTV = browserFragment.webview?.getUrl()?.contains("youtube.com/tv") ?: false
         isEnabled = !isYoutubeTV && !browserFragment.context.isVoiceViewEnabled()
@@ -269,11 +270,15 @@ class CursorController(
     fun onStart() {
         browserFragment.context.getAccessibilityManager().addTouchExplorationStateChangeListener(this)
         setEnabledForCurrentState() // VoiceView state may change.
+
+        browserFragment.session.loading.observe(browserFragment, isLoadingObserver)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onStop() {
         browserFragment.context.getAccessibilityManager().removeTouchExplorationStateChangeListener(this)
+
+        browserFragment.session.loading.removeObserver(isLoadingObserver)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
@@ -289,5 +294,11 @@ class CursorController(
         val scrollX = Math.round(scrollVel.x * SCROLL_MULTIPLIER)
         val scrollY = Math.round(scrollVel.y * SCROLL_MULTIPLIER)
         browserFragment.webView?.flingScroll(scrollX, scrollY)
+    }
+
+    private inner class CursorIsLoadingObserver : NonNullObserver<Boolean>() {
+        override fun onValueChanged(isLoading: Boolean) {
+            setEnabledForCurrentState()
+        }
     }
 }
