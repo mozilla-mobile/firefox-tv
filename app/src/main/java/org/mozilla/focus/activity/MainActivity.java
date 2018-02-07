@@ -87,7 +87,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private Switch drawerTrackingProtectionSwitch;
     private LinearLayout customNavItem;
     private boolean isDrawerOpen = false;
-    private boolean isCursorEnabled = true;
 
     private final AccessibilityManager.TouchExplorationStateChangeListener voiceViewStateChangeListener = new AccessibilityManager.TouchExplorationStateChangeListener() {
         @Override
@@ -294,10 +293,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
     private void updateForVoiceView(final boolean isVoiceViewEnabled) {
         // The user can turn on/off VoiceView, at which point we may want to change the cursor visibility.
-        updateCursorState();
-    }
-
-    private void updateCursorState() {
         final BrowserFragment browserFragment =
                 (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
         if (browserFragment != null) {
@@ -578,14 +573,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         }
     }
 
-    public void setCursorEnabled(boolean toEnable) {
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-
-        isCursorEnabled = toEnable;
-        browserFragment.setCursorEnabled(toEnable);
-    }
-
     @Override
     public void onNonTextInputUrlEntered(@NotNull final String urlStr) {
         onUrlEnteredInner(urlStr, false, null, null);
@@ -681,7 +668,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             return true;
         }
 
-        if (browserFragment == null || !browserFragment.isVisible() || isDrawerOpen || !isCursorEnabled) {
+        if (browserFragment == null || !browserFragment.isVisible() || isDrawerOpen) {
             return super.dispatchKeyEvent(event);
         }
 

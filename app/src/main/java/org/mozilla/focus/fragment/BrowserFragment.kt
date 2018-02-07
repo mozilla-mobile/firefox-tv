@@ -28,7 +28,6 @@ import org.mozilla.focus.session.SessionCallbackProxy
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
-import org.mozilla.focus.utils.Direction
 import org.mozilla.focus.web.IWebView
 import org.mozilla.focus.web.IWebViewLifecycleFragment
 import org.mozilla.focus.widget.BrowserNavigationOverlay
@@ -183,7 +182,6 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
      * - BrowserFragment calls MainActivity which calls BrowserFragment again - this is unnecessary.
      */
     fun updateCursorState() {
-        val activity = activity as MainActivity
         val webView = webView
         // Bandaid null checks, underlying issue #249
         val enableCursor = webView != null &&
@@ -191,7 +189,8 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
                 !webView.getUrl()!!.contains("youtube.com/tv") &&
                 context != null &&
                 !context.isVoiceViewEnabled() // VoiceView has its own navigation controls.
-        activity.setCursorEnabled(enableCursor)
+        cursor?.isEnabled = enableCursor
+        setCursorEnabled(enableCursor)
     }
 
     fun setCursorEnabled(toEnable: Boolean) {
@@ -261,12 +260,18 @@ class CursorController(
         private val browserFragment: BrowserFragment,
         val view: CursorView
 ) {
+    var isEnabled = true
+        set(value) {
+            field = value
+            keyDispatcher.isEnabled = value
+        }
+
     val viewModel = CursorViewModel(onUpdate = { x, y, scrollVel ->
         view.updatePosition(x, y)
         scrollWebView(scrollVel)
     }, simulateTouchEvent = { browserFragment.activity.dispatchTouchEvent(it) })
 
-    val keyDispatcher = CursorKeyDispatcher(viewModel)
+    val keyDispatcher = CursorKeyDispatcher(isEnabled, viewModel)
 
     init {
         view.onLayoutChanged = { width, height ->
