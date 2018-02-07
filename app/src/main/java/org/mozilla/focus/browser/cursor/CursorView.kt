@@ -14,15 +14,9 @@ import android.support.annotation.UiThread
 import android.util.AttributeSet
 import android.view.View
 import org.mozilla.focus.R
-import java.util.concurrent.TimeUnit
 
 private const val CURSOR_SIZE = 45f
 private const val CURSOR_ALPHA = 102
-
-private const val CURSOR_ANIMATION_DURATION = 250
-private val CURSOR_HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3)
-private const val VIEW_MIN_ALPHA = 0f
-
 
 /** A drawn Cursor: see [CursorViewModel] for responding to keys and setting position. */
 class CursorView(context: Context, attrs: AttributeSet) : View(context, attrs) {
