@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.android.synthetic.main.fragment_browser.view.*
 import org.mozilla.focus.R
@@ -116,6 +117,8 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
             NavigationEvent.HOME -> (activity as MainActivity).showHomeScreen()
             NavigationEvent.SETTINGS -> (activity as MainActivity).showSettingsScreen()
             NavigationEvent.LOAD -> (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
+            NavigationEvent.SHOW_OVERLAY -> updateCursorState()
+            NavigationEvent.HIDE_OVERLAY -> updateCursorState()
         }
     }
 

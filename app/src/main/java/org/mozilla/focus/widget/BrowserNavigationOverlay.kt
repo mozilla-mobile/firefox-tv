@@ -19,7 +19,7 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.Settings
 
 enum class NavigationEvent {
-    HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD, TURBO;
+    HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD, TURBO, SHOW_OVERLAY, HIDE_OVERLAY;
 
     companion object {
         fun fromViewClick(viewId: Int?) = when (viewId) {
@@ -97,10 +97,14 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 KeyEvent.KEYCODE_MENU -> {
                     val newVisibility = if (visibility == View.VISIBLE) View.GONE else View.VISIBLE
                     visibility = newVisibility
-                    if (newVisibility == View.VISIBLE) {
-                        // TODO: breaks YT focus on hiding
-//                        navButtonBack.requestFocus()
+                    val navEvent = when (newVisibility) {
+                        View.VISIBLE -> {
+                            navButtonBack.requestFocus()
+                            NavigationEvent.SHOW_OVERLAY
+                        }
+                        else -> NavigationEvent.HIDE_OVERLAY
                     }
+                    eventHandler?.onNavigationEvent(navEvent)
                     TelemetryWrapper.drawerShowHideEvent(visibility == View.VISIBLE)
                     return true
                 }
