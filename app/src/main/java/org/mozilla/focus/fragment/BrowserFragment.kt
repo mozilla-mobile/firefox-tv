@@ -17,8 +17,10 @@ import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.android.synthetic.main.fragment_browser.view.*
 import org.mozilla.focus.R
+import org.mozilla.focus.R.drawable.cursor
 import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.architecture.NonNullObserver
+import org.mozilla.focus.browser.CursorKeyDispatcher
 import org.mozilla.focus.browser.CursorViewModel
 import org.mozilla.focus.ext.isVoiceViewEnabled
 import org.mozilla.focus.session.NullSession
@@ -78,6 +80,8 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
      */
     private var cursorViewModel: CursorViewModel? = null
         @UiThread get set
+    private var cursorKeyDispatcher: CursorKeyDispatcher? = null
+        @UiThread get set // See cursorViewModel.
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,6 +139,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
 
     override fun onDestroyView() {
         super.onDestroyView()
+        cursorKeyDispatcher = null
         cursorViewModel = null // TODO: stop async operations.
     }
 
@@ -149,6 +154,8 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
             // Bind to the nullable reference to allow nulling and thus GC.
             cursorViewModel?.maxBounds = PointF(width.toFloat(), height.toFloat())
         }
+
+        cursorKeyDispatcher = CursorKeyDispatcher(cursorViewModel!!)
     }
 
     fun onBackPressed(): Boolean {
@@ -181,7 +188,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     fun setBlockingEnabled(enabled: Boolean) = webview?.setBlockingEnabled(enabled)
 
     // --- TODO: CURSOR CODE - MODULARIZE IN #412. --- //
-    fun dispatchKeyEvent(event: KeyEvent): Boolean = cursorViewModel?.dispatchKeyEvent(event) ?: false
+    fun dispatchKeyEvent(event: KeyEvent): Boolean = cursorKeyDispatcher?.dispatchKeyEvent(event) ?: false
 
     /**
      * Gets the current state of the application and updates the cursor state accordingly.

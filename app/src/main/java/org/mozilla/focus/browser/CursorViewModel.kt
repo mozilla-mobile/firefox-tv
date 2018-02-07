@@ -6,10 +6,8 @@ package org.mozilla.focus.browser
 
 import android.graphics.PointF
 import android.os.SystemClock
-import android.provider.SyncStateContract.Helpers.update
 import android.support.annotation.UiThread
 import android.support.v4.math.MathUtils
-import android.view.KeyEvent
 import android.view.MotionEvent
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
@@ -17,7 +15,6 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import org.mozilla.focus.ext.use
 import org.mozilla.focus.utils.Direction
-import org.mozilla.focus.utils.RemoteKey
 import java.util.EnumSet
 import java.util.concurrent.TimeUnit
 
@@ -33,14 +30,11 @@ private const val DOWN_TIME_OFFSET_MILLIS = 100
  *
  * It has the following responsibilities:
  * - Data: stores current cursor position, velocity, etc.
- * - Input: convert key presses to movement events
  * - Loop: manage an event loop
  * - Update: updates & clamps (to argument bounds) the Cursor data from the event loop
  * - Notify: tell listeners about data updates, including scroll events
  *
  * When using this class, be sure to update the public properties, e.g. [maxBounds].
- *
- * We could further modularize this class by splitting out its responsibilities.
  *
  * @param onUpdate Callback when the state of the cursor is updated: this will be called from the UI thread.
  * @param simulateTouchEvent Takes the given touch event and simulates a touch to the screen.
@@ -134,46 +128,24 @@ class CursorViewModel(
         }
     }
 
-    /**
-     * Converts key events into Cursor actions; an analog to [Activity.dispatchKeyEvent].
-     *
-     * @return true if this key event was handled, false otherwise.
-     */
-    @UiThread
-    fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (event.action != KeyEvent.ACTION_DOWN
-                && event.action != KeyEvent.ACTION_UP) return false
-
-        val remoteKey = RemoteKey.fromKeyEvent(event) ?: return false
-        if (remoteKey == RemoteKey.CENTER) {
-            dispatchTouchEventOnCurrentPosition(event.action)
-            return true
+    fun onDirectionKeyDown(dir: Direction) {
+        pressedDirections.add(dir)
+        if (updateLoop == null) {
+            updateLoop = asyncStartUpdates()
         }
-
-        val direction = remoteKey.toDirection()
-        if (direction != null) {
-            onDirectionKey(direction, event.action)
-            return true
-        }
-        return false
     }
 
-    private fun onDirectionKey(dir: Direction, action: Int) {
-        if (action == KeyEvent.ACTION_DOWN) {
-            pressedDirections.add(dir)
-            if (updateLoop == null) updateLoop = asyncStartUpdates()
-        } else if (action == KeyEvent.ACTION_UP) {
-            pressedDirections.remove(dir)
-            if (pressedDirections.isEmpty()) {
-                updateLoop?.cancel()
-                updateLoop = null
-                vel = 0f // Stop moving.
-            }
+    fun onDirectionKeyUp(dir: Direction) {
+        pressedDirections.remove(dir)
+        if (pressedDirections.isEmpty()) {
+            updateLoop?.cancel()
+            updateLoop = null
+            vel = 0f // Stop moving.
         }
     }
 
     /** Dispatches a touch event on the current position, sending a click where the cursor is. */
-    private fun dispatchTouchEventOnCurrentPosition(action: Int) {
+    fun onSelectKeyEvent(action: Int) {
         val now = SystemClock.uptimeMillis()
         MotionEvent.obtain(now - DOWN_TIME_OFFSET_MILLIS, now, action, pos.x, pos.y, 0).use {
             simulateTouchEvent(it)
