@@ -74,7 +74,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
      * Encapsulates the cursor's components. If this value is null, the Cursor is not attached
      * to the view hierarchy.
      */
-    private var cursor: CursorController? = null
+    var cursor: CursorController? = null
         @UiThread get set // Set from the UI thread so serial access is required for simplicity.
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,6 +85,11 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view.browserOverlay!!.setNavigationEventHandler(this)
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        cursor?.onPause()
     }
 
     private fun initSession() {
@@ -133,7 +138,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
 
     override fun onDestroyView() {
         super.onDestroyView()
-        cursor = null // TODO: stop async operations.
+        cursor = null
     }
 
     fun onBackPressed(): Boolean {
@@ -187,10 +192,6 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
                 context != null &&
                 !context.isVoiceViewEnabled() // VoiceView has its own navigation controls.
         activity.setCursorEnabled(enableCursor)
-    }
-
-    fun stopMoving(direction: Direction) {
-        cursorView.stopMoving(direction)
     }
 
     fun setCursorEnabled(toEnable: Boolean) {
@@ -255,7 +256,7 @@ private class BrowserIWebViewCallback(
  *
  * For simplicity, the lifecycle of the ViewModel and the KeyDispatcher are the same as the View.
  */
-private class CursorController(
+class CursorController(
         // Our lifecycle is shorter than BrowserFragment, so we can hold a reference.
         private val browserFragment: BrowserFragment,
         val view: CursorView
@@ -271,6 +272,10 @@ private class CursorController(
         view.onLayoutChanged = { width, height ->
             viewModel.maxBounds = PointF(width.toFloat(), height.toFloat())
         }
+    }
+
+    fun onPause() {
+        viewModel.cancelUpdates()
     }
 
     private fun scrollWebView(scrollVel: PointF) {

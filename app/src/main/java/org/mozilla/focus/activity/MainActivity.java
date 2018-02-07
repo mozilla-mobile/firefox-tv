@@ -194,11 +194,10 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 // Stop cursor movement upon drawer opening
                 // Need to fix follow-up issue https://github.com/mozilla-mobile/focus-video/issues/219
                 final BrowserFragment browserFragment = (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-                if (browserFragment != null) {
-                    browserFragment.stopMoving(Direction.DOWN);
-                    browserFragment.stopMoving(Direction.LEFT);
-                    browserFragment.stopMoving(Direction.RIGHT);
-                    browserFragment.stopMoving(Direction.UP);
+                if (browserFragment != null &&
+                        browserFragment.getCursor() != null) {
+                    // For all intents and purposes, covering the UI with a menu is the same as onPause.
+                    browserFragment.getCursor().onPause();
                 }
 
                 TelemetryWrapper.drawerShowHideEvent(true);

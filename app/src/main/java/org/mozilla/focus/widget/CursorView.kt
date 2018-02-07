@@ -53,18 +53,6 @@ class CursorView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         canvas.drawCircle(pos.x, pos.y, CURSOR_SIZE, paint)
     }
 
-    // TODO: revive this fn.
-    fun stopMoving(direction: Direction) {
-        /*
-        activeDirections.remove(direction)
-
-        if (activeDirections.isEmpty()) {
-            animate().alpha(VIEW_MIN_ALPHA)
-                    .setDuration(CURSOR_ANIMATION_DURATION.toLong()).startDelay = CURSOR_HIDE_AFTER_MILLIS
-        }
-        */
-    }
-
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
 

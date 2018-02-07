@@ -138,9 +138,7 @@ class CursorViewModel(
     fun onDirectionKeyUp(dir: Direction) {
         pressedDirections.remove(dir)
         if (pressedDirections.isEmpty()) {
-            updateLoop?.cancel()
-            updateLoop = null
-            vel = 0f // Stop moving.
+            cancelUpdates()
         }
     }
 
@@ -150,6 +148,13 @@ class CursorViewModel(
         MotionEvent.obtain(now - DOWN_TIME_OFFSET_MILLIS, now, action, pos.x, pos.y, 0).use {
             simulateTouchEvent(it)
         }
+    }
+
+    fun cancelUpdates() {
+        pressedDirections.clear()
+        updateLoop?.cancel()
+        updateLoop = null
+        vel = 0f // Stop moving.
     }
 }
 
