@@ -4,7 +4,10 @@
 
 package org.mozilla.focus.fragment
 
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.OnLifecycleEvent
 import android.graphics.PointF
 import android.os.Bundle
 import android.support.annotation.UiThread
@@ -88,21 +91,6 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
         super.onViewCreated(view, savedInstanceState)
     }
 
-    override fun onPause() {
-        super.onPause()
-        cursor?.onPause()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        cursor?.onStart()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        cursor?.onStop()
-    }
-
     private fun initSession() {
         val sessionUUID = arguments.getString(ARGUMENT_SESSION_UUID)
                 ?: throw IllegalAccessError("No session exists")
@@ -142,13 +130,15 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_browser, container, false).apply {
-            cursor = CursorController(this@BrowserFragment, cursorView)
-        }
+        val layout = inflater.inflate(R.layout.fragment_browser, container, false)
+        cursor = CursorController(this, layout.cursorView)
+        lifecycle.addObserver(cursor!!)
+        return layout
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        lifecycle.removeObserver(cursor!!)
         cursor = null
     }
 
@@ -240,12 +230,14 @@ private class BrowserIWebViewCallback(
  * will also prevent access to the components beyond the lifecycle.
  *
  * For simplicity, the lifecycle of the ViewModel and the KeyDispatcher are the same as the View.
+ *
+ * When using this class, don't forget to add it as a [LifecycleObserver].
  */
 class CursorController(
         // Our lifecycle is shorter than BrowserFragment, so we can hold a reference.
         private val browserFragment: BrowserFragment,
         val view: CursorView
-) : AccessibilityManager.TouchExplorationStateChangeListener {
+) : AccessibilityManager.TouchExplorationStateChangeListener, LifecycleObserver {
     var isEnabled = true
         set(value) {
             field = value
@@ -273,15 +265,18 @@ class CursorController(
         isEnabled = !isYoutubeTV && !browserFragment.context.isVoiceViewEnabled()
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onStart() {
         browserFragment.context.getAccessibilityManager().addTouchExplorationStateChangeListener(this)
         setEnabledForCurrentState() // VoiceView state may change.
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onStop() {
         browserFragment.context.getAccessibilityManager().removeTouchExplorationStateChangeListener(this)
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun onPause() {
         viewModel.cancelUpdates()
     }
