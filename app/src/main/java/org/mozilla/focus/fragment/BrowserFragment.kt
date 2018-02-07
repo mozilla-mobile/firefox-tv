@@ -111,7 +111,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     }
 
     private fun updateForVoiceView(isEnabled: Boolean) {
-        updateCursorState()
+        cursor?.setEnabledForCurrentState()
     }
 
     private fun initSession() {
@@ -127,7 +127,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
         session.loading.observe(this, object : NonNullObserver<Boolean>() {
             public override fun onValueChanged(loading: Boolean) {
                 val activity = activity as MainActivity
-                updateCursorState()
+                cursor?.setEnabledForCurrentState()
                 if (!loading && activity.isReloadingForYoutubeDrawerClosed) {
                     activity.isReloadingForYoutubeDrawerClosed = false
 
@@ -192,15 +192,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     fun reload() = webView?.reload()
     fun setBlockingEnabled(enabled: Boolean) = webview?.setBlockingEnabled(enabled)
 
-    // --- TODO: CURSOR CODE - MODULARIZE IN #412. --- //
     fun dispatchKeyEvent(event: KeyEvent): Boolean = cursor?.keyDispatcher?.dispatchKeyEvent(event) ?: false
-
-    /** Gets the current state of the browser and updates the cursor state accordingly. */
-    fun updateCursorState() {
-        // These sources have their own navigation controls.
-        val isYoutubeTV = webview?.getUrl()?.contains("youtube.com/tv") ?: false
-        cursor?.isEnabled = !isYoutubeTV && !context.isVoiceViewEnabled()
-    }
 }
 
 private class BrowserIWebViewCallback(
@@ -283,6 +275,13 @@ class CursorController(
         view.onLayoutChanged = { width, height ->
             viewModel.maxBounds = PointF(width.toFloat(), height.toFloat())
         }
+    }
+
+    /** Gets the current state of the browser and updates the cursor enabled state accordingly. */
+    fun setEnabledForCurrentState() {
+        // These sources have their own navigation controls.
+        val isYoutubeTV = browserFragment.webview?.getUrl()?.contains("youtube.com/tv") ?: false
+        isEnabled = !isYoutubeTV && !browserFragment.context.isVoiceViewEnabled()
     }
 
     fun onPause() {
