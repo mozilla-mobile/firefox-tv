@@ -23,8 +23,8 @@ import kotlinx.android.synthetic.main.fragment_browser.view.*
 import org.mozilla.focus.R
 import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.architecture.NonNullObserver
-import org.mozilla.focus.browser.CursorKeyDispatcher
-import org.mozilla.focus.browser.CursorViewModel
+import org.mozilla.focus.browser.cursor.CursorKeyDispatcher
+import org.mozilla.focus.browser.cursor.CursorViewModel
 import org.mozilla.focus.ext.getAccessibilityManager
 import org.mozilla.focus.ext.isVoiceViewEnabled
 import org.mozilla.focus.session.NullSession
@@ -36,7 +36,7 @@ import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.web.IWebView
 import org.mozilla.focus.web.IWebViewLifecycleFragment
 import org.mozilla.focus.widget.BrowserNavigationOverlay
-import org.mozilla.focus.widget.CursorView
+import org.mozilla.focus.browser.cursor.CursorView
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 import org.mozilla.focus.widget.NavigationEvent
 
