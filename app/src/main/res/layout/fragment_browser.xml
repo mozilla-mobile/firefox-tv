@@ -40,7 +40,7 @@
         android:background="@android:color/black"
         android:visibility="gone" />
 
-    <org.mozilla.focus.widget.CursorView
+    <org.mozilla.focus.browser.cursor.CursorView
         android:id="@+id/cursorView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

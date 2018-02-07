@@ -2,11 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.focus.browser
+package org.mozilla.focus.browser.cursor
 
 import android.support.annotation.UiThread
 import android.view.KeyEvent
-import org.mozilla.focus.fragment.CursorController
 import org.mozilla.focus.utils.Direction
 import org.mozilla.focus.utils.RemoteKey
 
