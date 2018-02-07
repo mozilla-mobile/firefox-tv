@@ -31,7 +31,7 @@ import org.mozilla.focus.utils.Direction
 import org.mozilla.focus.web.IWebView
 import org.mozilla.focus.web.IWebViewLifecycleFragment
 import org.mozilla.focus.widget.BrowserNavigationOverlay
-import org.mozilla.focus.widget.Cursor
+import org.mozilla.focus.widget.CursorView
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 import org.mozilla.focus.widget.NavigationEvent
 
@@ -129,7 +129,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_browser, container, false).apply {
-            connectCursorToViewModel(cursor)
+            connectCursorToViewModel(cursorView)
         }
     }
 
@@ -139,13 +139,13 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     }
 
     @UiThread // cursorViewModel can only be accessed from the UiThread.
-    private fun connectCursorToViewModel(cursor: Cursor) {
+    private fun connectCursorToViewModel(cursorView: CursorView) {
         cursorViewModel = CursorViewModel(onUpdate = { x, y, scrollVel ->
-            cursor.updatePosition(x, y)
+            cursorView.updatePosition(x, y)
             scrollWebView(scrollVel)
         }, simulateTouchEvent = { activity.dispatchTouchEvent(it) })
 
-        cursor.onLayoutChanged = { width, height ->
+        cursorView.onLayoutChanged = { width, height ->
             // Bind to the nullable reference to allow nulling and thus GC.
             cursorViewModel?.maxBounds = PointF(width.toFloat(), height.toFloat())
         }
@@ -205,11 +205,11 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     }
 
     fun stopMoving(direction: Direction) {
-        cursor.stopMoving(direction)
+        cursorView.stopMoving(direction)
     }
 
     fun setCursorEnabled(toEnable: Boolean) {
-        cursor.visibility = if (toEnable) View.VISIBLE else View.GONE
+        cursorView.visibility = if (toEnable) View.VISIBLE else View.GONE
     }
 
     private fun scrollWebView(scrollVel: PointF) {

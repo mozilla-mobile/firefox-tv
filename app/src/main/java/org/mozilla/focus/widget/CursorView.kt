@@ -27,7 +27,7 @@ private const val VIEW_MIN_ALPHA = 0f
 
 
 /** A drawn Cursor: see [CursorViewModel] for responding to keys and setting position. */
-class Cursor(context: Context, attrs: AttributeSet) : View(context, attrs) {
+class CursorView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
     /** A callback when layout for this view occurs. */
     var onLayoutChanged: (width: Int, height: Int) -> Unit = { _, _ -> }
