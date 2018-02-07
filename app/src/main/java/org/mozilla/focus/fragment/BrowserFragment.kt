@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.android.synthetic.main.fragment_browser.view.*
 import org.mozilla.focus.R
@@ -108,7 +109,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
         })
     }
 
-    override fun onEvent(event: NavigationEvent, value: String?, autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?) {
+    override fun onNavigationEvent(event: NavigationEvent, value: String?, autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?) {
         when (event) {
             NavigationEvent.BACK -> if (canGoBack()) goBack()
             NavigationEvent.FORWARD -> if (canGoForward()) goForward()
@@ -116,6 +117,8 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
             NavigationEvent.HOME -> (activity as MainActivity).showHomeScreen()
             NavigationEvent.SETTINGS -> (activity as MainActivity).showSettingsScreen()
             NavigationEvent.LOAD -> (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
+            NavigationEvent.SHOW_OVERLAY -> updateCursorState()
+            NavigationEvent.HIDE_OVERLAY -> updateCursorState()
         }
     }
 
@@ -141,6 +144,8 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
             // Go back in web history
             goBack()
             TelemetryWrapper.browserBackControllerEvent()
+        } else if (browserOverlay.visibility == View.VISIBLE) {
+            browserOverlay.visibility = View.GONE
         } else {
             fragmentManager.popBackStack()
             SessionManager.getInstance().removeCurrentSession()
@@ -166,7 +171,11 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     fun setBlockingEnabled(enabled: Boolean) = webview?.setBlockingEnabled(enabled)
 
     // --- TODO: CURSOR CODE - MODULARIZE IN #412. --- //
-    fun dispatchKeyEvent(event: KeyEvent) = cursorViewModel.dispatchKeyEvent(event)
+    fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (browserOverlay.dispatchKeyEvent(event)) return true
+        if (webView?.getUrl()!!.contains("youtube.com/tv")) return false
+        return cursorViewModel.dispatchKeyEvent(event)
+    }
 
     /**
      * Gets the current state of the application and updates the cursor state accordingly.
@@ -183,7 +192,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
         // Bandaid null checks, underlying issue #249
         val enableCursor = webView != null &&
                 webView.getUrl() != null &&
-                !webView.getUrl()!!.contains("youtube.com/tv") &&
+                (browserOverlay.visibility != View.VISIBLE && !webView.getUrl()!!.contains("youtube.com/tv")) &&
                 context != null &&
                 !context.isVoiceViewEnabled() // VoiceView has its own navigation controls.
         activity.setCursorEnabled(enableCursor)

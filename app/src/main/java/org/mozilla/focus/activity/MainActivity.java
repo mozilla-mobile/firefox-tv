@@ -682,7 +682,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             return true;
         }
 
-        if (browserFragment == null || !browserFragment.isVisible() || isDrawerOpen || !isCursorEnabled) {
+        if (browserFragment == null || !browserFragment.isVisible()) {
             return super.dispatchKeyEvent(event);
         }
 
