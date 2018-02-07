@@ -22,7 +22,6 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -35,7 +34,6 @@ import org.jetbrains.annotations.NotNull;
 import org.mozilla.focus.R;
 import org.mozilla.focus.architecture.NonNullObserver;
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter;
-import org.mozilla.focus.ext.ContextKt;
 import org.mozilla.focus.fragment.BrowserFragment;
 import org.mozilla.focus.fragment.HomeFragment;
 import org.mozilla.focus.fragment.NewSettingsFragment;
@@ -47,7 +45,6 @@ import org.mozilla.focus.telemetry.MenuAppNavButton;
 import org.mozilla.focus.telemetry.MenuBrowserNavButton;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.telemetry.UrlTextInputLocation;
-import org.mozilla.focus.utils.Direction;
 import org.mozilla.focus.utils.OnUrlEnteredListener;
 import org.mozilla.focus.utils.SafeIntent;
 import org.mozilla.focus.utils.Settings;
@@ -87,14 +84,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private Switch drawerTrackingProtectionSwitch;
     private LinearLayout customNavItem;
     private boolean isDrawerOpen = false;
-    private boolean isCursorEnabled = true;
-
-    private final AccessibilityManager.TouchExplorationStateChangeListener voiceViewStateChangeListener = new AccessibilityManager.TouchExplorationStateChangeListener() {
-        @Override
-        public void onTouchExplorationStateChanged(final boolean enabled) {
-            updateForVoiceView(enabled);
-        }
-    };
 
     public enum VideoPlayerState {
        BROWSER, HOME, SETTINGS
@@ -194,11 +183,10 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 // Stop cursor movement upon drawer opening
                 // Need to fix follow-up issue https://github.com/mozilla-mobile/focus-video/issues/219
                 final BrowserFragment browserFragment = (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-                if (browserFragment != null) {
-                    browserFragment.stopMoving(Direction.DOWN);
-                    browserFragment.stopMoving(Direction.LEFT);
-                    browserFragment.stopMoving(Direction.RIGHT);
-                    browserFragment.stopMoving(Direction.UP);
+                if (browserFragment != null &&
+                        browserFragment.getCursor() != null) {
+                    // For all intents and purposes, covering the UI with a menu is the same as onPause.
+                    browserFragment.getCursor().onPause();
                 }
 
                 TelemetryWrapper.drawerShowHideEvent(true);
@@ -215,6 +203,11 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 if (browserFragment != null && browserFragment.isVisible() && browserFragment.getUrl().contains("youtube.com/tv")) {
                     browserFragment.reload();
                     isReloadingForYoutubeDrawerClosed = true;
+                }
+
+                if (browserFragment != null && browserFragment.getCursor() != null) {
+                    // For all intents and purposes, covering the UI with a menu is the same as onPause.
+                    browserFragment.getCursor().onResume();
                 }
             }
 
@@ -291,26 +284,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         } else {
             drawerTrackingProtectionSwitch.setAlpha(.6f);
         }
-    }
-
-    private void updateForVoiceView(final boolean isVoiceViewEnabled) {
-        // The user can turn on/off VoiceView, at which point we may want to change the cursor visibility.
-        updateCursorState();
-    }
-
-    private void updateCursorState() {
-        final BrowserFragment browserFragment =
-                (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-        if (browserFragment != null) {
-            browserFragment.updateCursorState();
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        ContextKt.getAccessibilityManager(this).addTouchExplorationStateChangeListener(voiceViewStateChangeListener);
-        updateForVoiceView(ContextKt.isVoiceViewEnabled(this));
     }
 
     @Override
@@ -428,7 +401,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     protected void onStop() {
         super.onStop();
 
-        ContextKt.getAccessibilityManager(this).removeTouchExplorationStateChangeListener(voiceViewStateChangeListener);
         TelemetryWrapper.stopMainActivity();
     }
 
@@ -579,14 +551,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         }
     }
 
-    public void setCursorEnabled(boolean toEnable) {
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-
-        isCursorEnabled = toEnable;
-        browserFragment.setCursorEnabled(toEnable);
-    }
-
     @Override
     public void onNonTextInputUrlEntered(@NotNull final String urlStr) {
         onUrlEnteredInner(urlStr, false, null, null);
@@ -682,7 +646,7 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             return true;
         }
 
-        if (browserFragment == null || !browserFragment.isVisible() || isDrawerOpen || !isCursorEnabled) {
+        if (browserFragment == null || !browserFragment.isVisible() || isDrawerOpen) {
             return super.dispatchKeyEvent(event);
         }
 

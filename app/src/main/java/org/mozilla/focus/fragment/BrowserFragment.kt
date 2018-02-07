@@ -5,7 +5,6 @@
 package org.mozilla.focus.fragment
 
 import android.arch.lifecycle.Observer
-import android.graphics.PointF
 import android.os.Bundle
 import android.support.annotation.UiThread
 import android.text.TextUtils
@@ -19,24 +18,20 @@ import kotlinx.android.synthetic.main.fragment_browser.view.*
 import org.mozilla.focus.R
 import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.architecture.NonNullObserver
-import org.mozilla.focus.browser.CursorViewModel
-import org.mozilla.focus.ext.isVoiceViewEnabled
+import org.mozilla.focus.browser.cursor.CursorController
 import org.mozilla.focus.session.NullSession
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.session.SessionCallbackProxy
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
-import org.mozilla.focus.utils.Direction
 import org.mozilla.focus.web.IWebView
 import org.mozilla.focus.web.IWebViewLifecycleFragment
 import org.mozilla.focus.widget.BrowserNavigationOverlay
-import org.mozilla.focus.widget.Cursor
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 import org.mozilla.focus.widget.NavigationEvent
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
-private const val SCROLL_MULTIPLIER = 45
 
 /**
  * Fragment for displaying the browser UI.
@@ -69,7 +64,12 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
 
     private val sessionManager = SessionManager.getInstance()
 
-    private val cursorViewModel = CursorViewModel(simulateTouchEvent = { activity.dispatchTouchEvent(it) })
+    /**
+     * Encapsulates the cursor's components. If this value is null, the Cursor is not attached
+     * to the view hierarchy.
+     */
+    var cursor: CursorController? = null
+        @UiThread get set // Set from the UI thread so serial access is required for simplicity.
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,7 +94,6 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
         session.loading.observe(this, object : NonNullObserver<Boolean>() {
             public override fun onValueChanged(loading: Boolean) {
                 val activity = activity as MainActivity
-                updateCursorState()
                 if (!loading && activity.isReloadingForYoutubeDrawerClosed) {
                     activity.isReloadingForYoutubeDrawerClosed = false
 
@@ -120,20 +119,17 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_browser, container, false).apply {
-            connectCursorToViewModel(cursor)
-        }
+        val layout = inflater.inflate(R.layout.fragment_browser, container, false)
+        cursor = CursorController(this, cursorParent = layout.browserFragmentRoot,
+                view = layout.cursorView)
+        lifecycle.addObserver(cursor!!)
+        return layout
     }
 
-    @UiThread // CursorViewModel.onUpdate requires.
-    private fun connectCursorToViewModel(cursor: Cursor) {
-        cursorViewModel.onUpdate = { x, y, scrollVel ->
-            cursor.updatePosition(x, y)
-            scrollWebView(scrollVel)
-        }
-        cursor.onLayout = { width, height ->
-            cursorViewModel.maxBounds = PointF(width.toFloat(), height.toFloat())
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        lifecycle.removeObserver(cursor!!)
+        cursor = null
     }
 
     fun onBackPressed(): Boolean {
@@ -165,43 +161,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     fun reload() = webView?.reload()
     fun setBlockingEnabled(enabled: Boolean) = webview?.setBlockingEnabled(enabled)
 
-    // --- TODO: CURSOR CODE - MODULARIZE IN #412. --- //
-    fun dispatchKeyEvent(event: KeyEvent) = cursorViewModel.dispatchKeyEvent(event)
-
-    /**
-     * Gets the current state of the application and updates the cursor state accordingly.
-     *
-     * Note that this pattern could use some improvements:
-     * - It's a little weird to get the current state from globals, rather than get passed in relevant values.
-     * - BrowserFragment.setCursorEnabled should be called from this code path, but that's unclear
-     * - BrowserFragment should use a listener to talk to MainActivity and shouldn't know about it directly.
-     * - BrowserFragment calls MainActivity which calls BrowserFragment again - this is unnecessary.
-     */
-    fun updateCursorState() {
-        val activity = activity as MainActivity
-        val webView = webView
-        // Bandaid null checks, underlying issue #249
-        val enableCursor = webView != null &&
-                webView.getUrl() != null &&
-                !webView.getUrl()!!.contains("youtube.com/tv") &&
-                context != null &&
-                !context.isVoiceViewEnabled() // VoiceView has its own navigation controls.
-        activity.setCursorEnabled(enableCursor)
-    }
-
-    fun stopMoving(direction: Direction) {
-        cursor.stopMoving(direction)
-    }
-
-    fun setCursorEnabled(toEnable: Boolean) {
-        cursor.visibility = if (toEnable) View.VISIBLE else View.GONE
-    }
-
-    private fun scrollWebView(scrollVel: PointF) {
-        val scrollX = Math.round(scrollVel.x * SCROLL_MULTIPLIER)
-        val scrollY = Math.round(scrollVel.y * SCROLL_MULTIPLIER)
-        webview?.flingScroll(scrollX, scrollY)
-    }
+    fun dispatchKeyEvent(event: KeyEvent): Boolean = cursor?.keyDispatcher?.dispatchKeyEvent(event) ?: false
 }
 
 private class BrowserIWebViewCallback(

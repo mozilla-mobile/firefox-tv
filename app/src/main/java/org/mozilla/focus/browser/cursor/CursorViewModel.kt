@@ -2,14 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.focus.browser
+package org.mozilla.focus.browser.cursor
 
 import android.graphics.PointF
 import android.os.SystemClock
-import android.provider.SyncStateContract.Helpers.update
 import android.support.annotation.UiThread
 import android.support.v4.math.MathUtils
-import android.view.KeyEvent
 import android.view.MotionEvent
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
@@ -17,13 +15,13 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import org.mozilla.focus.ext.use
 import org.mozilla.focus.utils.Direction
-import org.mozilla.focus.utils.RemoteKey
+import java.util.EnumSet
 import java.util.concurrent.TimeUnit
 
-private const val UPDATE_DELAY_MILLIS = 20L
+private const val UPDATE_DELAY_MILLIS = 17L // ~60 FPS.
 
 private const val FRICTION = 0.98f
-private const val MAX_SPEED = 25f
+private const val MAX_SPEED = 22f
 
 private const val DOWN_TIME_OFFSET_MILLIS = 100
 
@@ -32,27 +30,22 @@ private const val DOWN_TIME_OFFSET_MILLIS = 100
  *
  * It has the following responsibilities:
  * - Data: stores current cursor position, velocity, etc.
- * - Input: convert key presses to movement events
  * - Loop: manage an event loop
  * - Update: updates & clamps (to argument bounds) the Cursor data from the event loop
  * - Notify: tell listeners about data updates, including scroll events
  *
- * When using this class, be sure to update the public properties, e.g. [onUpdate] and [maxBounds].
+ * When using this class, be sure to update the public properties, e.g. [maxBounds].
  *
- * We could further modularize this class by splitting out its responsibilities.
+ * This ViewModel is written with its lifecycle being the same as its View.
+ *
+ * @param onUpdate Callback when the state of the cursor is updated: this will be called from the UI thread.
+ * @param simulateTouchEvent Takes the given touch event and simulates a touch to the screen.
  */
 class CursorViewModel(
+        private val onUpdate: (x: Float, y: Float, scrollVel: PointF) -> Unit,
         private val simulateTouchEvent: (MotionEvent) -> Unit
 ) {
-    /**
-     * Called when the cursor position is updated: this should be connected to the View.
-     * Must be set by the caller.
-     *
-     * This will always be called from the UIThread.
-     */
-    var onUpdate: (x: Float, y: Float, scrollVel: PointF) -> Unit = { _, _, _ -> }
-        @UiThread get
-        @UiThread set
+
     private val scrollVelReturnVal = PointF()
 
     /**
@@ -62,27 +55,35 @@ class CursorViewModel(
     var maxBounds = PointF(0f, 0f)
         @UiThread set(value) {
             field = value
-            clampPos(pos, value)
-            if (!isInitialPosSet) {
+            if (isInitialPosSet) {
+                clampPos(pos, value)
+            } else {
                 isInitialPosSet = true
                 pos.set(value.x / 2, value.y / 2) // Center.
-                onUpdate(pos.x, pos.y, getScrollVel())
             }
+            onUpdate(pos.x, pos.y, getScrollVel())
         }
 
     private var isInitialPosSet = false
     private val pos = PointF(0f, 0f)
     private var vel = 0f
 
-    private val pressedDirections = mutableSetOf<Direction>()
+    private val pressedDirections = EnumSet.noneOf(Direction::class.java)
 
     private var updateLoop: Deferred<Unit>? = null
 
-    // TODO: Distances should update as a function of time to prevent lag.
-    // TODO: Describe algorithm more naturally as velocity and acceleration vectors.
     private fun update(deltaMillis: Long) {
-        vel = (vel + 1) * FRICTION
-        vel = Math.min(MAX_SPEED, vel)
+        // Frames aren't guaranteed to occur at perfect intervals so we adjust the distance
+        // travelled by the amount of time that has actually passed between frames (as
+        // opposed to the amount of time we expect to pass between frames): this should
+        // increase smoothness when the system can't keep up with our desired framerate.
+        //
+        // This adjustment could be expressed more naturally if this algorithm was expressed
+        // as a series of kinematic equations, i.e. vnew = vold + accel * deltaTime.
+        val deltaVel = (vel + 1) * FRICTION - vel
+        val timeAdjustedDeltaVel = deltaVel * (deltaMillis / UPDATE_DELAY_MILLIS.toFloat())
+        vel = Math.min(MAX_SPEED, vel + timeAdjustedDeltaVel)
+
         val isMovingDiagonal = pressedDirections.size > 1
         val finalVel = if (isMovingDiagonal) vel / 2 else vel
 
@@ -137,50 +138,33 @@ class CursorViewModel(
         }
     }
 
-    /**
-     * Converts key events into Cursor actions; an analog to [Activity.dispatchKeyEvent].
-     *
-     * @return true if this key event was handled, false otherwise.
-     */
-    @UiThread
-    fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (event.action != KeyEvent.ACTION_DOWN
-                && event.action != KeyEvent.ACTION_UP) return false
-
-        val remoteKey = RemoteKey.fromKeyEvent(event) ?: return false
-        if (remoteKey == RemoteKey.CENTER) {
-            dispatchTouchEventOnCurrentPosition(event.action)
-            return true
+    fun onDirectionKeyDown(dir: Direction) {
+        pressedDirections.add(dir)
+        if (updateLoop == null) {
+            updateLoop = asyncStartUpdates()
         }
-
-        val direction = remoteKey.toDirection()
-        if (direction != null) {
-            onDirectionKey(direction, event.action)
-            return true
-        }
-        return false
     }
 
-    private fun onDirectionKey(dir: Direction, action: Int) {
-        if (action == KeyEvent.ACTION_DOWN) {
-            pressedDirections.add(dir)
-            if (updateLoop == null) updateLoop = asyncStartUpdates()
-        } else if (action == KeyEvent.ACTION_UP) {
-            pressedDirections.remove(dir)
-            if (pressedDirections.isEmpty()) {
-                updateLoop?.cancel()
-                updateLoop = null
-                vel = 0f // Stop moving.
-            }
+    fun onDirectionKeyUp(dir: Direction) {
+        pressedDirections.remove(dir)
+        if (pressedDirections.isEmpty()) {
+            cancelUpdates()
         }
     }
 
     /** Dispatches a touch event on the current position, sending a click where the cursor is. */
-    private fun dispatchTouchEventOnCurrentPosition(action: Int) {
+    fun onSelectKeyEvent(action: Int) {
         val now = SystemClock.uptimeMillis()
         MotionEvent.obtain(now - DOWN_TIME_OFFSET_MILLIS, now, action, pos.x, pos.y, 0).use {
             simulateTouchEvent(it)
         }
+    }
+
+    fun cancelUpdates() {
+        pressedDirections.clear()
+        updateLoop?.cancel()
+        updateLoop = null
+        vel = 0f // Stop moving.
     }
 }
 
