@@ -4,11 +4,7 @@
 
 package org.mozilla.focus.fragment
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.OnLifecycleEvent
-import android.graphics.PointF
 import android.os.Bundle
 import android.support.annotation.UiThread
 import android.text.TextUtils
@@ -16,17 +12,13 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.accessibility.AccessibilityManager
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.android.synthetic.main.fragment_browser.view.*
 import org.mozilla.focus.R
 import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.architecture.NonNullObserver
-import org.mozilla.focus.browser.cursor.CursorKeyDispatcher
-import org.mozilla.focus.browser.cursor.CursorViewModel
-import org.mozilla.focus.ext.getAccessibilityManager
-import org.mozilla.focus.ext.isVoiceViewEnabled
+import org.mozilla.focus.browser.cursor.CursorController
 import org.mozilla.focus.session.NullSession
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.session.SessionCallbackProxy
@@ -36,12 +28,10 @@ import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.web.IWebView
 import org.mozilla.focus.web.IWebViewLifecycleFragment
 import org.mozilla.focus.widget.BrowserNavigationOverlay
-import org.mozilla.focus.browser.cursor.CursorView
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 import org.mozilla.focus.widget.NavigationEvent
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
-private const val SCROLL_MULTIPLIER = 45
 
 /**
  * Fragment for displaying the browser UI.
@@ -218,87 +208,5 @@ private class BrowserIWebViewCallback(
 
         fullscreenCallback?.fullScreenExited()
         fullscreenCallback = null
-    }
-}
-
-/**
- * Encapsulates interactions of the Cursors components. It has the following responsibilities:
- * - Data: references to each Cursor component
- * - Controller: manages interactions between the components and the parent fragment
- * - Lifecycle management: provides lifecycle callbacks; nulling a reference to this controller
- * will also prevent access to the components beyond the lifecycle.
- *
- * For simplicity, the lifecycle of the ViewModel and the KeyDispatcher are the same as the View.
- *
- * When using this class, don't forget to add it as a [LifecycleObserver].
- */
-class CursorController(
-        // Our lifecycle is shorter than BrowserFragment, so we can hold a reference.
-        private val browserFragment: BrowserFragment,
-        val view: CursorView
-) : AccessibilityManager.TouchExplorationStateChangeListener, LifecycleObserver {
-    var isEnabled = true
-        set(value) {
-            field = value
-            keyDispatcher.isEnabled = value
-            view.visibility = if (value) View.VISIBLE else View.GONE
-        }
-
-    val viewModel = CursorViewModel(onUpdate = { x, y, scrollVel ->
-        view.updatePosition(x, y)
-        scrollWebView(scrollVel)
-    }, simulateTouchEvent = { browserFragment.activity.dispatchTouchEvent(it) })
-
-    val keyDispatcher = CursorKeyDispatcher(isEnabled, viewModel)
-
-    private val isLoadingObserver = CursorIsLoadingObserver()
-
-    init {
-        view.onLayoutChanged = { width, height ->
-            viewModel.maxBounds = PointF(width.toFloat(), height.toFloat())
-        }
-    }
-
-    /** Gets the current state of the browser and updates the cursor enabled state accordingly. */
-    private fun setEnabledForCurrentState() {
-        // These sources have their own navigation controls.
-        val isYoutubeTV = browserFragment.webview?.getUrl()?.contains("youtube.com/tv") ?: false
-        isEnabled = !isYoutubeTV && !browserFragment.context.isVoiceViewEnabled()
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onStart() {
-        browserFragment.context.getAccessibilityManager().addTouchExplorationStateChangeListener(this)
-        setEnabledForCurrentState() // VoiceView state may change.
-
-        browserFragment.session.loading.observe(browserFragment, isLoadingObserver)
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onStop() {
-        browserFragment.context.getAccessibilityManager().removeTouchExplorationStateChangeListener(this)
-
-        browserFragment.session.loading.removeObserver(isLoadingObserver)
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun onPause() {
-        viewModel.cancelUpdates()
-    }
-
-    override fun onTouchExplorationStateChanged(isEnabled: Boolean) {
-        setEnabledForCurrentState()
-    }
-
-    private fun scrollWebView(scrollVel: PointF) {
-        val scrollX = Math.round(scrollVel.x * SCROLL_MULTIPLIER)
-        val scrollY = Math.round(scrollVel.y * SCROLL_MULTIPLIER)
-        browserFragment.webView?.flingScroll(scrollX, scrollY)
-    }
-
-    private inner class CursorIsLoadingObserver : NonNullObserver<Boolean>() {
-        override fun onValueChanged(isLoading: Boolean) {
-            setEnabledForCurrentState()
-        }
     }
 }
