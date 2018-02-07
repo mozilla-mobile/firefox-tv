@@ -19,11 +19,11 @@ import java.util.EnumSet
 import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 
-private const val UPDATE_DELAY_MILLIS = 20L
+private const val UPDATE_DELAY_MILLIS = 17L // ~60 FPS.
 private const val UPDATE_DELAY_MILLIS_F = UPDATE_DELAY_MILLIS.toFloat() // Avoid conversion in update loop.
 
 private const val ACCEL_MODIFIER = 0.98f
-private const val MAX_VELOCITY = 25f
+private const val MAX_VELOCITY = 21.25f
 
 private const val DOWN_TIME_OFFSET_MILLIS = 100
 
