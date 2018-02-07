@@ -32,7 +32,7 @@ class CursorController(
         // Our lifecycle is shorter than BrowserFragment, so we can hold a reference.
         private val browserFragment: BrowserFragment,
         cursorParent: View,
-        val view: CursorView
+        private val view: CursorView
 ) : AccessibilityManager.TouchExplorationStateChangeListener, LifecycleObserver {
     var isEnabled = true
         set(value) {
@@ -41,7 +41,7 @@ class CursorController(
             view.visibility = if (value) View.VISIBLE else View.GONE
         }
 
-    val viewModel = CursorViewModel(onUpdate = { x, y, scrollVel ->
+    private val viewModel = CursorViewModel(onUpdate = { x, y, scrollVel ->
         view.updatePosition(x, y)
         scrollWebView(scrollVel)
     }, simulateTouchEvent = { browserFragment.activity.dispatchTouchEvent(it) })
