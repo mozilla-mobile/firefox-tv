@@ -80,7 +80,13 @@ class CursorController(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun onPause() {
+        view.cancelUpdates()
         viewModel.cancelUpdates()
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    fun onResume() {
+        view.startUpdates()
     }
 
     override fun onTouchExplorationStateChanged(isEnabled: Boolean) {

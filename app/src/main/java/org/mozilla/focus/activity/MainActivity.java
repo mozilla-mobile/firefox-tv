@@ -204,6 +204,11 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                     browserFragment.reload();
                     isReloadingForYoutubeDrawerClosed = true;
                 }
+
+                if (browserFragment != null && browserFragment.getCursor() != null) {
+                    // For all intents and purposes, covering the UI with a menu is the same as onPause.
+                    browserFragment.getCursor().onResume();
+                }
             }
 
             @Override
