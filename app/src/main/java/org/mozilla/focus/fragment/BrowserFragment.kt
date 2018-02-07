@@ -53,12 +53,6 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
         }
     }
 
-    private val voiceViewStateChangeListener = object : AccessibilityManager.TouchExplorationStateChangeListener {
-        override fun onTouchExplorationStateChanged(isEnabled: Boolean) {
-            updateForVoiceView(isEnabled)
-        }
-    }
-
     // IWebViewLifecycleFragment expects a value for these properties before onViewCreated. We use a getter
     // for the properties that reference session because it is lateinit.
     override lateinit var session: Session
@@ -101,17 +95,12 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
 
     override fun onStart() {
         super.onStart()
-        context.getAccessibilityManager().addTouchExplorationStateChangeListener(voiceViewStateChangeListener)
-        updateForVoiceView(context.isVoiceViewEnabled())
+        cursor?.onStart()
     }
 
     override fun onStop() {
         super.onStop()
-        context.getAccessibilityManager().removeTouchExplorationStateChangeListener(voiceViewStateChangeListener)
-    }
-
-    private fun updateForVoiceView(isEnabled: Boolean) {
-        cursor?.setEnabledForCurrentState()
+        cursor?.onStop()
     }
 
     private fun initSession() {
@@ -256,7 +245,7 @@ class CursorController(
         // Our lifecycle is shorter than BrowserFragment, so we can hold a reference.
         private val browserFragment: BrowserFragment,
         val view: CursorView
-) {
+) : AccessibilityManager.TouchExplorationStateChangeListener {
     var isEnabled = true
         set(value) {
             field = value
@@ -284,8 +273,21 @@ class CursorController(
         isEnabled = !isYoutubeTV && !browserFragment.context.isVoiceViewEnabled()
     }
 
+    fun onStart() {
+        browserFragment.context.getAccessibilityManager().addTouchExplorationStateChangeListener(this)
+        setEnabledForCurrentState() // VoiceView state may change.
+    }
+
+    fun onStop() {
+        browserFragment.context.getAccessibilityManager().removeTouchExplorationStateChangeListener(this)
+    }
+
     fun onPause() {
         viewModel.cancelUpdates()
+    }
+
+    override fun onTouchExplorationStateChanged(isEnabled: Boolean) {
+        setEnabledForCurrentState()
     }
 
     private fun scrollWebView(scrollVel: PointF) {
