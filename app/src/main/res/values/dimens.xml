@@ -45,4 +45,7 @@
     <dimen name="home_tile_corner_radius">4dp</dimen>
 
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="remote_cursor_size">45dp</dimen>
+    <dimen name="remote_cursor_size2x">90dp</dimen>
 </resources>

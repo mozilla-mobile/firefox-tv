@@ -120,7 +120,8 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val layout = inflater.inflate(R.layout.fragment_browser, container, false)
-        cursor = CursorController(this, layout.cursorView)
+        cursor = CursorController(this, cursorParent = layout.browserFragmentRoot,
+                view = layout.cursorView)
         lifecycle.addObserver(cursor!!)
         return layout
     }

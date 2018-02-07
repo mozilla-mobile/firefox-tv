@@ -31,6 +31,7 @@ private const val SCROLL_MULTIPLIER = 45
 class CursorController(
         // Our lifecycle is shorter than BrowserFragment, so we can hold a reference.
         private val browserFragment: BrowserFragment,
+        cursorParent: View,
         val view: CursorView
 ) : AccessibilityManager.TouchExplorationStateChangeListener, LifecycleObserver {
     var isEnabled = true
@@ -50,8 +51,8 @@ class CursorController(
     private val isLoadingObserver = CursorIsLoadingObserver()
 
     init {
-        view.onLayoutChanged = { width, height ->
-            viewModel.maxBounds = PointF(width.toFloat(), height.toFloat())
+        cursorParent.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            viewModel.maxBounds = PointF(right.toFloat(), bottom.toFloat())
         }
     }
 
