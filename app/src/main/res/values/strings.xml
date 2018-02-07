@@ -555,29 +555,6 @@ be temporary, and you can try again later.</li>
     video strings -->
     <string name="menu_drawer_home">Home</string>
 
-    <!-- Home tile strings -->
-
-    <!-- Trademarked brand name: Does not need to be translated -->
-    <string name="tile_youtube_tv">YouTube</string>
-    <!-- Shortcut to a video search engine (Currently Google) -->
-    <string name="tile_google_video_search">Video Search</string>
-    <!-- Trademarked brand name: Does not need to be translated -->
-    <string name="tile_imdb">IMDB</string>
-    <!-- Trademarked brand name: Does not need to be translated -->
-    <string name="tile_rottentomatoes">Rotten Tomatoes</string>
-    <!-- Trademarked brand name: Does not need to be translated -->
-    <string name="tile_metacritic">metacritic</string>
-    <!-- Trademarked brand name: Does not need to be translated -->
-    <string name="tile_fandango">Fandango</string>
-    <!-- Trademarked brand name: Does not need to be translated -->
-    <string name="tile_hollywood_reporter">Hollywood Reporter</string>
-    <!-- Trademarked brand name: Does not need to be translated -->
-    <string name="tile_flickr">Flickr</string>
-    <!-- Trademarked brand name: Does not need to be translated -->
-    <string name="tile_instagram">Instagram</string>
-    <!-- Trademarked brand name: Does not need to be translated -->
-    <string name="tile_pinterest">Pinterest</string>
-
     <!-- Settings strings -->
     <string name="settings_cookies_dialog_title">Clear all cookies and site data</string>
     <string name="settings_cookies_dialog_content">Selecting ‘Clear Now’ will clear all cookies and site data stored by Firefox for Fire TV. This may sign you out of websites and remove offline web content.</string>

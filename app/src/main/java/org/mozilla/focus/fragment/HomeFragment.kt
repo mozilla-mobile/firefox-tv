@@ -6,8 +6,7 @@ package org.mozilla.focus.fragment
 
 import android.graphics.Color
 import android.os.Bundle
-import android.support.annotation.DrawableRes
-import android.support.annotation.StringRes
+import android.content.Context
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -18,11 +17,13 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_home.*
+import org.json.JSONObject
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.OnUrlEnteredListener
+import android.graphics.BitmapFactory
 
 private const val COL_COUNT = 5
 
@@ -31,6 +32,9 @@ class HomeFragment : Fragment() {
     lateinit var urlBar: LinearLayout
     var onUrlEnteredListener = object : OnUrlEnteredListener {} // default impl does nothing.
     val urlAutoCompleteFilter = UrlAutoCompleteFilter()
+    val HOME_TILES_DIR = "defaults/"
+    val HOME_TILES_JSON_PATH = HOME_TILES_DIR + "default_tiles.json"
+    val HOME_TILES_JSON_KEY = "default_tiles"
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater!!.inflate(R.layout.fragment_home, container, false)
@@ -55,7 +59,18 @@ class HomeFragment : Fragment() {
     }
 
     private fun initTiles() = with (tileContainer) {
-        adapter = HomeTileAdapter(onUrlEnteredListener)
+        val homeTiles = mutableListOf<HomeTile>()
+        val inputAsString = context.assets.open(HOME_TILES_JSON_PATH).bufferedReader().use { it.readText() }
+        val jsonArray = JSONObject(inputAsString).getJSONArray(HOME_TILES_JSON_KEY)
+        for (i in 0..(jsonArray.length() - 1)) {
+            val jsonObject = jsonArray.getJSONObject(i)
+            val url = jsonObject.getString("url")
+            val title = jsonObject.getString("title")
+            val imgPath = HOME_TILES_DIR + jsonObject.getString("img")
+            val id = jsonObject.getString("identifier")
+            homeTiles.add(HomeTile(url, title, imgPath, id))
+        }
+        adapter = HomeTileAdapter(onUrlEnteredListener, homeTiles, context)
         layoutManager = GridLayoutManager(context, COL_COUNT)
         setHasFixedSize(true)
     }
@@ -75,29 +90,16 @@ class HomeFragment : Fragment() {
     }
 }
 
-private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener) :
+private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, homeTiles: MutableList<HomeTile>, context: Context) :
         RecyclerView.Adapter<TileViewHolder>() {
-
-    val tiles = listOf(
-            HomeTile("https://youtube.com/tv", R.string.tile_youtube_tv, R.drawable.tile_youtube),
-            HomeTile("https://www.google.com/search?tbm=vid", R.string.tile_google_video_search, R.drawable.tile_google),
-            HomeTile("http://imdb.com", R.string.tile_imdb, R.drawable.tile_imdb),
-            HomeTile("https://www.rottentomatoes.com", R.string.tile_rottentomatoes, R.drawable.tile_rotten_tomatoes),
-
-            // order?
-            HomeTile("http://metacritic.com", R.string.tile_metacritic, R.drawable.tile_metacritic),
-            HomeTile("http://fandango.com", R.string.tile_fandango, R.drawable.tile_fandango),
-
-            HomeTile("https://hollywoodreporter.com", R.string.tile_hollywood_reporter, R.drawable.tile_hollywood_reporter),
-            HomeTile("https://flickr.com", R.string.tile_flickr, R.drawable.tile_flickr),
-            HomeTile("https://instagram.com", R.string.tile_instagram, R.drawable.tile_instagram), // sign in required
-            HomeTile("https://pinterest.com", R.string.tile_pinterest, R.drawable.tile_pinterest) // sign in required
-    )
+    val context = context
+    val tiles = homeTiles
 
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with (holder) {
         val item = tiles[position]
-        titleView.setText(item.titleRes)
-        iconView.setImageResource(item.imageRes)
+        titleView.setText(item.title)
+        val bmImg = BitmapFactory.decodeStream(context.assets.open(item.imagePath))
+        iconView.setImageBitmap(bmImg)
         itemView.setOnClickListener {
             onUrlEnteredListener.onNonTextInputUrlEntered(item.url)
             TelemetryWrapper.homeTileClickEvent()
@@ -133,6 +135,8 @@ private class TileViewHolder(
 
 private data class HomeTile (
         val url: String,
-        @StringRes val titleRes: Int,
-        @DrawableRes val imageRes: Int
+        val title: String,
+        val imagePath: String,
+        // unique id used to identify specific home tiles, e.g. for deletion, etc.
+        val id: String
 )

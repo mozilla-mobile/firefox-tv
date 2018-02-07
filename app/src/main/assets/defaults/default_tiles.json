@@ -1,0 +1,64 @@
+{
+  "default_tiles": [
+    {
+        "identifier": "youtube",
+        "url": "https://youtube.com/tv",
+        "title": "YouTube",
+        "img": "tile_youtube.png"
+    },
+    {
+        "identifier": "googleVideo",
+        "url": "https://www.google.com/search?tbm=vid",
+        "title": "Video Search",
+        "img": "tile_google.png"
+    },
+    {
+        "identifier": "imdb",
+        "url": "http://imdb.com",
+        "title": "IMDB",
+        "img": "tile_imdb.png"
+    },
+    {
+        "identifier": "rottenTomatoes",
+        "url": "https://www.rottentomatoes.com",
+        "title": "Rotten Tomatoes",
+        "img": "tile_rotten_tomatoes.png"
+    },
+    {
+        "identifier": "metacritic",
+        "url": "http://metacritic.com",
+        "title": "metacritic",
+        "img": "tile_metacritic.png"
+    },
+    {
+        "identifier": "fandango",
+        "url": "http://fandango.com",
+        "title": "Fandango",
+        "img": "tile_fandango.png"
+    },
+    {
+        "identifier": "hollywoodReporter",
+        "url": "https://hollywoodreporter.com",
+        "title": "Hollywood Reporter",
+        "img": "tile_hollywood_reporter.png"
+    },
+    {
+        "identifier": "flickr",
+        "url": "https://flickr.com",
+        "title": "Flickr",
+        "img": "tile_flickr.png"
+    },
+    {
+        "identifier": "instagram",
+        "url": "https://instagram.com",
+        "title": "Instagram",
+        "img": "tile_instagram.png"
+    },
+    {
+        "identifier": "pinterest",
+        "url": "https://pinterest.com",
+        "title": "Pinterest",
+        "img": "tile_pinterest.png"
+    }
+  ]
+}
