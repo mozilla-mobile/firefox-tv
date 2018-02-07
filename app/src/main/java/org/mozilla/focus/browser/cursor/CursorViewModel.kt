@@ -18,10 +18,10 @@ import org.mozilla.focus.utils.Direction
 import java.util.EnumSet
 import java.util.concurrent.TimeUnit
 
-private const val UPDATE_DELAY_MILLIS = 20L
+private const val UPDATE_DELAY_MILLIS = 17L // ~60 FPS.
 
 private const val FRICTION = 0.98f
-private const val MAX_SPEED = 25f
+private const val MAX_SPEED = 22f
 
 private const val DOWN_TIME_OFFSET_MILLIS = 100
 
