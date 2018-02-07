@@ -13,6 +13,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.accessibility.AccessibilityManager
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.android.synthetic.main.fragment_browser.view.*
@@ -21,6 +22,7 @@ import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.browser.CursorKeyDispatcher
 import org.mozilla.focus.browser.CursorViewModel
+import org.mozilla.focus.ext.getAccessibilityManager
 import org.mozilla.focus.ext.isVoiceViewEnabled
 import org.mozilla.focus.session.NullSession
 import org.mozilla.focus.session.Session
@@ -48,6 +50,12 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
         @JvmStatic
         fun createForSession(session: Session) = BrowserFragment().apply {
             arguments = Bundle().apply { putString(ARGUMENT_SESSION_UUID, session.uuid) }
+        }
+    }
+
+    private val voiceViewStateChangeListener = object : AccessibilityManager.TouchExplorationStateChangeListener {
+        override fun onTouchExplorationStateChanged(isEnabled: Boolean) {
+            updateForVoiceView(isEnabled)
         }
     }
 
@@ -89,6 +97,21 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     override fun onPause() {
         super.onPause()
         cursor?.onPause()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        context.getAccessibilityManager().addTouchExplorationStateChangeListener(voiceViewStateChangeListener)
+        updateForVoiceView(context.isVoiceViewEnabled())
+    }
+
+    override fun onStop() {
+        super.onStop()
+        context.getAccessibilityManager().removeTouchExplorationStateChangeListener(voiceViewStateChangeListener)
+    }
+
+    private fun updateForVoiceView(isEnabled: Boolean) {
+        updateCursorState()
     }
 
     private fun initSession() {

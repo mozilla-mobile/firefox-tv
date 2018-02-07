@@ -22,7 +22,6 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -35,7 +34,6 @@ import org.jetbrains.annotations.NotNull;
 import org.mozilla.focus.R;
 import org.mozilla.focus.architecture.NonNullObserver;
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter;
-import org.mozilla.focus.ext.ContextKt;
 import org.mozilla.focus.fragment.BrowserFragment;
 import org.mozilla.focus.fragment.HomeFragment;
 import org.mozilla.focus.fragment.NewSettingsFragment;
@@ -47,7 +45,6 @@ import org.mozilla.focus.telemetry.MenuAppNavButton;
 import org.mozilla.focus.telemetry.MenuBrowserNavButton;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.telemetry.UrlTextInputLocation;
-import org.mozilla.focus.utils.Direction;
 import org.mozilla.focus.utils.OnUrlEnteredListener;
 import org.mozilla.focus.utils.SafeIntent;
 import org.mozilla.focus.utils.Settings;
@@ -87,13 +84,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     private Switch drawerTrackingProtectionSwitch;
     private LinearLayout customNavItem;
     private boolean isDrawerOpen = false;
-
-    private final AccessibilityManager.TouchExplorationStateChangeListener voiceViewStateChangeListener = new AccessibilityManager.TouchExplorationStateChangeListener() {
-        @Override
-        public void onTouchExplorationStateChanged(final boolean enabled) {
-            updateForVoiceView(enabled);
-        }
-    };
 
     public enum VideoPlayerState {
        BROWSER, HOME, SETTINGS
@@ -291,22 +281,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         }
     }
 
-    private void updateForVoiceView(final boolean isVoiceViewEnabled) {
-        // The user can turn on/off VoiceView, at which point we may want to change the cursor visibility.
-        final BrowserFragment browserFragment =
-                (BrowserFragment) getSupportFragmentManager().findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-        if (browserFragment != null) {
-            browserFragment.updateCursorState();
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        ContextKt.getAccessibilityManager(this).addTouchExplorationStateChangeListener(voiceViewStateChangeListener);
-        updateForVoiceView(ContextKt.isVoiceViewEnabled(this));
-    }
-
     @Override
     public void onClick(View view) {
         final FragmentManager fragmentManager = getSupportFragmentManager();
@@ -422,7 +396,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
     protected void onStop() {
         super.onStop();
 
-        ContextKt.getAccessibilityManager(this).removeTouchExplorationStateChangeListener(voiceViewStateChangeListener);
         TelemetryWrapper.stopMainActivity();
     }
 
