@@ -36,6 +36,8 @@ private const val DOWN_TIME_OFFSET_MILLIS = 100
  *
  * When using this class, be sure to update the public properties, e.g. [maxBounds].
  *
+ * This ViewModel is written with its lifecycle being the same as its View.
+ *
  * @param onUpdate Callback when the state of the cursor is updated: this will be called from the UI thread.
  * @param simulateTouchEvent Takes the given touch event and simulates a touch to the screen.
  */
@@ -53,12 +55,13 @@ class CursorViewModel(
     var maxBounds = PointF(0f, 0f)
         @UiThread set(value) {
             field = value
-            clampPos(pos, value)
-            if (!isInitialPosSet) {
+            if (isInitialPosSet) {
+                clampPos(pos, value)
+            } else {
                 isInitialPosSet = true
                 pos.set(value.x / 2, value.y / 2) // Center.
-                onUpdate(pos.x, pos.y, getScrollVel())
             }
+            onUpdate(pos.x, pos.y, getScrollVel())
         }
 
     private var isInitialPosSet = false
