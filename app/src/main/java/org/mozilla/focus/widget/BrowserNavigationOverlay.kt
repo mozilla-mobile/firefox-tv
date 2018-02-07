@@ -8,6 +8,7 @@ import android.content.Context
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.util.AttributeSet
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
@@ -88,6 +89,29 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             event = NavigationEvent.RELOAD
         }
         eventHandler?.onNavigationEvent(event)
+    }
+
+    override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.action == KeyEvent.ACTION_DOWN && event.repeatCount == 0) {
+            when (event.keyCode) {
+                KeyEvent.KEYCODE_MENU -> {
+                    val newVisibility = if (visibility == View.VISIBLE) View.GONE else View.VISIBLE
+                    visibility = newVisibility
+                    if (newVisibility == View.VISIBLE) {
+                        // TODO: breaks YT focus on hiding
+//                        navButtonBack.requestFocus()
+                    }
+                    TelemetryWrapper.drawerShowHideEvent(visibility == View.VISIBLE)
+                    return true
+                }
+            }
+        }
+
+        if (visibility != View.VISIBLE) {
+            return false
+        }
+
+        return super.dispatchKeyEvent(event)
     }
 
     fun setNavigationEventHandler(handler: NavigationEventHandler) {

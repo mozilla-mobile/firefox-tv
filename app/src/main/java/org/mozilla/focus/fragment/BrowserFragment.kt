@@ -141,6 +141,8 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
             // Go back in web history
             goBack()
             TelemetryWrapper.browserBackControllerEvent()
+        } else if (browserOverlay.visibility == View.VISIBLE) {
+            browserOverlay.visibility = View.GONE
         } else {
             fragmentManager.popBackStack()
             SessionManager.getInstance().removeCurrentSession()
@@ -166,7 +168,11 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     fun setBlockingEnabled(enabled: Boolean) = webview?.setBlockingEnabled(enabled)
 
     // --- TODO: CURSOR CODE - MODULARIZE IN #412. --- //
-    fun dispatchKeyEvent(event: KeyEvent) = cursorViewModel.dispatchKeyEvent(event)
+    fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (browserOverlay.dispatchKeyEvent(event)) return true
+        if (webView?.getUrl()!!.contains("youtube.com/tv")) return false
+        return cursorViewModel.dispatchKeyEvent(event)
+    }
 
     /**
      * Gets the current state of the application and updates the cursor state accordingly.
@@ -183,8 +189,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
         // Bandaid null checks, underlying issue #249
         val enableCursor = webView != null &&
                 webView.getUrl() != null &&
-                !webView.getUrl()!!.contains("youtube.com/tv") &&
-                browserOverlay.visibility != View.VISIBLE &&
+                (browserOverlay.visibility != View.VISIBLE && !webView.getUrl()!!.contains("youtube.com/tv")) &&
                 context != null &&
                 !context.isVoiceViewEnabled() // VoiceView has its own navigation controls.
         activity.setCursorEnabled(enableCursor)
