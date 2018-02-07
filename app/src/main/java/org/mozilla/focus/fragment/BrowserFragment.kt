@@ -17,7 +17,6 @@ import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.android.synthetic.main.fragment_browser.view.*
 import org.mozilla.focus.R
-import org.mozilla.focus.R.drawable.cursor
 import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.browser.CursorKeyDispatcher
@@ -72,16 +71,11 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     private val sessionManager = SessionManager.getInstance()
 
     /**
-     * ViewModel for the cursor. Te simplify state-handling, we (unconventionally)
-     * make the lifecycle of the ViewModel the same as its View: this value will be
-     * null when the BrowserFragment View is detached.
-     *
-     * This should only be accessed from the UI thread to simplify concurrency in get/set.
+     * Encapsulates the cursor's components. If this value is null, the Cursor is not attached
+     * to the view hierarchy.
      */
-    private var cursorViewModel: CursorViewModel? = null
-        @UiThread get set
-    private var cursorKeyDispatcher: CursorKeyDispatcher? = null
-        @UiThread get set // See cursorViewModel.
+    private var cursor: CursorController? = null
+        @UiThread get set // Set from the UI thread so serial access is required for simplicity.
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -133,29 +127,13 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_browser, container, false).apply {
-            connectCursorToViewModel(cursorView)
+            cursor = CursorController(this@BrowserFragment, cursorView)
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        cursorKeyDispatcher = null
-        cursorViewModel = null // TODO: stop async operations.
-    }
-
-    @UiThread // cursorViewModel can only be accessed from the UiThread.
-    private fun connectCursorToViewModel(cursorView: CursorView) {
-        cursorViewModel = CursorViewModel(onUpdate = { x, y, scrollVel ->
-            cursorView.updatePosition(x, y)
-            scrollWebView(scrollVel)
-        }, simulateTouchEvent = { activity.dispatchTouchEvent(it) })
-
-        cursorView.onLayoutChanged = { width, height ->
-            // Bind to the nullable reference to allow nulling and thus GC.
-            cursorViewModel?.maxBounds = PointF(width.toFloat(), height.toFloat())
-        }
-
-        cursorKeyDispatcher = CursorKeyDispatcher(cursorViewModel!!)
+        cursor = null // TODO: stop async operations.
     }
 
     fun onBackPressed(): Boolean {
@@ -188,7 +166,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     fun setBlockingEnabled(enabled: Boolean) = webview?.setBlockingEnabled(enabled)
 
     // --- TODO: CURSOR CODE - MODULARIZE IN #412. --- //
-    fun dispatchKeyEvent(event: KeyEvent): Boolean = cursorKeyDispatcher?.dispatchKeyEvent(event) ?: false
+    fun dispatchKeyEvent(event: KeyEvent): Boolean = cursor?.keyDispatcher?.dispatchKeyEvent(event) ?: false
 
     /**
      * Gets the current state of the application and updates the cursor state accordingly.
@@ -217,12 +195,6 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
 
     fun setCursorEnabled(toEnable: Boolean) {
         cursorView.visibility = if (toEnable) View.VISIBLE else View.GONE
-    }
-
-    private fun scrollWebView(scrollVel: PointF) {
-        val scrollX = Math.round(scrollVel.x * SCROLL_MULTIPLIER)
-        val scrollY = Math.round(scrollVel.y * SCROLL_MULTIPLIER)
-        webview?.flingScroll(scrollX, scrollY)
     }
 }
 
@@ -271,5 +243,39 @@ private class BrowserIWebViewCallback(
 
         fullscreenCallback?.fullScreenExited()
         fullscreenCallback = null
+    }
+}
+
+/**
+ * Encapsulates interactions of the Cursors components. It has the following responsibilities:
+ * - Data: references to each Cursor component
+ * - Controller: manages interactions between the components and the parent fragment
+ * - Lifecycle management: provides lifecycle callbacks; nulling a reference to this controller
+ * will also prevent access to the components beyond the lifecycle.
+ *
+ * For simplicity, the lifecycle of the ViewModel and the KeyDispatcher are the same as the View.
+ */
+private class CursorController(
+        // Our lifecycle is shorter than BrowserFragment, so we can hold a reference.
+        private val browserFragment: BrowserFragment,
+        val view: CursorView
+) {
+    val viewModel = CursorViewModel(onUpdate = { x, y, scrollVel ->
+        view.updatePosition(x, y)
+        scrollWebView(scrollVel)
+    }, simulateTouchEvent = { browserFragment.activity.dispatchTouchEvent(it) })
+
+    val keyDispatcher = CursorKeyDispatcher(viewModel)
+
+    init {
+        view.onLayoutChanged = { width, height ->
+            viewModel.maxBounds = PointF(width.toFloat(), height.toFloat())
+        }
+    }
+
+    private fun scrollWebView(scrollVel: PointF) {
+        val scrollX = Math.round(scrollVel.x * SCROLL_MULTIPLIER)
+        val scrollY = Math.round(scrollVel.y * SCROLL_MULTIPLIER)
+        browserFragment.webView?.flingScroll(scrollX, scrollY)
     }
 }
