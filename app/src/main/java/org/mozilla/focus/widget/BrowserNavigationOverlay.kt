@@ -94,9 +94,14 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         eventHandler = handler
     }
 
-    fun setOverlayVisible(toShow: Boolean) {
+    fun isVisible(): Boolean {
+        return visibility == View.VISIBLE
+    }
+
+    fun setOverlayVisibleByUser(toShow: Boolean) {
         visibility = if (toShow) VISIBLE else GONE
         if (toShow) navButtonBack.requestFocus()
+        TelemetryWrapper.drawerShowHideEvent(toShow)
     }
 
     private fun updateTurboState(toEnableBlocking: Boolean) = with (turboButton) {
