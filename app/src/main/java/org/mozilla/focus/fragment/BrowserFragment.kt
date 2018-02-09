@@ -161,7 +161,21 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     fun reload() = webView?.reload()
     fun setBlockingEnabled(enabled: Boolean) = webview?.setBlockingEnabled(enabled)
 
-    fun dispatchKeyEvent(event: KeyEvent): Boolean = cursor?.keyDispatcher?.dispatchKeyEvent(event) ?: false
+    fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (handleMenuKeyEvent(event)) return true
+        return cursor?.keyDispatcher?.dispatchKeyEvent(event)?: false
+    }
+
+    private fun handleMenuKeyEvent(event: KeyEvent): Boolean {
+        if (event.keyCode == KeyEvent.KEYCODE_MENU && event.action == KeyEvent.ACTION_DOWN
+                && event.repeatCount == 0) {
+            val toShow = browserOverlay.visibility != View.VISIBLE
+            browserOverlay.setOverlayVisible(toShow)
+            TelemetryWrapper.drawerShowHideEvent(toShow)
+            return true
+        }
+        return false
+    }
 }
 
 private class BrowserIWebViewCallback(
