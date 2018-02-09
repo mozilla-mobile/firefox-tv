@@ -199,19 +199,8 @@ object TelemetryWrapper {
                     .setAppName(TELEMETRY_APP_NAME_FOCUS_TV)
                     .setUpdateChannel(BuildConfig.BUILD_TYPE)
                     .setPreferencesImportantForTelemetry(
-                            resources.getString(R.string.pref_key_search_engine),
-                            resources.getString(R.string.pref_key_privacy_block_ads),
-                            resources.getString(R.string.pref_key_privacy_block_analytics),
-                            resources.getString(R.string.pref_key_privacy_block_social),
-                            resources.getString(R.string.pref_key_privacy_block_other),
-                            resources.getString(R.string.pref_key_performance_block_webfonts),
-                            resources.getString(R.string.pref_key_locale),
-                            resources.getString(R.string.pref_key_secure),
-                            resources.getString(R.string.pref_key_default_browser),
-                            resources.getString(R.string.pref_key_autocomplete_preinstalled),
-                            resources.getString(R.string.pref_key_autocomplete_custom),
                             IWebView.TRACKING_PROTECTION_ENABLED_PREF
-                            )
+                    )
                     .setSettingsProvider(TelemetrySettingsProvider(context))
                     .setCollectionEnabled(telemetryEnabled)
                     .setUploadEnabled(telemetryEnabled)
