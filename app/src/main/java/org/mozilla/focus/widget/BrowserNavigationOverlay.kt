@@ -94,6 +94,11 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         eventHandler = handler
     }
 
+    fun setOverlayVisible(toShow: Boolean) {
+        visibility = if (toShow) VISIBLE else GONE
+        if (toShow) navButtonBack.requestFocus()
+    }
+
     private fun updateTurboState(toEnableBlocking: Boolean) = with (turboButton) {
         Settings.getInstance(context).isBlockingEnabled = toEnableBlocking
         isActivated = toEnableBlocking
