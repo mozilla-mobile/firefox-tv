@@ -59,8 +59,7 @@ class CursorController(
     /** Gets the current state of the browser and updates the cursor enabled state accordingly. */
     private fun setEnabledForCurrentState() {
         // These sources have their own navigation controls.
-        val isYoutubeTV = browserFragment.webView?.getUrl()?.contains("youtube.com/tv") ?: false
-        isEnabled = !isYoutubeTV && !browserFragment.context.isVoiceViewEnabled()
+        isEnabled = !browserFragment.isYoutubeTV() && !browserFragment.context.isVoiceViewEnabled()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)

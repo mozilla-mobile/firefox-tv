@@ -137,12 +137,18 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
             // Go back in web history
             goBack()
             TelemetryWrapper.browserBackControllerEvent()
+        } else if (browserOverlay.isVisible()) {
+            browserOverlay.setOverlayVisibleByUser(false)
         } else {
             fragmentManager.popBackStack()
             SessionManager.getInstance().removeCurrentSession()
         }
 
         return true
+    }
+
+    fun isYoutubeTV(): Boolean {
+        return webView?.getUrl()?.contains("youtube.com/tv") ?: false
     }
 
     // TODO: When all calling code is kotlin, rm these - they're unnecessary with cascading nulls.
@@ -162,16 +168,21 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     fun setBlockingEnabled(enabled: Boolean) = webview?.setBlockingEnabled(enabled)
 
     fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (handleMenuKeyEvent(event)) return true
+        if (handleSpecialKeyEvent(event)) return true
         return cursor?.keyDispatcher?.dispatchKeyEvent(event)?: false
     }
 
-    private fun handleMenuKeyEvent(event: KeyEvent): Boolean {
+    private fun handleSpecialKeyEvent(event: KeyEvent): Boolean {
         if (event.keyCode == KeyEvent.KEYCODE_MENU && event.action == KeyEvent.ACTION_DOWN
                 && event.repeatCount == 0) {
-            val toShow = browserOverlay.visibility != View.VISIBLE
-            browserOverlay.setOverlayVisible(toShow)
-            TelemetryWrapper.drawerShowHideEvent(toShow)
+            val toShow = !browserOverlay.isVisible()
+            browserOverlay.setOverlayVisibleByUser(toShow)
+            return true
+        }
+
+        if (isYoutubeTV() && !browserOverlay.isVisible() && event.keyCode == KeyEvent.KEYCODE_BACK) {
+            val escKeyEvent = KeyEvent(event.action, KeyEvent.KEYCODE_ESCAPE)
+            activity.dispatchKeyEvent(escKeyEvent)
             return true
         }
         return false
