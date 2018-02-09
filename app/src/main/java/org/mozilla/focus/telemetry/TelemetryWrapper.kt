@@ -23,6 +23,7 @@ import org.mozilla.telemetry.config.TelemetryConfiguration
 import org.mozilla.telemetry.event.TelemetryEvent
 import org.mozilla.telemetry.measurement.DefaultSearchMeasurement
 import org.mozilla.telemetry.measurement.SearchesMeasurement
+import org.mozilla.telemetry.measurement.SettingsMeasurement
 import org.mozilla.telemetry.net.HttpURLConnectionTelemetryClient
 import org.mozilla.telemetry.ping.TelemetryCorePingBuilder
 import org.mozilla.telemetry.ping.TelemetryMobileEventPingBuilder
@@ -201,7 +202,7 @@ object TelemetryWrapper {
                     .setPreferencesImportantForTelemetry(
                             IWebView.TRACKING_PROTECTION_ENABLED_PREF
                     )
-                    .setSettingsProvider(TelemetrySettingsProvider(context))
+                    .setSettingsProvider(SettingsMeasurement.SharedPreferenceSettingsProvider())
                     .setCollectionEnabled(telemetryEnabled)
                     .setUploadEnabled(telemetryEnabled)
 
