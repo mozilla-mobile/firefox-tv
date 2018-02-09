@@ -10,6 +10,7 @@ import android.arch.lifecycle.OnLifecycleEvent
 import android.graphics.PointF
 import android.view.View
 import android.view.accessibility.AccessibilityManager
+import kotlinx.android.synthetic.main.fragment_browser.*
 import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.ext.getAccessibilityManager
 import org.mozilla.focus.ext.isVoiceViewEnabled
@@ -57,9 +58,10 @@ class CursorController(
     }
 
     /** Gets the current state of the browser and updates the cursor enabled state accordingly. */
-    private fun setEnabledForCurrentState() {
+    fun setEnabledForCurrentState() {
         // These sources have their own navigation controls.
         isEnabled = !browserFragment.isYoutubeTV() && !browserFragment.context.isVoiceViewEnabled()
+                && !browserFragment.browserOverlay.isVisible()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)

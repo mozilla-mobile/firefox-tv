@@ -177,6 +177,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
                 && event.repeatCount == 0) {
             val toShow = !browserOverlay.isVisible()
             browserOverlay.setOverlayVisibleByUser(toShow)
+            cursor?.setEnabledForCurrentState()
             return true
         }
 
