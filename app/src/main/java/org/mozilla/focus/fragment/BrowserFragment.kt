@@ -36,7 +36,8 @@ private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 /**
  * Fragment for displaying the browser UI.
  */
-class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.NavigationEventHandler {
+class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.NavigationEventHandler,
+        BrowserNavigationOverlay.BrowserNavigationStateProvider   {
     companion object {
         const val FRAGMENT_TAG = "browser"
 
@@ -78,6 +79,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view.browserOverlay!!.setNavigationEventHandler(this)
+        view.browserOverlay!!.setBrowserNavigationStateProvider(this)
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -131,6 +133,10 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
         lifecycle.removeObserver(cursor!!)
         cursor = null
     }
+
+    override fun isBackEnabled() = canGoBack()
+    override fun isForwardEnabled() = canGoForward()
+    override fun getCurrentUrl() = url
 
     fun onBackPressed(): Boolean {
         if (canGoBack()) {

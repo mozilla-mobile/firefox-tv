@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.browser_overlay.view.*
+import kotlinx.android.synthetic.main.fragment_home.view.*
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.telemetry.TelemetryWrapper
@@ -42,7 +43,14 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                               autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? = null)
     }
 
+    interface BrowserNavigationStateProvider {
+        fun isBackEnabled(): Boolean
+        fun isForwardEnabled(): Boolean
+        fun getCurrentUrl(): String?
+    }
+
     private var eventHandler: NavigationEventHandler? = null
+    private var navigationProvider: BrowserNavigationStateProvider? = null
 
     init {
         LayoutInflater.from(context)
@@ -94,14 +102,31 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         eventHandler = handler
     }
 
+    fun setBrowserNavigationStateProvider(provider: BrowserNavigationStateProvider) {
+        navigationProvider = provider
+    }
+
     fun isVisible(): Boolean {
         return visibility == View.VISIBLE
     }
 
     fun setOverlayVisibleByUser(toShow: Boolean) {
         visibility = if (toShow) VISIBLE else GONE
-        if (toShow) navButtonBack.requestFocus()
+        if (toShow) navUrlInput.requestFocus()
         TelemetryWrapper.drawerShowHideEvent(toShow)
+        updateNavigationButtons()
+    }
+
+    private fun updateNavigationButtons() {
+        val canGoBack = navigationProvider?.isBackEnabled()?: false
+        navButtonBack.isEnabled = canGoBack
+        navButtonBack.isFocusable = canGoBack
+
+        val canGoForward = navigationProvider?.isForwardEnabled()?: false
+        navButtonForward.isEnabled = canGoForward
+        navButtonForward.isFocusable = canGoForward
+
+        navUrlInput.setText(navigationProvider?.getCurrentUrl())
     }
 
     private fun updateTurboState(toEnableBlocking: Boolean) = with (turboButton) {
