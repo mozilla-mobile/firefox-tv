@@ -47,6 +47,9 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
         }
     }
 
+    // We need to respond to the onPageFinished event so we set a flag here.
+    var isReloadingForYoutubeDrawerClosed = false;
+
     // IWebViewLifecycleFragment expects a value for these properties before onViewCreated. We use a getter
     // for the properties that reference session because it is lateinit.
     override lateinit var session: Session
@@ -96,8 +99,8 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
         session.loading.observe(this, object : NonNullObserver<Boolean>() {
             public override fun onValueChanged(loading: Boolean) {
                 val activity = activity as MainActivity
-                if (!loading && activity.isReloadingForYoutubeDrawerClosed) {
-                    activity.isReloadingForYoutubeDrawerClosed = false
+                if (!loading && isReloadingForYoutubeDrawerClosed) {
+                    isReloadingForYoutubeDrawerClosed = false
 
                     // We send a play event which:
                     // - If we're on the video selection page, does nothing.
@@ -117,6 +120,10 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
             NavigationEvent.HOME -> (activity as MainActivity).showHomeScreen()
             NavigationEvent.SETTINGS -> (activity as MainActivity).showSettingsScreen()
             NavigationEvent.LOAD -> (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
+            NavigationEvent.RELOAD_YT -> {
+                isReloadingForYoutubeDrawerClosed = true
+                reload()
+            }
         }
     }
 
