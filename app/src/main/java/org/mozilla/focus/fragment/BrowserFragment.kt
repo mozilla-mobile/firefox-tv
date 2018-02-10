@@ -202,7 +202,10 @@ private class BrowserIWebViewCallback(
 
     private var fullscreenCallback: IWebView.FullscreenCallback? = null
 
-    override fun onPageStarted(url: String) {}
+    override fun onPageStarted(url: String) {
+        browserFragment.browserOverlay.updateNavigationButtons()
+    }
+
     override fun onPageFinished(isSecure: Boolean) {}
     override fun onProgress(progress: Int) {}
 

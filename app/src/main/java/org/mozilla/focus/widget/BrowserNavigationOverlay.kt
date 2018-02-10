@@ -12,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.browser_overlay.view.*
-import kotlinx.android.synthetic.main.fragment_home.view.*
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.telemetry.TelemetryWrapper
@@ -112,12 +111,14 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
     fun setOverlayVisibleByUser(toShow: Boolean) {
         visibility = if (toShow) VISIBLE else GONE
-        if (toShow) navUrlInput.requestFocus()
         TelemetryWrapper.drawerShowHideEvent(toShow)
-        updateNavigationButtons()
+        if (toShow) {
+            navUrlInput.requestFocus()
+            updateNavigationButtons()
+        }
     }
 
-    private fun updateNavigationButtons() {
+    fun updateNavigationButtons() {
         val canGoBack = navigationProvider?.isBackEnabled()?: false
         navButtonBack.isEnabled = canGoBack
         navButtonBack.isFocusable = canGoBack
@@ -127,6 +128,17 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         navButtonForward.isFocusable = canGoForward
 
         navUrlInput.setText(navigationProvider?.getCurrentUrl())
+
+        updateFocusOnNavigation()
+    }
+
+    private fun updateFocusOnNavigation() {
+        when {
+            findFocus() != null -> return
+            navButtonBack.isEnabled -> navButtonBack.requestFocus()
+            navButtonForward.isEnabled -> navButtonForward.requestFocus()
+            else -> navButtonReload.requestFocus()
+        }
     }
 
     private fun updateTurboState(toEnableBlocking: Boolean) = with (turboButton) {
