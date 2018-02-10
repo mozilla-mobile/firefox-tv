@@ -18,7 +18,7 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.Settings
 
 enum class NavigationEvent {
-    HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD, TURBO;
+    HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD, TURBO, RELOAD_YT;
 
     companion object {
         fun fromViewClick(viewId: Int?) = when (viewId) {
@@ -115,6 +115,11 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         if (toShow) {
             navUrlInput.requestFocus()
             updateNavigationButtons()
+        } else {
+            // #393: Youtube doesn't refocus properly, so refresh
+            if (navUrlInput.text.contains("youtube.com/tv")) {
+                eventHandler?.onNavigationEvent(NavigationEvent.RELOAD_YT)
+            }
         }
     }
 
