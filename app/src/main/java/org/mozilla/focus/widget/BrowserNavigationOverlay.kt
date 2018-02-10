@@ -124,11 +124,11 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     }
 
     fun updateNavigationButtons() {
-        val canGoBack = navigationProvider?.isBackEnabled()?: false
+        val canGoBack = navigationProvider?.isBackEnabled() ?: false
         navButtonBack.isEnabled = canGoBack
         navButtonBack.isFocusable = canGoBack
 
-        val canGoForward = navigationProvider?.isForwardEnabled()?: false
+        val canGoForward = navigationProvider?.isForwardEnabled() ?: false
         navButtonForward.isEnabled = canGoForward
         navButtonForward.isFocusable = canGoForward
 
