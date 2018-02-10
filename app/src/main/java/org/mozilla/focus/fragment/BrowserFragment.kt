@@ -37,7 +37,7 @@ private const val ARGUMENT_SESSION_UUID = "sessionUUID"
  * Fragment for displaying the browser UI.
  */
 class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.NavigationEventHandler,
-        BrowserNavigationOverlay.BrowserNavigationStateProvider   {
+        BrowserNavigationOverlay.BrowserNavigationStateProvider {
     companion object {
         const val FRAGMENT_TAG = "browser"
 
@@ -48,7 +48,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     }
 
     // We need to respond to the onPageFinished event so we set a flag here.
-    var isReloadingForYoutubeDrawerClosed = false;
+    var isReloadingForYoutubeDrawerClosed = false
 
     // IWebViewLifecycleFragment expects a value for these properties before onViewCreated. We use a getter
     // for the properties that reference session because it is lateinit.
@@ -182,7 +182,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
 
     fun dispatchKeyEvent(event: KeyEvent): Boolean {
         if (handleSpecialKeyEvent(event)) return true
-        return cursor?.keyDispatcher?.dispatchKeyEvent(event)?: false
+        return cursor?.keyDispatcher?.dispatchKeyEvent(event) ?: false
     }
 
     private fun handleSpecialKeyEvent(event: KeyEvent): Boolean {
