@@ -220,13 +220,6 @@ object TelemetryWrapper {
     }
 
     @JvmStatic
-    fun settingsEvent(key: String, value: String) {
-        TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.SETTING, key)
-                .extra(Extra.TO, value)
-                .queue()
-    }
-
-    @JvmStatic
     fun sslErrorEvent(fromPage: Boolean, error: SslError) {
         // SSL Errors from https://developer.android.com/reference/android/net/http/SslError.html
         val primaryErrorMessage = when (error.primaryError) {
