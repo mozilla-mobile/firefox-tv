@@ -60,7 +60,6 @@ import java.util.List;
 
 public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlEnteredListener, View.OnClickListener {
 
-    public static final String ACTION_ERASE = "erase";
     public static final String ACTION_OPEN = "open";
 
     public static final String EXTRA_TEXT_SELECTION = "text_selection";
@@ -416,25 +415,8 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
             TelemetryWrapper.openNotificationActionEvent();
         }
 
-        if (ACTION_ERASE.equals(action)) {
-            processEraseAction(intent);
-        }
-
         if (intent.isLauncherIntent()) {
             TelemetryWrapper.resumeFromIconEvent();
-        }
-    }
-
-    private void processEraseAction(final SafeIntent intent) {
-        final boolean fromShortcut = intent.getBooleanExtra(EXTRA_SHORTCUT, false);
-        final boolean fromNotification = intent.getBooleanExtra(EXTRA_NOTIFICATION, false);
-
-        SessionManager.getInstance().removeAllSessions();
-
-        if (fromShortcut) {
-            TelemetryWrapper.eraseShortcutEvent();
-        } else if (fromNotification) {
-            TelemetryWrapper.eraseAndOpenNotificationActionEvent();
         }
     }
 

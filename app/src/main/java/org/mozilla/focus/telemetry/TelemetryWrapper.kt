@@ -262,16 +262,6 @@ object TelemetryWrapper {
     }
 
     @JvmStatic
-    fun eraseAndOpenNotificationActionEvent() {
-        withSessionCounts(TelemetryEvent.create(
-                Category.ACTION,
-                Method.CLICK,
-                Object.NOTIFICATION_ACTION,
-                Value.ERASE_AND_OPEN)
-        ).queue()
-    }
-
-    @JvmStatic
     fun openNotificationActionEvent() {
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.NOTIFICATION_ACTION, Value.OPEN).queue()
     }
