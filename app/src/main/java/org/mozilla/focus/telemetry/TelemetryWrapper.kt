@@ -261,12 +261,6 @@ object TelemetryWrapper {
     }
 
     @JvmStatic
-    fun eraseShortcutEvent() {
-        withSessionCounts(TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.SHORTCUT, Value.ERASE))
-                .queue()
-    }
-
-    @JvmStatic
     fun settingsEvent(key: String, value: String) {
         TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.SETTING, key)
                 .extra(Extra.TO, value)

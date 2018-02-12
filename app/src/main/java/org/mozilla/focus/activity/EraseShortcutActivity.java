@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import org.mozilla.focus.session.SessionManager;
-import org.mozilla.focus.telemetry.TelemetryWrapper;
 
 public class EraseShortcutActivity extends Activity {
     @Override
@@ -16,8 +15,6 @@ public class EraseShortcutActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         SessionManager.getInstance().removeAllSessions();
-
-        TelemetryWrapper.eraseShortcutEvent();
 
         finishAndRemoveTask();
     }
