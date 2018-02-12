@@ -87,7 +87,6 @@ object TelemetryWrapper {
         val FIREFOX = "firefox"
         val ERASE = "erase"
         val ERASE_AND_OPEN = "erase_open"
-        val CUSTOM_TAB = "custom_tab"
         val OPEN = "open"
         val URL = "url"
         val CANCEL = "cancel"
@@ -247,11 +246,6 @@ object TelemetryWrapper {
         }
 
         event.queue()
-    }
-
-    @JvmStatic
-    fun customTabMenuEvent() {
-        TelemetryEvent.create(Category.ACTION, Method.OPEN, Object.MENU, Value.CUSTOM_TAB).queue()
     }
 
     private fun searchEnterEvent(inputLocation: UrlTextInputLocation) {
