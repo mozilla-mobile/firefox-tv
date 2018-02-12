@@ -29,7 +29,6 @@ import org.mozilla.focus.locale.Locales;
 import org.mozilla.focus.search.MultiselectSearchEngineListPreference;
 import org.mozilla.focus.search.RadioSearchEngineListPreference;
 import org.mozilla.focus.search.SearchEngineManager;
-import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.widget.DefaultBrowserPreference;
 
 import java.util.Locale;
@@ -258,8 +257,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        TelemetryWrapper.settingsEvent(key, String.valueOf(sharedPreferences.getAll().get(key)));
-
         if (!localeUpdated && key.equals(getString(R.string.pref_key_locale))) {
             // Updating the locale leads to onSharedPreferenceChanged being triggered again in some
             // cases. To avoid an infinite loop we won't update the preference a second time. This

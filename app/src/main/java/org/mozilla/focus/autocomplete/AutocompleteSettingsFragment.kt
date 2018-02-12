@@ -11,7 +11,6 @@ import android.preference.PreferenceFragment
 import android.preference.PreferenceScreen
 import org.mozilla.focus.R
 import org.mozilla.focus.settings.SettingsFragment
-import org.mozilla.focus.telemetry.TelemetryWrapper
 
 /**
  * Settings UI for configuring autocomplete.
@@ -53,10 +52,5 @@ class AutocompleteSettingsFragment : PreferenceFragment(), SharedPreferences.OnS
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        if (key == null || sharedPreferences == null) {
-            return
-        }
-
-        TelemetryWrapper.settingsEvent(key, sharedPreferences.all[key].toString())
     }
 }
