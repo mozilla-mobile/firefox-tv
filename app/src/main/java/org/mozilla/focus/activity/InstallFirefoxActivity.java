@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.webkit.WebView;
 
-import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.Browsers;
 
 /**
@@ -51,8 +50,6 @@ public class InstallFirefoxActivity extends Activity {
         // Start this activity to load the redirect URL in a WebView.
         final Intent intent = new Intent(context, InstallFirefoxActivity.class);
         context.startActivity(intent);
-
-        TelemetryWrapper.installFirefoxEvent();
     }
 
     @Override

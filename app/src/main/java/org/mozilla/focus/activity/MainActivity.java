@@ -249,10 +249,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
         final SafeIntent intent = new SafeIntent(getIntent());
 
-        if (intent.isLauncherIntent()) {
-            TelemetryWrapper.openFromIconEvent();
-        }
-
         customNavItem = findViewById(R.id.custom_button_layout);
 
         sessionManager.handleIntent(this, intent, savedInstanceState);
@@ -408,10 +404,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         final SafeIntent intent = new SafeIntent(unsafeIntent);
 
         sessionManager.handleNewIntent(this, intent);
-
-        if (intent.isLauncherIntent()) {
-            TelemetryWrapper.resumeFromIconEvent();
-        }
     }
 
     public void showHomeScreen() {

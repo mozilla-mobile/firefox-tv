@@ -9,11 +9,9 @@ import android.content.Context
 import android.net.http.SslError
 import android.os.StrictMode
 import android.preference.PreferenceManager
-import android.support.annotation.CheckResult
 import org.mozilla.focus.BuildConfig
 import org.mozilla.focus.R
 import org.mozilla.focus.search.SearchEngineManager
-import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.utils.AppConstants
 import org.mozilla.focus.web.IWebView
 import org.mozilla.focus.widget.InlineAutocompleteEditText.AutocompleteResult
@@ -51,14 +49,8 @@ object TelemetryWrapper {
         val CHANGE = "change"
         val FOREGROUND = "foreground"
         val BACKGROUND = "background"
-        val SAVE = "save"
-        val OPEN = "open"
-        val INSTALL = "install"
         val SHOW = "show"
         val HIDE = "hide"
-        val REMOVE = "remove"
-        val REORDER = "reorder"
-        val RESTORE = "restore"
         val PAGE = "page"
         val RESOURCE = "resource"
     }
@@ -68,29 +60,13 @@ object TelemetryWrapper {
         val SETTING = "setting"
         val APP = "app"
         val MENU = "menu"
-        val NOTIFICATION_ACTION = "notification_action"
-        val SHORTCUT = "shortcut"
-        val BLOCKING_SWITCH = "blocking_switch"
         val BROWSER = "browser"
-        val ADD_TO_HOMESCREEN_DIALOG = "add_to_homescreen_dialog"
-        val APP_ICON = "app_icon"
-        val AUTOCOMPLETE_DOMAIN = "autocomplete_domain"
-        val SEARCH_ENGINE_SETTING = "search_engine_setting"
-        val ADD_SEARCH_ENGINE_LEARN_MORE = "search_engine_learn_more"
-        val CUSTOM_SEARCH_ENGINE = "custom_search_engine"
-        val REMOVE_SEARCH_ENGINES = "remove_search_engines"
         const val HOME_TILE = "home_tile"
         val TURBO_MODE = "turbo_mode"
     }
 
     internal object Value {
-        val FIREFOX = "firefox"
-        val ERASE = "erase"
-        val OPEN = "open"
         val URL = "url"
-        val CANCEL = "cancel"
-        val ADD_TO_HOMESCREEN = "add_to_homescreen"
-        val RESUME = "resume"
         val RELOAD = "refresh"
         val CLEAR_DATA = "clear_data"
         val BACK = "back"
@@ -102,13 +78,10 @@ object TelemetryWrapper {
     }
 
     private object Extra {
-        val FROM = "from"
         val TO = "to"
         val TOTAL = "total"
-        val SELECTED = "selected"
         val AUTOCOMPLETE = "autocomplete"
         val SOURCE = "source"
-        val SUCCESS = "success"
         val ERROR_CODE = "error_code"
 
         // We need this second source key because we use SOURCE when using this key.
@@ -189,20 +162,6 @@ object TelemetryWrapper {
         }
     }
 
-    /**
-     * Add the position of the current session and total number of sessions as extras to the event
-     * and return it.
-     */
-    @CheckResult
-    private fun withSessionCounts(event: TelemetryEvent): TelemetryEvent {
-        val sessionManager = SessionManager.getInstance()
-
-        event.extra(Extra.SELECTED, sessionManager.positionOfCurrentSession.toString())
-        event.extra(Extra.TOTAL, sessionManager.numberOfSessions.toString())
-
-        return event
-    }
-
     @JvmStatic
     fun startSession() {
         TelemetryHolder.get().recordSessionStart()
@@ -268,31 +227,6 @@ object TelemetryWrapper {
     }
 
     @JvmStatic
-    fun openFromIconEvent() {
-        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.APP_ICON, Value.OPEN).queue()
-    }
-
-    @JvmStatic
-    fun resumeFromIconEvent() {
-        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.APP_ICON, Value.RESUME).queue()
-    }
-
-    @JvmStatic
-    fun installFirefoxEvent() {
-        TelemetryEvent.create(Category.ACTION, Method.INSTALL, Object.APP, Value.FIREFOX).queue()
-    }
-
-    @JvmStatic
-    fun blockingSwitchEvent(isBlockingEnabled: Boolean) {
-        TelemetryEvent.create(
-                Category.ACTION,
-                Method.CLICK,
-                Object.BLOCKING_SWITCH,
-                isBlockingEnabled.toString()
-        ).queue()
-    }
-
-    @JvmStatic
     fun sslErrorEvent(fromPage: Boolean, error: SslError) {
         // SSL Errors from https://developer.android.com/reference/android/net/http/SslError.html
         val primaryErrorMessage = when (error.primaryError) {
@@ -307,69 +241,6 @@ object TelemetryWrapper {
         TelemetryEvent.create(Category.ERROR, if (fromPage) Method.PAGE else Method.RESOURCE, Object.BROWSER)
                 .extra(Extra.ERROR_CODE, primaryErrorMessage)
                 .queue()
-    }
-
-    fun saveAutocompleteDomainEvent() {
-        TelemetryEvent.create(Category.ACTION, Method.SAVE, Object.AUTOCOMPLETE_DOMAIN).queue()
-    }
-
-    fun removeAutocompleteDomainsEvent(count: Int) {
-        TelemetryEvent.create(Category.ACTION, Method.REMOVE, Object.AUTOCOMPLETE_DOMAIN)
-                .extra(Extra.TOTAL, count.toString())
-                .queue()
-    }
-
-    fun reorderAutocompleteDomainEvent(from: Int, to: Int) {
-        TelemetryEvent.create(Category.ACTION, Method.REORDER, Object.AUTOCOMPLETE_DOMAIN)
-                .extra(Extra.FROM, from.toString())
-                .extra(Extra.TO, to.toString())
-                .queue()
-    }
-
-    @JvmStatic
-    fun setDefaultSearchEngineEvent(source: String) {
-        TelemetryEvent.create(Category.ACTION, Method.SAVE, Object.SEARCH_ENGINE_SETTING)
-                .extra(Extra.SOURCE, source)
-                .queue()
-    }
-
-    @JvmStatic
-    fun openSearchSettingsEvent() {
-        TelemetryEvent.create(Category.ACTION, Method.OPEN, Object.SEARCH_ENGINE_SETTING).queue()
-    }
-
-    @JvmStatic
-    fun menuRemoveEnginesEvent() {
-        TelemetryEvent.create(Category.ACTION, Method.REMOVE, Object.SEARCH_ENGINE_SETTING).queue()
-    }
-
-    @JvmStatic
-    fun menuRestoreEnginesEvent() {
-        TelemetryEvent.create(Category.ACTION, Method.RESTORE, Object.SEARCH_ENGINE_SETTING).queue()
-    }
-
-    @JvmStatic
-    fun menuAddSearchEngineEvent() {
-        TelemetryEvent.create(Category.ACTION, Method.SHOW, Object.CUSTOM_SEARCH_ENGINE).queue()
-    }
-
-    @JvmStatic
-    fun saveCustomSearchEngineEvent(success: Boolean) {
-        TelemetryEvent.create(Category.ACTION, Method.SAVE, Object.CUSTOM_SEARCH_ENGINE)
-                .extra(Extra.SUCCESS, success.toString())
-                .queue()
-    }
-
-    @JvmStatic
-    fun removeSearchEnginesEvent(selected: Int) {
-        TelemetryEvent.create(Category.ACTION, Method.REMOVE, Object.REMOVE_SEARCH_ENGINES)
-                .extra(Extra.SELECTED, selected.toString())
-                .queue()
-    }
-
-    @JvmStatic
-    fun addSearchEngineLearnMoreEvent() {
-        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.ADD_SEARCH_ENGINE_LEARN_MORE).queue()
     }
 
     @JvmStatic
