@@ -24,7 +24,6 @@ import android.widget.LinearLayout;
 import org.mozilla.focus.R;
 import org.mozilla.focus.shortcut.HomeScreen;
 import org.mozilla.focus.shortcut.IconGenerator;
-import org.mozilla.focus.telemetry.TelemetryWrapper;
 
 /**
  * Fragment displaying a dialog where a user can change the title for a homescreen shortcut
@@ -87,7 +86,6 @@ public class AddToHomescreenDialogFragment extends DialogFragment {
         addToHomescreenDialogCancelButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TelemetryWrapper.cancelAddToHomescreenShortcutEvent();
                 dismiss();
             }
         });
@@ -97,7 +95,6 @@ public class AddToHomescreenDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 HomeScreen.installShortCut(getContext(), IconGenerator.generateLauncherIcon(getContext(), url), url,
                         editableTitle.getText().toString().trim(), blockingEnabled);
-                TelemetryWrapper.addToHomescreenShortcutEvent();
                 dismiss();
             }
         });
