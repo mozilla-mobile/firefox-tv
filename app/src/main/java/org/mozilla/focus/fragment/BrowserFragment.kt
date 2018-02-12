@@ -191,6 +191,10 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
             val toShow = !browserOverlay.isVisible()
             browserOverlay.setOverlayVisibleByUser(toShow)
             cursor?.setEnabledForCurrentState()
+            // Fix this youtube focus hack in #393
+            if (!toShow && isYoutubeTV()) {
+                webView?.requestFocus()
+            }
             return true
         }
 
@@ -210,7 +214,9 @@ private class BrowserIWebViewCallback(
     private var fullscreenCallback: IWebView.FullscreenCallback? = null
 
     override fun onPageStarted(url: String) {
-        browserFragment.browserOverlay.updateNavigationButtons()
+        if (browserFragment.browserOverlay.isVisible()) {
+            browserFragment.browserOverlay.updateNavigationButtons()
+        }
     }
 
     override fun onPageFinished(isSecure: Boolean) {}

@@ -37,6 +37,7 @@ interface IWebView {
     fun canGoBack(): Boolean
 
     fun flingScroll(vx: Int, vy: Int)
+    fun requestFocus(): Boolean
 
     fun cleanup()
 
