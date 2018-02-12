@@ -409,12 +409,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
         sessionManager.handleNewIntent(this, intent);
 
-        final String action = intent.getAction();
-
-        if (ACTION_OPEN.equals(action)) {
-            TelemetryWrapper.openNotificationActionEvent();
-        }
-
         if (intent.isLauncherIntent()) {
             TelemetryWrapper.resumeFromIconEvent();
         }

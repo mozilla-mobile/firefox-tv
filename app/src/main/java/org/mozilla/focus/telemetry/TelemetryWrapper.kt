@@ -86,7 +86,6 @@ object TelemetryWrapper {
     internal object Value {
         val FIREFOX = "firefox"
         val ERASE = "erase"
-        val ERASE_AND_OPEN = "erase_open"
         val OPEN = "open"
         val URL = "url"
         val CANCEL = "cancel"
@@ -259,11 +258,6 @@ object TelemetryWrapper {
                 telemetry.configuration.context)
 
         telemetry.recordSearch(SearchesMeasurement.LOCATION_ACTIONBAR, searchEngine.identifier)
-    }
-
-    @JvmStatic
-    fun openNotificationActionEvent() {
-        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.NOTIFICATION_ACTION, Value.OPEN).queue()
     }
 
     @JvmStatic
