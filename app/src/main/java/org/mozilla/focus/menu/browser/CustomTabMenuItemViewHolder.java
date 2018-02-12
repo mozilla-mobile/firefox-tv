@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.view.View;
 
 import org.mozilla.focus.R;
-import org.mozilla.focus.telemetry.TelemetryWrapper;
 
 /**
  * Custom tab menu items look just the same as any other menu items. The primary difference
@@ -49,8 +48,6 @@ import org.mozilla.focus.telemetry.TelemetryWrapper;
         } catch (PendingIntent.CanceledException e) {
             // There's really nothing we can do here...
         }
-
-        TelemetryWrapper.customTabMenuEvent();
     }
 
     /* package-private */ void bind(BrowserMenuAdapter.MenuItem menuItem) {
