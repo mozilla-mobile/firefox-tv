@@ -12,7 +12,6 @@ import android.widget.CompoundButton;
 import android.widget.RadioGroup;
 
 import org.mozilla.focus.R;
-import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.Settings;
 
 public class RadioSearchEngineListPreference extends SearchEngineListPreference implements RadioGroup.OnCheckedChangeListener {
@@ -47,8 +46,5 @@ public class RadioSearchEngineListPreference extends SearchEngineListPreference 
     public void onCheckedChanged (RadioGroup group, int checkedId) {
         final SearchEngine newDefaultEngine = searchEngines.get(checkedId);
         Settings.getInstance(group.getContext()).setDefaultSearchEngine(newDefaultEngine);
-        final String source = SearchEngineManager.getInstance().isCustomSearchEngine(newDefaultEngine.getIdentifier(), getContext()) ?
-                SearchEngineManager.ENGINE_TYPE_CUSTOM : SearchEngineManager.ENGINE_TYPE_BUNDLED;
-        TelemetryWrapper.setDefaultSearchEngineEvent(source);
     }
 }

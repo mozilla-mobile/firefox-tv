@@ -14,7 +14,6 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import org.mozilla.focus.R
 import org.mozilla.focus.settings.SettingsFragment
-import org.mozilla.focus.telemetry.TelemetryWrapper
 
 class AutocompleteRemoveFragment : AutocompleteListFragment() {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -35,8 +34,6 @@ class AutocompleteRemoveFragment : AutocompleteListFragment() {
             launch(UI) {
                 async {
                     CustomAutocomplete.removeDomains(context, domains)
-
-                    TelemetryWrapper.removeAutocompleteDomainsEvent(domains.size)
                 }.await()
 
                 fragmentManager.popBackStack()

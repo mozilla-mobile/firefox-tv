@@ -26,7 +26,6 @@ import org.mozilla.focus.R;
 import org.mozilla.focus.activity.InfoActivity;
 import org.mozilla.focus.search.ManualAddSearchEnginePreference;
 import org.mozilla.focus.search.SearchEngineManager;
-import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.SupportUtils;
 import org.mozilla.focus.utils.UrlUtils;
 import org.mozilla.focus.utils.ViewUtils;
@@ -104,7 +103,6 @@ public class ManualAddSearchEngineSettingsFragment extends SettingsFragment {
                 final Intent intent = InfoActivity.getIntentFor(context, url, title);
                 context.startActivity(intent);
 
-                TelemetryWrapper.addSearchEngineLearnMoreEvent();
                 return true;
 
             case R.id.menu_save_search_engine:
@@ -126,8 +124,6 @@ public class ManualAddSearchEngineSettingsFragment extends SettingsFragment {
                     setUiIsValidatingAsync(true, item);
                     activeAsyncTask = new ValidateSearchEngineAsyncTask(this, engineName, searchQuery).execute();
                     menuItemForActiveAsyncTask = item;
-                } else {
-                    TelemetryWrapper.saveCustomSearchEngineEvent(false);
                 }
                 return true;
 
@@ -158,9 +154,7 @@ public class ManualAddSearchEngineSettingsFragment extends SettingsFragment {
 
         @Override
         protected Boolean doInBackground(final Void... voids) {
-            final boolean isValidSearchQuery = isValidSearchQueryURL(query);
-            TelemetryWrapper.saveCustomSearchEngineEvent(isValidSearchQuery);
-            return isValidSearchQuery;
+            return isValidSearchQueryURL(query);
         }
 
         @Override

@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import org.mozilla.focus.R;
 import org.mozilla.focus.fragment.BrowserFragment;
-import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.ThreadUtils;
 
 /* package */ class BlockingItemViewHolder extends BrowserMenuViewHolder implements CompoundButton.OnCheckedChangeListener {
@@ -64,8 +63,6 @@ import org.mozilla.focus.utils.ThreadUtils;
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         fragment.setBlockingEnabled(isChecked);
-
-        TelemetryWrapper.blockingSwitchEvent(isChecked);
 
         // Delay closing the menu and reloading the website a bit so that the user can actually see
         // the switch change its state.

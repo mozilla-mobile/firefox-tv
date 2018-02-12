@@ -8,18 +8,17 @@ import android.app.Fragment
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.Menu
-import android.view.MenuItem
 import kotlinx.android.synthetic.main.fragment_autocomplete_add_domain.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 import org.mozilla.focus.R
 import org.mozilla.focus.ext.removePrefixesIgnoreCase
 import org.mozilla.focus.settings.SettingsFragment
-import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.ViewUtils
 
 /**
@@ -74,8 +73,6 @@ class AutocompleteAddFragment : Fragment() {
     private fun saveDomainAndClose(context: Context, domain: String) {
         launch(CommonPool) {
             CustomAutocomplete.addDomain(context, domain)
-
-            TelemetryWrapper.saveAutocompleteDomainEvent()
         }
 
         ViewUtils.showBrandedSnackbar(view, R.string.preference_autocomplete_add_confirmation, 0)
