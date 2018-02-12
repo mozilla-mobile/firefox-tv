@@ -54,11 +54,8 @@ object TelemetryWrapper {
         val SAVE = "save"
         val OPEN = "open"
         val INSTALL = "install"
-        val INTENT_URL = "intent_url"
-        val TEXT_SELECTION_INTENT = "text_selection_intent"
         val SHOW = "show"
         val HIDE = "hide"
-        val SHARE_INTENT = "share_intent"
         val REMOVE = "remove"
         val REORDER = "reorder"
         val RESTORE = "restore"
@@ -76,7 +73,6 @@ object TelemetryWrapper {
         val BLOCKING_SWITCH = "blocking_switch"
         val BROWSER = "browser"
         val ADD_TO_HOMESCREEN_DIALOG = "add_to_homescreen_dialog"
-        val HOMESCREEN_SHORTCUT = "homescreen_shortcut"
         val APP_ICON = "app_icon"
         val AUTOCOMPLETE_DOMAIN = "autocomplete_domain"
         val SEARCH_ENGINE_SETTING = "search_engine_setting"
@@ -94,7 +90,6 @@ object TelemetryWrapper {
         val CUSTOM_TAB = "custom_tab"
         val OPEN = "open"
         val URL = "url"
-        val SEARCH = "search"
         val CANCEL = "cancel"
         val ADD_TO_HOMESCREEN = "add_to_homescreen"
         val RESUME = "resume"
@@ -255,27 +250,8 @@ object TelemetryWrapper {
     }
 
     @JvmStatic
-    fun browseIntentEvent() {
-        TelemetryEvent.create(Category.ACTION, Method.INTENT_URL, Object.APP).queue()
-    }
-
-    @JvmStatic
-    fun shareIntentEvent(isSearch: Boolean) {
-        if (isSearch) {
-            TelemetryEvent.create(Category.ACTION, Method.SHARE_INTENT, Object.APP, Value.SEARCH).queue()
-        } else {
-            TelemetryEvent.create(Category.ACTION, Method.SHARE_INTENT, Object.APP, Value.URL).queue()
-        }
-    }
-
-    @JvmStatic
     fun customTabMenuEvent() {
         TelemetryEvent.create(Category.ACTION, Method.OPEN, Object.MENU, Value.CUSTOM_TAB).queue()
-    }
-
-    @JvmStatic
-    fun textSelectionIntentEvent() {
-        TelemetryEvent.create(Category.ACTION, Method.TEXT_SELECTION_INTENT, Object.APP).queue()
     }
 
     private fun searchEnterEvent(inputLocation: UrlTextInputLocation) {
@@ -304,11 +280,6 @@ object TelemetryWrapper {
     @JvmStatic
     fun openNotificationActionEvent() {
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.NOTIFICATION_ACTION, Value.OPEN).queue()
-    }
-
-    @JvmStatic
-    fun openHomescreenShortcutEvent() {
-        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOMESCREEN_SHORTCUT, Value.OPEN).queue()
     }
 
     @JvmStatic

@@ -5,20 +5,14 @@
 
 package org.mozilla.focus;
 
-import android.arch.lifecycle.LiveData;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 
 import org.mozilla.focus.locale.LocaleAwareApplication;
 import org.mozilla.focus.search.SearchEngineManager;
-import org.mozilla.focus.session.Session;
-import org.mozilla.focus.session.SessionManager;
 import org.mozilla.focus.session.VisibilityLifeCycleCallback;
-import org.mozilla.focus.telemetry.TelemetrySessionObserver;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.AppConstants;
-
-import java.util.List;
 
 public class FocusApplication extends LocaleAwareApplication {
     private VisibilityLifeCycleCallback visibilityLifeCycleCallback;
@@ -36,9 +30,6 @@ public class FocusApplication extends LocaleAwareApplication {
         TelemetryWrapper.init(this);
 
         registerActivityLifecycleCallbacks(visibilityLifeCycleCallback = new VisibilityLifeCycleCallback(this));
-
-        final LiveData<List<Session>> sessions = SessionManager.getInstance().getSessions();
-        sessions.observeForever(new TelemetrySessionObserver());
     }
 
     public VisibilityLifeCycleCallback getVisibilityLifeCycleCallback() {
