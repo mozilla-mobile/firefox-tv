@@ -31,7 +31,7 @@
 
     <!-- Menu item: Switch to another browser to open the currently visible page. This menu item
       will be shown if there are multiple browsers and we do not know which one is the default
-      browser or in case Focus is actually the default browser. Clicking this menu item will show
+      browser or in case Firefox for Fire TV is actually the default browser. Clicking this menu item will show
       a screen with multiple browsers (or other apps that can open the current URL) to choose from. -->
     <string name="menu_open_with_a_browser">Open with…</string>
 
@@ -62,10 +62,10 @@
          button in the application. -->
     <string name="notification_erase_text">Erase browsing history</string>
 
-    <!-- Notification action to open Focus and resume the current browsing session. -->
+    <!-- Notification action to open Firefox for Fire TV and resume the current browsing session. -->
     <string name="notification_action_open">Open</string>
 
-    <!-- Notification action to erase the current browsing session AND switch to Focus (bring it
+    <!-- Notification action to erase the current browsing session AND switch to Firefox for Fire TV (bring it
          to the foreground) -->
     <string name="notification_action_erase_and_open">Erase and Open</string>
 
@@ -79,10 +79,10 @@
     <string name="shortcut_erase_long_label">Erase browsing history</string>
 
     <!-- This is the label of an action we offer when the user selects text in other third-party apps.
-         Clicking this action will launch Focus and perform a search in the default search engine. -->
+         Clicking this action will launch Firefox for Fire TV and perform a search in the default search engine. -->
     <string name="text_selection_search_action">Search Privately</string>
 
-    <!-- Content of about focus. Argument 1 is the app name (Firefox Focus/Firefox Klar/etc).
+    <!-- Content of about Firefox for Fire TV. Argument 1 is the app name Firefox for Fire TV
          Argument 2 is the url for the learn-more link. -->
     <string name="about_content"><![CDATA[
 <p>%1$s puts you in control.</p>
@@ -114,10 +114,10 @@
     <!-- Title of "switch" preference that enables/disables autocomplete -->
     <string name="preference_switch_autocomplete">Autocomplete</string>
 
-    <!-- Preference title: URL autocomplete list that ships with Focus/Klar. -->
+    <!-- Preference title: URL autocomplete list that ships with Firefox for Fire TV. -->
     <string name="preference_category_autocomplete_preinstalled">Default URL List</string>
 
-    <!-- Preference summary: URL autocomplete list that ships with Focus/Klar. -->
+    <!-- Preference summary: URL autocomplete list that ships with Firefox for Fire TV -->
     <string name="preference_autocomplete_preinstalled_summary">Enable to have %1$s autocomplete over 450 popular URLs in the address bar.</string>
 
     <!-- Preference category: Custom (user-defined) autocomplete URLs. -->
@@ -165,7 +165,7 @@
     <string name="preference_autocomplete_add_error">Double-check the URL you entered.</string>
 
     <string name="preference_language">Language</string>
-    <!-- This is shown when the user hasn't set a focus specific language, i.e. when Focus
+    <!-- This is shown when the user hasn't set a Firefox for Fire TV specific language, i.e. when Firefox for Fire TV
          is using the system default language. -->
     <string name="preference_language_systemdefault">System default</string>
 
@@ -197,10 +197,10 @@
     <string name="preference_performance_block_webfonts_summary">May result in missing icons or images</string>
     <string name="preference_performance_block_images">Block images</string>
 
-    <!-- This preference does not set Focus as the default browser but instead links to Android's
+    <!-- This preference does not set Firefox for Fire TV as the default browser but instead links to Android's
      "default apps" settings screen or if not supported by this Android version to a SUMO page describing
-     how to set Focus as a default browser.
-      %1$s will be replaced by the app name (e.g. Firefox Focus) -->
+     how to set Firefox for Fire TV as a default browser.
+      %1$s will be replaced by the app name (e.g. Firefox for Fire TV) -->
     <string name="preference_default_browser2">Make %1$s default browser</string>
 
     <string name="preference_category_mozilla">Mozilla</string>
@@ -209,13 +209,13 @@
     <!-- A link to SUMO at the end of the summary (preference_mozilla_telemetry_summary2) of the "Send anonymous usage data" setting. -->
     <string name="preference_mozilla_telemetry_summary">Learn more</string>
 
-    <!-- %1$s will be replaced with the name of the app (e.g. Firefox Focus) -->
+    <!-- %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV) -->
     <string name="preference_mozilla_telemetry_summary2">Mozilla strives to collect only what we need to provide and improve %1$s for everyone.</string>
 
-    <!-- In-app link (in settings) to Focus privacy notice. -->
+    <!-- In-app link (in settings) to Firefox for Fire TV privacy notice. -->
     <string name="preference_privacy_notice">Privacy Notice</string>
 
-    <!-- Item in Preferences that shows the about page. Parameter 1 is the app name, i.e. Firefox Focus/Firefox Klar. -->
+    <!-- Item in Preferences that shows the about page. Parameter 1 is the app name, i.e. Firefox for Fire TV. -->
     <string name="preference_about">About %1$s</string>
 
     <!-- Header for the list of installed search engines -->
@@ -343,11 +343,11 @@
 
     <string name="external_app_prompt_title">Open link in another  app</string>
     <!-- This string is shown when the user has clicked a link that needs to be opened in a different app.
-         Argument 2 is the external app name, argument 1 is our name (i.e. Firefox Focus, or Firefox Klar). -->
+         Argument 2 is the external app name, argument 1 is our name (i.e. Firefox for Fire TV). -->
     <string name="external_app_prompt">You can leave %1$s to open this link in %2$s.</string>
     <!-- This text is the title of a dialog shown if no app could be found for a custom link protocol. -->
     <string name="external_app_prompt_no_app_title">Find an app that can open link</string>
-    <!-- This text is shown in a dialog if no app could be found for a custom link protocol. %1$s is the name of the app (i.e. Firefox Focus) and %2$s is the name of
+    <!-- This text is shown in a dialog if no app could be found for a custom link protocol. %1$s is the name of the app (i.e. Firefox for Fire TV) and %2$s is the name of
          the app store installed on the device (usually that's Google Play). -->
     <string name="external_app_prompt_no_app">None of the apps on your device are able to open this link. You can leave %1$s to search %2$s for an app that can.</string>
     <!-- This label is shown above a list of apps that can be used to open a given link -->
@@ -359,7 +359,7 @@
     <!-- Snackbar action to immediately open the successfully downloaded file. -->
     <string name="download_snackbar_open">Open</string>
 
-    <!-- Download dialog: Warns users that downloaded files will not be deleted even when erasing history. %1$s will be replaced with the app name (i.e. Firefox Focus). -->
+    <!-- Download dialog: Warns users that downloaded files will not be deleted even when erasing history. %1$s will be replaced with the app name (i.e. Firefox for Fire TV). -->
     <string name="download_dialog_warning"><![CDATA[Downloaded files <b>will not be deleted</b> when you erase %1$s history.]]></string>
 
     <!-- Title of download dialogue -->
@@ -450,7 +450,7 @@ be temporary, and you can try again later.</li>
     <!-- Label used in the contextmenu shown when long-pressing on a link -->
     <string name="contextmenu_open_in_new_tab">Open link in new tab</string>
 
-    <!-- This is a warning shown in the browser's context menu (when long pressing an image). %1$s will be replaced with the long name of the app (e.g. Firefox Focus). -->
+    <!-- This is a warning shown in the browser's context menu (when long pressing an image). %1$s will be replaced with the long name of the app (e.g. Firefox for Fire TV). -->
     <string name="contextmenu_image_warning"><![CDATA[Saved and shared images <b>will not be deleted</b> when you erase %1$s history.]]></string>
 
     <!-- First run tour (Default browser): Title -->
@@ -465,12 +465,12 @@ be temporary, and you can try again later.</li>
 
     <!-- First run tour (Shortcut): Title -->
     <string name="firstrun_shortcut_title">Add shortcuts to your home screen</string>
-    <!-- First run tour (Shortcut): Text. %1$s will be replaced with the name of the app (e.g. Firefox Focus) -->
+    <!-- First run tour (Shortcut): Text. %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV) -->
     <string name="firstrun_shortcut_text">Return to your favorite sites in %1$s quickly. Just select \"Add to Home screen\" from the %1$s menu.</string>
 
     <!-- First run tour (Privacy): Title -->
     <string name="firstrun_privacy_title">Make privacy a habit</string>
-    <!-- First run tour (Privacy): Text. %1$s will be replaced with the name of the app (e.g. Firefox Focus) -->
+    <!-- First run tour (Privacy): Text. %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV) -->
     <string name="firstrun_privacy_text">Set %1$s as your default browser and get the benefits of private browsing when you open webpages from other apps.</string>
 
     <string name="firstrun_close_button">OK, got it!</string>
@@ -527,31 +527,32 @@ be temporary, and you can try again later.</li>
     <string name="download_firefox">Download Firefox</string>
 
     <!-- Text shown in the "Your rights" screen.
-    %1$s will be replaced with the name of the app (e.g. Firefox Focus)-->
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)-->
     <string name="your_rights_content1"><![CDATA[%1$s is free and open source software made by Mozilla and other contributors.]]></string>
 
     <!-- Text shown in the "Your rights" screen.
-    %1$s will be replaced with the name of the app (e.g. Firefox Focus)
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
     %2$s will be replaced with a URL linking to the MPL (e.g. https://www.mozilla.org/en-US/MPL/) -->
     <string name="your_rights_content2"><![CDATA[%1$s is made available to you under the terms of the <a href="%2$s">Mozilla Public License</a> and other open source licenses.]]></string>
 
     <!-- Text shown in the "Your rights" screen.
-    %1$s will be replaced with the name of the app (e.g. Firefox Focus)
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
     %2$s will be replaced with a URL linking to the trademark policy (e.g. https://www.mozilla.org/foundation/trademarks/policy/) -->
     <string name="your_rights_content3"><![CDATA[You are not granted any rights or licenses to the trademarks of the Mozilla Foundation or any party, including the Mozilla, Firefox or %1$s names or logos. Additional information may be found <a href="%2$s">here</a>.]]></string>
 
     <!-- Text shown in the "Your rights" screen.
-    %1$s will be replaced with the name of the app (e.g. Firefox Focus)
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
     %2$s will be replaced with a URL linking to the list of licenses used by the dependencies.-->
     <string name="your_rights_content4"><![CDATA[Additional source code for %1$s is available under various other free and open source <a href="%2$s">licenses</a>.]]></string>
 
     <!-- Text shown in the "Your rights" screen.
-    %1$s will be replaced with the name of the app (e.g. Firefox Focus)
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
     %2$s will be replaced with a URL linking to the GPL
     %3$s will be replaced with a URL linking to the tracking protection wiki page (e.g. https://wiki.mozilla.org/Security/Tracking_protection#Lists) -->
     <string name="your_rights_content5"><![CDATA[%1$s also uses blocklists provided by Disconnect, Inc. as separate and independent works under the <a href="%2$s">GNU General Public License v3</a>, and available <a href="%3$s">here</a>.]]></string>
 
-    <!-- Focus video strings -->
+    <!-- Firefox for Fire TV
+    video strings -->
     <string name="menu_drawer_home">Home</string>
 
     <!-- Home tile strings -->
@@ -561,6 +562,8 @@ be temporary, and you can try again later.</li>
     <string name="tile_rottentomatoes">Rotten Tomatoes</string>
     <string name="tile_metacritic">metacritic</string>
     <string name="tile_fandango">Fandango</string>
+
+    <!-- Name of an American magazine: Does not need to be translated -->
     <string name="tile_hollywood_reporter">Hollywood Reporter</string>
     <string name="tile_flickr">Flickr</string>
     <string name="tile_instagram">Instagram</string>
