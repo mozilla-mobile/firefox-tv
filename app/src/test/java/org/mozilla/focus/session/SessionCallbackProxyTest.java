@@ -6,11 +6,9 @@ package org.mozilla.focus.session;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mozilla.focus.architecture.NonNullMutableLiveData;
 import org.mozilla.focus.web.IWebView;
 import org.robolectric.RobolectricTestRunner;
 
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -64,24 +62,5 @@ public class SessionCallbackProxyTest {
         proxy.onURLChanged(TEST_URL);
 
         verify(session).setUrl(TEST_URL);
-    }
-
-    @Test
-    public void testBlockedTrackerCounter() {
-        final NonNullMutableLiveData<Integer> blockedTrackerCounter = new NonNullMutableLiveData<>(50);
-
-        final Session session = mock(Session.class);
-        doReturn(blockedTrackerCounter).when(session).getBlockedTrackers();
-
-        final SessionCallbackProxy proxy = new SessionCallbackProxy(session, mock(IWebView.Callback.class));
-
-        proxy.countBlockedTracker();
-
-        verify(session).getBlockedTrackers();
-        verify(session).setTrackersBlocked(51);
-
-        proxy.resetBlockedTrackers();
-
-        verify(session).setTrackersBlocked(0);
     }
 }

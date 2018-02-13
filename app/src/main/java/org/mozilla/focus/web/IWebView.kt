@@ -95,9 +95,6 @@ interface IWebView {
          */
         fun onExitFullScreen()
 
-        fun countBlockedTracker()
-        fun resetBlockedTrackers()
-
         fun onBlockingStateChanged(isBlockingEnabled: Boolean)
     }
 

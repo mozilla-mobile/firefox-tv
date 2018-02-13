@@ -32,6 +32,8 @@ public class FocusWebViewClient extends TrackingProtectionWebViewClient {
     private static final String STATE_KEY_URL = "client_last_url";
     private static final String STATE_KEY_CERTIFICATE = "client_last_certificate";
 
+    protected IWebView.Callback callback;
+
     private String restoredUrl;
     private SslCertificate restoredCertificate;
     private boolean errorReceived;
@@ -320,5 +322,9 @@ public class FocusWebViewClient extends TrackingProtectionWebViewClient {
         }
 
         super.onReceivedError(webView, errorCode, description, failingUrl);
+    }
+
+    public void setCallback(IWebView.Callback callback) {
+        this.callback = callback;
     }
 }
