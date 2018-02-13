@@ -69,16 +69,10 @@
             android:src="@drawable/ic_settings"
             android:contentDescription="@string/menu_settings"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/NavigationButton"
-            android:focusable="false"
-            android:src="@drawable/ic_search"
-            android:importantForAccessibility="no"/>
-
         <org.mozilla.focus.widget.InlineAutocompleteEditText
             android:id="@+id/navUrlInput"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="10dp"
             android:layout_width="400dp"
             android:layout_height="40dp"
             android:background="@color/homeUrlBarBackground"
