@@ -30,8 +30,6 @@ import org.mozilla.focus.utils.ThreadUtils;
         switchView.setOnCheckedChangeListener(this);
 
         trackerCounter = itemView.findViewById(R.id.trackers_count);
-
-        updateTrackers(fragment.getSession().getBlockedTrackers().getValue());
     }
 
     /* package */ void updateTrackers(int trackers) {

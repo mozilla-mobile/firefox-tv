@@ -23,7 +23,6 @@ public class Session {
     private final NonNullMutableLiveData<Integer> progress;
     private final NonNullMutableLiveData<Boolean> secure;
     private final NonNullMutableLiveData<Boolean> loading;
-    private final NonNullMutableLiveData<Integer> trackersBlocked;
     private Bundle webviewState;
     private String searchTerms;
     private String searchUrl;
@@ -39,7 +38,6 @@ public class Session {
         this.progress = new NonNullMutableLiveData<>(0);
         this.secure = new NonNullMutableLiveData<>(false);
         this.loading = new NonNullMutableLiveData<>(false);
-        this.trackersBlocked = new NonNullMutableLiveData<>(0);
 
         this.isBlockingEnabled = true;
         this.isRecorded = false;
@@ -89,16 +87,8 @@ public class Session {
         return loading;
     }
 
-    /* package */ void setTrackersBlocked(int trackersBlocked) {
-        this.trackersBlocked.postValue(trackersBlocked);
-    }
-
     /* package */ void clearSearchTerms() {
         searchTerms = null;
-    }
-
-    public NonNullLiveData<Integer> getBlockedTrackers() {
-        return trackersBlocked;
     }
 
     public void saveWebViewState(Bundle bundle) {
