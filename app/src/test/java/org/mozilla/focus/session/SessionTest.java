@@ -39,7 +39,6 @@ public class SessionTest {
         assertEquals(0, (int) session.getProgress().getValue());
         assertFalse(session.getSecure().getValue());
         assertFalse(session.getLoading().getValue());
-        assertEquals(0, (int) session.getBlockedTrackers().getValue());
     }
 
     @Test
@@ -65,11 +64,6 @@ public class SessionTest {
             final Observer<Boolean> loadingObserver = mockObserver();
             session.getLoading().observe(mockLifecycleOwner(), loadingObserver);
             verify(loadingObserver).onChanged(false);
-        }
-        {
-            final Observer<Integer> blockedTrackersObserver = mockObserver();
-            session.getBlockedTrackers().observe(mockLifecycleOwner(), blockedTrackersObserver);
-            verify(blockedTrackersObserver).onChanged(0);
         }
     }
 
@@ -108,14 +102,6 @@ public class SessionTest {
 
             session.setLoading(true);
             verify(loadingObserver).onChanged(true);
-        }
-        {
-            final Observer<Integer> blockedTrackersObserver = mockObserver();
-            session.getBlockedTrackers().observe(mockLifecycleOwner(), blockedTrackersObserver);
-            verify(blockedTrackersObserver).onChanged(0);
-
-            session.setTrackersBlocked(23);
-            verify(blockedTrackersObserver).onChanged(23);
         }
     }
 
