@@ -11,7 +11,7 @@ cd ../..
 
 # Checkout l10n repository or update already existing checkout
 if [ ! -d "l10n-repo" ]; then
-	git clone https://github.com/mozilla-l10n/focus-android-l10n.git l10n-repo
+	git clone https://github.com/mozilla-l10n/firefoxtv-l10n.git l10n-repo
 else
 	cd l10n-repo
 	git fetch origin
