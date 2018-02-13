@@ -97,12 +97,6 @@ public class InfoFragment extends IWebViewLifecycleFragment {
             public void onExitFullScreen() {}
 
             @Override
-            public void countBlockedTracker() {}
-
-            @Override
-            public void resetBlockedTrackers() {}
-
-            @Override
             public void onBlockingStateChanged(boolean isBlockingEnabled) {}
         };
     }

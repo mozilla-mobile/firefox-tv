@@ -177,9 +177,6 @@ private class BrowserIWebViewCallback(
     override fun onURLChanged(url: String) {}
     override fun onRequest(isTriggeredByUserGesture: Boolean) {}
 
-    override fun countBlockedTracker() {}
-    override fun resetBlockedTrackers() {}
-
     override fun onBlockingStateChanged(isBlockingEnabled: Boolean) {}
 
     override fun onLongPress(hitTarget: IWebView.HitTarget) {}

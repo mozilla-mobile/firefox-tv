@@ -67,17 +67,6 @@ public class SessionCallbackProxy implements IWebView.Callback {
     }
 
     @Override
-    public void countBlockedTracker() {
-        //noinspection ConstantConditions - The value is never null
-        session.setTrackersBlocked(session.getBlockedTrackers().getValue() + 1);
-    }
-
-    @Override
-    public void resetBlockedTrackers() {
-        session.setTrackersBlocked(0);
-    }
-
-    @Override
     public void onBlockingStateChanged(boolean isBlockingEnabled) {
         session.setBlockingEnabled(isBlockingEnabled);
     }

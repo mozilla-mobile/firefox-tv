@@ -56,7 +56,6 @@ public class TrackingProtectionWebViewClient extends AmazonWebViewClient
      */
     private boolean blockingEnabled;
     /* package */ String currentPageURL;
-    protected IWebView.Callback callback;
 
     /* package */ TrackingProtectionWebViewClient(final Context context) {
         // Hopefully we have loaded background data already. We call triggerPreload() to try to trigger
@@ -67,10 +66,6 @@ public class TrackingProtectionWebViewClient extends AmazonWebViewClient
         settings.getPreferences().registerOnSharedPreferenceChangeListener(this);
         this.blockingEnabled = settings.isBlockingEnabled();
 
-    }
-
-    public void setCallback(IWebView.Callback callback) {
-        this.callback = callback;
     }
 
     public void setBlockingEnabled(boolean enabled) {
@@ -125,10 +120,6 @@ public class TrackingProtectionWebViewClient extends AmazonWebViewClient
         // Matches is true if the resourceUri is on the blocklist and is not a first party request.
         // The matcher code could be better named to make this apparent.
         if (blockedSiteMatcher.matches(resourceUri, currentPageUri)) {
-            if (callback != null) {
-                // TODO: the variable this value updates is inaccurate: see #317.
-                callback.countBlockedTracker();
-            }
             return new AmazonWebResourceResponse(null, null, null);
         }
 
@@ -148,10 +139,6 @@ public class TrackingProtectionWebViewClient extends AmazonWebViewClient
 
     @Override
     public void onPageStarted(AmazonWebView view, String url, Bitmap favicon) {
-        if (callback != null) {
-            callback.resetBlockedTrackers();
-        }
-
         currentPageURL = url;
 
         super.onPageStarted(view, url, favicon);
