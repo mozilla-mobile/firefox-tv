@@ -46,12 +46,7 @@ import java.util.List;
 
 public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlEnteredListener {
 
-    public static final String ACTION_OPEN = "open";
-
     public static final String EXTRA_TEXT_SELECTION = "text_selection";
-    public static final String EXTRA_NOTIFICATION = "notification";
-
-    private static final String EXTRA_SHORTCUT = "shortcut";
 
     private final SessionManager sessionManager;
 
