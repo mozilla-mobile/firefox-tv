@@ -206,5 +206,11 @@ public class WebViewProvider {
         public String getTitle() {
             return "?";
         }
+
+        @Override
+        public boolean isYoutubeTV() {
+            // TODO: Default implementation
+            return false;
+        }
     }
 }

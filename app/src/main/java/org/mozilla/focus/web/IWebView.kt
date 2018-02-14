@@ -45,6 +45,11 @@ interface IWebView {
     fun saveWebViewState(session: Session)
     fun destroy()
 
+    val isYoutubeTV: Boolean
+        get() {
+            return getUrl()?.contains("youtube.com/tv") ?: false
+        }
+
     /**
      * Enable/Disable content blocking for this session (Only the blockers that are
      * enabled in the app's settings will be turned on/off).

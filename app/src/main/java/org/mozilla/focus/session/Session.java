@@ -34,6 +34,7 @@ public class Session {
         this.uuid = UUID.randomUUID().toString();
         this.source = source;
 
+        // See SessionCallbackProxy for where these are set.
         this.url = new NonNullMutableLiveData<>(url);
         this.progress = new NonNullMutableLiveData<>(0);
         this.secure = new NonNullMutableLiveData<>(false);

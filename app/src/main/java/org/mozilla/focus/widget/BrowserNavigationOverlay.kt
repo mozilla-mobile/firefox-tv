@@ -37,19 +37,39 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyle: Int = 0 )
     : LinearLayout(context, attrs, defStyle), View.OnClickListener {
 
-    interface NavigationEventHandler {
-        fun onNavigationEvent(event: NavigationEvent, value: String? = null,
-                              autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? = null)
-    }
-
     interface BrowserNavigationStateProvider {
         fun isBackEnabled(): Boolean
         fun isForwardEnabled(): Boolean
         fun getCurrentUrl(): String?
     }
 
-    private var eventHandler: NavigationEventHandler? = null
-    private var navigationProvider: BrowserNavigationStateProvider? = null
+    var onNavigationEvent: ((event: NavigationEvent, value: String?,
+                             autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?) -> Unit)? = null
+
+    var navigationStateProvider: BrowserNavigationStateProvider? = null
+
+    var isVisible: Boolean
+        get() = visibility == View.VISIBLE
+        set(makeVisible) {
+            visibility = if (makeVisible) VISIBLE else GONE
+            if (makeVisible) {
+                navUrlInput.requestFocus()
+                updateNavigationButtons()
+            } else {
+                // #393: Youtube doesn't refocus properly, so refresh
+                if (navUrlInput.text.contains("youtube.com/tv")) {
+                    onNavigationEvent?.invoke(NavigationEvent.RELOAD_YT, null, null)
+                }
+            }
+        }
+
+    private var isTurboEnabled: Boolean
+        get() = Settings.getInstance(context).isBlockingEnabled
+        set(value) {
+            Settings.getInstance(context).isBlockingEnabled = value
+            turboButton.isActivated = value
+            TelemetryWrapper.blockingSwitchEvent(value)
+        }
 
     init {
         LayoutInflater.from(context)
@@ -73,7 +93,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             if (userInput.isNotEmpty()) {
                 // getLastAutocompleteResult must be called before closeDrawer: closeDrawer clears the text input,
                 // which clears the last autocomplete result.
-                eventHandler?.onNavigationEvent(NavigationEvent.LOAD, userInput, lastAutocompleteResult)
+                onNavigationEvent?.invoke(NavigationEvent.LOAD, userInput, lastAutocompleteResult)
                 setText(lastAutocompleteResult.text)
             }
         }
@@ -82,7 +102,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         setOnFilterListener { searchText, view -> autocompleteFilter.onFilter(searchText, view) }
 
         setOnBackPressedListener {
-            if (visibility == View.VISIBLE) {
+            if (isVisible) {
                 requestFocus()
             }
         }
@@ -91,64 +111,30 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     override fun onClick(view: View?) {
         var event = NavigationEvent.fromViewClick(view?.id) ?: return
         if (event == NavigationEvent.TURBO) {
-            updateTurboState(!turboButton.isActivated)
+            isTurboEnabled = !turboButton.isActivated
             event = NavigationEvent.RELOAD
         }
-        eventHandler?.onNavigationEvent(event)
+        onNavigationEvent?.invoke(event, null, null)
     }
 
-    fun setNavigationEventHandler(handler: NavigationEventHandler) {
-        eventHandler = handler
-    }
-
-    fun setBrowserNavigationStateProvider(provider: BrowserNavigationStateProvider) {
-        navigationProvider = provider
-    }
-
-    fun isVisible(): Boolean {
-        return visibility == View.VISIBLE
-    }
-
-    fun setOverlayVisibleByUser(toShow: Boolean) {
-        visibility = if (toShow) VISIBLE else GONE
-        TelemetryWrapper.drawerShowHideEvent(toShow)
-        if (toShow) {
-            navUrlInput.requestFocus()
-            updateNavigationButtons()
-        } else {
-            // #393: Youtube doesn't refocus properly, so refresh
-            if (navUrlInput.text.contains("youtube.com/tv")) {
-                eventHandler?.onNavigationEvent(NavigationEvent.RELOAD_YT)
-            }
-        }
+    fun setOverlayVisibleByUser(showOverlay: Boolean) {
+        isVisible = showOverlay
+        TelemetryWrapper.drawerShowHideEvent(showOverlay)
     }
 
     fun updateNavigationButtons() {
-        val canGoBack = navigationProvider?.isBackEnabled() ?: false
+        val canGoBack = navigationStateProvider?.isBackEnabled() ?: false
         navButtonBack.isEnabled = canGoBack
         navButtonBack.isFocusable = canGoBack
 
-        val canGoForward = navigationProvider?.isForwardEnabled() ?: false
+        val canGoForward = navigationStateProvider?.isForwardEnabled() ?: false
         navButtonForward.isEnabled = canGoForward
         navButtonForward.isFocusable = canGoForward
 
-        navUrlInput.setText(navigationProvider?.getCurrentUrl())
+        navUrlInput.setText(navigationStateProvider?.getCurrentUrl())
 
-        updateFocusOnNavigation()
-    }
-
-    private fun updateFocusOnNavigation() {
-        when {
-            findFocus() != null -> return
-            navButtonBack.isEnabled -> navButtonBack.requestFocus()
-            navButtonForward.isEnabled -> navButtonForward.requestFocus()
-            else -> navButtonReload.requestFocus()
+        if (findFocus() == null) {
+            requestFocus()
         }
-    }
-
-    private fun updateTurboState(toEnableBlocking: Boolean) = with (turboButton) {
-        Settings.getInstance(context).isBlockingEnabled = toEnableBlocking
-        isActivated = toEnableBlocking
-        TelemetryWrapper.blockingSwitchEvent(toEnableBlocking)
     }
 }

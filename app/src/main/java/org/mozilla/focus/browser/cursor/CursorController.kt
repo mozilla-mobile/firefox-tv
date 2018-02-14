@@ -60,8 +60,8 @@ class CursorController(
     /** Gets the current state of the browser and updates the cursor enabled state accordingly. */
     fun setEnabledForCurrentState() {
         // These sources have their own navigation controls.
-        isEnabled = !browserFragment.isYoutubeTV() && !browserFragment.context.isVoiceViewEnabled()
-                && !browserFragment.browserOverlay.isVisible()
+        isEnabled = !browserFragment.webView!!.isYoutubeTV && !browserFragment.context.isVoiceViewEnabled()
+                && !browserFragment.browserOverlay.isVisible
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)

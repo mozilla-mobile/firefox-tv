@@ -36,7 +36,7 @@ private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 /**
  * Fragment for displaying the browser UI.
  */
-class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.NavigationEventHandler,
+class BrowserFragment : IWebViewLifecycleFragment(),
         BrowserNavigationOverlay.BrowserNavigationStateProvider {
     companion object {
         const val FRAGMENT_TAG = "browser"
@@ -81,8 +81,8 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        view.browserOverlay!!.setNavigationEventHandler(this)
-        view.browserOverlay!!.setBrowserNavigationStateProvider(this)
+        view.browserOverlay!!.onNavigationEvent = onNavigationEvent
+        view.browserOverlay!!.navigationStateProvider = this
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -98,7 +98,6 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
         session.url.observe(this, Observer { url -> this@BrowserFragment.url = url })
         session.loading.observe(this, object : NonNullObserver<Boolean>() {
             public override fun onValueChanged(loading: Boolean) {
-                val activity = activity as MainActivity
                 if (!loading && isReloadingForYoutubeDrawerClosed) {
                     isReloadingForYoutubeDrawerClosed = false
 
@@ -108,11 +107,17 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
                     // we don't just see a black screen.
                     activity.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE))
                 }
+
+                // Update state on load start and finish to ensure buttons are updated correctly
+                if (browserOverlay.isVisible) {
+                    browserOverlay.updateNavigationButtons()
+                }
             }
         })
     }
 
-    override fun onNavigationEvent(event: NavigationEvent, value: String?, autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?) {
+    private val onNavigationEvent = { event: NavigationEvent, value: String?,
+        autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
         when (event) {
             NavigationEvent.BACK -> if (canGoBack()) goBack()
             NavigationEvent.FORWARD -> if (canGoForward()) goForward()
@@ -125,6 +130,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
                 reload()
             }
         }
+        Unit
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -146,25 +152,22 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     override fun getCurrentUrl() = url
 
     fun onBackPressed(): Boolean {
-        if (canGoBack()) {
-            // Go back in web history
-            goBack()
-            TelemetryWrapper.browserBackControllerEvent()
-        } else if (browserOverlay.isVisible()) {
-            browserOverlay.setOverlayVisibleByUser(false)
-        } else {
-            fragmentManager.popBackStack()
-            SessionManager.getInstance().removeCurrentSession()
+        when {
+            canGoBack() -> {
+                goBack()
+                TelemetryWrapper.browserBackControllerEvent()
+            }
+            browserOverlay.isVisible -> browserOverlay.setOverlayVisibleByUser(false)
+            else -> {
+                fragmentManager.popBackStack()
+                SessionManager.getInstance().removeCurrentSession()
+            }
         }
-
         return true
     }
 
-    fun isYoutubeTV(): Boolean {
-        return webView?.getUrl()?.contains("youtube.com/tv") ?: false
-    }
-
-    // TODO: When all calling code is kotlin, rm these - they're unnecessary with cascading nulls.
+    // TODO: Remove these eventually.
+    // This is outside BrowserFragment's responsibilities - these should be called through a WebView interface.
     fun canGoForward() = webview?.canGoForward() ?: false
     fun canGoBack() = webview?.canGoBack() ?: false
     fun goBack() = webview?.goBack()
@@ -181,29 +184,41 @@ class BrowserFragment : IWebViewLifecycleFragment(), BrowserNavigationOverlay.Na
     fun setBlockingEnabled(enabled: Boolean) = webview?.setBlockingEnabled(enabled)
 
     fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (handleSpecialKeyEvent(event)) return true
-        return cursor?.keyDispatcher?.dispatchKeyEvent(event) ?: false
+        /**
+         * Key handling order:
+         * - Menu to control overlay
+         * - Youtube remap of BACK to ESC
+         * - Cursor
+         * - Return false, as unhandled
+         */
+        return (handleSpecialKeyEvent(event)) ||
+                (cursor?.keyDispatcher?.dispatchKeyEvent(event) ?: false)
     }
 
     private fun handleSpecialKeyEvent(event: KeyEvent): Boolean {
-        if (event.keyCode == KeyEvent.KEYCODE_MENU && event.action == KeyEvent.ACTION_DOWN
-                && event.repeatCount == 0) {
-            val toShow = !browserOverlay.isVisible()
-            browserOverlay.setOverlayVisibleByUser(toShow)
-            cursor?.setEnabledForCurrentState()
+        if (event.keyCode == KeyEvent.KEYCODE_MENU && event.action == KeyEvent.ACTION_UP) {
+            val toShow = !browserOverlay.isVisible
+            showOverlay(toShow)
             // Fix this youtube focus hack in #393
-            if (!toShow && isYoutubeTV()) {
+            if (!toShow && webView!!.isYoutubeTV) {
                 webView?.requestFocus()
             }
             return true
         }
 
-        if (isYoutubeTV() && !browserOverlay.isVisible() && event.keyCode == KeyEvent.KEYCODE_BACK) {
+        if (!browserOverlay.isVisible && webView!!.isYoutubeTV &&
+                event.keyCode == KeyEvent.KEYCODE_BACK) {
             val escKeyEvent = KeyEvent(event.action, KeyEvent.KEYCODE_ESCAPE)
             activity.dispatchKeyEvent(escKeyEvent)
             return true
         }
         return false
+    }
+
+    private fun showOverlay(toShow: Boolean) {
+        browserOverlay.setOverlayVisibleByUser(toShow)
+        if (toShow) cursor?.onPause() else cursor?.onResume()
+        cursor?.setEnabledForCurrentState()
     }
 }
 
@@ -213,11 +228,7 @@ private class BrowserIWebViewCallback(
 
     private var fullscreenCallback: IWebView.FullscreenCallback? = null
 
-    override fun onPageStarted(url: String) {
-        if (browserFragment.browserOverlay.isVisible()) {
-            browserFragment.browserOverlay.updateNavigationButtons()
-        }
-    }
+    override fun onPageStarted(url: String) {}
 
     override fun onPageFinished(isSecure: Boolean) {}
     override fun onProgress(progress: Int) {}
