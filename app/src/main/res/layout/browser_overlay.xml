@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/browser_overlay_background"
     android:orientation="vertical"
+    android:descendantFocusability="afterDescendants"
     android:padding="20dp">
 
     <LinearLayout

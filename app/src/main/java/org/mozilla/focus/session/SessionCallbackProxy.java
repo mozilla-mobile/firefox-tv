@@ -32,7 +32,6 @@ public class SessionCallbackProxy implements IWebView.Callback {
         session.setProgress(MINIMUM_PROGRESS);
 
         session.setUrl(url);
-        delegate.onPageStarted(url);
     }
 
     @Override
