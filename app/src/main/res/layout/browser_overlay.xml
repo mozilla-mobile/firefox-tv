@@ -84,7 +84,6 @@
             android:inputType="textUri"
             android:lines="1"
             android:selectAllOnFocus="true"
-            android:textCursorDrawable="@drawable/cursor"
             android:importantForAutofill="no"/>
     </LinearLayout>
 
