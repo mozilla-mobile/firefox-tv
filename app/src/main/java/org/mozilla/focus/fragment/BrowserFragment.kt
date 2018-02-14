@@ -84,6 +84,7 @@ class BrowserFragment : IWebViewLifecycleFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view.browserOverlay!!.onNavigationEvent = onNavigationEvent
         view.browserOverlay!!.navigationStateProvider = this
+        progressBar.initialize(this)
         super.onViewCreated(view, savedInstanceState)
     }
 
