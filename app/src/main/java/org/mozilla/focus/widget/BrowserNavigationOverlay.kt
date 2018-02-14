@@ -68,7 +68,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         set(value) {
             Settings.getInstance(context).isBlockingEnabled = value
             turboButton.isActivated = value
-            TelemetryWrapper.blockingSwitchEvent(value)
+            TelemetryWrapper.turboModeSwitchEvent(value)
         }
 
     init {
