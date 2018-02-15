@@ -7,7 +7,6 @@ package org.mozilla.focus.widget;
 
 import android.content.Context;
 import android.graphics.Rect;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
@@ -20,7 +19,6 @@ import android.text.style.BackgroundColorSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.inputmethod.BaseInputConnection;
@@ -620,33 +618,5 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         }
 
         super.onSelectionChanged(selStart, selEnd);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (android.os.Build.VERSION.SDK_INT == Build.VERSION_CODES.M &&
-                event.getActionMasked() == MotionEvent.ACTION_UP) {
-            // Android 6 occasionally throws a NullPointerException inside Editor.onTouchEvent()
-            // for ACTION_UP when attempting to display (uninitialised) text handles. The Editor
-            // and TextView IME interactions are quite complex, so I don't know how to properly
-            // work around this issue, but we can at least catch the NPE to prevent crashing
-            // the whole app.
-            // (Editor tries to make both selection handles visible, but in certain cases they haven't
-            // been initialised yet, causing the NPE. It doesn't bother to check the selection handle
-            // state, and making some other calls to ensure the handles exist doesn't seem like a
-            // clean solution either since I don't understand most of the selection logic. This implementation
-            // only seems to exist in Android 6, both Android 5 and 7 have different implementations.)
-            try {
-                return super.onTouchEvent(event);
-            } catch (NullPointerException ignored) {
-                // Ignore this (see above) - since we're now in an unknown state let's clear all selection
-                // (which is still better than an arbitrary crash that we can't control):
-                clearFocus();
-                return true;
-            }
-        } else {
-            return super.onTouchEvent(event);
-
-        }
     }
 }
