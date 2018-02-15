@@ -126,7 +126,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         super.onAttachedToWindow();
         setOnKeyListener(new KeyListener());
         setOnKeyPreImeListener(new KeyPreImeListener());
-        setOnSelectionChangedListener(new SelectionChangeListener());
         addTextChangedListener(new TextChangeListener());
     }
 
@@ -485,31 +484,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         };
     }
 
-    private class SelectionChangeListener implements OnSelectionChangedListener {
-        @Override
-        public void onSelectionChanged(final int selStart, final int selEnd) {
-            // The user has repositioned the cursor somewhere. We need to adjust
-            // the autocomplete text depending on where the new cursor is.
-
-            final Editable text = getText();
-            final int start = text.getSpanStart(AUTOCOMPLETE_SPAN);
-
-            if (mSettingAutoComplete || start < 0 || (start == selStart && start == selEnd)) {
-                // Do not commit autocomplete text if there is no autocomplete text
-                // or if selection is still at start of autocomplete text
-                return;
-            }
-
-            if (selStart <= start && selEnd <= start) {
-                // The cursor is in user-typed text; remove any autocomplete text.
-                removeAutocomplete(text);
-            } else {
-                // The cursor is in the autocomplete text; commit it so it becomes regular text.
-                commitAutocomplete(text);
-            }
-        }
-    }
-
     private class TextChangeListener implements TextWatcher {
         private int textLengthBeforeChange;
 
@@ -621,7 +595,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
     }
 
     private OnKeyPreImeListener mOnKeyPreImeListener;
-    private OnSelectionChangedListener mOnSelectionChangedListener;
 
     public interface OnKeyPreImeListener {
         public boolean onKeyPreIme(View v, int keyCode, KeyEvent event);
@@ -640,18 +613,28 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         return false;
     }
 
-    public interface OnSelectionChangedListener {
-        public void onSelectionChanged(int selStart, int selEnd);
-    }
-
-    public void setOnSelectionChangedListener(OnSelectionChangedListener listener) {
-        mOnSelectionChangedListener = listener;
-    }
-
     @Override
     protected void onSelectionChanged(int selStart, int selEnd) {
-        if (mOnSelectionChangedListener != null) {
-            mOnSelectionChangedListener.onSelectionChanged(selStart, selEnd);
+        if (isAttachedToWindow()) {
+            // The user has repositioned the cursor somewhere. We need to adjust
+            // the autocomplete text depending on where the new cursor is.
+
+            final Editable text = getText();
+            final int start = text.getSpanStart(AUTOCOMPLETE_SPAN);
+
+            if (mSettingAutoComplete || start < 0 || (start == selStart && start == selEnd)) {
+                // Do not commit autocomplete text if there is no autocomplete text
+                // or if selection is still at start of autocomplete text
+                return;
+            }
+
+            if (selStart <= start && selEnd <= start) {
+                // The cursor is in user-typed text; remove any autocomplete text.
+                removeAutocomplete(text);
+            } else {
+                // The cursor is in the autocomplete text; commit it so it becomes regular text.
+                commitAutocomplete(text);
+            }
         }
 
         super.onSelectionChanged(selStart, selEnd);
