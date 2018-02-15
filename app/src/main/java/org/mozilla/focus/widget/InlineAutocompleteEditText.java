@@ -42,10 +42,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         void onFilter(String searchText, InlineAutocompleteEditText view);
     }
 
-    public interface OnSearchStateChangeListener {
-        void onSearchStateChange(boolean isActive);
-    }
-
     public interface OnBackPressedListener {
         void onBackPressed();
     }
@@ -97,7 +93,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
 
     private OnCommitListener mCommitListener;
     private OnFilterListener mFilterListener;
-    private OnSearchStateChangeListener mSearchStateChangeListener;
     private OnBackPressedListener mOnBackPressedListener;
 
     // The previous autocomplete result returned to us
@@ -128,10 +123,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         mOnBackPressedListener = listener;
     }
 
-    void setOnSearchStateChangeListener(OnSearchStateChangeListener listener) {
-        mSearchStateChangeListener = listener;
-    }
-
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -144,13 +135,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
     @Override
     public void onFocusChanged(boolean gainFocus, int direction, Rect previouslyFocusedRect) {
         super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
-
-        // Make search icon inactive when edit toolbar search term isn't a user entered
-        // search term
-        final boolean isActive = !TextUtils.isEmpty(getText());
-        if (mSearchStateChangeListener != null) {
-            mSearchStateChangeListener.onSearchStateChange(isActive);
-        }
 
         if (gainFocus) {
             resetAutocompleteState();
@@ -585,11 +569,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
                 // Otherwise, remove the old autocomplete text
                 // until any new autocomplete text gets added.
                 removeAutocomplete(editable);
-            }
-
-            // Update search icon with an active state since user is typing
-            if (mSearchStateChangeListener != null) {
-                mSearchStateChangeListener.onSearchStateChange(textLength > 0);
             }
 
             if (mFilterListener != null) {
