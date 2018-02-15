@@ -682,7 +682,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
 
     private OnKeyPreImeListener mOnKeyPreImeListener;
     private OnSelectionChangedListener mOnSelectionChangedListener;
-    private OnWindowFocusChangeListener mOnWindowFocusChangeListener;
 
     public interface OnKeyPreImeListener {
         public boolean onKeyPreIme(View v, int keyCode, KeyEvent event);
@@ -716,22 +715,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         }
 
         super.onSelectionChanged(selStart, selEnd);
-    }
-
-    public interface OnWindowFocusChangeListener {
-        public void onWindowFocusChanged(boolean hasFocus);
-    }
-
-    public void setOnWindowFocusChangeListener(OnWindowFocusChangeListener listener) {
-        mOnWindowFocusChangeListener = listener;
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (mOnWindowFocusChangeListener != null) {
-            mOnWindowFocusChangeListener.onWindowFocusChanged(hasFocus);
-        }
     }
 
     @Override
