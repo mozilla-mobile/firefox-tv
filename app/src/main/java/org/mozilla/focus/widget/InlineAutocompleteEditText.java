@@ -46,10 +46,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         void onSearchStateChange(boolean isActive);
     }
 
-    public interface OnTextChangeListener {
-        void onTextChange(String originalText, String autocompleteText);
-    }
-
     public interface OnBackPressedListener {
         void onBackPressed();
     }
@@ -102,7 +98,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
     private OnCommitListener mCommitListener;
     private OnFilterListener mFilterListener;
     private OnSearchStateChangeListener mSearchStateChangeListener;
-    private OnTextChangeListener mTextChangeListener;
     private OnBackPressedListener mOnBackPressedListener;
 
     // The previous autocomplete result returned to us
@@ -135,10 +130,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
 
     void setOnSearchStateChangeListener(OnSearchStateChangeListener listener) {
         mSearchStateChangeListener = listener;
-    }
-
-    public void setOnTextChangeListener(OnTextChangeListener listener) {
-        mTextChangeListener = listener;
     }
 
     @Override
@@ -603,10 +594,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
 
             if (mFilterListener != null) {
                 mFilterListener.onFilter(text, doAutocomplete ? InlineAutocompleteEditText.this : null);
-            }
-
-            if (mTextChangeListener != null) {
-                mTextChangeListener.onTextChange(text, getText().toString());
             }
         }
 
