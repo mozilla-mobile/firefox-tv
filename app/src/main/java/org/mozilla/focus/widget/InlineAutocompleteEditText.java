@@ -97,8 +97,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
 
     // The previous autocomplete result returned to us
     private AutocompleteResult mAutoCompleteResult = AutocompleteResult.emptyResult();
-    // Length of the user-typed portion of the result
-    private int mAutoCompletePrefixLength;
     // If text change is due to us setting autocomplete
     private boolean mSettingAutoComplete;
     // Spans used for marking the autocomplete text
@@ -209,16 +207,8 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
 
         mAutoCompleteResult = AutocompleteResult.emptyResult();
 
-        // Pretend we already autocompleted the existing text,
-        // so that actions like backspacing don't trigger autocompletion.
-        mAutoCompletePrefixLength = getText().length();
-
         // Show the cursor.
         setCursorVisible(true);
-    }
-
-    protected String getNonAutocompleteText() {
-        return getNonAutocompleteText(getText());
     }
 
     /**
@@ -254,10 +244,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         // When we call delete() here, the autocomplete spans we set are removed as well.
         text.delete(start, text.length());
 
-        // Keep mAutoCompletePrefixLength the same because the prefix has not changed.
-        // Clear mAutoCompleteResult to make sure we get fresh autocomplete text next time.
-        mAutoCompleteResult = AutocompleteResult.emptyResult();
-
         // Reshow the cursor.
         setCursorVisible(true);
 
@@ -283,10 +269,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         for (final Object span : mAutoCompleteSpans) {
             text.removeSpan(span);
         }
-
-        // Keep mAutoCompleteResult the same because the result has not changed.
-        // Reset mAutoCompletePrefixLength because the prefix now includes the autocomplete text.
-        mAutoCompletePrefixLength = text.length();
 
         // Reshow the cursor.
         setCursorVisible(true);
@@ -411,12 +393,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         }
 
         announceForAccessibility(text.toString());
-    }
-
-    public String getOriginalText() {
-        final Editable text = getText();
-
-        return text.subSequence(0, mAutoCompletePrefixLength).toString();
     }
 
     @NonNull
@@ -553,8 +529,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
                 // If you're hitting backspace (the string is getting smaller), don't autocomplete
                 doAutocomplete = false;
             }
-
-            mAutoCompletePrefixLength = textLength;
 
             // If we are not autocompleting, we set mDiscardAutoCompleteResult to true
             // to discard any autocomplete results that are in-flight, and vice versa.
