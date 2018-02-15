@@ -149,9 +149,7 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
 
     @Override
     public void setText(final CharSequence text, final TextView.BufferType type) {
-        final String textString = (text == null) ? "" : text.toString();
-
-        super.setText(textString, type);
+        super.setText(text, type);
 
         // Any autocomplete text would have been overwritten, so reset our autocomplete states.
         resetAutocompleteState();
