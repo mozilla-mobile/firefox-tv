@@ -125,7 +125,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         setOnKeyListener(new KeyListener());
-        setOnKeyPreImeListener(new KeyPreImeListener());
         addTextChangedListener(new TextChangeListener());
     }
 
@@ -535,9 +534,35 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         }
     }
 
-    private class KeyPreImeListener implements OnKeyPreImeListener {
+    private class KeyListener implements View.OnKeyListener {
         @Override
-        public boolean onKeyPreIme(View v, int keyCode, KeyEvent event) {
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                if (event.getAction() != KeyEvent.ACTION_DOWN) {
+                    return true;
+                }
+
+                if (mCommitListener != null) {
+                    mCommitListener.onCommit();
+                }
+
+                return true;
+            }
+
+            if ((keyCode == KeyEvent.KEYCODE_DEL ||
+                    (keyCode == KeyEvent.KEYCODE_FORWARD_DEL)) &&
+                    removeAutocomplete(getText())) {
+                // Delete autocomplete text when backspacing or forward deleting.
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    @Override
+    public boolean onKeyPreIme(int keyCode, KeyEvent event) {
+        if (isAttachedToWindow()) {
             // We only want to process one event per tap
             if (event.getAction() != KeyEvent.ACTION_DOWN) {
                 return false;
@@ -565,49 +590,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
             }
 
             return false;
-        }
-    }
-
-    private class KeyListener implements View.OnKeyListener {
-        @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
-            if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                if (event.getAction() != KeyEvent.ACTION_DOWN) {
-                    return true;
-                }
-
-                if (mCommitListener != null) {
-                    mCommitListener.onCommit();
-                }
-
-                return true;
-            }
-
-            if ((keyCode == KeyEvent.KEYCODE_DEL ||
-                    (keyCode == KeyEvent.KEYCODE_FORWARD_DEL)) &&
-                    removeAutocomplete(getText())) {
-                // Delete autocomplete text when backspacing or forward deleting.
-                return true;
-            }
-
-            return false;
-        }
-    }
-
-    private OnKeyPreImeListener mOnKeyPreImeListener;
-
-    public interface OnKeyPreImeListener {
-        public boolean onKeyPreIme(View v, int keyCode, KeyEvent event);
-    }
-
-    public void setOnKeyPreImeListener(OnKeyPreImeListener listener) {
-        mOnKeyPreImeListener = listener;
-    }
-
-    @Override
-    public boolean onKeyPreIme(int keyCode, KeyEvent event) {
-        if (mOnKeyPreImeListener != null) {
-            return mOnKeyPreImeListener.onKeyPreIme(this, keyCode, event);
         }
 
         return false;
