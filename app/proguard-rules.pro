@@ -32,6 +32,9 @@
 #   public *;
 #}
 
+-keep public class com.amazon.android.webkit.android.AndroidWebKitFactory { public *; }
+-keep public class com.amazon.android.webkit.embedded.EmbeddedWebKitFactory { public *; }
+
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable
