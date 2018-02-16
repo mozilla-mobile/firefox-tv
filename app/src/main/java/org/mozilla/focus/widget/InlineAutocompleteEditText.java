@@ -18,6 +18,7 @@ import android.text.TextWatcher;
 import android.text.style.BackgroundColorSpan;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
@@ -101,6 +102,24 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
     private Object[] mAutoCompleteSpans;
     // Do not process autocomplete result
     private boolean mDiscardAutoCompleteResult;
+
+    /**
+     * True if the current key press is text entry from the Fire TV Remote app (from Google Play) or
+     * a "Clear" press on the soft keyboard, false otherwise. We include the latter due to
+     * implementation necessity.
+     *
+     * fwiw, there are a few ways I've found to tell if the remote app is in use:
+     * - {@link #onKeyPreIme(int, KeyEvent)} is not called when entering text input with the remote
+     * app
+     * - You can {@link InputDevice#getDeviceIds()} but it's only useful if you have a key event to
+     * associate each press with.
+     * - commitText("", ...) is called, followed by deleteSurroundingText (these two calls happen
+     * when Clear is selected on the soft keyboard too, but that's the only other event I've found)
+     * and then commitText is called with a String argument with more than 1 character (only if the
+     * user has entered 1 character). No other input device I've found does this. This call pattern
+     * doesn't happen when backspace is pressed on the remote app.
+     */
+    private boolean isKeyFromRemoteAppOrSoftKeyboardClear;
 
     public InlineAutocompleteEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -284,7 +303,12 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
     public void onAutocomplete(final AutocompleteResult result) {
         // If mDiscardAutoCompleteResult is true, we temporarily disabled
         // autocomplete (due to backspacing, etc.) and we should bail early.
-        if (mDiscardAutoCompleteResult) {
+        //
+        // We disable autocomplete when the Fire TV remote app (from the Play Store) is entering
+        // text input because autocomplete would be time consuming to implement: for full reasoning,
+        // see https://github.com/mozilla-mobile/firefox-tv/issues/276#issuecomment-365801269
+        // For a soft keyboard "Clear", it doesn't matter if we disable autocomplete.
+        if (mDiscardAutoCompleteResult || isKeyFromRemoteAppOrSoftKeyboardClear) {
             return;
         }
 
@@ -427,18 +451,7 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         return new InputConnectionWrapper(ic, false) {
             @Override
             public boolean deleteSurroundingText(final int beforeLength, final int afterLength) {
-                if (removeAutocomplete(getText())) {
-                    // If we have autocomplete text, the cursor is at the boundary between
-                    // regular and autocomplete text. So regardless of which direction we
-                    // are deleting, we should delete the autocomplete text first.
-                    // Make the IME aware that we interrupted the deleteSurroundingText call,
-                    // by restarting the IME.
-                    final InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (imm != null) {
-                        imm.restartInput(InlineAutocompleteEditText.this);
-                    }
-                    return false;
-                }
+                removeAutocomplete(getText());
                 return super.deleteSurroundingText(beforeLength, afterLength);
             }
 
@@ -463,10 +476,24 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
 
             @Override
             public boolean commitText(CharSequence text, int newCursorPosition) {
+                if (isCommitTextFromRemoteAppOrSoftKeyboardClear(text)) {
+                    setIsKeyFromRemoteAppOrSoftKeyboardClear(true);
+                }
+
                 if (removeAutocompleteOnComposing(text)) {
                     return false;
                 }
                 return super.commitText(text, newCursorPosition);
+            }
+
+            private boolean isCommitTextFromRemoteAppOrSoftKeyboardClear(final CharSequence text) {
+                // Two events call this with text as the empty string: Clear from the soft keyboard
+                // and input from the remote app (which calls this with the empty string to
+                // clear the input, then calls this with the full input). Since we don't want
+                // autocomplete for the remote app and autocomplete is unnecessary when all the text
+                // is cleared, we compare against the empty string to see if this could be the
+                // remote app.
+                return "".equals(text);
             }
 
             @Override
@@ -492,7 +519,8 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
             final int textLength = text.length();
             boolean doAutocomplete = true;
 
-            if (UrlUtils.isSearchQuery(text)) {
+            if (UrlUtils.isSearchQuery(text) ||
+                    isKeyFromRemoteAppOrSoftKeyboardClear) { // See var use in onAutocomplete.
                 doAutocomplete = false;
             } else if (textLength == textLengthBeforeChange - 1 || textLength == 0) {
                 // If you're hitting backspace (the string is getting smaller), don't autocomplete
@@ -558,6 +586,11 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
 
     @Override
     public boolean onKeyPreIme(int keyCode, KeyEvent event) {
+        // The remote app doesn't fire this key event when entering characters into the url bar so
+        // it must not be the remote app. Note that the remote app does fire this for focusing the
+        // url bar though.
+        setIsKeyFromRemoteAppOrSoftKeyboardClear(false);
+
         if (isAttachedToWindow()) {
             // We only want to process one event per tap
             if (event.getAction() != KeyEvent.ACTION_DOWN) {
@@ -616,5 +649,13 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         }
 
         super.onSelectionChanged(selStart, selEnd);
+    }
+
+    private void setIsKeyFromRemoteAppOrSoftKeyboardClear(final boolean isKeyFromRemoteApp) {
+        isKeyFromRemoteAppOrSoftKeyboardClear = isKeyFromRemoteApp;
+        if (isKeyFromRemoteApp) {
+            resetAutocompleteState(); // We want a blank autocomplete result for telemetry.
+            removeAutocomplete(getText()); // Perhaps not strictly necessary.
+        }
     }
 }
