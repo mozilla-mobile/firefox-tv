@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingLeft="12dp"
+            android:paddingRight="12dp"
             android:paddingBottom="50dp">
 
         <!-- TODO: analyze the params below -->
@@ -30,6 +31,7 @@
                 android:background="@color/homeUrlBarBackground"
                 android:inputType="textUri"
                 android:lines="1"
+                android:layout_marginEnd="20dp"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:paddingStart="8dp"
@@ -44,13 +46,22 @@
                 android:importantForAutofill="no"
                 tools:targetApi="o" /><!-- importantForAutofill is only supported on Android O+ -->
 
+        <ImageButton
+            android:id="@+id/settingsButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="50dp"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@android:color/holo_red_dark"
+            android:contentDescription="@string/menu_settings"
+            android:src="@drawable/ic_settings" />
+
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:layout_gravity="center_vertical"
-                android:scaleType="centerInside"
-                android:layout_marginStart="50dp"
                 android:layout_marginEnd="10dp"
+                android:scaleType="centerInside"
                 android:src="@drawable/ic_firefox_and_workmark"
                 tools:ignore="ContentDescription"/>
         <requestFocus/> <!-- Requests initial focus -->
