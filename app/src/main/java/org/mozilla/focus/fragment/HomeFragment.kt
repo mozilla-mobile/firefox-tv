@@ -24,17 +24,25 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.OnUrlEnteredListener
 import android.graphics.BitmapFactory
+import java.lang.ref.WeakReference
 
 private const val COL_COUNT = 5
+
+interface HomeDelegate {
+    fun didPressSettings()
+}
 
 /** The home fragment which displays the navigation tiles of the app. */
 class HomeFragment : Fragment() {
     lateinit var urlBar: LinearLayout
     var onUrlEnteredListener = object : OnUrlEnteredListener {} // default impl does nothing.
+    var delegate: WeakReference<HomeDelegate>? = null
     val urlAutoCompleteFilter = UrlAutoCompleteFilter()
     val HOME_TILES_DIR = "defaults/"
     val HOME_TILES_JSON_PATH = HOME_TILES_DIR + "default_tiles.json"
     val HOME_TILES_JSON_KEY = "default_tiles"
+    val SETTINGS_ICON_IDLE_ALPHA = 0.4f
+    val SETTINGS_ICON_ACTIVE_ALPHA = 1.0f
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater!!.inflate(R.layout.fragment_home, container, false)
@@ -46,6 +54,15 @@ class HomeFragment : Fragment() {
         // todo: saved instance state?
         initTiles()
         initUrlInputView()
+
+        settingsButton.alpha = SETTINGS_ICON_IDLE_ALPHA
+        settingsButton.setOnFocusChangeListener { v, hasFocus ->
+            v.alpha = if (hasFocus) SETTINGS_ICON_ACTIVE_ALPHA else SETTINGS_ICON_IDLE_ALPHA
+        }
+
+        settingsButton.setOnClickListener { v ->
+            delegate?.get()?.didPressSettings()
+        }
     }
 
     override fun onResume() {
