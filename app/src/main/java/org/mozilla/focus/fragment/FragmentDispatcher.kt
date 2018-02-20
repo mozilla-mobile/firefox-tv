@@ -23,7 +23,6 @@ class FragmentDispatcher {
         /**
          * Loads the given url. If isTextInput is true, there should be no null parameters.
          */
-        @JvmStatic
         fun onUrlEnteredInner(urlStr: String, isTextInput: Boolean,
                               autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?,
                               inputLocation: UrlTextInputLocation?,
@@ -83,7 +82,6 @@ class FragmentDispatcher {
             }
         }
 
-        @JvmStatic
         fun showHomeScreen(fragmentManager: FragmentManager, onUrlEnteredListener: OnUrlEnteredListener) {
             // TODO: animations if fragment is found.
             val homeFragment = fragmentManager.findFragmentByTag(HomeFragment.FRAGMENT_TAG) as HomeFragment?
@@ -103,7 +101,6 @@ class FragmentDispatcher {
                     .commit()
         }
 
-        @JvmStatic
         fun showSettingsScreen(fragmentManager: FragmentManager) {
             // TODO: animations if fragment is found.
             val settingsFragment = NewSettingsFragment.create()
@@ -113,7 +110,6 @@ class FragmentDispatcher {
                     .commit()
         }
 
-        @JvmStatic
         fun showBrowserScreenForCurrentSession(fragmentManager: FragmentManager, sessionManager: SessionManager) {
             val currentSession = sessionManager.currentSession
 

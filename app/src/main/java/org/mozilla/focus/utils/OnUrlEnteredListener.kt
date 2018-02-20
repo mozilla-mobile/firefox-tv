@@ -10,5 +10,5 @@ import org.mozilla.focus.widget.InlineAutocompleteEditText.AutocompleteResult
 // I'd define this in MainActivity but it's not kotlin so it can't have a default implementation.
 interface OnUrlEnteredListener {
     fun onNonTextInputUrlEntered(urlStr: String) {}
-    fun onTextInputUrlEntered(urlStr: String, autocompleteResult: AutocompleteResult, loc: UrlTextInputLocation) {}
+    fun onTextInputUrlEntered(urlStr: String, autocompleteResult: AutocompleteResult?, inputLocation: UrlTextInputLocation?) {}
 }

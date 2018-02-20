@@ -38,7 +38,7 @@ public class TextActionActivity extends Activity {
 
         final Intent searchIntent = new Intent(this, MainActivity.class);
         searchIntent.setAction(Intent.ACTION_VIEW);
-        searchIntent.putExtra(MainActivity.Companion.getEXTRA_TEXT_SELECTION(), true);
+        searchIntent.putExtra(MainActivity.EXTRA_TEXT_SELECTION, true);
         searchIntent.setData(Uri.parse(searchUrl));
 
         startActivity(searchIntent);
