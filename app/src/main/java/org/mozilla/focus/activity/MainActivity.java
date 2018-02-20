@@ -9,9 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.View;
@@ -24,18 +22,15 @@ import org.jetbrains.annotations.NotNull;
 import org.mozilla.focus.R;
 import org.mozilla.focus.architecture.NonNullObserver;
 import org.mozilla.focus.fragment.BrowserFragment;
-import org.mozilla.focus.fragment.HomeFragment;
-import org.mozilla.focus.fragment.NewSettingsFragment;
+import org.mozilla.focus.fragment.FragmentDispatcher;
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity;
 import org.mozilla.focus.session.Session;
 import org.mozilla.focus.session.SessionManager;
-import org.mozilla.focus.session.Source;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.telemetry.UrlTextInputLocation;
 import org.mozilla.focus.utils.OnUrlEnteredListener;
 import org.mozilla.focus.utils.SafeIntent;
 import org.mozilla.focus.utils.Settings;
-import org.mozilla.focus.utils.UrlUtils;
 import org.mozilla.focus.utils.ViewUtils;
 import org.mozilla.focus.web.IWebView;
 import org.mozilla.focus.web.WebViewProvider;
@@ -87,9 +82,9 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
                 if (sessions.isEmpty()) {
                     // There's no active session. Show the URL input screen so that the user can
                     // start a new session.
-                    showHomeScreen();
+                    FragmentDispatcher.showHomeScreen(getSupportFragmentManager(), MainActivity.this);
                 } else {
-                    showBrowserScreenForCurrentSession();
+                    FragmentDispatcher.showBrowserScreenForCurrentSession(getSupportFragmentManager(), sessionManager);
                 }
 
                 if (Settings.getInstance(MainActivity.this).shouldShowOnboarding()) {
@@ -139,53 +134,6 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
         sessionManager.handleNewIntent(this, intent);
     }
 
-    public void showHomeScreen() {
-        // TODO: animations if fragment is found.
-        final HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HomeFragment.FRAGMENT_TAG);
-        if (homeFragment != null && homeFragment.isVisible()) {
-            // This is already at the top of the stack - do nothing.
-            return;
-        }
-
-        // We don't want to be able to go back from the back stack, so clear the whole fragment back stack.
-        getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
-        // Show the home screen.
-        final HomeFragment newHomeFragment = HomeFragment.create();
-        newHomeFragment.setOnUrlEnteredListener(this);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, newHomeFragment, HomeFragment.FRAGMENT_TAG)
-                .commit();
-    }
-
-    public void showSettingsScreen() {
-        // TODO: animations if fragment is found.
-        final NewSettingsFragment settingsFragment = NewSettingsFragment.create();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, settingsFragment, NewSettingsFragment.FRAGMENT_TAG)
-                .addToBackStack(null)
-                .commit();
-    }
-
-    private void showBrowserScreenForCurrentSession() {
-        final Session currentSession = sessionManager.getCurrentSession();
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-
-        final BrowserFragment fragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-        if (fragment != null && fragment.getSession().isSameAs(currentSession)) {
-            // There's already a BrowserFragment displaying this session.
-            return;
-        }
-
-        fragmentManager
-                .beginTransaction()
-                .replace(R.id.container,
-                        BrowserFragment.createForSession(currentSession), BrowserFragment.FRAGMENT_TAG)
-                .addToBackStack(null)
-                .commit();
-    }
 
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {
@@ -230,81 +178,20 @@ public class MainActivity extends LocaleAwareAppCompatActivity implements OnUrlE
 
     @Override
     public void onNonTextInputUrlEntered(@NotNull final String urlStr) {
-        onUrlEnteredInner(urlStr, false, null, null);
+        ViewUtils.hideKeyboard(fragmentContainer);
+        FragmentDispatcher.onUrlEnteredInner(urlStr, false, null, null,
+                getSupportFragmentManager(), sessionManager, this);
     }
 
     @Override
     public void onTextInputUrlEntered(@NotNull final String urlStr,
             @NotNull final InlineAutocompleteEditText.AutocompleteResult autocompleteResult,
             @NotNull final UrlTextInputLocation inputLocation) {
-        // It'd be much cleaner/safer to do this with a kotlin callback.
-        onUrlEnteredInner(urlStr, true, autocompleteResult, inputLocation);
-    }
-
-    // todo: naming
-    // todo: to make MainActivity smaller, this should move to a single responsibility class like FragmentDispatcher
-    /**
-     * Loads the given url. If isTextInput is true, there should be no null parameters.
-     */
-    private void onUrlEnteredInner(final String urlStr, final boolean isTextInput,
-            @Nullable final InlineAutocompleteEditText.AutocompleteResult autocompleteResult,
-            @Nullable final UrlTextInputLocation inputLocation) {
-        if (TextUtils.isEmpty(urlStr.trim())) {
-            return;
-        }
 
         ViewUtils.hideKeyboard(fragmentContainer);
-
-        final boolean isUrl = UrlUtils.isUrl(urlStr);
-        final String updatedUrlStr;
-        final String searchTerms;
-        if (isUrl) {
-            updatedUrlStr = UrlUtils.normalize(urlStr);
-            searchTerms = null;
-        } else {
-            updatedUrlStr = UrlUtils.createSearchUrl(this, urlStr);
-            searchTerms = urlStr.trim();
-        }
-
-        if (sessionManager.hasSession()) {
-            sessionManager.getCurrentSession().setSearchTerms(searchTerms); // todo: correct?
-        }
-
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-
-        // TODO: could this ever happen where browserFragment is on top? and do we need to do anything special for it?
-        final BrowserFragment browserFragment = (BrowserFragment) fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG);
-        final boolean isSearch = !TextUtils.isEmpty(searchTerms);
-        if (browserFragment != null && browserFragment.isVisible()) {
-            // Reuse existing visible fragment - in this case we know the user is already browsing.
-            // The fragment might exist if we "erased" a browsing session, hence we need to check
-            // for visibility in addition to existence.
-            browserFragment.loadUrl(updatedUrlStr);
-
-            // And this fragment can be removed again.
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, browserFragment)
-                    .addToBackStack(null)
-                    .commit();
-        } else {
-            if (isSearch) {
-                SessionManager.getInstance().createSearchSession(Source.USER_ENTERED, updatedUrlStr, searchTerms);
-            } else {
-                SessionManager.getInstance().createSession(Source.USER_ENTERED, updatedUrlStr);
-            }
-        }
-
-        if (isTextInput) {
-            // Non-text input events are handled at the source, e.g. home tile click events.
-            if (autocompleteResult == null) {
-                throw new IllegalArgumentException("Expected non-null autocomplete result for text input");
-            }
-            if (inputLocation == null) {
-                throw new IllegalArgumentException("Expected non-null input location for text input");
-            }
-
-            TelemetryWrapper.urlBarEvent(!isSearch, autocompleteResult, inputLocation);
-        }
+        // It'd be much cleaner/safer to do this with a kotlin callback.
+        FragmentDispatcher.onUrlEnteredInner(urlStr, true, autocompleteResult, inputLocation,
+                getSupportFragmentManager(), sessionManager, this);
     }
 
     @Override

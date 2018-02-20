@@ -25,6 +25,7 @@ import org.mozilla.focus.session.SessionCallbackProxy
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
+import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.web.IWebView
 import org.mozilla.focus.web.IWebViewLifecycleFragment
 import org.mozilla.focus.widget.BrowserNavigationOverlay
@@ -122,8 +123,8 @@ class BrowserFragment : IWebViewLifecycleFragment(),
             NavigationEvent.BACK -> if (canGoBack()) goBack()
             NavigationEvent.FORWARD -> if (canGoForward()) goForward()
             NavigationEvent.RELOAD -> reload()
-            NavigationEvent.HOME -> (activity as MainActivity).showHomeScreen()
-            NavigationEvent.SETTINGS -> (activity as MainActivity).showSettingsScreen()
+            NavigationEvent.HOME -> FragmentDispatcher.showHomeScreen(fragmentManager, activity as OnUrlEnteredListener)
+            NavigationEvent.SETTINGS -> FragmentDispatcher.showSettingsScreen(fragmentManager)
             NavigationEvent.LOAD -> (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
             NavigationEvent.RELOAD_YT -> {
                 isReloadingForYoutubeDrawerClosed = true
