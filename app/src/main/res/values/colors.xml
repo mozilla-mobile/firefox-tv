@@ -75,4 +75,10 @@
     <color name="onboarding_button_highlight">#500060df</color>
 
     <color name="browser_overlay_background">#e6000000</color>
+
+    <color name="button_default">#ededf0</color>
+    <color name="button_disabled">#7e7e7f</color>
+    <color name="button_focused">#00feff</color>
+    <color name="button_focused_disabled">#348383</color>
+    <color name="button_pressed">#00c8d7</color>
 </resources>

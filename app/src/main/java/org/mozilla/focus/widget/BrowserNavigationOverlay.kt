@@ -5,7 +5,7 @@
 package org.mozilla.focus.widget
 
 import android.content.Context
-import android.support.v4.content.ContextCompat
+import android.graphics.Color
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -78,8 +78,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 turboButton)
                 .forEach {
                     it.setOnClickListener(this)
-                    DrawableCompat.setTintList(it.drawable.mutate(),
-                            ContextCompat.getColorStateList(context, R.color.overlay_button_selector))
+                    DrawableCompat.setTint(it.drawable.mutate(), Color.BLACK)
                     // Inactive state is used for Turbo mode
                     it.isActivated = true
                 }

@@ -19,33 +19,40 @@
 
         <ImageButton
             android:id="@+id/navButtonBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:layout_marginEnd="@dimen/button_right_margin"
             style="@style/NavigationButton"
+            android:background="@drawable/circle_button_background"
             android:src="@drawable/ic_back"
-            android:contentDescription="@string/content_description_back"/>
+            android:contentDescription="@string/content_description_back" />
 
         <ImageButton
             android:id="@+id/navButtonForward"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:layout_marginEnd="@dimen/button_right_margin"
             style="@style/NavigationButton"
+            android:background="@drawable/circle_button_background"
             android:src="@drawable/ic_forward"
             android:contentDescription="@string/content_description_forward"/>
 
         <ImageButton
             android:id="@+id/navButtonReload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:layout_marginEnd="@dimen/button_right_margin"
             style="@style/NavigationButton"
+            android:background="@drawable/circle_button_background"
             android:src="@drawable/ic_refresh"
             android:contentDescription="@string/content_description_reload"/>
 
         <ImageButton
             android:id="@+id/turboButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
             style="@style/NavigationButton"
+            android:background="@drawable/circle_button_background"
             android:src="@drawable/turbo"
             android:contentDescription="@string/turbo_mode"/>
 
@@ -56,17 +63,21 @@
         android:gravity="center_vertical">
         <ImageButton
             android:id="@+id/navButtonHome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:layout_marginEnd="@dimen/button_right_margin"
             style="@style/NavigationButton"
+            android:background="@drawable/circle_button_background"
             android:src="@drawable/ic_home"
             android:contentDescription="@string/menu_drawer_home"/>
 
         <ImageButton
             android:id="@+id/navButtonSettings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:layout_marginEnd="@dimen/button_right_margin"
             style="@style/NavigationButton"
+            android:background="@drawable/circle_button_background"
             android:src="@drawable/ic_settings"
             android:contentDescription="@string/menu_settings"/>
 
@@ -75,12 +86,11 @@
             android:drawableStart="@drawable/ic_search"
             android:drawablePadding="10dp"
             android:layout_width="400dp"
-            android:layout_height="40dp"
+            android:layout_height="48dp"
             android:background="@color/homeUrlBarBackground"
             android:hint="@string/urlbar_hint"
             android:imeOptions="actionGo|flagNoExtractUi|flagNoFullscreen"
             android:paddingStart="10dp"
-            android:layout_marginStart="12dp"
             android:inputType="textUri"
             android:lines="1"
             android:selectAllOnFocus="true"
