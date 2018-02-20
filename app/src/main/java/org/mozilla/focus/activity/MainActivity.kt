@@ -8,7 +8,6 @@ package org.mozilla.focus.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.FragmentManager
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.View
@@ -33,16 +32,11 @@ import org.mozilla.focus.web.IWebView
 import org.mozilla.focus.web.WebViewProvider
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 
-
 class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
 
-    private val sessionManager: SessionManager
+    private val sessionManager = SessionManager.getInstance()
 
     private var fragmentContainer: View? = null
-
-    init {
-        sessionManager = SessionManager.getInstance()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,11 +53,9 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
 
         fragmentContainer = findViewById(R.id.container)
 
-
         val intent = SafeIntent(intent)
 
         sessionManager.handleIntent(this, intent, savedInstanceState)
-
         sessionManager.sessions.observe(this, object : NonNullObserver<List<Session>>() {
             public override fun onValueChanged(sessions: List<Session>) {
                 if (sessions.isEmpty()) {
@@ -75,8 +67,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
                 }
 
                 if (Settings.getInstance(this@MainActivity).shouldShowOnboarding()) {
-                    val intent = Intent(this@MainActivity, OnboardingActivity::class.java)
-                    startActivity(intent)
+                    val onboardingIntent = Intent(this@MainActivity, OnboardingActivity::class.java)
+                    startActivity(onboardingIntent)
                 }
             }
         })
@@ -116,18 +108,16 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
         sessionManager.handleNewIntent(this, intent)
     }
 
-
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
         return if (name == IWebView::class.java.name) {
             // Inject our implementation of IWebView from the WebViewProvider.
             WebViewProvider.create(this, attrs, factory!!)
         } else super.onCreateView(name, context, attrs)
-
     }
 
     override fun onBackPressed() {
         val fragmentManager = supportFragmentManager
-        val browserFragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment
+        val browserFragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment?
         if (browserFragment != null &&
                 browserFragment.isVisible &&
                 browserFragment.onBackPressed()) {
@@ -142,7 +132,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
         if (!isAmazonFactoryInit) {
             factory = AmazonWebKitFactories.getDefaultFactory()
             if (factory!!.isRenderProcess(this)) {
-                return  // Do nothing if this is on render process
+                return // Do nothing if this is on render process
             }
             factory!!.initialize(this.applicationContext)
 
@@ -162,9 +152,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
     }
 
     override fun onTextInputUrlEntered(urlStr: String,
-                                       autocompleteResult: InlineAutocompleteEditText.AutocompleteResult,
-                                       inputLocation: UrlTextInputLocation) {
-
+                                       autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?,
+                                       inputLocation: UrlTextInputLocation?) {
         ViewUtils.hideKeyboard(fragmentContainer)
         // It'd be much cleaner/safer to do this with a kotlin callback.
         FragmentDispatcher.onUrlEnteredInner(urlStr, true, autocompleteResult, inputLocation,
@@ -173,19 +162,17 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         val fragmentManager = supportFragmentManager
-        val browserFragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment
+        val browserFragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment?
 
         return if (browserFragment == null || !browserFragment.isVisible) {
             super.dispatchKeyEvent(event)
-        } else browserFragment.dispatchKeyEvent(event) || super.dispatchKeyEvent(event)
-
+        } else {
+            browserFragment.dispatchKeyEvent(event) || super.dispatchKeyEvent(event)
+        }
     }
 
     companion object {
-
-        val EXTRA_TEXT_SELECTION = "text_selection"
-
-
+        @JvmField val EXTRA_TEXT_SELECTION = "text_selection"
         private var isAmazonFactoryInit = false
         var factory: AmazonWebKitFactory? = null
     }
