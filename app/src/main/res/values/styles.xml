@@ -99,7 +99,10 @@
     </style>
 
     <style name="NavigationButton" parent="Widget.AppCompat.ImageButton">
+        <item name="android:layout_width">@dimen/button_size</item>
+        <item name="android:layout_height">@dimen/button_size</item>
+        <item name="android:layout_marginEnd">@dimen/button_right_margin</item>
         <item name="android:padding">12dp</item>
-        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="android:background">@drawable/circle_button_background</item>
     </style>
 </resources>
