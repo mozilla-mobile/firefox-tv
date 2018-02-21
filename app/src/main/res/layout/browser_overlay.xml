@@ -63,7 +63,7 @@
             android:drawableStart="@drawable/ic_search"
             android:drawablePadding="10dp"
             android:layout_width="400dp"
-            android:layout_height="48dp"
+            android:layout_height="@dimen/urlbar_height"
             android:background="@color/homeUrlBarBackground"
             android:hint="@string/urlbar_hint"
             android:imeOptions="actionGo|flagNoExtractUi|flagNoFullscreen"
