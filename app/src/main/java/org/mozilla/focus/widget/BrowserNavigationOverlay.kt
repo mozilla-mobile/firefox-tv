@@ -78,7 +78,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 turboButton)
                 .forEach {
                     it.setOnClickListener(this)
-                    DrawableCompat.setTint(it.drawable.mutate(), Color.BLACK)
                     // Inactive state is used for Turbo mode
                     it.isActivated = true
                 }

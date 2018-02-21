@@ -48,7 +48,9 @@
 
     <dimen name="remote_cursor_size">45dp</dimen>
     <dimen name="remote_cursor_size2x">90dp</dimen>
+
     <dimen name="button_size">48dp</dimen>
-    <dimen name="button_radius">24dp</dimen>
-    <dimen name="button_right_margin">24dp</dimen>
+
+    <!-- We want to keep button_size and urlbar height the same to keep them aligned -->
+    <dimen name="urlbar_height">@dimen/button_size</dimen>
 </resources>
