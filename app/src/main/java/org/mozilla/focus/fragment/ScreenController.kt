@@ -21,11 +21,11 @@ object ScreenController {
     /**
      * Loads the given url. If isTextInput is true, there should be no null parameters.
      */
-    fun onUrlEnteredInner(urlStr: String, isTextInput: Boolean,
-                          autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?,
-                          inputLocation: UrlTextInputLocation?,
-                          fragmentManager: FragmentManager, sessionManager: SessionManager,
-                          context: Context) {
+    fun onUrlEnteredInner(context: Context, fragmentManager: FragmentManager,
+                          sessionManager: SessionManager,
+                          urlStr: String,
+                          isTextInput: Boolean, autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?,
+                          inputLocation: UrlTextInputLocation?) {
         if (TextUtils.isEmpty(urlStr.trim())) {
             return
         }

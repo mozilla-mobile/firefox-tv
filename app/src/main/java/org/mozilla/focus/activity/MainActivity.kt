@@ -15,6 +15,7 @@ import android.view.WindowManager
 
 import com.amazon.android.webkit.AmazonWebKitFactories
 import com.amazon.android.webkit.AmazonWebKitFactory
+import kotlinx.android.synthetic.main.activity_main.container
 import org.mozilla.focus.R
 import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.fragment.BrowserFragment
@@ -36,24 +37,18 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
 
     private val sessionManager = SessionManager.getInstance()
 
-    private var fragmentContainer: View? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initAmazonFactory()
+        val intent = SafeIntent(intent)
 
         if (Settings.getInstance(this).shouldUseSecureMode()) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
-
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
         setContentView(R.layout.activity_main)
-
-        fragmentContainer = findViewById(R.id.container)
-
-        val intent = SafeIntent(intent)
 
         sessionManager.handleIntent(this, intent, savedInstanceState)
         sessionManager.sessions.observe(this, object : NonNullObserver<List<Session>>() {
@@ -146,18 +141,18 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
     }
 
     override fun onNonTextInputUrlEntered(urlStr: String) {
-        ViewUtils.hideKeyboard(fragmentContainer)
-        ScreenController.onUrlEnteredInner(urlStr, false, null, null,
-                supportFragmentManager, sessionManager, this)
+        ViewUtils.hideKeyboard(container)
+        ScreenController.onUrlEnteredInner(this, supportFragmentManager, sessionManager, urlStr,
+                false, null, null)
     }
 
     override fun onTextInputUrlEntered(urlStr: String,
                                        autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?,
                                        inputLocation: UrlTextInputLocation?) {
-        ViewUtils.hideKeyboard(fragmentContainer)
+        ViewUtils.hideKeyboard(container)
         // It'd be much cleaner/safer to do this with a kotlin callback.
-        ScreenController.onUrlEnteredInner(urlStr, true, autocompleteResult, inputLocation,
-                supportFragmentManager, sessionManager, this)
+        ScreenController.onUrlEnteredInner(this, supportFragmentManager, sessionManager, urlStr,
+                true, autocompleteResult, inputLocation)
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
@@ -174,6 +169,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
     companion object {
         @JvmField val EXTRA_TEXT_SELECTION = "text_selection"
         private var isAmazonFactoryInit = false
-        var factory: AmazonWebKitFactory? = null
+        @JvmStatic var factory: AmazonWebKitFactory? = null
     }
 }

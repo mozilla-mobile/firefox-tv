@@ -104,7 +104,7 @@ public class InfoActivity extends AppCompatActivity {
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {
         if (name.equals(IWebView.class.getName())) {
-            final View view = WebViewProvider.create(this, attrs, MainActivity.Companion.getFactory());
+            final View view = WebViewProvider.create(this, attrs, MainActivity.getFactory());
 
             final IWebView webView = (IWebView) view;
             webView.setBlockingEnabled(false);
