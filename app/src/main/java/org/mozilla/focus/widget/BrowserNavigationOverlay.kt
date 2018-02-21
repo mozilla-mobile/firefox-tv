@@ -5,8 +5,6 @@
 package org.mozilla.focus.widget
 
 import android.content.Context
-import android.graphics.Color
-import android.support.v4.graphics.drawable.DrawableCompat
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
