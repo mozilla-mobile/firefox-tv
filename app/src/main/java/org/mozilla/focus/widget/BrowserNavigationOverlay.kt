@@ -93,8 +93,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             if (userInput.isNotEmpty()) {
                 // getLastAutocompleteResult must be called before closeDrawer: closeDrawer clears the text input,
                 // which clears the last autocomplete result.
-                onNavigationEvent?.invoke(NavigationEvent.LOAD, userInput, lastAutocompleteResult)
                 setText(lastAutocompleteResult.text)
+                onNavigationEvent?.invoke(NavigationEvent.LOAD, userInput, lastAutocompleteResult)
             }
         }
         val autocompleteFilter = UrlAutoCompleteFilter()

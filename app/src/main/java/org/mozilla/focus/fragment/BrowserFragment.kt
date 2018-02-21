@@ -125,7 +125,10 @@ class BrowserFragment : IWebViewLifecycleFragment(),
             NavigationEvent.RELOAD -> reload()
             NavigationEvent.HOME -> ScreenController.showHomeScreen(fragmentManager, activity as OnUrlEnteredListener)
             NavigationEvent.SETTINGS -> ScreenController.showSettingsScreen(fragmentManager)
-            NavigationEvent.LOAD -> (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
+            NavigationEvent.LOAD -> {
+                (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
+                showOverlay(false)
+            }
             NavigationEvent.RELOAD_YT -> {
                 isReloadingForYoutubeDrawerClosed = true
                 reload()
