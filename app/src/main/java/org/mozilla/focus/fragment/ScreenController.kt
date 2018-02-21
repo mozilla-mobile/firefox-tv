@@ -17,7 +17,7 @@ import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.UrlUtils
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 
-object FragmentDispatcher {
+object ScreenController {
     /**
      * Loads the given url. If isTextInput is true, there should be no null parameters.
      */
