@@ -18,7 +18,7 @@ import com.amazon.android.webkit.AmazonWebKitFactory
 import org.mozilla.focus.R
 import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.fragment.BrowserFragment
-import org.mozilla.focus.fragment.FragmentDispatcher
+import org.mozilla.focus.fragment.ScreenController
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.session.SessionManager
@@ -61,9 +61,9 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
                 if (sessions.isEmpty()) {
                     // There's no active session. Show the URL input screen so that the user can
                     // start a new session.
-                    FragmentDispatcher.showHomeScreen(supportFragmentManager, this@MainActivity)
+                    ScreenController.showHomeScreen(supportFragmentManager, this@MainActivity)
                 } else {
-                    FragmentDispatcher.showBrowserScreenForCurrentSession(supportFragmentManager, sessionManager)
+                    ScreenController.showBrowserScreenForCurrentSession(supportFragmentManager, sessionManager)
                 }
 
                 if (Settings.getInstance(this@MainActivity).shouldShowOnboarding()) {
@@ -147,7 +147,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
 
     override fun onNonTextInputUrlEntered(urlStr: String) {
         ViewUtils.hideKeyboard(fragmentContainer)
-        FragmentDispatcher.onUrlEnteredInner(urlStr, false, null, null,
+        ScreenController.onUrlEnteredInner(urlStr, false, null, null,
                 supportFragmentManager, sessionManager, this)
     }
 
@@ -156,7 +156,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
                                        inputLocation: UrlTextInputLocation?) {
         ViewUtils.hideKeyboard(fragmentContainer)
         // It'd be much cleaner/safer to do this with a kotlin callback.
-        FragmentDispatcher.onUrlEnteredInner(urlStr, true, autocompleteResult, inputLocation,
+        ScreenController.onUrlEnteredInner(urlStr, true, autocompleteResult, inputLocation,
                 supportFragmentManager, sessionManager, this)
     }
 
