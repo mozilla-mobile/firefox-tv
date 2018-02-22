@@ -28,15 +28,11 @@ import java.lang.ref.WeakReference
 
 private const val COL_COUNT = 5
 
-interface HomeDelegate {
-    fun didPressSettings()
-}
-
 /** The home fragment which displays the navigation tiles of the app. */
 class HomeFragment : Fragment() {
     lateinit var urlBar: LinearLayout
     var onUrlEnteredListener = object : OnUrlEnteredListener {} // default impl does nothing.
-    var delegate: WeakReference<HomeDelegate>? = null
+    var onSettingsPressed: (() -> Unit)? = null
     val urlAutoCompleteFilter = UrlAutoCompleteFilter()
     val HOME_TILES_DIR = "defaults/"
     val HOME_TILES_JSON_PATH = HOME_TILES_DIR + "default_tiles.json"
@@ -61,7 +57,7 @@ class HomeFragment : Fragment() {
         }
 
         settingsButton.setOnClickListener { v ->
-            delegate?.get()?.didPressSettings()
+            onSettingsPressed?.invoke()
         }
     }
 
