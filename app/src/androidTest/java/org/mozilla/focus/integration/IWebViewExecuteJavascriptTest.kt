@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.focus.activity
+package org.mozilla.focus.integration
 
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.IdlingRegistry
@@ -25,8 +25,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.focus.R
-import org.mozilla.focus.activity.helpers.SessionLoadedIdlingResource
+import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.fragment.BrowserFragment
+import org.mozilla.focus.helpers.SessionLoadedIdlingResource
 
 /** An integration test to verify [IWebView.executeJS] works correctly. */
 @RunWith(AndroidJUnit4::class)
