@@ -1,0 +1,26 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This is the template for our Screengrabfile used in automation.
+# tools/taskcluster/generate_screengrab_config.py will read this
+# file and generate the final configuration that we use inside
+# a taskcluster task.
+
+use_tests_in_packages ['org.mozilla.focus.screenshots']
+app_package_name 'org.mozilla.tv.firefox.debug'
+
+app_apk_path 'app/build/outputs/apk/app-amazonWebview-debug.apk'
+tests_apk_path 'app/build/outputs/apk/app-amazonWebview-debug-androidTest.apk'
+
+# Supported locales
+locales ['en-US', 'de', 'zh-cn', 'fr', 'it', 'ja', 'pt-BR', 'es-ES']
+
+# Clear all previous screenshots locally. Technically not needed in automation.
+# But it's easier to debug this on a local device if there are no old screenshots
+# hanging around.
+clear_previous_screenshots true
+
+exit_on_test_failure false
+
+skip_open_summary false
