@@ -93,6 +93,7 @@ object ScreenController {
 
         // Show the home screen.
         val newHomeFragment = HomeFragment.create()
+        newHomeFragment.onSettingsPressed = { showSettingsScreen(fragmentManager) }
         newHomeFragment.onUrlEnteredListener = onUrlEnteredListener
         fragmentManager.beginTransaction()
                 .replace(R.id.container, newHomeFragment, HomeFragment.FRAGMENT_TAG)
