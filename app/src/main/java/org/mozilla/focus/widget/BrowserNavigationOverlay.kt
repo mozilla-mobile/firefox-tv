@@ -65,7 +65,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         get() = Settings.getInstance(context).isBlockingEnabled
         set(value) {
             Settings.getInstance(context).isBlockingEnabled = value
-            turboButton.isActivated = value
             TelemetryWrapper.turboModeSwitchEvent(value)
         }
 
@@ -76,11 +75,9 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 turboButton)
                 .forEach {
                     it.setOnClickListener(this)
-                    // Inactive state is used for Turbo mode
-                    it.isActivated = true
                 }
         setupUrlInput()
-        turboButton.isActivated = Settings.getInstance(context).isBlockingEnabled
+        turboButton.isChecked = Settings.getInstance(context).isBlockingEnabled
     }
 
     private fun setupUrlInput() = with (navUrlInput) {
@@ -107,7 +104,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     override fun onClick(view: View?) {
         var event = NavigationEvent.fromViewClick(view?.id) ?: return
         if (event == NavigationEvent.TURBO) {
-            isTurboEnabled = !turboButton.isActivated
+            isTurboEnabled = turboButton.isChecked
             event = NavigationEvent.RELOAD
         }
         onNavigationEvent?.invoke(event, null, null)

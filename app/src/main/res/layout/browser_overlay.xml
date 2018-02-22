@@ -35,10 +35,10 @@
             android:src="@drawable/ic_refresh"
             android:contentDescription="@string/content_description_reload"/>
 
-        <ImageButton
+        <org.mozilla.focus.widget.CheckableImageButton
             android:id="@+id/turboButton"
             style="@style/NavigationButton"
-            android:src="@drawable/turbo"
+            android:src="@drawable/turbo_selector"
             android:contentDescription="@string/turbo_mode"/>
 
     </LinearLayout>
