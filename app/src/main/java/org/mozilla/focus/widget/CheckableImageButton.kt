@@ -11,28 +11,30 @@ import android.view.View
 import android.widget.Checkable
 import android.widget.ImageButton
 
+private val checkedStateSet = intArrayOf(android.R.attr.state_checked)
+
 /**
  * ImageButton that implements Checkable.
  *
  * NB: We need a checkable button with a centered drawable for the overlay.
  * CheckBox uses a non-centered drawable, and we can't use ToggleButton
- * because it uses android:background, which we need for button state,
+ * because it uses android:background to set the image, which we need for button state,
  * so we make a custom button.
  *
  * We need to override onCreateDrawableState (see CompoundButton source) to add
  * the checked state to the attrs.
  */
 class CheckableImageButton @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyle: Int = 0 )
-    : ImageButton(context, attrs, defStyle), Checkable {
-
-    private val _checkedStateSet = intArrayOf(android.R.attr.state_checked)
+        context: Context, attrs: AttributeSet? = null, defStyle: Int = 0
+) : ImageButton(context, attrs, defStyle), Checkable {
 
     private var internalIsChecked = false
+        set(value) {
+            field = value
+            refreshDrawableState()
+        }
 
-    override fun isChecked(): Boolean {
-        return internalIsChecked
-    }
+    override fun isChecked() = internalIsChecked
 
     override fun toggle() {
         isChecked = !internalIsChecked
@@ -40,13 +42,12 @@ class CheckableImageButton @JvmOverloads constructor(
 
     override fun setChecked(checked: Boolean) {
         internalIsChecked = checked
-        refreshDrawableState()
     }
 
     override fun onCreateDrawableState(extraSpace: Int): IntArray {
         val drawableState = super.onCreateDrawableState(extraSpace + 1)
         if (internalIsChecked) {
-            View.mergeDrawableStates(drawableState, _checkedStateSet)
+            View.mergeDrawableStates(drawableState, checkedStateSet)
         }
         return drawableState
     }
