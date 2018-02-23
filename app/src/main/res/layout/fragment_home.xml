@@ -59,8 +59,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginEnd="10dp"
                 android:scaleType="centerInside"
+                android:layout_marginEnd="10dp"
                 android:src="@drawable/ic_firefox_and_workmark"
                 tools:ignore="ContentDescription"/>
         <requestFocus/> <!-- Requests initial focus -->
