@@ -158,7 +158,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         val fragmentManager = supportFragmentManager
         val browserFragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment?
-
+        
         return if (browserFragment == null || !browserFragment.isVisible) {
             super.dispatchKeyEvent(event)
         } else {
