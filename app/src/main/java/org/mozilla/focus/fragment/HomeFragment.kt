@@ -24,7 +24,6 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.OnUrlEnteredListener
 import android.graphics.BitmapFactory
-import java.lang.ref.WeakReference
 
 private const val COL_COUNT = 5
 
@@ -52,6 +51,7 @@ class HomeFragment : Fragment() {
         initUrlInputView()
 
         settingsButton.alpha = SETTINGS_ICON_IDLE_ALPHA
+        settingsButton.setImageResource(R.drawable.ic_settings)
         settingsButton.setOnFocusChangeListener { v, hasFocus ->
             v.alpha = if (hasFocus) SETTINGS_ICON_ACTIVE_ALPHA else SETTINGS_ICON_IDLE_ALPHA
         }
