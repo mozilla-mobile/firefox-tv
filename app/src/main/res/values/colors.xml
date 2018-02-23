@@ -76,6 +76,7 @@
 
     <color name="browser_overlay_background">#e6000000</color>
 
+    <color name="button_highlight">#64ffffff</color>
     <color name="button_default">#ededf0</color>
     <color name="button_disabled">#7e7e7f</color>
     <color name="button_focused">#00feff</color>
