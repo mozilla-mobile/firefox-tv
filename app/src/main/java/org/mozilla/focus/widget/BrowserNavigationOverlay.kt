@@ -78,6 +78,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 }
         setupUrlInput()
         turboButton.isChecked = Settings.getInstance(context).isBlockingEnabled
+        navButtonSettings.setImageResource(R.drawable.ic_settings)
     }
 
     private fun setupUrlInput() = with (navUrlInput) {
