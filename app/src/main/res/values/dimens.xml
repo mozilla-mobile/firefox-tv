@@ -46,8 +46,8 @@
 
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="remote_cursor_size">45dp</dimen>
-    <dimen name="remote_cursor_size2x">90dp</dimen>
+    <dimen name="remote_cursor_size">24dp</dimen>
+    <dimen name="remote_cursor_size2x">48dp</dimen>
 
     <dimen name="button_size">48dp</dimen>
 
