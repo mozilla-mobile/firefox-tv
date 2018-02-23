@@ -12,6 +12,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.view.View
+import android.view.View.GONE
 import android.widget.LinearLayout
 import org.mozilla.focus.R
 import org.mozilla.focus.architecture.NonNullObserver
@@ -35,9 +36,9 @@ class FirefoxProgressBar @JvmOverloads constructor(
         browserFrag.session.loading.observe(browserFrag, object : NonNullObserver<Boolean>() {
             public override fun onValueChanged(loading: Boolean) {
                 if (loading) {
-                    setMaxVisibility()
+                    showBar()
                 } else {
-                    resetCountdown()
+                    scheduleHideBar()
                 }
             }
         })
@@ -53,12 +54,14 @@ class FirefoxProgressBar @JvmOverloads constructor(
         setLayerType(View.LAYER_TYPE_SOFTWARE, null)
     }
 
-    private fun setMaxVisibility() {
+    private fun showBar() {
+        hideHandler.removeMessages(HIDE_MESSAGE_ID)
+        visibility = View.VISIBLE
         animate().cancel()
         alpha = 1f
     }
 
-    private fun resetCountdown() {
+    private fun scheduleHideBar() {
         hideHandler.removeMessages(HIDE_MESSAGE_ID)
         hideHandler.sendEmptyMessageDelayed(HIDE_MESSAGE_ID, HIDE_AFTER_MILLIS)
     }
@@ -76,8 +79,10 @@ private class FirefoxProgressBarHideHandler(view: FirefoxProgressBar) : Handler(
     private val viewWeakReference = WeakReference<FirefoxProgressBar>(view)
 
     override fun handleMessage(msg: Message?) {
-        viewWeakReference.get()
+        val progressBar = viewWeakReference.get()
+        progressBar
                 ?.animate()
+                ?.withEndAction { progressBar.visibility = GONE }
                 ?.setDuration(HIDE_ANIMATION_DURATION_MILLIS)
                 ?.alpha(0f)
                 ?.start()
