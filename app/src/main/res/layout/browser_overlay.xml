@@ -41,6 +41,18 @@
             android:src="@drawable/turbo_selector"
             android:contentDescription="@string/turbo_mode"/>
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/firefoxWordmark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_firefox_and_workmark" />
+
+
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -72,6 +84,25 @@
             android:lines="1"
             android:selectAllOnFocus="true"
             android:importantForAutofill="no"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:tint="@android:color/white"
+            android:src="@drawable/ic_wide_menu" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:paddingLeft="5dp"
+            android:text="@string/close_hint" />
     </LinearLayout>
 
 </LinearLayout>
