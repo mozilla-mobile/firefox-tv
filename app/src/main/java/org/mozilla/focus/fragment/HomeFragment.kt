@@ -4,9 +4,10 @@
 
 package org.mozilla.focus.fragment
 
+import android.content.Context
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
-import android.content.Context
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -23,7 +24,6 @@ import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.OnUrlEnteredListener
-import android.graphics.BitmapFactory
 
 private const val COL_COUNT = 5
 
@@ -98,7 +98,7 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, ho
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with (holder) {
         val item = tiles[position]
         titleView.setText(item.title)
-        val bmImg = BitmapFactory.decodeStream(context.assets.open(item.imagePath))
+        val bmImg = context.assets.open(item.imagePath).use { BitmapFactory.decodeStream(it) }
         iconView.setImageBitmap(bmImg)
         itemView.setOnClickListener {
             onUrlEnteredListener.onNonTextInputUrlEntered(item.url)
