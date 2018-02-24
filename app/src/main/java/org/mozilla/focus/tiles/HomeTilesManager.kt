@@ -19,6 +19,7 @@ import org.mozilla.focus.utils.UrlUtils
 import java.util.UUID
 
 private const val PREF_HOME_TILES = "homeTiles"
+private const val BUNDLED_SITES_ID_BLACKLIST = "blacklist"
 private const val CUSTOM_SITES_LIST = "customSitesList"
 
 private const val BUNDLED_HOME_TILES_DIR = "bundled"
@@ -49,10 +50,12 @@ class BundledTilesManager private constructor(context: Context) {
         val tilesJSONString = context.assets.open(HOME_TILES_JSON_PATH).bufferedReader().use { it.readText() }
         val tilesJSONArray = JSONArray(tilesJSONString)
         val lhm = LinkedHashMap<Uri, BundledHomeTile>(tilesJSONArray.length())
+        val blacklist = loadBlacklist(context)
         for (i in 0 until tilesJSONArray.length()) {
             val tile = BundledHomeTile.fromJSONObject(tilesJSONArray.getJSONObject(i))
-            // TODO: Check for blacklisted sites and don't add them
-            lhm.put(tile.url.toUri()!!, tile)
+            if (!blacklist.contains(tile.id)) {
+                lhm.put(tile.url.toUri()!!, tile)
+            }
         }
         return lhm
     }
@@ -76,9 +79,14 @@ class BundledTilesManager private constructor(context: Context) {
 
     @UiThread
     fun unpinSite(context: Context, uri: Uri): Boolean {
+        val blacklist = loadBlacklist(context)
+        val newBlacklist = blacklist.toMutableSet()
         for (pair in bundledTilesCache) {
             if (compareUri(uri, pair.key)) {
-                // TODO: Remove by pair.value.id (BEFORE removing from cache)
+                newBlacklist.add(pair.value.id)
+                context.getSharedPreferences(PREF_HOME_TILES, MODE_PRIVATE).edit()
+                        .putStringSet(BUNDLED_SITES_ID_BLACKLIST, newBlacklist)
+                        .apply()
                 bundledTilesCache.remove(pair.key)
                 return true
             }
@@ -90,6 +98,10 @@ class BundledTilesManager private constructor(context: Context) {
     fun loadImageFromPath(context: Context, path: String) = context.assets.open(
             "$BUNDLED_HOME_TILES_DIR/$path").use {
         BitmapFactory.decodeStream(it)
+    }
+
+    private fun loadBlacklist(context: Context): MutableSet<String> {
+        return context.getSharedPreferences(PREF_HOME_TILES, MODE_PRIVATE).getStringSet(BUNDLED_SITES_ID_BLACKLIST, mutableSetOf())
     }
 
     @UiThread

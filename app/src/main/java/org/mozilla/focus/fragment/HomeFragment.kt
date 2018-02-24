@@ -14,9 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
-import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.CommonPool
@@ -35,6 +33,11 @@ import org.mozilla.focus.tiles.CustomHomeTile
 import org.mozilla.focus.tiles.CustomTilesManager
 import org.mozilla.focus.tiles.HomeTile
 import org.mozilla.focus.utils.OnUrlEnteredListener
+import android.view.ContextMenu
+import android.view.MenuItem
+import android.view.KeyEvent
+import kotlinx.android.synthetic.main.home_tile.view.*
+import org.mozilla.focus.ext.toUri
 
 private const val COL_COUNT = 5
 private const val SETTINGS_ICON_IDLE_ALPHA = 0.4f
@@ -84,6 +87,39 @@ class HomeFragment : Fragment() {
         settingsButton.setOnClickListener { v ->
             onSettingsPressed?.invoke()
         }
+
+        registerForContextMenu(view)
+    }
+
+    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        activity.menuInflater.inflate(R.menu.menu_context_hometile, menu)
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.remove -> {
+                val homeTileAdapter = tileContainer.adapter as HomeTileAdapter
+                val tileToRemove = homeTileAdapter.getItemAtPosition(getFocusedTilePosition())
+                // This assumes that since we're deleting from a Home Tile object that we created
+                // that the Uri is valid, so we do not do error handling here.
+                when (tileToRemove) {
+                    is BundledHomeTile -> {
+                        val tileUri = tileToRemove.url.toUri()
+                        if (tileUri != null) {
+                            BundledTilesManager.getInstance(context).unpinSite(context, tileUri)
+                            homeTileAdapter.removeItemAtPosition(getFocusedTilePosition())
+                        }
+                    }
+                    is CustomHomeTile -> {
+                        CustomTilesManager.getInstance(context).unpinSite(context, tileToRemove.url)
+                        homeTileAdapter.removeItemAtPosition(getFocusedTilePosition())
+                    }
+                }
+                return true
+            }
+        }
+        return false
     }
 
     override fun onDestroyView() {
@@ -125,11 +161,23 @@ class HomeFragment : Fragment() {
         @JvmStatic
         fun create() = HomeFragment()
     }
+
+    fun getFocusedTilePosition(): Int {
+        return (activity.currentFocus.parent as? RecyclerView)?.getChildAdapterPosition(activity.currentFocus) ?: RecyclerView.NO_POSITION
+    }
+
+    fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if (event.keyCode == KeyEvent.KEYCODE_MENU && getFocusedTilePosition() != RecyclerView.NO_POSITION) {
+            activity.openContextMenu(view)
+            return true
+        }
+        return false
+    }
 }
 
 private class HomeTileAdapter(
         private val uiLifecycleCancelJob: Job,
-        private val tiles: List<HomeTile>,
+        private val tiles: MutableList<HomeTile>,
         private val onUrlEnteredListener: OnUrlEnteredListener
 ) : RecyclerView.Adapter<TileViewHolder>() {
 
@@ -153,12 +201,28 @@ private class HomeTileAdapter(
             if (hasFocus) {
                 backgroundResource = R.drawable.home_tile_title_focused_background
                 textColor = Color.WHITE
+                menuButton.visibility = View.VISIBLE
             } else {
                 backgroundResource = 0
                 textColor = Color.BLACK
+                menuButton.visibility = View.GONE
             }
             titleView.setBackgroundResource(backgroundResource)
             titleView.setTextColor(textColor)
+        }
+    }
+
+    fun getItemAtPosition(position: Int): HomeTile? {
+        if (position > -1 && position < itemCount) {
+            return tiles[position]
+        }
+        return null
+    }
+
+    fun removeItemAtPosition(position: Int) {
+        if (position > -1 && position < itemCount) {
+            tiles.removeAt(position)
+            notifyItemRemoved(position)
         }
     }
 
@@ -191,6 +255,7 @@ private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHold
 private class TileViewHolder(
         itemView: View
 ) : RecyclerView.ViewHolder(itemView) {
-    val iconView = itemView.findViewById<ImageView>(R.id.tile_icon)
-    val titleView = itemView.findViewById<TextView>(R.id.tile_title)
+    val iconView = itemView.tile_icon
+    val titleView = itemView.tile_title
+    val menuButton = itemView.home_tile_menu_icon
 }
