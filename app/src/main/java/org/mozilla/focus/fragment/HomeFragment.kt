@@ -4,7 +4,6 @@
 
 package org.mozilla.focus.fragment
 
-import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
@@ -70,7 +69,7 @@ class HomeFragment : Fragment() {
             val id = jsonObject.getString("identifier")
             homeTiles.add(HomeTile(url, title, imgPath, id))
         }
-        adapter = HomeTileAdapter(onUrlEnteredListener, homeTiles, context)
+        adapter = HomeTileAdapter(onUrlEnteredListener, homeTiles)
         layoutManager = GridLayoutManager(context, COL_COUNT)
         setHasFixedSize(true)
     }
@@ -90,15 +89,14 @@ class HomeFragment : Fragment() {
     }
 }
 
-private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, homeTiles: MutableList<HomeTile>, context: Context) :
+private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, homeTiles: MutableList<HomeTile>) :
         RecyclerView.Adapter<TileViewHolder>() {
-    val context = context
     val tiles = homeTiles
 
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with (holder) {
         val item = tiles[position]
         titleView.setText(item.title)
-        val bmImg = context.assets.open(item.imagePath).use { BitmapFactory.decodeStream(it) }
+        val bmImg = itemView.context.assets.open(item.imagePath).use { BitmapFactory.decodeStream(it) }
         iconView.setImageBitmap(bmImg)
         itemView.setOnClickListener {
             onUrlEnteredListener.onNonTextInputUrlEntered(item.url)
