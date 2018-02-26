@@ -17,7 +17,7 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.Settings
 
 enum class NavigationEvent {
-    HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD, TURBO, RELOAD_YT;
+    HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD, TURBO, RELOAD_YT, PIN_ACTION, PIN_SITE, UNPIN_SITE;
 
     companion object {
         fun fromViewClick(viewId: Int?) = when (viewId) {
@@ -27,6 +27,7 @@ enum class NavigationEvent {
             R.id.navButtonHome -> HOME
             R.id.navButtonSettings -> SETTINGS
             R.id.turboButton -> TURBO
+            R.id.pinButton -> PIN_ACTION
             else -> null
         }
     }
@@ -73,7 +74,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         LayoutInflater.from(context)
                 .inflate(R.layout.browser_overlay, this, true)
         listOf(navButtonBack, navButtonForward, navButtonReload, navButtonHome, navButtonSettings,
-                turboButton)
+                turboButton, pinButton)
                 .forEach {
                     it.setOnClickListener(this)
                 }
@@ -111,9 +112,14 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
     override fun onClick(view: View?) {
         var event = NavigationEvent.fromViewClick(view?.id) ?: return
-        if (event == NavigationEvent.TURBO) {
-            isTurboEnabled = turboButton.isChecked
-            event = NavigationEvent.RELOAD
+        when (event) {
+            NavigationEvent.TURBO -> {
+                isTurboEnabled = turboButton.isChecked
+                event = NavigationEvent.RELOAD
+            }
+            NavigationEvent.PIN_ACTION -> {
+                event = if (pinButton.isChecked) NavigationEvent.PIN_SITE else NavigationEvent.UNPIN_SITE
+            }
         }
         onNavigationEvent?.invoke(event, null, null)
     }
@@ -131,6 +137,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         val canGoForward = navigationStateProvider?.isForwardEnabled() ?: false
         navButtonForward.isEnabled = canGoForward
         navButtonForward.isFocusable = canGoForward
+
+        // TODO: Add "isPinned" state of page
 
         navUrlInput.setText(navigationStateProvider?.getCurrentUrl())
 
