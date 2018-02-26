@@ -134,6 +134,12 @@ class BrowserFragment : IWebViewLifecycleFragment(),
                 isReloadingForYoutubeDrawerClosed = true
                 reload()
             }
+            NavigationEvent.PIN_SITE -> {
+                // TODO: Add to pinned sites
+            }
+            NavigationEvent.UNPIN_SITE -> {
+                // TODO: Remove from pinned sites
+            }
         }
         Unit
     }
