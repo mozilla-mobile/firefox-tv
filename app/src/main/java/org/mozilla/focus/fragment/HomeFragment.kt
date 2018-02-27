@@ -24,7 +24,7 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.tiles.HomeTile
-import org.mozilla.focus.tiles.HomeTilesManager
+import org.mozilla.focus.tiles.CustomTilesAccessor
 
 private const val COL_COUNT = 5
 
@@ -74,7 +74,7 @@ class HomeFragment : Fragment() {
 
     private fun initTiles() = with (tileContainer) {
         val homeTiles = mutableListOf<HomeTile>()
-        homeTiles.addAll(HomeTilesManager.getCustomHomeTilesList(context))
+        homeTiles.addAll(CustomTilesAccessor.getCustomHomeTilesList())
         val inputAsString = context.assets.open(HOME_TILES_JSON_PATH).bufferedReader().use { it.readText() }
         val jsonArray = JSONObject(inputAsString).getJSONArray(HOME_TILES_JSON_KEY)
         for (i in 0..(jsonArray.length() - 1)) {
