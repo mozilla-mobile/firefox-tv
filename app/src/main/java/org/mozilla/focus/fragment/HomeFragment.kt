@@ -23,6 +23,8 @@ import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.OnUrlEnteredListener
+import org.mozilla.focus.tiles.HomeTile
+import org.mozilla.focus.tiles.HomeTilesManager
 
 private const val COL_COUNT = 5
 
@@ -72,6 +74,7 @@ class HomeFragment : Fragment() {
 
     private fun initTiles() = with (tileContainer) {
         val homeTiles = mutableListOf<HomeTile>()
+        homeTiles.addAll(HomeTilesManager.getCustomHomeTilesList(context))
         val inputAsString = context.assets.open(HOME_TILES_JSON_PATH).bufferedReader().use { it.readText() }
         val jsonArray = JSONObject(inputAsString).getJSONArray(HOME_TILES_JSON_KEY)
         for (i in 0..(jsonArray.length() - 1)) {
@@ -109,8 +112,10 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, ho
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with (holder) {
         val item = tiles[position]
         titleView.setText(item.title)
-        val bmImg = itemView.context.assets.open(item.imagePath).use { BitmapFactory.decodeStream(it) }
-        iconView.setImageBitmap(bmImg)
+        if (!item.imagePath.isNullOrEmpty()) {
+            val bmImg = itemView.context.assets.open(item.imagePath).use { BitmapFactory.decodeStream(it) }
+            iconView.setImageBitmap(bmImg)
+        }
         itemView.setOnClickListener {
             onUrlEnteredListener.onNonTextInputUrlEntered(item.url)
             TelemetryWrapper.homeTileClickEvent()
@@ -143,11 +148,3 @@ private class TileViewHolder(
     val iconView = itemView.findViewById<ImageView>(R.id.tile_icon)
     val titleView = itemView.findViewById<TextView>(R.id.tile_title)
 }
-
-private data class HomeTile (
-        val url: String,
-        val title: String,
-        val imagePath: String,
-        // unique id used to identify specific home tiles, e.g. for deletion, etc.
-        val id: String
-)
