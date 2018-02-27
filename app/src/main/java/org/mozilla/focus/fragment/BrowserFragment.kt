@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.android.synthetic.main.fragment_browser.view.*
 import org.mozilla.focus.R
@@ -138,11 +139,13 @@ class BrowserFragment : IWebViewLifecycleFragment(),
             NavigationEvent.PIN_SITE -> {
                 if (webview.getUrl() != null) {
                     CustomTilesAccessor.pinSite(context, webview.getUrl()!!)
+                    Toast.makeText(context, R.string.notification_pinned_site, Toast.LENGTH_SHORT).show()
                 }
             }
             NavigationEvent.UNPIN_SITE -> {
                 if (webview.getUrl() != null) {
                     CustomTilesAccessor.unpinSite(context, webview.getUrl()!!)
+                    Toast.makeText(context, R.string.notification_unpinned_site, Toast.LENGTH_SHORT).show()
                 }
             }
         }

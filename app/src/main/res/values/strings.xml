@@ -566,7 +566,9 @@ be temporary, and you can try again later.</li>
     <string name="onboarding_turbo_mode_button_on">Keep Turbo Mode Enabled</string>
     <string name="onboarding_turbo_mode_button_off">Turn Turbo Mode Off</string>
 
+    <string name="homescreen_tile_remove">Remove</string>
     <string name="nav_close_hint">Close</string>
 
-    <string name="homescreen_tile_remove">Remove</string>
+    <string name="notification_pinned_site">Pinned to Firefox TV homescreen</string>
+    <string name="notification_unpinned_site">Removed from Firefox TV homescreen</string>
 </resources>
