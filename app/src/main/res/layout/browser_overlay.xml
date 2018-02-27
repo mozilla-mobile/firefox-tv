@@ -90,19 +90,16 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:tint="@android:color/white"
-            android:src="@drawable/ic_wide_menu" />
-
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/navCloseHint"
+            android:gravity="center_vertical"
             android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_weight="0"
-            android:paddingLeft="5dp"
-            android:text="@string/close_hint" />
+            android:drawableStart="@drawable/ic_wide_menu"
+            android:drawablePadding="5dp"
+            android:text="@string/nav_close_hint"
+            android:textColor="@color/button_default" />
     </LinearLayout>
 
 </LinearLayout>

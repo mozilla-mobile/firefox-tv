@@ -566,6 +566,5 @@ be temporary, and you can try again later.</li>
     <string name="onboarding_turbo_mode_button_on">Keep Turbo Mode Enabled</string>
     <string name="onboarding_turbo_mode_button_off">Turn Turbo Mode Off</string>
 
-    <!-- Label for the hint to close the overlay-->
-    <string name="close_hint">Close</string>
+    <string name="nav_close_hint">Close</string>
 </resources>
