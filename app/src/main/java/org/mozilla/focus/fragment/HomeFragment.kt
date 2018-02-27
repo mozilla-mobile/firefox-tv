@@ -27,6 +27,7 @@ import org.mozilla.focus.tiles.HomeTile
 import org.mozilla.focus.tiles.CustomTilesAccessor
 
 private const val COL_COUNT = 5
+const val HOME_TILES_DIR = "defaults/"
 
 /** The home fragment which displays the navigation tiles of the app. */
 class HomeFragment : Fragment() {
@@ -34,7 +35,6 @@ class HomeFragment : Fragment() {
     var onUrlEnteredListener = object : OnUrlEnteredListener {} // default impl does nothing.
     var onSettingsPressed: (() -> Unit)? = null
     val urlAutoCompleteFilter = UrlAutoCompleteFilter()
-    val HOME_TILES_DIR = "defaults/"
     val HOME_TILES_JSON_PATH = HOME_TILES_DIR + "default_tiles.json"
     val HOME_TILES_JSON_KEY = "default_tiles"
     val SETTINGS_ICON_IDLE_ALPHA = 0.4f
@@ -79,11 +79,7 @@ class HomeFragment : Fragment() {
         val jsonArray = JSONObject(inputAsString).getJSONArray(HOME_TILES_JSON_KEY)
         for (i in 0..(jsonArray.length() - 1)) {
             val jsonObject = jsonArray.getJSONObject(i)
-            val url = jsonObject.getString("url")
-            val title = jsonObject.getString("title")
-            val imgPath = HOME_TILES_DIR + jsonObject.getString("img")
-            val id = jsonObject.getString("identifier")
-            homeTiles.add(HomeTile(url, title, imgPath, id))
+            homeTiles.add(HomeTile(jsonObject))
         }
         adapter = HomeTileAdapter(onUrlEnteredListener, homeTiles)
         layoutManager = GridLayoutManager(context, COL_COUNT)
@@ -113,7 +109,7 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, ho
         val item = tiles[position]
         titleView.setText(item.title)
         if (!item.imagePath.isNullOrEmpty()) {
-            val bmImg = itemView.context.assets.open(item.imagePath).use { BitmapFactory.decodeStream(it) }
+            val bmImg = itemView.context.assets.open(HOME_TILES_DIR + item.imagePath).use { BitmapFactory.decodeStream(it) }
             iconView.setImageBitmap(bmImg)
         }
         itemView.setOnClickListener {
