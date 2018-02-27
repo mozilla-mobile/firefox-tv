@@ -66,8 +66,15 @@ object CustomTilesAccessor {
 
     fun pinSite(context: Context, url: String) {
         customTilesCache.put(url, makeSiteJSON(url))
+        writeCacheToSharedPreferences(context)
+    }
 
-        // Write cache to SharedPreferences
+    fun unpinSite(context: Context, url: String) {
+        customTilesCache.remove(url)
+        writeCacheToSharedPreferences(context)
+    }
+
+    private fun writeCacheToSharedPreferences(context: Context) {
         val tilesJSONArray = JSONArray()
         for (tile in customTilesCache.values) {
             tilesJSONArray.put(tile)
