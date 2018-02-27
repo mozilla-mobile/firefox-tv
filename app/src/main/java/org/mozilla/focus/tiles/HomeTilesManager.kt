@@ -18,6 +18,19 @@ const val KEY_TITLE = "title"
 const val KEY_IMG = "img"
 const val KEY_ID = "identifier"
 
+data class HomeTile (
+        val url: String,
+        val title: String,
+        val imagePath: String?,
+        // unique id used to identify specific home tiles, e.g. for deletion, etc.
+        val id: String
+) {
+    constructor(jsonObject: JSONObject): this(jsonObject.getString(KEY_URL),
+            jsonObject.getString(KEY_TITLE),
+            jsonObject.optString(KEY_IMG),
+            jsonObject.getString(KEY_ID))
+}
+
 object HomeTilesManager {
     fun pinSite(context: Context, url: String) {
         val sharedPreferences = getHomeTilesPreferences(context)
@@ -46,5 +59,15 @@ object HomeTilesManager {
 
     private fun getHomeTilesPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(HOME_TILES_PREFS, MODE_PRIVATE)
+    }
+
+    fun getCustomHomeTilesList(context: Context): List<HomeTile> {
+        val sharedPreferences = context.getSharedPreferences(HOME_TILES_PREFS, MODE_PRIVATE)
+        val sitesJSONArray = getCustomSitesJSONArray(sharedPreferences)
+        val homeTiles = mutableListOf<HomeTile>()
+        for (i in sitesJSONArray.length() - 1 downTo 0) {
+            homeTiles.add(HomeTile(sitesJSONArray.getJSONObject(i)))
+        }
+        return homeTiles
     }
 }
