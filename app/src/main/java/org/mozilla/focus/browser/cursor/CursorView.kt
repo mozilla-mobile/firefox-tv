@@ -21,6 +21,7 @@ private const val CURSOR_ALPHA = 102
 private const val HIDE_MESSAGE_ID = 0
 private const val HIDE_ANIMATION_DURATION_MILLIS = 250L
 private val HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3)
+private const val CROSSHAIR_OFFSET = 7f
 
 /**
  * A drawn Cursor: see [CursorViewModel] for responding to keys and setting position.
@@ -28,8 +29,9 @@ private val HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3)
  */
 class CursorView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
+    private val cursor = context.resources.getDrawable(R.drawable.pointer, context.theme)
     private val hideHandler = CursorHideHandler(this)
-    private val CROSSHAIR_OFFSET = 6
+    private var cursorHasBeenDrawn = false
 
     @UiThread
     fun updatePosition(x: Float, y: Float) {
@@ -44,9 +46,11 @@ class CursorView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        val cursor = context.resources.getDrawable(R.drawable.pointer, context.theme)
-        cursor.setBounds(0, 0, height, width)
-        cursor.draw(canvas)
+        if (!cursorHasBeenDrawn) {
+            cursor.setBounds(0, 0, height, width)
+            cursor.draw(canvas)
+            cursorHasBeenDrawn = true
+        }
     }
 
     fun cancelUpdates() {
