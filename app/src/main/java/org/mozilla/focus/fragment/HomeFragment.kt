@@ -23,8 +23,13 @@ import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.OnUrlEnteredListener
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
+import org.json.JSONArray
 
 private const val COL_COUNT = 5
+val bundled_blacklist = "blacklist"
+val HOME_TILES_PREFS = "homeTilesPrefs"
 
 /** The home fragment which displays the navigation tiles of the app. */
 class HomeFragment : Fragment() {
@@ -46,6 +51,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // todo: saved instance state?
+        // TODO: add deletion UI
+
         initTiles()
         initUrlInputView()
 
@@ -71,20 +78,28 @@ class HomeFragment : Fragment() {
     }
 
     private fun initTiles() = with (tileContainer) {
-        val homeTiles = mutableListOf<HomeTile>()
         val inputAsString = context.assets.open(HOME_TILES_JSON_PATH).bufferedReader().use { it.readText() }
         val jsonArray = JSONObject(inputAsString).getJSONArray(HOME_TILES_JSON_KEY)
-        for (i in 0..(jsonArray.length() - 1)) {
-            val jsonObject = jsonArray.getJSONObject(i)
-            val url = jsonObject.getString("url")
-            val title = jsonObject.getString("title")
-            val imgPath = HOME_TILES_DIR + jsonObject.getString("img")
-            val id = jsonObject.getString("identifier")
-            homeTiles.add(HomeTile(url, title, imgPath, id))
-        }
-        adapter = HomeTileAdapter(onUrlEnteredListener, homeTiles)
+        val homeTilesPrefs = context.getSharedPreferences(HOME_TILES_PREFS, MODE_PRIVATE)
+        adapter = HomeTileAdapter(onUrlEnteredListener, unpackJsonHomeTiles(homeTilesPrefs, jsonArray))
         layoutManager = GridLayoutManager(context, COL_COUNT)
         setHasFixedSize(true)
+    }
+
+    private fun unpackJsonHomeTiles(homeTilesPrefs: SharedPreferences, homeTilesJsonArray: JSONArray): MutableList<HomeTile> {
+        val homeTiles = mutableListOf<HomeTile>()
+        val blacklist = homeTilesPrefs.getStringSet(bundled_blacklist, null)
+        for (i in 0..(homeTilesJsonArray.length() - 1)) {
+            val jsonObject = homeTilesJsonArray.getJSONObject(i)
+            val id = jsonObject.getString("identifier")
+            if (blacklist == null || !blacklist.contains(id)) {
+                val title = jsonObject.getString("title")
+                val imgPath = HOME_TILES_DIR + jsonObject.getString("img")
+                val url = jsonObject.getString("url")
+                homeTiles.add(HomeTile(url, title, imgPath, id))
+            }
+        }
+        return homeTiles
     }
 
     private fun initUrlInputView() = with (urlInputView) {
@@ -92,6 +107,15 @@ class HomeFragment : Fragment() {
             onUrlEnteredListener.onTextInputUrlEntered(text.toString(), urlInputView.lastAutocompleteResult, UrlTextInputLocation.HOME)
         }
         setOnFilterListener { searchText, view -> urlAutoCompleteFilter.onFilter(searchText, view) }
+    }
+
+    fun addBundledTileToBlacklist(id: String) {
+        val blacklist = context.getSharedPreferences(HOME_TILES_PREFS, MODE_PRIVATE).getStringSet(bundled_blacklist, mutableSetOf())
+        val edit = context.getSharedPreferences(HOME_TILES_PREFS, MODE_PRIVATE).edit()
+        val newBlacklist = blacklist.toMutableSet()
+        newBlacklist.add(id)
+        edit.putStringSet(bundled_blacklist, newBlacklist)
+        edit.apply()
     }
 
     companion object {
@@ -115,6 +139,7 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, ho
             onUrlEnteredListener.onNonTextInputUrlEntered(item.url)
             TelemetryWrapper.homeTileClickEvent()
         }
+
         itemView.setOnFocusChangeListener { v, hasFocus ->
             val backgroundResource: Int
             val textColor: Int
