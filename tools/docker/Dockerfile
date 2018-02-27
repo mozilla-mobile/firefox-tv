@@ -5,7 +5,7 @@
 # Inspired by:
 # https://hub.docker.com/r/runmymind/docker-android-sdk/~/dockerfile/
 
-FROM ubuntu:17.04
+FROM ubuntu:17.10
 
 MAINTAINER Sebastian Kaspari "skaspari@mozilla.com"
 
@@ -85,11 +85,11 @@ RUN /opt/tools/android-accept-licenses.sh android update sdk --no-ui --obsolete 
 WORKDIR /opt
 
 # Checkout source code
-RUN git clone https://github.com/mozilla-mobile/focus-android.git
+RUN git clone https://github.com/mozilla-mobile/firefox-tv.git
 
 # Build project and run gradle tasks once to pull all dependencies
-WORKDIR /opt/focus-android
-RUN ./gradlew assemble testAmazonWebviewDebugUnitTest lint pmd checkstyle findbugs
+WORKDIR /opt/firefox-tv/
+RUN ./gradlew clean assemble lint checkstyle ktlint pmd test
 
 # -- Post setup -------------------------------------------------------------------------
 
