@@ -25,6 +25,7 @@ import org.mozilla.focus.session.SessionCallbackProxy
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
+import org.mozilla.focus.tiles.HomeTilesManager
 import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.web.IWebView
 import org.mozilla.focus.web.IWebViewLifecycleFragment
@@ -135,7 +136,9 @@ class BrowserFragment : IWebViewLifecycleFragment(),
                 reload()
             }
             NavigationEvent.PIN_SITE -> {
-                // TODO: Add to pinned sites
+                if (webview.getUrl() != null) {
+                    HomeTilesManager.pinSite(context, webview.getUrl()!!)
+                }
             }
             NavigationEvent.UNPIN_SITE -> {
                 // TODO: Remove from pinned sites
