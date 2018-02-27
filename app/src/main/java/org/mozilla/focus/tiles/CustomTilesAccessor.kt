@@ -31,15 +31,50 @@ data class HomeTile (
             jsonObject.getString(KEY_ID))
 }
 
-object HomeTilesManager {
+/**
+ * Static accessor of custom home tiles, that is backed by SharedPreferences.
+ *
+ * New sites are appended to the end of the list.
+ *
+ * This keeps a cached version of the custom home tiles that have been pinned,
+ * in order to be more performant when checking whether sites are pinned or not.
+ * In order to keep the cache consistent, should only be called from the UIThread.
+ */
+object CustomTilesAccessor {
+    private lateinit var customTilesCache: LinkedHashMap<String, JSONObject>
+
+    // Cache pinned sites for perf beacues we need to check pinned state for every page load
+    fun initWithCache(customTiles: LinkedHashMap<String, JSONObject>) {
+        customTilesCache = customTiles
+    }
+
+    fun getCustomTilesCache(context: Context): LinkedHashMap<String, JSONObject> {
+        val tilesJSONArray = getCustomSitesJSONArray(getHomeTilesPreferences(context))
+        val lhm = LinkedHashMap<String, JSONObject>()
+        for (i in 0 until tilesJSONArray.length()) {
+            val tile = tilesJSONArray.getJSONObject(i)
+            lhm.put(tile.getString(KEY_URL), tile)
+        }
+        return lhm
+    }
+
+    fun isURLPinned(url: String): Boolean {
+        return customTilesCache.containsKey(url)
+    }
+
+    fun getCustomHomeTilesList() = customTilesCache.values.map { HomeTile(it) }.reversed()
+
     fun pinSite(context: Context, url: String) {
-        val sharedPreferences = getHomeTilesPreferences(context)
-        val sitesJSONArray = getCustomSitesJSONArray(sharedPreferences)
+        customTilesCache.put(url, makeSiteJSON(url))
 
-        sitesJSONArray.put(makeSiteJSON(url))
+        // Write cache to SharedPreferences
+        val tilesJSONArray = JSONArray()
+        for (tile in customTilesCache.values) {
+            tilesJSONArray.put(tile)
+        }
 
-        sharedPreferences.edit()
-                .putString(CUSTOM_SITES_LIST, sitesJSONArray.toString())
+        getHomeTilesPreferences(context).edit()
+                .putString(CUSTOM_SITES_LIST, tilesJSONArray.toString())
                 .apply()
     }
 
@@ -59,15 +94,5 @@ object HomeTilesManager {
 
     private fun getHomeTilesPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(HOME_TILES_PREFS, MODE_PRIVATE)
-    }
-
-    fun getCustomHomeTilesList(context: Context): List<HomeTile> {
-        val sharedPreferences = context.getSharedPreferences(HOME_TILES_PREFS, MODE_PRIVATE)
-        val sitesJSONArray = getCustomSitesJSONArray(sharedPreferences)
-        val homeTiles = mutableListOf<HomeTile>()
-        for (i in sitesJSONArray.length() - 1 downTo 0) {
-            homeTiles.add(HomeTile(sitesJSONArray.getJSONObject(i)))
-        }
-        return homeTiles
     }
 }

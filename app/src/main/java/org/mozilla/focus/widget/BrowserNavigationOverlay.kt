@@ -41,6 +41,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         fun isBackEnabled(): Boolean
         fun isForwardEnabled(): Boolean
         fun getCurrentUrl(): String?
+        fun isURLPinned(): Boolean
     }
 
     var onNavigationEvent: ((event: NavigationEvent, value: String?,
@@ -138,7 +139,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         navButtonForward.isEnabled = canGoForward
         navButtonForward.isFocusable = canGoForward
 
-        // TODO: Add "isPinned" state of page
+        pinButton.isChecked = navigationStateProvider?.isURLPinned() ?: false
 
         navUrlInput.setText(navigationStateProvider?.getCurrentUrl())
 

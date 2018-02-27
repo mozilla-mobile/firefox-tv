@@ -25,7 +25,7 @@ import org.mozilla.focus.session.SessionCallbackProxy
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
-import org.mozilla.focus.tiles.HomeTilesManager
+import org.mozilla.focus.tiles.CustomTilesAccessor
 import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.web.IWebView
 import org.mozilla.focus.web.IWebViewLifecycleFragment
@@ -137,7 +137,7 @@ class BrowserFragment : IWebViewLifecycleFragment(),
             }
             NavigationEvent.PIN_SITE -> {
                 if (webview.getUrl() != null) {
-                    HomeTilesManager.pinSite(context, webview.getUrl()!!)
+                    CustomTilesAccessor.pinSite(context, webview.getUrl()!!)
                 }
             }
             NavigationEvent.UNPIN_SITE -> {
@@ -164,6 +164,7 @@ class BrowserFragment : IWebViewLifecycleFragment(),
     override fun isBackEnabled() = canGoBack()
     override fun isForwardEnabled() = canGoForward()
     override fun getCurrentUrl() = url
+    override fun isURLPinned() = if (url != null) CustomTilesAccessor.isURLPinned(url!!) else false
 
     fun onBackPressed(): Boolean {
         when {

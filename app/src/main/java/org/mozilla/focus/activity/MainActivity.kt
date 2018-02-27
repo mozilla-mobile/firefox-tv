@@ -25,6 +25,7 @@ import org.mozilla.focus.session.Session
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
+import org.mozilla.focus.tiles.CustomTilesAccessor
 import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.SafeIntent
 import org.mozilla.focus.utils.Settings
@@ -41,6 +42,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
         super.onCreate(savedInstanceState)
 
         initAmazonFactory()
+        CustomTilesAccessor.initWithCache(CustomTilesAccessor.getCustomTilesCache(this))
         val intent = SafeIntent(intent)
 
         if (Settings.getInstance(this).shouldUseSecureMode()) {
