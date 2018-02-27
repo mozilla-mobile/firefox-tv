@@ -567,4 +567,6 @@ be temporary, and you can try again later.</li>
     <string name="onboarding_turbo_mode_button_off">Turn Turbo Mode Off</string>
 
     <string name="nav_close_hint">Close</string>
+
+    <string name="homescreen_tile_remove">Remove</string>
 </resources>
