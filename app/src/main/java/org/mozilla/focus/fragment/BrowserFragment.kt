@@ -141,7 +141,9 @@ class BrowserFragment : IWebViewLifecycleFragment(),
                 }
             }
             NavigationEvent.UNPIN_SITE -> {
-                // TODO: Remove from pinned sites
+                if (webview.getUrl() != null) {
+                    CustomTilesAccessor.unpinSite(context, webview.getUrl()!!)
+                }
             }
         }
         Unit
