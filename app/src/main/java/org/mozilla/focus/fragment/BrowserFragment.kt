@@ -8,6 +8,7 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.annotation.UiThread
 import android.text.TextUtils
+import android.view.Gravity
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -139,17 +140,23 @@ class BrowserFragment : IWebViewLifecycleFragment(),
             NavigationEvent.PIN_SITE -> {
                 if (webview.getUrl() != null) {
                     CustomTilesAccessor.pinSite(context, webview.getUrl()!!)
-                    Toast.makeText(context, R.string.notification_pinned_site, Toast.LENGTH_SHORT).show()
+                    showCenteredToast(R.string.notification_pinned_site)
                 }
             }
             NavigationEvent.UNPIN_SITE -> {
                 if (webview.getUrl() != null) {
                     CustomTilesAccessor.unpinSite(context, webview.getUrl()!!)
-                    Toast.makeText(context, R.string.notification_unpinned_site, Toast.LENGTH_SHORT).show()
+                    showCenteredToast(R.string.notification_unpinned_site)
                 }
             }
         }
         Unit
+    }
+
+    private fun showCenteredToast(resId: Int) {
+        val toast = Toast.makeText(context, resId, Toast.LENGTH_SHORT)
+        toast.setGravity(Gravity.CENTER_HORIZONTAL or Gravity.TOP, 0, 200)
+        toast.show()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
