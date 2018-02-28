@@ -17,7 +17,7 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.Settings
 
 enum class NavigationEvent {
-    HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD, TURBO, RELOAD_YT, PIN_ACTION, PIN_SITE, UNPIN_SITE;
+    HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD, TURBO, RELOAD_YT, PIN_ACTION;
 
     companion object {
         fun fromViewClick(viewId: Int?) = when (viewId) {
@@ -32,6 +32,9 @@ enum class NavigationEvent {
         }
     }
 }
+
+const val VAL_CHECKED = "checked"
+const val VAL_UNCHECKED = "unchecked"
 
 class BrowserNavigationOverlay @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyle: Int = 0 )
@@ -112,17 +115,17 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     }
 
     override fun onClick(view: View?) {
-        var event = NavigationEvent.fromViewClick(view?.id) ?: return
+        val event = NavigationEvent.fromViewClick(view?.id) ?: return
+        var value: String? = null
         when (event) {
             NavigationEvent.TURBO -> {
                 isTurboEnabled = turboButton.isChecked
-                event = NavigationEvent.RELOAD
             }
             NavigationEvent.PIN_ACTION -> {
-                event = if (pinButton.isChecked) NavigationEvent.PIN_SITE else NavigationEvent.UNPIN_SITE
+                value = if (pinButton.isChecked) VAL_CHECKED else VAL_UNCHECKED
             }
         }
-        onNavigationEvent?.invoke(event, null, null)
+        onNavigationEvent?.invoke(event, value, null)
     }
 
     fun setOverlayVisibleByUser(showOverlay: Boolean) {

@@ -34,6 +34,7 @@ import org.mozilla.focus.web.IWebViewLifecycleFragment
 import org.mozilla.focus.widget.BrowserNavigationOverlay
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 import org.mozilla.focus.widget.NavigationEvent
+import org.mozilla.focus.widget.VAL_CHECKED
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 
@@ -126,7 +127,7 @@ class BrowserFragment : IWebViewLifecycleFragment(),
         when (event) {
             NavigationEvent.BACK -> if (canGoBack()) goBack()
             NavigationEvent.FORWARD -> if (canGoForward()) goForward()
-            NavigationEvent.RELOAD -> reload()
+            NavigationEvent.TURBO, NavigationEvent.RELOAD -> reload()
             NavigationEvent.HOME -> ScreenController.showHomeScreen(fragmentManager, activity as OnUrlEnteredListener)
             NavigationEvent.SETTINGS -> ScreenController.showSettingsScreen(fragmentManager)
             NavigationEvent.LOAD -> {
@@ -137,16 +138,15 @@ class BrowserFragment : IWebViewLifecycleFragment(),
                 isReloadingForYoutubeDrawerClosed = true
                 reload()
             }
-            NavigationEvent.PIN_SITE -> {
-                if (webview.getUrl() != null) {
-                    CustomTilesAccessor.pinSite(context, webview.getUrl()!!)
-                    showCenteredToast(R.string.notification_pinned_site)
-                }
-            }
-            NavigationEvent.UNPIN_SITE -> {
-                if (webview.getUrl() != null) {
-                    CustomTilesAccessor.unpinSite(context, webview.getUrl()!!)
-                    showCenteredToast(R.string.notification_unpinned_site)
+            NavigationEvent.PIN_ACTION -> {
+                this@BrowserFragment.url?.let { url ->
+                    if (VAL_CHECKED == value) {
+                        CustomTilesAccessor.getInstance(context).pinSite(context, url)
+                        showCenteredToast(R.string.notification_pinned_site)
+                    } else {
+                        CustomTilesAccessor.getInstance(context).unpinSite(context, url)
+                        showCenteredToast(R.string.notification_unpinned_site)
+                    }
                 }
             }
         }
@@ -176,7 +176,7 @@ class BrowserFragment : IWebViewLifecycleFragment(),
     override fun isBackEnabled() = canGoBack()
     override fun isForwardEnabled() = canGoForward()
     override fun getCurrentUrl() = url
-    override fun isURLPinned() = if (url != null) CustomTilesAccessor.isURLPinned(url!!) else false
+    override fun isURLPinned() = url?.let { CustomTilesAccessor.getInstance(context).isURLPinned(url!!) } ?: false
 
     fun onBackPressed(): Boolean {
         when {
