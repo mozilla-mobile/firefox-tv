@@ -49,6 +49,37 @@ class HomeTileScreenshotStoreUnitTest {
         val actualBitmap = HomeTileScreenshotStore.read(RuntimeEnvironment.application, uuid)
         assertNull(actualBitmap)
     }
+
+    /** Assumes [HomeTileScreenshotStore.getFileForUUID] works correctly. */
+    @Test
+    fun testRemoveAsyncRemovesFile() = runBlocking {
+        val context = RuntimeEnvironment.application
+        val file = HomeTileScreenshotStore.getFileForUUID(context, uuid)
+        file.parentFile.mkdirs()
+        file.createNewFile()
+        file.writeText("Some test text")
+        assertEquals(1, file.parentFile.list().size)
+
+        HomeTileScreenshotStore.removeAsync(context, uuid).join()
+
+        assertEquals(0, file.parentFile.list().size)
+    }
+
+    /**
+     * Assumes [HomeTileScreenshotStore.saveAsync] and [HomeTileScreenshotStore.getFileForUUID]
+     * works correctly.
+     */
+    @Test
+    fun testRemoveAsyncRemovesFileWrittenBySaveAsync() = runBlocking {
+        val context = RuntimeEnvironment.application
+        val parentFile = HomeTileScreenshotStore.getFileForUUID(context, uuid).parentFile
+        HomeTileScreenshotStore.saveAsync(context, uuid, getBitmap()).join()
+        assertEquals(1, parentFile.list().size)
+
+        HomeTileScreenshotStore.removeAsync(context, uuid).join()
+
+        assertEquals(0, parentFile.list().size)
+    }
 }
 
 private fun getBitmap() = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888)

@@ -105,6 +105,14 @@ object HomeTileScreenshotStore {
         }
     }
 
+    /** @param a unique identifier for this screenshot. */
+    @AnyThread
+    fun removeAsync(context: Context, uuid: UUID) = launch {
+        fileSystemLock.write {
+            getFileForUUID(context, uuid).delete()
+        }
+    }
+
     /**
      * A blocking function to read a bitmap from the store.
      *
