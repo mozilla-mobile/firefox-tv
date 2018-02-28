@@ -17,7 +17,7 @@ private const val CUSTOM_SITES_LIST = "customSitesList"
 private const val KEY_URL = "url"
 private const val KEY_TITLE = "title"
 private const val KEY_IMG = "img"
-private const val KEY_ID = "identifier"
+private const val KEY_ID = "id"
 
 data class HomeTile(
         val url: String,
