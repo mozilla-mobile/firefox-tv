@@ -84,14 +84,17 @@
             android:drawablePadding="10dp"
             android:layout_width="400dp"
             android:layout_height="@dimen/urlbar_height"
-            android:background="@color/homeUrlBarBackground"
+            android:background="@drawable/nav_urlbar_background"
             android:hint="@string/urlbar_hint"
             android:imeOptions="actionGo|flagNoExtractUi|flagNoFullscreen"
             android:paddingStart="10dp"
             android:inputType="textUri"
             android:lines="1"
-            android:selectAllOnFocus="true"
-            android:importantForAutofill="no"/>
+            android:importantForAutofill="no"
+            android:cursorVisible="false"
+            android:textIsSelectable="false"
+            android:textColor="@color/button_text_color"
+            />
 
         <View
             android:layout_width="0dp"
