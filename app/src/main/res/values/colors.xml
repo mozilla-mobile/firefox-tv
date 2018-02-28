@@ -78,7 +78,8 @@
 
     <color name="button_highlight">#64ffffff</color>
     <color name="button_default">#ededf0</color>
-    <color name="button_disabled">#7e7e7f</color>
+    <color name="button_disabled">#4cededf0</color>
     <color name="button_focused">#00feff</color>
     <color name="button_pressed">#00c8d7</color>
+    <color name="button_text_color">#2a2a2e</color>
 </resources>
