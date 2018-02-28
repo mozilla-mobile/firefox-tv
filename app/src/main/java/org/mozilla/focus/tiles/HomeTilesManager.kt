@@ -7,32 +7,46 @@ package org.mozilla.focus.tiles
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import android.support.annotation.UiThread
 import org.json.JSONArray
 import org.json.JSONObject
 
-const val HOME_TILES_PREFS = "hometilesPrefs"
-const val CUSTOM_SITES_LIST = "customSitesList"
+private const val HOME_TILES = "homeTiles"
+private const val CUSTOM_SITES_LIST = "customSitesList"
 
-const val KEY_URL = "url"
-const val KEY_TITLE = "title"
-const val KEY_IMG = "img"
-const val KEY_ID = "identifier"
+private const val KEY_URL = "url"
+private const val KEY_TITLE = "title"
+private const val KEY_IMG = "img"
+private const val KEY_ID = "identifier"
 
-data class HomeTile (
+data class HomeTile(
         val url: String,
         val title: String,
         val imagePath: String?,
         // unique id used to identify specific home tiles, e.g. for deletion, etc.
         val id: String
 ) {
-    constructor(jsonObject: JSONObject): this(jsonObject.getString(KEY_URL),
-            jsonObject.getString(KEY_TITLE),
-            jsonObject.optString(KEY_IMG),
-            jsonObject.getString(KEY_ID))
+
+    fun toJSONObject() = JSONObject(mapOf(
+                KEY_URL to url,
+                KEY_TITLE to title,
+                KEY_IMG to imagePath,
+                KEY_ID to id
+    ))
+
+    companion object {
+        fun fromJSONObject(jsonObject: JSONObject): HomeTile {
+            return HomeTile(jsonObject.getString(KEY_URL),
+                    jsonObject.getString(KEY_TITLE),
+                    jsonObject.optString(KEY_IMG),
+                    jsonObject.getString(KEY_ID))
+        }
+    }
 }
 
 /**
  * Static accessor of custom home tiles, that is backed by SharedPreferences.
+ * This *MUST* be initialized before being used.
  *
  * New sites are appended to the end of the list.
  *
@@ -40,35 +54,41 @@ data class HomeTile (
  * in order to be more performant when checking whether sites are pinned or not.
  * In order to keep the cache consistent, should only be called from the UIThread.
  */
-object CustomTilesAccessor {
-    private lateinit var customTilesCache: LinkedHashMap<String, JSONObject>
-
+class CustomTilesAccessor(context: Context) {
     // Cache pinned sites for perf beacues we need to check pinned state for every page load
-    fun initWithCache(customTiles: LinkedHashMap<String, JSONObject>) {
-        customTilesCache = customTiles
+    private var customTilesCache = getCustomTilesCache(context)
+
+    companion object {
+        private var thisInstance: CustomTilesAccessor? = null
+        fun getInstance(context: Context): CustomTilesAccessor {
+            if (thisInstance == null) {
+                thisInstance = CustomTilesAccessor(context)
+            }
+            return thisInstance!!
+        }
     }
 
-    fun getCustomTilesCache(context: Context): LinkedHashMap<String, JSONObject> {
+    private fun getCustomTilesCache(context: Context): LinkedHashMap<String, HomeTile> {
         val tilesJSONArray = getCustomSitesJSONArray(getHomeTilesPreferences(context))
-        val lhm = LinkedHashMap<String, JSONObject>()
+        val lhm = LinkedHashMap<String, HomeTile>()
         for (i in 0 until tilesJSONArray.length()) {
             val tile = tilesJSONArray.getJSONObject(i)
-            lhm.put(tile.getString(KEY_URL), tile)
+            lhm.put(tile.getString(KEY_URL), HomeTile.fromJSONObject(tile))
         }
         return lhm
     }
 
-    fun isURLPinned(url: String): Boolean {
-        return customTilesCache.containsKey(url)
-    }
+    fun isURLPinned(url: String) = customTilesCache.containsKey(url)
 
-    fun getCustomHomeTilesList() = customTilesCache.values.map { HomeTile(it) }.reversed()
+    fun getCustomHomeTilesList() = customTilesCache.values.reversed()
 
+    @UiThread
     fun pinSite(context: Context, url: String) {
-        customTilesCache.put(url, makeSiteJSON(url))
+        customTilesCache.put(url, HomeTile(url, url, null, url))
         writeCacheToSharedPreferences(context)
     }
 
+    @UiThread
     fun unpinSite(context: Context, url: String) {
         customTilesCache.remove(url)
         writeCacheToSharedPreferences(context)
@@ -77,7 +97,7 @@ object CustomTilesAccessor {
     private fun writeCacheToSharedPreferences(context: Context) {
         val tilesJSONArray = JSONArray()
         for (tile in customTilesCache.values) {
-            tilesJSONArray.put(tile)
+            tilesJSONArray.put(tile.toJSONObject())
         }
 
         getHomeTilesPreferences(context).edit()
@@ -86,20 +106,11 @@ object CustomTilesAccessor {
     }
 
     private fun getCustomSitesJSONArray(sharedPreferences: SharedPreferences): JSONArray {
-        val sitesListString = sharedPreferences.getString(CUSTOM_SITES_LIST, null)
-        return if (sitesListString != null) JSONArray(sitesListString) else JSONArray()
-    }
-
-    private fun makeSiteJSON(url: String): JSONObject {
-        val siteJSON = JSONObject()
-        siteJSON.put(KEY_URL, url)
-        siteJSON.put(KEY_TITLE, url)
-        siteJSON.put(KEY_IMG, null)
-        siteJSON.put(KEY_ID, url)
-        return siteJSON
+        val sitesListString = sharedPreferences.getString(CUSTOM_SITES_LIST, "[]")
+        return JSONArray(sitesListString)
     }
 
     private fun getHomeTilesPreferences(context: Context): SharedPreferences {
-        return context.getSharedPreferences(HOME_TILES_PREFS, MODE_PRIVATE)
+        return context.getSharedPreferences(HOME_TILES, MODE_PRIVATE)
     }
 }

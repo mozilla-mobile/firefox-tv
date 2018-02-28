@@ -73,14 +73,17 @@ class HomeFragment : Fragment() {
     }
 
     private fun initTiles() = with (tileContainer) {
-        val homeTiles = mutableListOf<HomeTile>()
-        homeTiles.addAll(CustomTilesAccessor.getCustomHomeTilesList())
+        val homeTiles = mutableListOf<HomeTile>().apply {
+            addAll(CustomTilesAccessor.getInstance(context).getCustomHomeTilesList())
+        }
+
         val inputAsString = context.assets.open(HOME_TILES_JSON_PATH).bufferedReader().use { it.readText() }
         val jsonArray = JSONObject(inputAsString).getJSONArray(HOME_TILES_JSON_KEY)
         for (i in 0..(jsonArray.length() - 1)) {
             val jsonObject = jsonArray.getJSONObject(i)
-            homeTiles.add(HomeTile(jsonObject))
+            homeTiles.add(HomeTile.fromJSONObject(jsonObject))
         }
+
         adapter = HomeTileAdapter(onUrlEnteredListener, homeTiles)
         layoutManager = GridLayoutManager(context, COL_COUNT)
         setHasFixedSize(true)
@@ -108,14 +111,16 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, ho
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with (holder) {
         val item = tiles[position]
         titleView.setText(item.title)
-        if (!item.imagePath.isNullOrEmpty()) {
+        if (!item.imagePath.isNullOrBlank()) {
             val bmImg = itemView.context.assets.open(HOME_TILES_DIR + item.imagePath).use { BitmapFactory.decodeStream(it) }
             iconView.setImageBitmap(bmImg)
         }
+
         itemView.setOnClickListener {
             onUrlEnteredListener.onNonTextInputUrlEntered(item.url)
             TelemetryWrapper.homeTileClickEvent()
         }
+
         itemView.setOnFocusChangeListener { v, hasFocus ->
             val backgroundResource: Int
             val textColor: Int
