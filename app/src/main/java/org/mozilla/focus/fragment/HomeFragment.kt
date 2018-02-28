@@ -24,10 +24,14 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.tiles.HomeTile
-import org.mozilla.focus.tiles.CustomTilesAccessor
+import org.mozilla.focus.tiles.CustomTilesManager
 
 private const val COL_COUNT = 5
-const val HOME_TILES_DIR = "defaults/"
+private const val DEFAULT_HOME_TILES_DIR = "defaults/"
+private const val HOME_TILES_JSON_PATH = DEFAULT_HOME_TILES_DIR + "default_tiles.json"
+private const val HOME_TILES_JSON_KEY = "default_tiles"
+private const val SETTINGS_ICON_IDLE_ALPHA = 0.4f
+private const val SETTINGS_ICON_ACTIVE_ALPHA = 1.0f
 
 /** The home fragment which displays the navigation tiles of the app. */
 class HomeFragment : Fragment() {
@@ -35,10 +39,6 @@ class HomeFragment : Fragment() {
     var onUrlEnteredListener = object : OnUrlEnteredListener {} // default impl does nothing.
     var onSettingsPressed: (() -> Unit)? = null
     val urlAutoCompleteFilter = UrlAutoCompleteFilter()
-    val HOME_TILES_JSON_PATH = HOME_TILES_DIR + "default_tiles.json"
-    val HOME_TILES_JSON_KEY = "default_tiles"
-    val SETTINGS_ICON_IDLE_ALPHA = 0.4f
-    val SETTINGS_ICON_ACTIVE_ALPHA = 1.0f
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater!!.inflate(R.layout.fragment_home, container, false)
@@ -74,7 +74,7 @@ class HomeFragment : Fragment() {
 
     private fun initTiles() = with (tileContainer) {
         val homeTiles = mutableListOf<HomeTile>().apply {
-            addAll(CustomTilesAccessor.getInstance(context).getCustomHomeTilesList())
+            addAll(CustomTilesManager.getInstance(context).getCustomHomeTilesList())
         }
 
         val inputAsString = context.assets.open(HOME_TILES_JSON_PATH).bufferedReader().use { it.readText() }
@@ -112,7 +112,7 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, ho
         val item = tiles[position]
         titleView.setText(item.title)
         if (!item.imagePath.isNullOrBlank()) {
-            val bmImg = itemView.context.assets.open(HOME_TILES_DIR + item.imagePath).use { BitmapFactory.decodeStream(it) }
+            val bmImg = itemView.context.assets.open(DEFAULT_HOME_TILES_DIR + item.imagePath).use { BitmapFactory.decodeStream(it) }
             iconView.setImageBitmap(bmImg)
         }
 

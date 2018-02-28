@@ -30,11 +30,11 @@ enum class NavigationEvent {
             R.id.pinButton -> PIN_ACTION
             else -> null
         }
+
+        const val VAL_CHECKED = "checked"
+        const val VAL_UNCHECKED = "unchecked"
     }
 }
-
-const val VAL_CHECKED = "checked"
-const val VAL_UNCHECKED = "unchecked"
 
 class BrowserNavigationOverlay @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyle: Int = 0 )
@@ -122,7 +122,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 isTurboEnabled = turboButton.isChecked
             }
             NavigationEvent.PIN_ACTION -> {
-                value = if (pinButton.isChecked) VAL_CHECKED else VAL_UNCHECKED
+                value = if (pinButton.isChecked) NavigationEvent.VAL_CHECKED
+                else NavigationEvent.VAL_UNCHECKED
             }
         }
         onNavigationEvent?.invoke(event, value, null)
