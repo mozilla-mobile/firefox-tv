@@ -5,8 +5,9 @@
 
 package org.mozilla.focus.web
 
+import android.graphics.Bitmap
+import android.support.annotation.CheckResult
 import android.view.View
-
 import org.mozilla.focus.session.Session
 
 interface IWebView {
@@ -44,6 +45,13 @@ interface IWebView {
     fun restoreWebViewState(session: Session)
     fun saveWebViewState(session: Session)
     fun destroy()
+
+    /**
+     * Take a screenshot of the screen.
+     * @return a bitmap with the contents of the screen: *don't forget to recycle it!*
+     */
+    @CheckResult
+    fun takeScreenshot(): Bitmap
 
     val isYoutubeTV: Boolean
         get() {

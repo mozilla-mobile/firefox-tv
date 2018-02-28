@@ -6,6 +6,7 @@
 package org.mozilla.focus.webview
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.annotation.VisibleForTesting
 import android.util.AttributeSet
@@ -105,6 +106,15 @@ internal class FirefoxAmazonWebView(
 
     override fun cleanup() {
         this.deleteData()
+    }
+
+    override fun takeScreenshot(): Bitmap {
+        // Under the hood, createBitmap may create a new reference to the existing Bitmap so
+        // it's efficient: we don't have to copy the existing Bitmap or GC it on destroy.
+        buildDrawingCache()
+        val outBitmap = Bitmap.createBitmap(drawingCache)
+        destroyDrawingCache()
+        return outBitmap
     }
 }
 
