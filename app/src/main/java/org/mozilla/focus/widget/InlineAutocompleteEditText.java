@@ -219,9 +219,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         };
 
         mAutoCompleteResult = AutocompleteResult.emptyResult();
-
-        // Show the cursor.
-        setCursorVisible(true);
     }
 
     /**
@@ -257,9 +254,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         // When we call delete() here, the autocomplete spans we set are removed as well.
         text.delete(start, text.length());
 
-        // Reshow the cursor.
-        setCursorVisible(true);
-
         endSettingAutocomplete();
         return true;
     }
@@ -282,9 +276,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         for (final Object span : mAutoCompleteSpans) {
             text.removeSpan(span);
         }
-
-        // Reshow the cursor.
-        setCursorVisible(true);
 
         endSettingAutocomplete();
 
@@ -337,11 +328,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
             // Replace the existing autocomplete text with new one.
             // replace() preserves the autocomplete spans that we set before.
             text.replace(autoCompleteStart, textLength, result.getText(), autoCompleteStart, resultLength);
-
-            // Reshow the cursor if there is no longer any autocomplete text.
-            if (autoCompleteStart == resultLength) {
-                setCursorVisible(true);
-            }
 
             endSettingAutocomplete();
 
@@ -397,9 +383,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
             for (final Object span : mAutoCompleteSpans) {
                 text.setSpan(span, textLength, resultLength, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-
-            // Hide the cursor.
-            setCursorVisible(false);
 
             // Make sure the autocomplete text is visible. If the autocomplete text is too
             // long, it would appear the cursor will be scrolled out of view. However, this
@@ -657,5 +640,16 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
             resetAutocompleteState(); // We want a blank autocomplete result for telemetry.
             removeAutocomplete(getText()); // Perhaps not strictly necessary.
         }
+    }
+
+
+    // This prevents the selector from entering the text area
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
+            return super.dispatchKeyEvent(event);
+        }
+
+        return false;
     }
 }

@@ -4,10 +4,7 @@
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <shape
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
-    <size
-        android:height="40dp"
-        android:width="40dp" />
-    <solid
-        android:color="@color/overlay_button_selector" />
+    android:shape="rectangle">
+    <corners android:radius="@dimen/home_tile_corner_radius"/>
+    <solid android:color="@color/overlay_button_selector" />
 </shape>

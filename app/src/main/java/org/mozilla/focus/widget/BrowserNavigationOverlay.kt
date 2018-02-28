@@ -86,6 +86,11 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             if (it == null) { return@forEach }
             it.setTint(ContextCompat.getColor(context, R.color.button_default))
         }
+
+        navUrlInput.compoundDrawablesRelative.forEach {
+            if (it == null) { return@forEach }
+            it.setTint(ContextCompat.getColor(context, R.color.button_text_color))
+        }
     }
 
     private fun setupUrlInput() = with (navUrlInput) {
