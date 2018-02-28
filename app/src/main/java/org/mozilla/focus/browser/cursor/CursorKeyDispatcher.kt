@@ -23,17 +23,19 @@ class CursorKeyDispatcher(var isEnabled: Boolean, private val viewModel: CursorV
         if (event.action != KeyEvent.ACTION_DOWN
                 && event.action != KeyEvent.ACTION_UP) return false
 
-        val remoteKey = RemoteKey.fromKeyEvent(event) ?: return false
-        if (remoteKey == RemoteKey.CENTER) {
+        val remoteKey = RemoteKey.fromKeyEvent(event)
+        if (remoteKey == RemoteKey.CENTER ||
+                event.keyCode == KeyEvent.KEYCODE_ENTER) { // For keyboard and emulator use.
             dispatchTouchEventOnCurrentPosition(event.action)
             return true
         }
 
-        val direction = remoteKey.toDirection()
+        val direction = remoteKey?.toDirection()
         if (direction != null) {
             onDirectionKey(direction, event.action)
             return true
         }
+
         return false
     }
 
