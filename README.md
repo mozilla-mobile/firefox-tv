@@ -48,6 +48,8 @@ can be connected to a Fire TV at a time. Note that while you can install on an
 Android TV emulator, the behavior is different from Fire TV's and should not be
 relied upon.
 
+When using an emulator, you can press `cmd+m` to simulate a menu button press.
+
 ## License
 
     This Source Code Form is subject to the terms of the Mozilla Public
