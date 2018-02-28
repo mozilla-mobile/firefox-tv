@@ -17,6 +17,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.mozilla.focus.R;
 
@@ -137,5 +138,11 @@ public class ViewUtils {
 
     public static boolean isRTL(View view) {
         return ViewCompat.getLayoutDirection(view) == ViewCompat.LAYOUT_DIRECTION_RTL;
+    }
+
+    public static void showCenteredTopToast(Context context, int resId, int xOffset, int yOffset) {
+        Toast toast = Toast.makeText(context, resId, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, xOffset, yOffset);
+        toast.show();
     }
 }

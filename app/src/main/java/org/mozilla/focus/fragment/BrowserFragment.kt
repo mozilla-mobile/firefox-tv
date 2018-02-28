@@ -8,13 +8,11 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.annotation.UiThread
 import android.text.TextUtils
-import android.view.Gravity
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.android.synthetic.main.fragment_browser.view.*
 import org.mozilla.focus.R
@@ -27,14 +25,14 @@ import org.mozilla.focus.session.SessionCallbackProxy
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
-import org.mozilla.focus.tiles.CustomTilesAccessor
+import org.mozilla.focus.tiles.CustomTilesManager
 import org.mozilla.focus.utils.OnUrlEnteredListener
+import org.mozilla.focus.utils.ViewUtils.showCenteredTopToast
 import org.mozilla.focus.web.IWebView
 import org.mozilla.focus.web.IWebViewLifecycleFragment
 import org.mozilla.focus.widget.BrowserNavigationOverlay
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 import org.mozilla.focus.widget.NavigationEvent
-import org.mozilla.focus.widget.VAL_CHECKED
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 
@@ -140,23 +138,21 @@ class BrowserFragment : IWebViewLifecycleFragment(),
             }
             NavigationEvent.PIN_ACTION -> {
                 this@BrowserFragment.url?.let { url ->
-                    if (VAL_CHECKED == value) {
-                        CustomTilesAccessor.getInstance(context).pinSite(context, url)
-                        showCenteredToast(R.string.notification_pinned_site)
-                    } else {
-                        CustomTilesAccessor.getInstance(context).unpinSite(context, url)
-                        showCenteredToast(R.string.notification_unpinned_site)
+                    when (value) {
+                        NavigationEvent.VAL_CHECKED -> {
+                            CustomTilesManager.getInstance(context).pinSite(context, url)
+                            showCenteredTopToast(context, R.string.notification_pinned_site, 0, 200)
+                        }
+                        NavigationEvent.VAL_UNCHECKED -> {
+                            CustomTilesManager.getInstance(context).unpinSite(context, url)
+                            showCenteredTopToast(context, R.string.notification_unpinned_site, 0, 200)
+                        }
+                        else -> throw IllegalArgumentException("Unexpected value for PIN_ACTION: " + value)
                     }
                 }
             }
         }
         Unit
-    }
-
-    private fun showCenteredToast(resId: Int) {
-        val toast = Toast.makeText(context, resId, Toast.LENGTH_SHORT)
-        toast.setGravity(Gravity.CENTER_HORIZONTAL or Gravity.TOP, 0, 200)
-        toast.show()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -176,7 +172,7 @@ class BrowserFragment : IWebViewLifecycleFragment(),
     override fun isBackEnabled() = canGoBack()
     override fun isForwardEnabled() = canGoForward()
     override fun getCurrentUrl() = url
-    override fun isURLPinned() = url?.let { CustomTilesAccessor.getInstance(context).isURLPinned(url!!) } ?: false
+    override fun isURLPinned() = url?.let { CustomTilesManager.getInstance(context).isURLPinned(it) } ?: false
 
     fun onBackPressed(): Boolean {
         when {
