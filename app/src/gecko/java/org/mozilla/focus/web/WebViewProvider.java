@@ -6,6 +6,7 @@
 package org.mozilla.focus.web;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.View;
@@ -116,6 +117,12 @@ public class WebViewProvider {
         @Override
         public void cleanup() {
             // We're running in a private browsing window, so nothing to do
+        }
+
+        @NotNull
+        @Override
+        public Bitmap takeScreenshot() {
+            throw new NotImplementedError();
         }
 
         @Override
