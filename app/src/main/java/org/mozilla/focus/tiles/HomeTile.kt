@@ -46,6 +46,7 @@ class DefaultHomeTile(
 class CustomHomeTile(
         url: String,
         title: String,
+        /** Used by [HomeTileScreenshotStore] to uniquely identify tiles. */
         val id: UUID
 ) : HomeTile(url, title) {
 
