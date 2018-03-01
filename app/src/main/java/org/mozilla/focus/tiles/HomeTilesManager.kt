@@ -7,12 +7,14 @@ package org.mozilla.focus.tiles
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.support.annotation.AnyThread
 import android.support.annotation.UiThread
 import org.json.JSONArray
 import org.mozilla.focus.ext.toUri
+import org.mozilla.focus.home.HomeTileScreenshotStore
 import org.mozilla.focus.utils.UrlUtils
 import java.util.UUID
 
@@ -134,19 +136,22 @@ class CustomTilesManager private constructor(context: Context) {
     fun getCustomHomeTilesList() = customTilesCache.values.reversed()
 
     @UiThread
-    fun pinSite(context: Context, url: String) {
-        // TODO: titles, screenshots/icons.
-        customTilesCache.put(url, CustomHomeTile(url, "custom", UUID.randomUUID()))
+    fun pinSite(context: Context, url: String, screenshot: Bitmap?) {
+        // TODO: titles
+        val uuid = UUID.randomUUID()
+        customTilesCache[url] = CustomHomeTile(url, "custom", uuid)
         writeCacheToSharedPreferences(context)
+
+        if (screenshot != null) {
+            HomeTileScreenshotStore.saveAsync(context, uuid, screenshot)
+        }
     }
 
     @UiThread
     fun unpinSite(context: Context, url: String): Boolean {
-        if (!customTilesCache.containsKey(url)) {
-            return false
-        }
-        customTilesCache.remove(url)
+        val tile = customTilesCache.remove(url) ?: return false
         writeCacheToSharedPreferences(context)
+        HomeTileScreenshotStore.removeAsync(context, tile.id)
         return true
     }
 

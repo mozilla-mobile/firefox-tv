@@ -142,7 +142,8 @@ class BrowserFragment : IWebViewLifecycleFragment(),
                 this@BrowserFragment.url?.let { url ->
                     when (value) {
                         NavigationEvent.VAL_CHECKED -> {
-                            CustomTilesManager.getInstance(context).pinSite(context, url)
+                            CustomTilesManager.getInstance(context).pinSite(context, url,
+                                    webView?.takeScreenshot())
                             showCenteredTopToast(context, R.string.notification_pinned_site, 0, 200)
                         }
                         NavigationEvent.VAL_UNCHECKED -> {
