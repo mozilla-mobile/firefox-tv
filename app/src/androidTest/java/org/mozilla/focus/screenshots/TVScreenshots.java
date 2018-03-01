@@ -113,7 +113,7 @@ public class TVScreenshots extends ScreenshotTest {
         mActivityTestRule.launchActivity(intent);
 
         onView(allOf(withId(R.id.urlInputView), isDisplayed(), hasFocus()))
-                .perform(typeTextIntoFocusedView("mozilla.org"))
+                .perform(typeTextIntoFocusedView("example.com"))
                 .perform(pressImeActionButton());
 
         onView(withId(R.id.webview))
@@ -123,6 +123,8 @@ public class TVScreenshots extends ScreenshotTest {
 
         onView(withId(R.id.navCloseHint))
                 .check(matches(isDisplayed()));
+
+        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()));
 
         Screengrab.screenshot("browser-overlay");
 
@@ -169,6 +171,8 @@ public class TVScreenshots extends ScreenshotTest {
         /* capture a screenshot of the privacy notice */
         onView(allOf(withId(R.id.privacyNoticeButton), isDisplayed()))
                 .perform(click());
+
+        onView(allOf(withId(R.id.webview), isDisplayed()));
 
         Screengrab.screenshot("privacy-notice");
 
