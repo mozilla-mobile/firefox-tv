@@ -646,7 +646,11 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
     // This prevents the selector from entering the text area
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
+        int keyCode = event.getKeyCode();
+        boolean shouldDispatch = keyCode == KeyEvent.KEYCODE_ENTER
+            || keyCode == KeyEvent.KEYCODE_DPAD_CENTER;
+
+        if (shouldDispatch) {
             return super.dispatchKeyEvent(event);
         }
 
