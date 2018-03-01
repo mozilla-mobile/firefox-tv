@@ -12,9 +12,10 @@ import android.view.View
 import android.view.accessibility.AccessibilityManager
 import kotlinx.android.synthetic.main.fragment_browser.*
 import org.mozilla.focus.architecture.NonNullObserver
+import org.mozilla.focus.browser.BrowserFragment
 import org.mozilla.focus.ext.getAccessibilityManager
 import org.mozilla.focus.ext.isVoiceViewEnabled
-import org.mozilla.focus.browser.BrowserFragment
+import kotlin.properties.Delegates
 
 private const val SCROLL_MULTIPLIER = 45
 
@@ -35,12 +36,11 @@ class CursorController(
         cursorParent: View,
         private val view: CursorView
 ) : AccessibilityManager.TouchExplorationStateChangeListener, LifecycleObserver {
-    var isEnabled = true
-        set(value) {
-            field = value
-            keyDispatcher.isEnabled = value
-            view.visibility = if (value) View.VISIBLE else View.GONE
-        }
+
+    private var isEnabled: Boolean by Delegates.observable(true) { _, _, newValue ->
+        keyDispatcher.isEnabled = newValue
+        view.visibility = if (newValue) View.VISIBLE else View.GONE
+    }
 
     private val viewModel = CursorViewModel(onUpdate = { x, y, scrollVel ->
         view.updatePosition(x, y)
