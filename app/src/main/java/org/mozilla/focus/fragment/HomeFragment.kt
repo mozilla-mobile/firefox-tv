@@ -146,12 +146,10 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, va
     )
 
     private fun onBindDefaultHomeTile(holder: TileViewHolder, tile: DefaultHomeTile) = with (holder) {
-        if (!tile.imagePath.isNullOrBlank()) {
-            val bmImg = itemView.context.assets.open(DEFAULT_HOME_TILES_DIR + tile.imagePath).use {
-                BitmapFactory.decodeStream(it)
-            }
-            iconView.setImageBitmap(bmImg)
+        val bmImg = itemView.context.assets.open(DEFAULT_HOME_TILES_DIR + tile.imagePath).use {
+            BitmapFactory.decodeStream(it)
         }
+        iconView.setImageBitmap(bmImg)
     }
 }
 

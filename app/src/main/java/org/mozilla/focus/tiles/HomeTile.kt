@@ -23,7 +23,7 @@ sealed class HomeTile(val url: String, val title: String) {
 class DefaultHomeTile(
         url: String,
         title: String,
-        val imagePath: String?,
+        val imagePath: String,
         /** Unique id used to identify specific home tiles, e.g. for deletion, etc. **/
         val id: String
 ) : HomeTile(url, title) {
@@ -37,7 +37,7 @@ class DefaultHomeTile(
         fun fromJSONObject(jsonObject: JSONObject): DefaultHomeTile {
             return DefaultHomeTile(jsonObject.getString(KEY_URL),
                     jsonObject.getString(KEY_TITLE),
-                    jsonObject.optString(KEY_IMG),
+                    jsonObject.getString(KEY_IMG),
                     jsonObject.getString(KEY_ID))
         }
     }
