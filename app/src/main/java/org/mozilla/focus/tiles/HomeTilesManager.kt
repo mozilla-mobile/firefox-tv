@@ -7,13 +7,60 @@ package org.mozilla.focus.tiles
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import android.graphics.BitmapFactory
 import android.support.annotation.UiThread
 import org.json.JSONArray
+import org.json.JSONObject
 import java.util.UUID
 
 private const val PREF_HOME_TILES = "homeTiles"
 private const val CUSTOM_SITES_LIST = "customSitesList"
 
+private const val BUNDLED_HOME_TILES_DIR = "bundled/"
+private const val HOME_TILES_JSON_PATH = BUNDLED_HOME_TILES_DIR + "bundled_tiles.json"
+private const val HOME_TILES_JSON_KEY = "bundled_tiles"
+
+class BundledTilesManager private constructor(context: Context) {
+    companion object {
+        private var thisInstance: BundledTilesManager? = null
+        fun getInstance(context: Context): BundledTilesManager {
+            if (thisInstance == null) {
+                thisInstance = BundledTilesManager(context)
+            }
+            return thisInstance!!
+        }
+    }
+
+    private var bundledTilesCache = loadBundledTilesCache(context)
+
+    private fun loadBundledTilesCache(context: Context): LinkedHashMap<String, BundledHomeTile> {
+        val tilesJSONString = context.assets.open(HOME_TILES_JSON_PATH).bufferedReader().use { it.readText() }
+        val tilesJSONArray = JSONObject(tilesJSONString).getJSONArray(HOME_TILES_JSON_KEY)
+        val lhm = LinkedHashMap<String, BundledHomeTile>()
+        for (i in 0 until tilesJSONArray.length()) {
+            val tile = BundledHomeTile.fromJSONObject(tilesJSONArray.getJSONObject(i))
+            // TODO: Check for blacklisted sites and don't add them
+            lhm.put(tile.url, tile)
+        }
+        return lhm
+    }
+
+    @UiThread
+    fun isURLPinned(url: String) = bundledTilesCache.containsKey(url)
+
+    @UiThread
+    fun unpinSite(context: Context, url: String) {
+        bundledTilesCache.remove(url)
+        // TODO: Add site to blacklist in Issue #443 to persist un-pinning of bundled sites
+    }
+
+    fun loadImageFromPath(context: Context, path: String) = context.assets.open(BUNDLED_HOME_TILES_DIR + path).use {
+            BitmapFactory.decodeStream(it)
+        }
+
+    @UiThread
+    fun getBundledHomeTilesList() = bundledTilesCache.values.reversed()
+}
 /**
  * Static accessor of custom home tiles, that is backed by SharedPreferences.
  *
@@ -35,9 +82,9 @@ class CustomTilesManager private constructor(context: Context) {
     }
 
     // Cache pinned sites for perf beacues we need to check pinned state for every page load
-    private var customTilesCache = getCustomTilesCache(context)
+    private var customTilesCache = loadCustomTilesCache(context)
 
-    private fun getCustomTilesCache(context: Context): LinkedHashMap<String, CustomHomeTile> {
+    private fun loadCustomTilesCache(context: Context): LinkedHashMap<String, CustomHomeTile> {
         val tilesJSONArray = getCustomSitesJSONArray(getHomeTilesPreferences(context))
         val lhm = LinkedHashMap<String, CustomHomeTile>()
         for (i in 0 until tilesJSONArray.length()) {
@@ -82,8 +129,8 @@ class CustomTilesManager private constructor(context: Context) {
         val sitesListString = sharedPreferences.getString(CUSTOM_SITES_LIST, "[]")
         return JSONArray(sitesListString)
     }
+}
 
-    private fun getHomeTilesPreferences(context: Context): SharedPreferences {
-        return context.getSharedPreferences(PREF_HOME_TILES, MODE_PRIVATE)
-    }
+private fun getHomeTilesPreferences(context: Context): SharedPreferences {
+    return context.getSharedPreferences(PREF_HOME_TILES, MODE_PRIVATE)
 }
