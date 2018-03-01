@@ -76,10 +76,12 @@
 
     <color name="browser_overlay_background">#e6000000</color>
 
+    <color name="nav_close_hint">#ededf0</color>
+
     <color name="button_highlight">#64ffffff</color>
-    <color name="button_default">#ededf0</color>
-    <color name="button_disabled">#4cededf0</color>
-    <color name="button_focused">#00feff</color>
-    <color name="button_pressed">#00c8d7</color>
-    <color name="button_text_color">#2a2a2e</color>
+    <color name="button_default">#000000</color>
+    <color name="button_disabled">#4c000000</color>
+    <color name="button_focused">@color/photonBlue50</color>
+    <color name="button_pressed">@color/photonBlue40</color>
+    <color name="button_text_color">@android:color/white</color>
 </resources>

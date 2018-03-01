@@ -84,7 +84,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         navCloseHint.compoundDrawablesRelative.forEach {
             if (it == null) { return@forEach }
-            it.setTint(ContextCompat.getColor(context, R.color.button_default))
+            it.setTint(ContextCompat.getColor(context, R.color.nav_close_hint))
         }
 
         navUrlInput.compoundDrawablesRelative.forEach {
