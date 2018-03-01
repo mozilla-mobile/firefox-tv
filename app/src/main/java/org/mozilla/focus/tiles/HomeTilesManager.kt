@@ -56,6 +56,7 @@ class CustomTilesManager private constructor(context: Context) {
 
     @UiThread
     fun pinSite(context: Context, url: String) {
+        // TODO: titles, screenshots/icons.
         customTilesCache.put(url, CustomHomeTile(url, "custom", UUID.randomUUID()))
         writeCacheToSharedPreferences(context)
     }
