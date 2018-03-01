@@ -17,6 +17,7 @@ import org.mozilla.focus.ext.use
 import org.mozilla.focus.utils.Direction
 import java.util.EnumSet
 import java.util.concurrent.TimeUnit
+import kotlin.properties.Delegates
 
 private const val UPDATE_DELAY_MILLIS = 20L
 
@@ -52,17 +53,16 @@ class CursorViewModel(
      * The bounds inside which this cursor should remain, i.e. the screen bounds.
      * Must be set by the caller.
      */
-    var maxBounds = PointF(0f, 0f)
-        @UiThread set(value) {
-            field = value
-            if (isInitialPosSet) {
-                clampPos(pos, value)
-            } else {
-                isInitialPosSet = true
-                pos.set(value.x / 2, value.y / 2) // Center.
-            }
-            onUpdate(pos.x, pos.y, getScrollVel())
+    @set:UiThread
+    var maxBounds by Delegates.observable(PointF(0f, 0f)) { _, _, newValue ->
+        if (isInitialPosSet) {
+            clampPos(pos, newValue)
+        } else {
+            isInitialPosSet = true
+            pos.set(newValue.x / 2, newValue.y / 2) // Center.
         }
+        onUpdate(pos.x, pos.y, getScrollVel())
+    }
 
     private var isInitialPosSet = false
     private val pos = PointF(0f, 0f)
