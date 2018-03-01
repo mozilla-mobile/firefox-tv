@@ -134,11 +134,11 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, va
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = TileViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.home_tile, parent, false)
     )
+}
 
-    private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledHomeTile) = with (holder) {
-        val bitmap = BundledTilesManager.getInstance(itemView.context).loadImageFromPath(itemView.context, tile.imagePath)
-        iconView.setImageBitmap(bitmap)
-    }
+private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledHomeTile) = with (holder) {
+    val bitmap = BundledTilesManager.getInstance(itemView.context).loadImageFromPath(itemView.context, tile.imagePath)
+    iconView.setImageBitmap(bitmap)
 }
 
 private class TileViewHolder(
