@@ -17,7 +17,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_home.*
-import org.json.JSONObject
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.ext.forceExhaustive
@@ -26,13 +25,11 @@ import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.tiles.CustomHomeTile
 import org.mozilla.focus.tiles.CustomTilesManager
 import org.mozilla.focus.tiles.BundledHomeTile
+import org.mozilla.focus.tiles.BundledTilesManager
 import org.mozilla.focus.tiles.HomeTile
 import org.mozilla.focus.utils.OnUrlEnteredListener
 
 private const val COL_COUNT = 5
-private const val BUNDLED_HOME_TILES_DIR = "bundled/"
-private const val HOME_TILES_JSON_PATH = BUNDLED_HOME_TILES_DIR + "bundled_tiles.json"
-private const val HOME_TILES_JSON_KEY = "bundled_tiles"
 private const val SETTINGS_ICON_IDLE_ALPHA = 0.4f
 private const val SETTINGS_ICON_ACTIVE_ALPHA = 1.0f
 
@@ -78,13 +75,7 @@ class HomeFragment : Fragment() {
     private fun initTiles() = with (tileContainer) {
         val homeTiles = mutableListOf<HomeTile>().apply {
             addAll(CustomTilesManager.getInstance(context).getCustomHomeTilesList())
-        }
-
-        val inputAsString = context.assets.open(HOME_TILES_JSON_PATH).bufferedReader().use { it.readText() }
-        val jsonArray = JSONObject(inputAsString).getJSONArray(HOME_TILES_JSON_KEY)
-        for (i in 0..(jsonArray.length() - 1)) {
-            val jsonObject = jsonArray.getJSONObject(i)
-            homeTiles.add(BundledHomeTile.fromJSONObject(jsonObject))
+            addAll(BundledTilesManager.getInstance(context).getBundledHomeTilesList())
         }
 
         adapter = HomeTileAdapter(onUrlEnteredListener, homeTiles)
@@ -146,10 +137,8 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, va
     )
 
     private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledHomeTile) = with (holder) {
-        val bmImg = itemView.context.assets.open(BUNDLED_HOME_TILES_DIR + tile.imagePath).use {
-            BitmapFactory.decodeStream(it)
-        }
-        iconView.setImageBitmap(bmImg)
+        val bitmap = BundledTilesManager.getInstance(itemView.context).loadImageFromPath(itemView.context, tile.imagePath)
+        iconView.setImageBitmap(bitmap)
     }
 }
 
