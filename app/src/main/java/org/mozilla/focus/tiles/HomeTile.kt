@@ -14,9 +14,9 @@ private const val KEY_IMG = "img"
 private const val KEY_ID = "id"
 
 sealed class HomeTile(val url: String, val title: String) {
-    protected fun appendToJSONObject(obj: JSONObject) {
-        obj.put(KEY_URL, url)
-        obj.put(KEY_TITLE, title)
+    protected open fun toJSONObject() = JSONObject().apply {
+        put(KEY_URL, url)
+        put(KEY_TITLE, title)
     }
 }
 
@@ -28,13 +28,9 @@ class DefaultHomeTile(
         val id: String
 ) : HomeTile(url, title) {
 
-    fun toJSONObject(): JSONObject {
-        val obj = JSONObject(mapOf(
-                KEY_IMG to imagePath,
-                KEY_ID to id
-        ))
-        super.appendToJSONObject(obj)
-        return obj
+    public override fun toJSONObject() = super.toJSONObject().apply {
+        put(KEY_IMG, imagePath)
+        put(KEY_ID, id)
     }
 
     companion object {
@@ -53,9 +49,8 @@ class CustomHomeTile(
         val id: UUID
 ) : HomeTile(url, title) {
 
-    fun toJSONObject() = JSONObject().apply {
+    public override fun toJSONObject() = super.toJSONObject().apply {
         put(KEY_ID, id.toString())
-        super.appendToJSONObject(this)
     }
 
     companion object {
