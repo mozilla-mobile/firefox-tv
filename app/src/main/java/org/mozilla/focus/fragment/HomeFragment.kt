@@ -22,9 +22,11 @@ import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
-import org.mozilla.focus.utils.OnUrlEnteredListener
-import org.mozilla.focus.tiles.HomeTile
+import org.mozilla.focus.tiles.CustomHomeTile
 import org.mozilla.focus.tiles.CustomTilesManager
+import org.mozilla.focus.tiles.DefaultHomeTile
+import org.mozilla.focus.tiles.HomeTile
+import org.mozilla.focus.utils.OnUrlEnteredListener
 
 private const val COL_COUNT = 5
 private const val DEFAULT_HOME_TILES_DIR = "defaults/"
@@ -81,7 +83,7 @@ class HomeFragment : Fragment() {
         val jsonArray = JSONObject(inputAsString).getJSONArray(HOME_TILES_JSON_KEY)
         for (i in 0..(jsonArray.length() - 1)) {
             val jsonObject = jsonArray.getJSONObject(i)
-            homeTiles.add(HomeTile.fromJSONObject(jsonObject))
+            homeTiles.add(DefaultHomeTile.fromJSONObject(jsonObject))
         }
 
         adapter = HomeTileAdapter(onUrlEnteredListener, homeTiles)
@@ -104,17 +106,22 @@ class HomeFragment : Fragment() {
     }
 }
 
-private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, homeTiles: MutableList<HomeTile>) :
+private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, val tiles: List<HomeTile>) :
         RecyclerView.Adapter<TileViewHolder>() {
-    val tiles = homeTiles
 
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with (holder) {
         val item = tiles[position]
-        titleView.setText(item.title)
-        if (!item.imagePath.isNullOrBlank()) {
-            val bmImg = itemView.context.assets.open(DEFAULT_HOME_TILES_DIR + item.imagePath).use { BitmapFactory.decodeStream(it) }
-            iconView.setImageBitmap(bmImg)
+        when (item) {
+            is DefaultHomeTile -> {
+                if (!item.imagePath.isNullOrBlank()) {
+                    val bmImg = itemView.context.assets.open(DEFAULT_HOME_TILES_DIR + item.imagePath).use { BitmapFactory.decodeStream(it) }
+                    iconView.setImageBitmap(bmImg)
+                }
+            }
+            is CustomHomeTile -> { /* do nothing */ }
         }
+
+        titleView.setText(item.title)
 
         itemView.setOnClickListener {
             onUrlEnteredListener.onNonTextInputUrlEntered(item.url)
