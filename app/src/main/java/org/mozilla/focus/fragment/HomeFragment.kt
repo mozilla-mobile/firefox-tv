@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import org.json.JSONObject
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
+import org.mozilla.focus.ext.forceExhaustive
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.tiles.CustomHomeTile
@@ -112,14 +113,9 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, va
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with (holder) {
         val item = tiles[position]
         when (item) {
-            is DefaultHomeTile -> {
-                if (!item.imagePath.isNullOrBlank()) {
-                    val bmImg = itemView.context.assets.open(DEFAULT_HOME_TILES_DIR + item.imagePath).use { BitmapFactory.decodeStream(it) }
-                    iconView.setImageBitmap(bmImg)
-                }
-            }
+            is DefaultHomeTile -> onBindDefaultHomeTile(holder, item)
             is CustomHomeTile -> { /* do nothing */ }
-        }
+        }.forceExhaustive
 
         titleView.setText(item.title)
 
@@ -148,6 +144,15 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, va
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = TileViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.home_tile, parent, false)
     )
+
+    private fun onBindDefaultHomeTile(holder: TileViewHolder, tile: DefaultHomeTile) = with (holder) {
+        if (!tile.imagePath.isNullOrBlank()) {
+            val bmImg = itemView.context.assets.open(DEFAULT_HOME_TILES_DIR + tile.imagePath).use {
+                BitmapFactory.decodeStream(it)
+            }
+            iconView.setImageBitmap(bmImg)
+        }
+    }
 }
 
 private class TileViewHolder(
