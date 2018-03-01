@@ -20,7 +20,7 @@ sealed class HomeTile(val url: String, val title: String) {
     }
 }
 
-class DefaultHomeTile(
+class BundledHomeTile(
         url: String,
         title: String,
         val imagePath: String,
@@ -34,8 +34,8 @@ class DefaultHomeTile(
     }
 
     companion object {
-        fun fromJSONObject(jsonObject: JSONObject): DefaultHomeTile {
-            return DefaultHomeTile(jsonObject.getString(KEY_URL),
+        fun fromJSONObject(jsonObject: JSONObject): BundledHomeTile {
+            return BundledHomeTile(jsonObject.getString(KEY_URL),
                     jsonObject.getString(KEY_TITLE),
                     jsonObject.getString(KEY_IMG),
                     jsonObject.getString(KEY_ID))

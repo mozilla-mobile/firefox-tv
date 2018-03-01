@@ -25,14 +25,14 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.tiles.CustomHomeTile
 import org.mozilla.focus.tiles.CustomTilesManager
-import org.mozilla.focus.tiles.DefaultHomeTile
+import org.mozilla.focus.tiles.BundledHomeTile
 import org.mozilla.focus.tiles.HomeTile
 import org.mozilla.focus.utils.OnUrlEnteredListener
 
 private const val COL_COUNT = 5
-private const val DEFAULT_HOME_TILES_DIR = "defaults/"
-private const val HOME_TILES_JSON_PATH = DEFAULT_HOME_TILES_DIR + "default_tiles.json"
-private const val HOME_TILES_JSON_KEY = "default_tiles"
+private const val BUNDLED_HOME_TILES_DIR = "bundled/"
+private const val HOME_TILES_JSON_PATH = BUNDLED_HOME_TILES_DIR + "bundled_tiles.json"
+private const val HOME_TILES_JSON_KEY = "bundled_tiles"
 private const val SETTINGS_ICON_IDLE_ALPHA = 0.4f
 private const val SETTINGS_ICON_ACTIVE_ALPHA = 1.0f
 
@@ -84,7 +84,7 @@ class HomeFragment : Fragment() {
         val jsonArray = JSONObject(inputAsString).getJSONArray(HOME_TILES_JSON_KEY)
         for (i in 0..(jsonArray.length() - 1)) {
             val jsonObject = jsonArray.getJSONObject(i)
-            homeTiles.add(DefaultHomeTile.fromJSONObject(jsonObject))
+            homeTiles.add(BundledHomeTile.fromJSONObject(jsonObject))
         }
 
         adapter = HomeTileAdapter(onUrlEnteredListener, homeTiles)
@@ -113,7 +113,7 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, va
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with (holder) {
         val item = tiles[position]
         when (item) {
-            is DefaultHomeTile -> onBindDefaultHomeTile(holder, item)
+            is BundledHomeTile -> onBindBundledHomeTile(holder, item)
             is CustomHomeTile -> { /* do nothing */ }
         }.forceExhaustive
 
@@ -145,8 +145,8 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, va
             LayoutInflater.from(parent.context).inflate(R.layout.home_tile, parent, false)
     )
 
-    private fun onBindDefaultHomeTile(holder: TileViewHolder, tile: DefaultHomeTile) = with (holder) {
-        val bmImg = itemView.context.assets.open(DEFAULT_HOME_TILES_DIR + tile.imagePath).use {
+    private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledHomeTile) = with (holder) {
+        val bmImg = itemView.context.assets.open(BUNDLED_HOME_TILES_DIR + tile.imagePath).use {
             BitmapFactory.decodeStream(it)
         }
         iconView.setImageBitmap(bmImg)

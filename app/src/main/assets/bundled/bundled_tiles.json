@@ -1,5 +1,5 @@
 {
-  "default_tiles": [
+  "bundled_tiles": [
     {
         "id": "youtube",
         "url": "https://youtube.com/tv",
