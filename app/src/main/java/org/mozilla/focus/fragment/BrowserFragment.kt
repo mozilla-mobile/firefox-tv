@@ -145,8 +145,10 @@ class BrowserFragment : IWebViewLifecycleFragment(),
                             showCenteredTopToast(context, R.string.notification_pinned_site, 0, 200)
                         }
                         NavigationEvent.VAL_UNCHECKED -> {
-                            CustomTilesManager.getInstance(context).unpinSite(context, url)
-                            showCenteredTopToast(context, R.string.notification_unpinned_site, 0, 200)
+                            if (BundledTilesManager.getInstance(context).unpinSite(context, url)
+                                    || CustomTilesManager.getInstance(context).unpinSite(context, url)) {
+                                showCenteredTopToast(context, R.string.notification_unpinned_site, 0, 200)
+                            }
                         }
                         else -> throw IllegalArgumentException("Unexpected value for PIN_ACTION: " + value)
                     }

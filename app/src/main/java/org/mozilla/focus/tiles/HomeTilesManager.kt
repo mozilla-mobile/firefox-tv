@@ -64,9 +64,14 @@ class BundledTilesManager private constructor(context: Context) {
     }
 
     @UiThread
-    fun unpinSite(context: Context, url: String) {
+    fun unpinSite(context: Context, url: String): Boolean {
+        val tileId = getTileIdFromUrl(url)
+        if (tileId == null) {
+            return false
+        }
         bundledTilesCache.remove(URL(url))
         // TODO: Add site to blacklist in Issue #443 to persist un-pinning of bundled sites
+        return true
     }
 
     private fun getTileIdFromUrl(urlString: String): String? {
@@ -134,9 +139,13 @@ class CustomTilesManager private constructor(context: Context) {
     }
 
     @UiThread
-    fun unpinSite(context: Context, url: String) {
+    fun unpinSite(context: Context, url: String): Boolean {
+        if (!customTilesCache.containsKey(url)) {
+            return false
+        }
         customTilesCache.remove(url)
         writeCacheToSharedPreferences(context)
+        return true
     }
 
     private fun writeCacheToSharedPreferences(context: Context) {
