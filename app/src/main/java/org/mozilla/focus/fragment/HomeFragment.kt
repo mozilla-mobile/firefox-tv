@@ -4,6 +4,8 @@
 
 package org.mozilla.focus.fragment
 
+import android.animation.ObjectAnimator
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -12,13 +14,18 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
+import org.json.JSONObject
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.ext.forceExhaustive
+import org.mozilla.focus.home.HomeTileScreenshotStore
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.tiles.CustomHomeTile
@@ -31,6 +38,14 @@ import org.mozilla.focus.utils.OnUrlEnteredListener
 private const val COL_COUNT = 5
 private const val SETTINGS_ICON_IDLE_ALPHA = 0.4f
 private const val SETTINGS_ICON_ACTIVE_ALPHA = 1.0f
+
+/**
+ * Duration of animation to show custom tile. If the duration is too short, the tile will just
+ * pop-in. I speculate this happens because the amount of time it takes to downsample the bitmap
+ * is longer than the animation duration.
+ */
+private const val CUSTOM_TILE_ICON_TO_SHOW_MILLIS = 200L
+private val CUSTOM_TILE_ICON_INTERPOLATOR = DecelerateInterpolator()
 
 /** The home fragment which displays the navigation tiles of the app. */
 class HomeFragment : Fragment() {
@@ -104,7 +119,7 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, va
         val item = tiles[position]
         when (item) {
             is BundledHomeTile -> onBindBundledHomeTile(holder, item)
-            is CustomHomeTile -> { /* do nothing */ }
+            is CustomHomeTile -> onBindCustomHomeTile(holder, item)
         }.forceExhaustive
 
         titleView.setText(item.title)
@@ -139,6 +154,20 @@ private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, va
 private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledHomeTile) = with (holder) {
     val bitmap = BundledTilesManager.getInstance(itemView.context).loadImageFromPath(itemView.context, tile.imagePath)
     iconView.setImageBitmap(bitmap)
+}
+
+private fun onBindCustomHomeTile(holder: TileViewHolder, item: CustomHomeTile) = with (holder) {
+    launch {
+        val screenshot = HomeTileScreenshotStore.read(itemView.context, item.id) // TODO: if null, provide placeholder.
+        launch(UI) { // TODO: cancel
+            // Animate to avoid pop-in due to thread hand-offs. TODO: animation is janky.
+            ObjectAnimator.ofInt(iconView, "imageAlpha", 0, 255).apply {
+                interpolator = CUSTOM_TILE_ICON_INTERPOLATOR
+                duration = CUSTOM_TILE_ICON_TO_SHOW_MILLIS
+            }.start()
+            iconView.setImageBitmap(screenshot)
+        }
+    }
 }
 
 private class TileViewHolder(
