@@ -5,7 +5,6 @@
 package org.mozilla.focus.fragment
 
 import android.animation.ObjectAnimator
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -24,17 +23,16 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import org.json.JSONObject
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.ext.forceExhaustive
 import org.mozilla.focus.home.HomeTileScreenshotStore
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
-import org.mozilla.focus.tiles.CustomHomeTile
-import org.mozilla.focus.tiles.CustomTilesManager
 import org.mozilla.focus.tiles.BundledHomeTile
 import org.mozilla.focus.tiles.BundledTilesManager
+import org.mozilla.focus.tiles.CustomHomeTile
+import org.mozilla.focus.tiles.CustomTilesManager
 import org.mozilla.focus.tiles.HomeTile
 import org.mozilla.focus.utils.OnUrlEnteredListener
 
