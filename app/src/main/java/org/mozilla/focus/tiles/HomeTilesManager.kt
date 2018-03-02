@@ -54,6 +54,7 @@ class BundledTilesManager private constructor(context: Context) {
             val isSame = (url.protocol == u.protocol
                     && UrlUtils.stripCommonSubdomains(url.host) == UrlUtils.stripCommonSubdomains(u.host))
                     && url.path == u.path
+                    && url.ref == u.ref
             if (isSame) return true
         }
         return false
