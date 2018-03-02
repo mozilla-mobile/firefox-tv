@@ -8,6 +8,6 @@
     <size
         android:height="40dp"
         android:width="40dp" />
-    <solid
-        android:color="@color/overlay_button_selector" />
+    <solid android:color="@color/overlay_button_selector" />
+    <stroke android:color="@color/overlay_button_border" android:width="0.5dp" />
 </shape>
