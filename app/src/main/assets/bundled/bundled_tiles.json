@@ -8,7 +8,7 @@
     },
     {
         "id": "googleVideo",
-        "url": "https://www.google.com/search?tbm=vid",
+        "url": "https://www.google.com/webhp?tbm=vid",
         "title": "Video Search",
         "img": "tile_google.png"
     },
