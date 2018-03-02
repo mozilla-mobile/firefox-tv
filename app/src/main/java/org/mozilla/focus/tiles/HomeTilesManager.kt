@@ -49,21 +49,34 @@ class BundledTilesManager private constructor(context: Context) {
 
     @UiThread
     fun isURLPinned(urlString: String): Boolean {
-        val url = URL(urlString)
+        val testUrl = URL(urlString)
         for (u in bundledTilesCache.keys) {
-            val isSame = (url.protocol == u.protocol
-                    && UrlUtils.stripCommonSubdomains(url.host) == UrlUtils.stripCommonSubdomains(u.host))
-                    && url.path == u.path
-                    && url.ref == u.ref
-            if (isSame) return true
+            if (compareUrl(testUrl, u)) return true
         }
         return false
+    }
+
+    private fun compareUrl(url1: URL, url2: URL): Boolean {
+        return url1.protocol == url2.protocol
+                && UrlUtils.stripCommonSubdomains(url1.host) == UrlUtils.stripCommonSubdomains(url2.host)
+                && url1.path == url2.path
+                && url1.ref == url2.ref
     }
 
     @UiThread
     fun unpinSite(context: Context, url: String) {
         bundledTilesCache.remove(URL(url))
         // TODO: Add site to blacklist in Issue #443 to persist un-pinning of bundled sites
+    }
+
+    private fun getTileIdFromUrl(urlString: String): String? {
+        val testUrl = URL(urlString)
+        for (pair in bundledTilesCache) {
+            if (compareUrl(testUrl, pair.key)) {
+                return pair.value.id
+            }
+        }
+        return null
     }
 
     fun loadImageFromPath(context: Context, path: String) = context.assets.open(BUNDLED_HOME_TILES_DIR + path).use {
