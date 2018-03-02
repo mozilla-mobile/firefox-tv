@@ -143,10 +143,12 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         val canGoBack = navigationStateProvider?.isBackEnabled() ?: false
         navButtonBack.isEnabled = canGoBack
         navButtonBack.isFocusable = canGoBack
+        navButtonBack.alpha = if (canGoBack) 1.0f else 0.3f
 
         val canGoForward = navigationStateProvider?.isForwardEnabled() ?: false
         navButtonForward.isEnabled = canGoForward
         navButtonForward.isFocusable = canGoForward
+        navButtonForward.alpha = if (canGoForward) 1.0f else 0.3f
 
         pinButton.isChecked = navigationStateProvider?.isURLPinned() ?: false
 
