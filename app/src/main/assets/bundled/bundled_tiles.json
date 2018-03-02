@@ -1,5 +1,4 @@
-{
-  "bundled_tiles": [
+[
     {
         "id": "youtube",
         "url": "https://youtube.com/tv",
@@ -60,5 +59,4 @@
         "title": "Pinterest",
         "img": "tile_pinterest.png"
     }
-  ]
-}
+]
