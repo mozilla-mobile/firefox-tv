@@ -84,4 +84,5 @@
     <color name="button_focused">@color/photonBlue50</color>
     <color name="button_pressed">@color/photonBlue40</color>
     <color name="button_text_color">@android:color/white</color>
+    <color name="button_border">#339d9da1</color>
 </resources>
