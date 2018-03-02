@@ -8,20 +8,28 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.graphics.BitmapFactory
+import android.net.Uri
+import android.support.annotation.AnyThread
 import android.support.annotation.UiThread
 import org.json.JSONArray
-import org.json.JSONObject
+import org.mozilla.focus.ext.toUri
 import org.mozilla.focus.utils.UrlUtils
-import java.net.URL
 import java.util.UUID
 
 private const val PREF_HOME_TILES = "homeTiles"
 private const val CUSTOM_SITES_LIST = "customSitesList"
 
-private const val BUNDLED_HOME_TILES_DIR = "bundled/"
-private const val HOME_TILES_JSON_PATH = BUNDLED_HOME_TILES_DIR + "bundled_tiles.json"
-private const val HOME_TILES_JSON_KEY = "bundled_tiles"
+private const val BUNDLED_HOME_TILES_DIR = "bundled"
+private const val HOME_TILES_JSON_PATH = "$BUNDLED_HOME_TILES_DIR/bundled_tiles.json"
 
+/**
+ * Static accessor for bundled tiles, which are loaded from assets/bundled/bundled_tiles.json.
+ *
+ * The urls provided in the bundled tiles are expected to close matches (including on Uri.path,
+ * scheme [http or https]) with the final site that is loaded (after any server redirects, etc).
+ * That way we can clearly reflect "pinned" state of these sites on the homescreen by matching
+ * by url.
+ */
 class BundledTilesManager private constructor(context: Context) {
     companion object {
         private var thisInstance: BundledTilesManager? = null
@@ -35,61 +43,55 @@ class BundledTilesManager private constructor(context: Context) {
 
     private var bundledTilesCache = loadBundledTilesCache(context)
 
-    private fun loadBundledTilesCache(context: Context): LinkedHashMap<URL, BundledHomeTile> {
+    private fun loadBundledTilesCache(context: Context): LinkedHashMap<Uri, BundledHomeTile> {
         val tilesJSONString = context.assets.open(HOME_TILES_JSON_PATH).bufferedReader().use { it.readText() }
-        val tilesJSONArray = JSONObject(tilesJSONString).getJSONArray(HOME_TILES_JSON_KEY)
-        val lhm = LinkedHashMap<URL, BundledHomeTile>()
+        val tilesJSONArray = JSONArray(tilesJSONString)
+        val lhm = LinkedHashMap<Uri, BundledHomeTile>(tilesJSONArray.length())
         for (i in 0 until tilesJSONArray.length()) {
             val tile = BundledHomeTile.fromJSONObject(tilesJSONArray.getJSONObject(i))
             // TODO: Check for blacklisted sites and don't add them
-            lhm.put(URL(tile.url), tile)
+            lhm.put(tile.url.toUri()!!, tile)
         }
         return lhm
     }
 
     @UiThread
-    fun isURLPinned(urlString: String): Boolean {
-        val testUrl = URL(urlString)
-        for (u in bundledTilesCache.keys) {
-            if (compareUrl(testUrl, u)) return true
+    fun isURLPinned(uri: Uri): Boolean {
+        return bundledTilesCache.keys.any { u -> compareUri(uri, u) }
+    }
+
+    /**
+     * Make a best effort fuzzy compare (such as matching mobile versions of sites)
+     */
+    private fun compareUri(uri1: Uri, uri2: Uri): Boolean {
+        return uri1.scheme == uri2.scheme &&
+                UrlUtils.stripCommonSubdomains(uri1.authority) ==
+                    UrlUtils.stripCommonSubdomains(uri2.authority) &&
+                uri1.path == uri2.path &&
+                uri1.fragment == uri2.fragment &&
+                uri1.query == uri2.query
+    }
+
+    @UiThread
+    fun unpinSite(context: Context, uri: Uri): Boolean {
+        for (pair in bundledTilesCache) {
+            if (compareUri(uri, pair.key)) {
+                // TODO: Remove by pair.value.id (BEFORE removing from cache)
+                bundledTilesCache.remove(pair.key)
+                return true
+            }
         }
         return false
     }
 
-    private fun compareUrl(url1: URL, url2: URL): Boolean {
-        return url1.protocol == url2.protocol
-                && UrlUtils.stripCommonSubdomains(url1.host) == UrlUtils.stripCommonSubdomains(url2.host)
-                && url1.path == url2.path
-                && url1.ref == url2.ref
+    @AnyThread
+    fun loadImageFromPath(context: Context, path: String) = context.assets.open(
+            "$BUNDLED_HOME_TILES_DIR/$path").use {
+        BitmapFactory.decodeStream(it)
     }
 
     @UiThread
-    fun unpinSite(context: Context, url: String): Boolean {
-        val tileId = getTileIdFromUrl(url)
-        if (tileId == null) {
-            return false
-        }
-        bundledTilesCache.remove(URL(url))
-        // TODO: Add site to blacklist in Issue #443 to persist un-pinning of bundled sites
-        return true
-    }
-
-    private fun getTileIdFromUrl(urlString: String): String? {
-        val testUrl = URL(urlString)
-        for (pair in bundledTilesCache) {
-            if (compareUrl(testUrl, pair.key)) {
-                return pair.value.id
-            }
-        }
-        return null
-    }
-
-    fun loadImageFromPath(context: Context, path: String) = context.assets.open(BUNDLED_HOME_TILES_DIR + path).use {
-            BitmapFactory.decodeStream(it)
-        }
-
-    @UiThread
-    fun getBundledHomeTilesList() = bundledTilesCache.values
+    fun getBundledHomeTilesList() = bundledTilesCache.values.toMutableList()
 }
 /**
  * Static accessor of custom home tiles, that is backed by SharedPreferences.

@@ -19,6 +19,7 @@ import org.mozilla.focus.R
 import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.browser.cursor.CursorController
+import org.mozilla.focus.ext.toUri
 import org.mozilla.focus.session.NullSession
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.session.SessionCallbackProxy
@@ -145,9 +146,11 @@ class BrowserFragment : IWebViewLifecycleFragment(),
                             showCenteredTopToast(context, R.string.notification_pinned_site, 0, 200)
                         }
                         NavigationEvent.VAL_UNCHECKED -> {
-                            if (BundledTilesManager.getInstance(context).unpinSite(context, url)
-                                    || CustomTilesManager.getInstance(context).unpinSite(context, url)) {
-                                showCenteredTopToast(context, R.string.notification_unpinned_site, 0, 200)
+                            url.toUri()?.let {
+                                if (BundledTilesManager.getInstance(context).unpinSite(context, it)
+                                        || CustomTilesManager.getInstance(context).unpinSite(context, url)) {
+                                    showCenteredTopToast(context, R.string.notification_unpinned_site, 0, 200)
+                                }
                             }
                         }
                         else -> throw IllegalArgumentException("Unexpected value for PIN_ACTION: " + value)
@@ -175,7 +178,9 @@ class BrowserFragment : IWebViewLifecycleFragment(),
     override fun isBackEnabled() = canGoBack()
     override fun isForwardEnabled() = canGoForward()
     override fun getCurrentUrl() = url
-    override fun isURLPinned() = url?.let { CustomTilesManager.getInstance(context).isURLPinned(it) ||
+    override fun isURLPinned() = url.toUri()?.let {
+        // TODO: #569 fix CustomTilesManager to use Uri too
+        CustomTilesManager.getInstance(context).isURLPinned(it.toString()) ||
     BundledTilesManager.getInstance(context).isURLPinned(it) } ?: false
 
     fun onBackPressed(): Boolean {
