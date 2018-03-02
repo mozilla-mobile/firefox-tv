@@ -25,6 +25,7 @@ import org.mozilla.focus.session.SessionCallbackProxy
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
+import org.mozilla.focus.tiles.BundledTilesManager
 import org.mozilla.focus.tiles.CustomTilesManager
 import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.ViewUtils.showCenteredTopToast
@@ -172,7 +173,8 @@ class BrowserFragment : IWebViewLifecycleFragment(),
     override fun isBackEnabled() = canGoBack()
     override fun isForwardEnabled() = canGoForward()
     override fun getCurrentUrl() = url
-    override fun isURLPinned() = url?.let { CustomTilesManager.getInstance(context).isURLPinned(it) } ?: false
+    override fun isURLPinned() = url?.let { CustomTilesManager.getInstance(context).isURLPinned(it) ||
+    BundledTilesManager.getInstance(context).isURLPinned(it) } ?: false
 
     fun onBackPressed(): Boolean {
         when {

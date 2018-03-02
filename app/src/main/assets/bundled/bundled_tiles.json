@@ -14,49 +14,49 @@
     },
     {
         "id": "imdb",
-        "url": "http://imdb.com",
+        "url": "https://imdb.com/",
         "title": "IMDB",
         "img": "tile_imdb.png"
     },
     {
         "id": "rottenTomatoes",
-        "url": "https://www.rottentomatoes.com",
+        "url": "https://www.rottentomatoes.com/",
         "title": "Rotten Tomatoes",
         "img": "tile_rotten_tomatoes.png"
     },
     {
         "id": "metacritic",
-        "url": "http://metacritic.com",
+        "url": "http://metacritic.com/",
         "title": "metacritic",
         "img": "tile_metacritic.png"
     },
     {
         "id": "fandango",
-        "url": "http://fandango.com",
+        "url": "https://fandango.com/",
         "title": "Fandango",
         "img": "tile_fandango.png"
     },
     {
         "id": "hollywoodReporter",
-        "url": "https://hollywoodreporter.com",
+        "url": "https://hollywoodreporter.com/",
         "title": "Hollywood Reporter",
         "img": "tile_hollywood_reporter.png"
     },
     {
         "id": "flickr",
-        "url": "https://flickr.com",
+        "url": "https://flickr.com/",
         "title": "Flickr",
         "img": "tile_flickr.png"
     },
     {
         "id": "instagram",
-        "url": "https://instagram.com",
+        "url": "https://instagram.com/",
         "title": "Instagram",
         "img": "tile_instagram.png"
     },
     {
         "id": "pinterest",
-        "url": "https://pinterest.com",
+        "url": "https://pinterest.com/",
         "title": "Pinterest",
         "img": "tile_pinterest.png"
     }
