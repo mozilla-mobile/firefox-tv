@@ -56,6 +56,16 @@ private val COMPRESSION_FORMAT = Bitmap.CompressFormat.WEBP
  */
 private const val COMPRESSION_QUALITY = 50
 
+private val BITMAP_FACTORY_OPTIONS = BitmapFactory.Options().apply {
+    // When full resolution in memory, 1080p Bitmap takes up ~7.9MiB, no matter how it's been
+    // compressed on disk. To save memory and reduce CPU downscale overhead, we downsample.
+    //
+    // In 1080p, our max resolution, screenshots are 1920x1080px and the tiles are 280x200px
+    // (not dp). We divide the screenshots by 4, 480x270px, which fits in the tiles: these
+    // Bitmaps take up ~0.5MiB in memory.
+    inSampleSize = 4
+}
+
 /**
  * Storage for webpage screenshots used for the home tiles.
  *
@@ -116,10 +126,6 @@ object HomeTileScreenshotStore {
     /**
      * A blocking function to read a bitmap from the store.
      *
-     * TODO: Add downscale argument.
-     * When full size in memory, a 1080p Bitmap takes up ~7.9MiB, no matter how it's been compressed
-     * on disk.
-     *
      * @param uuid unique identifier for this screenshot.
      * @return The decoded [Bitmap], or null if the file DNE or the bitmap could not be decoded.
      */
@@ -131,7 +137,7 @@ object HomeTileScreenshotStore {
                 null
             } else {
                 file.inputStream().use {
-                    BitmapFactory.decodeStream(it)
+                    BitmapFactory.decodeStream(it, null, BITMAP_FACTORY_OPTIONS)
                 }
             }
         }
