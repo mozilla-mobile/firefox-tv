@@ -19,6 +19,9 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.coroutines.experimental.CancellationException
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.json.JSONObject
@@ -49,10 +52,17 @@ private val CUSTOM_TILE_ICON_INTERPOLATOR = DecelerateInterpolator()
 
 /** The home fragment which displays the navigation tiles of the app. */
 class HomeFragment : Fragment() {
+
     lateinit var urlBar: LinearLayout
     var onUrlEnteredListener = object : OnUrlEnteredListener {} // default impl does nothing.
     var onSettingsPressed: (() -> Unit)? = null
     val urlAutoCompleteFilter = UrlAutoCompleteFilter()
+
+    /**
+     * Used to cancel background->UI threads: we attach them as children to this job
+     * and cancel this job at the end of the UI lifecycle, cancelling the children.
+     */
+    private lateinit var uiLifecycleCancelJob: Job
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater!!.inflate(R.layout.fragment_home, container, false)
@@ -62,6 +72,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // todo: saved instance state?
+        uiLifecycleCancelJob = Job()
+
         initTiles()
         initUrlInputView()
 
@@ -74,6 +86,11 @@ class HomeFragment : Fragment() {
         settingsButton.setOnClickListener { v ->
             onSettingsPressed?.invoke()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        uiLifecycleCancelJob.cancel(CancellationException("Parent lifecycle has ended"))
     }
 
     override fun onResume() {
@@ -92,7 +109,7 @@ class HomeFragment : Fragment() {
             addAll(BundledTilesManager.getInstance(context).getBundledHomeTilesList())
         }
 
-        adapter = HomeTileAdapter(onUrlEnteredListener, homeTiles)
+        adapter = HomeTileAdapter(uiLifecycleCancelJob, homeTiles, onUrlEnteredListener)
         layoutManager = GridLayoutManager(context, COL_COUNT)
         setHasFixedSize(true)
     }
@@ -112,14 +129,17 @@ class HomeFragment : Fragment() {
     }
 }
 
-private class HomeTileAdapter(val onUrlEnteredListener: OnUrlEnteredListener, val tiles: List<HomeTile>) :
-        RecyclerView.Adapter<TileViewHolder>() {
+private class HomeTileAdapter(
+        private val uiLifecycleCancelJob: Job,
+        private val tiles: List<HomeTile>,
+        private val onUrlEnteredListener: OnUrlEnteredListener
+) : RecyclerView.Adapter<TileViewHolder>() {
 
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with (holder) {
         val item = tiles[position]
         when (item) {
             is BundledHomeTile -> onBindBundledHomeTile(holder, item)
-            is CustomHomeTile -> onBindCustomHomeTile(holder, item)
+            is CustomHomeTile -> onBindCustomHomeTile(uiLifecycleCancelJob, holder, item)
         }.forceExhaustive
 
         titleView.setText(item.title)
@@ -156,10 +176,10 @@ private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledHomeTile)
     iconView.setImageBitmap(bitmap)
 }
 
-private fun onBindCustomHomeTile(holder: TileViewHolder, item: CustomHomeTile) = with (holder) {
-    launch {
+private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHolder, item: CustomHomeTile) = with (holder) {
+    launch(uiLifecycleCancelJob + CommonPool) {
         val screenshot = HomeTileScreenshotStore.read(itemView.context, item.id) // TODO: if null, provide placeholder.
-        launch(UI) { // TODO: cancel
+        launch(UI) {
             // Animate to avoid pop-in due to thread hand-offs. TODO: animation is janky.
             ObjectAnimator.ofInt(iconView, "imageAlpha", 0, 255).apply {
                 interpolator = CUSTOM_TILE_ICON_INTERPOLATOR
