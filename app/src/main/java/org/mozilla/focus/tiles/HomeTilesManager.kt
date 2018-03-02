@@ -11,6 +11,8 @@ import android.graphics.BitmapFactory
 import android.support.annotation.UiThread
 import org.json.JSONArray
 import org.json.JSONObject
+import org.mozilla.focus.utils.UrlUtils
+import java.net.URL
 import java.util.UUID
 
 private const val PREF_HOME_TILES = "homeTiles"
@@ -33,24 +35,33 @@ class BundledTilesManager private constructor(context: Context) {
 
     private var bundledTilesCache = loadBundledTilesCache(context)
 
-    private fun loadBundledTilesCache(context: Context): LinkedHashMap<String, BundledHomeTile> {
+    private fun loadBundledTilesCache(context: Context): LinkedHashMap<URL, BundledHomeTile> {
         val tilesJSONString = context.assets.open(HOME_TILES_JSON_PATH).bufferedReader().use { it.readText() }
         val tilesJSONArray = JSONObject(tilesJSONString).getJSONArray(HOME_TILES_JSON_KEY)
-        val lhm = LinkedHashMap<String, BundledHomeTile>()
+        val lhm = LinkedHashMap<URL, BundledHomeTile>()
         for (i in 0 until tilesJSONArray.length()) {
             val tile = BundledHomeTile.fromJSONObject(tilesJSONArray.getJSONObject(i))
             // TODO: Check for blacklisted sites and don't add them
-            lhm.put(tile.url, tile)
+            lhm.put(URL(tile.url), tile)
         }
         return lhm
     }
 
     @UiThread
-    fun isURLPinned(url: String) = bundledTilesCache.containsKey(url)
+    fun isURLPinned(urlString: String): Boolean {
+        val url = URL(urlString)
+        for (u in bundledTilesCache.keys) {
+            val isSame = (url.protocol == u.protocol
+                    && UrlUtils.stripCommonSubdomains(url.host) == UrlUtils.stripCommonSubdomains(u.host))
+                    && url.path == u.path
+            if (isSame) return true
+        }
+        return false
+    }
 
     @UiThread
     fun unpinSite(context: Context, url: String) {
-        bundledTilesCache.remove(url)
+        bundledTilesCache.remove(URL(url))
         // TODO: Add site to blacklist in Issue #443 to persist un-pinning of bundled sites
     }
 
@@ -59,7 +70,7 @@ class BundledTilesManager private constructor(context: Context) {
         }
 
     @UiThread
-    fun getBundledHomeTilesList() = bundledTilesCache.values.reversed()
+    fun getBundledHomeTilesList() = bundledTilesCache.values
 }
 /**
  * Static accessor of custom home tiles, that is backed by SharedPreferences.
