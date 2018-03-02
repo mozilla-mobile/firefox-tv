@@ -80,7 +80,7 @@
 
     <color name="button_highlight">#64ffffff</color>
     <color name="button_default">#000000</color>
-    <color name="button_disabled">#4c000000</color>
+    <color name="button_disabled">#000000</color>
     <color name="button_focused">@color/photonBlue50</color>
     <color name="button_pressed">@color/photonBlue40</color>
     <color name="button_text_color">@android:color/white</color>
