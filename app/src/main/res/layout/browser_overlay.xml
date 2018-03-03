@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             style="@style/NavigationButton"
             android:src="@drawable/pin_selector"
-            android:contentDescription=""/>
+            android:contentDescription="@string/pin_label"/>
 
         <org.mozilla.focus.widget.CheckableImageButton
             android:id="@+id/turboButton"
