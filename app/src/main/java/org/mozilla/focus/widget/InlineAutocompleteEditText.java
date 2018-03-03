@@ -642,13 +642,18 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         }
     }
 
-
-    // This prevents the selector from entering the text area
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        int keyCode = event.getKeyCode();
-        boolean shouldDispatch = keyCode == KeyEvent.KEYCODE_ENTER
-            || keyCode == KeyEvent.KEYCODE_DPAD_CENTER;
+        // This prevents the selector from entering the text area
+        final int keyCode = event.getKeyCode();
+        final boolean shouldDispatch = keyCode != KeyEvent.KEYCODE_DPAD_DOWN
+                || keyCode != KeyEvent.KEYCODE_DPAD_DOWN_LEFT
+                || keyCode != KeyEvent.KEYCODE_DPAD_DOWN_RIGHT
+                || keyCode != KeyEvent.KEYCODE_DPAD_LEFT
+                || keyCode != KeyEvent.KEYCODE_DPAD_RIGHT
+                || keyCode != KeyEvent.KEYCODE_DPAD_UP
+                || keyCode != KeyEvent.KEYCODE_DPAD_UP_LEFT
+                || keyCode != KeyEvent.KEYCODE_DPAD_UP_RIGHT;
 
         if (shouldDispatch) {
             return super.dispatchKeyEvent(event);
