@@ -5,6 +5,7 @@
 package org.mozilla.focus.widget
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -87,15 +88,9 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         turboButton.isChecked = Settings.getInstance(context).isBlockingEnabled
         navButtonSettings.setImageResource(R.drawable.ic_settings)
 
-        navCloseHint.compoundDrawablesRelative.forEach {
-            if (it == null) { return@forEach }
-            it.setTint(ContextCompat.getColor(context, R.color.nav_close_hint))
-        }
-
-        navUrlInput.compoundDrawablesRelative.forEach {
-            if (it == null) { return@forEach }
-            it.setTint(ContextCompat.getColor(context, R.color.button_text_color))
-        }
+        val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context, R.color.nav_close_hint)) }
+        navCloseHint.compoundDrawablesRelative.forEach(tintDrawable)
+        navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
     }
 
     private fun setupUrlInput() = with (navUrlInput) {
