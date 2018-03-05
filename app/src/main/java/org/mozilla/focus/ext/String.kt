@@ -6,6 +6,8 @@ package org.mozilla.focus.ext
 
 import android.net.Uri
 import org.mozilla.focus.utils.UrlUtils
+import java.net.URI
+import java.net.URISyntaxException
 
 // Extension functions for the String class
 
@@ -80,4 +82,14 @@ fun String?.toUri(): Uri? = if (this == null) {
     null
 } else {
     Uri.parse(this)
+}
+
+fun String?.toJavaURI(): URI? = if (this == null) {
+    null
+} else {
+    try {
+        URI(this)
+    } catch (e: URISyntaxException) {
+        null
+    }
 }
