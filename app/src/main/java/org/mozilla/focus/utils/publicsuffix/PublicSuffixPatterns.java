@@ -5,14 +5,10 @@
 package org.mozilla.focus.utils.publicsuffix;
 
 import android.content.Context;
-import android.util.Log;
-
-import org.mozilla.gecko.util.IOUtils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,7 +37,9 @@ class PublicSuffixPatterns {
         } catch (IOException e) {
             throw new IllegalStateException("resource publicsuffixlist could not be opened but is bundled with app", e);
         } finally {
-            IOUtils.safeStreamClose(reader);
+            try {
+                if (reader != null) { reader.close(); }
+            } catch (IOException e) {}
         }
 
         return EXACT;

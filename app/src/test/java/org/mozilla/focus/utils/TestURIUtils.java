@@ -7,15 +7,18 @@ package org.mozilla.focus.utils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mozilla.focus.utils.URIUtils;
-import org.mozilla.gecko.background.testhelpers.TestRunner;
+import org.mozilla.focus.FirefoxTVBaseTest;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
-@RunWith(TestRunner.class)
-public class TestURIUtils {
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
+
+@RunWith(RobolectricTestRunner.class)
+public class TestURIUtils extends FirefoxTVBaseTest {
 
     private final String BUGZILLA_URL = "https://bugzilla.mozilla.org/enter_bug.cgi?format=guided#h=dupes%7CData%20%26%20BI%20Services%20Team%7C";
 
@@ -201,5 +204,37 @@ public class TestURIUtils {
         Assert.assertEquals("for input:" + uriString + "||",
                 expected,
                URIUtils.getFormattedDomain(RuntimeEnvironment.application, uri, includePublicSuffix, subdomainCount));
+    }
+
+    @Test
+    public void testIsIPv4RealAddress() {
+        assertTrue(URIUtils.isIPv4("192.168.1.1"));
+        assertTrue(URIUtils.isIPv4("8.8.8.8"));
+        assertTrue(URIUtils.isIPv4("63.245.215.20"));
+    }
+
+    @Test
+    public void testIsIPv4WithProtocol() {
+        assertFalse(URIUtils.isIPv4("http://8.8.8.8"));
+        assertFalse(URIUtils.isIPv4("https://8.8.8.8"));
+    }
+
+    @Test
+    public void testIsIPv4WithPort() {
+        assertFalse(URIUtils.isIPv4("8.8.8.8:400"));
+        assertFalse(URIUtils.isIPv4("8.8.8.8:1337"));
+    }
+
+    @Test
+    public void testIsIPv4WithPath() {
+        assertFalse(URIUtils.isIPv4("8.8.8.8/index.html"));
+        assertFalse(URIUtils.isIPv4("8.8.8.8/"));
+    }
+
+    @Test
+    public void testIsIPv4WithIPv6() {
+        assertFalse(URIUtils.isIPv4("2001:db8::1 "));
+        assertFalse(URIUtils.isIPv4("2001:db8:0:1:1:1:1:1"));
+        assertFalse(URIUtils.isIPv4("[2001:db8:a0b:12f0::1]"));
     }
 }
