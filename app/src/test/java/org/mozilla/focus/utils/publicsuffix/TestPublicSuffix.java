@@ -7,8 +7,7 @@ package org.mozilla.focus.utils.publicsuffix;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mozilla.focus.FirefoxTVBaseTest;
-import org.robolectric.RobolectricTestRunner;
+import org.mozilla.focus.FirefoxTVTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
 import java.util.ArrayList;
@@ -17,8 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RunWith(RobolectricTestRunner.class)
-public class TestPublicSuffix extends FirefoxTVBaseTest {
+@RunWith(FirefoxTVTestRunner.class)
+public class TestPublicSuffix {
     @Test
     public void testStripPublicSuffix() {
         // Test empty value
