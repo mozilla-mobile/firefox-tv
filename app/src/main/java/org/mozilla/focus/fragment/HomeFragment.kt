@@ -4,6 +4,7 @@
 
 package org.mozilla.focus.fragment
 
+import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.graphics.Color
 import android.os.Bundle
@@ -17,13 +18,16 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.experimental.CancellationException
-import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.CompletableDeferred
+import kotlinx.coroutines.experimental.CoroutineStart
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.ext.forceExhaustive
+import org.mozilla.focus.ext.toJavaURI
 import org.mozilla.focus.home.HomeTileScreenshotStore
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
@@ -32,6 +36,7 @@ import org.mozilla.focus.tiles.BundledTilesManager
 import org.mozilla.focus.tiles.CustomHomeTile
 import org.mozilla.focus.tiles.CustomTilesManager
 import org.mozilla.focus.tiles.HomeTile
+import org.mozilla.focus.utils.FormattedDomain
 import org.mozilla.focus.utils.OnUrlEnteredListener
 import android.view.ContextMenu
 import android.view.MenuItem
@@ -48,7 +53,7 @@ private const val SETTINGS_ICON_ACTIVE_ALPHA = 1.0f
  * pop-in. I speculate this happens because the amount of time it takes to downsample the bitmap
  * is longer than the animation duration.
  */
-private const val CUSTOM_TILE_ICON_TO_SHOW_MILLIS = 200L
+private const val CUSTOM_TILE_TO_SHOW_MILLIS = 200L
 private val CUSTOM_TILE_ICON_INTERPOLATOR = DecelerateInterpolator()
 
 /** The home fragment which displays the navigation tiles of the app. */
@@ -188,8 +193,6 @@ private class HomeTileAdapter(
             is CustomHomeTile -> onBindCustomHomeTile(uiLifecycleCancelJob, holder, item)
         }.forceExhaustive
 
-        titleView.setText(item.title)
-
         itemView.setOnClickListener {
             onUrlEnteredListener.onNonTextInputUrlEntered(item.url)
             TelemetryWrapper.homeTileClickEvent()
@@ -236,19 +239,35 @@ private class HomeTileAdapter(
 private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledHomeTile) = with (holder) {
     val bitmap = BundledTilesManager.getInstance(itemView.context).loadImageFromPath(itemView.context, tile.imagePath)
     iconView.setImageBitmap(bitmap)
+
+    titleView.text = tile.title
 }
 
 private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHolder, item: CustomHomeTile) = with (holder) {
-    launch(uiLifecycleCancelJob + CommonPool) {
-        val screenshot = HomeTileScreenshotStore.read(itemView.context, item.id) // TODO: if null, provide placeholder.
-        launch(UI) {
-            // Animate to avoid pop-in due to thread hand-offs. TODO: animation is janky.
-            ObjectAnimator.ofInt(iconView, "imageAlpha", 0, 255).apply {
-                interpolator = CUSTOM_TILE_ICON_INTERPOLATOR
-                duration = CUSTOM_TILE_ICON_TO_SHOW_MILLIS
-            }.start()
-            iconView.setImageBitmap(screenshot)
+    launch(uiLifecycleCancelJob + UI, CoroutineStart.UNDISPATCHED) {
+        val validUri = item.url.toJavaURI()
+
+        val screenshot = async { HomeTileScreenshotStore.read(itemView.context, item.id) }
+        val title = if (validUri == null) {
+            CompletableDeferred(item.url)
+        } else {
+            async { FormattedDomain.format(itemView.context, validUri, true, 1) }
         }
+
+        // Wait for both to complete so we can animate them together.
+        iconView.setImageBitmap(screenshot.await()) // TODO: if null, provide placeholder.
+        titleView.text = title.await()
+
+        // Animate to avoid pop-in due to thread hand-offs. TODO: animation is janky.
+        AnimatorSet().apply {
+            interpolator = CUSTOM_TILE_ICON_INTERPOLATOR
+            duration = CUSTOM_TILE_TO_SHOW_MILLIS
+
+            val iconAnim = ObjectAnimator.ofInt(iconView, "imageAlpha", 0, 255)
+            val titleAnim = ObjectAnimator.ofFloat(titleView, "alpha", 0f, 1f)
+
+            playTogether(iconAnim, titleAnim)
+        }.start()
     }
 }
 
