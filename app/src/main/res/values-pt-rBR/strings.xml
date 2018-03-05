@@ -24,7 +24,7 @@
   <string name="shortcut_erase_short_label">Apagar</string>
   <string name="shortcut_erase_long_label">Apagar o histórico de navegação</string>
   <string name="text_selection_search_action">Pesquisa privativa</string>
-  <string name="about_content"><![CDATA[<p xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%1$s coloca voc&#234; no controle.</p>\n<p xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"Use-o como o seu navegador privativo:\n  "<ul>"\n    "<li>Pesquise e navegue direto no aplicativo</li>"\n    "<li>Bloqueie rastreadores (ou atualize as configura&#231;&#245;es para permiti-los)</li>"\n    "<li>Apague para excluir cookies assim como o hist&#243;rico de pesquisa e navega&#231;&#227;o</li>"\n  "</ul>\n</p>\n<p xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%1$s &#233; produzido pela Mozilla. Nossa miss&#227;o &#233; promover uma Internet saud&#225;vel e aberta.<br/>\n<a href="%2$s">Saiba mais</a></p>]]></string>
+  <string name="about_content"><![CDATA[<p xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%1$s coloca voc&amp;#234; no controle.</p>\\n<p xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"Use-o como o seu navegador privativo:\\n  \""<ul>"\"\\n    \""<li>Pesquise e navegue direto no aplicativo</li>"\"\\n    \""<li>Bloqueie rastreadores (ou atualize as configura&amp;#231;&amp;#245;es para permiti-los)</li>"\"\\n    \""<li>Apague para excluir cookies assim como o hist&amp;#243;rico de pesquisa e navega&amp;#231;&amp;#227;o</li>"\"\\n  \""</ul>\\n</p>\\n<p xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%1$s &amp;#233; produzido pela Mozilla. Nossa miss&amp;#227;o &amp;#233; promover uma Internet saud&amp;#225;vel e aberta.<br/>\\n<a href="%2$s">Saiba mais</a></p>]]></string>
   <string name="preference_category_search">Pesquisar</string>
   <string name="preference_search_engine_default">Padrão</string>
   <string name="preference_state_on">Ativado</string>
@@ -99,6 +99,7 @@
   <string name="accessibility_announcement_search">Adicionar mecanismo de pesquisa</string>
   <string name="search_add_confirmation">Novo mecanismo de pesquisa adicionado.</string>
   <string name="search_add_error_empty_name">Digite o nome do mecanismo de pesquisa</string>
+  <string name="search_add_error_duplicate_name">Um mecanismo de busca já está utilizando esse nome.</string>
   <string name="search_add_error_empty_search">Digite um termo de pesquisa</string>
   <string name="search_add_error_format">Verifique se o termo da pesquisa corresponde ao formato de exemplo</string>
   <string name="content_description_clear_input">Limpar campo</string>
@@ -127,25 +128,25 @@
   <string name="external_multiple_apps_matched_exit">Sair da navegação privativa?</string>
   <string name="download_snackbar_finished">%1$s finalizado</string>
   <string name="download_snackbar_open">Abrir</string>
-  <string name="download_dialog_warning"><![CDATA["Arquivos baixados "<b xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">n&#227;o ser&#227;o deletados</b>" quando você apagar o histórico do %1$s."]]></string>
+  <string name="download_dialog_warning"><![CDATA[\"Arquivos baixados \"<b xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">n&amp;#227;o ser&amp;#227;o deletados</b>\" quando você apagar o histórico do %1$s.\"]]></string>
   <string name="download_dialog_title">Baixar arquivo</string>
   <string name="download_dialog_action_cancel">Cancelar</string>
   <string name="download_dialog_action_download">Baixar</string>
   <string name="errorpage_title">Problemas ao carregar a página</string>
   <string name="errorpage_refresh">Tentar novamente</string>
   <string name="error_connectionfailure_title">Não foi possível conectar</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>O site pode estar temporariamente indispon&#237;vel ou ocupado demais. Tente novamente em alguns instantes.</li>"\n        "<li>Se n&#227;o conseguir carregar nenhuma p&#225;gina, verifique a conex&#227;o de dados ou Wi-Fi do seu dispositivo m&#243;vel.</li>"\n      "</ul>]]></string>
+  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n        \""<li>O site pode estar temporariamente indispon&amp;#237;vel ou ocupado demais. Tente novamente em alguns instantes.</li>"\"\\n        \""<li>Se n&amp;#227;o conseguir carregar nenhuma p&amp;#225;gina, verifique a conex&amp;#227;o de dados ou Wi-Fi do seu dispositivo m&amp;#243;vel.</li>"\"\\n      \""</ul>]]></string>
   <string name="error_timeout_title">A conexão expirou</string>
   <string name="error_hostLookup_title">Servidor não encontrado</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>"Verifique se o endere&#231;o cont&#233;m erros de digita&#231;&#227;o, como\n          "<strong>ww</strong>".example.com ao inv&#233;s de\n          "<strong>www</strong>.example.com</li>"\n        "<li>Se n&#227;o conseguir carregar nenhuma p&#225;gina, verifique a conex&#227;o de dados ou Wi-Fi de seu dispositivo.</li>"\n      "</ul>]]></string>
+  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n        \""<li>"\"Verifique se o endere&amp;#231;o cont&amp;#233;m erros de digita&amp;#231;&amp;#227;o, como\\n          \""<strong>ww</strong>"\".example.com ao inv&amp;#233;s de\\n          \""<strong>www</strong>.example.com</li>"\"\\n        \""<li>Se n&amp;#227;o conseguir carregar nenhuma p&amp;#225;gina, verifique a conex&amp;#227;o de dados ou Wi-Fi de seu dispositivo.</li>"\"\\n      \""</ul>]]></string>
   <string name="error_malformedURI_title">O endereço não é válido</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"Os endere&#231;os da Web s&#227;o geralmente escritos como "<strong>http://www.example.com/</strong></li>"\n  "<li>"Certifique-se de usar barras obl&#237;quas (ex. "<strong>/</strong>).</li>\n</ul>]]></string>
+  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>\"Os endere&amp;#231;os da Web s&amp;#227;o geralmente escritos como \"<strong>http://www.example.com/</strong></li>"\"\\n  \""<li>\"Certifique-se de usar barras obl&amp;#237;quas (ex. \"<strong>/</strong>).</li>\\n</ul>]]></string>
   <string name="error_redirectLoop_title">A página não está sendo redirecionada corretamente</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Este problema, &#224;s vezes, pode ser causado pela desativa&#231;&#227;o ou recusa em aceitar os cookies.</li>\n</ul>]]></string>
+  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>Este problema, &amp;#224;s vezes, pode ser causado pela desativa&amp;#231;&amp;#227;o ou recusa em aceitar os cookies.</li>\\n</ul>]]></string>
   <string name="error_unsupportedprotocol_title">O endereço não foi compreendido</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Talvez seja necess&#225;rio instalar outro software para abrir esse endere&#231;o.</li>\n</ul>]]></string>
+  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>Talvez seja necess&amp;#225;rio instalar outro software para abrir esse endere&amp;#231;o.</li>\\n</ul>]]></string>
   <string name="error_sslhandshake_title">Falha na conexão segura</string>
-  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Isto pode ser um problema com a configura&#231;&#227;o do servidor ou pode ser algu&#233;m tentando se passar pelo servidor.</li>"\n  "<li>Se voc&#234; se conectou a este servidor com sucesso no passado, o erro pode ser tempor&#225;rio, e voc&#234; pode tentar novamente mais tarde.</li>\n</ul>]]></string>
+  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>Isto pode ser um problema com a configura&amp;#231;&amp;#227;o do servidor ou pode ser algu&amp;#233;m tentando se passar pelo servidor.</li>"\"\\n  \""<li>Se voc&amp;#234; se conectou a este servidor com sucesso no passado, o erro pode ser tempor&amp;#225;rio, e voc&amp;#234; pode tentar novamente mais tarde.</li>\\n</ul>]]></string>
   <string name="error_generic_title">Ops</string>
   <string name="error_generic_message">Não podemos carregar esta página por algum motivo.</string>
   <string name="contextmenu_link_share">Compartilhar link</string>
@@ -154,7 +155,7 @@
   <string name="contextmenu_image_copy">Copiar endereço da imagem</string>
   <string name="contextmenu_image_save">Salvar imagem</string>
   <string name="contextmenu_open_in_new_tab">Abrir link em nova aba</string>
-  <string name="contextmenu_image_warning"><![CDATA["As imagens salvas e compartilhadas "<b xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">n&#227;o ser&#227;o exclu&#237;das</b>" ao apagar o histórico do %1$s."]]></string>
+  <string name="contextmenu_image_warning"><![CDATA[\"As imagens salvas e compartilhadas \"<b xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">n&amp;#227;o ser&amp;#227;o exclu&amp;#237;das</b>\" ao apagar o histórico do %1$s.\"]]></string>
   <string name="firstrun_defaultbrowser_title">Potencialize sua privacidade</string>
   <string name="firstrun_defaultbrowser_text2">Leve a navegação privativa ao próximo nível. Bloqueie propagandas e outros conteúdos que podem rastrear você entre os sites diminuir o tempo de carregamento das páginas.</string>
   <string name="firstrun_search_title">Pesquise à sua maneira</string>
@@ -178,8 +179,16 @@
   <string name="tabs_tray_action_erase">Limpar o histórico de navegação</string>
   <string name="download_firefox">Baixar o Firefox</string>
   <string name="your_rights_content1">O %1$s é um software livre e de código aberto feita pela Mozilla e outros contribuidores.</string>
-  <string name="your_rights_content2"><![CDATA["O %1$s é disponibilizado de acordo com os termos da "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" e outras licenças de código aberto."]]></string>
-  <string name="your_rights_content3"><![CDATA["Não lhe são concedidos quaisquer direitos ou licenças sobre marcas registradas da Mozilla Foundation ou de terceiros, incluindo os nomes ou logos da Mozilla, Firefox ou %1$s. Informações adicionais podem ser encontradas "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">here</a>.]]></string>
-  <string name="your_rights_content4"><![CDATA["Código fonte adicionais para o %1$s estão disponíveis sobre várias outras "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">licen&#231;as</a>" livres e de código aberto."]]></string>
-  <string name="your_rights_content5"><![CDATA["O %1$s também utiliza "<em xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">listas de bloqueios</em>" disponibilizadas pela Disconnect, Inc. como um trabalho independente disponibilizado "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">aqui</a>", sob a "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>.]]></string>
+  <string name="your_rights_content2"><![CDATA[\"O %1$s é disponibilizado de acordo com os termos da \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>\" e outras licenças de código aberto.\"]]></string>
+  <string name="your_rights_content3"><![CDATA[\"Não lhe são concedidos quaisquer direitos ou licenças sobre marcas registradas da Mozilla Foundation ou de terceiros, incluindo os nomes ou logos da Mozilla, Firefox ou %1$s. Informações adicionais podem ser encontradas \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">here</a>.]]></string>
+  <string name="your_rights_content4"><![CDATA[\"Código fonte adicionais para o %1$s estão disponíveis sobre várias outras \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">licen&amp;#231;as</a>\" livres e de código aberto.\"]]></string>
+  <string name="your_rights_content5"><![CDATA[\"O %1$s também utiliza \"<em xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">listas de bloqueios</em>\" disponibilizadas pela Disconnect, Inc. como um trabalho independente disponibilizado \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">aqui</a>\", sob a \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>.]]></string>
+  <string name="menu_drawer_home">Início</string>
+  <string name="settings_cookies_dialog_title">Limpar todos os cookies e dados do site</string>
+  <string name="settings_cookies_dialog_content">Selecionando ´Limpar agora´ irá limpar todos os cookies e dados dos sites que foram armazenados pelo Firefox para Fire TV. Isso poderá desconectar suas contas das páginas web e remover conteúdos off-line.</string>
+  <string name="turbo_mode">Modo Turbo</string>
+  <string name="onboarding_turbo_mode_title">O Modo Turbo auxilia você a navegar mais rápido</string>
+  <string name="onboarding_turbo_mode_body">O Modo Turbo bloqueia automaticamente rastreadores e anúncios para ajudá-lo a chegar ao seu destino mais rápido. Se houver algum problema de velocidade - como um site que não está se comportando da forma que você espera - apenas desligue o Modo Turbo.</string>
+  <string name="onboarding_turbo_mode_button_on">Manter o Modo Turbo ativado</string>
+  <string name="onboarding_turbo_mode_button_off">Desativar Modo Turbo</string>
 </resources>

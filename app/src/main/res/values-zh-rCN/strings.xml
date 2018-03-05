@@ -24,7 +24,7 @@
   <string name="shortcut_erase_short_label">清除</string>
   <string name="shortcut_erase_long_label">清除浏览记录</string>
   <string name="text_selection_search_action">私密搜索</string>
-  <string name="about_content"><![CDATA[<p xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%1$s &#35753;&#24744;&#25484;&#25511;&#32447;&#19978;&#29983;&#27963;&#12290;</p>\n<p xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"&#29992;&#20316;&#38544;&#31169;&#27983;&#35272;&#22120;&#65292;&#21487;&#20197;&#65306;\n  "<ul>"\n    "<li>&#30452;&#25509;&#22312;&#24212;&#29992;&#20013;&#25628;&#32034;&#21644;&#27983;&#35272;</li>"\n    "<li>&#25318;&#25130;&#36319;&#36394;&#22120;&#65288;&#20063;&#21487;&#35843;&#25972;&#20026;&#20801;&#35768;&#36319;&#36394;&#22120;&#65289;</li>"\n    "<li>&#33258;&#21160;&#28165;&#38500; Cookie&#12289;&#25628;&#32034;&#35760;&#24405;&#21644;&#27983;&#35272;&#35760;&#24405;</li>"\n  "</ul>\n</p>\n<p xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%1$s &#30001; Mozilla &#20986;&#21697;&#12290;&#25105;&#20204;&#30340;&#20351;&#21629;&#26159;&#20419;&#25104;&#20581;&#24247;&#12289;&#24320;&#25918;&#30340;&#20114;&#32852;&#32593;&#12290;<br/>\n<a href="%2$s">&#35814;&#32454;&#20102;&#35299;</a></p>]]></string>
+  <string name="about_content"><![CDATA[<p xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%1$s &amp;#35753;&amp;#24744;&amp;#25484;&amp;#25511;&amp;#32447;&amp;#19978;&amp;#29983;&amp;#27963;&amp;#12290;</p>\\n<p xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"&amp;#29992;&amp;#20316;&amp;#38544;&amp;#31169;&amp;#27983;&amp;#35272;&amp;#22120;&amp;#65292;&amp;#21487;&amp;#20197;&amp;#65306;\\n  \""<ul>"\"\\n    \""<li>&amp;#30452;&amp;#25509;&amp;#22312;&amp;#24212;&amp;#29992;&amp;#20013;&amp;#25628;&amp;#32034;&amp;#21644;&amp;#27983;&amp;#35272;</li>"\"\\n    \""<li>&amp;#25318;&amp;#25130;&amp;#36319;&amp;#36394;&amp;#22120;&amp;#65288;&amp;#20063;&amp;#21487;&amp;#35843;&amp;#25972;&amp;#20026;&amp;#20801;&amp;#35768;&amp;#36319;&amp;#36394;&amp;#22120;&amp;#65289;</li>"\"\\n    \""<li>&amp;#33258;&amp;#21160;&amp;#28165;&amp;#38500; Cookie&amp;#12289;&amp;#25628;&amp;#32034;&amp;#35760;&amp;#24405;&amp;#21644;&amp;#27983;&amp;#35272;&amp;#35760;&amp;#24405;</li>"\"\\n  \""</ul>\\n</p>\\n<p xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">%1$s &amp;#30001; Mozilla &amp;#20986;&amp;#21697;&amp;#12290;&amp;#25105;&amp;#20204;&amp;#30340;&amp;#20351;&amp;#21629;&amp;#26159;&amp;#20419;&amp;#25104;&amp;#20581;&amp;#24247;&amp;#12289;&amp;#24320;&amp;#25918;&amp;#30340;&amp;#20114;&amp;#32852;&amp;#32593;&amp;#12290;<br/>\\n<a href="%2$s">&amp;#35814;&amp;#32454;&amp;#20102;&amp;#35299;</a></p>]]></string>
   <string name="preference_category_search">搜索</string>
   <string name="preference_search_engine_default">默认</string>
   <string name="preference_state_on">开</string>
@@ -99,6 +99,7 @@
   <string name="accessibility_announcement_search">添加搜索引擎</string>
   <string name="search_add_confirmation">已添加新的搜索引擎。</string>
   <string name="search_add_error_empty_name">输入搜索引擎名称</string>
+  <string name="search_add_error_duplicate_name">一个已安装的搜索引擎已在使用此名称。</string>
   <string name="search_add_error_empty_search">输入搜索字符串</string>
   <string name="search_add_error_format">请检查搜索字符串与示例格式是否匹配</string>
   <string name="content_description_clear_input">清空输入内容</string>
@@ -127,25 +128,25 @@
   <string name="external_multiple_apps_matched_exit">退出隐私浏览模式？</string>
   <string name="download_snackbar_finished">%1$s 下载完毕</string>
   <string name="download_snackbar_open">打开</string>
-  <string name="download_dialog_warning"><![CDATA[清除 %1$s 的历史记录时，<b xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">&#19981;&#20250;&#21024;&#38500;</b>已下载的文件。]]></string>
+  <string name="download_dialog_warning"><![CDATA[清除 %1$s 的历史记录时，<b xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">&amp;#19981;&amp;#20250;&amp;#21024;&amp;#38500;</b>已下载的文件。]]></string>
   <string name="download_dialog_title">下载文件</string>
   <string name="download_dialog_action_cancel">取消</string>
   <string name="download_dialog_action_download">下载</string>
   <string name="errorpage_title">页面载入出错</string>
   <string name="errorpage_refresh">重试</string>
   <string name="error_connectionfailure_title">无法连接</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>&#35813;&#32593;&#31449;&#21487;&#33021;&#26242;&#26102;&#19981;&#21487;&#29992;&#25110;&#22826;&#24537;&#20102;&#12290;&#19968;&#20250;&#20799;&#20877;&#35797;&#35797;&#21543;&#12290;</li>"\n        "<li>&#22914;&#26524;&#20320;&#26080;&#27861;&#36733;&#20837;&#20219;&#20309;&#39029;&#38754;&#65292;&#35831;&#26816;&#26597;&#24744;&#30340;&#31227;&#21160;&#35774;&#22791;&#30340;&#25968;&#25454;&#25110; Wi-Fi &#36830;&#25509;&#12290;</li>"\n      "</ul>]]></string>
+  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n        \""<li>&amp;#35813;&amp;#32593;&amp;#31449;&amp;#21487;&amp;#33021;&amp;#26242;&amp;#26102;&amp;#19981;&amp;#21487;&amp;#29992;&amp;#25110;&amp;#22826;&amp;#24537;&amp;#20102;&amp;#12290;&amp;#19968;&amp;#20250;&amp;#20799;&amp;#20877;&amp;#35797;&amp;#35797;&amp;#21543;&amp;#12290;</li>"\"\\n        \""<li>&amp;#22914;&amp;#26524;&amp;#20320;&amp;#26080;&amp;#27861;&amp;#36733;&amp;#20837;&amp;#20219;&amp;#20309;&amp;#39029;&amp;#38754;&amp;#65292;&amp;#35831;&amp;#26816;&amp;#26597;&amp;#24744;&amp;#30340;&amp;#31227;&amp;#21160;&amp;#35774;&amp;#22791;&amp;#30340;&amp;#25968;&amp;#25454;&amp;#25110; Wi-Fi &amp;#36830;&amp;#25509;&amp;#12290;</li>"\"\\n      \""</ul>]]></string>
   <string name="error_timeout_title">连接超时</string>
   <string name="error_hostLookup_title">找不到服务器</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>"&#35831;&#26816;&#26597;&#35813;&#22320;&#22336;&#26159;&#21542;&#36755;&#38169;&#65292;&#27604;&#22914;&#23558;\n          "<strong>www</strong>".example.com &#38169;&#20889;&#25104; \n          "<strong>ww</strong>.example.com</li>"\n        "<li>&#22914;&#26524;&#24744;&#26080;&#27861;&#36733;&#20837;&#20219;&#20309;&#39029;&#38754;&#65292;&#35831;&#26816;&#26597;&#35813;&#35774;&#22791;&#30340;&#25968;&#25454;&#25110; Wi-Fi &#36830;&#25509;&#12290;</li>"\n      "</ul>]]></string>
+  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n        \""<li>"\"&amp;#35831;&amp;#26816;&amp;#26597;&amp;#35813;&amp;#22320;&amp;#22336;&amp;#26159;&amp;#21542;&amp;#36755;&amp;#38169;&amp;#65292;&amp;#27604;&amp;#22914;&amp;#23558;\\n          \""<strong>www</strong>"\".example.com &amp;#38169;&amp;#20889;&amp;#25104; \\n          \""<strong>ww</strong>.example.com</li>"\"\\n        \""<li>&amp;#22914;&amp;#26524;&amp;#24744;&amp;#26080;&amp;#27861;&amp;#36733;&amp;#20837;&amp;#20219;&amp;#20309;&amp;#39029;&amp;#38754;&amp;#65292;&amp;#35831;&amp;#26816;&amp;#26597;&amp;#35813;&amp;#35774;&amp;#22791;&amp;#30340;&amp;#25968;&amp;#25454;&amp;#25110; Wi-Fi &amp;#36830;&amp;#25509;&amp;#12290;</li>"\"\\n      \""</ul>]]></string>
   <string name="error_malformedURI_title">地址无效</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"&#32593;&#39029;&#22320;&#22336;&#36890;&#24120;&#26684;&#24335;&#20026; "<strong>http://www.example.com/</strong></li>"\n  "<li>"&#35831;&#30830;&#35748;&#24744;&#20351;&#29992;&#30340;&#26159;&#27491;&#26012;&#26464;&#65288;&#21363; "<strong>/</strong>&#65289;&#12290;</li>\n</ul>]]></string>
+  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>\"&amp;#32593;&amp;#39029;&amp;#22320;&amp;#22336;&amp;#36890;&amp;#24120;&amp;#26684;&amp;#24335;&amp;#20026; \"<strong>http://www.example.com/</strong></li>"\"\\n  \""<li>\"&amp;#35831;&amp;#30830;&amp;#35748;&amp;#24744;&amp;#20351;&amp;#29992;&amp;#30340;&amp;#26159;&amp;#27491;&amp;#26012;&amp;#26464;&amp;#65288;&amp;#21363; \"<strong>/</strong>&amp;#65289;&amp;#12290;</li>\\n</ul>]]></string>
   <string name="error_redirectLoop_title">此页面不正确地重定向</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>&#26377;&#26102;&#20505;&#31105;&#29992;&#25110;&#25298;&#32477;&#25509;&#21463; Cookie &#20250;&#23548;&#33268;&#27492;&#38382;&#39064;&#12290;</li>\n</ul>]]></string>
+  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>&amp;#26377;&amp;#26102;&amp;#20505;&amp;#31105;&amp;#29992;&amp;#25110;&amp;#25298;&amp;#32477;&amp;#25509;&amp;#21463; Cookie &amp;#20250;&amp;#23548;&amp;#33268;&amp;#27492;&amp;#38382;&amp;#39064;&amp;#12290;</li>\\n</ul>]]></string>
   <string name="error_unsupportedprotocol_title">无法理解该地址</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>&#24744;&#21487;&#33021;&#38656;&#35201;&#23433;&#35013;&#20854;&#20182;&#36719;&#20214;&#25165;&#33021;&#25171;&#24320;&#27492;&#22320;&#22336;&#12290;</li>\n</ul>]]></string>
+  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>&amp;#24744;&amp;#21487;&amp;#33021;&amp;#38656;&amp;#35201;&amp;#23433;&amp;#35013;&amp;#20854;&amp;#20182;&amp;#36719;&amp;#20214;&amp;#25165;&amp;#33021;&amp;#25171;&amp;#24320;&amp;#27492;&amp;#22320;&amp;#22336;&amp;#12290;</li>\\n</ul>]]></string>
   <string name="error_sslhandshake_title">安全连接失败</string>
-  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>&#36825;&#21487;&#33021;&#26159;&#26381;&#21153;&#22120;&#37197;&#32622;&#30340;&#38382;&#39064;&#65292;&#25110;&#32773;&#26377;&#20154;&#23581;&#35797;&#20882;&#20805;&#35813;&#26381;&#21153;&#22120;&#25152;&#33268;&#12290;</li>"\n  "<li>&#22914;&#26524;&#24744;&#20043;&#21069;&#26366;&#25104;&#21151;&#36830;&#25509;&#35813;&#26381;&#21153;&#22120;&#65292;&#37027;&#20040;&#27492;&#38169;&#35823;&#21487;&#33021;&#26159;&#26242;&#26102;&#30340;&#65292;&#24744;&#21487;&#20197;&#31245;&#21518;&#20877;&#35797;&#12290;</li>\n</ul>]]></string>
+  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>&amp;#36825;&amp;#21487;&amp;#33021;&amp;#26159;&amp;#26381;&amp;#21153;&amp;#22120;&amp;#37197;&amp;#32622;&amp;#30340;&amp;#38382;&amp;#39064;&amp;#65292;&amp;#25110;&amp;#32773;&amp;#26377;&amp;#20154;&amp;#23581;&amp;#35797;&amp;#20882;&amp;#20805;&amp;#35813;&amp;#26381;&amp;#21153;&amp;#22120;&amp;#25152;&amp;#33268;&amp;#12290;</li>"\"\\n  \""<li>&amp;#22914;&amp;#26524;&amp;#24744;&amp;#20043;&amp;#21069;&amp;#26366;&amp;#25104;&amp;#21151;&amp;#36830;&amp;#25509;&amp;#35813;&amp;#26381;&amp;#21153;&amp;#22120;&amp;#65292;&amp;#37027;&amp;#20040;&amp;#27492;&amp;#38169;&amp;#35823;&amp;#21487;&amp;#33021;&amp;#26159;&amp;#26242;&amp;#26102;&amp;#30340;&amp;#65292;&amp;#24744;&amp;#21487;&amp;#20197;&amp;#31245;&amp;#21518;&amp;#20877;&amp;#35797;&amp;#12290;</li>\\n</ul>]]></string>
   <string name="error_generic_title">啊哦</string>
   <string name="error_generic_message">由于某些原因，我们无法载入此页面。</string>
   <string name="contextmenu_link_share">分享链接</string>
@@ -154,7 +155,7 @@
   <string name="contextmenu_image_copy">复制图像地址</string>
   <string name="contextmenu_image_save">保存图像</string>
   <string name="contextmenu_open_in_new_tab">在新标签页打开链接</string>
-  <string name="contextmenu_image_warning"><![CDATA[清除 %1$s 的历史记录时，<b xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">&#19981;&#20250;&#21024;&#38500;</b>已保存和已分享的图像。]]></string>
+  <string name="contextmenu_image_warning"><![CDATA[清除 %1$s 的历史记录时，<b xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">&amp;#19981;&amp;#20250;&amp;#21024;&amp;#38500;</b>已保存和已分享的图像。]]></string>
   <string name="firstrun_defaultbrowser_title">强化您的隐私</string>
   <string name="firstrun_defaultbrowser_text2">隐私浏览模式变得更强大了。能拦截广告，还能拦截在不同网站跟踪您，又拖慢网页载入的内容。</string>
   <string name="firstrun_search_title">用你的方式搜你所寻</string>
@@ -178,18 +179,16 @@
   <string name="tabs_tray_action_erase">清除浏览记录</string>
   <string name="download_firefox">下载 Firefox</string>
   <string name="your_rights_content1">%1$s 是由 Mozilla 及贡献者制作的一款自由的开源软件。</string>
-  <string name="your_rights_content2"><![CDATA["%1$s 依照 "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla &#20844;&#20849;&#35768;&#21487;&#35777;</a>及其他一些开源许可证向您授权。]]></string>
-  <string name="your_rights_content3"><![CDATA[您没有取得 Mozilla 基金会或任何一方的商标的任何权利或许可，包括 Mozilla、Firefox 和 %1$s 名称或徽标的许可。有关信息请查阅<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#27492;&#22788;</a>。]]></string>
-  <string name="your_rights_content4"><![CDATA[%1$s 其他源代码以各类自由和开源<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#35768;&#21487;&#35777;</a>开放。]]></string>
-  <string name="your_rights_content5"><![CDATA["%1$s 还使用 Disconnect 公司提供的阻止列表，它是以 "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU &#36890;&#29992;&#20844;&#20849;&#35768;&#21487;&#35777; v3</a>" 提供的一个独立的作品，可在"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">&#36825;&#37324;</a>找到。]]></string>
+  <string name="your_rights_content2"><![CDATA[\"%1$s 依照 \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla &amp;#20844;&amp;#20849;&amp;#35768;&amp;#21487;&amp;#35777;</a>及其他一些开源许可证向您授权。]]></string>
+  <string name="your_rights_content3"><![CDATA[您没有取得 Mozilla 基金会或任何一方的商标的任何权利或许可，包括 Mozilla、Firefox 和 %1$s 名称或徽标的许可。有关信息请查阅<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&amp;#27492;&amp;#22788;</a>。]]></string>
+  <string name="your_rights_content4"><![CDATA[%1$s 其他源代码以各类自由和开源<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&amp;#35768;&amp;#21487;&amp;#35777;</a>开放。]]></string>
+  <string name="your_rights_content5"><![CDATA[\"%1$s 还使用 Disconnect 公司提供的阻止列表，它是以 \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU &amp;#36890;&amp;#29992;&amp;#20844;&amp;#20849;&amp;#35768;&amp;#21487;&amp;#35777; v3</a>\" 提供的一个独立的作品，可在\"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">&amp;#36825;&amp;#37324;</a>找到。]]></string>
   <string name="menu_drawer_home">主页</string>
   <string name="settings_cookies_dialog_title">清除所有 Cookie 和站点数据</string>
   <string name="settings_cookies_dialog_content">选择“立即清除”将清除 Firefox 存储的所有 Cookie 和站点数据。这可能使您退出网站的登录，以及删除离线的网站内容。</string>
-
-    <!-- Appended by save_robotranslations.py -->
-    <string name="turbo_mode">加速模式</string>
-    <string name="onboarding_turbo_mode_title">加速模式可以帮助您更快地浏览</string>
-    <string name="onboarding_turbo_mode_body">加速模式会自动阻止跟踪器和广告，帮助您快速找到自己的位置。 如果出现速度颠簸 - 就像一个不像您期望的那样的网站 - 只需关闭加速模式即可。</string>
-    <string name="onboarding_turbo_mode_button_on">保持加速模式启用</string>
-    <string name="onboarding_turbo_mode_button_off">关闭加速模式</string>
+  <string name="turbo_mode">加速模式</string>
+  <string name="onboarding_turbo_mode_title">加速模式下浏览更快更轻巧</string>
+  <string name="onboarding_turbo_mode_body">加速模式会自动拦截跟踪器与广告，访问网站更迅捷。若您发现网站无法正常工作，请退出加速模式。</string>
+  <string name="onboarding_turbo_mode_button_on">保持加速模式启用</string>
+  <string name="onboarding_turbo_mode_button_off">退出加速模式</string>
 </resources>
