@@ -4,6 +4,9 @@
 
 package org.mozilla.focus.utils;
 
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +16,7 @@ import org.robolectric.RuntimeEnvironment;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.regex.Pattern;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -22,34 +26,48 @@ public class TestURIUtils extends FirefoxTVBaseTest {
 
     private final String BUGZILLA_URL = "https://bugzilla.mozilla.org/enter_bug.cgi?format=guided#h=dupes%7CData%20%26%20BI%20Services%20Team%7C";
 
+    private static final Pattern EMPTY_PATH = Pattern.compile("/*");
+
+    /**
+     * Returns true if {@link URI#getPath()} is not empty, false otherwise where empty means the given path contains
+     * characters other than "/".
+     *
+     * This is necessary because the URI method will return "/" for "http://google.com/".
+     */
+    public static boolean isPathEmpty(@NonNull final URI uri) {
+        final String path = uri.getPath();
+        return TextUtils.isEmpty(path) || EMPTY_PATH.matcher(path).matches();
+
+    }
+
     @Test
     public void testIsPathEmptyWithURINoPath() throws Exception {
         final URI uri = new URI("https://google.com");
-        Assert.assertTrue(URIUtils.isPathEmpty(uri));
+        Assert.assertTrue(isPathEmpty(uri));
     }
 
     @Test
     public void testIsPathEmptyWithURISlashPath() throws Exception {
         final URI uri = new URI("http://google.com/");
-        Assert.assertTrue(URIUtils.isPathEmpty(uri));
+        Assert.assertTrue(isPathEmpty(uri));
     }
 
     @Test
     public void testIsPathEmptyWithURIDoubleSlashPath() throws Exception {
         final URI uri = new URI("http://google.com//");
-        Assert.assertTrue(URIUtils.isPathEmpty(uri));
+        Assert.assertTrue(isPathEmpty(uri));
     }
 
     @Test
     public void testIsPathEmptyWithURIEncodedSpaceSlashPath() throws Exception {
         final URI uri = new URI("http://google.com/%20/");
-        Assert.assertFalse(URIUtils.isPathEmpty(uri));
+        Assert.assertFalse(isPathEmpty(uri));
     }
 
     @Test
     public void testIsPathEmptyWithURIPath() throws Exception {
         final URI uri = new URI("http://google.com/search/whatever/");
-        Assert.assertFalse(URIUtils.isPathEmpty(uri));
+        Assert.assertFalse(isPathEmpty(uri));
     }
 
     // --- getFormattedDomain, include PublicSuffix --- //
