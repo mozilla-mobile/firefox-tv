@@ -8,7 +8,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 import android.text.TextUtils;
@@ -18,38 +17,11 @@ import org.mozilla.focus.utils.publicsuffix.PublicSuffix;
 
 import java.lang.ref.WeakReference;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.regex.Pattern;
 
 /** Utilities for operating on URLs. */
 public class URIUtils {
-    private static final String LOGTAG = "GeckoURIUtils";
-
-    private static final Pattern EMPTY_PATH = Pattern.compile("/*");
 
     private URIUtils() {}
-
-    /** @return a {@link URI} if possible, else null. */
-    @Nullable
-    public static URI uriOrNull(final String uriString) {
-        try {
-            return new URI(uriString);
-        } catch (final URISyntaxException e) {
-            return null;
-        }
-    }
-
-    /**
-     * Returns true if {@link URI#getPath()} is not empty, false otherwise where empty means the given path contains
-     * characters other than "/".
-     *
-     * This is necessary because the URI method will return "/" for "http://google.com/".
-     */
-    public static boolean isPathEmpty(@NonNull final URI uri) {
-        final String path = uri.getPath();
-        return TextUtils.isEmpty(path) || EMPTY_PATH.matcher(path).matches();
-
-    }
 
     /**
      * Returns the domain for the given URI, formatted by the other available parameters.
@@ -143,36 +115,5 @@ public class URIUtils {
     private static boolean isIPv6(final URI uri) {
         final String host = uri.getHost();
         return !TextUtils.isEmpty(host) && host.contains(":");
-    }
-
-    /**
-     * An async task that will take a URI formatted as a String and will retrieve
-     * {@link #getFormattedDomain(Context, URI, boolean, int)}. To use this, extend the class and override
-     * {@link #onPostExecute(Object)}, where the formatted domain, or the empty String if the host cannot determined,
-     * will be returned.
-     */
-    public static abstract class GetFormattedDomainAsyncTask extends AsyncTask<Void, Void, String> {
-        protected final WeakReference<Context> contextWeakReference;
-        protected final URI uri;
-        protected final boolean shouldIncludePublicSuffix;
-        protected final int subdomainCount;
-
-        public GetFormattedDomainAsyncTask(final Context context, final URI uri, final boolean shouldIncludePublicSuffix,
-                final int subdomainCount) {
-            this.contextWeakReference = new WeakReference<>(context);
-            this.uri = uri;
-            this.shouldIncludePublicSuffix = shouldIncludePublicSuffix;
-            this.subdomainCount = subdomainCount;
-        }
-
-        @Override
-        protected String doInBackground(final Void... params) {
-            final Context context = contextWeakReference.get();
-            if (context == null) {
-                return "";
-            }
-
-            return URIUtils.getFormattedDomain(context, uri, shouldIncludePublicSuffix, subdomainCount);
-        }
     }
 }
