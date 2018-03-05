@@ -22,7 +22,7 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
-public class TestURIUtils extends FirefoxTVBaseTest {
+public class TestFormattedDomain extends FirefoxTVBaseTest {
 
     private final String BUGZILLA_URL = "https://bugzilla.mozilla.org/enter_bug.cgi?format=guided#h=dupes%7CData%20%26%20BI%20Services%20Team%7C";
 
@@ -70,7 +70,7 @@ public class TestURIUtils extends FirefoxTVBaseTest {
         Assert.assertFalse(isPathEmpty(uri));
     }
 
-    // --- getFormattedDomain, include PublicSuffix --- //
+    // --- format, include PublicSuffix --- //
     @Test
     public void testGetFormattedDomainWithSuffix0Parts() {
         final boolean includePublicSuffix = true;
@@ -101,7 +101,7 @@ public class TestURIUtils extends FirefoxTVBaseTest {
         assertGetFormattedDomain("https://user:pass@m.foo.com/bar/baz?noo=abc#123", includePublicSuffix, subdomainCount, "m.foo.com");
     }
 
-    // --- getFormattedDomain, exclude PublicSuffix --- //
+    // --- format, exclude PublicSuffix --- //
     @Test
     public void testGetFormattedDomainNoSuffix0Parts() {
         final boolean includePublicSuffix = false;
@@ -132,7 +132,7 @@ public class TestURIUtils extends FirefoxTVBaseTest {
         assertGetFormattedDomain("https://user:pass@m.foo.com/bar/baz?noo=abc#123", includePublicSuffix, subdomainCount, "m.foo");
     }
 
-    // --- getFormattedDomain, saving time by not splitting up these tests on public suffix param. --- //
+    // --- format, saving time by not splitting up these tests on public suffix param. --- //
     @Test
     public void testGetFormattedDomainTwoLevelPublicSuffix() throws Exception {
         assertGetFormattedDomain("http://bbc.co.uk", false, 0, "bbc");
@@ -202,12 +202,12 @@ public class TestURIUtils extends FirefoxTVBaseTest {
 
     @Test(expected = NullPointerException.class)
     public void testGetFormattedDomainNullContextThrows() throws Exception {
-        URIUtils.getFormattedDomain(null, new URI("http://google.com"), false, 0);
+        FormattedDomain.format(null, new URI("http://google.com"), false, 0);
     }
 
     @Test(expected = NullPointerException.class)
     public void testGetFormattedDomainNullURIThrows() throws Exception {
-        URIUtils.getFormattedDomain(RuntimeEnvironment.application, null, false, 0);
+        FormattedDomain.format(RuntimeEnvironment.application, null, false, 0);
     }
 
     private void assertGetFormattedDomain(final String uriString, final boolean includePublicSuffix,
@@ -221,38 +221,38 @@ public class TestURIUtils extends FirefoxTVBaseTest {
 
         Assert.assertEquals("for input:" + uriString + "||",
                 expected,
-               URIUtils.getFormattedDomain(RuntimeEnvironment.application, uri, includePublicSuffix, subdomainCount));
+               FormattedDomain.format(RuntimeEnvironment.application, uri, includePublicSuffix, subdomainCount));
     }
 
     @Test
     public void testIsIPv4RealAddress() {
-        assertTrue(URIUtils.isIPv4("192.168.1.1"));
-        assertTrue(URIUtils.isIPv4("8.8.8.8"));
-        assertTrue(URIUtils.isIPv4("63.245.215.20"));
+        assertTrue(FormattedDomain.isIPv4("192.168.1.1"));
+        assertTrue(FormattedDomain.isIPv4("8.8.8.8"));
+        assertTrue(FormattedDomain.isIPv4("63.245.215.20"));
     }
 
     @Test
     public void testIsIPv4WithProtocol() {
-        assertFalse(URIUtils.isIPv4("http://8.8.8.8"));
-        assertFalse(URIUtils.isIPv4("https://8.8.8.8"));
+        assertFalse(FormattedDomain.isIPv4("http://8.8.8.8"));
+        assertFalse(FormattedDomain.isIPv4("https://8.8.8.8"));
     }
 
     @Test
     public void testIsIPv4WithPort() {
-        assertFalse(URIUtils.isIPv4("8.8.8.8:400"));
-        assertFalse(URIUtils.isIPv4("8.8.8.8:1337"));
+        assertFalse(FormattedDomain.isIPv4("8.8.8.8:400"));
+        assertFalse(FormattedDomain.isIPv4("8.8.8.8:1337"));
     }
 
     @Test
     public void testIsIPv4WithPath() {
-        assertFalse(URIUtils.isIPv4("8.8.8.8/index.html"));
-        assertFalse(URIUtils.isIPv4("8.8.8.8/"));
+        assertFalse(FormattedDomain.isIPv4("8.8.8.8/index.html"));
+        assertFalse(FormattedDomain.isIPv4("8.8.8.8/"));
     }
 
     @Test
     public void testIsIPv4WithIPv6() {
-        assertFalse(URIUtils.isIPv4("2001:db8::1 "));
-        assertFalse(URIUtils.isIPv4("2001:db8:0:1:1:1:1:1"));
-        assertFalse(URIUtils.isIPv4("[2001:db8:a0b:12f0::1]"));
+        assertFalse(FormattedDomain.isIPv4("2001:db8::1 "));
+        assertFalse(FormattedDomain.isIPv4("2001:db8:0:1:1:1:1:1"));
+        assertFalse(FormattedDomain.isIPv4("[2001:db8:a0b:12f0::1]"));
     }
 }
