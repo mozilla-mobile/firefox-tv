@@ -190,7 +190,7 @@ class BrowserFragment : IWebViewLifecycleFragment(),
                 goBack()
                 TelemetryWrapper.browserBackControllerEvent()
             }
-            browserOverlay.isVisible -> browserOverlay.setOverlayVisibleByUser(false)
+            browserOverlay.isVisible -> showOverlay(false)
             else -> {
                 fragmentManager.popBackStack()
                 SessionManager.getInstance().removeCurrentSession()
