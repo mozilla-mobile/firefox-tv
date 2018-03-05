@@ -152,6 +152,16 @@ dependencies {
     androidTestCompile "com.android.support.test.espresso:espresso-core:$espresso_version", {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
+
+    androidTestCompile("com.android.support.test.espresso:espresso-contrib:$espresso_version") {
+        exclude module: 'appcompat-v7'
+        exclude module: 'support-v4'
+        exclude module: 'support-annotations'
+        exclude module: 'recyclerview-v7'
+        exclude module: 'design'
+        exclude module: 'espresso-core'
+    }
+
     androidTestCompile "com.android.support.test.espresso:espresso-idling-resource:$espresso_version"
     androidTestCompile "com.android.support.test.espresso:espresso-web:$espresso_version", {
         exclude group: 'com.android.support', module: 'support-annotations'
