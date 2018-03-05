@@ -9,9 +9,11 @@ import android.os.AsyncTask;
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.support.annotation.WorkerThread;
 import android.text.TextUtils;
-import ch.boye.httpclientandroidlib.conn.util.InetAddressUtils;
+import android.util.Patterns;
+
 import org.mozilla.focus.utils.publicsuffix.PublicSuffix;
 
 import java.lang.ref.WeakReference;
@@ -96,7 +98,7 @@ public class URIUtils {
             return ""; // There's no host so there's no domain to retrieve.
         }
 
-        if (InetAddressUtils.isIPv4Address(host) ||
+        if (isIPv4(host) ||
                 isIPv6(uri) ||
                 !host.contains(".")) { // If this is just a hostname and not a FQDN, use the entire hostname.
             return host;
@@ -131,6 +133,10 @@ public class URIUtils {
 
         // There are fewer subdomains than the total we'll accept so return them all!
         return host;
+    }
+
+    @VisibleForTesting static boolean isIPv4(final String host) {
+        return Patterns.IP_ADDRESS.matcher(host).matches();
     }
 
     // impl via FFiOS: https://github.com/mozilla-mobile/firefox-ios/blob/deb9736c905cdf06822ecc4a20152df7b342925d/Shared/Extensions/NSURLExtensions.swift#L292
