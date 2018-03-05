@@ -1,7 +1,8 @@
 [
     {
         "id": "youtube",
-        "url": "https://youtube.com/tv",
+        /* Use this URL to ensure users see the best formatted website. */
+        "url": "https://ftv.cdn.mozilla.net/ytht",
         "title": "YouTube",
         "img": "tile_youtube.png"
     },
