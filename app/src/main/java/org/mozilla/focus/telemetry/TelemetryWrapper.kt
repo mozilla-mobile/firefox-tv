@@ -18,6 +18,7 @@ import org.mozilla.focus.tiles.HomeTile
 import org.mozilla.focus.utils.AppConstants
 import org.mozilla.focus.web.IWebView
 import org.mozilla.focus.widget.InlineAutocompleteEditText.AutocompleteResult
+import org.mozilla.focus.widget.NavigationEvent
 import org.mozilla.telemetry.Telemetry
 import org.mozilla.telemetry.TelemetryHolder
 import org.mozilla.telemetry.config.TelemetryConfiguration
@@ -66,6 +67,7 @@ object TelemetryWrapper {
         val BROWSER = "browser"
         const val HOME_TILE = "home_tile"
         val TURBO_MODE = "turbo_mode"
+        val PIN_PAGE = "pin_page"
     }
 
     internal object Value {
@@ -266,9 +268,30 @@ object TelemetryWrapper {
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.MENU, button.value).queue()
     }
 
-    @JvmStatic
-    fun menuAppNavEvent(button: MenuAppNavButton) {
-        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.MENU, button.value).queue()
+    fun overlayClickEvent(event: NavigationEvent, isTurboButtonChecked: Boolean, isPinButtonChecked: Boolean) {
+        val telemetryValue = when (event) {
+            NavigationEvent.HOME -> Value.HOME
+            NavigationEvent.SETTINGS -> Value.SETTINGS
+
+            NavigationEvent.BACK -> Value.BACK
+            NavigationEvent.FORWARD -> Value.FORWARD
+            NavigationEvent.RELOAD -> Value.RELOAD
+
+            // For legacy reasons, turbo has different telemetry params so we special case it.
+            // Pin has a similar state change so we model it after turbo.
+            NavigationEvent.TURBO -> {
+                TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.TURBO_MODE, boolToOnOff(isTurboButtonChecked)).queue()
+                return
+            }
+            NavigationEvent.PIN_ACTION -> {
+                TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.PIN_PAGE, boolToOnOff(isPinButtonChecked)).queue()
+                return
+            }
+
+            // Load is handled in a separate event; we don't need to handle reload YT.
+            NavigationEvent.LOAD, NavigationEvent.RELOAD_YT -> return
+        }
+        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.MENU, telemetryValue).queue()
     }
 
     /**
@@ -282,12 +305,7 @@ object TelemetryWrapper {
                 .queue()
     }
 
-    /** @param isSwitchedOn true if the switch was turned on, false otherwise. */
-    @JvmStatic
-    fun turboModeSwitchEvent(isSwitchedOn: Boolean) {
-        val value = if (isSwitchedOn) Value.ON else Value.OFF
-        TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.TURBO_MODE, value).queue()
-    }
+    private fun boolToOnOff(boolean: Boolean) = if (boolean) Value.ON else Value.OFF
 }
 
 enum class UrlTextInputLocation(internal val extra: String) {
@@ -301,10 +319,4 @@ enum class MenuBrowserNavButton(val value: String) {
     REFRESH(TelemetryWrapper.Value.RELOAD),
     BACK(TelemetryWrapper.Value.BACK),
     FORWARD(TelemetryWrapper.Value.FORWARD),
-}
-
-enum class MenuAppNavButton(val value: String) {
-    // We define separate `value`s so we can rename the enum without interfering.
-    HOME(TelemetryWrapper.Value.HOME),
-    SETTINGS(TelemetryWrapper.Value.SETTINGS),
 }
