@@ -72,7 +72,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         get() = Settings.getInstance(context).isBlockingEnabled
         set(value) {
             Settings.getInstance(context).isBlockingEnabled = value
-            TelemetryWrapper.turboModeSwitchEvent(value)
         }
 
     init {
@@ -117,16 +116,20 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     override fun onClick(view: View?) {
         val event = NavigationEvent.fromViewClick(view?.id) ?: return
         var value: String? = null
+
+        val isTurboButtonChecked = turboButton.isChecked
+        val isPinButtonChecked = pinButton.isChecked
         when (event) {
             NavigationEvent.TURBO -> {
-                isTurboEnabled = turboButton.isChecked
+                isTurboEnabled = isTurboButtonChecked
             }
             NavigationEvent.PIN_ACTION -> {
-                value = if (pinButton.isChecked) NavigationEvent.VAL_CHECKED
+                value = if (isPinButtonChecked) NavigationEvent.VAL_CHECKED
                 else NavigationEvent.VAL_UNCHECKED
             }
         }
         onNavigationEvent?.invoke(event, value, null)
+        TelemetryWrapper.overlayClickEvent(event, isTurboButtonChecked, isPinButtonChecked)
     }
 
     fun setOverlayVisibleByUser(showOverlay: Boolean) {
