@@ -58,9 +58,15 @@ public class FormattedDomain {
     @WorkerThread // calls PublicSuffix methods.
     public static String format(@NonNull final Context context, @NonNull final URI uri,
                                 final boolean shouldIncludePublicSuffix, @IntRange(from = 0) final int subdomainCount) {
-        if (context == null) { throw new NullPointerException("Expected non-null Context argument"); }
-        if (uri == null) { throw new NullPointerException("Expected non-null uri argument"); }
-        if (subdomainCount < 0) { throw new IllegalArgumentException("Expected subdomainCount >= 0."); }
+        if (context == null) {
+            throw new NullPointerException("Expected non-null Context argument");
+        }
+        if (uri == null) {
+            throw new NullPointerException("Expected non-null uri argument");
+        }
+        if (subdomainCount < 0) {
+            throw new IllegalArgumentException("Expected subdomainCount >= 0.");
+        }
 
         final String host = uri.getHost();
         if (TextUtils.isEmpty(host)) {

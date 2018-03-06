@@ -38,8 +38,10 @@ class PublicSuffixPatterns {
             throw new IllegalStateException("resource publicsuffixlist could not be opened but is bundled with app", e);
         } finally {
             try {
-                if (reader != null) { reader.close(); }
-            } catch (IOException e) {}
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) { }
         }
 
         return EXACT;

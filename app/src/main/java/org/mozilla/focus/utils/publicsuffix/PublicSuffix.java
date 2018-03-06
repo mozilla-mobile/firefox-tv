@@ -62,8 +62,12 @@ public class PublicSuffix {
     @NonNull
     @WorkerThread // This method might need to load data from disk
     public static String getPublicSuffix(@NonNull final Context context, @NonNull final String domain, final int additionalPartCount) {
-        if (context == null) { throw new NullPointerException("Expected non-null Context argument"); }
-        if (domain == null) { throw new NullPointerException("Expected non-null domain argument"); }
+        if (context == null) {
+            throw new NullPointerException("Expected non-null Context argument");
+        }
+        if (domain == null) {
+            throw new NullPointerException("Expected non-null domain argument");
+        }
 
         if (additionalPartCount < 0) {
             throw new IllegalArgumentException("Expected additionalPartCount > 0. Got: " + additionalPartCount);
