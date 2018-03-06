@@ -12,6 +12,9 @@ import android.preference.PreferenceManager
 import org.mozilla.focus.BuildConfig
 import org.mozilla.focus.R
 import org.mozilla.focus.search.SearchEngineManager
+import org.mozilla.focus.tiles.BundledHomeTile
+import org.mozilla.focus.tiles.CustomHomeTile
+import org.mozilla.focus.tiles.HomeTile
 import org.mozilla.focus.utils.AppConstants
 import org.mozilla.focus.web.IWebView
 import org.mozilla.focus.widget.InlineAutocompleteEditText.AutocompleteResult
@@ -75,6 +78,8 @@ object TelemetryWrapper {
         val SETTINGS = "settings"
         val ON = "on"
         val OFF = "off"
+        val TILE_BUNDLED = "bundled"
+        val TILE_CUSTOM = "custom"
     }
 
     private object Extra {
@@ -237,8 +242,11 @@ object TelemetryWrapper {
     }
 
     @JvmStatic
-    fun homeTileClickEvent() {
-        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE).queue()
+    fun homeTileClickEvent(tile: HomeTile) {
+        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE, when (tile) {
+            is BundledHomeTile -> Value.TILE_BUNDLED
+            is CustomHomeTile -> Value.TILE_CUSTOM
+        }).queue()
     }
 
     @JvmStatic

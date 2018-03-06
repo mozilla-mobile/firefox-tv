@@ -195,7 +195,7 @@ private class HomeTileAdapter(
 
         itemView.setOnClickListener {
             onUrlEnteredListener.onNonTextInputUrlEntered(item.url)
-            TelemetryWrapper.homeTileClickEvent()
+            TelemetryWrapper.homeTileClickEvent(item)
         }
 
         itemView.setOnFocusChangeListener { v, hasFocus ->
