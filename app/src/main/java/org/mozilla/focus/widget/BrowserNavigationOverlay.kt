@@ -147,6 +147,18 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         pinButton.isChecked = navigationStateProvider?.isURLPinned() ?: false
 
+        // Prevent the focus from looping to the bottom row when reaching the last
+        // focusable element in the top row
+        navButtonReload.nextFocusLeftId = when {
+            canGoForward -> R.id.navButtonForward
+            canGoBack -> R.id.navButtonBack
+            else -> R.id.navButtonReload
+        }
+        navButtonForward.nextFocusLeftId = when {
+            canGoBack -> R.id.navButtonBack
+            else -> R.id.navButtonForward
+        }
+
         navUrlInput.setText(navigationStateProvider?.getCurrentUrl())
 
         if (findFocus() == null) {
