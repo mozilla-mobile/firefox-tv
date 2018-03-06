@@ -36,7 +36,7 @@ tasks:
           && git config advice.detachedHead false
           && git checkout {{event.head.sha}}
           && echo "--" > .adjust_token
-          && ./gradlew clean assemble lint checkstyle ktlint pmd test
+          && LANG=en_US.UTF-8 ./gradlew clean assemble lint checkstyle ktlint pmd test
       artifacts:
         'public':
           type: 'directory'
