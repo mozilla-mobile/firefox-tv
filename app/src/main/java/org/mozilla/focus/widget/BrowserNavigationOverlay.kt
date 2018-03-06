@@ -132,11 +132,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         TelemetryWrapper.overlayClickEvent(event, isTurboButtonChecked, isPinButtonChecked)
     }
 
-    fun setOverlayVisibleByUser(showOverlay: Boolean) {
-        isVisible = showOverlay
-        TelemetryWrapper.drawerShowHideEvent(showOverlay)
-    }
-
     fun updateNavigationButtons() {
         val canGoBack = navigationStateProvider?.isBackEnabled() ?: false
         navButtonBack.isEnabled = canGoBack

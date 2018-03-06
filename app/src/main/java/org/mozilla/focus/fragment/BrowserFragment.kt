@@ -15,7 +15,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.android.synthetic.main.fragment_browser.view.*
-import kotlinx.android.synthetic.main.home_tile.*
 import org.mozilla.focus.R
 import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.architecture.NonNullObserver
@@ -133,7 +132,7 @@ class BrowserFragment : IWebViewLifecycleFragment(),
             NavigationEvent.SETTINGS -> ScreenController.showSettingsScreen(fragmentManager)
             NavigationEvent.LOAD -> {
                 (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
-                showOverlay(false)
+                setOverlayVisibileByUser(false)
             }
             NavigationEvent.RELOAD_YT -> {
                 isReloadingForYoutubeDrawerClosed = true
@@ -191,7 +190,7 @@ class BrowserFragment : IWebViewLifecycleFragment(),
                 goBack()
                 TelemetryWrapper.browserBackControllerEvent()
             }
-            browserOverlay.isVisible -> showOverlay(false)
+            browserOverlay.isVisible -> setOverlayVisibileByUser(false)
             else -> {
                 fragmentManager.popBackStack()
                 SessionManager.getInstance().removeCurrentSession()
@@ -232,7 +231,7 @@ class BrowserFragment : IWebViewLifecycleFragment(),
     private fun handleSpecialKeyEvent(event: KeyEvent): Boolean {
         if (event.keyCode == KeyEvent.KEYCODE_MENU && event.action == KeyEvent.ACTION_UP) {
             val toShow = !browserOverlay.isVisible
-            showOverlay(toShow)
+            setOverlayVisibileByUser(toShow)
             // Fix this youtube focus hack in #393
             if (!toShow && webView!!.isYoutubeTV) {
                 webView?.requestFocus()
@@ -249,10 +248,11 @@ class BrowserFragment : IWebViewLifecycleFragment(),
         return false
     }
 
-    private fun showOverlay(toShow: Boolean) {
-        browserOverlay.setOverlayVisibleByUser(toShow)
+    private fun setOverlayVisibileByUser(toShow: Boolean) {
+        browserOverlay.isVisible = toShow
         if (toShow) cursor?.onPause() else cursor?.onResume()
         cursor?.setEnabledForCurrentState()
+        TelemetryWrapper.drawerShowHideEvent(toShow)
     }
 }
 
