@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<resources>
+    <color name="tv_white">#eeeeee</color>
+    <color name="tv_blue50">@color/photonBlue50</color>
+    <color name="tv_blue60">@color/photonBlue60</color>
+    <color name="tv_ink">#0c0c15</color>
+    <color name="tv_ink2">#282938</color>
+</resources>
