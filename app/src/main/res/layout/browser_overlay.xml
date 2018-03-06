@@ -21,7 +21,8 @@
             android:id="@+id/navButtonBack"
             style="@style/NavigationButton"
             android:src="@drawable/ic_back"
-            android:contentDescription="@string/content_description_back" />
+            android:contentDescription="@string/content_description_back"
+            android:nextFocusLeft="@id/navButtonBack"/>
 
         <ImageButton
             android:id="@+id/navButtonForward"
@@ -47,7 +48,8 @@
             android:id="@+id/turboButton"
             style="@style/NavigationButton"
             android:src="@drawable/turbo_selector"
-            android:contentDescription="@string/turbo_mode"/>
+            android:contentDescription="@string/turbo_mode"
+            android:nextFocusRight="@+id/navButtonHome"/>
 
         <View
             android:layout_width="0dp"
@@ -70,7 +72,8 @@
             android:id="@+id/navButtonHome"
             style="@style/NavigationButton"
             android:src="@drawable/ic_home"
-            android:contentDescription="@string/menu_drawer_home"/>
+            android:contentDescription="@string/menu_drawer_home"
+            android:nextFocusLeft="@id/turboButton"/>
 
         <ImageButton
             android:id="@+id/navButtonSettings"
@@ -94,6 +97,7 @@
             android:cursorVisible="false"
             android:textIsSelectable="false"
             android:textColor="@color/button_text_color"
+            android:nextFocusRight="@id/navUrlInput"
             />
 
         <View
