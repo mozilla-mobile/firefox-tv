@@ -133,7 +133,7 @@ class CustomTilesManager private constructor(context: Context) {
     fun isURLPinned(url: String) = customTilesCache.containsKey(url)
 
     @UiThread
-    fun getCustomHomeTilesList() = customTilesCache.values.reversed()
+    fun getCustomHomeTilesList() = customTilesCache.values.toList() // return a copy.
 
     @UiThread
     fun pinSite(context: Context, url: String, screenshot: Bitmap?) {

@@ -103,8 +103,8 @@ class HomeFragment : Fragment() {
 
     private fun initTiles() = with (tileContainer) {
         val homeTiles = mutableListOf<HomeTile>().apply {
-            addAll(CustomTilesManager.getInstance(context).getCustomHomeTilesList())
             addAll(BundledTilesManager.getInstance(context).getBundledHomeTilesList())
+            addAll(CustomTilesManager.getInstance(context).getCustomHomeTilesList())
         }
 
         adapter = HomeTileAdapter(uiLifecycleCancelJob, homeTiles, onUrlEnteredListener)
