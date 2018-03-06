@@ -263,11 +263,6 @@ object TelemetryWrapper {
         TelemetryEvent.create(Category.ACTION, method, Object.MENU).queue()
     }
 
-    @JvmStatic
-    fun menuBrowserNavEvent(button: MenuBrowserNavButton) {
-        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.MENU, button.value).queue()
-    }
-
     fun overlayClickEvent(event: NavigationEvent, isTurboButtonChecked: Boolean, isPinButtonChecked: Boolean) {
         val telemetryValue = when (event) {
             NavigationEvent.HOME -> Value.HOME
@@ -294,10 +289,7 @@ object TelemetryWrapper {
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.MENU, telemetryValue).queue()
     }
 
-    /**
-     * The browser goes back from a controller press. Another way to track back presses is
-     * [menuBrowserNavEvent] with [MenuBrowserNavButton.BACK].
-     */
+    /** The browser goes back from a controller press. */
     @JvmStatic
     fun browserBackControllerEvent() {
         TelemetryEvent.create(Category.ACTION, Method.PAGE, Object.BROWSER, Value.BACK)
@@ -312,11 +304,4 @@ enum class UrlTextInputLocation(internal val extra: String) {
     // We hardcode the Strings so we can change the enum
     HOME("home"),
     MENU("menu"),
-}
-
-enum class MenuBrowserNavButton(val value: String) {
-    // We define separate `value`s so we can rename the enum without interfering.
-    REFRESH(TelemetryWrapper.Value.RELOAD),
-    BACK(TelemetryWrapper.Value.BACK),
-    FORWARD(TelemetryWrapper.Value.FORWARD),
 }
