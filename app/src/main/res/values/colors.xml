@@ -79,10 +79,11 @@
     <color name="nav_close_hint">#ededf0</color>
 
     <color name="button_highlight">#64ffffff</color>
-    <color name="button_default">#000000</color>
-    <color name="button_disabled">#000000</color>
-    <color name="button_focused">@color/photonBlue50</color>
-    <color name="button_pressed">@color/photonBlue40</color>
-    <color name="button_text_color">@android:color/white</color>
-    <color name="button_border">#339d9da1</color>
+    <color name="button_default">@color/translucent_tv_ink</color>
+    <color name="button_disabled">@color/tv_ink</color>
+    <color name="button_focused">@color/tv_blue50</color>
+    <color name="button_pressed">@color/tv_blue60</color>
+    <color name="button_checked">@color/translucent_tv_ink2</color>
+    <color name="button_text_color">@color/tv_white</color>
+    <color name="button_border">@color/translucent_tv_gray40</color>
 </resources>
