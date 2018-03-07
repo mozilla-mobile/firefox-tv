@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.focus.tiles
+package org.mozilla.focus.home
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
@@ -14,7 +14,6 @@ import android.support.annotation.AnyThread
 import android.support.annotation.UiThread
 import org.json.JSONArray
 import org.mozilla.focus.ext.toUri
-import org.mozilla.focus.home.HomeTileScreenshotStore
 import org.mozilla.focus.utils.UrlUtils
 import java.util.UUID
 
@@ -23,7 +22,7 @@ private const val BUNDLED_SITES_ID_BLACKLIST = "blacklist"
 private const val CUSTOM_SITES_LIST = "customSitesList"
 
 private const val BUNDLED_HOME_TILES_DIR = "bundled"
-private const val HOME_TILES_JSON_PATH = "$BUNDLED_HOME_TILES_DIR/bundled_tiles.json"
+private const val HOME_TILES_JSON_PATH = "${BUNDLED_HOME_TILES_DIR}/bundled_tiles.json"
 
 /**
  * Static accessor for bundled tiles, which are loaded from assets/bundled/bundled_tiles.json.
@@ -102,7 +101,7 @@ class BundledTilesManager private constructor(context: Context) {
 
     @AnyThread
     fun loadImageFromPath(context: Context, path: String) = context.assets.open(
-            "$BUNDLED_HOME_TILES_DIR/$path").use {
+            "${BUNDLED_HOME_TILES_DIR}/$path").use {
         BitmapFactory.decodeStream(it)
     }
 

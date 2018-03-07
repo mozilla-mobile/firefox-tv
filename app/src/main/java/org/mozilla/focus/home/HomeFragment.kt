@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.focus.fragment
+package org.mozilla.focus.home
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -33,14 +33,8 @@ import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.ext.forceExhaustive
 import org.mozilla.focus.ext.toJavaURI
 import org.mozilla.focus.ext.toUri
-import org.mozilla.focus.home.HomeTileScreenshotStore
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
-import org.mozilla.focus.tiles.BundledHomeTile
-import org.mozilla.focus.tiles.BundledTilesManager
-import org.mozilla.focus.tiles.CustomHomeTile
-import org.mozilla.focus.tiles.CustomTilesManager
-import org.mozilla.focus.tiles.HomeTile
 import org.mozilla.focus.utils.FormattedDomain
 import org.mozilla.focus.utils.OnUrlEnteredListener
 

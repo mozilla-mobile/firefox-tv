@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_main.container
 import org.mozilla.focus.R
 import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.fragment.BrowserFragment
-import org.mozilla.focus.fragment.HomeFragment
+import org.mozilla.focus.home.HomeFragment
 import org.mozilla.focus.fragment.ScreenController
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity
 import org.mozilla.focus.session.Session
