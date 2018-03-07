@@ -12,9 +12,9 @@ import android.preference.PreferenceManager
 import org.mozilla.focus.BuildConfig
 import org.mozilla.focus.R
 import org.mozilla.focus.search.SearchEngineManager
-import org.mozilla.focus.tiles.BundledHomeTile
-import org.mozilla.focus.tiles.CustomHomeTile
-import org.mozilla.focus.tiles.HomeTile
+import org.mozilla.focus.home.BundledHomeTile
+import org.mozilla.focus.home.CustomHomeTile
+import org.mozilla.focus.home.HomeTile
 import org.mozilla.focus.utils.AppConstants
 import org.mozilla.focus.web.IWebView
 import org.mozilla.focus.widget.InlineAutocompleteEditText.AutocompleteResult

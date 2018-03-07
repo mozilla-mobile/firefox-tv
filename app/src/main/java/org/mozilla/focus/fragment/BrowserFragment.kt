@@ -26,8 +26,8 @@ import org.mozilla.focus.session.SessionCallbackProxy
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
-import org.mozilla.focus.tiles.BundledTilesManager
-import org.mozilla.focus.tiles.CustomTilesManager
+import org.mozilla.focus.home.BundledTilesManager
+import org.mozilla.focus.home.CustomTilesManager
 import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.ViewUtils.showCenteredTopToast
 import org.mozilla.focus.web.IWebView

@@ -5,8 +5,8 @@
 package org.mozilla.focus.telemetry
 
 import android.content.Context
-import org.mozilla.focus.tiles.BundledTilesManager
-import org.mozilla.focus.tiles.CustomTilesManager
+import org.mozilla.focus.home.BundledTilesManager
+import org.mozilla.focus.home.CustomTilesManager
 import org.mozilla.telemetry.measurement.SettingsMeasurement
 
 /**
