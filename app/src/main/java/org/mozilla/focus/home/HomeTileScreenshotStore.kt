@@ -11,6 +11,7 @@ import android.support.annotation.AnyThread
 import android.support.annotation.VisibleForTesting
 import android.support.annotation.WorkerThread
 import kotlinx.coroutines.experimental.launch
+import org.mozilla.focus.ext.arePixelsAllTheSame
 import org.mozilla.focus.home.HomeTileScreenshotStore.DIR
 import java.io.File
 import java.util.UUID
@@ -104,6 +105,12 @@ object HomeTileScreenshotStore {
     /** @param uuid a unique identifier for this screenshot. */
     @AnyThread
     fun saveAsync(context: Context, uuid: UUID, screenshot: Bitmap) = launch {
+        if (!isScreenshotAcceptableAsHomeTile(screenshot)) {
+            // We won't save this image, meaning we'll return null when we try to read it.
+            // At the time of writing, this will fall back to placeholders.
+            return@launch
+        }
+
         fileSystemLock.write {
             ensureParentDirs(context)
 
@@ -148,3 +155,13 @@ object HomeTileScreenshotStore {
 
 private fun ensureParentDirs(context: Context) { File(context.filesDir, DIR).mkdirs() }
 private fun getPathForUUID(uuid: UUID) = "$DIR/$uuid"
+
+private fun isScreenshotAcceptableAsHomeTile(screenshot: Bitmap): Boolean {
+    // Some websites get blank screenshots: vimeo videos are all black and Youtube videos
+    // are all transparent. We don't want these.
+    //
+    // It'd be more accurate to add some delta when comparing pixels, but that adds
+    // complexity that we we don't need for any screenshots we've already seen - Bitmap screenshots
+    // don't have compression rounding errors - and may accidentally remove valid images.
+    return !screenshot.arePixelsAllTheSame()
+}
