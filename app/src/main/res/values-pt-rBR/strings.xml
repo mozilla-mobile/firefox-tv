@@ -191,4 +191,9 @@
   <string name="onboarding_turbo_mode_body">O Modo Turbo bloqueia automaticamente rastreadores e anúncios para ajudá-lo a chegar ao seu destino mais rápido. Se houver algum problema de velocidade - como um site que não está se comportando da forma que você espera - apenas desligue o Modo Turbo.</string>
   <string name="onboarding_turbo_mode_button_on">Manter o Modo Turbo ativado</string>
   <string name="onboarding_turbo_mode_button_off">Desativar Modo Turbo</string>
+  <string name="homescreen_tile_remove">Remover</string>
+  <string name="nav_close_hint">Fechar</string>
+  <string name="pin_label">Fixar na tela inicial</string>
+  <string name="notification_pinned_site">Fixado à tela inicial do Firefox TV</string>
+  <string name="notification_unpinned_site">Removido da tela inicial do Firefox TV</string>
 </resources>
