@@ -19,11 +19,9 @@ import android.support.test.uiautomator.UiObjectNotFoundException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
-import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 import org.mozilla.focus.R;
 import org.mozilla.focus.activity.MainActivity;
 
@@ -37,15 +35,18 @@ import static android.support.test.espresso.action.ViewActions.pressImeActionBut
 import static android.support.test.espresso.action.ViewActions.typeTextIntoFocusedView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.hasFocus;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsNot.not;
 import static org.mozilla.focus.activity.OnboardingActivity.ONBOARD_SHOWN_PREF;
 
 @RunWith(AndroidJUnit4.class)
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TVScreenshots extends ScreenshotTest {
 
     private Intent intent;
@@ -76,7 +77,7 @@ public class TVScreenshots extends ScreenshotTest {
     }
 
     @Test
-    public void TVScreenshotsFirstLaunchScreen() throws InterruptedException, UiObjectNotFoundException {
+    public void firstLaunchScreen() throws InterruptedException, UiObjectNotFoundException {
         /* Overwrite the app preference before main activity launch */
         preferencesEditor
                 .putBoolean(ONBOARD_SHOWN_PREF, false)
@@ -95,7 +96,7 @@ public class TVScreenshots extends ScreenshotTest {
     }
 
     @Test
-    public void TVScreenshotsHomeScreen() throws InterruptedException, UiObjectNotFoundException {
+    public void defaultHomeScreen() throws InterruptedException, UiObjectNotFoundException {
         /* capture a screenshot of the default home-screen */
         mActivityTestRule.launchActivity(intent);
 
@@ -108,7 +109,7 @@ public class TVScreenshots extends ScreenshotTest {
     }
 
     @Test
-    public void TVScreenshotsNavOverlay () throws InterruptedException, UiObjectNotFoundException {
+    public void browserNavOverlay () throws InterruptedException, UiObjectNotFoundException {
         /* default home-screen in the main activity should be displayed */
         mActivityTestRule.launchActivity(intent);
 
@@ -124,7 +125,8 @@ public class TVScreenshots extends ScreenshotTest {
         onView(withId(R.id.navCloseHint))
                 .check(matches(isDisplayed()));
 
-        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()));
+        onView(withId(R.id.navUrlInput))
+                .check(matches(isDisplayed()));
 
         Screengrab.screenshot("browser-overlay");
 
@@ -138,7 +140,7 @@ public class TVScreenshots extends ScreenshotTest {
     }
 
     @Test
-    public void TVScreenshotsSettings() throws InterruptedException, UiObjectNotFoundException {
+    public void settingsView() throws InterruptedException, UiObjectNotFoundException {
         /* default home-screen in the main activity should be displayed */
         mActivityTestRule.launchActivity(intent);
 
@@ -176,6 +178,80 @@ public class TVScreenshots extends ScreenshotTest {
 
         Screengrab.screenshot("privacy-notice");
 
+        mDevice.pressBack();
+    }
+
+    @Test
+    public void unpinTileInHome() throws InterruptedException, UiObjectNotFoundException {
+        /* default home-screen in the main activity should be displayed */
+        mActivityTestRule.launchActivity(intent);
+
+        onView(allOf(withId(R.id.urlInputView), isDisplayed(), hasFocus()));
+
+        mDevice.pressDPadDown();
+        mDevice.pressMenu();
+
+        onView(withText(R.string.homescreen_tile_remove))
+                .check(matches(isDisplayed()));
+
+        Screengrab.screenshot("menu-remove-tile");
+
+        mDevice.pressBack();
+    }
+
+    @Test
+    public void pinTileFromOverlay() throws InterruptedException, UiObjectNotFoundException {
+        /* default home-screen in the main activity should be displayed */
+        mActivityTestRule.launchActivity(intent);
+
+        onView(allOf(withId(R.id.urlInputView), isDisplayed(), hasFocus()))
+                .perform(typeTextIntoFocusedView("example.com"))
+                .perform(pressImeActionButton());
+
+        onView(withId(R.id.webview))
+                .check(matches(isDisplayed()));
+
+        mDevice.pressMenu();
+
+        onView(withId(R.id.pinButton))
+                .check(matches(isDisplayed()))
+                .perform(click());
+
+        onView(withText(R.string.notification_pinned_site))
+                .inRoot(withDecorView(not(is(mActivityTestRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        Screengrab.screenshot("overlay-pinned-tile");
+
+        mDevice.pressBack();
+        mDevice.pressBack();
+    }
+
+    @Test
+    public void unpinTileFromOverlay() throws InterruptedException, UiObjectNotFoundException {
+    /* default home-screen in the main activity should be displayed */
+        mActivityTestRule.launchActivity(intent);
+
+        onView(allOf(withId(R.id.urlInputView), isDisplayed(), hasFocus()))
+                .perform(typeTextIntoFocusedView("example.com"))
+                .perform(pressImeActionButton());
+
+        onView(withId(R.id.webview))
+                .check(matches(isDisplayed()));
+
+        mDevice.pressMenu();
+
+        onView(withId(R.id.pinButton))
+                .check(matches(isDisplayed()))
+                .perform(click());
+
+        onView(withText(R.string.notification_unpinned_site))
+                .inRoot(withDecorView(not(is(mActivityTestRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        Screengrab.screenshot("overlay-unpinned-tile");
+
+        mDevice.pressBack();
         mDevice.pressBack();
     }
 }
