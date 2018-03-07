@@ -191,4 +191,9 @@
   <string name="onboarding_turbo_mode_body">Der Turbo-Modus blockiert automatisch Tracker und Anzeigen, damit Sie schneller ans Ziel kommen. Wenn es ein Problem gibt – wie bei einer Website, die sich nicht so verhält, wie Sie es erwarten – schalten Sie einfach den Turbo-Modus aus.</string>
   <string name="onboarding_turbo_mode_button_on">Turbo-Modus aktiviert lassen</string>
   <string name="onboarding_turbo_mode_button_off">Turbo-Modus deaktivieren</string>
+  <string name="homescreen_tile_remove">Entfernen</string>
+  <string name="nav_close_hint">Schließen</string>
+  <string name="pin_label">An Startbildschirm anheften</string>
+  <string name="notification_pinned_site">Am Firefox-TV-Startbildschirm angeheftet</string>
+  <string name="notification_unpinned_site">Vom Firefox-TV-Startbildschirm entfernt</string>
 </resources>

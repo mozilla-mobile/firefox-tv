@@ -191,4 +191,9 @@
   <string name="onboarding_turbo_mode_body">La modalità turbo blocca in automatico elementi traccianti e pubblicità per caricare le pagine più rapidamente. Se incontri un problema, come un sito che non funziona come dovrebbe, basterà disattivare la modalità turbo.</string>
   <string name="onboarding_turbo_mode_button_on">Mantieni attiva modalità turbo</string>
   <string name="onboarding_turbo_mode_button_off">Disattiva modalità turbo</string>
+  <string name="homescreen_tile_remove">Rimuovi</string>
+  <string name="nav_close_hint">Chiudi</string>
+  <string name="pin_label">Fissa alla schermata principale</string>
+  <string name="notification_pinned_site">Fissato alla schermata principale di Firefox TV</string>
+  <string name="notification_unpinned_site">Rimosso dalla schermata principale di Firefox TV</string>
 </resources>

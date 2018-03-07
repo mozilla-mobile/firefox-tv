@@ -191,4 +191,9 @@
   <string name="onboarding_turbo_mode_body">Le mode turbo bloque automatiquement les traqueurs et les publicités pour que les pages web se chargent plus vite. S’il y a un hic (comme un site web qui ne fonctionne pas comme vous l’espériez), il vous suffit de désactiver le mode turbo.</string>
   <string name="onboarding_turbo_mode_button_on">Laisser le mode turbo activé</string>
   <string name="onboarding_turbo_mode_button_off">Désactiver le mode turbo</string>
+  <string name="homescreen_tile_remove">Retirer</string>
+  <string name="nav_close_hint">Fermer</string>
+  <string name="pin_label">Épingler à l’écran d’accueil</string>
+  <string name="notification_pinned_site">Épinglé à l’écran d’accueil Firefox TV</string>
+  <string name="notification_unpinned_site">Retiré de l’écran d’accueil Firefox TV</string>
 </resources>

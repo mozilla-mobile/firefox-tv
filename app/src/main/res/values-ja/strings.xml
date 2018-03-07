@@ -191,4 +191,9 @@
   <string name="onboarding_turbo_mode_body">ターボモードは自動的にトラッカーと広告をブロックし、より速くブラウズするのを手助けします。 サイトが期待通りに動作しないなど問題が見られる場合は、ターボモードを無効化してください。</string>
   <string name="onboarding_turbo_mode_button_on">ターボモードを有効のままにする</string>
   <string name="onboarding_turbo_mode_button_off">ターボモードを無効にする</string>
+  <string name="homescreen_tile_remove">削除</string>
+  <string name="nav_close_hint">閉じる</string>
+  <string name="pin_label">ホーム画面にピン留め</string>
+  <string name="notification_pinned_site">Firefox TV のホーム画面にピン留めしました</string>
+  <string name="notification_unpinned_site">Firefox TV のホーム画面から削除しました</string>
 </resources>
