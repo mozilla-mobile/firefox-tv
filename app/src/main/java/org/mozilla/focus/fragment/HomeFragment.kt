@@ -254,7 +254,10 @@ private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHold
         val title = if (validUri == null) {
             CompletableDeferred(item.url)
         } else {
-            async { FormattedDomain.format(itemView.context, validUri, true, 1) }
+            async {
+                val subdomainDotDomain = FormattedDomain.format(itemView.context, validUri, false, 1)
+                FormattedDomain.stripCommonPrefixes(subdomainDotDomain)
+            }
         }
 
         // Wait for both to complete so we can animate them together.

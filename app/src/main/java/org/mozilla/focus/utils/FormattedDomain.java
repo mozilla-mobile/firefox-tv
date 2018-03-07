@@ -93,6 +93,22 @@ public class FormattedDomain {
         return domainStr;
     }
 
+    public static String stripCommonPrefixes(@NonNull final String host) {
+        // In contrast to desktop, we also strip mobile subdomains,
+        // since its unlikely users are intentionally typing them
+        int start = 0;
+
+        if (host.startsWith("www.")) {
+            start = 4;
+        } else if (host.startsWith("mobile.")) {
+            start = 7;
+        } else if (host.startsWith("m.")) {
+            start = 2;
+        }
+
+        return host.substring(start);
+    }
+
     /** Strips any subdomains from the host over the given limit. */
     private static String stripSubdomains(String host, final int desiredSubdomainCount) {
         int includedSubdomainCount = 0;
