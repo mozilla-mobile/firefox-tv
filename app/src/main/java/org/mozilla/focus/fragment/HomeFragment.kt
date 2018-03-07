@@ -11,12 +11,16 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.ContextMenu
+import android.view.KeyEvent
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.home_tile.view.*
 import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.CompletableDeferred
 import kotlinx.coroutines.experimental.CoroutineStart
@@ -28,6 +32,7 @@ import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.ext.forceExhaustive
 import org.mozilla.focus.ext.toJavaURI
+import org.mozilla.focus.ext.toUri
 import org.mozilla.focus.home.HomeTileScreenshotStore
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
@@ -38,11 +43,6 @@ import org.mozilla.focus.tiles.CustomTilesManager
 import org.mozilla.focus.tiles.HomeTile
 import org.mozilla.focus.utils.FormattedDomain
 import org.mozilla.focus.utils.OnUrlEnteredListener
-import android.view.ContextMenu
-import android.view.MenuItem
-import android.view.KeyEvent
-import kotlinx.android.synthetic.main.home_tile.view.*
-import org.mozilla.focus.ext.toUri
 
 private const val COL_COUNT = 5
 private const val SETTINGS_ICON_IDLE_ALPHA = 0.4f
@@ -172,7 +172,9 @@ class HomeFragment : Fragment() {
     }
 
     fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        if (event.keyCode == KeyEvent.KEYCODE_MENU && getFocusedTilePosition() != RecyclerView.NO_POSITION) {
+        if (event.keyCode == KeyEvent.KEYCODE_MENU &&
+                event.action == KeyEvent.ACTION_UP &&
+                getFocusedTilePosition() != RecyclerView.NO_POSITION) {
             activity.openContextMenu(view)
             return true
         }
