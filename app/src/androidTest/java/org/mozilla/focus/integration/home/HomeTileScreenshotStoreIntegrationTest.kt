@@ -18,6 +18,8 @@ import org.mozilla.focus.assertEqualsWithDelta
 import org.mozilla.focus.home.HomeTileScreenshotStore
 import java.util.UUID
 
+private const val DIMEN = 140 // should be divisible by 4.
+
 @RunWith(AndroidJUnit4::class)
 class HomeTileScreenshotStoreIntegrationTest {
 
@@ -38,10 +40,14 @@ class HomeTileScreenshotStoreIntegrationTest {
     @Test
     fun testSaveAndReadRestoresBitmap() = runBlocking {
         // We use a bitmap that won't change much after compression.
-        val expectedBitmap = getRedSquare()
-        val uuid = UUID.randomUUID()
-        HomeTileScreenshotStore.saveAsync(andyContext, uuid, expectedBitmap).join()
+        val originalBitmap = getRedishSquare()
 
+        val uuid = UUID.randomUUID()
+        HomeTileScreenshotStore.saveAsync(andyContext, uuid, originalBitmap).join()
+
+        // Reading scales the bitmap by 4 so they don't take up as much space in memory.
+        val expectedDimen = DIMEN / 4
+        val expectedBitmap = Bitmap.createScaledBitmap(originalBitmap, expectedDimen, expectedDimen, false)
         val actualBitmap = HomeTileScreenshotStore.read(andyContext, uuid)
 
         // Delta chosen by testing against our compression quality.
@@ -50,8 +56,8 @@ class HomeTileScreenshotStoreIntegrationTest {
     }
 }
 
-private fun getRedSquare(): Bitmap {
-    val dimen = 140
-    val colors = IntArray(dimen * dimen) { Color.RED }
-    return Bitmap.createBitmap(colors, dimen, dimen, Bitmap.Config.ARGB_8888)
+/* Return almost solid color square: we don't save completely blank tiles so we change a pixel. */
+private fun getRedishSquare() = Bitmap.createBitmap(DIMEN, DIMEN, Bitmap.Config.ARGB_8888).apply {
+    eraseColor(Color.RED)
+    setPixel(0, 0, Color.rgb(244, 0, 0))
 }

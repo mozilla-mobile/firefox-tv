@@ -5,6 +5,7 @@
 package org.mozilla.focus.home
 
 import android.graphics.Bitmap
+import android.graphics.Color
 import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertNull
 import kotlinx.coroutines.experimental.runBlocking
@@ -37,11 +38,24 @@ class HomeTileScreenshotStoreUnitTest {
     @Test
     fun testSaveAsyncDoesNotOverwrite() = runBlocking {
         val context = RuntimeEnvironment.application
-        HomeTileScreenshotStore.saveAsync(context, uuid, getBitmap()).join()
-        HomeTileScreenshotStore.saveAsync(context, UUID.randomUUID(), getBitmap()).join()
+        HomeTileScreenshotStore.saveAsync(context, uuid, getNonBlankBitmap()).join()
+        HomeTileScreenshotStore.saveAsync(context, UUID.randomUUID(), getNonBlankBitmap()).join()
 
         assertEquals(2,
                 HomeTileScreenshotStore.getFileForUUID(context, uuid).parentFile.list().size)
+    }
+
+    @Test
+    fun testSaveAsyncDoesNotSaveBlankScreenshot() = runBlocking {
+        val bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888).apply {
+            eraseColor(Color.RED)
+        }
+        val context = RuntimeEnvironment.application
+        HomeTileScreenshotStore.saveAsync(context, uuid, bitmap).join()
+
+        val parentDir = HomeTileScreenshotStore.getFileForUUID(context, uuid).parentFile
+        parentDir.mkdirs() // so we can easily assert without crashing if dirs weren't made.
+        assertEquals(0, parentDir.list().size)
     }
 
     @Test
@@ -73,7 +87,7 @@ class HomeTileScreenshotStoreUnitTest {
     fun testRemoveAsyncRemovesFileWrittenBySaveAsync() = runBlocking {
         val context = RuntimeEnvironment.application
         val parentFile = HomeTileScreenshotStore.getFileForUUID(context, uuid).parentFile
-        HomeTileScreenshotStore.saveAsync(context, uuid, getBitmap()).join()
+        HomeTileScreenshotStore.saveAsync(context, uuid, getNonBlankBitmap()).join()
         assertEquals(1, parentFile.list().size)
 
         HomeTileScreenshotStore.removeAsync(context, uuid).join()
@@ -82,4 +96,8 @@ class HomeTileScreenshotStoreUnitTest {
     }
 }
 
-private fun getBitmap() = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888)
+/** Gets a bitmap that isn't a single color: we don't save blank bitmaps, so this is important. */
+private fun getNonBlankBitmap() = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888).apply {
+    eraseColor(Color.RED)
+    setPixel(0, 0, Color.rgb(244, 0, 0))
+}
