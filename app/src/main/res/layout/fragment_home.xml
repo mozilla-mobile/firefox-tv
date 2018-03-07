@@ -5,7 +5,6 @@
 <!-- TODO: scrolll view -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
-              android:clipChildren="false"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:padding="50dp"
@@ -18,7 +17,7 @@
             android:orientation="horizontal"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
-            android:paddingBottom="50dp">
+            android:paddingBottom="40dp">
 
         <!-- TODO: analyze the params below -->
         x<org.mozilla.focus.widget.InlineAutocompleteEditText
@@ -69,6 +68,8 @@
 
     <android.support.v7.widget.RecyclerView
             android:id="@+id/tileContainer"
+            android:clipToPadding="false"
+            android:paddingTop="10dp"
             android:clipChildren="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
