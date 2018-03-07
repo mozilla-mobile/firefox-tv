@@ -96,10 +96,9 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         setOnCommitListener {
             val userInput = text.toString()
             if (userInput.isNotEmpty()) {
-                // getLastAutocompleteResult must be called before closeDrawer: closeDrawer clears the text input,
-                // which clears the last autocomplete result.
-                setText(lastAutocompleteResult.text)
-                onNavigationEvent?.invoke(NavigationEvent.LOAD, userInput, lastAutocompleteResult)
+                val cachedAutocompleteResult = lastAutocompleteResult // setText clears the reference so we cache it here.
+                setText(cachedAutocompleteResult.text)
+                onNavigationEvent?.invoke(NavigationEvent.LOAD, userInput, cachedAutocompleteResult)
             }
         }
         val autocompleteFilter = UrlAutoCompleteFilter()
