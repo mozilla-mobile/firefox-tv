@@ -20,7 +20,7 @@ import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.home_tile.view.*
+import kotlinx.android.synthetic.main.bundled_home_tile.view.*
 import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.CompletableDeferred
 import kotlinx.coroutines.experimental.CoroutineStart
@@ -41,6 +41,8 @@ import org.mozilla.focus.utils.OnUrlEnteredListener
 private const val COL_COUNT = 5
 private const val SETTINGS_ICON_IDLE_ALPHA = 0.4f
 private const val SETTINGS_ICON_ACTIVE_ALPHA = 1.0f
+private const val BUNDLED_TILE_VIEW_TYPE = 0
+private const val CUSTOM_TILE_VIEW_TYPE = 1
 
 /**
  * Duration of animation to show custom tile. If the duration is too short, the tile will just
@@ -212,6 +214,11 @@ private class HomeTileAdapter(
         }
     }
 
+    override fun getItemViewType(position: Int) = when (getItemAtPosition(position)) {
+        is BundledHomeTile -> BUNDLED_TILE_VIEW_TYPE
+        else -> CUSTOM_TILE_VIEW_TYPE
+    }
+
     fun getItemAtPosition(position: Int): HomeTile? {
         if (position > -1 && position < itemCount) {
             return tiles[position]
@@ -228,9 +235,13 @@ private class HomeTileAdapter(
 
     override fun getItemCount() = tiles.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = TileViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.home_tile, parent, false)
-    )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TileViewHolder {
+        var layout = R.layout.bundled_home_tile
+        if (viewType == CUSTOM_TILE_VIEW_TYPE) {
+            layout = R.layout.custom_home_tile
+        }
+        return TileViewHolder(LayoutInflater.from(parent.context).inflate(layout, parent, false))
+    }
 }
 
 private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledHomeTile) = with (holder) {
