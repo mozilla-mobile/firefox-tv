@@ -248,6 +248,13 @@ class BrowserFragment : IWebViewLifecycleFragment(),
         return false
     }
 
+    /**
+     * Changes the overlay visibility: this should be called instead of changing
+     * [BrowserNavigationOverlay.isVisible] directly.
+     *
+     * It's important this is only called for user actions because our Telemetry
+     * is dependent on it.
+     */
     private fun setOverlayVisibileByUser(toShow: Boolean) {
         browserOverlay.isVisible = toShow
         if (toShow) cursor?.onPause() else cursor?.onResume()
