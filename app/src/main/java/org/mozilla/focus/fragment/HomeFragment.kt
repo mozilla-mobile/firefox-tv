@@ -105,7 +105,7 @@ class HomeFragment : Fragment() {
         when (item.itemId) {
             R.id.remove -> {
                 val homeTileAdapter = tileContainer.adapter as HomeTileAdapter
-                val tileToRemove = homeTileAdapter.getItemAtPosition(getFocusedTilePosition())
+                val tileToRemove = homeTileAdapter.getItemAtPosition(getFocusedTilePosition()) ?: return false
                 // This assumes that since we're deleting from a Home Tile object that we created
                 // that the Uri is valid, so we do not do error handling here.
                 when (tileToRemove) {
@@ -121,6 +121,7 @@ class HomeFragment : Fragment() {
                         homeTileAdapter.removeItemAtPosition(getFocusedTilePosition())
                     }
                 }
+                TelemetryWrapper.homeTileRemovedEvent(tileToRemove)
                 return true
             }
         }
