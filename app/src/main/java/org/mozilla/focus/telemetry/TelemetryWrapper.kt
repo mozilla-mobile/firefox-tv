@@ -57,6 +57,7 @@ object TelemetryWrapper {
         val HIDE = "hide"
         val PAGE = "page"
         val RESOURCE = "resource"
+        val REMOVE = "remove"
     }
 
     private object Object {
@@ -245,10 +246,8 @@ object TelemetryWrapper {
 
     @JvmStatic
     fun homeTileClickEvent(tile: HomeTile) {
-        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE, when (tile) {
-            is BundledHomeTile -> Value.TILE_BUNDLED
-            is CustomHomeTile -> Value.TILE_CUSTOM
-        }).queue()
+        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE,
+                getTileTypeAsStringValue(tile)).queue()
     }
 
     @JvmStatic
@@ -297,7 +296,17 @@ object TelemetryWrapper {
                 .queue()
     }
 
+    fun homeTileRemovedEvent(removedTile: HomeTile) {
+        TelemetryEvent.create(Category.ACTION, Method.REMOVE, Object.HOME_TILE,
+                getTileTypeAsStringValue(removedTile)).queue()
+    }
+
     private fun boolToOnOff(boolean: Boolean) = if (boolean) Value.ON else Value.OFF
+
+    private fun getTileTypeAsStringValue(tile: HomeTile) = when (tile) {
+        is BundledHomeTile -> Value.TILE_BUNDLED
+        is CustomHomeTile -> Value.TILE_CUSTOM
+    }
 }
 
 enum class UrlTextInputLocation(internal val extra: String) {
