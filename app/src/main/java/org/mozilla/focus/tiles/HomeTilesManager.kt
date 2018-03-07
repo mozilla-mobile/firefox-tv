@@ -46,6 +46,12 @@ class BundledTilesManager private constructor(context: Context) {
 
     private var bundledTilesCache = loadBundledTilesCache(context)
 
+    /**
+     * The number of tiles in this manager. This is more performant than
+     * [#getBundledHomeTilesList].size, which returns a copy of the data.
+     */
+    val tileCount get() = bundledTilesCache.size
+
     private fun loadBundledTilesCache(context: Context): LinkedHashMap<Uri, BundledHomeTile> {
         val tilesJSONString = context.assets.open(HOME_TILES_JSON_PATH).bufferedReader().use { it.readText() }
         val tilesJSONArray = JSONArray(tilesJSONString)
@@ -129,6 +135,12 @@ class CustomTilesManager private constructor(context: Context) {
 
     // Cache pinned sites for perf beacues we need to check pinned state for every page load
     private var customTilesCache = loadCustomTilesCache(context)
+
+    /**
+     * The number of tiles in this manager. This is more performant than
+     * [#getCustomHomeTilesList].size, which returns a copy of the data.
+     */
+    val tileCount get() = customTilesCache.size
 
     private fun loadCustomTilesCache(context: Context): LinkedHashMap<String, CustomHomeTile> {
         val tilesJSONArray = getCustomSitesJSONArray(getHomeTilesPreferences(context))

@@ -25,7 +25,6 @@ import org.mozilla.telemetry.config.TelemetryConfiguration
 import org.mozilla.telemetry.event.TelemetryEvent
 import org.mozilla.telemetry.measurement.DefaultSearchMeasurement
 import org.mozilla.telemetry.measurement.SearchesMeasurement
-import org.mozilla.telemetry.measurement.SettingsMeasurement
 import org.mozilla.telemetry.net.HttpURLConnectionTelemetryClient
 import org.mozilla.telemetry.ping.TelemetryCorePingBuilder
 import org.mozilla.telemetry.ping.TelemetryMobileEventPingBuilder
@@ -133,8 +132,6 @@ object TelemetryWrapper {
         // are readable/writable.
         val threadPolicy = StrictMode.allowThreadDiskWrites()
         try {
-            val resources = context.resources
-
             val telemetryEnabled = isTelemetryEnabled(context)
 
             val configuration = TelemetryConfiguration(context)
@@ -142,9 +139,11 @@ object TelemetryWrapper {
                     .setAppName(TELEMETRY_APP_NAME_FOCUS_TV)
                     .setUpdateChannel(BuildConfig.BUILD_TYPE)
                     .setPreferencesImportantForTelemetry(
-                            IWebView.TRACKING_PROTECTION_ENABLED_PREF
+                            IWebView.TRACKING_PROTECTION_ENABLED_PREF,
+                            TelemetrySettingsProvider.PREF_CUSTOM_HOME_TILE_COUNT,
+                            TelemetrySettingsProvider.PREF_TOTAL_HOME_TILE_COUNT
                     )
-                    .setSettingsProvider(SettingsMeasurement.SharedPreferenceSettingsProvider())
+                    .setSettingsProvider(TelemetrySettingsProvider(context))
                     .setCollectionEnabled(telemetryEnabled)
                     .setUploadEnabled(telemetryEnabled)
 
