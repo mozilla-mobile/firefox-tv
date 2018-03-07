@@ -22,7 +22,7 @@ private const val BUNDLED_SITES_ID_BLACKLIST = "blacklist"
 private const val CUSTOM_SITES_LIST = "customSitesList"
 
 private const val BUNDLED_HOME_TILES_DIR = "bundled"
-private const val HOME_TILES_JSON_PATH = "${BUNDLED_HOME_TILES_DIR}/bundled_tiles.json"
+private const val HOME_TILES_JSON_PATH = "$BUNDLED_HOME_TILES_DIR/bundled_tiles.json"
 
 /**
  * Static accessor for bundled tiles, which are loaded from assets/bundled/bundled_tiles.json.
@@ -101,7 +101,7 @@ class BundledTilesManager private constructor(context: Context) {
 
     @AnyThread
     fun loadImageFromPath(context: Context, path: String) = context.assets.open(
-            "${BUNDLED_HOME_TILES_DIR}/$path").use {
+            "$BUNDLED_HOME_TILES_DIR/$path").use {
         BitmapFactory.decodeStream(it)
     }
 
