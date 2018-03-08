@@ -11,8 +11,6 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.net.Uri
-import android.os.Build
-import android.support.v4.content.ContextCompat
 import android.util.TypedValue
 import org.mozilla.focus.R
 import org.mozilla.focus.utils.UrlUtils
@@ -23,24 +21,10 @@ class HomeTilePlaceholderGenerator {
         private val TEXT_SIZE_DP = 36f
         private val DEFAULT_ICON_CHAR = '?'
 
-        /**
-         * See [generateAdaptiveLauncherIcon] for more details.
-         */
         @JvmStatic
         fun generate(context: Context, url: String?): Bitmap {
             val startingChar = getRepresentativeCharacter(url)
-            return generateCharacterIcon(context, startingChar)
-        }
-
-        /**
-         * Generate an icon with the given character. The icon will be drawn
-         * on top of a generic launcher icon shape that we provide.
-         */
-        @JvmStatic
-        fun generateCharacterIcon(context: Context, character: Char) = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            generateAdaptiveLauncherIcon(context, character)
-        } else {
-            generateLauncherIconPreOreo(context, character)
+            return generateLauncherIconPreOreo(context, startingChar)
         }
 
         /*
@@ -53,25 +37,6 @@ class HomeTilePlaceholderGenerator {
             options.inMutable = true
             val shape = BitmapFactory.decodeResource(context.resources, R.drawable.ic_homescreen_shape, options)
             return drawCharacterOnBitmap(context, character, shape)
-        }
-
-        /**
-         * Generates a launcher icon for versions of Android that support Adaptive Icons (Oreo+):
-         * https://developer.android.com/guide/practices/ui_guidelines/icon_design_adaptive.html
-         */
-        private fun generateAdaptiveLauncherIcon(context: Context, character: Char): Bitmap {
-            val res = context.resources
-            val adaptiveIconDimen = res.getDimensionPixelSize(R.dimen.adaptive_icon_drawable_dimen)
-
-            val bitmap = Bitmap.createBitmap(adaptiveIconDimen, adaptiveIconDimen, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(bitmap)
-
-            // Adaptive Icons have two layers: a background that fills the canvas and
-            // a foreground that's centered. First, we draw the background...
-            canvas.drawColor(ContextCompat.getColor(context, R.color.add_to_homescreen_icon_background))
-
-            // Then draw the foreground
-            return drawCharacterOnBitmap(context, character, bitmap)
         }
 
         private fun drawCharacterOnBitmap(context: Context, character: Char, bitmap: Bitmap): Bitmap {
