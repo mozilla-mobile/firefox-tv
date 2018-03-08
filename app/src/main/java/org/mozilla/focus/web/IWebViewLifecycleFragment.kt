@@ -77,13 +77,11 @@ abstract class IWebViewLifecycleFragment : LocaleAwareFragment() {
         super.onResume()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        if (webView != null) {
-            webView!!.callback = null
-            webView!!.destroy()
-            webView = null
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        webView!!.callback = null
+        webView!!.destroy()
+        webView = null
     }
 
     override fun applyLocale() {
