@@ -17,7 +17,7 @@ import android.util.TypedValue
 import org.mozilla.focus.R
 import org.mozilla.focus.utils.UrlUtils
 
-class IconGenerator {
+class HomeTilePlaceholderGenerator {
 
     companion object {
         private val TEXT_SIZE_DP = 36f
@@ -27,7 +27,7 @@ class IconGenerator {
          * See [generateAdaptiveLauncherIcon] for more details.
          */
         @JvmStatic
-        fun generateLauncherIcon(context: Context, url: String?): Bitmap {
+        fun generate(context: Context, url: String?): Bitmap {
             val startingChar = getRepresentativeCharacter(url)
             return generateCharacterIcon(context, startingChar)
         }
