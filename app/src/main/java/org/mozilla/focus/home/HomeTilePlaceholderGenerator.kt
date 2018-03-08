@@ -35,18 +35,16 @@ class HomeTilePlaceholderGenerator {
         }
 
         private fun drawCharacterOnBitmap(context: Context, character: Char, bitmap: Bitmap): Bitmap {
-            val canvas = Canvas(bitmap)
-
-            val paint = Paint()
-
-            val textSize = TypedValue.applyDimension(
+            val desiredTextSize = TypedValue.applyDimension(
                     TypedValue.COMPLEX_UNIT_DIP, TEXT_SIZE_DP, context.resources.displayMetrics)
+            val paint = Paint().apply {
+                color = Color.WHITE
+                textAlign = Paint.Align.CENTER
+                textSize = desiredTextSize
+                isAntiAlias = true
+            }
 
-            paint.color = Color.WHITE
-            paint.textAlign = Paint.Align.CENTER
-            paint.textSize = textSize
-            paint.isAntiAlias = true
-
+            val canvas = Canvas(bitmap)
             canvas.drawText(character.toString(),
                     canvas.width / 2.0f,
                     canvas.height / 2.0f - (paint.descent() + paint.ascent()) / 2.0f,
