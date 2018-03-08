@@ -54,4 +54,9 @@
 
     <!-- We want to keep button_size and urlbar height the same to keep them aligned -->
     <dimen name="urlbar_height">@dimen/button_size</dimen>
+
+    <!-- In HomeTileScreenshotStore, we generate screenshots of this size and scale them:
+         it should be a fine estimate for now. -->
+    <dimen name="home_tile_icon_estimated_width">480px</dimen>
+    <dimen name="home_tile_icon_estimated_height">270px</dimen>
 </resources>
