@@ -6,11 +6,11 @@ package org.mozilla.focus.home
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.net.Uri
+import android.support.v4.content.ContextCompat
 import android.util.TypedValue
 import org.mozilla.focus.R
 import org.mozilla.focus.utils.UrlUtils
@@ -18,25 +18,20 @@ import org.mozilla.focus.utils.UrlUtils
 class HomeTilePlaceholderGenerator {
 
     companion object {
-        private val TEXT_SIZE_DP = 36f
+        private val TEXT_SIZE_DP = 52f
         private val DEFAULT_ICON_CHAR = '?'
 
-        @JvmStatic
         fun generate(context: Context, url: String?): Bitmap {
             val startingChar = getRepresentativeCharacter(url)
-            return generateLauncherIconPreOreo(context, startingChar)
-        }
 
-        /*
-         * This method needs to be separate from generateAdaptiveLauncherIcon so that we can generate
-         * the pre-Oreo icon to display in the Add To Home screen Dialog
-         */
-        @JvmStatic
-        fun generateLauncherIconPreOreo(context: Context, character: Char): Bitmap {
-            val options = BitmapFactory.Options()
-            options.inMutable = true
-            val shape = BitmapFactory.decodeResource(context.resources, R.drawable.ic_homescreen_shape, options)
-            return drawCharacterOnBitmap(context, character, shape)
+            // When this method is called, the view we're setting this bitmap on has no size (maybe
+            // because it doesn't contain an image?) so we use a hard-coded estimated size instead.
+            val width = context.resources.getDimensionPixelSize(R.dimen.home_tile_icon_estimated_width)
+            val height = context.resources.getDimensionPixelSize(R.dimen.home_tile_icon_estimated_height)
+
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            bitmap.eraseColor(ContextCompat.getColor(context, R.color.tv_ink))
+            return drawCharacterOnBitmap(context, startingChar, bitmap)
         }
 
         private fun drawCharacterOnBitmap(context: Context, character: Char, bitmap: Bitmap): Bitmap {

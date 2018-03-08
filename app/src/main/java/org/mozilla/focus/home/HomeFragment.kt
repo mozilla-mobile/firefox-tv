@@ -244,7 +244,11 @@ private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHold
     launch(uiLifecycleCancelJob + UI, CoroutineStart.UNDISPATCHED) {
         val validUri = item.url.toJavaURI()
 
-        val screenshot = async { HomeTileScreenshotStore.read(itemView.context, item.id) }
+        val screenshot = async {
+            val screenshot = HomeTileScreenshotStore.read(itemView.context, item.id)
+            screenshot ?: HomeTilePlaceholderGenerator.generate(itemView.context, item.url)
+        }
+
         val title = if (validUri == null) {
             CompletableDeferred(item.url)
         } else {
