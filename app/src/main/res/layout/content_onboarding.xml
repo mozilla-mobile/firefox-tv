@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/onboarding_background"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="org.mozilla.focus.activity.OnboardingActivity"
     tools:showIn="@layout/activity_onboarding">
@@ -52,6 +51,7 @@
                 android:layout_marginTop="200dp"
                 android:text="@string/onboarding_turbo_mode_title"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textColor="@color/tv_white"
                 tools:text="@string/onboarding_turbo_mode_title" />
 
             <TextView
@@ -85,6 +85,7 @@
                 android:background="@drawable/nav_button_selector"
                 android:text="@string/onboarding_turbo_mode_button_on"
                 tools:text="@string/onboarding_turbo_mode_button_on"
+                android:textColor="@color/tv_white"
                 android:nextFocusDown="@+id/disable_turbo_mode"
                 android:nextFocusUp="@id/disable_turbo_mode">
                 <requestFocus />
@@ -100,6 +101,7 @@
                 android:background="@drawable/nav_button_selector"
                 android:text="@string/onboarding_turbo_mode_button_off"
                 tools:text="@string/onboarding_turbo_mode_button_off"
+                android:textColor="@color/tv_white"
                 android:nextFocusDown="@id/enable_turbo_mode"
                 android:nextFocusUp="@id/enable_turbo_mode" />
 
