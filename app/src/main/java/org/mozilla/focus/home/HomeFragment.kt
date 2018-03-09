@@ -261,7 +261,7 @@ private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHold
         }
 
         // Wait for both to complete so we can animate them together.
-        iconView.setImageBitmap(screenshot.await()) // TODO: if null, provide placeholder.
+        iconView.setImageBitmap(screenshot.await())
         titleView.text = title.await()
 
         // Animate to avoid pop-in due to thread hand-offs. TODO: animation is janky.
