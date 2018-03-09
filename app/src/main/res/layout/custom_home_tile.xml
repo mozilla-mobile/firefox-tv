@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="140dp"
+    android:layout_height="100dp"
+    android:background="@drawable/home_tile_background"
+    android:foreground="@drawable/home_tile_selector"
+    android:focusable="true"
+    android:clickable="true"
+    android:clipChildren="false"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginBottom="18dp">
+
+    <ImageView
+        android:id="@+id/home_tile_menu_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|top"
+        android:layout_marginEnd="-10dp"
+        android:layout_marginTop="-10dp"
+        android:background="@drawable/context_menu_button_background"
+        android:elevation="4dp"
+        android:padding="4dp"
+        android:src="@drawable/ic_wide_menu_home"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="4dp"
+        android:orientation="vertical">
+
+        <org.mozilla.focus.widget.RoundedImageView
+            android:id="@+id/tile_icon"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/tile_youtube" />
+
+        <TextView
+            android:id="@+id/tile_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_horizontal"
+            android:maxLines="1"
+            android:paddingBottom="6dp"
+            android:paddingTop="6dp"
+            android:textColor="@android:color/black"
+            tools:text="YouTube" />
+    </LinearLayout>
+</FrameLayout>
