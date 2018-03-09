@@ -8,6 +8,7 @@ package org.mozilla.focus.widget
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Checkable
 import android.widget.ImageButton
 
@@ -55,5 +56,13 @@ class CheckableImageButton @JvmOverloads constructor(
     override fun performClick(): Boolean {
         toggle()
         return super.performClick()
+    }
+
+    override fun onInitializeAccessibilityNodeInfo(info: AccessibilityNodeInfo?) {
+        super.onInitializeAccessibilityNodeInfo(info)
+        info?.isChecked = isChecked
+        // Issue #528 - isCheckable is intended to announce checked state on focus, but doesn't
+        // work with VoiceView
+        info?.isCheckable = true
     }
 }
