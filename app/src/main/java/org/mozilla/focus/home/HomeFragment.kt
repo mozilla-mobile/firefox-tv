@@ -244,12 +244,12 @@ private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHold
     launch(uiLifecycleCancelJob + UI, CoroutineStart.UNDISPATCHED) {
         val validUri = item.url.toJavaURI()
 
-        val screenshot = async {
+        val screenshotDeferred = async {
             val screenshot = HomeTileScreenshotStore.read(itemView.context, item.id)
             screenshot ?: HomeTilePlaceholderGenerator.generate(itemView.context, item.url)
         }
 
-        val title = if (validUri == null) {
+        val titleDeferred = if (validUri == null) {
             CompletableDeferred(item.url)
         } else {
             async {
@@ -258,9 +258,15 @@ private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHold
             }
         }
 
-        // Wait for both to complete so we can animate them together.
-        iconView.setImageBitmap(screenshot.await())
-        titleView.text = title.await()
+        // We wait for both to complete so we can animate them together.
+        val screenshot = screenshotDeferred.await()
+        val title = titleDeferred.await()
+
+        // NB: Don't suspend after this point (i.e. between view updates like setImage)
+        // so we don't see intermediate view states.
+        // TODO: It'd be less error-prone to launch { /* bg work */ launch(UI) { /* UI work */ } }
+        iconView.setImageBitmap(screenshot)
+        titleView.text = title
 
         // Animate to avoid pop-in due to thread hand-offs. TODO: animation is janky.
         AnimatorSet().apply {
