@@ -70,7 +70,6 @@
     <color name="homeUrlBarBackground">#30ffffff</color>
     <color name="default_background_gray">#e3e3e5</color>
 
-    <color name="onboarding_background">#ffffff</color>
     <color name="onboarding_overlay">#cc000000</color>
     <color name="onboarding_button_highlight">#500060df</color>
 
