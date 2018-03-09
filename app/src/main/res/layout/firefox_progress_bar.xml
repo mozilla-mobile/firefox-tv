@@ -12,6 +12,7 @@
 
     <org.mozilla.focus.utils.GifImageView
         android:id="@+id/gifImageView"
+        android:alpha="0.85"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -23,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:textColor="#2a2a2e"
+        android:textColor="@color/tv_gray2"
         android:fontFamily="sans-serif"
         android:maxLines="1"
         android:layout_marginEnd="8dp"/>
