@@ -81,6 +81,7 @@
             android:src="@drawable/ic_settings"
             android:contentDescription="@string/menu_settings"/>
 
+        <!-- Drawable tinted in code (XML needs API 23+). -->
         <org.mozilla.focus.widget.InlineAutocompleteEditText
             android:id="@+id/navUrlInput"
             android:drawableStart="@drawable/ic_search"
@@ -91,12 +92,13 @@
             android:hint="@string/urlbar_hint"
             android:imeOptions="actionGo|flagNoExtractUi|flagNoFullscreen"
             android:paddingStart="10dp"
+            android:paddingEnd="4dp"
             android:inputType="textUri"
             android:lines="1"
             android:importantForAutofill="no"
             android:cursorVisible="false"
             android:textIsSelectable="false"
-            android:textColor="@color/button_text_color"
+            android:textColor="@color/tv_white"
             android:nextFocusRight="@id/navUrlInput"
             />
 
@@ -105,6 +107,7 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
+        <!-- Drawable tinted in code (XML needs API 23+). -->
         <TextView
             android:id="@+id/navCloseHint"
             android:gravity="center_vertical"
@@ -114,7 +117,7 @@
             android:drawableStart="@drawable/ic_wide_menu"
             android:drawablePadding="5dp"
             android:text="@string/nav_close_hint"
-            android:textColor="@color/nav_close_hint" />
+            android:textColor="@color/tv_white" />
     </LinearLayout>
 
 </LinearLayout>

@@ -87,7 +87,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         turboButton.isChecked = Settings.getInstance(context).isBlockingEnabled
         navButtonSettings.setImageResource(R.drawable.ic_settings)
 
-        val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context, R.color.nav_close_hint)) }
+        val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context, R.color.tv_white)) }
         navCloseHint.compoundDrawablesRelative.forEach(tintDrawable)
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
     }

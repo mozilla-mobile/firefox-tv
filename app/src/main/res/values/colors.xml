@@ -76,14 +76,11 @@
 
     <color name="browser_overlay_background">#e6000000</color>
 
-    <color name="nav_close_hint">#ededf0</color>
-
     <color name="button_highlight">#64ffffff</color>
     <color name="button_default">@color/translucent_tv_ink</color>
     <color name="button_disabled">@color/tv_ink</color>
     <color name="button_focused">@color/tv_blue50</color>
     <color name="button_pressed">@color/tv_blue60</color>
     <color name="button_checked">@color/translucent_tv_ink2</color>
-    <color name="button_text_color">@color/tv_white</color>
     <color name="button_border">@color/translucent_tv_gray40</color>
 </resources>
