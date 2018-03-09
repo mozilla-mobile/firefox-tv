@@ -48,11 +48,14 @@
             android:id="@+id/tile_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="start"
             android:fontFamily="sans-serif-medium"
             android:gravity="center_horizontal"
-            android:maxLines="1"
             android:paddingBottom="6dp"
+            android:paddingEnd="6dp"
+            android:paddingStart="6dp"
             android:paddingTop="6dp"
+            android:singleLine="true"
             android:textColor="@android:color/black"
             tools:text="YouTube" />
     </LinearLayout>
