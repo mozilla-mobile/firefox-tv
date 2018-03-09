@@ -48,14 +48,14 @@
                 android:importantForAutofill="no"
                 tools:targetApi="o" /><!-- importantForAutofill is only supported on Android O+ -->
 
+        <!-- Image src set in code to fix SVGs. -->
         <ImageButton
             android:id="@+id/settingsButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginEnd="50dp"
             android:background="@drawable/home_settings_button_background"
-            android:contentDescription="@string/menu_settings"
-            android:src="@drawable/ic_settings" />
+            android:contentDescription="@string/menu_settings"/>
 
         <ImageView
                 android:layout_width="wrap_content"

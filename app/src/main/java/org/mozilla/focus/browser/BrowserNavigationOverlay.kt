@@ -86,7 +86,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         setupUrlInput()
         turboButton.isChecked = Settings.getInstance(context).isBlockingEnabled
-        navButtonSettings.setImageResource(R.drawable.ic_settings)
+        navButtonSettings.setImageResource(R.drawable.ic_settings) // Must be set in code for SVG to work correctly.
 
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context, R.color.tv_white)) }
         navCloseHint.compoundDrawablesRelative.forEach(tintDrawable)
