@@ -38,7 +38,7 @@
                 android:paddingEnd="8dp"
                 android:requiresFadingEdge="horizontal"
                 android:selectAllOnFocus="true"
-                android:textColor="#ffffff"
+                android:textColor="@color/tv_white"
                 android:textColorHighlight="@color/colorAccent"
                 android:textColorHint="@color/colorTextInactive"
                 android:textSize="15sp"
