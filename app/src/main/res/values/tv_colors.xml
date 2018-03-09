@@ -5,6 +5,7 @@
 
 <resources>
     <color name="tv_white">#eeeeee</color>
+    <color name="tv_gray2">#a0a0a3</color>
     <color name="tv_gray40">#b1b1b3</color>
     <color name="translucent_tv_gray40">#33b1b1b3</color>
     <color name="tv_blue50">@color/photonBlue50</color>
