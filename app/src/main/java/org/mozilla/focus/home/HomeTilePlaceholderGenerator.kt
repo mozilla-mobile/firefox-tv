@@ -7,7 +7,6 @@ package org.mozilla.focus.home
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.net.Uri
 import android.support.v4.content.ContextCompat
@@ -38,7 +37,7 @@ class HomeTilePlaceholderGenerator {
             val desiredTextSize = TypedValue.applyDimension(
                     TypedValue.COMPLEX_UNIT_DIP, TEXT_SIZE_DP, context.resources.displayMetrics)
             val paint = Paint().apply {
-                color = Color.WHITE
+                color = ContextCompat.getColor(context, R.color.tv_white)
                 textAlign = Paint.Align.CENTER
                 textSize = desiredTextSize
                 isAntiAlias = true

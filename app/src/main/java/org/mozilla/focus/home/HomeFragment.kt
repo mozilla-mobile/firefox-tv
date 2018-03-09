@@ -9,6 +9,7 @@ import android.animation.ObjectAnimator
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.ContextMenu
@@ -195,12 +196,13 @@ private class HomeTileAdapter(
             TelemetryWrapper.homeTileClickEvent(item)
         }
 
+        val tvWhiteColor = ContextCompat.getColor(holder.itemView.context, R.color.tv_white)
         itemView.setOnFocusChangeListener { v, hasFocus ->
             val backgroundResource: Int
             val textColor: Int
             if (hasFocus) {
                 backgroundResource = R.drawable.home_tile_title_focused_background
-                textColor = Color.WHITE
+                textColor = tvWhiteColor
                 menuButton.visibility = View.VISIBLE
             } else {
                 backgroundResource = 0
