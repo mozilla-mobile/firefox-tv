@@ -92,7 +92,7 @@
             android:hint="@string/urlbar_hint"
             android:imeOptions="actionGo|flagNoExtractUi|flagNoFullscreen"
             android:paddingStart="10dp"
-            android:paddingEnd="4dp"
+            android:paddingEnd="10dp"
             android:inputType="textUri"
             android:lines="1"
             android:importantForAutofill="no"
