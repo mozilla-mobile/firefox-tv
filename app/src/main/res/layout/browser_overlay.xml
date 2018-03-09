@@ -71,10 +71,10 @@
             android:contentDescription="@string/menu_drawer_home"
             android:nextFocusLeft="@id/turboButton"/>
 
+        <!-- Image src set in code to fix SVG. -->
         <ImageButton
             android:id="@+id/navButtonSettings"
             style="@style/NavigationButton"
-            android:src="@drawable/ic_settings"
             android:contentDescription="@string/menu_settings"/>
 
         <!-- Drawable tinted in code (XML needs API 23+). -->

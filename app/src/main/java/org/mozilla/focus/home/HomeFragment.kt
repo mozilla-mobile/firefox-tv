@@ -82,7 +82,7 @@ class HomeFragment : Fragment() {
         initUrlInputView()
 
         settingsButton.alpha = SETTINGS_ICON_IDLE_ALPHA
-        settingsButton.setImageResource(R.drawable.ic_settings)
+        settingsButton.setImageResource(R.drawable.ic_settings) // Must be set in code for SVG to work correctly.
         settingsButton.setOnFocusChangeListener { v, hasFocus ->
             v.alpha = if (hasFocus) SETTINGS_ICON_ACTIVE_ALPHA else SETTINGS_ICON_IDLE_ALPHA
         }
