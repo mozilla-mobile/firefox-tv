@@ -59,7 +59,7 @@ class HomeTileScreenshotStoreUnitTest {
     }
 
     @Test
-    fun testReadFileDoesNotExist() {
+    fun testReadFileDoesNotExist() = runBlocking {
         val actualBitmap = HomeTileScreenshotStore.read(RuntimeEnvironment.application, uuid)
         assertNull(actualBitmap)
     }

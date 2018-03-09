@@ -11,13 +11,13 @@ import android.support.annotation.AnyThread
 import android.support.annotation.VisibleForTesting
 import android.support.annotation.WorkerThread
 import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.sync.Mutex
+import kotlinx.coroutines.experimental.sync.withLock
 import org.mozilla.focus.ext.arePixelsAllTheSame
 import org.mozilla.focus.home.HomeTileScreenshotStore.DIR
+import org.mozilla.focus.home.HomeTileScreenshotStore.uuidToFileSystemMutex
 import java.io.File
 import java.util.UUID
-import java.util.concurrent.locks.ReentrantReadWriteLock
-import kotlin.concurrent.read
-import kotlin.concurrent.write
 
 /**
  * The format with which to compress on disk. Our goals for storage:
@@ -77,30 +77,21 @@ private val BITMAP_FACTORY_OPTIONS = BitmapFactory.Options().apply {
  * - The [CustomTilesManager] stores a unique identifier so we rely on it to provide one,
  * pushing the complexity there.
  *
- * This class is thread-safe: see lock javadoc for details.
+ * This class is thread-safe: see [uuidToFileSystemMutex] javadoc for details.
  */
 object HomeTileScreenshotStore {
 
     @VisibleForTesting const val DIR = "home_screenshots"
 
     /**
-     * A lock on all file system operations: we acquire an exclusive lock for any writes and a
-     * shared lock for any reads. In practice, we should have little contention: reads happen only
-     * when showing the home tiles while writes can only happen when we pin or unpin a site, neither
-     * of which should happen concurrently with a read. This locking is important to ensure the
-     * initial write completes before any reads.
+     * A map from UUID to Mutex: we have one lock for each screenshot we try to access (by uuid).
      *
-     * We could do more granular locking by having a lock per file/URL/screenshot, but that would be
-     * more complex for little gain, given the little contention we expect.
+     * This locking is important to ensure the file is completely written before its first read.
      *
-     * One downside to using a [ReentrantReadWriteLock] is that it's not coroutine aware: in the
-     * event of contention, threads from the common thread pool will be removed from scheduling
-     * until the write lock returns, forcing the thread pool to spin up more threads if there are
-     * more readers. However, coroutine aware solutions (e.g. [Mutex]) would require more
-     * coarse-grained locking that will generate contention, or more complexity, which isn't worth
-     * it given our low chances of contention.
+     * Sometimes file writes can block for a long time (#610) so it's important we don't lock all
+     * reads and writes on a single write.
      */
-    private val fileSystemLock = ReentrantReadWriteLock()
+    private val uuidToFileSystemMutex = mutableMapOf<UUID, Mutex>()
 
     /** @param uuid a unique identifier for this screenshot. */
     @AnyThread
@@ -111,7 +102,7 @@ object HomeTileScreenshotStore {
             return@launch
         }
 
-        fileSystemLock.write {
+        getMutex(uuid).withLock {
             ensureParentDirs(context)
 
             val screenshotFile = getFileForUUID(context, uuid)
@@ -125,7 +116,7 @@ object HomeTileScreenshotStore {
     /** @param a unique identifier for this screenshot. */
     @AnyThread
     fun removeAsync(context: Context, uuid: UUID) = launch {
-        fileSystemLock.write {
+        getMutex(uuid).withLock {
             getFileForUUID(context, uuid).delete()
         }
     }
@@ -137,20 +128,22 @@ object HomeTileScreenshotStore {
      * @return The decoded [Bitmap], or null if the file DNE or the bitmap could not be decoded.
      */
     @WorkerThread // file access.
-    fun read(context: Context, uuid: UUID): Bitmap? {
-        return fileSystemLock.read {
-            val file = getFileForUUID(context, uuid)
-            if (!file.exists()) {
-                null
-            } else {
-                file.inputStream().use {
-                    BitmapFactory.decodeStream(it, null, BITMAP_FACTORY_OPTIONS)
-                }
+    suspend fun read(context: Context, uuid: UUID) = getMutex(uuid).withLock { // TODO: consider timeout: #610
+        val file = getFileForUUID(context, uuid)
+        if (!file.exists()) {
+            null
+        } else {
+            file.inputStream().use {
+                BitmapFactory.decodeStream(it, null, BITMAP_FACTORY_OPTIONS)
             }
         }
     }
 
     @VisibleForTesting internal fun getFileForUUID(context: Context, uuid: UUID) = File(context.filesDir, getPathForUUID(uuid))
+
+    private fun getMutex(uuid: UUID) = synchronized(uuidToFileSystemMutex) {
+        uuidToFileSystemMutex.getOrPut(uuid) { Mutex() }
+    }
 }
 
 private fun ensureParentDirs(context: Context) { File(context.filesDir, DIR).mkdirs() }
