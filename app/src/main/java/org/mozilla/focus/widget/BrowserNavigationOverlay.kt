@@ -105,6 +105,13 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         autocompleteFilter.load(context.applicationContext)
         setOnFilterListener { searchText, view -> autocompleteFilter.onFilter(searchText, view) }
 
+        // #548: Get the current URL when we leave resign focus
+        setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                setText(navigationStateProvider?.getCurrentUrl())
+            }
+        }
+
         setOnBackPressedListener {
             if (isVisible) {
                 requestFocus()
@@ -156,7 +163,11 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             else -> R.id.navButtonForward
         }
 
-        navUrlInput.setText(navigationStateProvider?.getCurrentUrl())
+        // #548: Prevent the URL from changing while it has focus
+        // so that user input isn't interrupted
+        if (!navUrlInput.hasFocus()) {
+            navUrlInput.setText(navigationStateProvider?.getCurrentUrl())
+        }
 
         if (findFocus() == null) {
             requestFocus()
