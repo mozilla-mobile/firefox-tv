@@ -80,6 +80,9 @@ class BrowserFragment : IWebViewLifecycleFragment(),
     var cursor: CursorController? = null
         @UiThread get set // Set from the UI thread so serial access is required for simplicity.
 
+    // Cache the overlay visibility state to persist in fragment back stack
+    private var overlayVisibleCached: Int? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSession()
@@ -88,6 +91,7 @@ class BrowserFragment : IWebViewLifecycleFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         view.browserOverlay!!.onNavigationEvent = onNavigationEvent
         view.browserOverlay!!.navigationStateProvider = this
+        view.browserOverlay!!.visibility = overlayVisibleCached ?: View.GONE
         progressBar.initialize(this)
         super.onViewCreated(view, savedInstanceState)
     }
@@ -174,6 +178,7 @@ class BrowserFragment : IWebViewLifecycleFragment(),
         super.onDestroyView()
         lifecycle.removeObserver(cursor!!)
         cursor = null
+        overlayVisibleCached = browserOverlay.visibility
     }
 
     override fun isBackEnabled() = canGoBack()
