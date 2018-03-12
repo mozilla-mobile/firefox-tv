@@ -41,8 +41,7 @@ private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 /**
  * Fragment for displaying the browser UI.
  */
-class BrowserFragment : IWebViewLifecycleFragment(),
-        BrowserNavigationOverlay.BrowserNavigationStateProvider {
+class BrowserFragment : IWebViewLifecycleFragment() {
     companion object {
         const val FRAGMENT_TAG = "browser"
 
@@ -165,7 +164,7 @@ class BrowserFragment : IWebViewLifecycleFragment(),
         lifecycle.addObserver(cursor!!)
 
         layout.browserOverlay.onNavigationEvent = onNavigationEvent
-        layout.browserOverlay.navigationStateProvider = this
+        layout.browserOverlay.navigationStateProvider = NavigationStateProvider()
         layout.browserOverlay.visibility = overlayVisibleCached ?: View.GONE
 
         layout.progressBar.initialize(this)
@@ -179,14 +178,6 @@ class BrowserFragment : IWebViewLifecycleFragment(),
         cursor = null
         overlayVisibleCached = browserOverlay.visibility
     }
-
-    override fun isBackEnabled() = canGoBack()
-    override fun isForwardEnabled() = canGoForward()
-    override fun getCurrentUrl() = url
-    override fun isURLPinned() = url.toUri()?.let {
-        // TODO: #569 fix CustomTilesManager to use Uri too
-        CustomTilesManager.getInstance(context).isURLPinned(it.toString()) ||
-    BundledTilesManager.getInstance(context).isURLPinned(it) } ?: false
 
     fun onBackPressed(): Boolean {
         when {
@@ -271,6 +262,16 @@ class BrowserFragment : IWebViewLifecycleFragment(),
         if (toShow) cursor?.onPause() else cursor?.onResume()
         cursor?.setEnabledForCurrentState()
         TelemetryWrapper.drawerShowHideEvent(toShow)
+    }
+
+    private inner class NavigationStateProvider : BrowserNavigationOverlay.BrowserNavigationStateProvider {
+        override fun isBackEnabled() = canGoBack()
+        override fun isForwardEnabled() = canGoForward()
+        override fun getCurrentUrl() = url
+        override fun isURLPinned() = url.toUri()?.let {
+            // TODO: #569 fix CustomTilesManager to use Uri too
+            CustomTilesManager.getInstance(context).isURLPinned(it.toString()) ||
+                    BundledTilesManager.getInstance(context).isURLPinned(it) } ?: false
     }
 }
 
