@@ -28,12 +28,12 @@ public class NavigationItemViewHolder extends BrowserMenuViewHolder {
         updateLoading(fragment.getSession().getLoading().getValue());
 
         final View forwardView = itemView.findViewById(R.id.forward);
-        if (!fragment.canGoForward()) {
-            forwardView.setEnabled(false);
-            forwardView.setAlpha(0.5f);
-        } else {
-            forwardView.setOnClickListener(this);
-        }
+//        if (!fragment.canGoForward()) {
+//            forwardView.setEnabled(false);
+//            forwardView.setAlpha(0.5f);
+//        } else {
+//            forwardView.setOnClickListener(this);
+//        }
     }
 
     public void updateLoading(boolean loading) {

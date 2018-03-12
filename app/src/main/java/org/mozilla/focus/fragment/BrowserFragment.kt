@@ -94,7 +94,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
         else
             NullSession()
 
-        setBlockingEnabled(session.isBlockingEnabled)
+        webView?.setBlockingEnabled(session.isBlockingEnabled)
         session.url.observe(this, Observer { url -> this@BrowserFragment.url = url })
         session.loading.observe(this, object : NonNullObserver<Boolean>() {
             public override fun onValueChanged(loading: Boolean) {
@@ -119,9 +119,9 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
         autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
         when (event) {
-            NavigationEvent.BACK -> if (canGoBack()) goBack()
-            NavigationEvent.FORWARD -> if (canGoForward()) goForward()
-            NavigationEvent.TURBO, NavigationEvent.RELOAD -> reload()
+            NavigationEvent.BACK -> if (webView?.canGoBack() ?: false) webView?.goBack()
+            NavigationEvent.FORWARD -> if (webView?.canGoForward() ?: false) webView?.goForward()
+            NavigationEvent.TURBO, NavigationEvent.RELOAD -> webView?.reload()
             NavigationEvent.HOME -> ScreenController.showHomeScreen(fragmentManager, activity as OnUrlEnteredListener)
             NavigationEvent.SETTINGS -> ScreenController.showSettingsScreen(fragmentManager)
             NavigationEvent.LOAD -> {
@@ -130,7 +130,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
             }
             NavigationEvent.RELOAD_YT -> {
                 isReloadingForYoutubeDrawerClosed = true
-                reload()
+                webView?.reload()
             }
             NavigationEvent.PIN_ACTION -> {
                 this@BrowserFragment.url?.let { url ->
@@ -181,8 +181,8 @@ class BrowserFragment : IWebViewLifecycleFragment() {
 
     fun onBackPressed(): Boolean {
         when {
-            canGoBack() -> {
-                goBack()
+            webView?.canGoBack() ?: false -> {
+                webView?.goBack()
                 TelemetryWrapper.browserBackControllerEvent()
             }
             browserOverlay.isVisible -> setOverlayVisibileByUser(false)
@@ -194,22 +194,12 @@ class BrowserFragment : IWebViewLifecycleFragment() {
         return true
     }
 
-    // TODO: Remove these eventually.
-    // This is outside BrowserFragment's responsibilities - these should be called through a WebView interface.
-    fun canGoForward() = webview?.canGoForward() ?: false
-    fun canGoBack() = webview?.canGoBack() ?: false
-    fun goBack() = webview?.goBack()
-    fun goForward() = webview?.goForward()
-
     fun loadUrl(url: String) {
         val webView = webView
         if (webView != null && !TextUtils.isEmpty(url)) {
             webView.loadUrl(url)
         }
     }
-
-    fun reload() = webView?.reload()
-    fun setBlockingEnabled(enabled: Boolean) = webview?.setBlockingEnabled(enabled)
 
     fun dispatchKeyEvent(event: KeyEvent): Boolean {
         /**
@@ -265,8 +255,8 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     }
 
     private inner class NavigationStateProvider : BrowserNavigationOverlay.BrowserNavigationStateProvider {
-        override fun isBackEnabled() = canGoBack()
-        override fun isForwardEnabled() = canGoForward()
+        override fun isBackEnabled() = webView?.canGoBack() ?: false
+        override fun isForwardEnabled() = webView?.canGoForward() ?: false
         override fun getCurrentUrl() = url
         override fun isURLPinned() = url.toUri()?.let {
             // TODO: #569 fix CustomTilesManager to use Uri too
