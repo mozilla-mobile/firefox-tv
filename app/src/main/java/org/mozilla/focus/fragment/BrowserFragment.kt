@@ -87,14 +87,6 @@ class BrowserFragment : IWebViewLifecycleFragment(),
         initSession()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        view.browserOverlay!!.onNavigationEvent = onNavigationEvent
-        view.browserOverlay!!.navigationStateProvider = this
-        view.browserOverlay!!.visibility = overlayVisibleCached ?: View.GONE
-        progressBar.initialize(this)
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     private fun initSession() {
         val sessionUUID = arguments.getString(ARGUMENT_SESSION_UUID)
                 ?: throw IllegalAccessError("No session exists")
@@ -167,9 +159,17 @@ class BrowserFragment : IWebViewLifecycleFragment(),
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val layout = inflater.inflate(R.layout.fragment_browser, container, false)
+
         cursor = CursorController(this, cursorParent = layout.browserFragmentRoot,
                 view = layout.cursorView)
         lifecycle.addObserver(cursor!!)
+
+        layout.browserOverlay.onNavigationEvent = onNavigationEvent
+        layout.browserOverlay.navigationStateProvider = this
+        layout.browserOverlay.visibility = overlayVisibleCached ?: View.GONE
+
+        layout.progressBar.initialize(this)
+
         return layout
     }
 
