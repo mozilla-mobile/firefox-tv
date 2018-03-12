@@ -20,14 +20,14 @@ import org.mozilla.focus.activity.MainActivity
 import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.browser.cursor.CursorController
 import org.mozilla.focus.ext.toUri
+import org.mozilla.focus.home.BundledTilesManager
+import org.mozilla.focus.home.CustomTilesManager
 import org.mozilla.focus.session.NullSession
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.session.SessionCallbackProxy
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
-import org.mozilla.focus.home.BundledTilesManager
-import org.mozilla.focus.home.CustomTilesManager
 import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.ViewUtils.showCenteredTopToast
 import org.mozilla.focus.web.IWebView
@@ -61,13 +61,12 @@ class BrowserFragment : IWebViewLifecycleFragment(),
     override val initialUrl get() = session.url.value
     override val iWebViewCallback get() = SessionCallbackProxy(session, BrowserIWebViewCallback(this))
 
-    // getUrl() is used for things like sharing the current URL. We could try to use the webview,
-    // but sometimes it's null, and sometimes it returns a null URL. Sometimes it returns a data:
-    // URL for error pages. The URL we show in the toolbar is (A) always correct and (B) what the
-    // user is probably expecting to share, so lets use that here:
-    //
-    // Note: when refactoring, I removed the url view and replaced urlView.setText with assignment
-    // to this url variable - should be equivalent.
+    /**
+     * The current URL.
+     *
+     * Use this instead of the WebView's URL which can return null, return a null URL, or return
+     * data: URLs (for error pages).
+     */
     var url: String? = null
         private set
 
