@@ -60,7 +60,7 @@ import org.mozilla.focus.utils.ThreadUtils;
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        fragment.setBlockingEnabled(isChecked);
+        fragment.getWebView().setBlockingEnabled(isChecked);
 
         // Delay closing the menu and reloading the website a bit so that the user can actually see
         // the switch change its state.
@@ -69,7 +69,7 @@ import org.mozilla.focus.utils.ThreadUtils;
             public void run() {
                 getMenu().dismiss();
 
-                fragment.reload();
+                fragment.getWebView().reload();
             }
         }, /* Switch.THUMB_ANIMATION_DURATION */ 250);
     }
