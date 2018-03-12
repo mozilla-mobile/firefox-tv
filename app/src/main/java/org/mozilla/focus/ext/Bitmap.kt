@@ -5,6 +5,12 @@
 package org.mozilla.focus.ext
 
 import android.graphics.Bitmap
+import android.graphics.BitmapShader
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.RectF
+import android.graphics.Shader
+import android.support.annotation.CheckResult
 
 fun Bitmap.arePixelsAllTheSame(): Boolean {
     val testPixel = getPixel(0, 0)
@@ -25,4 +31,18 @@ fun Bitmap.arePixelsAllTheSame(): Boolean {
     }
 
     return true
+}
+
+@CheckResult
+fun Bitmap.withRoundedCorners(cornerRadius: Float): Bitmap? {
+    val newBitmapWithScreenshotDims = Bitmap.createBitmap(width, height, config)
+    val canvas = Canvas(newBitmapWithScreenshotDims)
+    val paint = Paint()
+
+    // Need to set isAntiAlias to true because it smooths out the edges of what is being drawn
+    paint.isAntiAlias = true
+
+    paint.shader = BitmapShader(this, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+    canvas.drawRoundRect(RectF(0.0f, 0.0f, width.toFloat(), height.toFloat()), cornerRadius, cornerRadius, paint)
+    return newBitmapWithScreenshotDims
 }
