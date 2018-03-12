@@ -261,8 +261,10 @@ private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHold
         val validUri = item.url.toJavaURI()
 
         val screenshotDeferred = async {
-            val screenshot = HomeTileScreenshotStore.read(itemView.context, item.id)
-            screenshot ?: HomeTilePlaceholderGenerator.generate(itemView.context, item.url)
+            val homeTileCornerRadius = itemView.resources.getDimension(R.dimen.home_tile_corner_radius)
+            val homeTilePlaceholderCornerRadius = itemView.resources.getDimension(R.dimen.home_tile_placeholder_corner_radius)
+            val screenshot = HomeTileScreenshotStore.read(itemView.context, item.id)?.withRoundedCorners(homeTileCornerRadius)
+            screenshot ?: HomeTilePlaceholderGenerator.generate(itemView.context, item.url).withRoundedCorners(homeTilePlaceholderCornerRadius)
         }
 
         val titleDeferred = if (validUri == null) {
@@ -281,7 +283,7 @@ private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHold
         // NB: Don't suspend after this point (i.e. between view updates like setImage)
         // so we don't see intermediate view states.
         // TODO: It'd be less error-prone to launch { /* bg work */ launch(UI) { /* UI work */ } }
-        iconView.setImageBitmap(screenshot.withRoundedCorners(iconView.resources.getDimension(R.dimen.home_tile_corner_radius)))
+        iconView.setImageBitmap(screenshot)
         titleView.text = title
 
         // Animate to avoid pop-in due to thread hand-offs. TODO: animation is janky.

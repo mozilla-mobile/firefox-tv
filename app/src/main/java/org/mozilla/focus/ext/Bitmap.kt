@@ -34,7 +34,7 @@ fun Bitmap.arePixelsAllTheSame(): Boolean {
 }
 
 @CheckResult
-fun Bitmap.withRoundedCorners(cornerRadius: Float): Bitmap? {
+fun Bitmap.withRoundedCorners(cornerRadius: Float): Bitmap {
     val newBitmapWithScreenshotDims = Bitmap.createBitmap(width, height, config)
     val canvas = Canvas(newBitmapWithScreenshotDims)
     val paint = Paint()

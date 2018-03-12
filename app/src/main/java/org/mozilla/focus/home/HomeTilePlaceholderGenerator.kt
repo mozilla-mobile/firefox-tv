@@ -17,18 +17,13 @@ import org.mozilla.focus.utils.UrlUtils
 class HomeTilePlaceholderGenerator {
 
     companion object {
-        private val TEXT_SIZE_DP = 52f
+        private val TEXT_SIZE_DP = 22f
         private val DEFAULT_ICON_CHAR = '?'
 
         fun generate(context: Context, url: String?): Bitmap {
             val startingChar = getRepresentativeCharacter(url)
-
-            // When this method is called, the view we're setting this bitmap on has no size (maybe
-            // because it doesn't contain an image?) so we use a hard-coded estimated size instead.
-            val width = context.resources.getDimensionPixelSize(R.dimen.home_tile_icon_estimated_width)
-            val height = context.resources.getDimensionPixelSize(R.dimen.home_tile_icon_estimated_height)
-
-            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val dimen = context.resources.getDimensionPixelSize(R.dimen.home_tile_placeholder_icon_size)
+            val bitmap = Bitmap.createBitmap(dimen, dimen, Bitmap.Config.ARGB_8888)
             bitmap.eraseColor(ContextCompat.getColor(context, R.color.tv_ink))
             return drawCharacterOnBitmap(context, startingChar, bitmap)
         }
