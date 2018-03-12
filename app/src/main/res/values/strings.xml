@@ -8,169 +8,16 @@
     <!-- Label used for buttons, e.g. in dialogs -->
     <string name="action_ok">OK</string>
 
-    <string name="action_save">Save</string>
-
     <!-- This text is shown in the URL bar when it's empty -->
     <string name="urlbar_hint">Search or enter address</string>
 
-    <string name="teaser">Automatic private browsing.\nBrowse. Erase. Repeat.</string>
-
-    <!-- "Snackbar" shown after the user has pressed the 'erase' button at the end of a browsing session -->
-    <string name="feedback_erase">Your browsing history has been erased.</string>
-
-    <!-- This label is shown below the URL bar as soon as the user enters text. Clicking the label will perform a search -->
-    <string name="search_hint">Search for %1$s</string>
-
-    <!-- Menu item: Share the currently visible page -->
-    <string name="menu_share">Share…</string>
-
-    <!-- Menu item: Switch to another browser to open the currently visible page. %1$s will be
-      replaces with the name of the browser like: "Open with Firefox" or "Open with Chrome". Some
-      links can be opened by native apps that aren't a browser, e.g. "Open with YouTube" -->
-    <string name="menu_open_with_default_browser">Open with %1$s</string>
-
-    <!-- Menu item: Switch to another browser to open the currently visible page. This menu item
-      will be shown if there are multiple browsers and we do not know which one is the default
-      browser or in case Firefox for Fire TV is actually the default browser. Clicking this menu item will show
-      a screen with multiple browsers (or other apps that can open the current URL) to choose from. -->
-    <string name="menu_open_with_a_browser">Open with…</string>
-
-    <!-- Menu item: Add the current page as a shortcut to the device's home screen (launcher). -->
-    <string name="menu_add_to_home_screen">Add to Home screen</string>
-
-    <!-- Menu item: Shows information about features and changes that are new to this version -->
-    <string name="menu_whats_new">What\'s New</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_about">About</string>
-    <string name="menu_help">Help</string>
-    <string name="menu_rights">Your Rights</string>
-
-    <!-- Menu item: This is the label for a menu entry that shows how many trackers have been blocked
-         for the currently loaded website. The number of blocked trackers is shown below this label.
-         Next to this label is a switch that allows the user to temporarily enable / disable the
-         blocking of trackers for the current browsing session - for example if the current website
-         doesn't work correctly with blocked content. -->
-    <string name="menu_trackers_blocked_title">Trackers blocked</string>
-
-    <!-- This is the title of a dialog that shows all the share targets (apps or contacts) when
-         sharing an URL. -->
-    <string name="share_dialog_title">Share via</string>
-
-    <!-- While a browsing session is active (in the foreground or background) we will show a notification
-         so that the user doesn't forget about the website still being open. This text is shown in
-         the notification. Clicking the notification will have the same effect as clicking the "erase"
-         button in the application. -->
-    <string name="notification_erase_text">Erase browsing history</string>
-
-    <!-- Notification action to open Firefox for Fire TV and resume the current browsing session. -->
-    <string name="notification_action_open">Open</string>
-
-    <!-- Notification action to erase the current browsing session AND switch to Firefox for Fire TV (bring it
-         to the foreground) -->
-    <string name="notification_action_erase_and_open">Erase and Open</string>
-
-    <!-- On Android 7+ users can add a shortcut for erasing the browsing history to the home screen.
-         This is the label for this shortcut. Android recommends a maximum length of 10 characters. -->
-    <string name="shortcut_erase_short_label">Erase</string>
-
-    <!-- The same as 'shortcut_erase_short_label' but more descriptive. The launcher shows this
-         instead of the short title when it has enough space. Android recommends a maximum length
-         of 25 characters. -->
-    <string name="shortcut_erase_long_label">Erase browsing history</string>
-
-    <!-- This is the label of an action we offer when the user selects text in other third-party apps.
-         Clicking this action will launch Firefox for Fire TV and perform a search in the default search engine. -->
-    <string name="text_selection_search_action">Search Privately</string>
-
-    <!-- Content of about Firefox for Fire TV. Argument 1 is the app name Firefox for Fire TV
-         Argument 2 is the url for the learn-more link. -->
-    <string name="about_content"><![CDATA[
-<p>%1$s puts you in control.</p>
-<p>Use it as a private browser:
-  <ul>
-    <li>Search and browse right in the app</li>
-    <li>Block trackers (or update settings to allow trackers)</li>
-    <li>Erase to delete cookies as well as search and browsing history</li>
-  </ul>
-</p>
-<p>%1$s is produced by Mozilla. Our mission is to foster a healthy, open Internet.<br/>
-<a href="%2$s">Learn more</a></p>
-    ]]></string>
-
-    <string name="preference_category_search">Search</string>
-
-    <!-- This label is shown below the name of the default search engine in settings -->
-    <string name="preference_search_engine_default">Default</string>
-
-    <!-- Text that is shown below a "switch" preference that is enabled. -->
-    <string name="preference_state_on">On</string>
-
-    <!-- Text that is shown below a "switch" preference that is disabled. -->
-    <string name="preference_state_off">Off</string>
-
-    <!-- Item in settings that will open a new preference screen for configuring the URL autocomplete behavior. -->
-    <string name="preference_subitem_autocomplete">URL Autocomplete</string>
-
-    <!-- Title of "switch" preference that enables/disables autocomplete -->
-    <string name="preference_switch_autocomplete">Autocomplete</string>
-
-    <!-- Preference title: URL autocomplete list that ships with Firefox for Fire TV. -->
-    <string name="preference_category_autocomplete_preinstalled">Default URL List</string>
-
-    <!-- Preference summary: URL autocomplete list that ships with Firefox for Fire TV -->
-    <string name="preference_autocomplete_preinstalled_summary">Enable to have %1$s autocomplete over 450 popular URLs in the address bar.</string>
-
-    <!-- Preference category: Custom (user-defined) autocomplete URLs. -->
-    <string name="preference_category_autocomplete_custom">Custom URL</string>
-
-    <!-- Item in autocomplete settings that will open a new preference screen for adding and removing custom autocomplete URLs -->
-    <string name="preference_autocomplete_subitem_customlist">Custom URLs</string>
-
-    <!-- Action at the bottom of the list of custom autocomplete URLs that will open a new screen to add a new URL to the list. -->
-    <string name="preference_autocomplete_action_add">+ Add custom URL</string>
-
-    <!-- Title of the screen for adding custom autocomplete URLs. -->
-    <string name="preference_autocomplete_title_add">Add custom URL</string>
-
-    <string name="preference_autocomplete_title_remove">Remove custom URLs</string>
-
-    <!-- A link to SUMO at autocomplete settings. -->
-    <string name="preference_autocomplete_learn_more">Learn more</string>
-
-    <!-- Preference summary: Custom (user-defined) autocomplete URLs. -->
-    <string name="preference_autocomplete_custom_summary">Add and manage custom autocomplete URLs.</string>
-
-    <!-- Label for the "custom autocomplete URL" input field -->
-    <string name="preference_autocomplete_add_title">URL to add</string>
-
-    <!-- "Hint" text for the "custom autocomplete URL" input field. Shown when the field is empty. -->
-    <string name="preference_autocomplete_add_hint">Paste or enter URL</string>
-
-    <!-- Example how a custom domain autocomplete URL be added (e.g. without http://) -->
-    <string name="preference_autocomplete_add_example">Example: example.com</string>
-
-    <!-- Content description (not visible, for screen readers etc.): A "handle" that allows the user to reorder custom autocomplete URLs -->
-    <string name="preference_autocomplete_handle_content_description">-</string>
-
-    <!-- Confirmation "snackbar" shown after a new custom autocomplete URL has been added. -->
-    <string name="preference_autocomplete_add_confirmation">New custom URL added.</string>
-
-    <!-- Menu item to remove existing autocomplete URLs. -->
-    <string name="preference_autocomplete_menu_remove">Remove</string>
-
-    <!-- Content description (not visible, for screen readers etc.): Button that will delete all selected custom autocomplete URLs. -->
-    <string name="preference_autocomplete_action_remove_content_description">Remove</string>
-
-    <!-- Error message shown if the entered custom autocomplete URL is not valid or empty. -->
-    <string name="preference_autocomplete_add_error">Double-check the URL you entered.</string>
-
     <string name="preference_language">Language</string>
+
     <!-- This is shown when the user hasn't set a Firefox for Fire TV specific language, i.e. when Firefox for Fire TV
          is using the system default language. -->
     <string name="preference_language_systemdefault">System default</string>
-
-    <!-- This is the title of the dialog for selecting a new default search engine -->
-    <string name="preference_dialog_title_search_engine">Default search</string>
 
     <string name="preference_category_privacy">Privacy</string>
     <string name="preference_privacy_block_ads">Block ad trackers</string>
@@ -182,129 +29,15 @@
     <string name="preference_privacy_block_content">Block other content trackers</string>
     <string name="preference_privacy_block_content_summary2">Enabling may cause some pages to behave unexpectedly</string>
 
-    <!-- Preference Title: Secure Mode is a setting that prevents the app's content to show up in the "recent apps" screen
-         and prevents the user from taking screenshots or casting the app to other displays. -->
-    <string name="preference_privacy_secure_mode">Stealth</string>
-    <!-- Preference Summary: Stealth mode (previously "Secure mode") is a setting that prevents the
-     app's content (in our case especially the content of webpages) to show up in the "recent apps"
-     screen. Additionally Android will prevent the user from taking screenshots or casting the app
-     to other displays. However we try to keep this description short and brief to avoid confusion. -->
-    <string name="preference_privacy_stealth_summary">Hide webpages when switching apps</string>
-
     <string name="preference_category_performance">Performance</string>
     <string name="preference_performance_block_webfonts">Block Web fonts</string>
     <!-- This text is shown below the setting for disabling web fonts. Some websites use icons/images from a font and those do not show up if fonts are blocked.-->
     <string name="preference_performance_block_webfonts_summary">May result in missing icons or images</string>
-    <string name="preference_performance_block_images">Block images</string>
 
-    <!-- This preference does not set Firefox for Fire TV as the default browser but instead links to Android's
-     "default apps" settings screen or if not supported by this Android version to a SUMO page describing
-     how to set Firefox for Fire TV as a default browser.
-      %1$s will be replaced by the app name (e.g. Firefox for Fire TV) -->
-    <string name="preference_default_browser2">Make %1$s default browser</string>
-
-    <string name="preference_category_mozilla">Mozilla</string>
     <string name="preference_mozilla_telemetry2">Send usage data</string>
-
-    <!-- A link to SUMO at the end of the summary (preference_mozilla_telemetry_summary2) of the "Send anonymous usage data" setting. -->
-    <string name="preference_mozilla_telemetry_summary">Learn more</string>
-
-    <!-- %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV) -->
-    <string name="preference_mozilla_telemetry_summary2">Mozilla strives to collect only what we need to provide and improve %1$s for everyone.</string>
 
     <!-- In-app link (in settings) to Firefox for Fire TV privacy notice. -->
     <string name="preference_privacy_notice">Privacy Notice</string>
-
-    <!-- Item in Preferences that shows the about page. Parameter 1 is the app name, i.e. Firefox for Fire TV. -->
-    <string name="preference_about">About %1$s</string>
-
-    <!-- Header for the list of installed search engines -->
-    <string name="preference_search_installed_search_engines">Installed search engines</string>
-
-    <!-- Action for restoring the default list of search engines -->
-    <string name="preference_search_restore">Restore default search engines</string>
-
-    <!-- Action for adding an additional search engine to the list.
-    The "+" is used to emphasize that this is an "add" action -->
-    <string name="preference_search_add2">+ Add another search engine</string>
-    <string name="preference_search_remove_title">Remove search engines</string>
-    <string name="preference_search_remove">Remove</string>
-
-    <!-- Clickable text in tutorial to open a dialog to manually add a search engine -->
-    <string name="tutorial_search_manually_add">Manually add</string>
-
-    <string name="tutorial_search_title">Add search engine</string>
-    <string name="tutorial_search_step1">1. Go to the search engine homepage.</string>
-    <string name="tutorial_search_step2">2. Tap into the search engine’s search field.</string>
-    <!-- An alternative string for Step 2 of the tutorial -->
-    <string name="tutorial_search_step2_alternative">2. Long press the search engine’s search field.</string>
-    <string name="tutorial_search_step3">3. Tap the magnifying glass icon above the keyboard to add the search engine.</string>
-    <!-- Clickable action text that shows when user long-presses on a search engine search field (this is similar to paste or copy when long-pressing a text field) -->
-    <string name="action_option_add_search_engine">Add search engine</string>
-
-    <!-- An alternative string for Step 3 of the tutorial. Parameter 1 is action_option_add_search_engine, which is the action text that the tutorial is referring to -->
-    <string name="tutorial_search_step3_alternative">3. Tap %1$s</string>
-    <string name="tutorial_search_step4">4. If you don’t see the magnifying glass, try manually adding a search engine.</string>
-
-    <!-- An alternative string for Step 4 of tutorial. Instruction with suggested action to add search engine, and alternative if that fails. Parameter 1 is &action_option_add_search_engine, which is the clickable action text for adding a search engine. -->
-    <string name="tutorial_search_step4_alternative">4. If you don’t see %1$s, try manually adding a search engine.</string>
-    <string name="tutorial_search_finish">GET STARTED</string>
-
-    <string name="search_add_hint">Tap the magnifying glass icon above the keyboard to add this search engine.</string>
-
-    <string name="search_add_manually_name">Name to display</string>
-    <string name="search_add_manually_name_hint">Search engine name</string>
-    <string name="search_add_manually_string">Search string to use</string>
-    <string name="search_add_manually_save">Save</string>
-
-    <!-- Explanation of how to add search string, with instruction on how to modify the string if necessary. The string "%s" should not be changed or removed. -->
-    <string name="search_add_manually_string_hint">Paste or enter search string. If necessary, replace search term with: %s.</string>
-    <!-- Example of search engine url -->
-    <string name="search_add_manually_example">Example: example.com/search/?q=%s</string>
-
-    <!-- This text is not visible. Instead it will be read by the accessibility service to describe the icon for adding a search engine -->
-    <string name="accessibility_announcement_search">Add search engine</string>
-
-    <string name="search_add_confirmation">New search engine added.</string>
-
-    <string name="search_add_error_empty_name">Enter search engine name</string>
-    <string name="search_add_error_duplicate_name">An installed search engine is already using that name.</string>
-
-    <string name="search_add_error_empty_search">Enter search string</string>
-
-    <string name="search_add_error_format">Check that search string matches Example format</string>
-
-    <!-- Content description (not visible, for screen readers etc.): Clear text in URL bar -->
-    <string name="content_description_clear_input">Clear input</string>
-
-    <!-- Content description (not visible, for screen readers etc.): Clicking on the website overlay
-     while in typing mode will dismiss and go back to the browser. This text will be read when the
-     overlay if focused. See https://github.com/mozilla-mobile/focus-android/issues/50 -->
-    <string name="content_description_dismiss_input">Dismiss</string>
-
-    <!-- Content description (not visible, for screen readers etc.): Erase button: Erase the browsing
-     history and go back to the home screen. -->
-    <string name="content_description_erase">Erase browsing history</string>
-
-    <!-- Content description (not visible, for screen readers etc.): A floating action button that
-      is shown on top of the web content. Clicking the button shows (expands) the menu for switching
-      tabs, adding a new tab or erasing the browsing history. -->
-    <string name="content_description_fab_expand">Expand</string>
-
-    <!-- If the user has multiple tabs open we will show an addition "floating action button" showing how many tabs are open.
-     This string is not displayed and read only by screenreaders. %1$s will be replaced with the number of open tabs. This
-      button will only be visible when there is more than one tab open (>= 2). -->
-    <string name="content_description_tab_counter">Tabs open: %1$s</string>
-
-    <!-- Description of the "+" button used to open a new temporary tab ("open" is a verb), not displayed and read only by screenreaders. -->
-    <string name="content_description_open_tab">Open tab</string>
-
-    <!-- Description of the "X" button used to close a new temporary tab ("close" is a verb), not displayed and read only by screenreaders. -->
-    <string name="content_description_close_tab">Close tab</string>
-
-    <!-- Content description (not visible, for screen readers etc.): Lock icon showed in the URL bar for
-     https pages.. -->
-    <string name="content_description_lock">Secure connection</string>
 
     <!-- This text is not visible. Instead it will be read by the accessibility service once we start
      loading a website -->
@@ -314,9 +47,6 @@
      finished loading a website -->
     <string name="accessibility_announcement_loading_finished">Website loaded</string>
 
-    <!-- Content description (not visible, for screen readers etc.): "Three dot" menu button. -->
-    <string name="content_description_menu">More options</string>
-
     <!-- Content description (not visible, for screen readers etc.): Navigate forward (browsing history) -->
     <string name="content_description_forward">Navigate forward</string>
 
@@ -325,21 +55,6 @@
 
     <!-- Content description (not visible, for screen readers etc.): Navigate back (browsing history) -->
     <string name="content_description_back">Navigate back</string>
-
-    <!-- Content description (not visible, for screen readers etc.): Stop loading the current website. This button will turn into the refresh button once loading has been completed (see content_description_reload) -->
-    <string name="content_description_stop">Stop loading website</string>
-
-    <!-- Content description (not visible, for screen readers etc.): Custom Tab exit button - closes the custom tab and returns to the previous app. -->
-    <string name="content_description_customtab_exit">Return to previous app</string>
-
-    <!-- Content description (not visible, for screen readers etc.): This is the description for the switch in the menu that temporarily disables/enables
-         content blocking for the current session -->
-    <string name="content_description_blocking_switch">Block trackers</string>
-
-    <!-- This is a context menu item shown when long pressing on the URL bar. Selecting it will copy the text from the clipboard into the URL bar and open the URL or perform a search. -->
-    <string name="context_menu_paste_go">Paste &amp; Go</string>
-
-    <string name="your_rights">Your Rights</string>
 
     <string name="external_app_prompt_title">Open link in another  app</string>
     <!-- This string is shown when the user has clicked a link that needs to be opened in a different app.
@@ -352,24 +67,6 @@
     <string name="external_app_prompt_no_app">None of the apps on your device are able to open this link. You can leave %1$s to search %2$s for an app that can.</string>
     <!-- This label is shown above a list of apps that can be used to open a given link -->
     <string name="external_multiple_apps_matched_exit">Exit Private Browsing?</string>
-
-    <!-- Snackbar that will be displayed after a download has completed. %1$s will be replaced with the file name. -->
-    <string name="download_snackbar_finished">%1$s finished</string>
-
-    <!-- Snackbar action to immediately open the successfully downloaded file. -->
-    <string name="download_snackbar_open">Open</string>
-
-    <!-- Download dialog: Warns users that downloaded files will not be deleted even when erasing history. %1$s will be replaced with the app name (i.e. Firefox for Fire TV). -->
-    <string name="download_dialog_warning"><![CDATA[Downloaded files <b>will not be deleted</b> when you erase %1$s history.]]></string>
-
-    <!-- Title of download dialogue -->
-    <string name="download_dialog_title">Download File</string>
-
-    <!-- Option in download dialogue to cancel a download -->
-    <string name="download_dialog_action_cancel">Cancel</string>
-
-    <!-- Option in download dialogue to start a download -->
-     <string name="download_dialog_action_download">Download</string>
 
     <!-- The page html title (i.e. the <title> tag content) -->
     <string name="errorpage_title">Problem loading page</string>
@@ -436,95 +133,6 @@ be temporary, and you can try again later.</li>
 
     <string name="error_generic_title">Oops</string>
     <string name="error_generic_message">We can’t load this page for some reason.</string>
-
-    <!-- Label used in the contextmenu shown when long-pressing on a link -->
-    <string name="contextmenu_link_share">Share link</string>
-    <!-- Label used in the contextmenu shown when long-pressing on a link -->
-    <string name="contextmenu_link_copy">Copy link address</string>
-    <!-- Label used in the contextmenu shown when long-pressing on an image -->
-    <string name="contextmenu_image_share">Share image</string>
-    <!-- Label used in the contextmenu shown when long-pressing on an image -->
-    <string name="contextmenu_image_copy">Copy image address</string>
-    <!-- Label used in the contextmenu shown when long-pressing on an image -->
-    <string name="contextmenu_image_save">Save image</string>
-    <!-- Label used in the contextmenu shown when long-pressing on a link -->
-    <string name="contextmenu_open_in_new_tab">Open link in new tab</string>
-
-    <!-- This is a warning shown in the browser's context menu (when long pressing an image). %1$s will be replaced with the long name of the app (e.g. Firefox for Fire TV). -->
-    <string name="contextmenu_image_warning"><![CDATA[Saved and shared images <b>will not be deleted</b> when you erase %1$s history.]]></string>
-
-    <!-- First run tour (Default browser): Title -->
-    <string name="firstrun_defaultbrowser_title">Power up your privacy</string>
-    <!-- First run tour (Default browser): Text. -->
-    <string name="firstrun_defaultbrowser_text2">Take private browsing to the next level. Block ads and other content that can track you across sites and bog down page load times.</string>
-
-    <!-- First run tour (Search): Title -->
-    <string name="firstrun_search_title">Your search, your way</string>
-    <!-- First run tour (Search): Text -->
-    <string name="firstrun_search_text">Searching for something different? Choose another default search engine in Settings.</string>
-
-    <!-- First run tour (Shortcut): Title -->
-    <string name="firstrun_shortcut_title">Add shortcuts to your home screen</string>
-    <!-- First run tour (Shortcut): Text. %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV) -->
-    <string name="firstrun_shortcut_text">Return to your favorite sites in %1$s quickly. Just select \"Add to Home screen\" from the %1$s menu.</string>
-
-    <!-- First run tour (Privacy): Title -->
-    <string name="firstrun_privacy_title">Make privacy a habit</string>
-    <!-- First run tour (Privacy): Text. %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV) -->
-    <string name="firstrun_privacy_text">Set %1$s as your default browser and get the benefits of private browsing when you open webpages from other apps.</string>
-
-    <string name="firstrun_close_button">OK, got it!</string>
-    <string name="firstrun_skip_button">Skip</string>
-    <string name="firstrun_next_button">Next</string>
-
-    <!-- Indicator that no trackers are being blocked because content blocking is disabled; normally shows the number of blocked trackers -->
-    <string name="content_blocking_disabled">-</string>
-
-    <!-- The title of a dialog we show when the user selected a menu action to add the current website as a shortcut to the home screen. -->
-    <string name="dialog_addtohomescreen_title">Add to Home screen</string>
-
-    <!-- Label of the action that will add the current website to the home screen (shown in the confirmation dialog). -->
-    <string name="dialog_addtohomescreen_action_add">Add</string>
-
-    <!-- Label of the action that will close the dialog and not add anything to the home screen (shown in the confirmation dialog). -->
-    <string name="dialog_addtohomescreen_action_cancel">Cancel</string>
-
-    <!-- When tracking protection is disabled for the current session then we will show this warning in the "Add to home screen" dialog to
-         let the user know that the shortcut will always be opened with tracking protection disabled. -->
-    <string name="dialog_addtohomescreen_tracking_protection">Shortcut will open with Tracking Protection disabled</string>
-
-    <!-- When the limit of concurrent tabs is reached and the user wants to open another tab then we show a dialog to select a tab
-         that will be overridden with the new link. This is the title of the dialog where the user selects a tab to replace with the
-         new URL. -->
-    <string name="dialog_opentab_title">Open link in selected tab</string>
-
-    <!-- When the limit of concurrent tabs is reached and the user wants to open another tab then we show a dialog to select a tab
-         that will be overridden with the new link. This is the label of the action/button to open the new link in the selected
-          existing tab. -->
-    <string name="dialog_opentab_action_open">Open</string>
-
-    <!-- The user visible name of the "notification channel" (Android 8+ feature) for the ongoing notification shown while a browsing session is active.
-    The recommended maximum length is 40 characters; the value may be truncated if it is too long.
-
-    * To understand what notification channels are, see: https://www.androidcentral.com/notification-channels
-    * To see how this string will look like in Android's UI, see: https://github.com/mozilla-mobile/focus-android/issues/863#issuecomment-324105723
-    -->
-    <string name="notification_browsing_session_channel_name">Private browsing session</string>
-
-    <!-- The user visible description of the "notification channel" (Android 8+ feature) for the ongoing notification shown while a browsing session is active.
-    The recommended maximum length is 300 characters; the value may be truncated if it is too long. %1$s will be replaced with the name of the app (e.g. Firefox Focus).
-
-    * To understand what notification channels are, see: https://www.androidcentral.com/notification-channels
-    * To see how this string will look like in Android's UI, see: https://github.com/mozilla-mobile/focus-android/issues/863#issuecomment-324105723
-    -->
-    <string name="notification_browsing_session_channel_description">Notifications let you erase your %1$s session with a tap. You don’t need to open the app or see what’s running in your browser.</string>
-
-    <!-- Label for a button in the "tabs tray" to erase the browsing history (closes all tabs and removes associated data). -->
-    <string name="tabs_tray_action_erase">Erase browsing history</string>
-
-    <!-- If the user decides to open the current page in another browser and if Firefox is not installed then we show this
-      item in the list of browsers. Clicking it will open the app store installed on the device (usually that's Google Play). -->
-    <string name="download_firefox">Download Firefox</string>
 
     <!-- Text shown in the "Your rights" screen.
     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)-->
