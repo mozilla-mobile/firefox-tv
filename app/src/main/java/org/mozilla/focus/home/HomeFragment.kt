@@ -34,6 +34,7 @@ import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.ext.forceExhaustive
 import org.mozilla.focus.ext.toJavaURI
 import org.mozilla.focus.ext.toUri
+import org.mozilla.focus.ext.withRoundedCorners
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.FormattedDomain
@@ -187,8 +188,14 @@ private class HomeTileAdapter(
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with (holder) {
         val item = tiles[position]
         when (item) {
-            is BundledHomeTile -> onBindBundledHomeTile(holder, item)
-            is CustomHomeTile -> onBindCustomHomeTile(uiLifecycleCancelJob, holder, item)
+            is BundledHomeTile -> {
+                onBindBundledHomeTile(holder, item)
+                setLayoutMarginParams(iconView, R.dimen.bundled_home_tile_margin_value)
+            }
+            is CustomHomeTile -> {
+                onBindCustomHomeTile(uiLifecycleCancelJob, holder, item)
+                setLayoutMarginParams(iconView, R.dimen.custom_home_tile_margin_value)
+            }
         }.forceExhaustive
 
         itemView.setOnClickListener {
@@ -212,6 +219,13 @@ private class HomeTileAdapter(
             titleView.setBackgroundResource(backgroundResource)
             titleView.setTextColor(textColor)
         }
+    }
+
+    private fun setLayoutMarginParams(iconView: View, tileMarginValue: Int) {
+        val layoutMarginParams = iconView.layoutParams as ViewGroup.MarginLayoutParams
+        val marginValue = iconView.resources.getDimensionPixelSize(tileMarginValue)
+        layoutMarginParams.setMargins(marginValue, marginValue, marginValue, 0)
+        iconView.layoutParams = layoutMarginParams
     }
 
     fun getItemAtPosition(position: Int): HomeTile? {
@@ -267,7 +281,7 @@ private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHold
         // NB: Don't suspend after this point (i.e. between view updates like setImage)
         // so we don't see intermediate view states.
         // TODO: It'd be less error-prone to launch { /* bg work */ launch(UI) { /* UI work */ } }
-        iconView.setImageBitmap(screenshot)
+        iconView.setImageBitmap(screenshot.withRoundedCorners(iconView.resources.getDimension(R.dimen.home_tile_corner_radius)))
         titleView.text = title
 
         // Animate to avoid pop-in due to thread hand-offs. TODO: animation is janky.
