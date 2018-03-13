@@ -3,7 +3,6 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <dimen name="menu_elevation">8dp</dimen>
 
     <!-- We specifically want match_parent here. If we set -1, the build breaks since integers aren't allowed.
          If we set -1dp, the UI breaks (i.e. we don't get match_parent). For some reason adding another
@@ -15,19 +14,7 @@
     <dimen name="design_navigation_separator_vertical_padding" tools:override="true">0dp</dimen>
     <dimen name="design_navigation_padding_bottom" tools:override="true">0dp</dimen>
 
-    <dimen name="adaptive_icon_drawable_dimen">108dp</dimen> <!-- Specified in AdaptiveIconDrawable docs. -->
-
-    <dimen name="dialogHorizontalPadding">24dp</dimen>
-
-    <dimen name="preference_root_layout_padding">16dp</dimen>
-    <dimen name="preference_icon_drawable_size">24dp</dimen>
-    <dimen name="preference_drawable_padding">32dp</dimen>
-    <dimen name="preference_padding_top">8dp</dimen>
-    <dimen name="preference_padding_horizontal">16dp</dimen>
-    <dimen name="preference_padding_vertical">12dp</dimen>
-    <dimen name="preference_row_height">48dp</dimen>
-
-    <dimen name="textinputlayout_spacing">8dp</dimen>
+    <!-- Specified in AdaptiveIconDrawable docs. -->
 
     <dimen name="home_tile_corner_radius">4dp</dimen>
     <dimen name="urlbar_corner_radius">4dp</dimen>
