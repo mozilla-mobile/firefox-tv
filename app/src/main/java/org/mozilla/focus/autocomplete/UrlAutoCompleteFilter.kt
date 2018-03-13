@@ -24,7 +24,6 @@ class UrlAutoCompleteFilter : InlineAutocompleteEditText.OnFilterListener {
 
     object AutocompleteSource {
         const val DEFAULT_LIST = "default"
-        const val CUSTOM_LIST = "custom"
     }
 
     private var settings: Settings? = null
