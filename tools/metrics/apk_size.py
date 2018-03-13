@@ -8,7 +8,7 @@ from os import path, listdir, stat
 from sys import exit
 
 SIZE_LIMIT_MB = 5
-PATH = path.join(path.dirname(path.abspath(__file__)), '../../app/build/outputs/apk/')
+PATH = path.join(path.dirname(path.abspath(__file__)), '../../app/build/outputs/apk/amazonWebview/debug')
 SIZE_LIMIT_BYTES = SIZE_LIMIT_MB * 1024 * 1024;
 
 files = []

@@ -12,8 +12,8 @@ use_tests_in_packages ['org.mozilla.focus.activity.screenshots']
 app_package_name 'org.mozilla.tv.firefox.debug'
 use_tests_in_packages ['org.mozilla.focus.activity']
 
-app_apk_path 'app/build/outputs/apk/app-amazonWebview-debug.apk'
-tests_apk_path 'app/build/outputs/apk/app-amazonWebview-debug-androidTest.apk'
+app_apk_path 'app/build/outputs/apk/amazonWebview/debug/app-amazonWebview-debug.apk'
+tests_apk_path 'app/build/outputs/apk/amazonWebview/debug/app-amazonWebview-debug-androidTest.apk'
 
 # Clear all previous screenshots locally. Technically not needed in automation.
 # But it's easier to debug this on a local device if there are no old screenshots
