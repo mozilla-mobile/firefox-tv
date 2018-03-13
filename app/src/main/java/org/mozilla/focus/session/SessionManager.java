@@ -13,7 +13,6 @@ import android.text.TextUtils;
 
 import org.mozilla.focus.architecture.NonNullLiveData;
 import org.mozilla.focus.architecture.NonNullMutableLiveData;
-import org.mozilla.focus.shortcut.HomeScreen;
 import org.mozilla.focus.utils.SafeIntent;
 import org.mozilla.focus.utils.UrlUtils;
 
@@ -75,12 +74,7 @@ public class SessionManager {
                 return; // If there's no URL in the Intent then we can't create a session.
             }
 
-            if (intent.hasExtra(HomeScreen.ADD_TO_HOMESCREEN_TAG)) {
-                final boolean blockingEnabled = intent.getBooleanExtra(HomeScreen.BLOCKING_ENABLED, true);
-                createSession(context, Source.HOME_SCREEN, intent, intent.getDataString(), blockingEnabled);
-            } else {
-                createSession(context, Source.VIEW, intent, intent.getDataString());
-            }
+            createSession(context, Source.VIEW, intent, intent.getDataString());
         } else if (Intent.ACTION_SEND.equals(action)) {
             final String dataString = intent.getStringExtra(Intent.EXTRA_TEXT);
             if (TextUtils.isEmpty(dataString)) {
