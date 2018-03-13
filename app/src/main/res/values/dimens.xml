@@ -5,28 +5,15 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <dimen name="menu_elevation">8dp</dimen>
 
-    <dimen name="floating_action_button_margin">16dp</dimen>
-
-    <item name="match_parent" type="dimen">-1</item>
     <!-- We specifically want match_parent here. If we set -1, the build breaks since integers aren't allowed.
          If we set -1dp, the UI breaks (i.e. we don't get match_parent). For some reason adding another
          redirection via an existing attribute works... -->
-    <dimen name="firstrun_container_width">@dimen/match_parent</dimen>
 
     <!-- The custom tabs spec defines a maximum close button size, we need to define this here to enforce that sizing. -->
-    <dimen name="customtabs_toolbar_icon_size">24dp</dimen>
 
     <!-- We are using a NavigationView in our context menu and it adds padding that we do not want. -->
-    <dimen name="design_navigation_padding_top_default" tools:override="true">0dp</dimen>
     <dimen name="design_navigation_separator_vertical_padding" tools:override="true">0dp</dimen>
     <dimen name="design_navigation_padding_bottom" tools:override="true">0dp</dimen>
-
-    <dimen name="firstrun_card_width">300dp</dimen>
-    <dimen name="firstrun_card_height">460dp</dimen>
-
-    <dimen name="tabs_button_text_size">16dp</dimen>
-
-    <dimen name="floating_action_button_size">56dp</dimen>
 
     <dimen name="adaptive_icon_drawable_dimen">108dp</dimen> <!-- Specified in AdaptiveIconDrawable docs. -->
 
@@ -45,10 +32,7 @@
     <dimen name="home_tile_corner_radius">4dp</dimen>
     <dimen name="urlbar_corner_radius">4dp</dimen>
 
-    <dimen name="fab_margin">16dp</dimen>
-
     <dimen name="remote_cursor_size">45dp</dimen>
-    <dimen name="remote_cursor_size2x">90dp</dimen>
 
     <dimen name="button_size">48dp</dimen>
     <dimen name="bundled_home_tile_margin_value">8dp</dimen>

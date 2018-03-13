@@ -9,49 +9,19 @@
 
     <color name="colorAccentSettings">@color/photonBlue50</color>
 
-    <color name="colorGradientStart">#ffa01142</color>
-    <color name="colorGradientCenter">#ff90116D</color>
-    <color name="colorGradientEnd">#ff5c1166</color>
-
-    <color name="colorProgressGradientStart">#FF9400FF</color>
-    <color name="colorProgressGradientEnd">#FFFF1AD9</color>
-
-    <color name="coloInactiveGradientStart">#ff453440</color>
-    <color name="colorInactiveGradientCenter">#ff433446</color>
-    <color name="colorInactiveGradientEnd">#ff3b3445</color>
-
-    <color name="colorErase">@color/photonMagenta70</color>
-    <color name="colorErasePressed">@color/photonMagenta80</color>
-
-    <color name="colorMultitasking">@color/photonBlue50</color>
-    <color name="colorMultitaskingPressed">@color/photonBlue60</color>
-
-    <color name="colorSheetSessionBackground">#fff9f9fa</color>
-    <color name="colorSheetSessionBackgroundPressed">#ffededf0</color>
-
     <color name="colorDotHighlight">@color/photonBlue40</color>
 
-    <color name="colorMenuBackground">#414141</color>
     <color name="colorMenuBackgroundDark">#272727</color>
 
     <color name="colorCursor">#ccffffff</color>
-
-    <color name="colorOverlay">#cc000000</color>
 
     <color name="colorTextInactive">#80FFFFFF</color>
 
     <color name="snackbarBackground">#FF414146</color>
     <color name="snackbarTextColor">#ffffffff</color>
-    <color name="snackbarActionText">@color/photonBlue50</color>
-
-    <color name="searchHintTextColor">#ffffffff</color>
-
-    <color name="onboarding_indicator_default">#7FFFFFFF</color>
-    <color name="onboarding_indicator_selected">#FFFFFFFF</color>
 
     <color name="dialogAccent">@color/photonBlue50</color>
 
-    <color name="colorSession">#272727</color>
     <color name="colorAction">@color/photonBlue50</color>
 
     <color name="add_to_homescreen_text">#B3FFFFFF</color>
