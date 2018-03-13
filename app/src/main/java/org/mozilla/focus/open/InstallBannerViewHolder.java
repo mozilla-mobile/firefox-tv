@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import org.mozilla.focus.R;
-import org.mozilla.focus.activity.InstallFirefoxActivity;
 
 public class InstallBannerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     public static final int LAYOUT_ID = R.layout.item_install_banner;
@@ -30,6 +29,5 @@ public class InstallBannerViewHolder extends RecyclerView.ViewHolder implements 
 
     @Override
     public void onClick(View view) {
-        InstallFirefoxActivity.open(view.getContext());
     }
 }

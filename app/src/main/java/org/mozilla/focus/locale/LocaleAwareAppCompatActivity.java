@@ -12,8 +12,6 @@ import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import org.mozilla.focus.activity.SettingsActivity;
-
 import java.util.Locale;
 
 public abstract class LocaleAwareAppCompatActivity
@@ -74,24 +72,15 @@ public abstract class LocaleAwareAppCompatActivity
         }
     }
 
-    /**
-     * Open the app preferences. Activities must not open SettingsActivity themselves, or any
-     * locale changes performed by SettingsActivity might not be correctly detected.
-     */
-    public void openPreferences() {
-        final Intent settingsIntent = new Intent(this, SettingsActivity.class);
-        startActivityForResult(settingsIntent, 0);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         onConfigurationChanged(getResources().getConfiguration());
 
-        if (resultCode == SettingsActivity.ACTIVITY_RESULT_LOCALE_CHANGED) {
-            applyLocale();
-        }
+//        if (resultCode == SettingsActivity.ACTIVITY_RESULT_LOCALE_CHANGED) {
+//            applyLocale();
+//        }
     }
 
     @Override
