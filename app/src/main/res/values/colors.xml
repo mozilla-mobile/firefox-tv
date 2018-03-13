@@ -9,10 +9,6 @@
 
     <color name="colorAccentSettings">@color/photonBlue50</color>
 
-    <color name="colorDotHighlight">@color/photonBlue40</color>
-
-    <color name="colorMenuBackgroundDark">#272727</color>
-
     <color name="colorCursor">#ccffffff</color>
 
     <color name="colorTextInactive">#80FFFFFF</color>
@@ -20,16 +16,7 @@
     <color name="snackbarBackground">#FF414146</color>
     <color name="snackbarTextColor">#ffffffff</color>
 
-    <color name="dialogAccent">@color/photonBlue50</color>
-
     <color name="colorAction">@color/photonBlue50</color>
-
-    <color name="add_to_homescreen_text">#B3FFFFFF</color>
-    <color name="add_to_homescreen_icon_background">#4C0074</color>
-
-    <color name="firefoxInstallHint">@color/photonMagenta70</color>
-    <color name="preference_row_selected">#414146</color>
-    <color name="preference_row_disabled">#B3313131</color>
 
     <color name="scrollbarThumb">#b2b2b2b2</color>
     <color name="teal50">#00feff</color>

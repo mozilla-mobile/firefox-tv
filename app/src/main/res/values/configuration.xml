@@ -4,6 +4,5 @@
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <resources>
     <!-- We are overriding this value in values-sw600dp -->
-    <bool name="is_tablet">false</bool>
 
 </resources>
