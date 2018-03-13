@@ -37,7 +37,7 @@ python $directory/generate_screengrab_config.py $@
 /opt/focus-android/tools/taskcluster/android-wait-for-emulator.sh
 
 # Install app and make sure directory for taking screenshot exists.
-adb install -r app/build/outputs/apk/app-amazonWebview-webview-debug.apk
+adb install -r app/build/outputs/apk/amazonWebview/debug/app-amazonWebview-webview-debug.apk
 adb shell mkdir /data/data/org.mozilla.tv.firefox.debug/files
 
 # Take screenshots
