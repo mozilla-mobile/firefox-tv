@@ -29,7 +29,6 @@ class UrlAutoCompleteFilter : InlineAutocompleteEditText.OnFilterListener {
 
     private var settings: Settings? = null
 
-    private var customDomains: List<String> = emptyList()
     private var preInstalledDomains: List<String> = emptyList()
 
     override fun onFilter(rawSearchText: String, view: InlineAutocompleteEditText?) {
@@ -41,18 +40,6 @@ class UrlAutoCompleteFilter : InlineAutocompleteEditText.OnFilterListener {
         val searchText = rawSearchText.toLowerCase(Locale.US)
 
         settings?.let {
-            if (it.shouldAutocompleteFromCustomDomainList()) {
-                val autocomplete = tryToAutocomplete(searchText, customDomains)
-                if (autocomplete != null) {
-                    view.onAutocomplete(prepareAutocompleteResult(
-                            rawSearchText,
-                            autocomplete,
-                            AutocompleteSource.CUSTOM_LIST,
-                            customDomains.size))
-                    return
-                }
-            }
-
             if (it.shouldAutocompleteFromShippedDomainList()) {
                 val autocomplete = tryToAutocomplete(searchText, preInstalledDomains)
                 if (autocomplete != null) {
@@ -84,9 +71,8 @@ class UrlAutoCompleteFilter : InlineAutocompleteEditText.OnFilterListener {
         return null
     }
 
-    internal fun onDomainsLoaded(domains: List<String>, customDomains: List<String>) {
+    internal fun onDomainsLoaded(domains: List<String>) {
         this.preInstalledDomains = domains
-        this.customDomains = customDomains
     }
 
     fun load(context: Context, loadDomainsFromDisk: Boolean = true) {
@@ -96,7 +82,7 @@ class UrlAutoCompleteFilter : InlineAutocompleteEditText.OnFilterListener {
             launch(UI) {
                 val domains = async(CommonPool) { loadDomains(context) }
 
-                onDomainsLoaded(domains.await(), emptyList())
+                onDomainsLoaded(domains.await())
             }
         }
     }
