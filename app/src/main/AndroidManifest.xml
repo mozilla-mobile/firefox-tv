@@ -67,39 +67,11 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.TextActionActivity"
-            android:label="@string/text_selection_search_action"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.PROCESS_TEXT" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-        </activity>
-
-        <!-- SettingsActivity title is set dynamically for multilocale support -->
-        <activity android:name=".activity.SettingsActivity"
-            android:theme="@style/SettingsTheme"
-            android:configChanges="locale"
-            android:windowSoftInputMode="adjustPan"/>
-
         <activity android:name=".activity.InfoActivity"
                   android:theme="@style/InfoTheme"/>
 
-        <activity android:name=".activity.InstallFirefoxActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-
         <activity android:name=".activity.OnboardingActivity"
                   android:theme="@style/AppTheme"/>
-
-        <service
-            android:name=".customtabs.CustomTabsService"
-            android:exported="true"
-            tools:ignore="ExportedService">
-            <intent-filter>
-                <action android:name="android.support.customtabs.action.CustomTabsService" />
-            </intent-filter>
-        </service>
 
         <meta-data
             android:name="android.webkit.WebView.MetricsOptOut"
