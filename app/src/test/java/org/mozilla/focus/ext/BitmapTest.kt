@@ -10,9 +10,9 @@ import junit.framework.Assert.assertFalse
 import junit.framework.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mozilla.focus.FirefoxTVTestRunner
+import org.robolectric.RobolectricTestRunner
 
-@RunWith(FirefoxTVTestRunner::class)
+@RunWith(RobolectricTestRunner::class)
 class BitmapTest {
 
     @Test

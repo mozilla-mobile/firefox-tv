@@ -67,7 +67,7 @@ object UserAgent {
 
         val existingWebViewUA = settings.userAgentString
 
-        val appVersion: String? // null during testing - unknown if ever null during application.
+        val appVersion: String? // unknown if Android framework returns null but not worth crashing over.
         try {
             appVersion = context.packageManager.getPackageInfo(context.packageName, 0).versionName
         } catch (e: PackageManager.NameNotFoundException) {
