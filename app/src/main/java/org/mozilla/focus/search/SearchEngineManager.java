@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
-import android.graphics.Bitmap;
 import android.support.annotation.WorkerThread;
 import android.util.Log;
 
@@ -20,37 +19,20 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.focus.ext.AssetManagerKt;
 import org.mozilla.focus.locale.Locales;
-import org.mozilla.focus.shortcut.IconGenerator;
-import org.mozilla.focus.utils.BitmapUtils;
 import org.mozilla.focus.utils.Settings;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -62,9 +44,6 @@ public class SearchEngineManager extends BroadcastReceiver {
     public static final String PREF_KEY_HIDDEN_DEFAULT_ENGINES = "hidden_default_engines";
     private static final String PREF_KEY_CUSTOM_SEARCH_VERSION = "pref_custom_search_version";
     private static final int CUSTOM_SEARCH_VERSION = 1;
-
-    public static final String ENGINE_TYPE_CUSTOM = "custom";
-    public static final String ENGINE_TYPE_BUNDLED = "bundled";
 
     private static SearchEngineManager instance = new SearchEngineManager();
 
@@ -81,80 +60,6 @@ public class SearchEngineManager extends BroadcastReceiver {
     }
 
     private SearchEngineManager() {}
-
-    public static boolean addSearchEngine(SharedPreferences sharedPreferences, Context context, String engineName, String searchQuery) {
-        // This is not for a homescreen shortcut so we don't want an adaptive launcher icon.
-        final Bitmap iconBitmap = IconGenerator.generateLauncherIconPreOreo(context, engineName.charAt(0));
-        final String searchEngineXml = buildSearchEngineXML(engineName, searchQuery, iconBitmap);
-        if (searchEngineXml == null) {
-            return false;
-        }
-        final Set<String> existingEngines = sharedPreferences.getStringSet(PREF_KEY_CUSTOM_SEARCH_ENGINES, Collections.<String>emptySet());
-        final Set<String> newEngines = new LinkedHashSet<>();
-        newEngines.addAll(existingEngines);
-        newEngines.add(engineName);
-
-        sharedPreferences.edit().putInt(PREF_KEY_CUSTOM_SEARCH_VERSION, CUSTOM_SEARCH_VERSION)
-                .putStringSet(PREF_KEY_CUSTOM_SEARCH_ENGINES, newEngines)
-                .putString(engineName, searchEngineXml)
-                .apply();
-
-        return true;
-    }
-
-    public static String buildSearchEngineXML(String engineName, String searchQuery, Bitmap iconBitmap) {
-        Document document = null;
-        try {
-            document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
-            final Element rootElement = document.createElement("OpenSearchDescription");
-            rootElement.setAttribute("xmlns", "http://a9.com/-/spec/opensearch/1.1/");
-            document.appendChild(rootElement);
-
-            final Element shortNameElement = document.createElement("ShortName");
-            shortNameElement.setTextContent(engineName);
-            rootElement.appendChild(shortNameElement);
-
-            final Element imageElement = document.createElement("Image");
-            imageElement.setAttribute("width", "16");
-            imageElement.setAttribute("height", "16");
-            imageElement.setTextContent(BitmapUtils.getBase64EncodedDataUriFromBitmap(iconBitmap));
-            rootElement.appendChild(imageElement);
-
-            final Element descriptionElement = document.createElement("Description");
-            descriptionElement.setTextContent(engineName);
-            rootElement.appendChild(descriptionElement);
-
-            final Element urlElement = document.createElement("Url");
-            urlElement.setAttribute("type", "text/html");
-            // Simple implementation that assumes "%s" terminator from UrlUtils.isValidSearchEngineQueryUrl
-            final String templateSearchString = searchQuery.substring(0, searchQuery.length() - 2) + "{searchTerms}";
-            urlElement.setAttribute("template", templateSearchString);
-            rootElement.appendChild(urlElement);
-
-        } catch (ParserConfigurationException e) {
-            Log.e(LOG_TAG, "Couldn't create new Document for building search engine XML", e);
-            return null;
-        }
-        return XMLtoString(document);
-    }
-
-    private static String XMLtoString(Document doc) {
-        if (doc == null) {
-            return null;
-        }
-
-        final Writer writer = new StringWriter();
-        try {
-            final Transformer tf = TransformerFactory.newInstance().newTransformer();
-            tf.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            tf.transform(new DOMSource(doc), new StreamResult(writer));
-        } catch (TransformerConfigurationException e) {
-            return null;
-        } catch (TransformerException e) {
-            return null;
-        }
-        return writer.toString();
-    }
 
     public void init(Context context) {
         context.registerReceiver(this, new IntentFilter(Intent.ACTION_LOCALE_CHANGED));
@@ -251,15 +156,6 @@ public class SearchEngineManager extends BroadcastReceiver {
         return customEngines;
     }
 
-    public boolean isCustomSearchEngine(String engineId, Context context) {
-        for (SearchEngine e : loadCustomSearchEngines(context)) {
-            if (e.getIdentifier().equals(engineId)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private JSONArray loadSearchEngineListForLocale(Context context) throws IOException {
         try {
             final Locale locale = Locale.getDefault();
@@ -285,12 +181,6 @@ public class SearchEngineManager extends BroadcastReceiver {
             // reading it. An error here would mean the JSON file is corrupt.
             throw new AssertionError("Reading search configuration failed", e);
         }
-    }
-
-    public synchronized List<SearchEngine> getSearchEngines() {
-        awaitLoadingSearchEnginesLocked();
-
-        return searchEngines;
     }
 
     public synchronized SearchEngine getDefaultSearchEngine(Context context) {
@@ -323,39 +213,6 @@ public class SearchEngineManager extends BroadcastReceiver {
                 // Ignore
             }
         }
-    }
-
-    public static void removeSearchEngines(Set<String> engineIdsToRemove, SharedPreferences sharedPreferences) {
-        // Check custom engines first.
-        final Set<String> customEngines = sharedPreferences.getStringSet(PREF_KEY_CUSTOM_SEARCH_ENGINES, Collections.<String>emptySet());
-        final Set<String> remainingCustomEngines = new LinkedHashSet<>();
-        final SharedPreferences.Editor enginesEditor = sharedPreferences.edit();
-
-        for (String engineId : customEngines) {
-            if (engineIdsToRemove.contains(engineId)) {
-                enginesEditor.remove(engineId);
-                // Handled engine removal.
-                engineIdsToRemove.remove(engineId);
-            } else {
-                remainingCustomEngines.add(engineId);
-            }
-        }
-        enginesEditor.putStringSet(PREF_KEY_CUSTOM_SEARCH_ENGINES, remainingCustomEngines);
-
-        // Everything else must be a default engine.
-        final Set<String> hiddenDefaultEngines = sharedPreferences.getStringSet(PREF_KEY_HIDDEN_DEFAULT_ENGINES, Collections.<String>emptySet());
-        engineIdsToRemove.addAll(hiddenDefaultEngines);
-        enginesEditor.putStringSet(PREF_KEY_HIDDEN_DEFAULT_ENGINES, engineIdsToRemove);
-
-        enginesEditor.apply();
-    }
-
-    public static boolean hasAllDefaultSearchEngines(SharedPreferences sharedPreferences) {
-        return !sharedPreferences.contains(PREF_KEY_HIDDEN_DEFAULT_ENGINES);
-    }
-
-    public static synchronized void restoreDefaultSearchEngines(SharedPreferences sharedPreferences) {
-        sharedPreferences.edit().remove(PREF_KEY_HIDDEN_DEFAULT_ENGINES).apply();
     }
 
     private synchronized void invalidateSearchEngines() {

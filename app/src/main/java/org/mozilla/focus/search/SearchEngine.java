@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 public class SearchEngine {
 
     // Parameters copied from nsSearchService.js
@@ -35,11 +33,6 @@ public class SearchEngine {
     /* package */ String name;
     /* package */ Bitmap icon;
     /* package */ List<Uri> resultsUris;
-    // We don't currently support search suggestions, however that's something that we might
-    // need to support in future, moreover this is already stored in the input files that we're merely
-    // moving into memory - hence we probably want to keep this field for now:
-    @SuppressFBWarnings(value = "URF_UNREAD_FIELD", justification = "Needed for future versions, reflects on-disk format")
-    /* package */ Uri suggestUri;
 
     /* package */ SearchEngine(String identifier) {
         this.identifier = identifier;
@@ -69,14 +62,6 @@ public class SearchEngine {
         final String template = Uri.decode(searchUri.toString());
         final String urlWithSubstitutions = paramSubstitution(template, Uri.encode(searchTerm));
         return UrlUtils.normalize(urlWithSubstitutions); // User-entered search engines may need normalization.
-    }
-
-    public String getBaseSearchUrl() {
-        if (!resultsUris.isEmpty()) {
-            return resultsUris.get(0).toString();
-        } else {
-            return null;
-        }
     }
 
     /**
