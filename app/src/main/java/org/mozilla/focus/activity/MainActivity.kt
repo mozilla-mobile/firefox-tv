@@ -11,16 +11,14 @@ import android.os.Bundle
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.View
-import android.view.WindowManager
-
 import com.amazon.android.webkit.AmazonWebKitFactories
 import com.amazon.android.webkit.AmazonWebKitFactory
-import kotlinx.android.synthetic.main.activity_main.container
+import kotlinx.android.synthetic.main.activity_main.*
 import org.mozilla.focus.R
 import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.fragment.BrowserFragment
-import org.mozilla.focus.home.HomeFragment
 import org.mozilla.focus.fragment.ScreenController
+import org.mozilla.focus.home.HomeFragment
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.session.SessionManager
@@ -44,9 +42,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
         initAmazonFactory()
         val intent = SafeIntent(intent)
 
-        if (Settings.getInstance(this).shouldUseSecureMode()) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
-        }
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
         setContentView(R.layout.activity_main)
@@ -80,12 +75,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
         super.onResume()
 
         TelemetryWrapper.startSession()
-
-        if (Settings.getInstance(this).shouldUseSecureMode()) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
-        } else {
-            window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
-        }
     }
 
     override fun onPause() {
