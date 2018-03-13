@@ -15,7 +15,6 @@ import java.net.URLEncoder;
 import java.util.Locale;
 
 public class SupportUtils {
-    public static final String DEFAULT_BROWSER_URL = "https://support.mozilla.org/kb/set-firefox-focus-default-browser-android";
 
     public static String getSumoURLForTopic(final Context context, final String topic) {
         String escapedTopic;
