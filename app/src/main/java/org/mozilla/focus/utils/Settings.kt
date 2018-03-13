@@ -49,10 +49,7 @@ class Settings private constructor(context: Context) {
                 .apply()
     }
 
-    fun shouldAutocompleteFromShippedDomainList() =
-            preferences.getBoolean(
-                    getPreferenceKey(R.string.pref_key_autocomplete_preinstalled),
-                    true)
+    fun shouldAutocompleteFromShippedDomainList() = true
 
     private fun getPreferenceKey(resourceId: Int): String =
             resources.getString(resourceId)
