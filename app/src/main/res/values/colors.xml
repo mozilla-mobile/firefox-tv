@@ -16,8 +16,6 @@
     <color name="snackbarBackground">#FF414146</color>
     <color name="snackbarTextColor">#ffffffff</color>
 
-    <color name="colorAction">@color/photonBlue50</color>
-
     <color name="scrollbarThumb">#b2b2b2b2</color>
     <color name="teal50">#00feff</color>
     <color name="teal_nav">#03d8ff</color>
