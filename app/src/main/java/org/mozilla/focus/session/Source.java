@@ -20,16 +20,6 @@ public enum Source {
     SHARE,
 
     /**
-     * Via text selection action ("Search privately")
-     */
-    TEXT_SELECTION,
-
-    /**
-     * Via a home screen shortcut.
-     */
-    HOME_SCREEN,
-
-    /**
      * The user entered a URL (or search ter,s)
      */
     USER_ENTERED,
@@ -38,11 +28,6 @@ public enum Source {
      * Custom tab from a third-party application.
      */
     CUSTOM_TAB,
-
-    /**
-     * Open as a new tab from the (context( menu.
-     */
-    MENU,
 
     /**
      * Only used internally if we need to temporarily create a session object with no specific source.

@@ -12,8 +12,6 @@ public final class AppConstants {
     private static final String BUILD_TYPE_BETA = "beta";
     private static final String BUILD_TYPE_RELEASE = "release";
 
-    private static final String PRODUCT_FLAVOR_KLAR = "klar";
-
     private AppConstants() {}
 
     public static boolean isDevBuild() {
@@ -28,7 +26,4 @@ public final class AppConstants {
         return BUILD_TYPE_BETA.equals(BuildConfig.BUILD_TYPE);
     }
 
-    public static boolean supportsDownloadingFiles() {
-        return true;
-    }
 }

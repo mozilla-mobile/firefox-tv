@@ -95,23 +95,6 @@ public class SafeIntent {
         }
     }
 
-    public SafeBundle getBundleExtra(final String name) {
-        try {
-            final Bundle bundle = intent.getBundleExtra(name);
-            if (bundle != null) {
-                return new SafeBundle(bundle);
-            } else {
-                return null;
-            }
-        } catch (OutOfMemoryError e) {
-            Log.w(LOGTAG, "Couldn't get intent extras: OOM. Malformed?");
-            return null;
-        } catch (RuntimeException e) {
-            Log.w(LOGTAG, "Couldn't get intent extras.", e);
-            return null;
-        }
-    }
-
     public CharSequence getCharSequenceExtra(final String name) {
         try {
             return intent.getCharSequenceExtra(name);
