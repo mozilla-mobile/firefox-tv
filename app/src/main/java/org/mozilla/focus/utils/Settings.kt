@@ -54,11 +54,6 @@ class Settings private constructor(context: Context) {
                     getPreferenceKey(R.string.pref_key_autocomplete_preinstalled),
                     true)
 
-    fun shouldAutocompleteFromCustomDomainList() =
-            preferences.getBoolean(
-                    getPreferenceKey(R.string.pref_key_autocomplete_custom),
-                    false)
-
     private fun getPreferenceKey(resourceId: Int): String =
             resources.getString(resourceId)
 
