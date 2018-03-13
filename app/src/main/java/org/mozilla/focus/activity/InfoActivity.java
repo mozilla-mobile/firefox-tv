@@ -20,7 +20,6 @@ import org.mozilla.focus.R;
 import org.mozilla.focus.browser.LocalizedContent;
 import org.mozilla.focus.fragment.InfoFragment;
 import org.mozilla.focus.locale.Locales;
-import org.mozilla.focus.utils.SupportUtils;
 import org.mozilla.focus.web.IWebView;
 import org.mozilla.focus.web.WebViewProvider;
 
@@ -30,7 +29,6 @@ import org.mozilla.focus.web.WebViewProvider;
  */
 public class InfoActivity extends AppCompatActivity {
     private static final String PRIVACY_NOTICE_URL = "https://www.mozilla.org/privacy/firefox-fire-tv/";
-    private static final String PRIVACY_NOTICE_KLAR_URL = "https://www.mozilla.org/privacy/firefox-fire-tv/";
 
     private static final String EXTRA_URL = "extra_url";
     private static final String EXTRA_TITLE = "extra_title";
@@ -49,24 +47,9 @@ public class InfoActivity extends AppCompatActivity {
         return getIntentFor(context, LocalizedContent.URL_ABOUT, resources.getString(R.string.menu_about));
     }
 
-    public static Intent getRightsIntent(final Context context) {
-        final Resources resources = Locales.getLocalizedResources(context);
-        return getIntentFor(context, LocalizedContent.URL_RIGHTS, resources.getString(R.string.menu_rights));
-    }
-
-    public static Intent getHelpIntent(final Context context) {
-        final Resources resources = Locales.getLocalizedResources(context);
-        return getIntentFor(context, SupportUtils.HELP_URL, resources.getString(R.string.menu_help));
-    }
-
     public static Intent getPrivacyNoticeIntent(final Context context) {
         final Resources resources = Locales.getLocalizedResources(context);
         return getIntentFor(context, PRIVACY_NOTICE_URL, resources.getString(R.string.preference_privacy_notice));
-    }
-
-    public static Intent getTrackerHelpIntent(final Context context) {
-        final Resources resources = Locales.getLocalizedResources(context);
-        return getIntentFor(context, SupportUtils.getSumoURLForTopic(context, "trackers"), resources.getString(R.string.menu_help));
     }
 
     @Override

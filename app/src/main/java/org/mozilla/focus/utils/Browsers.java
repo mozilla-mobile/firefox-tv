@@ -12,9 +12,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,10 +65,6 @@ public class Browsers {
 
     private final Map<String, ActivityInfo> browsers;
     private final ActivityInfo defaultBrowser;
-    // This will contain installed firefox branded browser ordered by priority from Firefox,
-    // Firefox_Beta, Firefox Aurora and Firefox_Nightly. If multiple firefox branded browser is
-    // installed then higher priority one will be stored here
-    private ActivityInfo firefoxBrandedBrowser;
 
     public Browsers(Context context, @NonNull String url) {
         final PackageManager packageManager = context.getPackageManager();
@@ -87,20 +81,6 @@ public class Browsers {
 
         this.browsers = browsers;
         this.defaultBrowser = findDefault(context, packageManager, uri);
-        this.firefoxBrandedBrowser = findFirefoxBrandedBrowser();
-    }
-
-    private ActivityInfo findFirefoxBrandedBrowser() {
-        if (browsers.containsKey(KnownBrowser.FIREFOX.packageName)) {
-            return browsers.get(KnownBrowser.FIREFOX.packageName);
-        } else if (browsers.containsKey(KnownBrowser.FIREFOX_BETA.packageName)) {
-            return browsers.get(KnownBrowser.FIREFOX_BETA.packageName);
-        } else if (browsers.containsKey(KnownBrowser.FIREFOX_AURORA.packageName)) {
-            return browsers.get(KnownBrowser.FIREFOX_AURORA.packageName);
-        } else if (browsers.containsKey(KnownBrowser.FIREFOX_NIGHTLY.packageName)) {
-            return browsers.get(KnownBrowser.FIREFOX_NIGHTLY.packageName);
-        }
-        return null;
     }
 
     private Map<String, ActivityInfo> resolveBrowsers(Context context, PackageManager packageManager, @NonNull Uri uri) {
@@ -177,60 +157,6 @@ public class Browsers {
     }
 
     /**
-     * Does this user have a default browser that is not Firefox (release) or Focus (this build).
-     */
-    public boolean hasThirdPartyDefaultBrowser(Context context) {
-        return defaultBrowser != null
-                && !defaultBrowser.packageName.equals(KnownBrowser.FIREFOX.packageName)
-                && !(firefoxBrandedBrowser != null && defaultBrowser.packageName.equals(firefoxBrandedBrowser.packageName))
-                && !defaultBrowser.packageName.equals(context.getPackageName());
-    }
-
-    /**
-     * Is (regular) the default browser of the user?
-     */
-    public boolean isFirefoxDefaultBrowser() {
-        if (defaultBrowser == null) {
-            return false;
-        }
-
-        return defaultBrowser.packageName.equals(KnownBrowser.FIREFOX.packageName)
-                || defaultBrowser.packageName.equals(KnownBrowser.FIREFOX_BETA.packageName)
-                || defaultBrowser.packageName.equals(KnownBrowser.FIREFOX_AURORA.packageName)
-                || defaultBrowser.packageName.equals(KnownBrowser.FIREFOX_NIGHTLY.packageName);
-    }
-
-    public @Nullable ActivityInfo getDefaultBrowser() {
-        return defaultBrowser;
-    }
-
-    /**
-     * Does this user have browsers installed that are not Focus, Firefox or the default browser?
-     */
-    public boolean hasMultipleThirdPartyBrowsers(Context context) {
-        if (browsers.size() > 1) {
-            // There are more than us and Firefox.
-            return true;
-        }
-
-        for (ActivityInfo info : browsers.values()) {
-            if (info != defaultBrowser
-                    && !info.packageName.equals(KnownBrowser.FIREFOX.packageName)
-                    && !info.packageName.equals(context.getPackageName())) {
-                // There's at least one browser that is not Focus or Firefox and also not the
-                // default browser.
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public boolean isInstalled(KnownBrowser browser) {
-        return browsers.containsKey(browser.packageName);
-    }
-
-    /**
      * Is *this* application the default browser?
      */
     public boolean isDefaultBrowser(Context context) {
@@ -238,17 +164,4 @@ public class Browsers {
 
     }
 
-    public ActivityInfo[] getInstalledBrowsers() {
-        final Collection<ActivityInfo> collection = browsers.values();
-
-        return collection.toArray(new ActivityInfo[collection.size()]);
-    }
-
-    public boolean hasFirefoxBrandedBrowserInstalled() {
-        return firefoxBrandedBrowser != null;
-    }
-
-    public ActivityInfo getFirefoxBrandedBrowser() {
-        return firefoxBrandedBrowser;
-    }
 }

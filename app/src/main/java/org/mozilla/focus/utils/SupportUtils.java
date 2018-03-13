@@ -15,16 +15,7 @@ import java.net.URLEncoder;
 import java.util.Locale;
 
 public class SupportUtils {
-    public static final String HELP_URL = "https://support.mozilla.org/kb/what-firefox-focus-android";
     public static final String DEFAULT_BROWSER_URL = "https://support.mozilla.org/kb/set-firefox-focus-default-browser-android";
-
-    public static String getWhatsNewUrl(Context context) {
-        return getSumoURLForTopic(context, "whats-new-focus-android-4");
-    }
-
-    public static String getAutocompleteUrl(Context context) {
-        return getSumoURLForTopic(context, "autofill-domain-android");
-    }
 
     public static String getSumoURLForTopic(final Context context, final String topic) {
         String escapedTopic;

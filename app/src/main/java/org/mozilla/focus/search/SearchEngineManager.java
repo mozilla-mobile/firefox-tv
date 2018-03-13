@@ -42,8 +42,6 @@ public class SearchEngineManager extends BroadcastReceiver {
     public static final String PREF_FILE_SEARCH_ENGINES = "custom-search-engines";
     public static final String PREF_KEY_CUSTOM_SEARCH_ENGINES = "pref_custom_search_engines";
     public static final String PREF_KEY_HIDDEN_DEFAULT_ENGINES = "hidden_default_engines";
-    private static final String PREF_KEY_CUSTOM_SEARCH_VERSION = "pref_custom_search_version";
-    private static final int CUSTOM_SEARCH_VERSION = 1;
 
     private static SearchEngineManager instance = new SearchEngineManager();
 
