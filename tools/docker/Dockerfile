@@ -43,11 +43,12 @@ ENV PATH ${PATH}:${ANDROID_SDK_HOME}/tools:${ANDROID_SDK_HOME}/platform-tools:/o
 # Platform tools
 RUN echo y | android update sdk --no-ui --all --filter platform-tools | grep 'package installed'
 
-# Android 8.0 / SDK 26
+# Android SDK
 RUN echo y | android update sdk --no-ui --all --filter android-26 | grep 'package installed'
 
-# Build tools 26.0.1
+# Build tools
 RUN echo y | android update sdk --no-ui --all --filter build-tools-26.0.1 | grep 'package installed'
+RUN echo y | android update sdk --no-ui --all --filter build-tools-26.0.2 | grep 'package installed'
 
 # Extras
 RUN echo y | android update sdk --no-ui --all --filter extra-android-m2repository | grep 'package installed'
