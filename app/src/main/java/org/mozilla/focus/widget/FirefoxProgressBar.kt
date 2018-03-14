@@ -16,7 +16,7 @@ import android.view.View.GONE
 import android.widget.LinearLayout
 import org.mozilla.focus.R
 import org.mozilla.focus.architecture.NonNullObserver
-import org.mozilla.focus.fragment.BrowserFragment
+import org.mozilla.focus.browser.BrowserFragment
 import kotlinx.android.synthetic.main.firefox_progress_bar.view.*
 import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit

@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.focus.fragment
+package org.mozilla.focus.browser
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
@@ -15,8 +15,9 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.android.synthetic.main.fragment_browser.view.*
+import org.mozilla.focus.MainActivity
 import org.mozilla.focus.R
-import org.mozilla.focus.activity.MainActivity
+import org.mozilla.focus.ScreenController
 import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.browser.cursor.CursorController
 import org.mozilla.focus.ext.toUri

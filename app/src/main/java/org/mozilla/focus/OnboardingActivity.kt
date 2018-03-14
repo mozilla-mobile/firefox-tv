@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.focus.activity
+package org.mozilla.focus
 
 import android.app.Activity
 import android.content.Intent
@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.content_onboarding.*
-import org.mozilla.focus.R
 import org.mozilla.focus.web.IWebView
 
 class OnboardingActivity : AppCompatActivity() {

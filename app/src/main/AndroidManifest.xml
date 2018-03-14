@@ -30,7 +30,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
         </provider>
-        <activity android:name=".activity.MainActivity"
+        <activity android:name=".MainActivity"
             android:launchMode="singleTask"
             android:configChanges="keyboard|keyboardHidden|mcc|mnc|orientation|screenSize|locale|layoutDirection|smallestScreenSize|screenLayout"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
@@ -67,10 +67,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.InfoActivity"
+        <activity android:name=".browser.InfoActivity"
                   android:theme="@style/InfoTheme"/>
 
-        <activity android:name=".activity.OnboardingActivity"
+        <activity android:name=".OnboardingActivity"
                   android:theme="@style/AppTheme"/>
 
         <meta-data

@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.focus.activity
+package org.mozilla.focus
 
 import android.content.Context
 import android.content.Intent
@@ -14,10 +14,8 @@ import android.view.View
 import com.amazon.android.webkit.AmazonWebKitFactories
 import com.amazon.android.webkit.AmazonWebKitFactory
 import kotlinx.android.synthetic.main.activity_main.*
-import org.mozilla.focus.R
 import org.mozilla.focus.architecture.NonNullObserver
-import org.mozilla.focus.fragment.BrowserFragment
-import org.mozilla.focus.fragment.ScreenController
+import org.mozilla.focus.browser.BrowserFragment
 import org.mozilla.focus.home.HomeFragment
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity
 import org.mozilla.focus.session.Session
