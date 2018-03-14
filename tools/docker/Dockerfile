@@ -30,6 +30,8 @@ RUN gem install fastlane
 
 RUN locale-gen en_US.UTF-8
 
+ENV LANG en_US.UTF-8
+
 # -- Android SDK ------------------------------------------------------------------------
 
 RUN cd /opt && wget -q https://dl.google.com/android/android-sdk_r24.4.1-linux.tgz -O android-sdk.tgz
