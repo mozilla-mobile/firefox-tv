@@ -47,8 +47,7 @@
 
     <dimen name="fab_margin">16dp</dimen>
 
-    <dimen name="remote_cursor_size">45dp</dimen>
-    <dimen name="remote_cursor_size2x">90dp</dimen>
+    <dimen name="remote_cursor_size">24dp</dimen>
 
     <dimen name="button_size">48dp</dimen>
     <dimen name="bundled_home_tile_margin_value">8dp</dimen>
