@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 import org.mozilla.focus.R;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
 import static android.support.test.espresso.action.ViewActions.replaceText;
@@ -33,9 +34,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static android.support.test.espresso.web.assertion.WebViewAssertions.webMatches;
 import static android.support.test.espresso.web.model.Atoms.getCurrentUrl;
 import static android.support.test.espresso.web.sugar.Web.onWebView;
-import static android.support.test.espresso.web.assertion.WebViewAssertions.webMatches;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.mozilla.focus.activity.OnboardingActivity.ONBOARD_SHOWN_PREF;
@@ -111,11 +112,9 @@ public class BrowserOverlayTest {
         onView(ViewMatchers.withId(R.id.new_settings_list))
                 .check(matches(isDisplayed()));
 
-        mDevice.pressBack();
+        pressBack();
 
         webView.check(matches(isDisplayed()));
-
-        mDevice.pressMenu();
 
         /* Navigation: visit/back/forward */
 
