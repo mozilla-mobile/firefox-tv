@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.focus.fragment
+package org.mozilla.focus
 
 import android.app.AlertDialog
 import android.content.DialogInterface
@@ -13,8 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityManager
 import kotlinx.android.synthetic.main.fragment_new_settings.*
-import org.mozilla.focus.R
-import org.mozilla.focus.activity.InfoActivity
+import org.mozilla.focus.browser.InfoActivity
 import org.mozilla.focus.ext.getAccessibilityManager
 import org.mozilla.focus.ext.isVoiceViewEnabled
 import org.mozilla.focus.session.SessionManager

@@ -23,7 +23,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mozilla.focus.R;
-import org.mozilla.focus.activity.MainActivity;
+import org.mozilla.focus.MainActivity;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.locale.LocaleTestRule;
@@ -44,7 +44,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNot.not;
-import static org.mozilla.focus.activity.OnboardingActivity.ONBOARD_SHOWN_PREF;
+import static org.mozilla.focus.OnboardingActivity.ONBOARD_SHOWN_PREF;
 
 @RunWith(AndroidJUnit4.class)
 public class TVScreenshots extends ScreenshotTest {

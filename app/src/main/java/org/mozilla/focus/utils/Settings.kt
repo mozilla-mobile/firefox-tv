@@ -10,7 +10,7 @@ import android.content.res.Resources
 import android.preference.PreferenceManager
 
 import org.mozilla.focus.R
-import org.mozilla.focus.activity.OnboardingActivity
+import org.mozilla.focus.OnboardingActivity
 import org.mozilla.focus.search.SearchEngine
 import org.mozilla.focus.web.IWebView
 

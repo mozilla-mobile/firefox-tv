@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.focus.activity;
+package org.mozilla.focus.browser;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
@@ -20,6 +20,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mozilla.focus.R;
+import org.mozilla.focus.MainActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
@@ -39,7 +40,7 @@ import static android.support.test.espresso.web.model.Atoms.getCurrentUrl;
 import static android.support.test.espresso.web.sugar.Web.onWebView;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
-import static org.mozilla.focus.activity.OnboardingActivity.ONBOARD_SHOWN_PREF;
+import static org.mozilla.focus.OnboardingActivity.ONBOARD_SHOWN_PREF;
 
 @RunWith(AndroidJUnit4.class)
 public class BrowserOverlayTest {

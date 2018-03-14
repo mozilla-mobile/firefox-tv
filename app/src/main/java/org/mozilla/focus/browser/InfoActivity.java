@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.focus.activity;
+package org.mozilla.focus.browser;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,9 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
 
+import org.mozilla.focus.MainActivity;
 import org.mozilla.focus.R;
-import org.mozilla.focus.browser.LocalizedContent;
-import org.mozilla.focus.fragment.InfoFragment;
 import org.mozilla.focus.locale.Locales;
 import org.mozilla.focus.web.IWebView;
 import org.mozilla.focus.web.WebViewProvider;

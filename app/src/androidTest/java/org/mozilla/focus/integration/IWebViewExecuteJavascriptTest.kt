@@ -25,8 +25,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.focus.R
-import org.mozilla.focus.activity.MainActivity
-import org.mozilla.focus.fragment.BrowserFragment
+import org.mozilla.focus.MainActivity
+import org.mozilla.focus.browser.BrowserFragment
 import org.mozilla.focus.helpers.SessionLoadedIdlingResource
 
 /** An integration test to verify [IWebView.executeJS] works correctly. */

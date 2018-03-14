@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.fragment_browser.*
 import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.ext.getAccessibilityManager
 import org.mozilla.focus.ext.isVoiceViewEnabled
-import org.mozilla.focus.fragment.BrowserFragment
+import org.mozilla.focus.browser.BrowserFragment
 
 private const val SCROLL_MULTIPLIER = 45
 
