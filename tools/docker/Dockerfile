@@ -61,21 +61,6 @@ COPY tools /opt/tools
 # Accept licenses
 COPY licenses ${ANDROID_SDK_HOME}/licenses
 
-# -- Emulator ---------------------------------------------------------------------------
-
-# Android 5.0 / SDK 21
-RUN echo y | android update sdk --no-ui --all --filter android-21 | grep 'package installed'
-
-# Emulator image
-RUN echo y | android update sdk --no-ui --all --filter sys-img-armeabi-v7a-android-21 | grep 'package installed'
-
-# Create emulator AVD
-RUN echo no | android create avd -f -n test -t android-21 --abi default/armeabi-v7a --skin 480x800
-
-# Create fake keymap file (Otherwise the emulator won't start up)
-RUN mkdir /opt/android-sdk-linux/tools/keymaps && \
-    touch /opt/android-sdk-linux/tools/keymaps/en-us
-
 # -- Update SDK -------------------------------------------------------------------------
 
 # Update SDK
