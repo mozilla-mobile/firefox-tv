@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.TypedValue
 import android.view.ContextMenu
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -21,6 +22,7 @@ import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.home_tile.*
 import kotlinx.android.synthetic.main.home_tile.view.*
 import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.CompletableDeferred
@@ -90,6 +92,19 @@ class HomeFragment : Fragment() {
         }
 
         registerForContextMenu(view)
+
+        tileContainer.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                val gridLayoutManager = recyclerView?.layoutManager as GridLayoutManager
+                val lastVisibleItem = gridLayoutManager.findLastCompletelyVisibleItemPosition()
+                // We add a scroll offset, revealing the next row to hint that there are more home tiles
+                if (dy > 0 && getFocusedTilePosition() > lastVisibleItem) {
+                    val scrollOffset = TypedValue.applyDimension(
+                            TypedValue.COMPLEX_UNIT_DIP, home_tile.height.toFloat() / 2, context.resources.displayMetrics)
+                    recyclerView.smoothScrollBy(0, scrollOffset.toInt())
+                }
+            }
+        })
     }
 
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
