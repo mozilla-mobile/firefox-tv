@@ -24,7 +24,6 @@ import java.nio.charset.StandardCharsets;
  * A very simple parser for search plugins.
  */
 /* package */ class SearchEngineParser {
-    private static final String URLTYPE_SUGGEST_JSON = "application/x-suggestions+json";
     private static final String URLTYPE_SEARCH_HTML  = "text/html";
     private static final String URL_REL_MOBILE = "mobile";
 
@@ -113,7 +112,6 @@ import java.nio.charset.StandardCharsets;
             } else {
                 searchEngine.resultsUris.add(uri);
             }
-        } else if (type.equals(URLTYPE_SUGGEST_JSON)) {
         }
     }
 
