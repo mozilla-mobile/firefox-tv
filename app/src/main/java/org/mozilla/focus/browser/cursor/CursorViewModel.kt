@@ -20,9 +20,10 @@ import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 
 private const val UPDATE_DELAY_MILLIS = 20L
+private const val UPDATE_DELAY_MILLIS_F = UPDATE_DELAY_MILLIS.toFloat() // Avoid conversion in update loop.
 
-private const val FRICTION = 0.98f
-private const val MAX_SPEED = 25f
+private const val ACCEL_MODIFIER = 0.98f
+private const val MAX_VELOCITY = 25f
 
 private const val DOWN_TIME_OFFSET_MILLIS = 100
 
@@ -75,32 +76,35 @@ class CursorViewModel(
     private fun update(deltaMillis: Long) {
         // Frames aren't guaranteed to occur at perfect intervals so we adjust the distance
         // travelled by the amount of time that has actually passed between frames (as
-        // opposed to the amount of time we expect to pass between frames): this should
-        // increase smoothness when the system can't keep up with our desired framerate.
+        // opposed to the amount of time we expect to pass between frames): this guarantees equal
+        // distance travelled when the system can't keep up with our desired framerate but the
+        // cursor will noticeably skip ahead as frames are dropped.
         //
-        // This adjustment could be expressed more naturally if this algorithm was expressed
-        // as a series of kinematic equations, i.e. vnew = vold + accel * deltaTime.
-        val deltaVel = (vel + 1) * FRICTION - vel
-        val timeAdjustedDeltaVel = deltaVel * (deltaMillis / UPDATE_DELAY_MILLIS.toFloat())
-        vel = Math.min(MAX_SPEED, vel + timeAdjustedDeltaVel)
+        // The way we express acceleration is not natural, but kept for legacy reasons.
+        val framesPassed = deltaMillis / UPDATE_DELAY_MILLIS_F
+        val accel = (vel + 1) * ACCEL_MODIFIER - vel
+        val timeAdjustedAccel = accel * framesPassed
+
+        vel = Math.min(MAX_VELOCITY, vel + timeAdjustedAccel)
 
         val isMovingDiagonal = pressedDirections.size > 1
         val finalVel = if (isMovingDiagonal) vel / 2 else vel
 
         for (dir in pressedDirections) {
-            updatePosForVel(dir, finalVel)
+            updatePosForVel(dir, finalVel, framesPassed)
         }
 
         clampPos(pos, maxBounds)
         onUpdate(pos.x, pos.y, getScrollVel())
     }
 
-    private fun updatePosForVel(dir: Direction, vel: Float) {
+    private fun updatePosForVel(dir: Direction, vel: Float, framesPassed: Float) {
+        val timeAdjustedVel = vel * framesPassed
         when (dir) {
-            Direction.UP -> pos.y -= vel
-            Direction.DOWN -> pos.y += vel
-            Direction.LEFT -> pos.x -= vel
-            Direction.RIGHT -> pos.x += vel
+            Direction.UP -> pos.y -= timeAdjustedVel
+            Direction.DOWN -> pos.y += timeAdjustedVel
+            Direction.LEFT -> pos.x -= timeAdjustedVel
+            Direction.RIGHT -> pos.x += timeAdjustedVel
         }
     }
 
