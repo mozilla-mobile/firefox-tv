@@ -6,7 +6,7 @@ package org.mozilla.focus.session;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mozilla.focus.web.IWebView;
+import org.mozilla.focus.iwebview.IWebView;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.mockito.Mockito.mock;

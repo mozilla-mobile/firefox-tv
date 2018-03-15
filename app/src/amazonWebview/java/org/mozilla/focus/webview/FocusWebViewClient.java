@@ -21,7 +21,7 @@ import org.mozilla.focus.browser.LocalizedContent;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.IntentUtils;
 import org.mozilla.focus.utils.UrlUtils;
-import org.mozilla.focus.web.IWebView;
+import org.mozilla.focus.iwebview.IWebView;
 
 /**
  * WebViewClient layer that handles browser specific WebViewClient functionality, such as error pages

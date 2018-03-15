@@ -15,8 +15,8 @@ import android.widget.ProgressBar;
 import org.mozilla.focus.R;
 import org.mozilla.focus.session.NullSession;
 import org.mozilla.focus.session.Session;
-import org.mozilla.focus.web.IWebView;
-import org.mozilla.focus.web.IWebViewLifecycleFragment;
+import org.mozilla.focus.iwebview.IWebView;
+import org.mozilla.focus.iwebview.IWebViewLifecycleFragment;
 
 public class InfoFragment extends IWebViewLifecycleFragment {
     private ProgressBar progressView;

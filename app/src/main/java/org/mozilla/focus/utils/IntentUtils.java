@@ -14,7 +14,7 @@ import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 
 import org.mozilla.focus.R;
-import org.mozilla.focus.web.IWebView;
+import org.mozilla.focus.iwebview.IWebView;
 
 import java.net.URISyntaxException;
 import java.util.List;

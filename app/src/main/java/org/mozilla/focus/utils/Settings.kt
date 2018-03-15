@@ -12,7 +12,7 @@ import android.preference.PreferenceManager
 import org.mozilla.focus.R
 import org.mozilla.focus.OnboardingActivity
 import org.mozilla.focus.search.SearchEngine
-import org.mozilla.focus.web.IWebView
+import org.mozilla.focus.iwebview.IWebView
 
 /**
  * A simple wrapper for SharedPreferences that makes reading preference a little bit easier.
