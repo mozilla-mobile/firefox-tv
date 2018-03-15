@@ -22,7 +22,7 @@
             android:paddingBottom="40dp">
 
         <!-- TODO: analyze the params below -->
-        x<org.mozilla.focus.widget.InlineAutocompleteEditText
+        <org.mozilla.focus.widget.InlineAutocompleteEditText
                 android:id="@+id/urlInputView"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
