@@ -48,7 +48,7 @@
         android:layout_gravity="top|start"
         />
 
-    <org.mozilla.focus.widget.FirefoxProgressBar
+    <org.mozilla.focus.browser.FirefoxProgressBar
         android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
         android:descendantFocusability="blocksDescendants"
         />
 
-    <org.mozilla.focus.widget.BrowserNavigationOverlay
+    <org.mozilla.focus.browser.BrowserNavigationOverlay
         android:id="@+id/browserOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

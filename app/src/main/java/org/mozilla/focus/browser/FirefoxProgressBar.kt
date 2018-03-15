@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.focus.widget
+package org.mozilla.focus.browser
 
 import android.content.Context
 import android.util.AttributeSet
@@ -16,7 +16,6 @@ import android.view.View.GONE
 import android.widget.LinearLayout
 import org.mozilla.focus.R
 import org.mozilla.focus.architecture.NonNullObserver
-import org.mozilla.focus.browser.BrowserFragment
 import kotlinx.android.synthetic.main.firefox_progress_bar.view.*
 import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
