@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import org.mozilla.focus.R;
 import org.mozilla.focus.utils.UrlUtils;
+import org.mozilla.focus.utils.ViewUtils;
 
 public class InlineAutocompleteEditText extends android.support.v7.widget.AppCompatEditText {
     public interface OnCommitListener {
@@ -598,7 +599,8 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
                 if (mOnBackPressedListener != null) {
                     mOnBackPressedListener.onBackPressed();
                 }
-                return false;
+                // Issue #495 - Handle hiding keyboard so Amazon keyboard doesn't mess up the focus.
+                return ViewUtils.hideKeyboard(this);
             }
 
             return false;

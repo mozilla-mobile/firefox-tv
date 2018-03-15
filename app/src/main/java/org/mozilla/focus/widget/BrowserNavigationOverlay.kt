@@ -104,12 +104,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         val autocompleteFilter = UrlAutoCompleteFilter()
         autocompleteFilter.load(context.applicationContext)
         setOnFilterListener { searchText, view -> autocompleteFilter.onFilter(searchText, view) }
-
-        setOnBackPressedListener {
-            if (isVisible) {
-                requestFocus()
-            }
-        }
     }
 
     override fun onClick(view: View?) {
