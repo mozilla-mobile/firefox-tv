@@ -18,7 +18,7 @@ import org.mozilla.focus.home.HomeTile
 import org.mozilla.focus.utils.AppConstants
 import org.mozilla.focus.web.IWebView
 import org.mozilla.focus.widget.InlineAutocompleteEditText.AutocompleteResult
-import org.mozilla.focus.widget.NavigationEvent
+import org.mozilla.focus.browser.NavigationEvent
 import org.mozilla.telemetry.Telemetry
 import org.mozilla.telemetry.TelemetryHolder
 import org.mozilla.telemetry.config.TelemetryConfiguration

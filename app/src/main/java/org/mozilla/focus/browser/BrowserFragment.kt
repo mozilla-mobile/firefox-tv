@@ -33,9 +33,7 @@ import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.ViewUtils.showCenteredTopToast
 import org.mozilla.focus.web.IWebView
 import org.mozilla.focus.web.IWebViewLifecycleFragment
-import org.mozilla.focus.widget.BrowserNavigationOverlay
 import org.mozilla.focus.widget.InlineAutocompleteEditText
-import org.mozilla.focus.widget.NavigationEvent
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 
@@ -118,7 +116,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     }
 
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
-        autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
+            autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
         when (event) {
             NavigationEvent.BACK -> if (webView?.canGoBack() ?: false) webView?.goBack()
             NavigationEvent.FORWARD -> if (webView?.canGoForward() ?: false) webView?.goForward()
