@@ -17,7 +17,7 @@ import org.mozilla.focus.ext.getAccessibilityManager
 import org.mozilla.focus.ext.isVoiceViewEnabled
 import kotlin.properties.Delegates
 
-private const val SCROLL_MULTIPLIER = 45
+private const val SCROLL_MULTIPLIER = 0.60f
 
 /**
  * Encapsulates interactions of the Cursors components. It has the following responsibilities:
@@ -97,7 +97,7 @@ class CursorController(
     private fun scrollWebView(scrollVel: PointF) {
         val scrollX = Math.round(scrollVel.x * SCROLL_MULTIPLIER)
         val scrollY = Math.round(scrollVel.y * SCROLL_MULTIPLIER)
-        browserFragment.webView?.flingScroll(scrollX, scrollY)
+        browserFragment.webView?.scrollBy(scrollX, scrollY)
     }
 
     private inner class CursorIsLoadingObserver : NonNullObserver<Boolean>() {
