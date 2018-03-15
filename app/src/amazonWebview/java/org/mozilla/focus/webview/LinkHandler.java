@@ -13,7 +13,7 @@ import android.view.View;
 
 import com.amazon.android.webkit.AmazonWebView;
 
-import org.mozilla.focus.web.IWebView;
+import org.mozilla.focus.iwebview.IWebView;
 
 /* package */ class LinkHandler implements View.OnLongClickListener {
     private final AmazonWebView webView;

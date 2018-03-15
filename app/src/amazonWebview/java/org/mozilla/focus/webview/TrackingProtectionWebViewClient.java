@@ -17,7 +17,7 @@ import com.amazon.android.webkit.AmazonWebViewClient;
 
 import org.mozilla.focus.R;
 import org.mozilla.focus.utils.Settings;
-import org.mozilla.focus.web.IWebView;
+import org.mozilla.focus.iwebview.IWebView;
 import org.mozilla.focus.webview.matcher.UrlMatcher;
 
 public class TrackingProtectionWebViewClient extends AmazonWebViewClient

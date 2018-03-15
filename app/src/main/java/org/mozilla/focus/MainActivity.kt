@@ -17,6 +17,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.browser.BrowserFragment
 import org.mozilla.focus.home.HomeFragment
+import org.mozilla.focus.iwebview.IWebView
+import org.mozilla.focus.iwebview.WebViewProvider
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.session.SessionManager
@@ -26,8 +28,6 @@ import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.SafeIntent
 import org.mozilla.focus.utils.Settings
 import org.mozilla.focus.utils.ViewUtils
-import org.mozilla.focus.web.IWebView
-import org.mozilla.focus.web.WebViewProvider
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 
 class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {

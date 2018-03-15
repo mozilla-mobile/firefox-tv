@@ -31,8 +31,8 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.ViewUtils.showCenteredTopToast
-import org.mozilla.focus.web.IWebView
-import org.mozilla.focus.web.IWebViewLifecycleFragment
+import org.mozilla.focus.iwebview.IWebView
+import org.mozilla.focus.iwebview.IWebViewLifecycleFragment
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"

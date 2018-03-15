@@ -16,7 +16,7 @@ import org.mozilla.focus.home.BundledHomeTile
 import org.mozilla.focus.home.CustomHomeTile
 import org.mozilla.focus.home.HomeTile
 import org.mozilla.focus.utils.AppConstants
-import org.mozilla.focus.web.IWebView
+import org.mozilla.focus.iwebview.IWebView
 import org.mozilla.focus.widget.InlineAutocompleteEditText.AutocompleteResult
 import org.mozilla.focus.browser.NavigationEvent
 import org.mozilla.telemetry.Telemetry

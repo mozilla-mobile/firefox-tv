@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.focus.web;
+package org.mozilla.focus.iwebview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -49,7 +49,7 @@ public class WebViewProvider {
         // Nothing: a WebKit work-around.
     }
 
-    public static class GeckoWebView extends NestedGeckoView implements IWebView {
+    public static class GeckoWebView extends org.mozilla.focus.iwebview.NestedGeckoView implements IWebView {
         private Callback callback;
         private String currentUrl = "about:blank";
         private boolean canGoBack;

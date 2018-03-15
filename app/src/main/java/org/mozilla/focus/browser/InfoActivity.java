@@ -19,8 +19,8 @@ import android.view.View;
 import org.mozilla.focus.MainActivity;
 import org.mozilla.focus.R;
 import org.mozilla.focus.locale.Locales;
-import org.mozilla.focus.web.IWebView;
-import org.mozilla.focus.web.WebViewProvider;
+import org.mozilla.focus.iwebview.IWebView;
+import org.mozilla.focus.iwebview.WebViewProvider;
 
 /**
  * A generic activity that supports showing additional information in a WebView. This is useful

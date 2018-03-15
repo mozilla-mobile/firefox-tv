@@ -16,7 +16,7 @@ import com.amazon.android.webkit.AmazonWebView
 import org.mozilla.focus.ext.deleteData
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.utils.UrlUtils
-import org.mozilla.focus.web.IWebView
+import org.mozilla.focus.iwebview.IWebView
 
 /**
  * An IWebView implementation using AmazonWebView.
