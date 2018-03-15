@@ -44,7 +44,7 @@ private const val DOWN_TIME_OFFSET_MILLIS = 100
  * @param simulateTouchEvent Takes the given touch event and simulates a touch to the screen.
  */
 class CursorViewModel(
-        private val onUpdate: (x: Float, y: Float, scrollVel: PointF) -> Unit,
+        private val onUpdate: (x: Float, y: Float, percentMaxScrollVel: PointF, framesPassed: Float) -> Unit,
         private val simulateTouchEvent: (MotionEvent) -> Unit
 ) {
 
@@ -62,7 +62,7 @@ class CursorViewModel(
             isInitialPosSet = true
             pos.set(newValue.x / 2, newValue.y / 2) // Center.
         }
-        onUpdate(pos.x, pos.y, getScrollVel())
+        onUpdate(pos.x, pos.y, getPercentMaxScrollVel(), 1f)
     }
 
     private var isInitialPosSet = false
@@ -95,7 +95,7 @@ class CursorViewModel(
         }
 
         clampPos(pos, maxBounds)
-        onUpdate(pos.x, pos.y, getScrollVel())
+        onUpdate(pos.x, pos.y, getPercentMaxScrollVel(), framesPassed)
     }
 
     private fun updatePosForVel(dir: Direction, vel: Float, framesPassed: Float) {
@@ -108,19 +108,20 @@ class CursorViewModel(
         }
     }
 
-    private fun getScrollVel(): PointF {
+    private fun getPercentMaxScrollVel(): PointF {
         scrollVelReturnVal.set(0f, 0f)
         if (vel > 0f) {
+            val percentMaxVel = vel / MAX_VELOCITY
             if (pos.x == 0f && pressedDirections.contains(Direction.LEFT)) {
-                scrollVelReturnVal.x = -vel
+                scrollVelReturnVal.x = -percentMaxVel
             } else if (pos.x == maxBounds.x && pressedDirections.contains(Direction.RIGHT)) {
-                scrollVelReturnVal.x = vel
+                scrollVelReturnVal.x = percentMaxVel
             }
 
             if (pos.y == 0f && pressedDirections.contains(Direction.UP)) {
-                scrollVelReturnVal.y = -vel
+                scrollVelReturnVal.y = -percentMaxVel
             } else if (pos.y == maxBounds.y && pressedDirections.contains(Direction.DOWN)) {
-                scrollVelReturnVal.y = vel
+                scrollVelReturnVal.y = percentMaxVel
             }
         }
         return scrollVelReturnVal

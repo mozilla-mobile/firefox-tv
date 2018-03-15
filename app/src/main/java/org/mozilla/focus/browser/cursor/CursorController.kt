@@ -17,7 +17,7 @@ import org.mozilla.focus.ext.getAccessibilityManager
 import org.mozilla.focus.ext.isVoiceViewEnabled
 import kotlin.properties.Delegates
 
-private const val SCROLL_MULTIPLIER = 0.60f
+private const val MAX_SCROLL_VELOCITY = 13
 
 /**
  * Encapsulates interactions of the Cursors components. It has the following responsibilities:
@@ -42,9 +42,9 @@ class CursorController(
         view.visibility = if (newValue) View.VISIBLE else View.GONE
     }
 
-    private val viewModel = CursorViewModel(onUpdate = { x, y, scrollVel ->
+    private val viewModel = CursorViewModel(onUpdate = { x, y, percentMaxScrollVel, framesPassed ->
         view.updatePosition(x, y)
-        scrollWebView(scrollVel)
+        scrollWebView(percentMaxScrollVel, framesPassed)
     }, simulateTouchEvent = { browserFragment.activity.dispatchTouchEvent(it) })
 
     val keyDispatcher = CursorKeyDispatcher(isEnabled, viewModel)
@@ -94,9 +94,14 @@ class CursorController(
         setEnabledForCurrentState()
     }
 
-    private fun scrollWebView(scrollVel: PointF) {
-        val scrollX = Math.round(scrollVel.x * SCROLL_MULTIPLIER)
-        val scrollY = Math.round(scrollVel.y * SCROLL_MULTIPLIER)
+    private fun scrollWebView(percentMaxScrollVel: PointF, framesPassed: Float) {
+        fun getDeltaScrollAdjustedForTime(percentScrollVel: Float) =
+                Math.round(percentScrollVel * MAX_SCROLL_VELOCITY * framesPassed)
+
+        // Adjusting for time guarantees the distance scrolled
+        // is the same, even if the framerate drops.
+        val scrollX = getDeltaScrollAdjustedForTime(percentMaxScrollVel.x)
+        val scrollY = getDeltaScrollAdjustedForTime(percentMaxScrollVel.y)
         browserFragment.webView?.scrollBy(scrollX, scrollY)
     }
 
