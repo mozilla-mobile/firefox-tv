@@ -88,7 +88,7 @@ public class WebViewProvider {
         }
 
         @Override
-        public void flingScroll(int vx, int vy) {
+        public void scrollBy(int vx, int vy) {
 
         }
 
