@@ -224,7 +224,7 @@ private class HomeTileAdapter(
     private fun setLayoutMarginParams(iconView: View, tileMarginValue: Int) {
         val layoutMarginParams = iconView.layoutParams as ViewGroup.MarginLayoutParams
         val marginValue = iconView.resources.getDimensionPixelSize(tileMarginValue)
-        layoutMarginParams.setMargins(marginValue, marginValue, marginValue, 0)
+        layoutMarginParams.setMargins(marginValue, marginValue, marginValue, marginValue)
         iconView.layoutParams = layoutMarginParams
     }
 
