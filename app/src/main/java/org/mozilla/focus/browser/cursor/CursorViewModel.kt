@@ -74,18 +74,24 @@ class CursorViewModel(
     private var updateLoop: Deferred<Unit>? = null
 
     private fun update(deltaMillis: Long) {
+        /**
+         * Gets the amount velocity should change per frame. The algorithm was determined
+         * experimentally and does not adhere to kinematic math.
+         */
+        fun getDeltaVelPerFrame() = (vel + 1) * ACCEL_MODIFIER - vel
+
         // Frames aren't guaranteed to occur at perfect intervals so we adjust the distance
         // travelled by the amount of time that has actually passed between frames (as
         // opposed to the amount of time we expect to pass between frames): this guarantees equal
         // distance travelled when the system can't keep up with our desired framerate but the
         // cursor will noticeably skip ahead as frames are dropped.
         //
-        // The way we express acceleration is not natural, but kept for legacy reasons.
+        // This adjustment could be expressed more naturally if this algorithm was expressed
+        // as a series of kinematic equations, i.e. vnew = vold + accel * deltaTime.
         val framesPassed = deltaMillis / UPDATE_DELAY_MILLIS_F
-        val accel = (vel + 1) * ACCEL_MODIFIER - vel
-        val timeAdjustedAccel = accel * framesPassed
+        val deltaVelForCurrentUpdate = getDeltaVelPerFrame() * framesPassed
 
-        vel = Math.min(MAX_VELOCITY, vel + timeAdjustedAccel)
+        vel = Math.min(MAX_VELOCITY, vel + deltaVelForCurrentUpdate)
 
         val isMovingDiagonal = pressedDirections.size > 1
         val finalVel = if (isMovingDiagonal) vel / 2 else vel
@@ -99,12 +105,12 @@ class CursorViewModel(
     }
 
     private fun updatePosForVel(dir: Direction, vel: Float, framesPassed: Float) {
-        val timeAdjustedVel = vel * framesPassed
+        val deltaPosForCurrentUpdate = vel * framesPassed
         when (dir) {
-            Direction.UP -> pos.y -= timeAdjustedVel
-            Direction.DOWN -> pos.y += timeAdjustedVel
-            Direction.LEFT -> pos.x -= timeAdjustedVel
-            Direction.RIGHT -> pos.x += timeAdjustedVel
+            Direction.UP -> pos.y -= deltaPosForCurrentUpdate
+            Direction.DOWN -> pos.y += deltaPosForCurrentUpdate
+            Direction.LEFT -> pos.x -= deltaPosForCurrentUpdate
+            Direction.RIGHT -> pos.x += deltaPosForCurrentUpdate
         }
     }
 
