@@ -60,6 +60,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             if (makeVisible) {
                 navUrlInput.requestFocus()
                 updateNavigationButtons()
+                navUrlInput.setText(navigationStateProvider?.getCurrentUrl())
             } else {
                 // #393: Youtube doesn't refocus properly, so refresh
                 if (navUrlInput.text.contains("youtube.com/tv")) {
@@ -104,13 +105,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         val autocompleteFilter = UrlAutoCompleteFilter()
         autocompleteFilter.load(context.applicationContext)
         setOnFilterListener { searchText, view -> autocompleteFilter.onFilter(searchText, view) }
-
-        // #548: Get the current URL when we leave resign focus
-        setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                setText(navigationStateProvider?.getCurrentUrl())
-            }
-        }
 
         setOnBackPressedListener {
             if (isVisible) {
