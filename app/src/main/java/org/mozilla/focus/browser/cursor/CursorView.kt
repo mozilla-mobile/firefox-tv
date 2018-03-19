@@ -8,8 +8,6 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
@@ -40,15 +38,7 @@ class CursorView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     }
 
     private val cursorBg = BitmapFactory.decodeResource(resources, R.drawable.cursor_bg)
-    private val cursorBgBlendingMode = PorterDuffXfermode(PorterDuff.Mode.MULTIPLY)
     private val cursorFg = BitmapFactory.decodeResource(resources, R.drawable.cursor_fg)
-    private val cursorFgBlendingMode = PorterDuffXfermode(PorterDuff.Mode.SCREEN)
-
-    init {
-        // In order to draw the bitmaps with the blending mode and
-        // alpha we have to set the LayerType to software
-        setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-    }
 
     @UiThread
     fun updatePosition(x: Float, y: Float) {
@@ -63,12 +53,7 @@ class CursorView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        // We have to paint a background for the shadow to apepar
-        canvas.drawRect(0f, 0f, width + 0f, height + 0f, paint)
-
-        paint.xfermode = cursorBgBlendingMode
         canvas.drawBitmap(cursorBg, 0f, 0f, paint)
-        paint.xfermode = cursorFgBlendingMode
         canvas.drawBitmap(cursorFg, 0f, 0f, paint)
     }
 
