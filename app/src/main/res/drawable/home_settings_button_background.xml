@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
-        <ripple android:color="@color/button_highlight">
-            <item android:id="@android:id/mask">
-                <shape android:shape="oval">
-                    <solid android:color="@android:color/black" />
-                </shape>
-            </item>
-        </ripple>
-    </item>
-</layer-list>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+    <size
+        android:height="40dp"
+        android:width="40dp"/>
+
+    <solid
+        android:color="@color/home_settings_button_background_color"/>
+
+</shape>
