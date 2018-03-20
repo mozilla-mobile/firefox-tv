@@ -103,9 +103,9 @@ object ScreenController {
 
     fun showSettingsScreen(fragmentManager: FragmentManager) {
         // TODO: animations if fragment is found.
-        val settingsFragment = NewSettingsFragment.create()
+        val settingsFragment = SettingsFragment.create()
         fragmentManager.beginTransaction()
-                .replace(R.id.container, settingsFragment, NewSettingsFragment.FRAGMENT_TAG)
+                .replace(R.id.container, settingsFragment, SettingsFragment.FRAGMENT_TAG)
                 .addToBackStack(null)
                 .commit()
     }

@@ -18,7 +18,6 @@
         android:layout_marginStart="30dp"/>
 
     <LinearLayout
-        android:id="@+id/new_settings_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
