@@ -37,4 +37,7 @@
     <color name="button_pressed">@color/tv_blue60</color>
     <color name="button_checked">@color/translucent_tv_ink2</color>
     <color name="button_border">@color/translucent_tv_gray40</color>
+
+    <color name="white_a10p">#1AFFFFFF</color>
+    <color name="white_a20p">#33FFFFFF</color>
 </resources>
