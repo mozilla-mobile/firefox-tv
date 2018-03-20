@@ -8,15 +8,16 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.arch.lifecycle.Observer
+import android.graphics.drawable.AnimationDrawable
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.view.View
 import android.view.View.GONE
 import android.widget.LinearLayout
+import kotlinx.android.synthetic.main.firefox_progress_bar.view.*
 import org.mozilla.focus.R
 import org.mozilla.focus.architecture.NonNullObserver
-import kotlinx.android.synthetic.main.firefox_progress_bar.view.*
 import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
 
@@ -46,16 +47,13 @@ class FirefoxProgressBar @JvmOverloads constructor(
     init {
         LayoutInflater.from(context)
                 .inflate(R.layout.firefox_progress_bar, this, true)
-        gifImageView.setGifImageResource(R.drawable.progress_loading_indicator)
-
-        // hardware acceleration needs to be disabled for gif support in FirefoxProgressBar
-        // http://android-er.blogspot.it/2014/03/play-animated-gif-with.html
-        setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+        setLayerType(View.LAYER_TYPE_HARDWARE, null)
     }
 
     private fun showBar() {
         hideHandler.removeMessages(HIDE_MESSAGE_ID)
         visibility = View.VISIBLE
+        (progressAnimation.background as AnimationDrawable).start()
         animate().cancel()
         alpha = 1f
     }
@@ -81,7 +79,10 @@ private class FirefoxProgressBarHideHandler(view: FirefoxProgressBar) : Handler(
         val progressBar = viewWeakReference.get()
         progressBar
                 ?.animate()
-                ?.withEndAction { progressBar.visibility = GONE }
+                ?.withEndAction {
+                    progressBar.visibility = GONE
+                    (progressBar.progressAnimation.background as AnimationDrawable).stop()
+                }
                 ?.setDuration(HIDE_ANIMATION_DURATION_MILLIS)
                 ?.alpha(0f)
                 ?.start()
