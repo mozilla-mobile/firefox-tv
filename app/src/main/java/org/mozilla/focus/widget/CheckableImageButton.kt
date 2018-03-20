@@ -9,6 +9,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.accessibility.AccessibilityNodeInfo
+import android.widget.CheckBox
 import android.widget.Checkable
 import android.widget.ImageButton
 
@@ -57,6 +58,15 @@ class CheckableImageButton @JvmOverloads constructor(
         toggle()
         return super.performClick()
     }
+
+    // The system provides special accessibility announcements based on the value returned
+    // from this method, e.g. overriding this method is the only difference between CheckBox
+    // and its CompoundButton super class:
+    // http://androidxref.com/8.0.0_r4/xref/frameworks/base/core/java/android/widget/CheckBox.java
+    //
+    // We want to act like a checkbox so we return checkbox here. We also need to update the
+    // checked state in onInitializeAccessibilityNodeInfo (below).
+    override fun getAccessibilityClassName(): CharSequence = CheckBox::class.java.name
 
     override fun onInitializeAccessibilityNodeInfo(info: AccessibilityNodeInfo?) {
         super.onInitializeAccessibilityNodeInfo(info)
