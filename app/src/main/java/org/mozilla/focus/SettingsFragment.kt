@@ -12,21 +12,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityManager
-import kotlinx.android.synthetic.main.fragment_new_settings.*
+import kotlinx.android.synthetic.main.fragment_settings.*
 import org.mozilla.focus.browser.InfoActivity
 import org.mozilla.focus.ext.getAccessibilityManager
 import org.mozilla.focus.ext.isVoiceViewEnabled
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 
-/** The home fragment which displays the navigation tiles of the app. */
-class NewSettingsFragment : Fragment() {
+/** The settings for the app. */
+class SettingsFragment : Fragment() {
     private val voiceViewStateChangeListener = AccessibilityManager.TouchExplorationStateChangeListener {
         updateForAccessibility()
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater!!.inflate(R.layout.fragment_new_settings, container, false)
+            inflater!!.inflate(R.layout.fragment_settings, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 
@@ -100,9 +100,9 @@ class NewSettingsFragment : Fragment() {
     }
 
     companion object {
-        const val FRAGMENT_TAG = "new_settings"
+        const val FRAGMENT_TAG = "settings"
 
         @JvmStatic
-        fun create() = NewSettingsFragment()
+        fun create() = SettingsFragment()
     }
 }
