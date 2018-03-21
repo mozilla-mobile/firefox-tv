@@ -14,23 +14,17 @@ import com.amazon.android.webkit.AmazonWebView
 import org.mozilla.focus.R
 import org.mozilla.focus.locale.Locales
 import org.mozilla.focus.utils.HtmlLoader
-import org.mozilla.focus.utils.SupportUtils
 
 object LocalizedContent {
     // We can't use "about:" because webview silently swallows about: pages, hence we use
     // a custom scheme.
-    const val URL_ABOUT = "focus:about"
-    const val URL_RIGHTS = "focus:rights"
+    const val URL_ABOUT = "firefox:about"
 
     fun handleInternalContent(url: String, webView: AmazonWebView): Boolean {
         if (URL_ABOUT == url) {
             loadAbout(webView)
             return true
-        } else if (URL_RIGHTS == url) {
-            loadRights(webView)
-            return true
         }
-
         return false
     }
 
@@ -42,8 +36,9 @@ object LocalizedContent {
         val resources = Locales.getLocalizedResources(context)
 
         val substitutionMap = ArrayMap<String, String>()
-        val appName = context.resources.getString(R.string.app_name)
-        val learnMoreURL = SupportUtils.getManifestoURL()
+
+        val appNameExtended = resources.getString(R.string.app_name_extended_fire)
+        substitutionMap["%about-title%"] = appNameExtended
 
         var aboutVersion = ""
         try {
@@ -54,29 +49,6 @@ object LocalizedContent {
         }
 
         substitutionMap["%about-version%"] = aboutVersion
-
-        val appNameExtended = resources.getString(R.string.app_name_extended_fire)
-        substitutionMap["%about-title%"] = appNameExtended
-
-
-        //final String wordmark = HtmlLoader.loadPngAsDataURI(context, R.drawable.wordmark);
-        //substitutionMap.put("%wordmark%", wordmark);
-
-        putLayoutDirectionIntoMap(webView, substitutionMap)
-
-        val data = HtmlLoader.loadResourceFile(context, R.raw.about, substitutionMap)
-        // We use a file:/// base URL so that we have the right origin to load file:/// css and image resources.
-        webView.loadDataWithBaseURL("file:///android_res/raw/about.html", data, "text/html", "UTF-8", null)
-    }
-
-    /**
-     * Load the content for focus:rights
-     */
-    private fun loadRights(webView: AmazonWebView) {
-        val context = webView.context
-        val resources = Locales.getLocalizedResources(context)
-
-        val substitutionMap = ArrayMap<String, String>()
 
         val appName = context.resources.getString(R.string.app_name)
         val mplUrl = "https://www.mozilla.org/en-US/MPL/"
@@ -102,9 +74,9 @@ object LocalizedContent {
 
         putLayoutDirectionIntoMap(webView, substitutionMap)
 
-        val data = HtmlLoader.loadResourceFile(context, R.raw.rights, substitutionMap)
+        val data = HtmlLoader.loadResourceFile(context, R.raw.about, substitutionMap)
         // We use a file:/// base URL so that we have the right origin to load file:/// css and image resources.
-        webView.loadDataWithBaseURL("file:///android_asset/rights.html", data, "text/html", "UTF-8", null)
+        webView.loadDataWithBaseURL("file:///android_res/raw/about.html", data, "text/html", "UTF-8", null)
     }
 
     private fun putLayoutDirectionIntoMap(webView: AmazonWebView, substitutionMap: MutableMap<String, String>) {
