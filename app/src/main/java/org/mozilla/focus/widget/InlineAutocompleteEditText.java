@@ -42,6 +42,14 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
         void onFilter(String searchText, InlineAutocompleteEditText view);
     }
 
+    /**
+     * Called when the user inputs some value. This is distinguished from commit (user completed
+     * input) and filter (text changed in the view, even by `setText` methods).
+     */
+    public interface OnUserInputListener {
+        void onUserInput();
+    }
+
     public interface OnBackPressedListener {
         void onBackPressed();
     }
@@ -93,6 +101,7 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
 
     private OnCommitListener mCommitListener;
     private OnFilterListener mFilterListener;
+    private OnUserInputListener mUserInputListener;
     private OnBackPressedListener mOnBackPressedListener;
 
     // The previous autocomplete result returned to us
@@ -133,6 +142,10 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
 
     public void setOnFilterListener(OnFilterListener listener) {
         mFilterListener = listener;
+    }
+
+    public void setOnUserInputListener(final OnUserInputListener listener) {
+        mUserInputListener = listener;
     }
 
     public void setOnBackPressedListener(OnBackPressedListener listener) {
@@ -460,6 +473,10 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
 
             @Override
             public boolean commitText(CharSequence text, int newCursorPosition) {
+                if (mUserInputListener != null) {
+                    mUserInputListener.onUserInput();
+                }
+
                 if (isCommitTextFromRemoteAppOrSoftKeyboardClear(text)) {
                     setIsKeyFromRemoteAppOrSoftKeyboardClear(true);
                 }
