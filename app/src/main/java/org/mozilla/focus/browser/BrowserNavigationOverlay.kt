@@ -18,6 +18,9 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.Settings
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 
+private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
+private const val NAVIGATION_BUTTON_DISABLED_ALPHA = 0.3f
+
 enum class NavigationEvent {
     HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD, TURBO, RELOAD_YT, PIN_ACTION;
 
@@ -130,12 +133,12 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         val canGoBack = navigationStateProvider?.isBackEnabled() ?: false
         navButtonBack.isEnabled = canGoBack
         navButtonBack.isFocusable = canGoBack
-        navButtonBack.alpha = if (canGoBack) 1.0f else 0.3f
+        navButtonBack.alpha = if (canGoBack) NAVIGATION_BUTTON_ENABLED_ALPHA else NAVIGATION_BUTTON_DISABLED_ALPHA
 
         val canGoForward = navigationStateProvider?.isForwardEnabled() ?: false
         navButtonForward.isEnabled = canGoForward
         navButtonForward.isFocusable = canGoForward
-        navButtonForward.alpha = if (canGoForward) 1.0f else 0.3f
+        navButtonForward.alpha = if (canGoForward) NAVIGATION_BUTTON_ENABLED_ALPHA else NAVIGATION_BUTTON_DISABLED_ALPHA
 
         pinButton.isChecked = navigationStateProvider?.isURLPinned() ?: false
 
