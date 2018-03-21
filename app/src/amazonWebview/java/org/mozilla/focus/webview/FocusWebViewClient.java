@@ -228,7 +228,7 @@ public class FocusWebViewClient extends TrackingProtectionWebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(AmazonWebView view, String url) {
         // If this is an internal URL like focus:about then we load the content ourselves here.
-        if (LocalizedContent.handleInternalContent(url, view)) {
+        if (LocalizedContent.INSTANCE.handleInternalContent(url, view)) {
             return true;
         }
 
