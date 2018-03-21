@@ -63,7 +63,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             visibility = if (makeVisible) VISIBLE else GONE
             if (makeVisible) {
                 navUrlInput.requestFocus()
-                updateNavigationButtons()
+                updateOverlayForCurrentState()
             } else {
                 // #393: Youtube doesn't refocus properly, so refresh
                 if (navUrlInput.text.contains("youtube.com/tv")) {
@@ -129,7 +129,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         TelemetryWrapper.overlayClickEvent(event, isTurboButtonChecked, isPinButtonChecked)
     }
 
-    fun updateNavigationButtons() {
+    fun updateOverlayForCurrentState() {
         val canGoBack = navigationStateProvider?.isBackEnabled() ?: false
         navButtonBack.isEnabled = canGoBack
         navButtonBack.isFocusable = canGoBack

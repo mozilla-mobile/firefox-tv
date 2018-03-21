@@ -111,7 +111,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
 
                 // Update state on load start and finish to ensure buttons are updated correctly
                 if (browserOverlay.isVisible) {
-                    browserOverlay.updateNavigationButtons()
+                    browserOverlay.updateOverlayForCurrentState()
                 }
             }
         })
