@@ -1,6 +1,5 @@
 # Firefox for Amazon's Fire TV
 
-[![BuddyBuild](https://dashboard.buddybuild.com/api/statusImage?appID=5a3050c4aa895000017cd42e&branch=master&build=latest)](https://dashboard.buddybuild.com/apps/5a3050c4aa895000017cd42e/build/latest?branch=master)
 [![Task Status](https://github.taskcluster.net/v1/repository/mozilla-mobile/firefox-tv/master/badge.svg)](https://github.taskcluster.net/v1/repository/mozilla-mobile/firefox-tv/master/latest)
 
 _Fast for good, just right for watching video at home. A browser for
