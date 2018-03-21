@@ -177,10 +177,10 @@ complexity:
     threshold: 20
   NestedBlockDepth:
     active: true
-    threshold: 3
+    threshold: 4
   LongParameterList:
     active: true
-    threshold: 5
+    threshold: 10
   LargeClass:
     active: true
     threshold: 150
@@ -189,20 +189,20 @@ complexity:
     threshold: 10
     includeStaticDeclarations: false
   ComplexMethod:
-    active: true
+    active: false
     threshold: 10
   MethodOverloading:
     active: false
     threshold: 5
   TooManyFunctions:
-    active: true
+    active: false
     thresholdInFiles: 10
     thresholdInClasses: 10
     thresholdInInterfaces: 10
     thresholdInObjects: 10
     thresholdInEnums: 10
   ComplexCondition:
-    active: true
+    active: false
     threshold: 3
   LabeledExpression:
     active: false
@@ -223,7 +223,7 @@ code-smell:
 style:
   active: true
   ReturnCount:
-    active: true
+    active: false
     max: 3
   ThrowsCount:
     active: true
@@ -239,7 +239,7 @@ style:
   EqualsNullCall:
     active: false
   ForbiddenComment:
-    active: true
+    active: false
     values: 'TODO:,FIXME:,STOPSHIP:'
   ForbiddenImport:
     active: false
@@ -271,7 +271,7 @@ style:
     active: true
   MaxLineLength:
     active: true
-    maxLineLength: 120
+    maxLineLength: 140
     excludePackageStatements: false
     excludeImportStatements: false
   PackageNaming:

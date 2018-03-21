@@ -23,6 +23,8 @@ import org.mozilla.focus.browser.cursor.CursorController
 import org.mozilla.focus.ext.toUri
 import org.mozilla.focus.home.BundledTilesManager
 import org.mozilla.focus.home.CustomTilesManager
+import org.mozilla.focus.iwebview.IWebView
+import org.mozilla.focus.iwebview.IWebViewLifecycleFragment
 import org.mozilla.focus.session.NullSession
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.session.SessionCallbackProxy
@@ -31,11 +33,11 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.ViewUtils.showCenteredTopToast
-import org.mozilla.focus.iwebview.IWebView
-import org.mozilla.focus.iwebview.IWebViewLifecycleFragment
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
+
+private const val TOAST_Y_OFFSET = 200
 
 /**
  * Fragment for displaying the browser UI.
@@ -137,13 +139,13 @@ class BrowserFragment : IWebViewLifecycleFragment() {
                         NavigationEvent.VAL_CHECKED -> {
                             CustomTilesManager.getInstance(context).pinSite(context, url,
                                     webView?.takeScreenshot())
-                            showCenteredTopToast(context, R.string.notification_pinned_site, 0, 200)
+                            showCenteredTopToast(context, R.string.notification_pinned_site, 0, TOAST_Y_OFFSET)
                         }
                         NavigationEvent.VAL_UNCHECKED -> {
                             url.toUri()?.let {
                                 if (BundledTilesManager.getInstance(context).unpinSite(context, it)
                                         || CustomTilesManager.getInstance(context).unpinSite(context, url)) {
-                                    showCenteredTopToast(context, R.string.notification_unpinned_site, 0, 200)
+                                    showCenteredTopToast(context, R.string.notification_unpinned_site, 0, TOAST_Y_OFFSET)
                                 }
                             }
                         }
