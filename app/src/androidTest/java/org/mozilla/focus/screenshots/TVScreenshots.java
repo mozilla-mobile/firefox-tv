@@ -130,13 +130,7 @@ public class TVScreenshots extends ScreenshotTest {
 
         Screengrab.screenshot("browser-overlay");
 
-        /* Bug? Clicking the home button will not save state for the next test */
-        /* Pressing back twice on the hardware remote saves state. */
-        /* onView(withId(R.id.navButtonHome)).perform(click()); */
-
-        mDevice.pressBack();
-        mDevice.pressBack();
-
+        onView(withId(R.id.navButtonHome)).perform(click());
     }
 
     @Test
@@ -151,7 +145,7 @@ public class TVScreenshots extends ScreenshotTest {
                 .perform(click());
 
         /* current settings list view */
-        onView(allOf(withId(R.id.settingsWebView), isDisplayed()));
+        onView(allOf(withId(R.id.container), isDisplayed()));
 
         ViewInteraction clearButton = onView(
                 allOf(withId(R.id.deleteButton), isDisplayed()));

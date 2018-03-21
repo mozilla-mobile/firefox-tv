@@ -110,7 +110,7 @@ public class BrowserOverlayTest {
                 .check(matches(isDisplayed()))
                 .perform(click());
 
-        onView(ViewMatchers.withId(R.id.new_settings_list))
+        onView(ViewMatchers.withId(R.id.container))
                 .check(matches(isDisplayed()));
 
         pressBack();
