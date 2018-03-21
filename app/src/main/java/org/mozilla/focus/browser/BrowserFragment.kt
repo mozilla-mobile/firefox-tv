@@ -6,8 +6,10 @@ package org.mozilla.focus.browser
 
 import android.arch.lifecycle.Observer
 import android.os.Bundle
+import android.os.SystemClock
 import android.support.annotation.UiThread
 import android.text.TextUtils
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +25,8 @@ import org.mozilla.focus.browser.cursor.CursorController
 import org.mozilla.focus.ext.toUri
 import org.mozilla.focus.home.BundledTilesManager
 import org.mozilla.focus.home.CustomTilesManager
+import org.mozilla.focus.iwebview.IWebView
+import org.mozilla.focus.iwebview.IWebViewLifecycleFragment
 import org.mozilla.focus.session.NullSession
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.session.SessionCallbackProxy
@@ -31,8 +35,7 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.ViewUtils.showCenteredTopToast
-import org.mozilla.focus.iwebview.IWebView
-import org.mozilla.focus.iwebview.IWebViewLifecycleFragment
+import org.mozilla.focus.webview.FirefoxAmazonWebView
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
@@ -209,7 +212,38 @@ class BrowserFragment : IWebViewLifecycleFragment() {
          * - Return false, as unhandled
          */
         return (handleSpecialKeyEvent(event)) ||
+                scroller.dispatchKeyEvent(event) ||
                 (cursor?.keyDispatcher?.dispatchKeyEvent(event) ?: false)
+    }
+
+    val scroller = Scroller()
+    inner class Scroller {
+        private val TIME_BETWEEN = 250L
+        var lastMillis = -1L
+
+        fun dispatchKeyEvent(event: KeyEvent): Boolean {
+            if (event.action == KeyEvent.ACTION_DOWN &&
+                    event.repeatCount == 0 &&
+                    (event.keyCode == KeyEvent.KEYCODE_DPAD_UP ||
+                            event.keyCode == KeyEvent.KEYCODE_DPAD_DOWN)) {
+                // whatever
+            } else {
+                return false
+            }
+            Log.d("lol", "called")
+
+            val now = SystemClock.elapsedRealtime()
+            if (now - lastMillis < TIME_BETWEEN) {
+                Log.d("lol", "less")
+                val mod = if (event.keyCode == KeyEvent.KEYCODE_DPAD_DOWN) 1 else -1
+                webView?.scrollBy(0, (webView as FirefoxAmazonWebView).height * mod)
+                lastMillis = now
+                return true
+            }
+
+            lastMillis = now
+            return false
+        }
     }
 
     private fun handleSpecialKeyEvent(event: KeyEvent): Boolean {
