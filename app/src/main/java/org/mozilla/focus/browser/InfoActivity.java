@@ -43,7 +43,7 @@ public class InfoActivity extends AppCompatActivity {
 
     public static Intent getAboutIntent(final Context context) {
         final Resources resources = Locales.getLocalizedResources(context);
-        return getIntentFor(context, LocalizedContent.INSTANCE.getURL_ABOUT(), resources.getString(R.string.menu_about));
+        return getIntentFor(context, LocalizedContent.URL_ABOUT, resources.getString(R.string.menu_about));
     }
 
     public static Intent getPrivacyNoticeIntent(final Context context) {

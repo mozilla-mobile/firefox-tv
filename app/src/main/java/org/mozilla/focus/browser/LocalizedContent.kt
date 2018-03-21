@@ -4,10 +4,7 @@
 
 package org.mozilla.focus.browser
 
-import android.content.Context
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.support.v4.util.ArrayMap
 import android.support.v4.view.ViewCompat
 import android.view.View
@@ -22,8 +19,8 @@ import org.mozilla.focus.utils.SupportUtils
 object LocalizedContent {
     // We can't use "about:" because webview silently swallows about: pages, hence we use
     // a custom scheme.
-    val URL_ABOUT = "focus:about"
-    val URL_RIGHTS = "focus:rights"
+    const val URL_ABOUT = "focus:about"
+    const val URL_RIGHTS = "focus:rights"
 
     fun handleInternalContent(url: String, webView: AmazonWebView): Boolean {
         if (URL_ABOUT == url) {

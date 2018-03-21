@@ -11,6 +11,6 @@ import org.mozilla.focus.browser.LocalizedContent;
  */
 public class NullSession extends Session {
     public NullSession() {
-        super(Source.NONE, LocalizedContent.INSTANCE.getURL_ABOUT());
+        super(Source.NONE, LocalizedContent.URL_ABOUT);
     }
 }
