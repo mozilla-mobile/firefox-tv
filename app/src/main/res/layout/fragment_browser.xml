@@ -46,6 +46,8 @@
         android:layout_width="@dimen/remote_cursor_size"
         android:layout_height="@dimen/remote_cursor_size"
         android:layout_gravity="top|start"
+        android:src="@drawable/cursor_full"
+        android:scaleType="centerInside"
         />
 
     <org.mozilla.focus.browser.FirefoxProgressBar
