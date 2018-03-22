@@ -23,6 +23,8 @@ import org.mozilla.focus.browser.cursor.CursorController
 import org.mozilla.focus.ext.toUri
 import org.mozilla.focus.home.BundledTilesManager
 import org.mozilla.focus.home.CustomTilesManager
+import org.mozilla.focus.iwebview.IWebView
+import org.mozilla.focus.iwebview.IWebViewLifecycleFragment
 import org.mozilla.focus.session.NullSession
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.session.SessionCallbackProxy
@@ -31,8 +33,6 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.ViewUtils.showCenteredTopToast
-import org.mozilla.focus.iwebview.IWebView
-import org.mozilla.focus.iwebview.IWebViewLifecycleFragment
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
