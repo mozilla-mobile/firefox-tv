@@ -78,6 +78,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             Settings.getInstance(context).isBlockingEnabled = value
         }
 
+    private var hasUserChangedURLSinceEditTextFocused = false
+
     init {
         LayoutInflater.from(context)
                 .inflate(R.layout.browser_overlay, this, true)
@@ -108,6 +110,14 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         val autocompleteFilter = UrlAutoCompleteFilter()
         autocompleteFilter.load(context.applicationContext)
         setOnFilterListener { searchText, view -> autocompleteFilter.onFilter(searchText, view) }
+
+        setOnUserInputListener { hasUserChangedURLSinceEditTextFocused = true }
+        setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                hasUserChangedURLSinceEditTextFocused = false
+                updateOverlayForCurrentState() // Update URL to overwrite user input, ensuring the url's accuracy.
+            }
+        }
     }
 
     override fun onClick(view: View?) {
@@ -154,10 +164,28 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             else -> R.id.navButtonForward
         }
 
-        navUrlInput.setText(navigationStateProvider?.getCurrentUrl())
+        maybeUpdateOverlayURLForCurrentState()
 
         if (findFocus() == null) {
             requestFocus()
+        }
+    }
+
+    private fun maybeUpdateOverlayURLForCurrentState() {
+        // The url can get updated in the background, e.g. if a loading page is redirected. We
+        // don't want a url update to interrupt the user typing so we don't update the url from
+        // the background if the user has already updated the url themselves.
+        //
+        // We revert this state when the view is unfocused: it ensures the URL is usually accurate
+        // (for security reasons) and it's simple compared to other options which keep more state.
+        //
+        // One problem this solution has is that if the URL is updated in the background rapidly,
+        // sometimes key events will be dropped, but I don't think there's much we can do about this:
+        // we can't determine if the keyboard is up or not and focus isn't a good indicator because
+        // we can focus the EditText without opening the soft keyboard and the user won't even know
+        // these are inaccurate!
+        if (!hasUserChangedURLSinceEditTextFocused) {
+            navUrlInput.setText(navigationStateProvider?.getCurrentUrl())
         }
     }
 }
