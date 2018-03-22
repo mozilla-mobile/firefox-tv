@@ -21,7 +21,7 @@
     <dimen name="home_tile_placeholder_icon_size">50dp</dimen>
     <dimen name="urlbar_corner_radius">4dp</dimen>
 
-    <dimen name="remote_cursor_size">45dp</dimen>
+    <dimen name="remote_cursor_size">58dp</dimen>
 
     <dimen name="button_size">48dp</dimen>
     <dimen name="bundled_home_tile_margin_value">8dp</dimen>
