@@ -158,7 +158,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
     }
 
     companion object {
-        @JvmField val EXTRA_TEXT_SELECTION = "text_selection"
         private var isAmazonFactoryInit = false
         @JvmStatic var factory: AmazonWebKitFactory? = null
     }
