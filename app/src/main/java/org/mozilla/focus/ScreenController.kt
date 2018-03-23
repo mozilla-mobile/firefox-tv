@@ -82,7 +82,6 @@ object ScreenController {
     }
 
     fun showHomeScreen(fragmentManager: FragmentManager, onUrlEnteredListener: OnUrlEnteredListener) {
-        // TODO: animations if fragment is found.
         val homeFragment = fragmentManager.findFragmentByTag(HomeFragment.FRAGMENT_TAG) as HomeFragment?
         if (homeFragment != null && homeFragment.isVisible) {
             // This is already at the top of the stack - do nothing.
@@ -102,7 +101,6 @@ object ScreenController {
     }
 
     fun showSettingsScreen(fragmentManager: FragmentManager) {
-        // TODO: animations if fragment is found.
         val settingsFragment = SettingsFragment.create()
         fragmentManager.beginTransaction()
                 .replace(R.id.container, settingsFragment, SettingsFragment.FRAGMENT_TAG)
