@@ -14,9 +14,9 @@ import android.view.View
 import com.amazon.android.webkit.AmazonWebChromeClient
 import com.amazon.android.webkit.AmazonWebView
 import org.mozilla.focus.ext.deleteData
+import org.mozilla.focus.iwebview.IWebView
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.utils.UrlUtils
-import org.mozilla.focus.iwebview.IWebView
 
 /**
  * An IWebView implementation using AmazonWebView.
@@ -116,6 +116,21 @@ internal class FirefoxAmazonWebView(
         destroyDrawingCache()
         return outBitmap
     }
+
+    override fun scrollByClamped(vx: Int, vy: Int) {
+        // This is not a true clamp: it can only stop us from
+        // continuing to scroll if we've already overscrolled.
+        val scrollX = clampScroll(vx) { canScrollHorizontally(it) }
+        val scrollY = clampScroll(vy) { canScrollVertically(it) }
+
+        super.scrollBy(scrollX, scrollY)
+    }
+}
+
+private inline fun clampScroll(scroll: Int, canScroll: (direction: Int) -> Boolean) = if (scroll != 0 && canScroll(scroll)) {
+    scroll
+} else {
+    0
 }
 
 // todo: move into WebClients file with FocusWebViewClient.
