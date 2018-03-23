@@ -88,7 +88,7 @@ public class WebViewProvider {
         }
 
         @Override
-        public void scrollBy(int vx, int vy) {
+        public void scrollByClamped(int vx, int vy) {
 
         }
 

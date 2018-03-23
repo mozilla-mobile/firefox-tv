@@ -37,7 +37,24 @@ interface IWebView {
     fun canGoForward(): Boolean
     fun canGoBack(): Boolean
 
-    fun scrollBy(vx: Int, vy: Int)
+    /**
+     * Scrolls the page but clamps it to the page dimensions, unlike [View.scrollBy].
+     *
+     * #712: View.scrollBy will "overscroll" the page dimensions, e.g. for a page of length 500,
+     * scrollBy can increment scrollY to greater values like 1000. After this, calling
+     * scrollBy upwards to scrollY = 750 will still not display any changes to the user: it has
+     * to make up that lost distance first.
+     *
+     * Scrolling and clamping appears to be the only way to prevent overscroll in Kotlin/Java,
+     * which does not return the content size: https://stackoverflow.com/a/49439945/2219998. You
+     * could also implement scrolling in JavaScript, but there's presumably a performance cost to
+     * executing JS, separating the code could make it hard to modify, and the code would need to
+     * be aware of which DOM element is being scrolled.
+     *
+     * For AmazonWebView, I verified that a page whose content shrinks when the user is scrolled all
+     * the way to the bottom will not create an upwards scroll dead zone.
+     */
+    fun scrollByClamped(vx: Int, vy: Int)
     fun requestFocus(): Boolean
 
     fun cleanup()

@@ -102,7 +102,8 @@ class CursorController(
         // is the same, even if the framerate drops.
         val scrollX = getDeltaScrollAdjustedForTime(percentMaxScrollVel.x)
         val scrollY = getDeltaScrollAdjustedForTime(percentMaxScrollVel.y)
-        browserFragment.webView?.scrollBy(scrollX, scrollY)
+
+        browserFragment.webView?.scrollByClamped(scrollX, scrollY)
     }
 
     private inner class CursorIsLoadingObserver : NonNullObserver<Boolean>() {
