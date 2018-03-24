@@ -100,7 +100,7 @@ internal class FirefoxAmazonWebView(
         client.notifyCurrentURL(url)
     }
 
-    override fun executeJS(js: String) {
+    override fun evalJS(js: String) {
         super.loadUrl("javascript:$js")
     }
 
