@@ -1,6 +1,7 @@
 # Firefox for Amazon's Fire TV
 
 [![Task Status](https://github.taskcluster.net/v1/repository/mozilla-mobile/firefox-tv/master/badge.svg)](https://github.taskcluster.net/v1/repository/mozilla-mobile/firefox-tv/master/latest)
+[![Sputnik](https://sputnik.ci/conf/badge)](https://sputnik.ci/app#/builds/mozilla-mobile/firefox-tv)
 
 _Fast for good, just right for watching video at home. A browser for
 discovering and watching web video on the big screen TV for users to install on

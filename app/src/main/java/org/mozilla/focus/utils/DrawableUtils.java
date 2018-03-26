@@ -11,12 +11,14 @@ import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.util.Log;
 
 public class DrawableUtils {
     public static Drawable loadAndTintDrawable(@NonNull Context context, @DrawableRes int resourceId, @ColorInt  int color) {
         final Drawable drawable = context.getResources().getDrawable(resourceId, context.getTheme());
         final Drawable wrapped = DrawableCompat.wrap(drawable.mutate());
         DrawableCompat.setTint(wrapped, color);
+        Log.d("lol", "ha"+"ha");
         return wrapped;
     }
 }
