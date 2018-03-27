@@ -53,9 +53,6 @@ class BrowserFragment : IWebViewLifecycleFragment() {
         }
     }
 
-    // We need to respond to the onPageFinished event so we set a flag here.
-    var isReloadingForYoutubeDrawerClosed = false
-
     // IWebViewLifecycleFragment expects a value for these properties before onViewCreated. We use a getter
     // for the properties that reference session because it is lateinit.
     override lateinit var session: Session
@@ -100,16 +97,6 @@ class BrowserFragment : IWebViewLifecycleFragment() {
         session.url.observe(this, Observer { url -> this@BrowserFragment.url = url })
         session.loading.observe(this, object : NonNullObserver<Boolean>() {
             public override fun onValueChanged(loading: Boolean) {
-                if (!loading && isReloadingForYoutubeDrawerClosed) {
-                    isReloadingForYoutubeDrawerClosed = false
-
-                    // We send a play event which:
-                    // - If we're on the video selection page, does nothing.
-                    // - If we're in a fullscreen video, will show the play/pause controls on the screen so
-                    // we don't just see a black screen.
-                    activity.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE))
-                }
-
                 // Update state on load start and finish to ensure buttons are updated correctly
                 if (browserOverlay.isVisible) {
                     browserOverlay.updateOverlayForCurrentState()
@@ -129,10 +116,6 @@ class BrowserFragment : IWebViewLifecycleFragment() {
             NavigationEvent.LOAD -> {
                 (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
                 setOverlayVisibileByUser(false)
-            }
-            NavigationEvent.RELOAD_YT -> {
-                isReloadingForYoutubeDrawerClosed = true
-                webView?.reload()
             }
             NavigationEvent.PIN_ACTION -> {
                 this@BrowserFragment.url?.let { url ->
