@@ -281,8 +281,8 @@ object TelemetryWrapper {
                 return
             }
 
-            // Load is handled in a separate event; we don't need to handle reload YT.
-            NavigationEvent.LOAD, NavigationEvent.RELOAD_YT -> return
+            // Load is handled in a separate event
+            NavigationEvent.LOAD -> return
         }
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.MENU, telemetryValue).queue()
     }

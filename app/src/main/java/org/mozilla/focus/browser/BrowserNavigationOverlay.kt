@@ -22,7 +22,7 @@ private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
 private const val NAVIGATION_BUTTON_DISABLED_ALPHA = 0.3f
 
 enum class NavigationEvent {
-    HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD, TURBO, RELOAD_YT, PIN_ACTION;
+    HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD, TURBO, PIN_ACTION;
 
     companion object {
         fun fromViewClick(viewId: Int?) = when (viewId) {
@@ -180,11 +180,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         if (visibility == View.VISIBLE) {
             navUrlInput.requestFocus()
             updateOverlayForCurrentState()
-        } else {
-            // #393: Youtube doesn't refocus properly, so refresh
-            if (navUrlInput.text.contains("youtube.com/tv")) {
-                onNavigationEvent?.invoke(NavigationEvent.RELOAD_YT, null, null)
-            }
         }
     }
 }
