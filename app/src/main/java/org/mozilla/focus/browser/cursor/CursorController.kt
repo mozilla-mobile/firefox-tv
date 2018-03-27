@@ -8,6 +8,7 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
 import android.graphics.PointF
+import android.view.KeyEvent
 import android.view.View
 import android.view.accessibility.AccessibilityManager
 import kotlinx.android.synthetic.main.fragment_browser.*
@@ -47,7 +48,16 @@ class CursorController(
         scrollWebView(percentMaxScrollVel, framesPassed)
     }, simulateTouchEvent = { browserFragment.activity.dispatchTouchEvent(it) })
 
-    val keyDispatcher = CursorKeyDispatcher(isEnabled, viewModel)
+    val keyDispatcher = CursorKeyDispatcher(isEnabled, onDirectionKey = { dir, action ->
+        when (action) {
+            KeyEvent.ACTION_DOWN -> viewModel.onDirectionKeyDown(dir)
+            KeyEvent.ACTION_UP -> viewModel.onDirectionKeyUp(dir)
+            else -> Unit
+        }
+    }, dispatchTouchEventOnCurrentPosition = { event ->
+        viewModel.onSelectKeyEvent(event.action)
+        view.updateCursorPressedState(event)
+    })
 
     private val isLoadingObserver = CursorIsLoadingObserver()
 

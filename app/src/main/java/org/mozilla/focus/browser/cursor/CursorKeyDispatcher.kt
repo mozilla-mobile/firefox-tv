@@ -10,7 +10,11 @@ import org.mozilla.focus.utils.Direction
 import org.mozilla.focus.utils.RemoteKey
 
 /** Converts raw key events into high-level commands the view model can recognize. */
-class CursorKeyDispatcher(var isEnabled: Boolean, private val viewModel: CursorViewModel) {
+class CursorKeyDispatcher(
+        var isEnabled: Boolean,
+        private val onDirectionKey: (dir: Direction, action: Int) -> Unit,
+        private val dispatchTouchEventOnCurrentPosition: (event: KeyEvent) -> Unit
+) {
 
     /**
      * Converts key events into Cursor actions; an analog to [Activity.dispatchKeyEvent].
@@ -26,7 +30,7 @@ class CursorKeyDispatcher(var isEnabled: Boolean, private val viewModel: CursorV
         val remoteKey = RemoteKey.fromKeyEvent(event)
         if (remoteKey == RemoteKey.CENTER ||
                 event.keyCode == KeyEvent.KEYCODE_ENTER) { // For keyboard and emulator use.
-            dispatchTouchEventOnCurrentPosition(event.action)
+            dispatchTouchEventOnCurrentPosition(event)
             return true
         }
 
@@ -37,15 +41,5 @@ class CursorKeyDispatcher(var isEnabled: Boolean, private val viewModel: CursorV
         }
 
         return false
-    }
-
-    private fun onDirectionKey(dir: Direction, action: Int) = when (action) {
-        KeyEvent.ACTION_DOWN -> viewModel.onDirectionKeyDown(dir)
-        KeyEvent.ACTION_UP -> viewModel.onDirectionKeyUp(dir)
-        else -> Unit
-    }
-
-    private fun dispatchTouchEventOnCurrentPosition(action: Int) {
-        viewModel.onSelectKeyEvent(action)
     }
 }
