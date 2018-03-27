@@ -40,8 +40,8 @@ class CursorView(context: Context, attrs: AttributeSet) : ImageView(context, att
     }
 
     fun updateCursorPressedState(event: KeyEvent) {
+        // Enter for keyboard and emulator use.
         val remoteKey = RemoteKey.fromKeyEvent(event)
-        // For keyboard and emulator use.
         if (remoteKey == RemoteKey.CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER) {
             if (event.action == KeyEvent.ACTION_DOWN) {
                 setImageResource(R.drawable.cursor_full_active)
