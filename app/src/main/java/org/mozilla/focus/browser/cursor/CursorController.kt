@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_browser.*
 import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.browser.BrowserFragment
 import org.mozilla.focus.ext.getAccessibilityManager
+import org.mozilla.focus.ext.isVisible
 import org.mozilla.focus.ext.isVoiceViewEnabled
 import kotlin.properties.Delegates
 

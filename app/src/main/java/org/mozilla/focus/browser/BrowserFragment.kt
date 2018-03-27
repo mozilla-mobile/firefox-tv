@@ -20,6 +20,7 @@ import org.mozilla.focus.R
 import org.mozilla.focus.ScreenController
 import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.browser.cursor.CursorController
+import org.mozilla.focus.ext.isVisible
 import org.mozilla.focus.ext.toUri
 import org.mozilla.focus.home.BundledTilesManager
 import org.mozilla.focus.home.CustomTilesManager
@@ -249,7 +250,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
      * is dependent on it.
      */
     private fun setOverlayVisibileByUser(toShow: Boolean) {
-        browserOverlay.isVisible = toShow
+        browserOverlay.visibility = if (toShow) View.VISIBLE else View.GONE
         if (toShow) cursor?.onPause() else cursor?.onResume()
         cursor?.setEnabledForCurrentState()
         TelemetryWrapper.drawerShowHideEvent(toShow)

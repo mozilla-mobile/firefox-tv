@@ -57,21 +57,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
     var navigationStateProvider: BrowserNavigationStateProvider? = null
 
-    var isVisible: Boolean
-        get() = visibility == View.VISIBLE
-        set(makeVisible) {
-            visibility = if (makeVisible) VISIBLE else GONE
-            if (makeVisible) {
-                navUrlInput.requestFocus()
-                updateOverlayForCurrentState()
-            } else {
-                // #393: Youtube doesn't refocus properly, so refresh
-                if (navUrlInput.text.contains("youtube.com/tv")) {
-                    onNavigationEvent?.invoke(NavigationEvent.RELOAD_YT, null, null)
-                }
-            }
-        }
-
     private var isTurboEnabled: Boolean
         get() = Settings.getInstance(context).isBlockingEnabled
         set(value) {
@@ -186,6 +171,20 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         // these are inaccurate!
         if (!hasUserChangedURLSinceEditTextFocused) {
             navUrlInput.setText(navigationStateProvider?.getCurrentUrl())
+        }
+    }
+
+    override fun setVisibility(visibility: Int) {
+        super.setVisibility(visibility)
+
+        if (visibility == View.VISIBLE) {
+            navUrlInput.requestFocus()
+            updateOverlayForCurrentState()
+        } else {
+            // #393: Youtube doesn't refocus properly, so refresh
+            if (navUrlInput.text.contains("youtube.com/tv")) {
+                onNavigationEvent?.invoke(NavigationEvent.RELOAD_YT, null, null)
+            }
         }
     }
 }
