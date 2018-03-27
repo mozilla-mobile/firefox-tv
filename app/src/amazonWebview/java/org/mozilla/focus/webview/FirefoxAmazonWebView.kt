@@ -14,6 +14,7 @@ import android.view.View
 import com.amazon.android.webkit.AmazonWebChromeClient
 import com.amazon.android.webkit.AmazonWebView
 import org.mozilla.focus.ext.deleteData
+import org.mozilla.focus.iwebview.FirefoxAmazonFocusedDOMElementCache
 import org.mozilla.focus.iwebview.IWebView
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.utils.UrlUtils
@@ -116,6 +117,8 @@ internal class FirefoxAmazonWebView(
         destroyDrawingCache()
         return outBitmap
     }
+
+    override val focusedDOMElement = FirefoxAmazonFocusedDOMElementCache(this)
 
     override fun scrollByClamped(vx: Int, vy: Int) {
         // This is not a true clamp: it can only stop us from

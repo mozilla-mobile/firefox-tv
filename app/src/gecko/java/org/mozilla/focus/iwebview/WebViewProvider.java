@@ -125,6 +125,19 @@ public class WebViewProvider {
             throw new NotImplementedError();
         }
 
+        @NotNull
+        @Override
+        public FocusedDOMElementCache getFocusedDOMElement() {
+            // This hack is only necessary for AmazonWebView: see FocusedDOMElementCache for details.
+            return new FocusedDOMElementCache() {
+                @Override
+                public void cache() { }
+
+                @Override
+                public void restore() { }
+            };
+        }
+
         @Override
         public void setBlockingEnabled(boolean enabled) {
             // We can't actually do this?
