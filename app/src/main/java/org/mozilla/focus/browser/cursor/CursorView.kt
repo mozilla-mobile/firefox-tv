@@ -10,7 +10,10 @@ import android.os.Looper
 import android.os.Message
 import android.support.annotation.UiThread
 import android.util.AttributeSet
+import android.view.KeyEvent
 import android.widget.ImageView
+import org.mozilla.focus.R
+import org.mozilla.focus.utils.RemoteKey
 import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
 
@@ -34,6 +37,18 @@ class CursorView(context: Context, attrs: AttributeSet) : ImageView(context, att
 
         setMaxVisibility()
         resetCountdown()
+    }
+
+    fun updateCursorPressedState(event: KeyEvent) {
+        val remoteKey = RemoteKey.fromKeyEvent(event)
+        // For keyboard and emulator use.
+        if (remoteKey == RemoteKey.CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER) {
+            if (event.action == KeyEvent.ACTION_DOWN) {
+                setImageResource(R.drawable.cursor_full_active)
+            } else if (event.action == KeyEvent.ACTION_UP) {
+                setImageResource(R.drawable.cursor_full)
+            }
+        }
     }
 
     fun cancelUpdates() {
