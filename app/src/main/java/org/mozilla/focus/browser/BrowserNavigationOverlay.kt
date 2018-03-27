@@ -54,8 +54,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
     var onNavigationEvent: ((event: NavigationEvent, value: String?,
                              autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?) -> Unit)? = null
-
     var navigationStateProvider: BrowserNavigationStateProvider? = null
+    var onPreSetVisibilityListener: ((isVisible: Boolean) -> Unit)? = null
 
     private var isTurboEnabled: Boolean
         get() = Settings.getInstance(context).isBlockingEnabled
@@ -175,6 +175,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     }
 
     override fun setVisibility(visibility: Int) {
+        onPreSetVisibilityListener?.invoke(visibility == View.VISIBLE)
         super.setVisibility(visibility)
 
         if (visibility == View.VISIBLE) {

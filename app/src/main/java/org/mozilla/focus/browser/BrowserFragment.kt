@@ -148,9 +148,16 @@ class BrowserFragment : IWebViewLifecycleFragment() {
                 view = layout.cursorView)
         lifecycle.addObserver(cursor!!)
 
-        layout.browserOverlay.onNavigationEvent = onNavigationEvent
-        layout.browserOverlay.navigationStateProvider = NavigationStateProvider()
-        layout.browserOverlay.visibility = overlayVisibleCached ?: View.GONE
+        with (layout.browserOverlay) {
+            onNavigationEvent = this@BrowserFragment.onNavigationEvent
+            navigationStateProvider = NavigationStateProvider()
+            visibility = overlayVisibleCached ?: View.GONE
+            onPreSetVisibilityListener = { isVisible ->
+                // The overlay can clear the DOM and a previous focused element cache (e.g. reload)
+                // so we need to do our own caching: see FocusedDOMElementCache for details.
+                if (!isVisible) { webView?.focusedDOMElement?.cache() }
+            }
+        }
 
         layout.progressBar.initialize(this)
 
