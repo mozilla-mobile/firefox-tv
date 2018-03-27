@@ -13,7 +13,7 @@ import org.mozilla.focus.utils.RemoteKey
 class CursorKeyDispatcher(
         var isEnabled: Boolean,
         private val onDirectionKey: (dir: Direction, action: Int) -> Unit,
-        private val dispatchTouchEventOnCurrentPosition: (event: KeyEvent) -> Unit
+        private val onSelectKey: (event: KeyEvent) -> Unit
 ) {
 
     /**
@@ -30,7 +30,7 @@ class CursorKeyDispatcher(
         val remoteKey = RemoteKey.fromKeyEvent(event)
         if (remoteKey == RemoteKey.CENTER ||
                 event.keyCode == KeyEvent.KEYCODE_ENTER) { // For keyboard and emulator use.
-            dispatchTouchEventOnCurrentPosition(event)
+            onSelectKey(event)
             return true
         }
 

@@ -54,7 +54,7 @@ class CursorController(
             KeyEvent.ACTION_UP -> viewModel.onDirectionKeyUp(dir)
             else -> Unit
         }
-    }, dispatchTouchEventOnCurrentPosition = { event ->
+    }, onSelectKey = { event ->
         viewModel.onSelectKeyEvent(event.action)
         view.updateCursorPressedState(event)
     })
