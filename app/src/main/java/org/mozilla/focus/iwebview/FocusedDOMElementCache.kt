@@ -26,7 +26,7 @@ package org.mozilla.focus.iwebview
  * DOMElement, which is in [View.setVisibility].
  */
 interface FocusedDOMElementCache {
-    /** Caches the currently focused DOMElement in the DOM (i.e. it will be lost if the page is reloaded). */
+    /** Caches the currently focused DOMElement in the DOM (i.e. it will be cleared if the page is reloaded). */
     fun cache()
 
     /** Focuses the cached DOMElement from [cache], if it's available, or does nothing. */
