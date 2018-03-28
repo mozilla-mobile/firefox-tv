@@ -91,7 +91,7 @@ class HomeFragment : Fragment() {
             onSettingsPressed?.invoke()
         }
 
-        registerForContextMenu(view)
+        registerForContextMenu(tileContainer)
 
         tileContainer.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
@@ -187,7 +187,7 @@ class HomeFragment : Fragment() {
         if (event.keyCode == KeyEvent.KEYCODE_MENU &&
                 event.action == KeyEvent.ACTION_UP &&
                 getFocusedTilePosition() != RecyclerView.NO_POSITION) {
-            activity.openContextMenu(view)
+            activity.openContextMenu(tileContainer)
             return true
         }
         return false
