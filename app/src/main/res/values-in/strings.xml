@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Hal ini mungkin dikarenakan ada masalah terkait dengan konfigurasi server, atau bisa jadi ada seseorang mencoba untuk berkedok sebagai server.</li>"\n  "<li>Jika Anda berhasil tersambung ke server ini sebelumnya, gangguan dapat bersifat sementara, dan Anda dapat mencoba kembali nanti.</li>\n</ul>]]></string>
   <string name="error_generic_title">Ups</string>
   <string name="error_generic_message">Kami tidak dapat memuat laman ini karena sejumlah alasan.</string>
+  <string name="your_rights">Hak Anda</string>
     <string name="your_rights_content1">%1$s adalah perangkat lunak bebas dan sumber terbuka yang dibuat oleh Mozilla dan kontributor lainnya.</string>
   <string name="your_rights_content2"><![CDATA["%1$s tersedia untuk Anda di bawah persyaratan "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Lisensi Publik Mozilla</a>" dan lisensi sumber terbuka lainnya."]]></string>
   <string name="your_rights_content3"><![CDATA["Anda tidak diberi izin atau lisensi apa pun atas merek dagang Mozilla Foundation atau pihak mana pun, termasuk nama atau logo Mozilla, Firefox, atau %1$s. Informasi lebih lanjut bisa ditemukan "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">di sini</a>.]]></string>

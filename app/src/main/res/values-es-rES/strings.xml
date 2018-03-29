@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>Puede que haya un problema con la configuraci&amp;#243;n del servidor o puede\\nque alguien est&amp;#233; intentando suplantar al servidor.</li>"\"\\n  \""<li>Si ya te hab&amp;#237;as conectado antes a este servidor sin problemas, puede que el error\\nsea temporal y puedes intentarlo m&amp;#225;s tarde.</li>\\n</ul>]]></string>
   <string name="error_generic_title">Ups</string>
   <string name="error_generic_message">Por alguna razón, no podemos cargar esta página.</string>
+  <string name="your_rights">Tus derechos</string>
   <string name="your_rights_content1">%1$s es software de código abierto y gratuito, creado por Mozilla y otros colaboradores.</string>
   <string name="your_rights_content2"><![CDATA[\"%1$s está disponible de acuerdo con los términos de la \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Licencia p&amp;#250;blica de Mozilla</a>\" y otras licencias de código abierto.\"]]></string>
   <string name="your_rights_content3"><![CDATA[\"No tienes ningún derecho o licencia sobre las marcas registradas de la Fundación Mozilla ni cualquier otra parte interesada, incluidos los nombres o logos de Mozilla, Firefox o %1$s. \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Aqu&amp;#237;</a>\" puedes encontrar más información.\"]]></string>

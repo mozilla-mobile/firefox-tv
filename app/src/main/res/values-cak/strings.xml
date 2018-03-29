@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Rik\'in jub\'a\' k\'o jun k\'ayewal rik\'in ri runuk\'ulem k\'uxasamaj o rik\'in jub\'a\' k\'o najowan nik\'exon ri k\'uxasamaj.</li>"\n  "<li>We atokin&#228;q chik pa re k\'uxasamaj re\' ojer kan, rik\'in jub\'a\' xa jun jumej sachoj ruma ri\' yatik&#239;r natojtob\'ej pa jun chik ti ramaj.</li>\n</ul>]]></string>
   <string name="error_generic_title">Uy.</string>
   <string name="error_generic_message">Man qetaman ta achike ruma man yojtikïr ta niqasamajij re ruxaq re\'.</string>
+  <string name="your_rights">Taq Ach\'ojib\'al</string>
     <string name="your_rights_content1">%1$s jun jamäl kema\' chuqa\' jaqäl b\'itz\'ib\' nuk\'un ruma Mozilla chuqa\' ch\'aqa\' chik to\'onela\'.</string>
   <string name="your_rights_content2"><![CDATA["%1$s niya\' pan aq\'a\' rik\'in rojqanem ri "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Aj win&#228;q Ya\'oj Ruq\'ij Mozilla</a>" chuqa\' ch\'aqa\' chik taq ya\'öj q\'ij kichin ch\'aqa\' chik taq jaqäl b\'itz\'ib\'."]]></string>
   <string name="your_rights_content3"><![CDATA["Man nisuj taq kich\'ojib\'al chuqa\' ya\'oj q\'ij chi ke ri etz\'ib\'an taq b\'i\'aj richin Mozilla Moloj ni xa ta chi ke ri taq ruch\'akulal achi\'el Mozilla, Firefox o %1$s taq b\'i\'aj o taq wachaj. Nawïl rutz\'aqat na\'oj "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">wawe\'</a>.]]></string>

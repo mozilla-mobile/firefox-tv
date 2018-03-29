@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Ongelma voi johtua palvelimen asetuksista tai jonkin toisen\npalvelimen vilpillisest&#228; yrityksest&#228; tekeyty&#228; palvelimeksi.</li>"\n  "<li>Jos yhteyden muodostuminen palvelimeen on aiemmin onnistunut, \nvika voi olla v&#228;liaikainen. Yrit&#228; t&#228;ll&#246;in my&#246;hemmin uudestaan.</li>\n</ul>]]></string>
   <string name="error_generic_title">Hups</string>
   <string name="error_generic_message">Verkkopyyntöä ei kyetä toteuttamaan.</string>
+  <string name="your_rights">Oikeutesi</string>
     <string name="your_rights_content1">%1$s on ilmainen, avoimen lähdekoodin ohjelmisto Mozillalta ja muilta avustajilta.</string>
   <string name="your_rights_content2"><![CDATA["%1$s on käytettävissäsi "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" ja muiden avoimen lähdekoodin lisenssien ehdoin."]]></string>
   <string name="your_rights_content3"><![CDATA["Sinulle ei anneta minkään muotoisia tavaramerkki- tai lisenssioikeuksia Mozilla-säätiön tai muun tahon tavaramerkkeihin, joihin lukeutuu Mozilla, Firefox tai %1$s -nimi tai -logo. Voit lukea tarkempia lisätietoja tavaramerkeistä "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">t&#228;&#228;lt&#228;</a>.]]></string>

@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Ky mund t&#235; jet&#235; problem i ardhur nga form&#235;simi i sh&#235;rbyesit, ose mund t&#235; b&#235;het fjal&#235; p&#235;r dik&#235; q&#235; po provon t&#235; imitoj&#235; sh&#235;rbyesin.</li>"\n  "<li>Po qe se n&#235; t&#235; kaluar&#235;n jeni lidhur me sukses te ky sh&#235;rbyes, gabimi mund t&#235; jet&#235; i p&#235;rkohsh&#235;m, dhe mund t&#235; riprovoni m&#235; von&#235;.</li>\n</ul>]]></string>
   <string name="error_generic_title">Mos!</string>
   <string name="error_generic_message">Për ndonjë farë arsyeje, s’e ngarkojmë dot këtë faqe.</string>
+  <string name="your_rights">Të drejtat Tuaja</string>
     <string name="your_rights_content1">%1$s është software i lirë dhe me burim të hapur, i krijuar nga Mozilla dhe kontribues të tjerë.</string>
   <string name="your_rights_content2"><![CDATA["%1$s ju jepet sipas kushteve të licencës "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" dhe të tjerash licencash me burim të hapur."]]></string>
   <string name="your_rights_content3"><![CDATA["Nuk ju është akorduar çfarëdo e drejte apo licencë mbi shenjat tregtare të fondacionit Mozilla Foundation apo çfarëdo pale tjetër, përfshi emrat apo logot e Mozilla-s, Firefox-it ose %1$s-it. Informacion shtesë mund të gjeni  "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">k&#235;tu</a>.]]></string>

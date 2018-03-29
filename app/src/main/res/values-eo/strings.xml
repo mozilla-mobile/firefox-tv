@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Tio povus esti problemo kun la agordoj de la servilo, a&#365; iu kiu klopodas trompe &#349;ajnigi esti tiu servilo.</li>"\n  "<li>Se vi konekti&#285;is al tiu servilo en la pasinto, la eraro povas esti momenta, kaj vi povos klopodi denove poste.</li>\n</ul>]]></string>
   <string name="error_generic_title">Fuŝ\'</string>
   <string name="error_generic_message">Ni ne povas ŝargi tiun ĉi paĝon pro iu kialo.</string>
+  <string name="your_rights">Viaj rajtoj</string>
     <string name="your_rights_content1">"%1$s estas libera kaj malfermitkoda programaro, farita de Mozilla kaj aliaj kontribuintoj. "</string>
   <string name="your_rights_content2"><![CDATA["%1$s estas liverita al vi sub la kondiĉoj de la "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Publika permesilo de Mozilla</a>" aŭ aliaj malfermitkodaj permesiloj."]]></string>
   <string name="your_rights_content3"><![CDATA["Neniu rajto por la registritaj markoj de Mozilla Foundation aŭ de iu alia estas ceditaj al vi. Tio inkluzivas, sed ne nur tion, la nomon aŭ emblemon de Mozilla, Firefox aŭ %1$s.  Pli da informo pri registritaj markoj troveblas "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#265;i tie</a>.]]></string>

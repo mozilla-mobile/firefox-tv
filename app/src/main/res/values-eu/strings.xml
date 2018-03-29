@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Hau zerbitzariaren konfigurazio-errore batengatik edo\nnorbait zerbitzariaren nortasuna hartzen ari delako izan daiteke.</li>"\n  "<li>Aurretik zerbitzari honetara behar bezala konektatu bazara, errorea\nbehin-behinekoa izan daiteke eta geroago saia zaitezke.</li>\n</ul>]]></string>
   <string name="error_generic_title">Iepa</string>
   <string name="error_generic_message">Ezin dugu orri hau kargatu arrazoi ezezagun batengatik.</string>
+  <string name="your_rights">Zure eskubideak</string>
     <string name="your_rights_content1">Mozillak eta beste hainbat laguntzailek egindako software libre eta kode irekikoa da %1$s.</string>
   <string name="your_rights_content2"><![CDATA["%1$s zure eskura dago "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" eta kode irekiko beste lizentzien baldintzapean."]]></string>
   <string name="your_rights_content3"><![CDATA["Ez zaizu inolako eskubiderik edo lizentziarik aitortzen Mozilla Fundazioaren edo bestelakoen marka erregistratuetan, Mozilla, Firefox eta %1$s izen edo logoetan barne. Argibide gehiago "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">hemen</a>" aurki daitezke."]]></string>

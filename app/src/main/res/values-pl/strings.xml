@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Mo&#380;e to by&#263; problem konfiguracji serwera lub pr&#243;ba podania si&#281;\nza ten serwer przez podmiot nieuprawniony.</li>"\n  "<li>Je&#347;li &#322;&#261;czono si&#281; wcze&#347;niej z&#160;tym serwerem, b&#322;&#261;d mo&#380;e by&#263; tymczasowy\ni&#160;nale&#380;y spr&#243;bowa&#263; ponownie p&#243;&#378;niej.</li>\n</ul>]]></string>
   <string name="error_generic_title">Wystąpił błąd</string>
   <string name="error_generic_message">Nie można otworzyć tej strony.</string>
+  <string name="your_rights">O prawach użytkownika</string>
     <string name="your_rights_content1">%1$s to wolne oprogramowanie o otwartym kodzie źródłowym tworzone przez Mozillę i innych współtwórców.</string>
   <string name="your_rights_content2"><![CDATA["%1$s jest dostępny na warunkach licencji "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">MPL (Mozilla Public License)</a>" i innych licencji open source."]]></string>
   <string name="your_rights_content3"><![CDATA["Nie otrzymujesz żadnych licencji ani praw do znaków towarowych Mozilla Foundation i innych podmiotów, w tym do nazw i logotypów Mozilla, Firefox i %1$s. "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Tutaj</a>" znajduje się więcej informacji na ten temat."]]></string>

@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>Potrebbe trattarsi di un problema nella configurazione del server oppure di un tentativo da parte di qualcuno di sostituirsi al server stesso.</li>"\"\\n  \""<li>Se &amp;#232; stato possibile connettersi a questo server in passato, il problema potrebbe essere solo temporaneo. Si consiglia di riprovare in seguito.</li>\\n</ul>]]></string>
   <string name="error_generic_title">Oops</string>
   <string name="error_generic_message">Per qualche motivo non è stato possibile caricare questa pagina.</string>
+  <string name="your_rights">I tuoi diritti</string>
   <string name="your_rights_content1">%1$s è un software libero e Open Source realizzato da Mozilla e altri collaboratori.</string>
   <string name="your_rights_content2"><![CDATA[\"%1$s è disponibile nei termini della \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>\" e di altre licenze Open Source.\"]]></string>
   <string name="your_rights_content3"><![CDATA[\"Mozilla non attribuisce all’utente alcun diritto o licenza relativamente all’utilizzo dei marchi registrati da Mozilla Foundation o da altri soggetti, inclusi i nomi Mozilla, Firefox, %1$s e i logo associati. Ulteriori informazioni sono disponibili in \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">questa pagina</a>.]]></string>

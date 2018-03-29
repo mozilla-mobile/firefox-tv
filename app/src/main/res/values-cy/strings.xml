@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">" \n  "<li>Gall hwn fod yn anhawster gyda ffurfweddiad y gweinydd neu gall fod \nyn rhywun sy\'n ceisio dynwared y gweinydd.</li>" \n  "<li>Os ydych wedi cysylltu\'n llwyddiannus gyda\'r gweinydd yn y gorffennol, efallai \nmai gwall dros dro ydyw ac i geisio eto.</li>" \n"</ul>]]></string>
   <string name="error_generic_title">Wps</string>
   <string name="error_generic_message">Methu llwytho\'r dudalen am ryw reswm.</string>
+  <string name="your_rights">Eich Hawliau</string>
     <string name="your_rights_content1">Mae %1$s yn feddalwedd cod agored a rhydd gan Mozilla a chyfranwyr eraill.</string>
   <string name="your_rights_content2"><![CDATA["Mae %1$s ar gael i chi o dan delerau "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Trwydded Cyhoeddus Mozilla</a>" a thrwyddedau cod agored eraill."]]></string>
   <string name="your_rights_content3"><![CDATA["Nid oes gennych unrhyw hawliau na thrwyddedau i nodau masnach y Mozilla Foudation nag o unrhyw barti, gan gynnwys enwau na logos Mozilla, Firefox na %1$s. Mae manylion pellach i\'w cael "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">yma</a>.]]></string>

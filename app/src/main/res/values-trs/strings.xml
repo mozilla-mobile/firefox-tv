@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Yi\'&#238; configurasi&#244;n \'iaj re\' nan si guruhuaj, asi hua \'ngo sa huin ruhu&#226; gatsin ri&#241;a man.</li>"\n  "<li>Sisi a\'n&#239;n atuj hue\'&#234;t ri&#241;a serbidor nej di&#251; gachin ni, man si \'iaj akuan\' man si guruhuaj, gin&#249;n huin &#241;&#251;n nana doj.</li>\n</ul>]]></string>
   <string name="error_generic_title">\'uâ\'</string>
   <string name="error_generic_message">Hua sa \'iaj na\'ue gayi\'ì pajinâ nan</string>
+  <string name="your_rights">Nej sa tna\'uej rayi\'ît</string>
     <string name="your_rights_content1">%1$s ‘ngō software chre nī sa huā nî’nïnj ï huin man giri Mozilla nī a’ngô nej duguî’ rugûñu’ūnj.</string>
   <string name="your_rights_content2"><![CDATA["%1$s huin guendâ gārasunt sanī da’uît gārayinat "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">si nugu&#224;n&#8217; Mozilla</a>" nī a’ngô nej nuguan’ nikāj nej sa huā nî’nïnj ïn."]]></string>
   <string name="your_rights_content3"><![CDATA["Nitāj si â’nïnj fundación Mozilla ganè’ nej rasuun nīka nī ngà ‘ngō yiko’ li, dàj rû’ si yugui nej %1$s asi da’nga’ nīka, Firefox. Ga’ue narì’t doj nuguan’ a’min rayi’î "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">hi&#363;j nan</a>.]]></string>

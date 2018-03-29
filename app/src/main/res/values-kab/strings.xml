@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[" "<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">" "<li>Ayagi yekka-d ahat seg ugur n twila n uqeddac ne&#947; amdan yetta&#603;ra&#7693;en ad yakker timagit n uqeddac.</li>"\n  "<li>Ma yella teqqne&#7693; yakan ar uqeddac-agi, ahat tucc&#7693;a d umatu kan, tzemre&#7693; ad t&#603;er&#7693;e&#7693; tikelt-nni&#7693;en ticki.</li></ul>]]></string>
   <string name="error_generic_title">Ihuh</string>
   <string name="error_generic_message">Ur nezmir ara ad d-nsali asebter-agi, ur neẓri ara acuγer.</string>
+  <string name="your_rights">Izerfan-ik</string>
     <string name="your_rights_content1">"%1$s baṭṭel s waɣbalu yeldin ixeddem-it Mozilla d imettekiyen nniḍen. "</string>
   <string name="your_rights_content2"><![CDATA[%1$s yella ddaw tiwtilin n<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Turagt tazayezt n Mozilla</a>akked turagt yeldin nniḍen.]]></string>
   <string name="your_rights_content3"><![CDATA["UR k-netmudu ara ula d azref neγ  turagt ɣef ticṛaḍ yersen n Mozilla neɣ n wis kraḍ, am Mozilla neγ Firefox neγ ismawen %1$s akked iluguten. ugar n talγut ad t-tafeḍ di "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">dagi</a>.]]></string>

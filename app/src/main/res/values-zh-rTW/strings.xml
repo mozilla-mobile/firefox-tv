@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"><li>&#21487;&#33021;&#26159;&#20282;&#26381;&#22120;&#35373;&#23450;&#21839;&#38988;&#36896;&#25104;&#65292;&#25110;&#26159;&#26377;&#20154;&#22039;&#35430;&#20605;&#35037;&#25104;&#35442;&#20282;&#26381;&#22120;&#12290;</li><li>&#33509;&#24744;&#20197;&#21069;&#21487;&#20197;&#33287;&#35442;&#20282;&#26381;&#22120;&#27491;&#24120;&#36899;&#32218;&#65292;&#37027;&#40636;&#36889;&#20491;&#37679;&#35492;&#21487;&#33021;&#21482;&#26159;&#26283;&#26178;&#30340;&#65292;&#35531;&#31245;&#20505;&#20877;&#35430;&#35430;&#30475;&#12290;</li>" "</ul>]]></string>
   <string name="error_generic_title">糟糕</string>
   <string name="error_generic_message">因為某些原因，我們無法載入此頁面。</string>
+  <string name="your_rights">您的權利</string>
     <string name="your_rights_content1">%1$s 是由 Mozilla 及貢獻者所打造，自由且開放原始碼的軟體。</string>
   <string name="your_rights_content2"><![CDATA["%1$s 依照 "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" 以及其他開放原始碼授權條款提供給您。"]]></string>
   <string name="your_rights_content3"><![CDATA["您並未被授權使用 Mozilla 基金會或任何相關部門的商標，包含但不限於 Mozilla、Firefox、%1$s 的商標。您可以在 "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#36889;&#35041;</a>找到更多資訊。]]></string>

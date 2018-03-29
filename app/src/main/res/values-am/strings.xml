@@ -40,5 +40,6 @@
   <string name="error_sslhandshake_title">ደህንነቱ የተጠበቀ ግንኙነት አልተሳካም</string>
   <string name="error_generic_title">ውይ</string>
   <string name="error_generic_message">ይህን ገጽ በሆነ ምክንያት ልንጭነውም አንችልም</string>
+  <string name="your_rights">የእርስዎ መብቶች</string>
     <string name="your_rights_content1">%1$s ሞዚላ እና ሌሎች አስተዋፅዖ አድራጊዎች የተሰሩ ነጻ እና ግልጽ ምንጭ ሶፍትዌሮች ናቸው</string>
 </resources>

@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Det kan vara ett problem med serverns konfiguration, eller det kan vara\nn&#229;gon som f&#246;rs&#246;ker imitera servern.</li>"\n  "<li>Om du har anslutit till den h&#228;r servern med framg&#229;ng i det f&#246;rflutna, kan felet\nvara tillf&#228;lligt, och du kan f&#246;rs&#246;ka igen senare.</li>\n</ul>]]></string>
   <string name="error_generic_title">Hoppsan</string>
   <string name="error_generic_message">Vi kan inte ladda den här sidan av någon anledning.</string>
+  <string name="your_rights">Dina rättigheter</string>
     <string name="your_rights_content1">%1$s är gratis och öppen källkodsprogramvara utvecklad av Mozilla och andra bidragsgivare.</string>
   <string name="your_rights_content2"><![CDATA["%1$s är tillgänglig för dig enligt villkoren i "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" och andra open source-licenser."]]></string>
   <string name="your_rights_content3"><![CDATA["Du är inte beviljad några rättigheter eller licenser till varumärken som tillhör Mozilla Foundation eller någon part, däribland Mozilla, Firefox eller %1$s namn eller logotyper. Ytterligare information kan hittas "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">h&#228;r</a>.]]></string>

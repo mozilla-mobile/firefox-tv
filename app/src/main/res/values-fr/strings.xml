@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"><li>Ceci peut &#234;tre d&#251; &#224; un probl&#232;me de configuration du serveur ou &#224; une personne essayant d&#8217;usurper l&#8217;identit&#233; du serveur.</li><li>Si vous avez d&#233;j&#224; pu vous connecter &#224; ce serveur, l&#8217;erreur est peut-&#234;tre temporaire et vous pouvez essayer &#224; nouveau plus tard.</li></ul>]]></string>
   <string name="error_generic_title">La requête ne peut aboutir</string>
   <string name="error_generic_message">Pour une raison inconnue, nous ne pouvons pas charger cette page.</string>
+  <string name="your_rights">Droits de l’utilisateur</string>
   <string name="your_rights_content1">%1$s est un logiciel libre et ouvert réalisé par Mozilla avec l’aide d’autres contributeurs.</string>
   <string name="your_rights_content2"><![CDATA["%1$s est distribué suivant les modalités de la "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" et d’autres licences open source."]]></string>
   <string name="your_rights_content3"><![CDATA["Il ne vous est cédé aucun droit ou licence sur les marques déposées de la Fondation Mozilla ou de tiers, y compris sur les noms et logos de Mozilla, Firefox ou %1$s. Des informations complémentaires peuvent être consultées "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">ici</a>.]]></string>

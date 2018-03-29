@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>To m&#243;h&#322;o problem z konfiguraciju serwera by&#263;, abo m&#243;h&#322;o by&#263;,\nzo n&#283;cht&#243; pospytuje serwer imitowa&#263;.</li>"\n  "<li>Jeli s&#263;e ze serwerom w za&#324;d&#378;enos&#263;i wusp&#283;&#353;nje zwjazany by&#322;, m&#243;h&#322; zmylk snano\nnachwilny by&#263; a m&#243;&#382;e&#263;e pozd&#378;i&#353;o hi&#353;&#263;e raz spyta&#263;.</li>\n</ul>]]></string>
   <string name="error_generic_title">Hopla</string>
   <string name="error_generic_message">Z někajkeje přičiny njemóžemy tutu stronu začitać.</string>
+  <string name="your_rights">Waše prawa</string>
     <string name="your_rights_content1">%1$s je darmotna softwara wotewrjeneho žórła wot Mozilla a druhich sobuskutkowarjow.</string>
   <string name="your_rights_content2"><![CDATA["%1$s so pod wuměnjenjemi licency "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" a druhimi licencami wotewrjeneho žórła k dispoziciji staja."]]></string>
   <string name="your_rights_content3"><![CDATA["Njedadźa wam žane prawa abo licency na wikowanskich znamjenjach załožby Mozilla Foundation abo třećich, inkluziwnje mjena abo loga Mozilla, Firefox abo %1$s. Dalše informacije namakaće "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">tu</a>.]]></string>

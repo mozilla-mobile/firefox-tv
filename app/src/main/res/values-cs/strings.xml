@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Tohle m&#367;&#382;e b&#253;t probl&#233;m s konfigurac&#237; serveru, nebo je mo&#382;n&#233;, &#382;e se za tento server n&#283;kdo sna&#382;&#237; vyd&#225;vat.</li>"\n  "<li>Pokud jste se k tomuto serveru v minulosti p&#345;ipojili &#250;sp&#283;&#353;n&#283;, m&#367;&#382;e j&#237;t o do&#269;asnou chybu a m&#367;&#382;ete to zkusit znovu pozd&#283;ji.</li>\n</ul>]]></string>
   <string name="error_generic_title">Jejda</string>
   <string name="error_generic_message">Tuto stránku nelze načíst.</string>
+  <string name="your_rights">Vaše práva</string>
     <string name="your_rights_content1">%1$s je otevřený software zdarma od Mozilly a jiných přispěvatelů.</string>
   <string name="your_rights_content2"><![CDATA["%1$s vám je zpřístupněn pod podmínkami "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" a jiných open source licencí."]]></string>
   <string name="your_rights_content3"><![CDATA["Nejsou vám však podstoupena žádná práva ani licence k ochranným známkám Mozilla Foundation či dalších stran, a to zejména k logům a jménům Mozilla, Firefox nebo %1$s. Podrobnější informace o ochranných známkách jsou dostupné "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">zde</a>.]]></string>

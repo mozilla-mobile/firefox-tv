@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Ovo bi mogao biti problem sa pode&#353;avanjima servera ili se neko mo&#382;da poku&#353;ava predstaviti kao server.</li>"\n  "<li>Ako ste se i ranije uspje&#353;no povezivali na ovaj server, gre&#353;ka mo&#382;e biti privremena i mo&#382;ete ponovo poku&#353;ati kasnije.</li>\n</ul>]]></string>
   <string name="error_generic_title">Ups</string>
   <string name="error_generic_message">Iz nekog razloga ne možemo učitati ovu stranicu.</string>
+  <string name="your_rights">Vaša prava</string>
     <string name="your_rights_content1">%1$s je besplatan softver i otvorenog koda napravljen od strane Mozille i drugih doprinosilaca.</string>
   <string name="your_rights_content2"><![CDATA["%1$s vam je omogućen pod uslovima "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" i drugih licenci otvorenog koda."]]></string>
   <string name="your_rights_content3"><![CDATA["Nemate nikakva prava niti licencu na zaštitne znakove Mozilla Foundation niti bilo šta slično, uključujući i Mozilla, Firefox ili %1$s imena ili logotipe. Dodatne informacije možete pronaći "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">ovdje</a>.]]></string>
