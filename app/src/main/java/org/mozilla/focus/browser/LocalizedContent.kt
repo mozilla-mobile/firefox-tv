@@ -20,6 +20,7 @@ object LocalizedContent {
     // a custom scheme.
     const val URL_ABOUT = "firefox:about"
 
+    @JvmStatic
     fun handleInternalContent(url: String, webView: AmazonWebView): Boolean {
         if (URL_ABOUT == url) {
             loadAbout(webView)
