@@ -208,11 +208,11 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     private fun handleSpecialKeyEvent(event: KeyEvent): Boolean {
         val keyCodeIsMenu = event.keyCode == KeyEvent.KEYCODE_MENU
         val keyCodeIsBack = event.keyCode == KeyEvent.KEYCODE_BACK
-        val actionIsUp = event.action == KeyEvent.ACTION_UP
+        val actionIsDown = event.action == KeyEvent.ACTION_DOWN
         val isOverlayToggleKey = (keyCodeIsMenu || (keyCodeIsBack && browserOverlay.isVisible))
 
         if (isOverlayToggleKey) {
-            if (actionIsUp) {
+            if (actionIsDown) {
                 val toShow = !browserOverlay.isVisible
                 setOverlayVisibileByUser(toShow)
                 // Fix this youtube focus hack in #393
