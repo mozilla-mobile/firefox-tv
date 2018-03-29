@@ -42,4 +42,5 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>B\'fh&#233;idir gur fadhb i gcumra&#237;ocht an fhreastala&#237; at&#225; ann, n&#243; b\'fh&#233;idir\ngo bhfuil duine &#233;igin ag d&#233;anamh aithrise ar an bhfreastala&#237;.</li>"\n  "<li>M&#225; &#233;ir&#237;onn leat ceangal leis an bhfreastala&#237; seo de ghn&#225;th, b\'fh&#233;idir\ngur fadhb shealadach &#237; agus gur f&#233;idir leat iarracht a dh&#233;anamh n&#237;os d&#233;ana&#237;.</li>\n</ul>]]></string>
   <string name="error_generic_title">Úps</string>
   <string name="error_generic_message">Ní féidir linn an leathanach seo a lódáil ar chúis éigin.</string>
+  <string name="your_rights">Cearta an úsáideora</string>
 </resources>

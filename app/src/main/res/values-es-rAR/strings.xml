@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Podr&#237;a haber un problema con la configuraci&#243;n del servidor o podr&#237;a ser\nalguien tratando de hacerse pasar por ese servidor.</li>"\n  "<li>Si te conectaste exitosamente a este servidor en el pasado, el error puede\nser temporal y pod&#233;s probar m&#225;s tarde.</li>\n</ul>]]></string>
   <string name="error_generic_title">Epa</string>
   <string name="error_generic_message">No se puede cargar esta página por alguna razón.</string>
+  <string name="your_rights">Tus derechos</string>
     <string name="your_rights_content1">%1$s es software gratuito y de código abierto hecho por Mozilla y otros colaboradores.</string>
   <string name="your_rights_content2"><![CDATA["%1$s está disponible para usted bajo los términos de la Licencia pública de Mozilla "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s"/>" y otras licencias de código abierto."]]></string>
   <string name="your_rights_content3"><![CDATA["No tenés derecho o licencia sobre las marcas registradas de la Fundación Mozilla ni cualquier otra parte interesada, incluidos los nombres o logos de Mozilla, Firefox o %1$s. Podés encontrar más información "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">aqu&#237;</a>.]]></string>

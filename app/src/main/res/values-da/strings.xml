@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Dette kan v&#230;re et problem med serverens konfiguration,\neller det kan betyde, at nogen fors&#248;ger at give sig ud for at v&#230;re serveren.</li>"\n  "<li>Hvis du har kunnet tilg&#229; serveren tidligere kan dette problem v&#230;re midlertidigt\nog du anbefales at pr&#248;ve igen senere.</li>\n</ul>]]></string>
   <string name="error_generic_title">Ups</string>
   <string name="error_generic_message">Siden kan af uvisse årsager ikke indlæses.</string>
+  <string name="your_rights">Dine rettigheder</string>
     <string name="your_rights_content1">%1$s er frit og åbent software, udviklet af Mozilla og andre bidragydere.</string>
   <string name="your_rights_content2"><![CDATA["%1$s er tilgængelig under de vilkår der er fastsat i "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" og andre licenser til åben kildekode."]]></string>
   <string name="your_rights_content3"><![CDATA["Du bliver ikke givet nogen ret eller licens til varemærker tilhørende Mozilla Foundation eller tredjepart, herunder navn og logo for Mozilla, Firefox og %1$s. Få flere oplysninger "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">her</a>.]]></string>

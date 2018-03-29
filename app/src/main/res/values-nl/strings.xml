@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Dit kan een probleem met de serverconfiguratie zijn, of iemand probeert\nde server na te bootsen.</li>"\n  "<li>Als u in het verleden met succes verbinding met deze server hebt gemaakt,\nkan de fout van tijdelijke aard zijn en kunt u het later nogmaals proberen.</li>\n</ul>]]></string>
   <string name="error_generic_title">Oeps</string>
   <string name="error_generic_message">Deze pagina kan om de een of andere reden niet worden geladen.</string>
+  <string name="your_rights">Uw rechten</string>
     <string name="your_rights_content1">%1$s is vrije en opensourcesoftware, gemaakt door Mozilla en andere medewerkers.</string>
   <string name="your_rights_content2"><![CDATA["%1$s wordt beschikbaar gesteld onder de voorwaarden van de "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" en andere opensourcelicenties."]]></string>
   <string name="your_rights_content3"><![CDATA["Er worden u geen rechten of licenties verleend op de handelsmerken van de Mozilla Foundation of enige andere partij, met inbegrip van de namen of logo’s van Mozilla, Firefox of %1$s. Aanvullende informatie is "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">hier</a>" te vinden."]]></string>

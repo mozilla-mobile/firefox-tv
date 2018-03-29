@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>Isto pode ser um problema com a configura&amp;#231;&amp;#227;o do servidor ou pode ser algu&amp;#233;m tentando se passar pelo servidor.</li>"\"\\n  \""<li>Se voc&amp;#234; se conectou a este servidor com sucesso no passado, o erro pode ser tempor&amp;#225;rio, e voc&amp;#234; pode tentar novamente mais tarde.</li>\\n</ul>]]></string>
   <string name="error_generic_title">Ops</string>
   <string name="error_generic_message">Não podemos carregar esta página por algum motivo.</string>
+  <string name="your_rights">Seus direitos</string>
   <string name="your_rights_content1">O %1$s é um software livre e de código aberto feita pela Mozilla e outros contribuidores.</string>
   <string name="your_rights_content2"><![CDATA[\"O %1$s é disponibilizado de acordo com os termos da \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>\" e outras licenças de código aberto.\"]]></string>
   <string name="your_rights_content3"><![CDATA[\"Não lhe são concedidos quaisquer direitos ou licenças sobre marcas registradas da Mozilla Foundation ou de terceiros, incluindo os nomes ou logos da Mozilla, Firefox ou %1$s. Informações adicionais podem ser encontradas \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">here</a>.]]></string>

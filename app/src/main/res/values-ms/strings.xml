@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Ini mungkin masalah dengan konfigurasi pelayan, atau boleh jadi\nada pihak yang cuba menyamar sebagai pelayan.</li>"\n  "<li>Jika anda pernah berjaya mendapatkan hubungan dengan pelayan ini dulu, ralat ini mungkin\nsementara dan anda boleh cuba lagi nanti.</li>\n</ul>]]></string>
   <string name="error_generic_title">Oops</string>
   <string name="error_generic_message">Kami tidak dapat memuat halaman ini untuk sebab-sebab tertentu.</string>
+  <string name="your_rights">Hak Anda</string>
     <string name="your_rights_content1">%1$s adalah perisian percuma dan sumber terbuka yang dihasilkan oleh Mozilla dan para penyumbang lain.</string>
   <string name="your_rights_content2"><![CDATA["%1$s disediakan untuk anda di bawah terma "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Lesen Umum Mozilla</a>" dan lesen sumber terbuka lain."]]></string>
   <string name="your_rights_content3"><![CDATA["Anda tidak diberikan sebarang hak atau lesen untuk tanda dagangan Yayasan Mozilla atau mana-mana pihak, termasuk menggunakan nama atau logo Mozilla, Firefox atau %1$s. Maklumat tambahan boleh didapati "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">di sini</a>.]]></string>

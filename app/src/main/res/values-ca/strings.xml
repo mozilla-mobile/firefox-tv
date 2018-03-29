@@ -44,4 +44,5 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Aix&#242; podria ser un problema amb la configuraci&#243; del servidor, o b&#233; podria ser que alg&#250; estigu&#233;s intentant fer-se passar pel servidor.</li>"\n  "<li>Si us hi heu connectat sense cap problema alguna altra vegada, l\'error podria ser temporal i podeu tornar-ho a provar m&#233;s tard.</li>\n</ul>]]></string>
   <string name="error_generic_title">Ups.</string>
   <string name="error_generic_message">No s\'ha pogut carregar aquesta pàgina per algun motiu.</string>
+  <string name="your_rights">Els vostres drets</string>
 </resources>

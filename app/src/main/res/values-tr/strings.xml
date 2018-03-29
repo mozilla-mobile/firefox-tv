@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">" \n  "<li>Sunucunun yap&#305;land&#305;rmas&#305;yla ilgili bir sorun olabilir veya birisi sunucuyu taklit etmeye &#231;al&#305;&#351;&#305;yor olabilir.</li>"\n  "<li>Daha &#246;nce bu sunucuya sorunsuz ba&#287;land&#305;ysan&#305;z sorun ge&#231;ici olabilir ve daha sonra yeniden ba&#287;lanmay&#305; deneyebilirsiniz.</li>\n</ul>]]></string>
   <string name="error_generic_title">Hata</string>
   <string name="error_generic_message">Bilinmeyen bir nedenden dolayı bu sayfa yüklenemedi.</string>
+  <string name="your_rights">Haklarınız</string>
     <string name="your_rights_content1">Mozilla ve gönüllüler tarafından geliştirilen %1$s, özgür ve açık kaynaklı bir yazılımdır.</string>
   <string name="your_rights_content2"><![CDATA["%1$s, "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Kamu Lisans&#305;</a>" ve diğer açık kaynak lisanslarının koşullarıyla sunulmaktadır."]]></string>
   <string name="your_rights_content3"><![CDATA["Mozilla Foundation’ın tescilli markaları olan Mozilla, Firefox, %1$s adları ve logoları da dahil olmak üzere, tescilli markalarımızın hakları ve lisansları sizinle paylaşılmamaktadır. Daha fazla bilgi almak isterseniz "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">buraya</a>" bakabilirsiniz."]]></string>

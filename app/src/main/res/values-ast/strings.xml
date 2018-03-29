@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Esto quiciabes seya un problema cola configuraci&#243;n del sirvidor o que\ndaqui&#233;n lu tea tentando de suplantar.</li>"\n  "<li>Si nel pas&#225;u te coneutesti a esti sirvidor con &#233;situ, quiciabes el fallu seya\ntemporal y pueas tentalo de nueves m&#225;s sero.</li>\n</ul>]]></string>
   <string name="error_generic_title">Ups</string>
   <string name="error_generic_message">Nun podemos cargar esta páxina por dalgún motivu</string>
+  <string name="your_rights">Els vostres drets</string>
     <string name="your_rights_content1">%1$s ye un programa de baldre y de códigu abiertu fechu por Mozilla y otros collaboradores.</string>
   <string name="your_rights_content2"><![CDATA["%1$s ta disponible so los términos de la "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" y otres llicencies de códigu abiertu."]]></string>
   <string name="your_rights_content3"><![CDATA["Nun tienes concedíu dengún drechu o llicencia total o parcial sobre les marques rexistraes de la Mozilla Foundation, esto inclúi los nomes y logos Mozilla, Firefox o %1$s. "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Equ&#237;</a>" pue alcontrase información adicional."]]></string>

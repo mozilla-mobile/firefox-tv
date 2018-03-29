@@ -47,4 +47,5 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Sa&#817;naan kuvi iin problema jii configuraci&#243;n ka&#817;a&#817; servidor a x&#237;&#237;n &#237;yo neva kuvi sa&#180;a xeen.</li>"\n  "<li>Dee a kiv&#616;-nu servidor ya&#180;a &#237;chi yata sa&#817;naan kuvi iin error nkuvi sa&#817;naan, kuvi nakiv&#616;-nu &#237;chika dee nn&#237;n&#237;.</li>\n</ul>]]></string>
   <string name="error_generic_title">Uta</string>
   <string name="error_generic_message">Iyo iin a sá´á ntu kuvi síne página ya´a.</string>
+  <string name="your_rights">Tutu nichí noo´o</string>
 </resources>

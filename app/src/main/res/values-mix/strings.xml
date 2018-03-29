@@ -46,6 +46,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Yee &#241;a V&#225;&#8217;&#224; nu inka pagina a inkana kuni sakue\'ena .</li>"\n  "<li>"Tatu va\'a nikitsau ta sata , chaa ntu\'u &#241;a V&#225;&#8217;&#224; yo kunchatu xoo cha kitsa tuku. "</li>\n</ul>]]></string>
   <string name="error_generic_title">Kukanu inu</string>
   <string name="error_generic_message">Ma ku kuncheu pagina yoo</string>
+  <string name="your_rights">Yee yu\'u</string>
     <string name="your_rights_content1">%1$s software kuachu\'un ntiina ni kuu vaa saa Mozilla tsi nivi sachu\'un chi\'an.</string>
   <string name="your_rights_content2"><![CDATA["%1$s kuu kuachu\'uña tsi "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Licencia p&#250;blica Mozilla</a>" tsi inka licencias ña código abierto."]]></string>
   <string name="your_rights_content3"><![CDATA["Koo licencia kuachu\'na marca Fundación Mozilla ni Firefox a inkana, tsi logotipo a sivi Mozilla, Firefox a %1$s ku ndukuku tu\'un "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">yo\'o</a>.]]></string>

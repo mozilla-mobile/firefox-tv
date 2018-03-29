@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Isto pote esser un problema in le configuration del servitor o il pote esser\nalcuno tentante usurpar le servitor.</li>"\n  "<li>Si tu ha connectite a iste servitor correctemente in le passato, le error pote\nesser temporari e tu pote retentar plus tarde.</li>\n</ul>]]></string>
   <string name="error_generic_title">Ups</string>
   <string name="error_generic_message">Nos non pote cargar iste pagina pro alcun ration.</string>
+  <string name="your_rights">Tu derectos</string>
     <string name="your_rights_content1">%1$s es libere, de codice aperite e facite per Mozilla e altere contributores.</string>
   <string name="your_rights_content2"><![CDATA["%1$s es distribuite a te sub le terminos del "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Licentia public Mozilla</a>" e altere licentias de codice aperite."]]></string>
   <string name="your_rights_content3"><![CDATA["Il non es concedite a te ulle derectos o licentias al marcas registrate del fundation Mozilla o de ulle tertie, includente le nomines e logotypos de Mozilla, de Firefox o de %1$s. Altere informationes pote esser trovate "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">hic</a>.]]></string>

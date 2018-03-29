@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Ez lehet a kiszolg&#225;l&#243; be&#225;ll&#237;t&#225;si probl&#233;m&#225;ja, vagy lehet, hogy valaki megpr&#243;b&#225;lja megszem&#233;lyes&#237;teni a kiszolg&#225;l&#243;t.</li>"\n  "<li>Ha a m&#250;ltban sikeresen csatlakozott a kiszolg&#225;l&#243;hoz, akkor a hiba ideiglenes lehet, &#233;s k&#233;s&#337;bb &#250;jra megpr&#243;b&#225;lhatja.</li>\n</ul>]]></string>
   <string name="error_generic_title">Hoppá</string>
   <string name="error_generic_message">Az oldal valamilyen okból nem tölthető be.</string>
+  <string name="your_rights">Az Ön jogai</string>
     <string name="your_rights_content1">A %1$s szabad és nyílt forráskódú szoftver, amelyet a Mozilla és más közreműködők készítenek.</string>
   <string name="your_rights_content2"><![CDATA["A %1$s a "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>, és más nyílt forráskódú licencek feltételei szerint érhető el.]]></string>
   <string name="your_rights_content3"><![CDATA["Nem kap semmiféle jogot vagy licencet a Mozilla Foundation vagy bármely más fél védjegyeihez, köztük a Mozilla, Firefox vagy %1$s nevekhez vagy logókhoz. További információkat "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">itt</a>" találhat."]]></string>

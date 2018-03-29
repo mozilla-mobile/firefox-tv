@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Bu serverin konfiqurasiyas&#305; il&#601; v&#601; ya biril&#601;rinin server&#601; h&#252;c&#252;m etm&#601;si il&#601; ba&#287;l&#305; ola bil&#601;r.</li>"\n  "<li>&#399;g&#601;r daha sonra bu server&#601; u&#287;urlu ba&#287;lana bilmi&#351;dinizs&#601;, bu x&#601;ta m&#252;v&#601;qq&#601;ti ola bil&#601;r v&#601; daha sonra t&#601;krar yoxlaya bil&#601;rsiz.</li>\n</ul>]]></string>
   <string name="error_generic_title">Uups</string>
   <string name="error_generic_message">Bəzi səbəblərdən bu səhifəni yükləyə bilmirik.</string>
+  <string name="your_rights">Hüquqlarınız</string>
     <string name="your_rights_content1">%1$s Mozilla və digər töhfəverənlər tərəfindən yaradılmış azad və açıq qaynaqlı proqramdır.</string>
   <string name="your_rights_content2"><![CDATA["%1$s "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" və digər açıq qaynaq lisenziyalarının şərtləri ilə təqdim edilir."]]></string>
   <string name="your_rights_content3"><![CDATA["Sizə Mozilla Fondunun və digər tərəflərin ticari markası olan Mozilla, Firefox və ya %1$s adları və loqoları üçün heç bir hüquq və ya lisenziya verilmir. Ətraflı məlumatı "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">buradan</a>" tapa bilərsiz."]]></string>

@@ -48,6 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Te&#382;ava je morda v nastavitvah stre&#382;nika ali pa nekdo posku&#353;a\nta stre&#382;nik opona&#353;ati.</li>"\n  "<li>&#268;e ste se v preteklosti &#382;e uspe&#353;no povezali na ta stre&#382;nik, je morda\nnapaka za&#269;asna in lahko znova poskusite kasneje.</li>\n</ul>]]></string>
   <string name="error_generic_title">Ups</string>
   <string name="error_generic_message">Iz neznanega razloga ne moremo naložiti strani.</string>
+  <string name="your_rights">Vaše pravice</string>
     <string name="your_rights_content1">%1$s je brezplačna in odprtokodna programska oprema, ki jo razvija Mozilla in ostali sodelavci.</string>
   <string name="your_rights_content2"><![CDATA["%1$s vam je na voljo pod pogoji "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" in drugih odprtokodnih licenc."]]></string>
   <string name="your_rights_content3"><![CDATA["Nikakršne pravice niti licence nimate za uporabo blagovnih znamk Fundacije Mozilla ali kateregakoli od izdelkov, vključno z imeni in logotipi Mozille, Firefoxa ali %1$sa. Dodatne informacije lahko najdete "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">tukaj</a>.]]></string>
