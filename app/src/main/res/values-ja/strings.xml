@@ -2,10 +2,10 @@
 <resources>
   <string name="action_cancel">キャンセル</string>
   <string name="action_ok">OK</string>
-    <string name="urlbar_hint">検索語またはアドレスを入力</string>
-    <string name="menu_settings">設定</string>
+  <string name="urlbar_hint">検索語またはアドレスを入力</string>
+  <string name="menu_settings">設定</string>
   <string name="menu_about">製品情報</string>
-    <string name="preference_language">言語</string>
+  <string name="preference_language">言語</string>
   <string name="preference_language_systemdefault">システム標準</string>
   <string name="preference_category_privacy">プライバシー</string>
   <string name="preference_privacy_block_ads">追跡広告をブロック</string>
@@ -16,17 +16,17 @@
   <string name="preference_privacy_block_social_summary">ユーザーの訪問を追跡するためサイトに埋め込まれ、共有ボタンのように表示されます</string>
   <string name="preference_privacy_block_content">他の追跡コンテンツをブロック</string>
   <string name="preference_privacy_block_content_summary2">有効にすると、ページによっては予期せぬ動作をする原因になります</string>
-    <string name="preference_category_performance">パフォーマンス</string>
+  <string name="preference_category_performance">パフォーマンス</string>
   <string name="preference_performance_block_webfonts">ウェブフォントをブロック</string>
   <string name="preference_performance_block_webfonts_summary">アイコンや画像が正常に表示されない場合があります</string>
-    <string name="preference_mozilla_telemetry2">使用状況データを送信</string>
-    <string name="preference_privacy_notice">プライバシー通知</string>
-    <string name="accessibility_announcement_loading">読み込み中</string>
+  <string name="preference_mozilla_telemetry2">使用状況データを送信</string>
+  <string name="preference_privacy_notice">プライバシー通知</string>
+  <string name="accessibility_announcement_loading">読み込み中</string>
   <string name="accessibility_announcement_loading_finished">ウェブサイト読み込み完了</string>
   <string name="content_description_forward">次のページへ進む</string>
   <string name="content_description_reload">ウェブサイトを再読み込み</string>
   <string name="content_description_back">前のページへ戻る</string>
-    <string name="external_app_prompt_title">リンクを他のアプリで開く</string>
+  <string name="external_app_prompt_title">リンクを他のアプリで開く</string>
   <string name="external_app_prompt">%1$s を離れて、%2$s でこのリンクを開いてください。</string>
   <string name="external_app_prompt_no_app_title">リンクを開けるアプリを探す</string>
   <string name="external_app_prompt_no_app">ご使用の端末にはこのリンクを開けるアプリがありません。%1$s を離れて、%2$s で開けるアプリを探してください。</string>
@@ -48,7 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>&#12469;&#12540;&#12496;&#12540;&#12398;&#35373;&#23450;&#12395;&#21839;&#38988;&#12364;&#12354;&#12427;&#12363;&#12289;&#35504;&#12363;&#12364;&#27491;&#35215;&#12398;&#12469;&#12540;&#12496;&#12540;&#12395;&#12394;&#12426;&#12377;&#12414;&#12375;&#12390;&#12356;&#12427;&#21487;&#33021;&#24615;&#12364;&#12354;&#12426;&#12414;&#12377;&#12290;</li>"\n  "<li>&#20197;&#21069;&#12399;&#27491;&#24120;&#12395;&#25509;&#32154;&#12391;&#12365;&#12390;&#12356;&#12383;&#22580;&#21512;&#12289;&#12371;&#12398;&#21839;&#38988;&#12399;&#24656;&#12425;&#12367;&#19968;&#26178;&#30340;&#12394;&#12418;&#12398;&#12391;&#12377;&#12398;&#12391;&#12289;&#24460;&#12391;&#20877;&#24230;&#35430;&#12375;&#12390;&#12415;&#12390;&#12367;&#12384;&#12373;&#12356;&#12290;</li>\n</ul>]]></string>
   <string name="error_generic_title">申し訳ありません</string>
   <string name="error_generic_message">何らかの理由によりこのページを正常に読み込めませんでした。</string>
-    <string name="your_rights_content1">%1$s は Mozilla や他の貢献者によって開発されているフリーでオープンソースのソフトウェアです。</string>
+  <string name="your_rights_content1">%1$s は Mozilla や他の貢献者によって開発されているフリーでオープンソースのソフトウェアです。</string>
   <string name="your_rights_content2"><![CDATA["%1$s は "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" やその他オープンソースライセンスの条件に基づいて使用可能となっています。"]]></string>
   <string name="your_rights_content3"><![CDATA["Mozilla、Firefox、%1$s の名称やロゴを含む、Mozilla Foundation および第三者の商標に関するいかなる権利やライセンスもあなたには与えられていません。追加の情報は "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla &#21830;&#27161;&#12509;&#12522;&#12471;&#12540;</a>" をご覧ください。"]]></string>
   <string name="your_rights_content4"><![CDATA["%1$s の追加ソースコードは、様々な他のフリーおよびオープンソースの "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#12521;&#12452;&#12475;&#12531;&#12473;</a>" に基いて公開されています。"]]></string>

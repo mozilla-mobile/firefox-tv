@@ -2,12 +2,12 @@
 <resources>
   <string name="action_cancel">Cancelar</string>
   <string name="action_ok">OK</string>
-    <string name="urlbar_hint">Pesquisar ou navegar</string>
-    <string name="menu_settings">Configurações</string>
+  <string name="urlbar_hint">Pesquisar ou navegar</string>
+  <string name="menu_settings">Configurações</string>
   <string name="menu_about">Sobre</string>
-    <string name="preference_language">Idioma</string>
+  <string name="preference_language">Idioma</string>
   <string name="preference_language_systemdefault">Padrão do sistema</string>
-    <string name="preference_category_privacy">Privacidade</string>
+  <string name="preference_category_privacy">Privacidade</string>
   <string name="preference_privacy_block_ads">Bloquear rastreadores de anúncio</string>
   <string name="preference_privacy_block_ads_summary">Algumas propagandas rastreiam os sites visitados, mesmo se você não clicar na propaganda</string>
   <string name="preference_privacy_block_analytics">Bloquear rastreadores analíticos</string>
@@ -16,22 +16,22 @@
   <string name="preference_privacy_block_social_summary">Incorporados nos sites para rastrear suas visitas e exibir funcionalidades como botões de compartilhamento</string>
   <string name="preference_privacy_block_content">Bloquear outros rastreadores</string>
   <string name="preference_privacy_block_content_summary2">Habilitar pode causar comportamento inesperado em algumas páginas</string>
-    <string name="preference_category_performance">Desempenho</string>
+  <string name="preference_category_performance">Desempenho</string>
   <string name="preference_performance_block_webfonts">Bloquear fontes Web</string>
   <string name="preference_performance_block_webfonts_summary">Pode resultar em falta de ícones ou imagens</string>
-    <string name="preference_mozilla_telemetry2">Enviar dados de utilização</string>
-    <string name="preference_privacy_notice">Política de Privacidade</string>
-    <string name="accessibility_announcement_loading">Carregando</string>
+  <string name="preference_mozilla_telemetry2">Enviar dados de utilização</string>
+  <string name="preference_privacy_notice">Política de Privacidade</string>
+  <string name="accessibility_announcement_loading">Carregando</string>
   <string name="accessibility_announcement_loading_finished">Site carregado</string>
-    <string name="content_description_forward">Navegar para a frente</string>
+  <string name="content_description_forward">Navegar para a frente</string>
   <string name="content_description_reload">Recarregar o site</string>
   <string name="content_description_back">Navegar de volta</string>
-    <string name="external_app_prompt_title">Abrir link em um outro app</string>
+  <string name="external_app_prompt_title">Abrir link em um outro app</string>
   <string name="external_app_prompt">Você pode sair do %1$s para abrir este link no %2$s.</string>
   <string name="external_app_prompt_no_app_title">Encontrar um app que pode abrir o link</string>
   <string name="external_app_prompt_no_app">Nenhum aplicativo do seu dispositivo consegue abrir este link. Você pode sair do %1$s para pesquisar no %2$s por um aplicativo compatível.</string>
   <string name="external_multiple_apps_matched_exit">Sair da navegação privativa?</string>
-    <string name="errorpage_title">Problemas ao carregar a página</string>
+  <string name="errorpage_title">Problemas ao carregar a página</string>
   <string name="errorpage_refresh">Tentar novamente</string>
   <string name="error_connectionfailure_title">Não foi possível conectar</string>
   <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n        \""<li>O site pode estar temporariamente indispon&amp;#237;vel ou ocupado demais. Tente novamente em alguns instantes.</li>"\"\\n        \""<li>Se n&amp;#227;o conseguir carregar nenhuma p&amp;#225;gina, verifique a conex&amp;#227;o de dados ou Wi-Fi do seu dispositivo m&amp;#243;vel.</li>"\"\\n      \""</ul>]]></string>
@@ -48,7 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>Isto pode ser um problema com a configura&amp;#231;&amp;#227;o do servidor ou pode ser algu&amp;#233;m tentando se passar pelo servidor.</li>"\"\\n  \""<li>Se voc&amp;#234; se conectou a este servidor com sucesso no passado, o erro pode ser tempor&amp;#225;rio, e voc&amp;#234; pode tentar novamente mais tarde.</li>\\n</ul>]]></string>
   <string name="error_generic_title">Ops</string>
   <string name="error_generic_message">Não podemos carregar esta página por algum motivo.</string>
-    <string name="your_rights_content1">O %1$s é um software livre e de código aberto feita pela Mozilla e outros contribuidores.</string>
+  <string name="your_rights_content1">O %1$s é um software livre e de código aberto feita pela Mozilla e outros contribuidores.</string>
   <string name="your_rights_content2"><![CDATA[\"O %1$s é disponibilizado de acordo com os termos da \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>\" e outras licenças de código aberto.\"]]></string>
   <string name="your_rights_content3"><![CDATA[\"Não lhe são concedidos quaisquer direitos ou licenças sobre marcas registradas da Mozilla Foundation ou de terceiros, incluindo os nomes ou logos da Mozilla, Firefox ou %1$s. Informações adicionais podem ser encontradas \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">here</a>.]]></string>
   <string name="your_rights_content4"><![CDATA[\"Código fonte adicionais para o %1$s estão disponíveis sobre várias outras \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">licen&amp;#231;as</a>\" livres e de código aberto.\"]]></string>

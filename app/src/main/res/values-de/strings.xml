@@ -2,12 +2,12 @@
 <resources>
   <string name="action_cancel">Abbrechen</string>
   <string name="action_ok">OK</string>
-    <string name="urlbar_hint">Suchen oder Adresse eingeben</string>
-    <string name="menu_settings">Einstellungen</string>
+  <string name="urlbar_hint">Suchen oder Adresse eingeben</string>
+  <string name="menu_settings">Einstellungen</string>
   <string name="menu_about">Über</string>
-    <string name="preference_language">Sprache</string>
+  <string name="preference_language">Sprache</string>
   <string name="preference_language_systemdefault">Systemstandard</string>
-    <string name="preference_category_privacy">Datenschutz</string>
+  <string name="preference_category_privacy">Datenschutz</string>
   <string name="preference_privacy_block_ads">Werbeverfolgung blockieren</string>
   <string name="preference_privacy_block_ads_summary">Manche Werbeanzeigen verfolgen Ihre Seitenbesuche, auch wenn Sie nicht auf die Anzeigen klicken</string>
   <string name="preference_privacy_block_analytics">Analyseverfolgung blockieren</string>
@@ -16,22 +16,22 @@
   <string name="preference_privacy_block_social_summary">Auf Websites eingebettet, um Ihre Besuche zu verfolgen und Funktionen wie Links zum Teilen anzuzeigen</string>
   <string name="preference_privacy_block_content">Andere Inhaltsverfolgung blockieren</string>
   <string name="preference_privacy_block_content_summary2">Dies kann dazu führen, dass manche Seiten sich ungewöhnlich verhalten</string>
-    <string name="preference_category_performance">Leistung</string>
+  <string name="preference_category_performance">Leistung</string>
   <string name="preference_performance_block_webfonts">Web-Schriftarten blockieren</string>
   <string name="preference_performance_block_webfonts_summary">Kann zu fehlenden Symbolen oder Grafiken führen</string>
-    <string name="preference_mozilla_telemetry2">Nutzungsdaten senden</string>
-    <string name="preference_privacy_notice">Datenschutzhinweis</string>
-    <string name="accessibility_announcement_loading">Wird geladen …</string>
+  <string name="preference_mozilla_telemetry2">Nutzungsdaten senden</string>
+  <string name="preference_privacy_notice">Datenschutzhinweis</string>
+  <string name="accessibility_announcement_loading">Wird geladen …</string>
   <string name="accessibility_announcement_loading_finished">Website geladen</string>
-    <string name="content_description_forward">Vorwärts navigieren</string>
+  <string name="content_description_forward">Vorwärts navigieren</string>
   <string name="content_description_reload">Website neu laden</string>
   <string name="content_description_back">Rückwärts navigieren</string>
-    <string name="external_app_prompt_title">Link in anderer App öffnen</string>
+  <string name="external_app_prompt_title">Link in anderer App öffnen</string>
   <string name="external_app_prompt">Sie können %1$s verlassen, um diesen Link in %2$s zu öffnen.</string>
   <string name="external_app_prompt_no_app_title">App zum Öffnen des Links finden</string>
   <string name="external_app_prompt_no_app">Anscheinend kann keine der Apps auf Ihrem Gerät diesen Link öffnen. Sie können %1$s verlassen und bei %2$s nach einer App dafür suchen.</string>
   <string name="external_multiple_apps_matched_exit">Privaten Modus verlassen?</string>
-    <string name="errorpage_title">Seiten-Ladefehler</string>
+  <string name="errorpage_title">Seiten-Ladefehler</string>
   <string name="errorpage_refresh">Erneut versuchen</string>
   <string name="error_connectionfailure_title">Verbindung fehlgeschlagen</string>
   <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n        \""<li>Die Website k&amp;#246;nnte vor&amp;#252;bergehend nicht erreichbar sein, versuchen Sie es bitte sp&amp;#228;ter nochmals.</li>"\"\\n        \""<li>\"Wenn Sie auch keine andere Website aufrufen k&amp;#246;nnen, &amp;#252;berpr&amp;#252;fen Sie bitte die Daten- oder WLAN-Verbindung. \"</li>"\"\\n      \""</ul>]]></string>
@@ -48,7 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>Das k&amp;#246;nnte ein Problem mit der Konfiguration des Servers sein, oder jemand will sich als dieser Server ausgeben.</li>"\"\\n  \""<li>Wenn Sie mit diesem Server in der Vergangenheit erfolgreich Verbindungen herstellen konnten, ist der Fehler eventuell nur vor&amp;#252;bergehend, und Sie k&amp;#246;nnen es sp&amp;#228;ter erneut versuchen.</li>\\n</ul>]]></string>
   <string name="error_generic_title">Hoppla</string>
   <string name="error_generic_message">Aus unbekannten Gründen konnte diese Seite nicht geladen werden.</string>
-    <string name="your_rights_content1">%1$s ist freie und quelloffene Software, die von Mozilla und anderen Mitwirkenden entwickelt wird.</string>
+  <string name="your_rights_content1">%1$s ist freie und quelloffene Software, die von Mozilla und anderen Mitwirkenden entwickelt wird.</string>
   <string name="your_rights_content2"><![CDATA[\"%1$s steht unter der \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>\" und anderen Open-Source-Lizenzen.\"]]></string>
   <string name="your_rights_content3"><![CDATA[\"Ihnen werden keine Rechte oder Lizenzen an den Markenrechten der Mozilla Foundation oder einer anderen Partei eingeräumt, dazu zählen die Namen und Logos von Mozilla, Firefox oder %1$s. Weitere Informationen finden Sie \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">hier</a>.]]></string>
   <string name="your_rights_content4"><![CDATA[Sonstiger Quelltext für %1$s steht unter diversen anderen freien und Open-Source-<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Lizenzen</a>.]]></string>

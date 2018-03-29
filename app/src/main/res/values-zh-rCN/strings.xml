@@ -2,10 +2,10 @@
 <resources>
   <string name="action_cancel">取消</string>
   <string name="action_ok">确定</string>
-    <string name="urlbar_hint">搜索或输入网址</string>
-    <string name="menu_settings">设置</string>
+  <string name="urlbar_hint">搜索或输入网址</string>
+  <string name="menu_settings">设置</string>
   <string name="menu_about">关于</string>
-    <string name="preference_language">语言</string>
+  <string name="preference_language">语言</string>
   <string name="preference_language_systemdefault">系统默认</string>
   <string name="preference_category_privacy">隐私</string>
   <string name="preference_privacy_block_ads">拦截广告跟踪器</string>
@@ -16,17 +16,17 @@
   <string name="preference_privacy_block_social_summary">嵌入到网站上从而跟踪您的访问和显示分享按钮</string>
   <string name="preference_privacy_block_content">拦截其他内容跟踪器</string>
   <string name="preference_privacy_block_content_summary2">启用可能导致部分网站工作异常</string>
-    <string name="preference_category_performance">性能</string>
+  <string name="preference_category_performance">性能</string>
   <string name="preference_performance_block_webfonts">拦截网络字体</string>
   <string name="preference_performance_block_webfonts_summary">可能造成图标或图像缺失</string>
-    <string name="preference_mozilla_telemetry2">发送使用统计</string>
-    <string name="preference_privacy_notice">隐私声明</string>
-    <string name="accessibility_announcement_loading">正在载入</string>
+  <string name="preference_mozilla_telemetry2">发送使用统计</string>
+  <string name="preference_privacy_notice">隐私声明</string>
+  <string name="accessibility_announcement_loading">正在载入</string>
   <string name="accessibility_announcement_loading_finished">网站已载入</string>
   <string name="content_description_forward">浏览下一页</string>
   <string name="content_description_reload">重新载入网站</string>
   <string name="content_description_back">浏览上一页</string>
-    <string name="external_app_prompt_title">用另一个应用打开链接</string>
+  <string name="external_app_prompt_title">用另一个应用打开链接</string>
   <string name="external_app_prompt">您可以离开 %1$s，用 %2$s 打开此链接。</string>
   <string name="external_app_prompt_no_app_title">寻找可以打开此链接的应用</string>
   <string name="external_app_prompt_no_app">您的设备上的应用都不能打开此链接。您可以离开 %1$s，到 %2$s 找找适合的应用。</string>
@@ -48,7 +48,7 @@
   <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>&amp;#36825;&amp;#21487;&amp;#33021;&amp;#26159;&amp;#26381;&amp;#21153;&amp;#22120;&amp;#37197;&amp;#32622;&amp;#30340;&amp;#38382;&amp;#39064;&amp;#65292;&amp;#25110;&amp;#32773;&amp;#26377;&amp;#20154;&amp;#23581;&amp;#35797;&amp;#20882;&amp;#20805;&amp;#35813;&amp;#26381;&amp;#21153;&amp;#22120;&amp;#25152;&amp;#33268;&amp;#12290;</li>"\"\\n  \""<li>&amp;#22914;&amp;#26524;&amp;#24744;&amp;#20043;&amp;#21069;&amp;#26366;&amp;#25104;&amp;#21151;&amp;#36830;&amp;#25509;&amp;#35813;&amp;#26381;&amp;#21153;&amp;#22120;&amp;#65292;&amp;#37027;&amp;#20040;&amp;#27492;&amp;#38169;&amp;#35823;&amp;#21487;&amp;#33021;&amp;#26159;&amp;#26242;&amp;#26102;&amp;#30340;&amp;#65292;&amp;#24744;&amp;#21487;&amp;#20197;&amp;#31245;&amp;#21518;&amp;#20877;&amp;#35797;&amp;#12290;</li>\\n</ul>]]></string>
   <string name="error_generic_title">啊哦</string>
   <string name="error_generic_message">由于某些原因，我们无法载入此页面。</string>
-    <string name="your_rights_content1">%1$s 是由 Mozilla 及贡献者制作的一款自由的开源软件。</string>
+  <string name="your_rights_content1">%1$s 是由 Mozilla 及贡献者制作的一款自由的开源软件。</string>
   <string name="your_rights_content2"><![CDATA[\"%1$s 依照 \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla &amp;#20844;&amp;#20849;&amp;#35768;&amp;#21487;&amp;#35777;</a>及其他一些开源许可证向您授权。]]></string>
   <string name="your_rights_content3"><![CDATA[您没有取得 Mozilla 基金会或任何一方的商标的任何权利或许可，包括 Mozilla、Firefox 和 %1$s 名称或徽标的许可。有关信息请查阅<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&amp;#27492;&amp;#22788;</a>。]]></string>
   <string name="your_rights_content4"><![CDATA[%1$s 其他源代码以各类自由和开源<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&amp;#35768;&amp;#21487;&amp;#35777;</a>开放。]]></string>
