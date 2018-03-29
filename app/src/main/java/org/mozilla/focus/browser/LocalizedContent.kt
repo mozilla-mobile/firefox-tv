@@ -58,6 +58,9 @@ object LocalizedContent {
         val trackingProtectionUrl = "https://wiki.mozilla.org/Security/Tracking_protection#Lists"
         val licensesUrl = "licenses.html"
 
+        val yourRights = resources.getString(R.string.your_rights)
+        substitutionMap["%your-rights%"] = yourRights
+
         val content1 = resources.getString(R.string.your_rights_content1, appName)
         substitutionMap["%your-rights-content1%"] = content1
 

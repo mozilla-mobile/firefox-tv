@@ -134,6 +134,8 @@ be temporary, and you can try again later.</li>
     <string name="error_generic_title">Oops</string>
     <string name="error_generic_message">We can’t load this page for some reason.</string>
 
+    <string name="your_rights">Your Rights</string>
+
     <!-- Text shown in the "Your rights" screen.
     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)-->
     <string name="your_rights_content1"><![CDATA[%1$s is free and open source software made by Mozilla and other contributors.]]></string>
