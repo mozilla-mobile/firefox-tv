@@ -231,26 +231,39 @@ tasks.whenTaskAdded { task ->
 }
 
 // -------------------------------------------------------------------------------------------------
-// Adjust: Read token from locale file if it exists (Only release builds)
+// Secrets: add API secrets from config files into the BuildConfig instance.
+// We use files because they're easier to manage than environment variables.
 // -------------------------------------------------------------------------------------------------
-
 android.applicationVariants.all { variant ->
+    def SENTRY_FIELD = 'SENTRY_DSN'
+    def SENTRY_DEBUG_FILE_PATH = "${rootDir}/.sentry_dsn_debug"
+    def SENTRY_RELEASE_FILE_PATH = "${rootDir}/.sentry_dsn_release"
     def variantName = variant.getName()
 
-    print("Adjust token (" + variantName + "): ")
+    print("Sentry DSN (" + variantName + "): ")
 
-    if (variantName.contains("Release") && variantName.contains("focus")) {
-        try {
-            def token = new File("${rootDir}/.adjust_token").text.trim()
-            buildConfigField 'String', 'ADJUST_TOKEN', '"' + token + '"'
-            println "(Added from .adjust_token file"
-        } catch (java.io.FileNotFoundException e) {
-            buildConfigField 'String', 'ADJUST_TOKEN', 'null'
-            println("X_X")
-        }
+    def filePath
+    if (variantName.contains("Debug")) {
+        filePath = SENTRY_DEBUG_FILE_PATH
+    } else if (variantName.contains("Beta") || variantName.contains("Release")) {
+        filePath = SENTRY_RELEASE_FILE_PATH
+    } else if (variantName.contains("Coverage")) {
+        // We never want to bundle Sentry with Coverage.
+        buildConfigField 'String', SENTRY_FIELD, 'null'
+        println("X_X")
+        return
     } else {
-        buildConfigField 'String', 'ADJUST_TOKEN', 'null'
-        println("--")
+        throw new IllegalStateException("Unhandled variant $variantName")
+    }
+
+    def file = new File(filePath)
+    if (file.exists()) {
+        def token = file.text.trim()
+        buildConfigField 'String', SENTRY_FIELD, '"' + token + '"'
+        println "Added from $filePath"
+    } else {
+        buildConfigField 'String', SENTRY_FIELD, 'null'
+        println("X_X")
     }
 }
 

@@ -55,8 +55,9 @@ infer-out/
 fastlane/
 Screengrabfile
 
-# Adjust token file
-.adjust_token
+# Secrets
+.sentry_dsn_debug
+.sentry_dsn_release
 
 # robotranslations file
 tools/l10n/robotranslations/locales.yaml
