@@ -123,6 +123,8 @@ repositories {
 }
 
 dependencies {
+    implementation 'io.sentry:sentry-android:1.7.2'
+
     implementation "com.android.support:appcompat-v7:$support_libraries_version"
     implementation "com.android.support:customtabs:$support_libraries_version"
     implementation "com.android.support:design:$support_libraries_version"
