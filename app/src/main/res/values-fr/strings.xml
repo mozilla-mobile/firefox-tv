@@ -2,12 +2,12 @@
 <resources>
   <string name="action_cancel">Annuler</string>
   <string name="action_ok">OK</string>
-    <string name="urlbar_hint">Recherche ou adresse</string>
-    <string name="menu_settings">Paramètres</string>
+  <string name="urlbar_hint">Recherche ou adresse</string>
+  <string name="menu_settings">Paramètres</string>
   <string name="menu_about">À propos</string>
-    <string name="preference_language">Langue</string>
+  <string name="preference_language">Langue</string>
   <string name="preference_language_systemdefault">Valeur par défaut du système</string>
-    <string name="preference_category_privacy">Vie privée</string>
+  <string name="preference_category_privacy">Vie privée</string>
   <string name="preference_privacy_block_ads">Bloquer les traqueurs publicitaires</string>
   <string name="preference_privacy_block_ads_summary">Certaines publicités pistent vos visites sur les sites, même sans cliquer sur les publicités</string>
   <string name="preference_privacy_block_analytics">Bloquer les traqueurs de statistiques</string>
@@ -16,22 +16,22 @@
   <string name="preference_privacy_block_social_summary">Ils sont insérés sur certains sites pour pister vos visites et afficher des fonctionnalités comme des boutons de partage</string>
   <string name="preference_privacy_block_content">Bloquer les autres traqueurs de contenu</string>
   <string name="preference_privacy_block_content_summary2">Activer cette option peut provoquer des problèmes sur certaines pages</string>
-    <string name="preference_category_performance">Performances</string>
+  <string name="preference_category_performance">Performances</string>
   <string name="preference_performance_block_webfonts">Bloquer les polices web</string>
   <string name="preference_performance_block_webfonts_summary">Peut empêcher certaines icônes ou images de s’afficher</string>
-    <string name="preference_mozilla_telemetry2">Envoyer des données d’utilisation</string>
-    <string name="preference_privacy_notice">Politique de confidentialité</string>
-    <string name="accessibility_announcement_loading">Chargement…</string>
+  <string name="preference_mozilla_telemetry2">Envoyer des données d’utilisation</string>
+  <string name="preference_privacy_notice">Politique de confidentialité</string>
+  <string name="accessibility_announcement_loading">Chargement…</string>
   <string name="accessibility_announcement_loading_finished">Site web chargé</string>
-    <string name="content_description_forward">Avancer dans l’historique</string>
+  <string name="content_description_forward">Avancer dans l’historique</string>
   <string name="content_description_reload">Actualiser la page web</string>
   <string name="content_description_back">Précédent</string>
-    <string name="external_app_prompt_title">Ouvrir le lien dans une autre application</string>
+  <string name="external_app_prompt_title">Ouvrir le lien dans une autre application</string>
   <string name="external_app_prompt">Vous allez quitter %1$s pour ouvrir ce lien dans %2$s.</string>
   <string name="external_app_prompt_no_app_title">Trouver une application capable d’ouvrir ce lien</string>
   <string name="external_app_prompt_no_app">Aucune des applications de votre appareil n’est capable d’ouvrir ce lien. Vous pouvez quitter %1$s pour rechercher dans %2$s une application qui en est capable.</string>
   <string name="external_multiple_apps_matched_exit">Quitter la navigation privée ?</string>
-    <string name="errorpage_title">Erreur de chargement de la page</string>
+  <string name="errorpage_title">Erreur de chargement de la page</string>
   <string name="errorpage_refresh">Réessayer</string>
   <string name="error_connectionfailure_title">La connexion a échoué</string>
   <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"><li>Le site est peut-&#234;tre temporairement indisponible ou surcharg&#233;. R&#233;essayez plus tard&#160;;</li>\\n<li>Si vous n&#8217;arrivez &#224; naviguer sur aucun site, v&#233;rifiez la connexion donn&#233;es ou Wi-Fi de votre appareil.</li></ul>]]></string>
@@ -45,10 +45,10 @@
   <string name="error_unsupportedprotocol_title">L’adresse n’a pas été reconnue</string>
   <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"><li>Il est peut-&#234;tre n&#233;cessaire d&#8217;installer une autre application pour ouvrir ce type d&#8217;adresse.</li></ul>]]></string>
   <string name="error_sslhandshake_title">Échec de la connexion sécurisée</string>
-  <string name="error_sslhandshake_message"><![CDATA[\" \"<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">\" \"<li>Ceci peut &#234;tre d&amp;#251; &#224; un probl&#232;me de configuration du serveur ou &#224; une personne essayant d&#8217;usurper l&#8217;identit&#233; du serveur.</li>\" \"<li>Si vous avez d&#233;j&#224; pu vous connecter &#224; ce serveur, l&#8217;erreur est peut-&#234;tre temporaire et vous pouvez essayer &#224; nouveau plus tard.</li>\" \"</ul>\" \"]]></string>
+  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"><li>Ceci peut &#234;tre d&#251; &#224; un probl&#232;me de configuration du serveur ou &#224; une personne essayant d&#8217;usurper l&#8217;identit&#233; du serveur.</li><li>Si vous avez d&#233;j&#224; pu vous connecter &#224; ce serveur, l&#8217;erreur est peut-&#234;tre temporaire et vous pouvez essayer &#224; nouveau plus tard.</li></ul>]]></string>
   <string name="error_generic_title">La requête ne peut aboutir</string>
   <string name="error_generic_message">Pour une raison inconnue, nous ne pouvons pas charger cette page.</string>
-    <string name="your_rights_content1">%1$s est un logiciel libre et ouvert réalisé par Mozilla avec l’aide d’autres contributeurs.</string>
+  <string name="your_rights_content1">%1$s est un logiciel libre et ouvert réalisé par Mozilla avec l’aide d’autres contributeurs.</string>
   <string name="your_rights_content2"><![CDATA["%1$s est distribué suivant les modalités de la "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" et d’autres licences open source."]]></string>
   <string name="your_rights_content3"><![CDATA["Il ne vous est cédé aucun droit ou licence sur les marques déposées de la Fondation Mozilla ou de tiers, y compris sur les noms et logos de Mozilla, Firefox ou %1$s. Des informations complémentaires peuvent être consultées "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">ici</a>.]]></string>
   <string name="your_rights_content4"><![CDATA["Le code source complémentaire pour %1$s est disponible sous différentes "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">licences</a>" libres et open source."]]></string>
