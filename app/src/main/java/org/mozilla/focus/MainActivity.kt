@@ -22,6 +22,7 @@ import org.mozilla.focus.iwebview.WebViewProvider
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.session.SessionManager
+import org.mozilla.focus.telemetry.SentryWrapper
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.OnUrlEnteredListener
@@ -36,6 +37,9 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.
+        SentryWrapper.init(this)
 
         initAmazonFactory()
         val intent = SafeIntent(intent)
