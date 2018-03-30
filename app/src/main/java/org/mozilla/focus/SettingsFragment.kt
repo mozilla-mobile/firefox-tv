@@ -17,6 +17,7 @@ import org.mozilla.focus.browser.InfoActivity
 import org.mozilla.focus.ext.getAccessibilityManager
 import org.mozilla.focus.ext.isVoiceViewEnabled
 import org.mozilla.focus.session.SessionManager
+import org.mozilla.focus.telemetry.DataUploadPreference
 import org.mozilla.focus.telemetry.TelemetryWrapper
 
 /** The settings for the app. */
@@ -31,10 +32,10 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 
         ic_lock.setImageResource(R.drawable.ic_lock)
-        telemetryButton.isChecked = TelemetryWrapper.isTelemetryEnabled(activity)
+        telemetryButton.isChecked = DataUploadPreference.isEnabled(activity)
         telemetryView.setOnClickListener { view ->
-            val newTelemetryState = !TelemetryWrapper.isTelemetryEnabled(activity)
-            TelemetryWrapper.setTelemetryEnabled(activity, newTelemetryState)
+            val newTelemetryState = !DataUploadPreference.isEnabled(activity)
+            DataUploadPreference.setIsEnabled(activity, newTelemetryState)
             telemetryButton.isChecked = newTelemetryState
         }
 

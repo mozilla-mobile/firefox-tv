@@ -8,17 +8,14 @@ package org.mozilla.focus.telemetry
 import android.content.Context
 import android.net.http.SslError
 import android.os.StrictMode
-import android.preference.PreferenceManager
 import org.mozilla.focus.BuildConfig
-import org.mozilla.focus.R
-import org.mozilla.focus.search.SearchEngineManager
+import org.mozilla.focus.browser.NavigationEvent
 import org.mozilla.focus.home.BundledHomeTile
 import org.mozilla.focus.home.CustomHomeTile
 import org.mozilla.focus.home.HomeTile
-import org.mozilla.focus.utils.AppConstants
 import org.mozilla.focus.iwebview.IWebView
+import org.mozilla.focus.search.SearchEngineManager
 import org.mozilla.focus.widget.InlineAutocompleteEditText.AutocompleteResult
-import org.mozilla.focus.browser.NavigationEvent
 import org.mozilla.telemetry.Telemetry
 import org.mozilla.telemetry.TelemetryHolder
 import org.mozilla.telemetry.config.TelemetryConfiguration
@@ -97,42 +94,12 @@ object TelemetryWrapper {
     }
 
     @JvmStatic
-    fun isTelemetryEnabled(context: Context): Boolean {
-        if (AppConstants.isDevBuild()) return false
-
-        // The first access to shared preferences will require a disk read.
-        val threadPolicy = StrictMode.allowThreadDiskReads()
-        try {
-            val resources = context.resources
-            val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-
-            return preferences.getBoolean(resources.getString(R.string.pref_key_telemetry), true)
-        } finally {
-            StrictMode.setThreadPolicy(threadPolicy)
-        }
-    }
-
-    @JvmStatic
-    fun setTelemetryEnabled(context: Context, enabled: Boolean) {
-        val resources = context.resources
-        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-
-        preferences.edit()
-                .putBoolean(resources.getString(R.string.pref_key_telemetry), enabled)
-                .apply()
-
-        TelemetryHolder.get()
-                .configuration
-                .setUploadEnabled(enabled).isCollectionEnabled = enabled
-    }
-
-    @JvmStatic
     fun init(context: Context) {
         // When initializing the telemetry library it will make sure that all directories exist and
         // are readable/writable.
         val threadPolicy = StrictMode.allowThreadDiskWrites()
         try {
-            val telemetryEnabled = isTelemetryEnabled(context)
+            val telemetryEnabled = DataUploadPreference.isEnabled(context)
 
             val configuration = TelemetryConfiguration(context)
                     .setServerEndpoint("https://incoming.telemetry.mozilla.org")
