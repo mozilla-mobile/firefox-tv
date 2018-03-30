@@ -7,6 +7,7 @@ package org.mozilla.focus.telemetry
 import android.content.Context
 import io.sentry.Sentry
 import io.sentry.android.AndroidSentryClientFactory
+import io.sentry.event.User
 import org.mozilla.focus.BuildConfig
 
 /**
@@ -37,5 +38,17 @@ object SentryWrapper {
         // the stored client. If we give it a client with an invalid DSN, it'll have
         // the effect of disabling the client.
         Sentry.init(sentryDsn, AndroidSentryClientFactory(context.applicationContext))
+
+        // By default, Sentry creates UUIDs for users and we don't want to upload them:
+        // they're personally identifiable information.
+        Sentry.getContext().user = SentryUnknownUser()
     }
 }
+
+/**
+ * A Sentry user that does not contain identifiable information like UUID.
+ *
+ * Use this instead of [io.sentry.context.Context.clearUser] because that
+ * will just clear any user we set and use a Sentry-generated UUID instead.
+ */
+private class SentryUnknownUser : User(null, null, null, null)
