@@ -29,6 +29,10 @@ android {
         preDexLibraries true
     }
 
+    lintOptions {
+        lintConfig file("lint.xml")
+    }
+
     // We have a three dimensional build configuration:
     // BUILD TYPE (debug, beta, release) X PRODUCT FLAVOR (focus) X ENGINE FLAVOR (webview, gecko)
 
