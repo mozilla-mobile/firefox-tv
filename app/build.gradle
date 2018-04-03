@@ -246,6 +246,8 @@ android.applicationVariants.all { variant ->
 
     print("Sentry DSN (" + variantName + "): ")
 
+    // We separate the debug files from the release files so that we don't
+    // accidentally ship a release using the debug key or vice versa.
     def filePath
     if (variantName.contains("Debug")) {
         filePath = SENTRY_DEBUG_FILE_PATH
