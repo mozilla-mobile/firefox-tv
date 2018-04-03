@@ -17,7 +17,15 @@ import org.mozilla.focus.BuildConfig
  * With the current implementation, to enable Sentry on Beta/Release builds, add a
  * <project-dir>/.sentry_dsn_release file with your key. To enable Sentry on Debug
  * builds, add a .sentry_dsn_debug key and replace the [DataUploadPreference.isEnabled]
- * value with true (upload is disabled by default in dev builds).
+ * value with true (upload is disabled by default in dev builds). These keys are available
+ * in the APT Google Drive -> Fire TV -> Engineering -> Secrets dir.
+ *
+ * The gradle output is the only way to verify if adding the key was successful (but it
+ * won't indicate if the key is valid: #747). You will see a message in the gradle output
+ * indicating the key was added:
+ * "Sentry DSN (amazonWebviewRelease): Added from /Users/mcomella/dev/moz/firefox-tv/.sentry_dsn_release"
+ * As opposed to:
+ * "Sentry DSN (amazonWebviewRelease): X_X"
  */
 object SentryWrapper {
 
