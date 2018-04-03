@@ -26,17 +26,16 @@ object SentryWrapper {
     }
 
     internal fun onIsEnabledChanged(context: Context, isEnabled: Boolean) {
-        // If the DSN is null, Sentry will attempt to find a DSN from other sources,
-        // it'll fail, and it won't be able to upload.
-        //
         // The BuildConfig value is populated from a file at compile time.
-        // If the file// did not exist, the value will be null.
+        // If the file did not exist, the value will be null.
+        //
+        // If you provide a null DSN to Sentry, it will disable upload and buffering to disk:
+        // https://github.com/getsentry/sentry-java/issues/574#issuecomment-378298484
+        //
+        // In the current implementation, each time `init` is called, it will overwrite the
+        // stored client and DSN, thus calling it with a null DSN will have the affect of
+        // disabling the client: https://github.com/getsentry/sentry-java/issues/574#issuecomment-378406105
         val sentryDsn = if (isEnabled) BuildConfig.SENTRY_DSN else null
-
-        // Unfortunately, Sentry doesn't make it easy to disable upload. However,
-        // in the current implementation, each time `init` is called, it will overwrite
-        // the stored client. If we give it a client with an invalid DSN, it'll have
-        // the effect of disabling the client.
         Sentry.init(sentryDsn, AndroidSentryClientFactory(context.applicationContext))
 
         // By default, Sentry creates UUIDs for users and we don't want to upload them:
