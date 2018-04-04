@@ -173,6 +173,15 @@ public class TVScreenshots extends ScreenshotTest {
         Screengrab.screenshot("privacy-notice");
 
         mDevice.pressBack();
+
+        onView(allOf(withId(R.id.aboutButton), isDisplayed()))
+                .perform(click());
+
+        onView(allOf(withId(R.id.webview), isDisplayed()));
+
+        Screengrab.screenshot("about-screen");
+
+        mDevice.pressBack();
     }
 
     @Test
