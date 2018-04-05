@@ -177,12 +177,6 @@ public class SessionManager {
         addSession(session);
     }
 
-    private void createSession(Context context, Source source, SafeIntent intent, String url, boolean blockingEnabled) {
-        final Session session = new Session(source, url);
-        session.setBlockingEnabled(blockingEnabled);
-        addSession(session);
-    }
-
     private void addSession(Session session) {
         currentSessionUUID = session.getUUID();
 
@@ -190,17 +184,6 @@ public class SessionManager {
         sessions.add(session);
 
         this.sessions.setValue(Collections.unmodifiableList(sessions));
-    }
-
-    public void selectSession(Session session) {
-        if (session.getUUID().equals(currentSessionUUID)) {
-            // This is already the selected session.
-            return;
-        }
-
-        currentSessionUUID = session.getUUID();
-
-        this.sessions.setValue(this.sessions.getValue());
     }
 
     /**
