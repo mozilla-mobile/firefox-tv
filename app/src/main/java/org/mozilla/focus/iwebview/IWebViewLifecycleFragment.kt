@@ -67,12 +67,14 @@ abstract class IWebViewLifecycleFragment : LocaleAwareFragment() {
     override fun onPause() {
         webView!!.saveWebViewState(session)
         webView!!.onPause()
+        webView!!.pauseTimers()
 
         super.onPause()
     }
 
     override fun onResume() {
         webView!!.onResume()
+        webView!!.resumeTimers()
 
         super.onResume()
     }

@@ -83,6 +83,16 @@ public class WebViewProvider {
         }
 
         @Override
+        public void pauseTimers() {
+
+        }
+
+        @Override
+        public void resumeTimers() {
+
+        }
+
+        @Override
         public void onResume() {
 
         }
