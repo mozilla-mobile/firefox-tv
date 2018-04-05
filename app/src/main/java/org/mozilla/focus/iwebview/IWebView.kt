@@ -26,6 +26,9 @@ interface IWebView {
     fun onPause()
     fun onResume()
 
+    fun pauseTimers()
+    fun resumeTimers()
+
     fun loadUrl(url: String)
     fun evalJS(js: String)
     fun stopLoading()
