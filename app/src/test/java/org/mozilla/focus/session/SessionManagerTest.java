@@ -148,7 +148,6 @@ public class SessionManagerTest {
         assertEquals(1, sessions.size());
 
         final Session session = sessions.get(0);
-        assertFalse(session.isSearch());
         assertEquals(TEST_URL, session.getUrl().getValue());
 
         assertTrue(sessionManager.hasSession());
@@ -167,8 +166,6 @@ public class SessionManagerTest {
         assertEquals(1, sessions.size());
 
         final Session session = sessions.get(0);
-        assertTrue(session.isSearch());
-        assertEquals("Hello World Focus", session.getSearchTerms());
         assertEquals(TEST_URL, session.getUrl().getValue());
 
         assertTrue(sessionManager.hasSession());

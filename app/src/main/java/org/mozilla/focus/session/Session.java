@@ -6,7 +6,6 @@ package org.mozilla.focus.session;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
 import org.mozilla.focus.architecture.NonNullLiveData;
 import org.mozilla.focus.architecture.NonNullMutableLiveData;
@@ -24,7 +23,6 @@ public class Session {
     private final NonNullMutableLiveData<Boolean> secure;
     private final NonNullMutableLiveData<Boolean> loading;
     private Bundle webviewState;
-    private String searchTerms;
     private boolean isRecorded;
     private boolean isBlockingEnabled;
 
@@ -87,7 +85,6 @@ public class Session {
     }
 
     /* package */ void clearSearchTerms() {
-        searchTerms = null;
     }
 
     public void saveWebViewState(Bundle bundle) {
@@ -108,18 +105,6 @@ public class Session {
 
     public void markAsRecorded() {
         isRecorded = true;
-    }
-
-    public boolean isSearch() {
-        return !TextUtils.isEmpty(searchTerms);
-    }
-
-    public void setSearchTerms(String searchTerms) {
-        this.searchTerms = searchTerms;
-    }
-
-    public String getSearchTerms() {
-        return searchTerms;
     }
 
     public boolean isSameAs(@NonNull Session session) {
