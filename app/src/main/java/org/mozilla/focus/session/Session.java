@@ -25,7 +25,6 @@ public class Session {
     private final NonNullMutableLiveData<Boolean> loading;
     private Bundle webviewState;
     private String searchTerms;
-    private String searchUrl;
     private boolean isRecorded;
     private boolean isBlockingEnabled;
 
@@ -121,14 +120,6 @@ public class Session {
 
     public String getSearchTerms() {
         return searchTerms;
-    }
-
-    public String getSearchUrl() {
-        return searchUrl;
-    }
-
-    public void setSearchUrl(String searchUrl) {
-        this.searchUrl = searchUrl;
     }
 
     public boolean isSameAs(@NonNull Session session) {
