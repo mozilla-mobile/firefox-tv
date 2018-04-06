@@ -7,21 +7,16 @@ package org.mozilla.focus.iwebview
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.util.AttributeSet
 import android.view.View
 import com.amazon.android.webkit.AmazonWebKitFactory
 import com.amazon.android.webkit.AmazonWebSettings
 import org.mozilla.focus.R
 import org.mozilla.focus.browser.UserAgent
-import org.mozilla.focus.ext.hasChild
 import org.mozilla.focus.webview.FirefoxAmazonWebChromeClient
 import org.mozilla.focus.webview.FirefoxAmazonWebView
 import org.mozilla.focus.webview.FocusWebViewClient
 import org.mozilla.focus.webview.TrackingProtectionWebViewClient
-
-private val uiHandler = Handler(Looper.getMainLooper())
 
 /** Creates a WebView-based IWebView implementation. */
 object WebViewProvider {
@@ -61,31 +56,6 @@ private fun initWebview(webView: FirefoxAmazonWebView) = with (webView) {
     //if (BuildConfig.DEBUG) {
     //    setWebContentsDebuggingEnabled(true);
     //}
-
-    // onFocusChangeListener isn't called for AmazonWebView (unlike Android's WebView)
-    // so we use the global listener instead.
-    viewTreeObserver.addOnGlobalFocusChangeListener { oldFocus: View?, newFocus: View? ->
-        if (!viewTreeObserver.isAlive) return@addOnGlobalFocusChangeListener
-
-        // These can both be false if the WebView is not involved in this transaction.
-        val isLosingFocus = webView.hasChild(oldFocus)
-        val isGainingFocus = webView.hasChild(newFocus)
-
-        // From a user's perspective, the WebView receives focus. Under the hood,
-        // the AmazonWebView's child, *Delegate, is actually receiving focus.
-        //
-        // For why we're doing this, see FocusedDOMElementCache.
-        if (isLosingFocus) {
-            // Any views (like BrowserNavigationOverlay) that may clear the cache, e.g. by
-            // reloading the page, are required to handle their own caching. Here we'll handle
-            // cases where the page cache isn't cleared.
-            focusedDOMElement.cache()
-        } else if (isGainingFocus) {
-            // Trying to restore immediately doesn't work - perhaps the WebView hasn't actually
-            // received focus yet? Posting to the end of the UI queue seems to solve the problem.
-            uiHandler.post { focusedDOMElement.restore() }
-        }
-    }
 }
 
 @SuppressLint("SetJavaScriptEnabled") // We explicitly want to enable JavaScript

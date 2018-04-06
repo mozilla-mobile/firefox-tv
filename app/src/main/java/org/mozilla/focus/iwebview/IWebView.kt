@@ -25,6 +25,8 @@ interface IWebView {
 
     fun onPause()
     fun onResume()
+    fun onStart()
+    fun onStop()
 
     fun pauseTimers()
     fun resumeTimers()

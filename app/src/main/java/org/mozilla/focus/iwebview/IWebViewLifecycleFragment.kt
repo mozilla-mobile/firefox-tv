@@ -79,6 +79,16 @@ abstract class IWebViewLifecycleFragment : LocaleAwareFragment() {
         super.onResume()
     }
 
+    override fun onStart() {
+        super.onStart()
+        webView!!.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        webView!!.onStop()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
 
