@@ -74,7 +74,7 @@ public class SessionManager {
                 return; // If there's no URL in the Intent then we can't create a session.
             }
 
-            createSession(context, Source.VIEW, intent, intent.getDataString());
+            createSession(Source.VIEW, intent.getDataString());
         } else if (Intent.ACTION_SEND.equals(action)) {
             final String dataString = intent.getStringExtra(Intent.EXTRA_TEXT);
             if (TextUtils.isEmpty(dataString)) {
@@ -169,11 +169,6 @@ public class SessionManager {
     public void createSearchSession(@NonNull Source source, @NonNull String url, String searchTerms) {
         final Session session = new Session(source, url);
         session.setSearchTerms(searchTerms);
-        addSession(session);
-    }
-
-    private void createSession(Context context, Source source, SafeIntent intent, String url) {
-        final Session session = new Session(source, url);
         addSession(session);
     }
 
