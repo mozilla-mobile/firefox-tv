@@ -82,16 +82,10 @@ public class SessionManager {
             }
 
             final boolean isSearch = !UrlUtils.isUrl(dataString);
-
             final String url = isSearch
                     ? UrlUtils.createSearchUrl(context, dataString)
                     : dataString;
-
-            if (isSearch) {
-                createSearchSession(Source.SHARE, url, dataString);
-            } else {
-                createSession(Source.SHARE, url);
-            }
+            createSession(Source.SHARE, url);
         }
     }
 
@@ -162,11 +156,6 @@ public class SessionManager {
     }
 
     public void createSession(@NonNull Source source, @NonNull String url) {
-        final Session session = new Session(source, url);
-        addSession(session);
-    }
-
-    public void createSearchSession(@NonNull Source source, @NonNull String url, String searchTerms) {
         final Session session = new Session(source, url);
         addSession(session);
     }

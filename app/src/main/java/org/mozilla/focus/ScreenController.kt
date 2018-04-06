@@ -57,11 +57,7 @@ object ScreenController {
                     .addToBackStack(null)
                     .commit()
         } else {
-            if (isSearch) {
-                SessionManager.getInstance().createSearchSession(Source.USER_ENTERED, updatedUrlStr, searchTerms)
-            } else {
-                SessionManager.getInstance().createSession(Source.USER_ENTERED, updatedUrlStr)
-            }
+            SessionManager.getInstance().createSession(Source.USER_ENTERED, updatedUrlStr)
         }
 
         if (isTextInput) {
