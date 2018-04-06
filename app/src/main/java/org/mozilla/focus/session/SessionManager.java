@@ -168,7 +168,6 @@ public class SessionManager {
 
     public void createSearchSession(@NonNull Source source, @NonNull String url, String searchTerms) {
         final Session session = new Session(source, url);
-        session.setSearchTerms(searchTerms);
         addSession(session);
     }
 

@@ -42,10 +42,6 @@ object ScreenController {
             searchTerms = urlStr.trim()
         }
 
-        if (sessionManager.hasSession()) {
-            sessionManager.currentSession.searchTerms = searchTerms // todo: correct?
-        }
-
         // TODO: could this ever happen where browserFragment is on top? and do we need to do anything special for it?
         val browserFragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG)
         val isSearch = !TextUtils.isEmpty(searchTerms)

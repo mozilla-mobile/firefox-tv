@@ -128,24 +128,6 @@ public class SessionTest {
     }
 
     @Test
-    public void testIsSearch() {
-        final Session session = new Session(Source.VIEW, TEST_URL);
-        assertFalse(session.isSearch());
-
-        session.setSearchTerms("hello world");
-        assertTrue(session.isSearch());
-
-        session.clearSearchTerms();
-        assertFalse(session.isSearch());
-
-        session.setSearchTerms(null);
-        assertFalse(session.isSearch());
-
-        session.setSearchTerms("");
-        assertFalse(session.isSearch());
-    }
-
-    @Test
     public void testIsRecorded() {
         final Session session = new Session(Source.VIEW, TEST_URL);
         assertFalse(session.isRecorded());
