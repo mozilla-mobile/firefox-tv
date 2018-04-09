@@ -3,10 +3,6 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <lint>
-    <!-- While we are developing the app and importing/exporting strings from the l10n repository
-         there will always be missing or extra translations. Just printing a warning is enough.
-         No need to fail the builds. -->
-    <issue id="MissingTranslation" severity="warning" />
 
     <issue id="InvalidPackage">
         <!-- Sentry: it uses one SDK for desktop apps and Android apps so I assume it's
@@ -14,4 +10,21 @@
              the functions are not available on Android. -->
         <ignore path="**/sentry*.jar"/>
     </issue>
+
+    <!-- DISABLED CHECKS: we mark warnings as errors so these are either "informational" - they'll
+         appear in the output - or "ignore", where we'll never see them. -->
+
+    <!-- Sometimes we want to build with the old version. -->
+    <issue id="GradleDependency" severity="informational"/>
+
+    <!-- Sometimes we don't want to update the SDK immediately. -->
+    <issue id="OldTargetApi" severity="informational"/>
+
+    <!-- While we are developing the app and importing/exporting strings from the l10n repository
+         there will always be missing or extra translations. Just printing a warning is enough.
+         No need to fail the builds. -->
+    <issue id="MissingTranslation" severity="ignore" />
+
+    <!-- We don't want to fail the build, nor do we want to to pollute our informational output. -->
+    <issue id="Typos" severity="informational"/>
 </lint>

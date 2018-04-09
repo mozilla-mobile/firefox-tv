@@ -31,6 +31,13 @@ android {
 
     lintOptions {
         lintConfig file("lint.xml")
+        baseline file("lint-baseline.xml")
+
+        // We want to fail the build if there is a lint error, otherwise we'll never fix them.
+        // This is the most efficient way to make Lint fail: the lint tool will add additional
+        // checks in the future so this ensures they will fail our build as soon as they are added,
+        // unlike a whitelist.
+        warningsAsErrors true
     }
 
     // We have a three dimensional build configuration:
