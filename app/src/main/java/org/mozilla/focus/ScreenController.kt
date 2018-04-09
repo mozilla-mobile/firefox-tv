@@ -41,24 +41,9 @@ object ScreenController {
             searchTerms = urlStr.trim()
         }
 
-        // TODO: could this ever happen where browserFragment is on top? and do we need to do anything special for it?
-        val browserFragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG)
+        showBrowserScreenForUrl(fragmentManager, updatedUrlStr)
+
         val isSearch = !TextUtils.isEmpty(searchTerms)
-        if (browserFragment != null && browserFragment.isVisible) {
-            // Reuse existing visible fragment - in this case we know the user is already browsing.
-            // The fragment might exist if we "erased" a browsing session, hence we need to check
-            // for visibility in addition to existence.
-            (browserFragment as BrowserFragment).loadUrl(updatedUrlStr)
-
-            // And this fragment can be removed again.
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, browserFragment)
-                    .addToBackStack(null)
-                    .commit()
-        } else {
-            SessionManager.getInstance().createSession(Source.USER_ENTERED, updatedUrlStr)
-        }
-
         if (isTextInput) {
             // Non-text input events are handled at the source, e.g. home tile click events.
             if (autocompleteResult == null) {
@@ -114,5 +99,25 @@ object ScreenController {
                         BrowserFragment.createForSession(currentSession), BrowserFragment.FRAGMENT_TAG)
                 .addToBackStack(null)
                 .commit()
+    }
+
+    fun showBrowserScreenForUrl(fragmentManager: FragmentManager, url: String) {
+        // This code is not correct:
+        // - We only support one session but it creates a new session when there's no BrowserFragment
+        // such as each time we open a URL from the home screen.
+        // - It doesn't handle the case where the BrowserFragment is non-null but not
+        // visible: this can happen when a BrowserFragment is in the back stack, e.g. if this
+        // method is called from Settings.
+        //
+        // However, from a user perspective, the behavior is correct (e.g. back stack functions
+        // correctly with multiple sessions).
+        val browserFragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as? BrowserFragment
+        if (browserFragment != null && browserFragment.isVisible) {
+            // We can't call loadUrl on the Fragment until the view hierarchy is inflated so we check
+            // for visibility in addition to existence.
+            browserFragment.loadUrl(url)
+        } else {
+            SessionManager.getInstance().createSession(Source.USER_ENTERED, url)
+        }
     }
 }
