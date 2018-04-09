@@ -134,8 +134,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
 
     override fun onNonTextInputUrlEntered(urlStr: String) {
         ViewUtils.hideKeyboard(container)
-        ScreenController.onUrlEnteredInner(this, supportFragmentManager, sessionManager, urlStr,
-                false, null, null)
+        ScreenController.onUrlEnteredInner(this, supportFragmentManager, urlStr, false,
+                null, null)
     }
 
     override fun onTextInputUrlEntered(urlStr: String,
@@ -143,8 +143,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
                                        inputLocation: UrlTextInputLocation?) {
         ViewUtils.hideKeyboard(container)
         // It'd be much cleaner/safer to do this with a kotlin callback.
-        ScreenController.onUrlEnteredInner(this, supportFragmentManager, sessionManager, urlStr,
-                true, autocompleteResult, inputLocation)
+        ScreenController.onUrlEnteredInner(this, supportFragmentManager, urlStr, true,
+                autocompleteResult, inputLocation)
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
