@@ -16,12 +16,14 @@ import com.amazon.android.webkit.AmazonWebKitFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.browser.BrowserFragment
+import org.mozilla.focus.ext.toSafeIntent
 import org.mozilla.focus.home.HomeFragment
 import org.mozilla.focus.iwebview.IWebView
 import org.mozilla.focus.iwebview.WebViewProvider
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity
 import org.mozilla.focus.session.Session
 import org.mozilla.focus.session.SessionManager
+import org.mozilla.focus.session.Source
 import org.mozilla.focus.telemetry.SentryWrapper
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
@@ -48,7 +50,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
 
         setContentView(R.layout.activity_main)
 
-        sessionManager.handleIntent(this, intent, savedInstanceState)
+        IntentValidator.validateOnCreate(this, intent, savedInstanceState, ::onValidBrowserIntent)
         sessionManager.sessions.observe(this, object : NonNullObserver<List<Session>>() {
             public override fun onValueChanged(sessions: List<Session>) {
                 if (sessions.isEmpty()) {
@@ -69,6 +71,14 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
         WebViewProvider.preload(this)
     }
 
+    override fun onNewIntent(unsafeIntent: Intent) {
+        IntentValidator.validate(this, unsafeIntent.toSafeIntent(), ::onValidBrowserIntent)
+    }
+
+    private fun onValidBrowserIntent(url: String, source: Source) {
+        sessionManager.createSession(source, url)
+    }
+
     override fun applyLocale() {
         // We don't care here: all our fragments update themselves as appropriate
     }
@@ -87,12 +97,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
     override fun onStop() {
         super.onStop()
         TelemetryWrapper.stopMainActivity()
-    }
-
-    override fun onNewIntent(unsafeIntent: Intent) {
-        val intent = SafeIntent(unsafeIntent)
-
-        sessionManager.handleNewIntent(this, intent)
     }
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
