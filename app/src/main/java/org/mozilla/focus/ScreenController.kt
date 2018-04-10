@@ -41,7 +41,7 @@ object ScreenController {
             searchTerms = urlStr.trim()
         }
 
-        showBrowserScreenForUrl(fragmentManager, updatedUrlStr)
+        showBrowserScreenForUrl(fragmentManager, updatedUrlStr, Source.USER_ENTERED)
 
         val isSearch = !TextUtils.isEmpty(searchTerms)
         if (isTextInput) {
@@ -101,7 +101,7 @@ object ScreenController {
                 .commit()
     }
 
-    fun showBrowserScreenForUrl(fragmentManager: FragmentManager, url: String) {
+    fun showBrowserScreenForUrl(fragmentManager: FragmentManager, url: String, source: Source) {
         // This code is not correct:
         // - We only support one session but it creates a new session when there's no BrowserFragment
         // such as each time we open a URL from the home screen.
@@ -117,7 +117,7 @@ object ScreenController {
             // for visibility in addition to existence.
             browserFragment.loadUrl(url)
         } else {
-            SessionManager.getInstance().createSession(Source.USER_ENTERED, url)
+            SessionManager.getInstance().createSession(source, url)
         }
     }
 }
