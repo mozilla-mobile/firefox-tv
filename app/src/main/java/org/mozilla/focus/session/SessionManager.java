@@ -4,17 +4,11 @@
 
 package org.mozilla.focus.session;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
-import android.text.TextUtils;
 
 import org.mozilla.focus.architecture.NonNullLiveData;
 import org.mozilla.focus.architecture.NonNullMutableLiveData;
-import org.mozilla.focus.utils.SafeIntent;
-import org.mozilla.focus.utils.UrlUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,57 +30,6 @@ public class SessionManager {
     private SessionManager() {
         this.sessions = new NonNullMutableLiveData<>(
                 Collections.unmodifiableList(Collections.<Session>emptyList()));
-    }
-
-    /**
-     * Handle this incoming intent (via onCreate()) and create a new session if required.
-     */
-    public void handleIntent(final Context context, final SafeIntent intent, final Bundle savedInstanceState) {
-        if ((intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0) {
-            // This Intent was launched from history (recent apps). Android will redeliver the
-            // original Intent (which might be a VIEW intent). However if there's no active browsing
-            // session then we do not want to re-process the Intent and potentially re-open a website
-            // from a session that the user already "erased".
-            return;
-        }
-
-        if (savedInstanceState != null) {
-            // We are restoring a previous session - No need to handle this Intent.
-            return;
-        }
-
-        createSessionFromIntent(context, intent);
-    }
-
-    /**
-     * Handle this incoming intent (via onNewIntent()) and create a new session if required.
-     */
-    public void handleNewIntent(final Context context, final SafeIntent intent) {
-        createSessionFromIntent(context, intent);
-    }
-
-    private void createSessionFromIntent(Context context, SafeIntent intent) {
-        final String action = intent.getAction();
-
-        if (Intent.ACTION_VIEW.equals(action)) {
-            final String dataString = intent.getDataString();
-            if (TextUtils.isEmpty(dataString)) {
-                return; // If there's no URL in the Intent then we can't create a session.
-            }
-
-            createSession(Source.VIEW, intent.getDataString());
-        } else if (Intent.ACTION_SEND.equals(action)) {
-            final String dataString = intent.getStringExtra(Intent.EXTRA_TEXT);
-            if (TextUtils.isEmpty(dataString)) {
-                return;
-            }
-
-            final boolean isSearch = !UrlUtils.isUrl(dataString);
-            final String url = isSearch
-                    ? UrlUtils.createSearchUrl(context, dataString)
-                    : dataString;
-            createSession(Source.SHARE, url);
-        }
     }
 
     /**
