@@ -4,18 +4,10 @@
 
 package org.mozilla.focus.session;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.customtabs.CustomTabsIntent;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mozilla.focus.utils.SafeIntent;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 
 import java.util.List;
 import java.util.UUID;
@@ -44,131 +36,6 @@ public class SessionManagerTest {
         assertNotNull(sessionManager.getSessions().getValue());
         assertEquals(0, sessionManager.getSessions().getValue().size());
         assertFalse(sessionManager.hasSession());
-    }
-
-    @Test
-    public void testViewIntent() {
-        final SessionManager sessionManager = SessionManager.getInstance();
-
-        final SafeIntent intent = new SafeIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(TEST_URL)));
-        sessionManager.handleIntent(RuntimeEnvironment.application, intent, null);
-
-        final List<Session> sessions = sessionManager.getSessions().getValue();
-        assertNotNull(sessions);
-        assertEquals(1, sessions.size());
-
-        final Session session = sessions.get(0);
-        assertEquals(TEST_URL, session.getUrl().getValue());
-
-        assertTrue(sessionManager.hasSession());
-    }
-
-    /**
-     * In production we see apps send VIEW intents without an URL. (#1373)
-     */
-    @Test
-    public void testViewIntentWithNullURL() {
-        final SessionManager sessionManager = SessionManager.getInstance();
-        assertFalse(sessionManager.hasSession());
-
-        final SafeIntent intent = new SafeIntent(new Intent(Intent.ACTION_VIEW, null));
-        sessionManager.handleIntent(RuntimeEnvironment.application, intent, null);
-
-        // We ignored the Intent and no session has been created.
-        assertFalse(sessionManager.hasSession());
-    }
-
-    @Test
-    public void testCustomTabIntent() {
-        final SessionManager sessionManager = SessionManager.getInstance();
-
-        final SafeIntent intent = new SafeIntent(new CustomTabsIntent.Builder()
-                .setToolbarColor(Color.GREEN)
-                .addDefaultShareMenuItem()
-                .build()
-                .intent
-                .setData(Uri.parse(TEST_URL)));
-
-        sessionManager.handleIntent(RuntimeEnvironment.application, intent, null);
-
-        final List<Session> sessions = sessionManager.getSessions().getValue();
-        assertNotNull(sessions);
-        assertEquals(1, sessions.size());
-
-        final Session session = sessions.get(0);
-        assertEquals(TEST_URL, session.getUrl().getValue());
-
-        assertTrue(sessionManager.hasSession());
-    }
-
-    @Test
-    public void testViewIntentFromHistoryIsIgnored() {
-        final SessionManager sessionManager = SessionManager.getInstance();
-
-        final Intent unsafeIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(TEST_URL));
-        unsafeIntent.addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY);
-
-        final SafeIntent intent = new SafeIntent(unsafeIntent);
-        sessionManager.handleIntent(RuntimeEnvironment.application, intent, null);
-
-        final List<Session> sessions = sessionManager.getSessions().getValue();
-        assertNotNull(sessions);
-        assertEquals(0, sessions.size());
-
-        assertFalse(sessionManager.hasSession());
-    }
-
-    @Test
-    public void testNoSessionIsCreatedIfWeAreRestoring() {
-        final SessionManager sessionManager = SessionManager.getInstance();
-
-        final Bundle instanceState = new Bundle();
-
-        final SafeIntent intent = new SafeIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(TEST_URL)));
-        sessionManager.handleIntent(RuntimeEnvironment.application, intent, instanceState);
-
-        final List<Session> sessions = sessionManager.getSessions().getValue();
-        assertNotNull(sessions);
-        assertEquals(0, sessions.size());
-
-        assertFalse(sessionManager.hasSession());
-    }
-
-    @Test
-    public void testShareIntentViaNewIntent() {
-        final SessionManager sessionManager = SessionManager.getInstance();
-
-        final Intent unsafeIntent = new Intent(Intent.ACTION_SEND);
-        unsafeIntent.putExtra(Intent.EXTRA_TEXT, TEST_URL);
-
-        sessionManager.handleNewIntent(RuntimeEnvironment.application, new SafeIntent(unsafeIntent));
-
-        final List<Session> sessions = sessionManager.getSessions().getValue();
-        assertNotNull(sessions);
-        assertEquals(1, sessions.size());
-
-        final Session session = sessions.get(0);
-        assertEquals(TEST_URL, session.getUrl().getValue());
-
-        assertTrue(sessionManager.hasSession());
-    }
-
-    public void testShareIntentWithTextViaNewIntent() {
-        final SessionManager sessionManager = SessionManager.getInstance();
-
-        final Intent unsafeIntent = new Intent(Intent.ACTION_SEND);
-        unsafeIntent.putExtra(Intent.EXTRA_TEXT, "Hello World Focus");
-
-        sessionManager.handleNewIntent(RuntimeEnvironment.application, new SafeIntent(unsafeIntent));
-
-        final List<Session> sessions = sessionManager.getSessions().getValue();
-        assertNotNull(sessions);
-        assertEquals(1, sessions.size());
-
-        final Session session = sessions.get(0);
-        assertEquals(TEST_URL, session.getUrl().getValue());
-
-        assertTrue(sessionManager.hasSession());
     }
 
     @Test(expected = IllegalAccessError.class)
