@@ -76,7 +76,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
     }
 
     private fun onValidBrowserIntent(url: String, source: Source) {
-        sessionManager.createSession(source, url)
+        ScreenController.showBrowserScreenForUrl(supportFragmentManager, url, source)
     }
 
     override fun applyLocale() {
