@@ -31,19 +31,10 @@ object ScreenController {
         }
 
         val isUrl = UrlUtils.isUrl(urlStr)
-        val updatedUrlStr: String
-        val searchTerms: String?
-        if (isUrl) {
-            updatedUrlStr = UrlUtils.normalize(urlStr)
-            searchTerms = null
-        } else {
-            updatedUrlStr = UrlUtils.createSearchUrl(context, urlStr)
-            searchTerms = urlStr.trim()
-        }
+        val updatedUrlStr = if (isUrl) UrlUtils.normalize(urlStr) else UrlUtils.createSearchUrl(context, urlStr)
 
         showBrowserScreenForUrl(fragmentManager, updatedUrlStr, Source.USER_ENTERED)
 
-        val isSearch = !TextUtils.isEmpty(searchTerms)
         if (isTextInput) {
             // Non-text input events are handled at the source, e.g. home tile click events.
             if (autocompleteResult == null) {
@@ -53,7 +44,7 @@ object ScreenController {
                 throw IllegalArgumentException("Expected non-null input location for text input")
             }
 
-            TelemetryWrapper.urlBarEvent(!isSearch, autocompleteResult, inputLocation)
+            TelemetryWrapper.urlBarEvent(isUrl, autocompleteResult, inputLocation)
         }
     }
 
