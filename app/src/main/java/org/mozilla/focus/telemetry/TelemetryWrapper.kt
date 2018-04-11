@@ -82,7 +82,6 @@ object TelemetryWrapper {
     }
 
     private object Extra {
-        val TO = "to"
         val TOTAL = "total"
         val AUTOCOMPLETE = "autocomplete"
         val SOURCE = "source"
