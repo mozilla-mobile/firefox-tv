@@ -215,7 +215,7 @@ private class HomeTileAdapter(
 
         itemView.setOnClickListener {
             onUrlEnteredListener.onNonTextInputUrlEntered(item.url)
-            TelemetryWrapper.homeTileClickEvent(item)
+            TelemetryWrapper.homeTileClickEvent(it.context, item)
         }
 
         val tvWhiteColor = ContextCompat.getColor(holder.itemView.context, R.color.tv_white)

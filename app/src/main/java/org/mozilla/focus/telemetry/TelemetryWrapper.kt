@@ -8,6 +8,7 @@ package org.mozilla.focus.telemetry
 import android.content.Context
 import android.net.http.SslError
 import android.os.StrictMode
+import android.support.annotation.UiThread
 import org.mozilla.focus.BuildConfig
 import org.mozilla.focus.browser.NavigationEvent
 import org.mozilla.focus.home.BundledHomeTile
@@ -15,6 +16,7 @@ import org.mozilla.focus.home.CustomHomeTile
 import org.mozilla.focus.home.HomeTile
 import org.mozilla.focus.iwebview.IWebView
 import org.mozilla.focus.search.SearchEngineManager
+import org.mozilla.focus.utils.Assert
 import org.mozilla.focus.widget.InlineAutocompleteEditText.AutocompleteResult
 import org.mozilla.telemetry.Telemetry
 import org.mozilla.telemetry.TelemetryHolder
@@ -29,6 +31,9 @@ import org.mozilla.telemetry.schedule.jobscheduler.JobSchedulerTelemetrySchedule
 import org.mozilla.telemetry.serialize.JSONPingSerializer
 import org.mozilla.telemetry.storage.FileTelemetryStorage
 
+private const val SHARED_PREFS_KEY = "telemetryLib" // Don't call it TelemetryWrapper to avoid accidental IDE rename.
+private const val KEY_CLICKED_HOME_TILE_IDS_PER_SESSION = "clickedHomeTileIDsPerSession"
+
 @Suppress(
         // Yes, this a large class with a lot of functions. But it's very simple and still easy to read.
         "TooManyFunctions",
@@ -39,6 +44,7 @@ object TelemetryWrapper {
 
     private object Category {
         val ACTION = "action"
+        val AGGREGATE = "aggregate"
         val ERROR = "error"
     }
 
@@ -86,6 +92,7 @@ object TelemetryWrapper {
         val AUTOCOMPLETE = "autocomplete"
         val SOURCE = "source"
         val ERROR_CODE = "error_code"
+        val UNIQUE_PER_SESSION = "unique_per_sess"
 
         // We need this second source key because we use SOURCE when using this key.
         // For the value, "autocomplete_source" exceeds max extra key length.
@@ -135,18 +142,26 @@ object TelemetryWrapper {
         }
     }
 
-    @JvmStatic
-    fun startSession() {
+    @UiThread // via TelemetryHomeTileUniqueClickPerSessionCounter
+    fun startSession(context: Context) {
         TelemetryHolder.get().recordSessionStart()
-
         TelemetryEvent.create(Category.ACTION, Method.FOREGROUND, Object.APP).queue()
+
+        // We call reset in both startSession and stopSession. We call it here to make sure we
+        // clean up before a new session if we crashed before stopSession.
+        TelemetryHomeTileUniqueClickPerSessionCounter.resetSessionData(context)
     }
 
-    @JvmStatic
-    fun stopSession() {
+    @UiThread // via TelemetryHomeTileUniqueClickPerSessionCounter
+    fun stopSession(context: Context) {
         TelemetryHolder.get().recordSessionEnd()
-
         TelemetryEvent.create(Category.ACTION, Method.BACKGROUND, Object.APP).queue()
+
+        // We call reset in both startSession and stopSession. We call it here to make sure we
+        // don't persist the user's visited tile history on disk longer than strictly necessary.
+
+        TelemetryHomeTileUniqueClickPerSessionCounter.queueEvent(context)
+        TelemetryHomeTileUniqueClickPerSessionCounter.resetSessionData(context)
     }
 
     @JvmStatic
@@ -209,10 +224,17 @@ object TelemetryWrapper {
                 .queue()
     }
 
-    @JvmStatic
-    fun homeTileClickEvent(tile: HomeTile) {
+    @UiThread // via TelemetryHomeTileUniqueClickPerSessionCounter
+    fun homeTileClickEvent(context: Context, tile: HomeTile) {
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE,
                 getTileTypeAsStringValue(tile)).queue()
+        TelemetryHomeTileUniqueClickPerSessionCounter.countTile(context, tile)
+    }
+
+    internal fun homeTileUniqueClickCountPerSessionEvent(uniqueClickCountPerSession: Int) {
+        TelemetryEvent.create(Category.AGGREGATE, Method.CLICK, Object.HOME_TILE)
+                .extra(Extra.UNIQUE_PER_SESSION, uniqueClickCountPerSession.toString())
+                .queue()
     }
 
     @JvmStatic
@@ -279,3 +301,41 @@ enum class UrlTextInputLocation(internal val extra: String) {
     HOME("home"),
     MENU("menu"),
 }
+
+/** Counts the number of unique home tiles per session the user has clicked on. */
+@UiThread // We get-and-set over SharedPreferences in countTile so we need resource protection.
+private object TelemetryHomeTileUniqueClickPerSessionCounter {
+
+    private const val COLLECTION_DISABLED = -1
+
+    fun countTile(context: Context, tile: HomeTile) {
+        Assert.isUiThread()
+        if (!TelemetryHolder.get().configuration.isCollectionEnabled) { return }
+
+        val sharedPrefs = getSharedPrefs(context)
+        val clickedTileIDs = (sharedPrefs.getStringSet(KEY_CLICKED_HOME_TILE_IDS_PER_SESSION, null)
+                ?: setOf()).toMutableSet() // create a copy: we can't modify a SharedPref StringSet.
+        clickedTileIDs.add(tile.idToString())
+
+        sharedPrefs.edit()
+                .putStringSet(KEY_CLICKED_HOME_TILE_IDS_PER_SESSION, clickedTileIDs)
+                .apply()
+    }
+
+    fun queueEvent(context: Context) {
+        Assert.isUiThread()
+
+        val uniqueClickCount = getSharedPrefs(context)
+                .getStringSet(KEY_CLICKED_HOME_TILE_IDS_PER_SESSION, null)?.size ?: 0
+        TelemetryWrapper.homeTileUniqueClickCountPerSessionEvent(uniqueClickCount)
+    }
+
+    fun resetSessionData(context: Context) {
+        Assert.isUiThread()
+        getSharedPrefs(context).edit()
+                .remove(KEY_CLICKED_HOME_TILE_IDS_PER_SESSION)
+                .apply()
+    }
+}
+
+private fun getSharedPrefs(context: Context) = context.getSharedPreferences(SHARED_PREFS_KEY, 0)
