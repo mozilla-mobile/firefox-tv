@@ -46,6 +46,7 @@ private const val TOAST_Y_OFFSET = 200
 class BrowserFragment : IWebViewLifecycleFragment() {
     companion object {
         const val FRAGMENT_TAG = "browser"
+        const val URL_HOME = "firefox:home"
 
         @JvmStatic
         fun createForSession(session: Session) = BrowserFragment().apply {
