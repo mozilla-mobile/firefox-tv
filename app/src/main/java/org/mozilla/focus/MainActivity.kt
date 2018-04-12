@@ -85,13 +85,12 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
 
     override fun onResume() {
         super.onResume()
-
-        TelemetryWrapper.startSession()
+        TelemetryWrapper.startSession(this)
     }
 
     override fun onPause() {
         super.onPause()
-        TelemetryWrapper.stopSession()
+        TelemetryWrapper.stopSession(this)
     }
 
     override fun onStop() {

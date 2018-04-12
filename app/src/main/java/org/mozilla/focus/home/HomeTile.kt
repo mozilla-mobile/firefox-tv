@@ -14,6 +14,11 @@ private const val KEY_IMG = "img"
 private const val KEY_ID = "id"
 
 sealed class HomeTile(val url: String, val title: String) {
+    fun idToString() = when (this) {
+        is BundledHomeTile -> id
+        is CustomHomeTile -> id.toString()
+    }
+
     protected open fun toJSONObject() = JSONObject().apply {
         put(KEY_URL, url)
         put(KEY_TITLE, title)
