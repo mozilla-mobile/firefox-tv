@@ -215,5 +215,17 @@ class HomeTilesManager {
                 addAll(CustomTilesManager.getInstance(context).getCustomHomeTilesList())
             }
         }
+
+        fun removeHomeTile(homeTile: HomeTile, context: Context) {
+            when (homeTile) {
+                is BundledHomeTile -> {
+                    val tileUri = homeTile.url.toUri()
+                    if (tileUri != null) {
+                        BundledTilesManager.getInstance(context).unpinSite(context, tileUri)
+                    }
+                }
+                is CustomHomeTile -> CustomTilesManager.getInstance(context).unpinSite(context, homeTile.url)
+            }
+        }
     }
 }
