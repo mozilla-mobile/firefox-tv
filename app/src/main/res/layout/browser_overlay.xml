@@ -53,17 +53,6 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_firefox_and_workmark" />
-
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical">
         <ImageButton
             android:id="@+id/navButtonHome"
             style="@style/NavigationButton"
@@ -76,6 +65,18 @@
             android:id="@+id/navButtonSettings"
             style="@style/NavigationButton"
             android:contentDescription="@string/menu_settings"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_firefox_and_workmark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical">
 
         <!-- Drawable tinted in code (XML needs API 23+). -->
         <org.mozilla.focus.widget.InlineAutocompleteEditText
@@ -115,5 +116,15 @@
             android:text="@string/nav_close_hint"
             android:textColor="@color/tv_white" />
     </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/tileContainer"
+        android:clipToPadding="false"
+        android:paddingTop="10dp"
+        android:clipChildren="false"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:paddingBottom="18dp"
+        android:background="@android:color/transparent"/>
 
 </LinearLayout>
