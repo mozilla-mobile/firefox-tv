@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.Toast
 import kotlinx.android.synthetic.main.browser_overlay.view.*
 import kotlinx.android.synthetic.main.home_tile.view.*
 import kotlinx.coroutines.experimental.Job
@@ -24,6 +25,7 @@ import org.mozilla.focus.home.HomeTilesManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.Settings
 import org.mozilla.focus.widget.InlineAutocompleteEditText
+import kotlin.properties.Delegates
 
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
 private const val NAVIGATION_BUTTON_DISABLED_ALPHA = 0.3f
@@ -67,6 +69,15 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
      * and cancel this job at the end of the UI lifecycle, cancelling the children.
      */
     var uiLifecycleCancelJob: Job
+
+    // Setting the onTileLongClick function in the HomeTileAdapter is fragile
+    // since we init the tiles in View.init and Android is inflating the view for us,
+    // thus we need to use Delegates.observable to update onTileLongClick.
+    var openHomeTileContextMenu: (() -> Unit) by Delegates.observable({}) { _, _, newValue ->
+        with (tileContainer) {
+            (adapter as HomeTileAdapter).onTileLongClick = newValue
+        }
+    }
 
     var onNavigationEvent: ((event: NavigationEvent, value: String?,
                              autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?) -> Unit)? = null
@@ -114,6 +125,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 }
             }
         })
+
+        Toast.makeText(context, R.string.homescreen_unpin_tutorial_toast, Toast.LENGTH_LONG).show()
     }
 
     private fun initTiles() = with (tileContainer) {
@@ -125,7 +138,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                     onNavigationEvent?.invoke(NavigationEvent.LOAD_TILE, urlStr, null)
                 }
             }
-        })
+        }, onTileLongClick = openHomeTileContextMenu)
         layoutManager = GridLayoutManager(context, COL_COUNT)
         setHasFixedSize(true)
     }

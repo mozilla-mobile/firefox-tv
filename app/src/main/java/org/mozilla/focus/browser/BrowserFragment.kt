@@ -8,11 +8,15 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.annotation.UiThread
 import android.text.TextUtils
+import android.view.ContextMenu
 import android.view.KeyEvent
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import kotlinx.android.synthetic.main.browser_overlay.*
+import kotlinx.android.synthetic.main.browser_overlay.view.*
 import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.android.synthetic.main.fragment_browser.view.*
 import kotlinx.coroutines.experimental.CancellationException
@@ -28,6 +32,7 @@ import org.mozilla.focus.ext.isVisible
 import org.mozilla.focus.ext.toUri
 import org.mozilla.focus.home.BundledTilesManager
 import org.mozilla.focus.home.CustomTilesManager
+import org.mozilla.focus.home.HomeTilesManager
 import org.mozilla.focus.iwebview.IWebView
 import org.mozilla.focus.iwebview.IWebViewLifecycleFragment
 import org.mozilla.focus.session.NullSession
@@ -171,11 +176,34 @@ class BrowserFragment : IWebViewLifecycleFragment() {
                 // so we need to do our own caching: see FocusedDOMElementCache for details.
                 if (!isVisible) { webView?.focusedDOMElement?.cache() }
             }
+
+            openHomeTileContextMenu = {
+                activity.openContextMenu(browserOverlay.tileContainer)
+            }
+            registerForContextMenu(browserOverlay.tileContainer)
         }
 
         layout.progressBar.initialize(this)
 
         return layout
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.remove -> {
+                val homeTileAdapter = tileContainer.adapter as HomeTileAdapter
+                val tileToRemove = homeTileAdapter.getItemAtPosition(browserOverlay.getFocusedTilePosition())
+                        ?: return false
+
+                // This assumes that since we're deleting from a Home Tile object that we created
+                // that the Uri is valid, so we do not do error handling here.
+                HomeTilesManager.removeHomeTile(tileToRemove, context)
+                homeTileAdapter.removeItemAtPosition(browserOverlay.getFocusedTilePosition())
+                TelemetryWrapper.homeTileRemovedEvent(tileToRemove)
+                return true
+            }
+            else -> return false
+        }
     }
 
     override fun onDestroyView() {
@@ -187,6 +215,10 @@ class BrowserFragment : IWebViewLifecycleFragment() {
         // there's no good way to pass in the uiLifecycleJob. We could consider other solutions
         // but it'll add complexity that I don't think is probably worth it.
         browserOverlay.uiLifecycleCancelJob.cancel(CancellationException("Parent lifecycle has ended"))
+    }
+
+    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
+        activity.menuInflater.inflate(R.menu.menu_context_hometile, menu)
     }
 
     fun onBackPressed(): Boolean {

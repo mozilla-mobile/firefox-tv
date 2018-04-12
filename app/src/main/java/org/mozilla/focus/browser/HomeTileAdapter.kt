@@ -44,7 +44,8 @@ private val CUSTOM_TILE_ICON_INTERPOLATOR = DecelerateInterpolator()
 class HomeTileAdapter(
         private val uiLifecycleCancelJob: Job,
         private var tiles: MutableList<HomeTile>,
-        private val loadUrl: (String) -> Unit
+        private val loadUrl: (String) -> Unit,
+        var onTileLongClick: (() -> Unit)?
 ) : RecyclerView.Adapter<TileViewHolder>() {
 
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with (holder) {
@@ -65,6 +66,11 @@ class HomeTileAdapter(
             TelemetryWrapper.homeTileClickEvent(it.context, item)
         }
 
+        itemView.setOnLongClickListener {
+            onTileLongClick?.invoke()
+            true
+        }
+
         val tvWhiteColor = ContextCompat.getColor(holder.itemView.context, R.color.tv_white)
         itemView.setOnFocusChangeListener { _, hasFocus ->
             val backgroundResource: Int
@@ -72,11 +78,9 @@ class HomeTileAdapter(
             if (hasFocus) {
                 backgroundResource = R.drawable.home_tile_title_focused_background
                 textColor = tvWhiteColor
-                menuButton.visibility = View.VISIBLE
             } else {
                 backgroundResource = 0
                 textColor = Color.BLACK
-                menuButton.visibility = View.GONE
             }
             titleView.setBackgroundResource(backgroundResource)
             titleView.setTextColor(textColor)
@@ -112,6 +116,12 @@ class HomeTileAdapter(
         }
         tiles = homeTiles
         notifyItemInserted(homeTiles.lastIndex)
+    }
+
+    fun getItemAtPosition(position: Int): HomeTile? = if (position > -1 && position < itemCount) {
+        tiles[position]
+    } else {
+        null
     }
 
     fun removeTileFromAdapter(tileId: String) {
@@ -192,5 +202,4 @@ class TileViewHolder(
 ) : RecyclerView.ViewHolder(itemView) {
     val iconView = itemView.tile_icon
     val titleView = itemView.tile_title
-    val menuButton = itemView.home_tile_menu_icon
 }
