@@ -306,8 +306,6 @@ enum class UrlTextInputLocation(internal val extra: String) {
 @UiThread // We get-and-set over SharedPreferences in countTile so we need resource protection.
 private object TelemetryHomeTileUniqueClickPerSessionCounter {
 
-    private const val COLLECTION_DISABLED = -1
-
     fun countTile(context: Context, tile: HomeTile) {
         Assert.isUiThread()
         if (!TelemetryHolder.get().configuration.isCollectionEnabled) { return }
