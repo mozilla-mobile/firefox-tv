@@ -315,11 +315,13 @@ private object TelemetryHomeTileUniqueClickPerSessionCounter {
         val sharedPrefs = getSharedPrefs(context)
         val clickedTileIDs = (sharedPrefs.getStringSet(KEY_CLICKED_HOME_TILE_IDS_PER_SESSION, null)
                 ?: setOf()).toMutableSet() // create a copy: we can't modify a SharedPref StringSet.
-        clickedTileIDs.add(tile.idToString())
+        val wasNewTileAdded = clickedTileIDs.add(tile.idToString())
 
-        sharedPrefs.edit()
-                .putStringSet(KEY_CLICKED_HOME_TILE_IDS_PER_SESSION, clickedTileIDs)
-                .apply()
+        if (wasNewTileAdded) {
+            sharedPrefs.edit()
+                    .putStringSet(KEY_CLICKED_HOME_TILE_IDS_PER_SESSION, clickedTileIDs)
+                    .apply()
+        }
     }
 
     fun queueEvent(context: Context) {
