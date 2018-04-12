@@ -245,39 +245,40 @@ tasks.whenTaskAdded { task ->
 // Secrets: add API secrets from config files into the BuildConfig instance.
 // We use files because they're easier to manage than environment variables.
 // -------------------------------------------------------------------------------------------------
-android.applicationVariants.all { variant ->
-    def SENTRY_FIELD = 'SENTRY_DSN'
-    def SENTRY_DEBUG_FILE_PATH = "${rootDir}/.sentry_dsn_debug"
-    def SENTRY_RELEASE_FILE_PATH = "${rootDir}/.sentry_dsn_release"
+def addSecretToBuildConfig(variant, fieldName, fileBaseName) {
     def variantName = variant.getName()
-
-    print("Sentry DSN (" + variantName + "): ")
+    print("${fieldName} (" + variantName + "): ")
 
     // We separate the debug files from the release files so that we don't
     // accidentally ship a release using the debug key or vice versa.
-    def filePath
+    def fileSuffix
     if (variantName.contains("Debug")) {
-        filePath = SENTRY_DEBUG_FILE_PATH
+        fileSuffix = "debug"
     } else if (variantName.contains("Beta") || variantName.contains("Release")) {
-        filePath = SENTRY_RELEASE_FILE_PATH
+        fileSuffix = "release"
     } else if (variantName.contains("Coverage")) {
-        // We never want to bundle Sentry with Coverage.
-        buildConfigField 'String', SENTRY_FIELD, 'null'
+        // We never want to bundle API keys with Coverage.
+        variant.buildConfigField 'String', fieldName, 'null'
         println("X_X")
         return
     } else {
         throw new IllegalStateException("Unhandled variant $variantName")
     }
 
+    def filePath = "${rootDir}/${fileBaseName}_${fileSuffix}"
     def file = new File(filePath)
     if (file.exists()) {
         def token = file.text.trim()
-        buildConfigField 'String', SENTRY_FIELD, '"' + token + '"'
+        variant.buildConfigField 'String', fieldName, '"' + token + '"'
         println "Added from $filePath"
     } else {
-        buildConfigField 'String', SENTRY_FIELD, 'null'
+        variant.buildConfigField 'String', fieldName, 'null'
         println("X_X")
     }
+}
+
+android.applicationVariants.all { variant ->
+    addSecretToBuildConfig(variant, 'SENTRY_DSN', ".sentry_dsn")
 }
 
 // -------------------------------------------------------------------------------------------------
