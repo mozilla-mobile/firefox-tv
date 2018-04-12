@@ -23,6 +23,8 @@ import org.mozilla.focus.utils.IntentUtils;
 import org.mozilla.focus.utils.UrlUtils;
 import org.mozilla.focus.iwebview.IWebView;
 
+import static org.mozilla.focus.browser.BrowserFragment.URL_HOME;
+
 /**
  * WebViewClient layer that handles browser specific WebViewClient functionality, such as error pages
  * and external URL handling.
@@ -229,6 +231,12 @@ public class FocusWebViewClient extends TrackingProtectionWebViewClient {
     public boolean shouldOverrideUrlLoading(AmazonWebView view, String url) {
         // If this is an internal URL like focus:about then we load the content ourselves here.
         if (LocalizedContent.handleInternalContent(url, view)) {
+            return true;
+        }
+
+        // Home screen loads a blank page and shows the overlay
+        if (url.equals(URL_HOME)) {
+            // TODO: show browser overlay
             return true;
         }
 
