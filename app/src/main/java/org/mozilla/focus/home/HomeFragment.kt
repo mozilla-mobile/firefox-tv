@@ -4,55 +4,28 @@
 
 package org.mozilla.focus.home
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
 import android.view.ContextMenu
 import android.view.KeyEvent
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.home_tile.*
-import kotlinx.android.synthetic.main.home_tile.view.*
 import kotlinx.coroutines.experimental.CancellationException
-import kotlinx.coroutines.experimental.CompletableDeferred
-import kotlinx.coroutines.experimental.CoroutineStart
 import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
-import org.mozilla.focus.ext.forceExhaustive
-import org.mozilla.focus.ext.toJavaURI
-import org.mozilla.focus.ext.toUri
-import org.mozilla.focus.ext.withRoundedCorners
-import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
-import org.mozilla.focus.utils.FormattedDomain
 import org.mozilla.focus.utils.OnUrlEnteredListener
 
-private const val COL_COUNT = 5
 private const val SETTINGS_ICON_IDLE_ALPHA = 0.4f
 private const val SETTINGS_ICON_ACTIVE_ALPHA = 1.0f
-
-/**
- * Duration of animation to show custom tile. If the duration is too short, the tile will just
- * pop-in. I speculate this happens because the amount of time it takes to downsample the bitmap
- * is longer than the animation duration.
- */
-private const val CUSTOM_TILE_TO_SHOW_MILLIS = 200L
-private val CUSTOM_TILE_ICON_INTERPOLATOR = DecelerateInterpolator()
 
 /** The home fragment which displays the navigation tiles of the app. */
 class HomeFragment : Fragment() {
@@ -78,7 +51,6 @@ class HomeFragment : Fragment() {
         // todo: saved instance state?
         uiLifecycleCancelJob = Job()
 
-        initTiles()
         initUrlInputView()
 
         settingsButton.alpha = SETTINGS_ICON_IDLE_ALPHA
@@ -112,33 +84,6 @@ class HomeFragment : Fragment() {
         activity.menuInflater.inflate(R.menu.menu_context_hometile, menu)
     }
 
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.remove -> {
-                val homeTileAdapter = tileContainer.adapter as HomeTileAdapter
-                val tileToRemove = homeTileAdapter.getItemAtPosition(getFocusedTilePosition()) ?: return false
-                // This assumes that since we're deleting from a Home Tile object that we created
-                // that the Uri is valid, so we do not do error handling here.
-                when (tileToRemove) {
-                    is BundledHomeTile -> {
-                        val tileUri = tileToRemove.url.toUri()
-                        if (tileUri != null) {
-                            BundledTilesManager.getInstance(context).unpinSite(context, tileUri)
-                            homeTileAdapter.removeItemAtPosition(getFocusedTilePosition())
-                        }
-                    }
-                    is CustomHomeTile -> {
-                        CustomTilesManager.getInstance(context).unpinSite(context, tileToRemove.url)
-                        homeTileAdapter.removeItemAtPosition(getFocusedTilePosition())
-                    }
-                }
-                TelemetryWrapper.homeTileRemovedEvent(tileToRemove)
-                return true
-            }
-        }
-        return false
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         uiLifecycleCancelJob.cancel(CancellationException("Parent lifecycle has ended"))
@@ -152,17 +97,6 @@ class HomeFragment : Fragment() {
     override fun onAttachFragment(childFragment: Fragment?) {
         super.onAttachFragment(childFragment)
         urlBar.requestFocus()
-    }
-
-    private fun initTiles() = with (tileContainer) {
-        val homeTiles = mutableListOf<HomeTile>().apply {
-            addAll(BundledTilesManager.getInstance(context).getBundledHomeTilesList())
-            addAll(CustomTilesManager.getInstance(context).getCustomHomeTilesList())
-        }
-
-        adapter = HomeTileAdapter(uiLifecycleCancelJob, homeTiles, onUrlEnteredListener)
-        layoutManager = GridLayoutManager(context, COL_COUNT)
-        setHasFixedSize(true)
     }
 
     private fun initUrlInputView() = with (urlInputView) {
@@ -192,132 +126,4 @@ class HomeFragment : Fragment() {
         }
         return false
     }
-}
-
-private class HomeTileAdapter(
-        private val uiLifecycleCancelJob: Job,
-        private val tiles: MutableList<HomeTile>,
-        private val onUrlEnteredListener: OnUrlEnteredListener
-) : RecyclerView.Adapter<TileViewHolder>() {
-
-    override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with (holder) {
-        val item = tiles[position]
-        when (item) {
-            is BundledHomeTile -> {
-                onBindBundledHomeTile(holder, item)
-                setLayoutMarginParams(iconView, R.dimen.bundled_home_tile_margin_value)
-            }
-            is CustomHomeTile -> {
-                onBindCustomHomeTile(uiLifecycleCancelJob, holder, item)
-                setLayoutMarginParams(iconView, R.dimen.custom_home_tile_margin_value)
-            }
-        }.forceExhaustive
-
-        itemView.setOnClickListener {
-            onUrlEnteredListener.onNonTextInputUrlEntered(item.url)
-            TelemetryWrapper.homeTileClickEvent(it.context, item)
-        }
-
-        val tvWhiteColor = ContextCompat.getColor(holder.itemView.context, R.color.tv_white)
-        itemView.setOnFocusChangeListener { v, hasFocus ->
-            val backgroundResource: Int
-            val textColor: Int
-            if (hasFocus) {
-                backgroundResource = R.drawable.home_tile_title_focused_background
-                textColor = tvWhiteColor
-                menuButton.visibility = View.VISIBLE
-            } else {
-                backgroundResource = 0
-                textColor = Color.BLACK
-                menuButton.visibility = View.GONE
-            }
-            titleView.setBackgroundResource(backgroundResource)
-            titleView.setTextColor(textColor)
-        }
-    }
-
-    private fun setLayoutMarginParams(iconView: View, tileMarginValue: Int) {
-        val layoutMarginParams = iconView.layoutParams as ViewGroup.MarginLayoutParams
-        val marginValue = iconView.resources.getDimensionPixelSize(tileMarginValue)
-        layoutMarginParams.setMargins(marginValue, marginValue, marginValue, marginValue)
-        iconView.layoutParams = layoutMarginParams
-    }
-
-    fun getItemAtPosition(position: Int): HomeTile? {
-        if (position > -1 && position < itemCount) {
-            return tiles[position]
-        }
-        return null
-    }
-
-    fun removeItemAtPosition(position: Int) {
-        if (position > -1 && position < itemCount) {
-            tiles.removeAt(position)
-            notifyItemRemoved(position)
-        }
-    }
-
-    override fun getItemCount() = tiles.size
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = TileViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.home_tile, parent, false)
-    )
-}
-
-private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledHomeTile) = with (holder) {
-    val bitmap = BundledTilesManager.getInstance(itemView.context).loadImageFromPath(itemView.context, tile.imagePath)
-    iconView.setImageBitmap(bitmap)
-
-    titleView.text = tile.title
-}
-
-private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHolder, item: CustomHomeTile) = with (holder) {
-    launch(uiLifecycleCancelJob + UI, CoroutineStart.UNDISPATCHED) {
-        val validUri = item.url.toJavaURI()
-
-        val screenshotDeferred = async {
-            val homeTileCornerRadius = itemView.resources.getDimension(R.dimen.home_tile_corner_radius)
-            val homeTilePlaceholderCornerRadius = itemView.resources.getDimension(R.dimen.home_tile_placeholder_corner_radius)
-            val screenshot = HomeTileScreenshotStore.read(itemView.context, item.id)?.withRoundedCorners(homeTileCornerRadius)
-            screenshot ?: HomeTilePlaceholderGenerator.generate(itemView.context, item.url).withRoundedCorners(homeTilePlaceholderCornerRadius)
-        }
-
-        val titleDeferred = if (validUri == null) {
-            CompletableDeferred(item.url)
-        } else {
-            async {
-                val subdomainDotDomain = FormattedDomain.format(itemView.context, validUri, false, 1)
-                FormattedDomain.stripCommonPrefixes(subdomainDotDomain)
-            }
-        }
-
-        // We wait for both to complete so we can animate them together.
-        val screenshot = screenshotDeferred.await()
-        val title = titleDeferred.await()
-
-        // NB: Don't suspend after this point (i.e. between view updates like setImage)
-        // so we don't see intermediate view states.
-        // TODO: It'd be less error-prone to launch { /* bg work */ launch(UI) { /* UI work */ } }
-        iconView.setImageBitmap(screenshot)
-        titleView.text = title
-
-        // Animate to avoid pop-in due to thread hand-offs. TODO: animation is janky.
-        AnimatorSet().apply {
-            interpolator = CUSTOM_TILE_ICON_INTERPOLATOR
-            duration = CUSTOM_TILE_TO_SHOW_MILLIS
-
-            val iconAnim = ObjectAnimator.ofInt(iconView, "imageAlpha", 0, 255)
-            val titleAnim = ObjectAnimator.ofFloat(titleView, "alpha", 0f, 1f)
-
-            playTogether(iconAnim, titleAnim)
-        }.start()
-    }
-}
-
-private class TileViewHolder(
-        itemView: View
-) : RecyclerView.ViewHolder(itemView) {
-    val iconView = itemView.tile_icon
-    val titleView = itemView.tile_title
-    val menuButton = itemView.home_tile_menu_icon
 }

@@ -7,19 +7,30 @@ package org.mozilla.focus.browser
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.browser_overlay.view.*
+import kotlinx.android.synthetic.main.home_tile.view.*
+import kotlinx.coroutines.experimental.Job
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
+import org.mozilla.focus.home.BundledTilesManager
+import org.mozilla.focus.home.CustomTilesManager
+import org.mozilla.focus.home.HomeTile
 import org.mozilla.focus.telemetry.TelemetryWrapper
+import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.Settings
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
 private const val NAVIGATION_BUTTON_DISABLED_ALPHA = 0.3f
+
+private const val COL_COUNT = 5
 
 enum class NavigationEvent {
     HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD, TURBO, PIN_ACTION;
@@ -52,6 +63,12 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         fun isURLPinned(): Boolean
     }
 
+    /**
+     * Used to cancel background->UI threads: we attach them as children to this job
+     * and cancel this job at the end of the UI lifecycle, cancelling the children.
+     */
+    private var uiLifecycleCancelJob: Job
+
     var onNavigationEvent: ((event: NavigationEvent, value: String?,
                              autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?) -> Unit)? = null
     var navigationStateProvider: BrowserNavigationStateProvider? = null
@@ -75,6 +92,9 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                     it.setOnClickListener(this)
                 }
 
+        uiLifecycleCancelJob = Job()
+
+        initTiles()
         setupUrlInput()
         turboButton.isChecked = Settings.getInstance(context).isBlockingEnabled
         navButtonSettings.setImageResource(R.drawable.ic_settings) // Must be set in code for SVG to work correctly.
@@ -82,6 +102,32 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context, R.color.tv_white)) }
         navCloseHint.compoundDrawablesRelative.forEach(tintDrawable)
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
+
+        tileContainer.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+                val gridLayoutManager = recyclerView?.layoutManager as GridLayoutManager
+                val lastVisibleItem = gridLayoutManager.findLastCompletelyVisibleItemPosition()
+                // We add a scroll offset, revealing the next row to hint that there are more home tiles
+                if (dy > 0 && getFocusedTilePosition() > lastVisibleItem) {
+                    val scrollOffset = TypedValue.applyDimension(
+                            TypedValue.COMPLEX_UNIT_DIP, home_tile.height.toFloat() / 2, context.resources.displayMetrics)
+                    recyclerView.smoothScrollBy(0, scrollOffset.toInt())
+                }
+            }
+        })
+    }
+
+    private fun initTiles() = with (tileContainer) {
+        val homeTiles = mutableListOf<HomeTile>().apply {
+            addAll(BundledTilesManager.getInstance(context).getBundledHomeTilesList())
+            addAll(CustomTilesManager.getInstance(context).getCustomHomeTilesList())
+        }
+
+        adapter = HomeTileAdapter(uiLifecycleCancelJob, homeTiles, loadUrl = { urlStr ->
+            onNonTextInputUrlEntered(urlStr)
+        })
+        layoutManager = GridLayoutManager(context, COL_COUNT)
+        setHasFixedSize(true)
     }
 
     private fun setupUrlInput() = with (navUrlInput) {
@@ -155,6 +201,10 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         if (findFocus() == null) {
             requestFocus()
         }
+    }
+
+    fun getFocusedTilePosition(): Int {
+        return (rootView.findFocus().parent as? RecyclerView)?.getChildAdapterPosition(rootView.findFocus()) ?: RecyclerView.NO_POSITION
     }
 
     private fun maybeUpdateOverlayURLForCurrentState() {
