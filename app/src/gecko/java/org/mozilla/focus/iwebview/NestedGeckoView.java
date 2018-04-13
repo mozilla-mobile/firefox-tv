@@ -5,6 +5,7 @@
 
 package org.mozilla.focus.iwebview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.view.NestedScrollingChild;
 import android.support.v4.view.NestedScrollingChildHelper;
@@ -15,6 +16,7 @@ import android.view.MotionEvent;
 import org.mozilla.gecko.GeckoView;
 import org.mozilla.gecko.GeckoViewSettings;
 
+@SuppressLint("ViewConstructor") // We construct only in code.
 public class NestedGeckoView extends GeckoView implements NestedScrollingChild {
     private int mLastY;
     private final int[] mScrollOffset = new int[2];

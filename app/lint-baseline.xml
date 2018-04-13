@@ -10170,32 +10170,6 @@
     </issue>
 
     <issue
-        id="ViewConstructor"
-        message="Custom view `NestedGeckoView` is missing constructor used by tools: `(Context)` or `(Context,AttributeSet)` or `(Context,AttributeSet,int)`"
-        errorLine1="public class NestedGeckoView extends GeckoView implements NestedScrollingChild {"
-        errorLine2="             ~~~~~~~~~~~~~~~"
-        includedVariants="geckoBeta,geckoDebug"
-        excludedVariants="amazonWebviewBeta,amazonWebviewCoverage,amazonWebviewDebug,amazonWebviewRelease">
-        <location
-            file="src/gecko/java/org/mozilla/focus/iwebview/NestedGeckoView.java"
-            line="18"
-            column="14"/>
-    </issue>
-
-    <issue
-        id="ViewConstructor"
-        message="Custom view `GeckoWebView` is missing constructor used by tools: `(Context)` or `(Context,AttributeSet)` or `(Context,AttributeSet,int)`"
-        errorLine1="    public static class GeckoWebView extends org.mozilla.focus.iwebview.NestedGeckoView implements IWebView {"
-        errorLine2="                        ~~~~~~~~~~~~"
-        includedVariants="geckoBeta,geckoDebug"
-        excludedVariants="amazonWebviewBeta,amazonWebviewCoverage,amazonWebviewDebug,amazonWebviewRelease">
-        <location
-            file="src/gecko/java/org/mozilla/focus/iwebview/WebViewProvider.java"
-            line="52"
-            column="25"/>
-    </issue>
-
-    <issue
         id="ClickableViewAccessibility"
         message="Custom view `NestedGeckoView` overrides `onTouchEvent` but not `performClick`"
         errorLine1="    public boolean onTouchEvent(MotionEvent ev) {"
