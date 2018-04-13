@@ -13,6 +13,7 @@
     app:cardCornerRadius="4dp"
     app:cardElevation="0dp"
     android:focusable="true"
+    android:stateListAnimator="@animator/pocket_video_item"
     >
 
     <LinearLayout
