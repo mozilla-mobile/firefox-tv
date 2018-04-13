@@ -279,6 +279,7 @@ def addSecretToBuildConfig(variant, fieldName, fileBaseName) {
 
 android.applicationVariants.all { variant ->
     addSecretToBuildConfig(variant, 'SENTRY_DSN', ".sentry_dsn")
+    addSecretToBuildConfig(variant, 'POCKET_KEY', ".pocket_key")
 }
 
 // -------------------------------------------------------------------------------------------------
