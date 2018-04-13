@@ -149,6 +149,8 @@ dependencies {
 
     implementation "android.arch.lifecycle:extensions:$architecture_components_version"
 
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+
     implementation ("com.google.code.findbugs:annotations:3.0.1") {
         // We really only need the SuppressFBWarnings annotation, everything else can be ignored.
         // Without this we get weird failures due to dependencies.

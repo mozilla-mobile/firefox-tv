@@ -63,3 +63,13 @@
 #
 # If Sentry ever mysteriously stops working after we upgrade it, this could be why.
 -keep class io.sentry.event.Event { *; }
+
+####################################################################################################
+# okHttp
+####################################################################################################
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontwarn org.conscrypt.**
+# A resource is loaded with a relative path so the package of this class must be preserved.
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
