@@ -13,17 +13,6 @@
     </issue>
 
     <issue
-        id="OldTargetApi"
-        message="Not targeting the latest versions of Android; compatibility &#xA;modes apply. Consider testing and updating this version. &#xA;Consult the android.os.Build.VERSION_CODES javadoc for details."
-        errorLine1="        targetSdkVersion 26"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="19"
-            column="9"/>
-    </issue>
-
-    <issue
         id="UnusedAttribute"
         message="Attribute `importantForAutofill` is only used in API level 26 and higher (current min is 22)"
         errorLine1="            android:importantForAutofill=&quot;no&quot;"
@@ -35,39 +24,6 @@
     </issue>
 
     <issue
-        id="GradleDependency"
-        message="A newer version of android.arch.lifecycle:extensions than 1.0.0 is available: 1.1.1"
-        errorLine1="    implementation &quot;android.arch.lifecycle:extensions:$architecture_components_version&quot;"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="146"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="GradleDependency"
-        message="A newer version of org.jetbrains.kotlinx:kotlinx-coroutines-android than 0.19.3 is available: 0.22.3"
-        errorLine1="    implementation &quot;org.jetbrains.kotlinx:kotlinx-coroutines-android:0.19.3&quot;"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="158"
-            column="5"/>
-    </issue>
-
-    <issue
-        id="GradleDependency"
-        message="A newer version of org.mockito:mockito-core than 2.12.0 is available: 2.15.0"
-        errorLine1="    testImplementation &apos;org.mockito:mockito-core:2.12.0&apos;"
-        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="build.gradle"
-            line="164"
-            column="5"/>
-    </issue>
-
-    <issue
         id="VisibleForTests"
         message="This method should only be accessed from tests or within private scope"
         errorLine1="                customEngines.add(SearchEngineParser.load(engine, engineInputStream));"
@@ -76,17 +32,6 @@
             file="src/main/java/org/mozilla/focus/search/SearchEngineManager.java"
             line="147"
             column="54"/>
-    </issue>
-
-    <issue
-        id="Typos"
-        message="&quot;media&quot; is a common misspelling; did you mean &quot;medier&quot; ?"
-        errorLine1="  &lt;string name=&quot;preference_privacy_block_social&quot;>Blokker sosiale media-sporere&lt;/string>"
-        errorLine2="                                                                 ^">
-        <location
-            file="src/main/res/values-nb-rNO/strings.xml"
-            line="15"
-            column="66"/>
     </issue>
 
     <issue
