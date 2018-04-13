@@ -234,9 +234,10 @@ public class FocusWebViewClient extends TrackingProtectionWebViewClient {
             return true;
         }
 
-        // Home screen loads a blank page and shows the overlay
+        // Home screen should show a blank webview. Since WebView doesn't (and shouldn't) have a
+        // handle to browser UI, this url can't be used to load the overlay.
         if (url.equals(URL_HOME)) {
-            // TODO: show browser overlay
+            view.clearView(); // Deprecated in Android WebView, but AmazonWebView doesn't conform
             return true;
         }
 

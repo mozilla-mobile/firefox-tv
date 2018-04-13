@@ -173,6 +173,13 @@ class BrowserFragment : IWebViewLifecycleFragment() {
         return layout
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        if (session.url.value == URL_HOME) {
+            browserOverlay.visibility = View.VISIBLE
+        }
+        super.onViewCreated(view, savedInstanceState)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         lifecycle.removeObserver(cursor!!)
