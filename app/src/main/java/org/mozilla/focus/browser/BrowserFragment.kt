@@ -116,11 +116,11 @@ class BrowserFragment : IWebViewLifecycleFragment() {
             NavigationEvent.SETTINGS -> ScreenController.showSettingsScreen(fragmentManager)
             NavigationEvent.LOAD_URL -> {
                 (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
-                setOverlayVisibileByUser(false)
+                setOverlayVisibleByUser(false)
             }
             NavigationEvent.LOAD_TILE -> {
                 (activity as MainActivity).onNonTextInputUrlEntered(value!!)
-                setOverlayVisibileByUser(false)
+                setOverlayVisibleByUser(false)
             }
             NavigationEvent.PIN_ACTION -> {
                 this@BrowserFragment.url?.let { url ->
@@ -186,7 +186,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
                 webView?.goBack()
                 TelemetryWrapper.browserBackControllerEvent()
             }
-            browserOverlay.isVisible -> setOverlayVisibileByUser(false)
+            browserOverlay.isVisible -> setOverlayVisibleByUser(false)
             else -> {
                 fragmentManager.popBackStack()
                 SessionManager.getInstance().removeCurrentSession()
@@ -223,7 +223,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
         if (isOverlayToggleKey) {
             if (actionIsDown) {
                 val toShow = !browserOverlay.isVisible
-                setOverlayVisibileByUser(toShow)
+                setOverlayVisibleByUser(toShow)
                 // Fix this youtube focus hack in #393
                 if (!toShow && webView!!.isYoutubeTV) {
                     webView?.requestFocus()
@@ -248,7 +248,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
      * It's important this is only called for user actions because our Telemetry
      * is dependent on it.
      */
-    private fun setOverlayVisibileByUser(toShow: Boolean) {
+    private fun setOverlayVisibleByUser(toShow: Boolean) {
         browserOverlay.visibility = if (toShow) View.VISIBLE else View.GONE
         if (toShow) cursor?.onPause() else cursor?.onResume()
         cursor?.setEnabledForCurrentState()
