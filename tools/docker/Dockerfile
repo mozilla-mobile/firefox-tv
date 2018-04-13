@@ -49,8 +49,8 @@ RUN echo y | android update sdk --no-ui --all --filter platform-tools | grep 'pa
 RUN echo y | android update sdk --no-ui --all --filter android-26 | grep 'package installed'
 
 # Build tools
-RUN echo y | android update sdk --no-ui --all --filter build-tools-26.0.1 | grep 'package installed'
 RUN echo y | android update sdk --no-ui --all --filter build-tools-26.0.2 | grep 'package installed'
+RUN echo y | android update sdk --no-ui --all --filter build-tools-27.0.3 | grep 'package installed'
 
 # Extras
 RUN echo y | android update sdk --no-ui --all --filter extra-android-m2repository | grep 'package installed'
