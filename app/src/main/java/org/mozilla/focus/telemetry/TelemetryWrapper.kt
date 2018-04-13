@@ -92,7 +92,6 @@ object TelemetryWrapper {
         val AUTOCOMPLETE = "autocomplete"
         val SOURCE = "source"
         val ERROR_CODE = "error_code"
-        val UNIQUE_PER_SESSION = "unique_per_sess"
 
         // We need this second source key because we use SOURCE when using this key.
         // For the value, "autocomplete_source" exceeds max extra key length.
@@ -232,8 +231,7 @@ object TelemetryWrapper {
     }
 
     internal fun homeTileUniqueClickCountPerSessionEvent(uniqueClickCountPerSession: Int) {
-        TelemetryEvent.create(Category.AGGREGATE, Method.CLICK, Object.HOME_TILE)
-                .extra(Extra.UNIQUE_PER_SESSION, uniqueClickCountPerSession.toString())
+        TelemetryEvent.create(Category.AGGREGATE, Method.CLICK, Object.HOME_TILE, uniqueClickCountPerSession.toString())
                 .queue()
     }
 
