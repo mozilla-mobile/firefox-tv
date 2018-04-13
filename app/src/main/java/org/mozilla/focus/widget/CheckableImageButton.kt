@@ -6,12 +6,12 @@
 package org.mozilla.focus.widget
 
 import android.content.Context
+import android.support.v7.widget.AppCompatImageButton
 import android.util.AttributeSet
 import android.view.View
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.CheckBox
 import android.widget.Checkable
-import android.widget.ImageButton
 
 private val checkedStateSet = intArrayOf(android.R.attr.state_checked)
 
@@ -28,7 +28,7 @@ private val checkedStateSet = intArrayOf(android.R.attr.state_checked)
  */
 class CheckableImageButton @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyle: Int = 0
-) : ImageButton(context, attrs, defStyle), Checkable {
+) : AppCompatImageButton(context, attrs, defStyle), Checkable {
 
     private var internalIsChecked = false
         set(value) {

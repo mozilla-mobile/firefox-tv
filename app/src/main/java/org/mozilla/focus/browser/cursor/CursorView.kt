@@ -9,9 +9,9 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.support.annotation.UiThread
+import android.support.v7.widget.AppCompatImageView
 import android.util.AttributeSet
 import android.view.KeyEvent
-import android.widget.ImageView
 import org.mozilla.focus.R
 import org.mozilla.focus.utils.RemoteKey
 import java.lang.ref.WeakReference
@@ -25,7 +25,7 @@ private val HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3)
  * A drawn Cursor: see [CursorViewModel] for responding to keys and setting position.
  * The cursor will hide itself when it hasn't received a location update recently.
  */
-class CursorView(context: Context, attrs: AttributeSet) : ImageView(context, attrs) {
+class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(context, attrs) {
 
     private val hideHandler = CursorHideHandler(this)
 
