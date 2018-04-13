@@ -31,6 +31,7 @@ private val uiHandler = Handler(Looper.getMainLooper())
  * Initialization for this class should primarily occur in WebViewProvider,
  * which is visible by the main code base and constructs this class.
  */
+@Suppress("ViewConstructor") // We only construct this in code.
 internal class FirefoxAmazonWebView(
         context: Context, attrs: AttributeSet,
         private val client: FocusWebViewClient,
