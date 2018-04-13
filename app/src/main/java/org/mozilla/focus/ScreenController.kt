@@ -9,12 +9,10 @@ import android.content.Context
 import android.support.v4.app.FragmentManager
 import android.text.TextUtils
 import org.mozilla.focus.browser.BrowserFragment
-import org.mozilla.focus.home.HomeFragment
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.session.Source
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
-import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.UrlUtils
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 
@@ -46,25 +44,6 @@ object ScreenController {
 
             TelemetryWrapper.urlBarEvent(isUrl, autocompleteResult, inputLocation)
         }
-    }
-
-    fun showHomeScreen(fragmentManager: FragmentManager, onUrlEnteredListener: OnUrlEnteredListener) {
-        val homeFragment = fragmentManager.findFragmentByTag(HomeFragment.FRAGMENT_TAG) as HomeFragment?
-        if (homeFragment != null && homeFragment.isVisible) {
-            // This is already at the top of the stack - do nothing.
-            return
-        }
-
-        // We don't want to be able to go back from the back stack, so clear the whole fragment back stack.
-        fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-
-        // Show the home screen.
-        val newHomeFragment = HomeFragment.create()
-        newHomeFragment.onSettingsPressed = { showSettingsScreen(fragmentManager) }
-        newHomeFragment.onUrlEnteredListener = onUrlEnteredListener
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, newHomeFragment, HomeFragment.FRAGMENT_TAG)
-                .commit()
     }
 
     fun showSettingsScreen(fragmentManager: FragmentManager) {
