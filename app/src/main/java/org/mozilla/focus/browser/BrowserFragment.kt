@@ -133,8 +133,10 @@ class BrowserFragment : IWebViewLifecycleFragment() {
                         NavigationEvent.VAL_UNCHECKED -> {
                             url.toUri()?.let {
                                 val tileId = BundledTilesManager.getInstance(context).unpinSite(context, it) ?: CustomTilesManager.getInstance(context).unpinSite(context, url)
-                                if (!tileId.isNullOrEmpty()) {
-                                    browserOverlay.removePinnedSiteFromTiles(tileId!!)
+                                // tileId should never be null, unless, for some reason we don't
+                                // have a reference to the tile/the tile isn't a Bundled or Custom tile
+                                if (tileId != null && !tileId.isEmpty()) {
+                                    browserOverlay.removePinnedSiteFromTiles(tileId)
                                     showCenteredTopToast(context, R.string.notification_unpinned_site, 0, TOAST_Y_OFFSET)
                                 }
                             }
