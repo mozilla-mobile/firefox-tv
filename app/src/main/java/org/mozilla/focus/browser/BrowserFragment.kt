@@ -127,7 +127,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
                         NavigationEvent.VAL_CHECKED -> {
                             CustomTilesManager.getInstance(context).pinSite(context, url,
                                     webView?.takeScreenshot())
-                            browserOverlay.addPinnedSiteToTiles()
+                            browserOverlay.refreshTilesForInsertion()
                             showCenteredTopToast(context, R.string.notification_pinned_site, 0, TOAST_Y_OFFSET)
                         }
                         NavigationEvent.VAL_UNCHECKED -> {

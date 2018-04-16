@@ -114,7 +114,7 @@ class BundledTilesManager private constructor(context: Context) {
     }
 
     @UiThread
-    fun getBundledHomeTilesList() = bundledTilesCache.values.toMutableList()
+    internal fun getBundledHomeTilesList() = bundledTilesCache.values.toMutableList()
 }
 /**
  * Static accessor of custom home tiles, that is backed by SharedPreferences.
@@ -160,7 +160,7 @@ class CustomTilesManager private constructor(context: Context) {
     fun isURLPinned(url: String) = customTilesCache.containsKey(url)
 
     @UiThread
-    fun getCustomHomeTilesList() = customTilesCache.values.toList() // return a copy.
+    internal fun getCustomHomeTilesList() = customTilesCache.values.toList() // return a copy.
 
     @UiThread
     fun pinSite(context: Context, url: String, screenshot: Bitmap?) {
