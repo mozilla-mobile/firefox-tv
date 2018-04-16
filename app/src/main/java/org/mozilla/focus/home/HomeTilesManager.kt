@@ -83,7 +83,7 @@ class BundledTilesManager private constructor(context: Context) {
     }
 
     @UiThread
-    fun unpinSite(context: Context, uri: Uri): Boolean {
+    fun unpinSite(context: Context, uri: Uri): String? {
         val blacklist = loadBlacklist(context)
         val newBlacklist = blacklist.toMutableSet()
         for (pair in bundledTilesCache) {
@@ -93,10 +93,10 @@ class BundledTilesManager private constructor(context: Context) {
                         .putStringSet(BUNDLED_SITES_ID_BLACKLIST, newBlacklist)
                         .apply()
                 bundledTilesCache.remove(pair.key)
-                return true
+                return pair.value.id
             }
         }
-        return false
+        return null
     }
 
     @AnyThread
@@ -171,11 +171,11 @@ class CustomTilesManager private constructor(context: Context) {
     }
 
     @UiThread
-    fun unpinSite(context: Context, url: String): Boolean {
-        val tile = customTilesCache.remove(url) ?: return false
+    fun unpinSite(context: Context, url: String): String? {
+        val tile = customTilesCache.remove(url) ?: return null
         writeCacheToSharedPreferences(context)
         HomeTileScreenshotStore.removeAsync(context, tile.id)
-        return true
+        return tile.id.toString()
     }
 
     private fun writeCacheToSharedPreferences(context: Context) {

@@ -127,12 +127,14 @@ class BrowserFragment : IWebViewLifecycleFragment() {
                         NavigationEvent.VAL_CHECKED -> {
                             CustomTilesManager.getInstance(context).pinSite(context, url,
                                     webView?.takeScreenshot())
+                            browserOverlay.addPinnedSiteToTiles()
                             showCenteredTopToast(context, R.string.notification_pinned_site, 0, TOAST_Y_OFFSET)
                         }
                         NavigationEvent.VAL_UNCHECKED -> {
                             url.toUri()?.let {
-                                if (BundledTilesManager.getInstance(context).unpinSite(context, it)
-                                        || CustomTilesManager.getInstance(context).unpinSite(context, url)) {
+                                val tileId = BundledTilesManager.getInstance(context).unpinSite(context, it) ?: CustomTilesManager.getInstance(context).unpinSite(context, url)
+                                if (!tileId.isNullOrEmpty()) {
+                                    browserOverlay.removePinnedSiteFromTiles(tileId!!)
                                     showCenteredTopToast(context, R.string.notification_unpinned_site, 0, TOAST_Y_OFFSET)
                                 }
                             }
