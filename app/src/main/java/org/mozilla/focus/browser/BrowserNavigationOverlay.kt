@@ -22,6 +22,7 @@ import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.home.BundledTilesManager
 import org.mozilla.focus.home.CustomTilesManager
 import org.mozilla.focus.home.HomeTile
+import org.mozilla.focus.home.HomeTilesManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.Settings
 import org.mozilla.focus.widget.InlineAutocompleteEditText
@@ -116,14 +117,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         })
     }
 
-    private fun initHomeTilesCache(): MutableList<HomeTile> {
-        return mutableListOf<HomeTile>().apply {
-            addAll(BundledTilesManager.getInstance(context).getBundledHomeTilesList())
-            addAll(CustomTilesManager.getInstance(context).getCustomHomeTilesList())
-        }
-    }
     private fun initTiles() = with (tileContainer) {
-        val homeTiles = initHomeTilesCache()
+        val homeTiles = HomeTilesManager.getTilesCache(context)
 
         adapter = HomeTileAdapter(uiLifecycleCancelJob, homeTiles, loadUrl = { urlStr ->
             with (navUrlInput) {
@@ -243,7 +238,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
     fun addPinnedSiteToTiles() {
         val adapter = tileContainer.adapter as HomeTileAdapter
-        adapter.updateAdapterSingleInsertion(initHomeTilesCache())
+        adapter.updateAdapterSingleInsertion(HomeTilesManager.getTilesCache(context))
     }
 
     fun removePinnedSiteFromTiles(tileIdOrUrl: String) {
