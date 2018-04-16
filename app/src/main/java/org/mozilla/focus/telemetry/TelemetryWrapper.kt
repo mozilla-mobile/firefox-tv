@@ -268,7 +268,8 @@ object TelemetryWrapper {
             }
 
             // Load is handled in a separate event
-            NavigationEvent.LOAD -> return
+            NavigationEvent.LOAD_URL -> return
+            NavigationEvent.LOAD_TILE -> return
         }
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.MENU, telemetryValue).queue()
     }

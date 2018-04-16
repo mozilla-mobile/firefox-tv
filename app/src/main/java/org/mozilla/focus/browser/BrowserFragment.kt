@@ -113,8 +113,12 @@ class BrowserFragment : IWebViewLifecycleFragment() {
             NavigationEvent.TURBO, NavigationEvent.RELOAD -> webView?.reload()
             NavigationEvent.HOME -> ScreenController.showHomeScreen(fragmentManager, activity as OnUrlEnteredListener)
             NavigationEvent.SETTINGS -> ScreenController.showSettingsScreen(fragmentManager)
-            NavigationEvent.LOAD -> {
+            NavigationEvent.LOAD_URL -> {
                 (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
+                setOverlayVisibileByUser(false)
+            }
+            NavigationEvent.LOAD_TILE -> {
+                (activity as MainActivity).onNonTextInputUrlEntered(value!!)
                 setOverlayVisibileByUser(false)
             }
             NavigationEvent.PIN_ACTION -> {
