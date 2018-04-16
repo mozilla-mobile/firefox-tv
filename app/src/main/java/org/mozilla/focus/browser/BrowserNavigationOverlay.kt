@@ -19,9 +19,6 @@ import kotlinx.android.synthetic.main.home_tile.view.*
 import kotlinx.coroutines.experimental.Job
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
-import org.mozilla.focus.home.BundledTilesManager
-import org.mozilla.focus.home.CustomTilesManager
-import org.mozilla.focus.home.HomeTile
 import org.mozilla.focus.home.HomeTilesManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.Settings
