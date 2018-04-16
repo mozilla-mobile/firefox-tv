@@ -97,8 +97,20 @@ class HomeTileAdapter(
         return null
     }
 
+    /**
+     * takes in the home tiles cache and updates the adapter's data source
+     * and UI accordingly, assuming only one new tile is added
+     */
     fun updateAdapterSingleInsertion(homeTiles: MutableList<HomeTile>) {
+        if (homeTiles.size == tiles.size) {
+            // The lists must not be the same size in order
+            // for an insertion to be valid
+            return
+        }
         for ((index, tile) in tiles.withIndex()) {
+            // Due to insertion, the inserted tile will be
+            // the first tile that will not match the
+            // previous list of tiles
             if (tile != homeTiles[index]) {
                 tiles = homeTiles
                 notifyItemInserted(index)

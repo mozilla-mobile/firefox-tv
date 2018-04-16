@@ -233,13 +233,13 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         }
     }
 
-    fun addPinnedSiteToTiles() {
+    fun refreshTilesForInsertion() {
         val adapter = tileContainer.adapter as HomeTileAdapter
         adapter.updateAdapterSingleInsertion(HomeTilesManager.getTilesCache(context))
     }
 
-    fun removePinnedSiteFromTiles(tileIdOrUrl: String) {
+    fun removePinnedSiteFromTiles(tileId: String) {
         val adapter = tileContainer.adapter as HomeTileAdapter
-        adapter.removeTileFromAdapter(tileIdOrUrl)
+        adapter.removeTileFromAdapter(tileId)
     }
 }
