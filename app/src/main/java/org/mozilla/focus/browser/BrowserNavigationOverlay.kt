@@ -23,7 +23,6 @@ import org.mozilla.focus.home.BundledTilesManager
 import org.mozilla.focus.home.CustomTilesManager
 import org.mozilla.focus.home.HomeTile
 import org.mozilla.focus.telemetry.TelemetryWrapper
-import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.Settings
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 
@@ -33,7 +32,7 @@ private const val NAVIGATION_BUTTON_DISABLED_ALPHA = 0.3f
 private const val COL_COUNT = 5
 
 enum class NavigationEvent {
-    HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD, TURBO, PIN_ACTION;
+    HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION;
 
     companion object {
         fun fromViewClick(viewId: Int?) = when (viewId) {
@@ -117,14 +116,21 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         })
     }
 
-    private fun initTiles() = with (tileContainer) {
-        val homeTiles = mutableListOf<HomeTile>().apply {
+    private fun initHomeTilesCache(): MutableList<HomeTile> {
+        return mutableListOf<HomeTile>().apply {
             addAll(BundledTilesManager.getInstance(context).getBundledHomeTilesList())
             addAll(CustomTilesManager.getInstance(context).getCustomHomeTilesList())
         }
+    }
+    private fun initTiles() = with (tileContainer) {
+        val homeTiles = initHomeTilesCache()
 
         adapter = HomeTileAdapter(uiLifecycleCancelJob, homeTiles, loadUrl = { urlStr ->
-            onNonTextInputUrlEntered(urlStr)
+            with (navUrlInput) {
+                if (urlStr.isNotEmpty()) {
+                    onNavigationEvent?.invoke(NavigationEvent.LOAD_TILE, urlStr, null)
+                }
+            }
         })
         layoutManager = GridLayoutManager(context, COL_COUNT)
         setHasFixedSize(true)
@@ -136,7 +142,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             if (userInput.isNotEmpty()) {
                 val cachedAutocompleteResult = lastAutocompleteResult // setText clears the reference so we cache it here.
                 setText(cachedAutocompleteResult.text)
-                onNavigationEvent?.invoke(NavigationEvent.LOAD, userInput, cachedAutocompleteResult)
+                onNavigationEvent?.invoke(NavigationEvent.LOAD_URL, userInput, cachedAutocompleteResult)
             }
         }
         val autocompleteFilter = UrlAutoCompleteFilter()
