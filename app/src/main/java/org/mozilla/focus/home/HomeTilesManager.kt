@@ -198,3 +198,15 @@ class CustomTilesManager private constructor(context: Context) {
 private fun getHomeTilesPreferences(context: Context): SharedPreferences {
     return context.getSharedPreferences(PREF_HOME_TILES, MODE_PRIVATE)
 }
+
+class HomeTilesManager {
+    companion object {
+        fun getTilesCache(context: Context): MutableList<HomeTile> {
+            return mutableListOf<HomeTile>().apply {
+                addAll(BundledTilesManager.getInstance(context).getBundledHomeTilesList())
+                addAll(CustomTilesManager.getInstance(context).getCustomHomeTilesList())
+            }
+        }
+    }
+}
+
