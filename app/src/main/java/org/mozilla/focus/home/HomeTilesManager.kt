@@ -82,6 +82,10 @@ class BundledTilesManager private constructor(context: Context) {
                 uri1.query == uri2.query
     }
 
+    /**
+     * returns tile id of a Bundled tile or null if
+     * it doesn't exist in the cache
+     */
     @UiThread
     fun unpinSite(context: Context, uri: Uri): String? {
         val blacklist = loadBlacklist(context)
@@ -170,6 +174,10 @@ class CustomTilesManager private constructor(context: Context) {
         }
     }
 
+    /**
+     * returns tile id after unpinning a Custom tile or null if
+     * it doesn't exist in the cache
+     */
     @UiThread
     fun unpinSite(context: Context, url: String): String? {
         val tile = customTilesCache.remove(url) ?: return null
