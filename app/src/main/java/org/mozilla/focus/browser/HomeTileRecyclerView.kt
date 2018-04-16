@@ -43,7 +43,7 @@ private val CUSTOM_TILE_ICON_INTERPOLATOR = DecelerateInterpolator()
 
 class HomeTileAdapter(
         private val uiLifecycleCancelJob: Job,
-        private val tiles: MutableList<HomeTile>,
+        private var tiles: MutableList<HomeTile>,
         private val loadUrl: (String) -> Unit
 ) : RecyclerView.Adapter<TileViewHolder>() {
 
@@ -97,9 +97,20 @@ class HomeTileAdapter(
         return null
     }
 
-    fun addItemToAdapter(homeTile: HomeTile) {
-        tiles.add(homeTile)
-        notifyItemInserted(tiles.lastIndex)
+    fun updateAdapterSingleInsertion(homeTiles: MutableList<HomeTile>) {
+        var i = 0
+        while (i < tiles.size) {
+            if (tiles[i] != homeTiles[i]) {
+                tiles = homeTiles
+                notifyItemInserted(i)
+            }
+            i++
+        }
+
+        if (tiles.size < homeTiles.size) {
+            tiles = homeTiles
+            notifyItemInserted(homeTiles.lastIndex)
+        }
     }
 
     fun removeTileFromAdapter(tileId: String) {
