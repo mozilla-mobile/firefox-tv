@@ -98,19 +98,15 @@ class HomeTileAdapter(
     }
 
     fun updateAdapterSingleInsertion(homeTiles: MutableList<HomeTile>) {
-        var i = 0
-        while (i < tiles.size) {
-            if (tiles[i] != homeTiles[i]) {
+        for ((index, tile) in tiles.withIndex()) {
+            if (tile != homeTiles[index]) {
                 tiles = homeTiles
-                notifyItemInserted(i)
+                notifyItemInserted(index)
+                return
             }
-            i++
         }
-
-        if (tiles.size < homeTiles.size) {
-            tiles = homeTiles
-            notifyItemInserted(homeTiles.lastIndex)
-        }
+        tiles = homeTiles
+        notifyItemInserted(homeTiles.lastIndex)
     }
 
     fun removeTileFromAdapter(tileId: String) {
