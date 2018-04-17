@@ -163,8 +163,6 @@ be temporary, and you can try again later.</li>
 
     <!-- Firefox for Fire TV
     video strings -->
-    <string name="menu_drawer_home">Home</string>
-
     <!-- Settings strings -->
     <string name="settings_cookies_dialog_title">Clear all cookies and site data</string>
     <string name="settings_cookies_dialog_content">Selecting ‘Clear Now’ will clear all cookies and site data stored by Firefox for Fire TV. This may sign you out of websites and remove offline web content.</string>
