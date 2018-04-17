@@ -90,13 +90,6 @@ class HomeTileAdapter(
         iconView.layoutParams = layoutMarginParams
     }
 
-    fun getItemAtPosition(position: Int): HomeTile? {
-        if (position > -1 && position < itemCount) {
-            return tiles[position]
-        }
-        return null
-    }
-
     /**
      * takes in the home tiles cache and updates the adapter's data source
      * and UI accordingly, assuming only one new tile is added
