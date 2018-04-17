@@ -32,7 +32,6 @@ import org.mozilla.focus.session.SessionCallbackProxy
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
-import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.ViewUtils.showCenteredTopToast
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 
@@ -112,7 +111,6 @@ class BrowserFragment : IWebViewLifecycleFragment() {
             NavigationEvent.BACK -> if (webView?.canGoBack() ?: false) webView?.goBack()
             NavigationEvent.FORWARD -> if (webView?.canGoForward() ?: false) webView?.goForward()
             NavigationEvent.TURBO, NavigationEvent.RELOAD -> webView?.reload()
-            NavigationEvent.HOME -> ScreenController.showHomeScreen(fragmentManager, activity as OnUrlEnteredListener)
             NavigationEvent.SETTINGS -> ScreenController.showSettingsScreen(fragmentManager)
             NavigationEvent.LOAD_URL -> {
                 (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)

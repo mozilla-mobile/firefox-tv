@@ -249,7 +249,6 @@ object TelemetryWrapper {
 
     fun overlayClickEvent(event: NavigationEvent, isTurboButtonChecked: Boolean, isPinButtonChecked: Boolean) {
         val telemetryValue = when (event) {
-            NavigationEvent.HOME -> Value.HOME
             NavigationEvent.SETTINGS -> Value.SETTINGS
 
             NavigationEvent.BACK -> Value.BACK

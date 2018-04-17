@@ -46,24 +46,18 @@
             style="@style/NavigationButton"
             android:src="@drawable/turbo_selector"
             android:contentDescription="@string/turbo_mode"
-            android:nextFocusRight="@+id/navButtonHome"/>
+            android:nextFocusRight="@+id/navButtonSettings"/>
 
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <ImageButton
-            android:id="@+id/navButtonHome"
-            style="@style/NavigationButton"
-            android:src="@drawable/ic_home"
-            android:contentDescription="@string/menu_drawer_home"
-            android:nextFocusLeft="@id/turboButton"/>
-
         <!-- Image src set in code to fix SVG. -->
         <ImageButton
             android:id="@+id/navButtonSettings"
             style="@style/NavigationButton"
+            android:nextFocusLeft="@id/turboButton"
             android:contentDescription="@string/menu_settings"/>
 
         <ImageView

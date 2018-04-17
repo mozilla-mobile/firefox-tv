@@ -30,14 +30,13 @@ private const val NAVIGATION_BUTTON_DISABLED_ALPHA = 0.3f
 private const val COL_COUNT = 5
 
 enum class NavigationEvent {
-    HOME, SETTINGS, BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION;
+    SETTINGS, BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION;
 
     companion object {
         fun fromViewClick(viewId: Int?) = when (viewId) {
             R.id.navButtonBack -> BACK
             R.id.navButtonForward -> FORWARD
             R.id.navButtonReload -> RELOAD
-            R.id.navButtonHome -> HOME
             R.id.navButtonSettings -> SETTINGS
             R.id.turboButton -> TURBO
             R.id.pinButton -> PIN_ACTION
@@ -83,7 +82,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     init {
         LayoutInflater.from(context)
                 .inflate(R.layout.browser_overlay, this, true)
-        listOf(navButtonBack, navButtonForward, navButtonReload, navButtonHome, navButtonSettings,
+        listOf(navButtonBack, navButtonForward, navButtonReload, navButtonSettings,
                 turboButton, pinButton)
                 .forEach {
                     it.setOnClickListener(this)
