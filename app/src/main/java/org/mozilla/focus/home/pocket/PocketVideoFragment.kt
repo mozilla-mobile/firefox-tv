@@ -7,6 +7,7 @@ package org.mozilla.focus.home.pocket
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,11 @@ class PocketVideoFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val layout = inflater.inflate(R.layout.fragment_pocket_video, container, false)
         layout.videoFeed.gridView.adapter = PocketVideoAdapter()
+
+        // SVGs can have artifacts if we set them in XML so we set it in code.
+        layout.pocketWordmarkView.setImageDrawable(context.getDrawable(R.drawable.ic_pocket_and_wordmark).apply {
+            setTint(ContextCompat.getColor(context, R.color.photonGrey10))
+        })
         return layout
     }
 
