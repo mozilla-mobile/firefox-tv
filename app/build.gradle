@@ -206,7 +206,9 @@ android.applicationVariants.all { variant ->
     def isBetaOrRelease = buildType == "release" || buildType == "beta"
 
     if (isBetaOrRelease) {
-        variant.mergedFlavor.versionCode = generatedVersionCode
+        variant.outputs.all { output ->
+            setVersionCodeOverride(generatedVersionCode)
+        }
     }
 
     println("Build type: " + buildType + " (versionCode = " + variant.mergedFlavor.versionCode + ")")
