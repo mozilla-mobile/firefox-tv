@@ -30,22 +30,35 @@
         tools:listitem="@layout/pocket_video_item"
         />
 
-    <TextView
-        android:id="@+id/header"
+    <View
+        android:id="@+id/headerBackgroundView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="#FF1F47"
-        android:gravity="start|center_vertical"
-        android:paddingBottom="16dp"
-        android:paddingEnd="24dp"
-        android:paddingStart="24dp"
-        android:paddingTop="16dp"
-        android:text="Pocket Videos"
-        android:textColor="@color/tv_white"
-        android:textSize="16sp"
+        android:layout_height="70dp"
+        android:background="@color/pocket_coral"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- TODO: Handle a11y of this view: #827 -->
+    <!-- We add the Pocket logo in code (see code for explanation).
+
+        width=wrap_content creates padding in the WebView so we make this span the
+        screen width and use scaleType=fitStart to position it where we want. -->
+    <ImageView
+        android:id="@+id/pocketWordmarkView"
+        android:layout_width="0dp"
+        android:layout_height="30.5dp"
+        android:scaleType="fitStart"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/headerBackgroundView"
+        app:layout_constraintEnd_toEndOf="@+id/headerBackgroundView"
+        app:layout_constraintStart_toStartOf="@+id/headerBackgroundView"
+        app:layout_constraintTop_toTopOf="@+id/headerBackgroundView"
+        tools:ignore="ContentDescription"
+        tools:src="@drawable/ic_pocket_and_wordmark"
+        tools:tint="@color/tv_white" />
 
     <TextView
         android:id="@+id/recommendedTitle"
@@ -58,5 +71,5 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header" />
+        app:layout_constraintTop_toBottomOf="@+id/headerBackgroundView" />
 </android.support.constraint.ConstraintLayout>
