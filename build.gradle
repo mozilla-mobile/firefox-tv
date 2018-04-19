@@ -5,7 +5,7 @@ buildscript {
     ext.architecture_components_version = '1.0.0'
     ext.espresso_version = '3.0.1'
     ext.kotlin_version = '1.2.0'
-    ext.moz_components_version = '0.2.2'
+    ext.moz_components_version = '0.4'
 
     repositories {
         jcenter()
