@@ -7,7 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#313135">
+    android:background="@color/photonGrey70">
 
     <!-- We need to make this view larger than its children to allow the children to scale when
          focused (clipChildren alone doesn't work) so we add vertical padding and center gravity. -->

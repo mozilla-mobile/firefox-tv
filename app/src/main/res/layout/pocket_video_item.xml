@@ -17,46 +17,53 @@
     >
 
     <LinearLayout
-        android:layout_width="220dp"
-        android:layout_height="wrap_content"
+        android:layout_width="240dp"
+        android:layout_height="290dp"
         android:orientation="vertical"
         >
 
         <ImageView
             android:id="@+id/videoThumbnailView"
             android:layout_width="match_parent"
-            android:layout_height="124dp"
+            android:layout_height="135dp"
             tools:background="#e00"
             tools:ignore="ContentDescription" />
 
+        <!-- Text and background colors are set dynamically based on parent focus state.
+             StateListDrawables don't work here because the parent gets focus, not these views. -->
         <TextView
             android:id="@+id/subdomainView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:background="#F8F8F9"
+            android:paddingTop="12dp"
+            android:paddingBottom="2dp"
             android:textSize="12sp"
-            android:textColor="#777777"
             android:textAllCaps="true"
+            android:fontFamily="@string/font_roboto_regular"
             android:maxLines="1"
+            tools:background="@color/photonGrey10"
             tools:text="youtube"
+            tools:textColor="@color/photonGrey50"
             />
 
+        <!-- Text and background colors are set dynamically: see comment above. -->
         <TextView
             android:id="@+id/titleView"
             android:layout_width="match_parent"
-            android:layout_height="124dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
-            android:background="#F8F8F9"
-            android:textColor="@color/tv_ink"
+            android:maxLines="3"
+            android:ellipsize="end"
             android:textSize="16sp"
-            android:textStyle="bold"
-            android:lineSpacingExtra="2dp"
-            tools:text="Mirror-Polished Japanese Foil Ball Challenge Crushed"
+            android:fontFamily="@string/font_roboto_regular"
+            android:lineSpacingExtra="8dp"
+            tools:background="@color/photonGrey10"
+            tools:text="Mirror-Polished Japanese Foil Ball Challenge Crushed this is a really long line so we can test that there are a maximum"
+            tools:textColor="@color/photonGrey90"
             />
 
     </LinearLayout>
