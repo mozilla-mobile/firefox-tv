@@ -17,6 +17,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_pocket_video.view.*
 import org.mozilla.focus.R
+import org.mozilla.focus.ext.updateLayoutParams
 
 /** A feed of Pocket videos. */
 class PocketVideoFragment : Fragment() {
@@ -53,6 +54,9 @@ private class PocketVideoAdapter(context: Context) : RecyclerView.Adapter<Pocket
     private val photonGrey10_a99 = ContextCompat.getColor(context, R.color.photonGrey10_a99)
     private val photonGrey10_aCC = ContextCompat.getColor(context, R.color.photonGrey10_aCC)
 
+    private val videoItemHorizontalMargin = context.resources.getDimensionPixelSize(R.dimen.pocket_video_item_horizontal_margin)
+    private val feedHorizontalMargin = context.resources.getDimensionPixelSize(R.dimen.pocket_feed_horizontal_margin)
+
     private val feedItems = List(8) { PocketVideo("Mirror-Polished Japanese $it Ball Challenge Crushed", "youtube.com/tv", "youtube.com/tv") }
 
     override fun getItemCount() = feedItems.size
@@ -62,6 +66,8 @@ private class PocketVideoAdapter(context: Context) : RecyclerView.Adapter<Pocket
 
     override fun onBindViewHolder(holder: PocketVideoViewHolder, position: Int) = with (holder) {
         val item = feedItems[position]
+        setHorizontalMargins(holder, position)
+
         holder.itemView.setOnFocusChangeListener { _, hasFocus -> updateForFocusState(holder, hasFocus) }
         updateForFocusState(holder, holder.itemView.isFocused)
 
@@ -90,6 +96,21 @@ private class PocketVideoAdapter(context: Context) : RecyclerView.Adapter<Pocket
 
             titleView.setTextColor(titleTextColor)
             subdomainView.setTextColor(subdomainTextColor)
+        }
+    }
+
+    /**
+     * Set the horizontal margins on the given view.
+     *
+     * We want to add padding to the beginning and end of the RecyclerView: ideally we'd just add
+     * paddingStart/End. Unfortunately, this causes a visual glitch as each card scrolls offscreen.
+     * Instead, we set the margins for the first and last card.
+     */
+    private fun setHorizontalMargins(holder: PocketVideoViewHolder, position: Int) = holder.itemView.updateLayoutParams {
+        (it as ViewGroup.MarginLayoutParams).apply {
+            // We need to reset margins on every view, not just first/last, because the View instance can be re-used.
+            marginStart = if (position == 0) feedHorizontalMargin else videoItemHorizontalMargin
+            marginEnd = if (position == feedItems.size - 1) feedHorizontalMargin else videoItemHorizontalMargin
         }
     }
 }

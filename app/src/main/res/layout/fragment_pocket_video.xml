@@ -10,16 +10,17 @@
     android:background="@color/photonGrey70">
 
     <!-- We need to make this view larger than its children to allow the children to scale when
-         focused (clipChildren alone doesn't work) so we add vertical padding and center gravity. -->
+         focused (clipChildren alone doesn't work) so we add vertical padding and center gravity.
+         We need 8dp+ of vertical padding to not clip the children at the current scale ratio.
+
+         We add horizontal padding to the start and end item in code: see onBind for details. -->
     <android.support.v17.leanback.widget.ListRowView
         android:id="@+id/videoFeed"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
+        android:layout_marginTop="14.5dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:gravity="center_vertical"
         android:clipChildren="false"
         android:clipToPadding="false"
