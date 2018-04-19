@@ -4,6 +4,7 @@
 
 package org.mozilla.focus.home.pocket
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -22,7 +23,7 @@ class PocketVideoFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val layout = inflater.inflate(R.layout.fragment_pocket_video, container, false)
-        layout.videoFeed.gridView.adapter = PocketVideoAdapter()
+        layout.videoFeed.gridView.adapter = PocketVideoAdapter(context)
 
         // SVGs can have artifacts if we set them in XML so we set it in code.
         layout.pocketWordmarkView.setImageDrawable(context.getDrawable(R.drawable.ic_pocket_and_wordmark).apply {
@@ -42,7 +43,15 @@ private class PocketVideo(
         val imageUrl: String
 )
 
-private class PocketVideoAdapter : RecyclerView.Adapter<PocketVideoViewHolder>() {
+private class PocketVideoAdapter(context: Context) : RecyclerView.Adapter<PocketVideoViewHolder>() {
+
+    // We cache these colors because we swap between them often.
+    private val photonGrey90 = ContextCompat.getColor(context, R.color.photonGrey90)
+    private val photonGrey70 = ContextCompat.getColor(context, R.color.photonGrey70)
+    private val photonGrey50 = ContextCompat.getColor(context, R.color.photonGrey50)
+    private val photonGrey10 = ContextCompat.getColor(context, R.color.photonGrey10)
+    private val photonGrey10_a99 = ContextCompat.getColor(context, R.color.photonGrey10_a99)
+    private val photonGrey10_aCC = ContextCompat.getColor(context, R.color.photonGrey10_aCC)
 
     private val feedItems = List(8) { PocketVideo("Mirror-Polished Japanese $it Ball Challenge Crushed", "youtube.com/tv", "youtube.com/tv") }
 
@@ -53,9 +62,35 @@ private class PocketVideoAdapter : RecyclerView.Adapter<PocketVideoViewHolder>()
 
     override fun onBindViewHolder(holder: PocketVideoViewHolder, position: Int) = with (holder) {
         val item = feedItems[position]
+        holder.itemView.setOnFocusChangeListener { _, hasFocus -> updateForFocusState(holder, hasFocus) }
+        updateForFocusState(holder, holder.itemView.isFocused)
+
         titleView.text = item.title
         subdomainView.text = "youtube" // TODO: get from Video.
         videoThumbnailView.setBackgroundColor(Color.parseColor("#ee0000")) // TODO: load async.
+    }
+
+    private fun updateForFocusState(holder: PocketVideoViewHolder, isFocused: Boolean) {
+        val titleTextColor: Int
+        val subdomainTextColor: Int
+        val cardBackground: Int
+        if (isFocused) {
+            titleTextColor = photonGrey90
+            subdomainTextColor = photonGrey50
+            cardBackground = photonGrey10
+        } else {
+            titleTextColor = photonGrey10_aCC
+            subdomainTextColor = photonGrey10_a99
+            cardBackground = photonGrey70
+        }
+
+        with (holder) {
+            titleView.setBackgroundColor(cardBackground)
+            subdomainView.setBackgroundColor(cardBackground)
+
+            titleView.setTextColor(titleTextColor)
+            subdomainView.setTextColor(subdomainTextColor)
+        }
     }
 }
 
