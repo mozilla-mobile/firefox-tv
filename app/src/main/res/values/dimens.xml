@@ -30,4 +30,6 @@
     <!-- We want to keep button_size and urlbar height the same to keep them aligned -->
     <dimen name="urlbar_height">@dimen/button_size</dimen>
 
+    <dimen name="pocket_feed_horizontal_margin">96dp</dimen>
+    <dimen name="pocket_video_item_horizontal_margin">12dp</dimen>
 </resources>
