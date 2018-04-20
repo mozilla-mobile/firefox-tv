@@ -13,6 +13,7 @@ import org.mozilla.focus.search.SearchEngineManager;
 import org.mozilla.focus.session.VisibilityLifeCycleCallback;
 import org.mozilla.focus.telemetry.TelemetryWrapper;
 import org.mozilla.focus.utils.AppConstants;
+import org.mozilla.focus.utils.OkHttpWrapper;
 
 public class FocusApplication extends LocaleAwareApplication {
     private VisibilityLifeCycleCallback visibilityLifeCycleCallback;
@@ -51,5 +52,11 @@ public class FocusApplication extends LocaleAwareApplication {
 
         StrictMode.setThreadPolicy(threadPolicyBuilder.build());
         StrictMode.setVmPolicy(vmPolicyBuilder.build());
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        OkHttpWrapper.onLowMemory();
     }
 }
