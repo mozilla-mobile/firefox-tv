@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.widget.TextViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -46,12 +47,9 @@ private class PocketVideo(
 
 private class PocketVideoAdapter(context: Context) : RecyclerView.Adapter<PocketVideoViewHolder>() {
 
-    // We cache these colors because we swap between them often.
-    private val photonGrey90 = ContextCompat.getColor(context, R.color.photonGrey90)
     private val photonGrey70 = ContextCompat.getColor(context, R.color.photonGrey70)
-    private val photonGrey50 = ContextCompat.getColor(context, R.color.photonGrey50)
+    private val photonGrey60 = ContextCompat.getColor(context, R.color.photonGrey60)
     private val photonGrey10 = ContextCompat.getColor(context, R.color.photonGrey10)
-    private val photonGrey10_a99 = ContextCompat.getColor(context, R.color.photonGrey10_a99)
     private val photonGrey10_aCC = ContextCompat.getColor(context, R.color.photonGrey10_aCC)
 
     private val videoItemHorizontalMargin = context.resources.getDimensionPixelSize(R.dimen.pocket_video_item_horizontal_margin)
@@ -78,15 +76,15 @@ private class PocketVideoAdapter(context: Context) : RecyclerView.Adapter<Pocket
 
     private fun updateForFocusState(holder: PocketVideoViewHolder, isFocused: Boolean) {
         val titleTextColor: Int
-        val subdomainTextColor: Int
+        val titleTextAppearanceRes: Int
         val cardBackground: Int
         if (isFocused) {
-            titleTextColor = photonGrey90
-            subdomainTextColor = photonGrey50
-            cardBackground = photonGrey10
+            titleTextColor = photonGrey10
+            titleTextAppearanceRes = R.style.RobotoMediumTextAppearance
+            cardBackground = photonGrey60
         } else {
             titleTextColor = photonGrey10_aCC
-            subdomainTextColor = photonGrey10_a99
+            titleTextAppearanceRes = R.style.RobotoRegularTextAppearance
             cardBackground = photonGrey70
         }
 
@@ -95,7 +93,7 @@ private class PocketVideoAdapter(context: Context) : RecyclerView.Adapter<Pocket
             subdomainView.setBackgroundColor(cardBackground)
 
             titleView.setTextColor(titleTextColor)
-            subdomainView.setTextColor(subdomainTextColor)
+            TextViewCompat.setTextAppearance(titleView, titleTextAppearanceRes)
         }
     }
 

@@ -29,7 +29,7 @@
             tools:background="#e00"
             tools:ignore="ContentDescription" />
 
-        <!-- Text and background colors are set dynamically based on parent focus state.
+        <!-- Background colors are set dynamically based on parent focus state.
              StateListDrawables don't work here because the parent gets focus, not these views. -->
         <TextView
             android:id="@+id/subdomainView"
@@ -39,16 +39,16 @@
             android:paddingEnd="12dp"
             android:paddingTop="12dp"
             android:paddingBottom="2dp"
+            android:textColor="@color/photonGrey10_a99"
             android:textSize="12sp"
             android:textAllCaps="true"
             android:fontFamily="@string/font_roboto_regular"
             android:maxLines="1"
-            tools:background="@color/photonGrey10"
+            tools:background="@color/photonGrey60"
             tools:text="youtube"
-            tools:textColor="@color/photonGrey50"
             />
 
-        <!-- Text and background colors are set dynamically: see comment above. -->
+        <!-- Text, fontFamily, and background colors are set dynamically: see comment above. -->
         <TextView
             android:id="@+id/titleView"
             android:layout_width="match_parent"
@@ -59,11 +59,11 @@
             android:maxLines="3"
             android:ellipsize="end"
             android:textSize="16sp"
-            android:fontFamily="@string/font_roboto_regular"
             android:lineSpacingExtra="8dp"
-            tools:background="@color/photonGrey10"
+            tools:background="@color/photonGrey60"
             tools:text="Mirror-Polished Japanese Foil Ball Challenge Crushed this is a really long line so we can test that there are a maximum"
-            tools:textColor="@color/photonGrey90"
+            tools:textColor="@color/photonGrey10"
+            tools:textAppearance="@style/RobotoMediumTextAppearance"
             />
 
     </LinearLayout>
