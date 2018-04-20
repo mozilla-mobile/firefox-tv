@@ -23,7 +23,10 @@ import org.mozilla.focus.utils.IntentUtils;
 import org.mozilla.focus.utils.UrlUtils;
 import org.mozilla.focus.iwebview.IWebView;
 
-import static org.mozilla.focus.browser.BrowserFragment.URL_HOME;
+import java.io.ByteArrayInputStream;
+
+import static org.mozilla.focus.browser.BrowserFragment.APP_URL_HOME;
+import static org.mozilla.focus.browser.BrowserFragment.APP_URL_PREFIX;
 
 /**
  * WebViewClient layer that handles browser specific WebViewClient functionality, such as error pages
@@ -111,7 +114,22 @@ public class FocusWebViewClient extends TrackingProtectionWebViewClient {
     // WebResourceRequest was added in API21 and there is no equivalent AmazonWebResourceRequest
     @Override
     public AmazonWebResourceResponse shouldInterceptRequest(AmazonWebView view, String request) {
+        if ((request != null && request.startsWith(APP_URL_PREFIX))) {
+            switch (request) {
+                case APP_URL_HOME:
+                    // Home screen should show a blank webview behind the overlay, but keep the url.
+                    callback.shouldInterceptRequest(request);
+                    final ByteArrayInputStream homeDataStream = makeEmptyDataStream();
+                    return new AmazonWebResourceResponse("text/html", "utf-8", homeDataStream);
+            }
+        }
+
         return super.shouldInterceptRequest(view, request);
+    }
+
+    private ByteArrayInputStream makeEmptyDataStream() {
+        // ByteArrayInputStream doesn't need to be closed.
+        return new ByteArrayInputStream("<html></html>".getBytes());
     }
 
 //    @Override
@@ -231,13 +249,6 @@ public class FocusWebViewClient extends TrackingProtectionWebViewClient {
     public boolean shouldOverrideUrlLoading(AmazonWebView view, String url) {
         // If this is an internal URL like focus:about then we load the content ourselves here.
         if (LocalizedContent.handleInternalContent(url, view)) {
-            return true;
-        }
-
-        // Home screen should show a blank webview. Since WebView doesn't (and shouldn't) have a
-        // handle to browser UI, this url can't be used to load the overlay.
-        if (url.equals(URL_HOME)) {
-            view.clearView(); // Deprecated in Android WebView, but AmazonWebView doesn't conform
             return true;
         }
 

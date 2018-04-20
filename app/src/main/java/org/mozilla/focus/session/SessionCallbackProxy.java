@@ -73,6 +73,11 @@ public class SessionCallbackProxy implements IWebView.Callback {
     }
 
     @Override
+    public void shouldInterceptRequest(String url) {
+        delegate.shouldInterceptRequest(url);
+    }
+
+    @Override
     public void onEnterFullScreen(@NonNull IWebView.FullscreenCallback callback, @Nullable View view) {
         // TODO: Replace with session property
         delegate.onEnterFullScreen(callback, view);

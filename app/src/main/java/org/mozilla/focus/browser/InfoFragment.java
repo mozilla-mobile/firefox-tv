@@ -85,6 +85,9 @@ public class InfoFragment extends IWebViewLifecycleFragment {
             public void onLongPress(IWebView.HitTarget hitTarget) {}
 
             @Override
+            public void shouldInterceptRequest(String url) {}
+
+            @Override
             public void onURLChanged(String url) {}
 
             @Override

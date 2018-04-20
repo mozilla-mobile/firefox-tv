@@ -16,7 +16,7 @@ import com.amazon.android.webkit.AmazonWebKitFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.browser.BrowserFragment
-import org.mozilla.focus.browser.BrowserFragment.Companion.URL_HOME
+import org.mozilla.focus.browser.BrowserFragment.Companion.APP_URL_HOME
 import org.mozilla.focus.ext.toSafeIntent
 import org.mozilla.focus.iwebview.IWebView
 import org.mozilla.focus.iwebview.WebViewProvider
@@ -55,7 +55,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
             public override fun onValueChanged(sessions: List<Session>) {
                 if (sessions.isEmpty()) {
                     // There's no active session. Start a new session with "homepage".
-                    sessionManager.createSession(Source.USER_ENTERED, URL_HOME)
+                    sessionManager.createSession(Source.USER_ENTERED, APP_URL_HOME)
                 }
                 ScreenController.showBrowserScreenForCurrentSession(supportFragmentManager, sessionManager)
 
