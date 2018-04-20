@@ -50,7 +50,7 @@ private class PocketVideoAdapter(context: Context) : RecyclerView.Adapter<Pocket
     private val photonGrey70 = ContextCompat.getColor(context, R.color.photonGrey70)
     private val photonGrey60 = ContextCompat.getColor(context, R.color.photonGrey60)
     private val photonGrey10 = ContextCompat.getColor(context, R.color.photonGrey10)
-    private val photonGrey10_aCC = ContextCompat.getColor(context, R.color.photonGrey10_aCC)
+    private val photonGrey10_a80p = ContextCompat.getColor(context, R.color.photonGrey10_a80p)
 
     private val videoItemHorizontalMargin = context.resources.getDimensionPixelSize(R.dimen.pocket_video_item_horizontal_margin)
     private val feedHorizontalMargin = context.resources.getDimensionPixelSize(R.dimen.pocket_feed_horizontal_margin)
@@ -83,7 +83,7 @@ private class PocketVideoAdapter(context: Context) : RecyclerView.Adapter<Pocket
             titleTextAppearanceRes = R.style.RobotoMediumTextAppearance
             cardBackground = photonGrey60
         } else {
-            titleTextColor = photonGrey10_aCC
+            titleTextColor = photonGrey10_a80p
             titleTextAppearanceRes = R.style.RobotoRegularTextAppearance
             cardBackground = photonGrey70
         }
