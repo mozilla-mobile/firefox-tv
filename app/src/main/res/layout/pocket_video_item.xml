@@ -39,7 +39,7 @@
             android:paddingEnd="12dp"
             android:paddingTop="12dp"
             android:paddingBottom="2dp"
-            android:textColor="@color/photonGrey10_a99"
+            android:textColor="@color/photonGrey10_a60p"
             android:textSize="12sp"
             android:textAllCaps="true"
             android:fontFamily="@string/font_roboto_regular"
