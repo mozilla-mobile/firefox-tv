@@ -15,10 +15,13 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.android.synthetic.main.fragment_browser.view.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import org.mozilla.focus.MainActivity
 import org.mozilla.focus.R
 import org.mozilla.focus.ScreenController
 import org.mozilla.focus.architecture.NonNullObserver
+import org.mozilla.focus.browser.BrowserFragment.Companion.APP_URL_HOME
 import org.mozilla.focus.browser.cursor.CursorController
 import org.mozilla.focus.ext.isVisible
 import org.mozilla.focus.ext.toUri
@@ -45,7 +48,9 @@ private const val TOAST_Y_OFFSET = 200
 class BrowserFragment : IWebViewLifecycleFragment() {
     companion object {
         const val FRAGMENT_TAG = "browser"
-        const val URL_HOME = "firefox:home"
+        const val APP_URL_PREFIX = "firefox:"
+        const val HOME_SUFFIX = "home"
+        const val APP_URL_HOME = APP_URL_PREFIX + HOME_SUFFIX
 
         @JvmStatic
         fun createForSession(session: Session) = BrowserFragment().apply {
@@ -171,13 +176,6 @@ class BrowserFragment : IWebViewLifecycleFragment() {
         return layout
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        if (session.url.value == URL_HOME) {
-            browserOverlay.visibility = View.VISIBLE
-        }
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         lifecycle.removeObserver(cursor!!)
@@ -226,6 +224,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
         val isOverlayToggleKey = (keyCodeIsMenu || (keyCodeIsBack && browserOverlay.isVisible))
 
         if (isOverlayToggleKey) {
+            // TODO: prevent hiding overlay on Homepage.
             if (actionIsDown) {
                 val toShow = !browserOverlay.isVisible
                 setOverlayVisibleByUser(toShow)
@@ -288,6 +287,13 @@ private class BrowserIWebViewCallback(
     override fun onBlockingStateChanged(isBlockingEnabled: Boolean) {}
 
     override fun onLongPress(hitTarget: IWebView.HitTarget) {}
+    override fun shouldInterceptRequest(url: String) {
+        launch(UI) {
+            when (url) {
+                APP_URL_HOME -> browserFragment.browserOverlay?.visibility = View.VISIBLE
+            }
+        }
+    }
 
     override fun onEnterFullScreen(callback: IWebView.FullscreenCallback, view: View?) {
         fullscreenCallback = callback
