@@ -73,6 +73,8 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     var url: String? = null
         private set
 
+    val isUrlEqualToHomepage: Boolean get() = url == APP_URL_HOME
+
     private val sessionManager = SessionManager.getInstance()
 
     /**
@@ -223,8 +225,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
         val actionIsDown = event.action == KeyEvent.ACTION_DOWN
         val isOverlayToggleKey = (keyCodeIsMenu || (keyCodeIsBack && browserOverlay.isVisible))
 
-        if (isOverlayToggleKey) {
-            // TODO: prevent hiding overlay on Homepage.
+        if (isOverlayToggleKey && !isUrlEqualToHomepage) {
             if (actionIsDown) {
                 val toShow = !browserOverlay.isVisible
                 setOverlayVisibleByUser(toShow)
