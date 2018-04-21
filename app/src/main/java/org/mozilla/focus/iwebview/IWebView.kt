@@ -75,10 +75,7 @@ interface IWebView {
     @CheckResult
     fun takeScreenshot(): Bitmap
 
-    val isYoutubeTV: Boolean
-        get() {
-            return getUrl()?.contains("youtube.com/tv") ?: false
-        }
+    val isYoutubeTV: Boolean get() = getUrl()?.contains("youtube.com/tv") ?: false
 
     val focusedDOMElement: FocusedDOMElementCache
 
