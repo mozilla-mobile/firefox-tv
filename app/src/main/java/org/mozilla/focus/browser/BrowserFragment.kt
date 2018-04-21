@@ -228,10 +228,6 @@ class BrowserFragment : IWebViewLifecycleFragment() {
             if (actionIsDown) {
                 val toShow = !browserOverlay.isVisible
                 setOverlayVisibleByUser(toShow)
-                // Fix this youtube focus hack in #393
-                if (!toShow && webView!!.isYoutubeTV) {
-                    webView?.requestFocus()
-                }
             }
             return true
         }
