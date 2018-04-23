@@ -27,6 +27,9 @@
     <!-- We need to do a string export to get rid of localized strings that were removed via
          https://github.com/mozilla-mobile/firefox-tv/pull/815#issuecomment-383549555 -->
     <issue id="ExtraTranslation" severity="informational"/>
+    <!-- TODO #846: Remove me! Localized strings without an en-US counterpart will be included here
+         and we can't remove the strings due to the way the l10n export tools work. -->
+    <issue id="UnusedResources" severity="informational"/>
 
     <!-- We don't want to fail the build, nor do we want to to pollute our informational output. -->
     <issue id="Typos" severity="informational"/>
