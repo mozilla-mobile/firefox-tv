@@ -91,3 +91,46 @@ tasks:
       description: Building Firefox for Amazon's Fire TV (via Gradle) - Master
       owner: '{{ event.head.user.email }}'
       source: '{{ event.head.repo.url }}'
+
+###############################################################################
+# Task: Release builds
+#
+# Triggered when a new tag or release is published (in any branch)
+#
+# - Build (unsigned) release versions of the app with release translations and
+#   adjust token.
+###############################################################################
+  - provisionerId: '{{ taskcluster.docker.provisionerId }}'
+    workerType: '{{ taskcluster.docker.workerType }}'
+    extra:
+      github:
+        events:
+          - release
+    scopes:
+      - "secrets:get:project/firefox-tv/tokens"
+    payload:
+      maxRunTime: 3600
+      deadline: "{{ '2 hours' | $fromNow }}"
+      image: 'mozillamobile/firefox-tv'
+      command:
+        - /bin/bash
+        - '--login'
+        - '-cx'
+        - >-
+          git fetch origin --tags
+          && git config advice.detachedHead false
+          && git checkout {{ event.version }}
+          && python tools/taskcluster/get-sentry-token.py
+          && ./gradlew --no-daemon clean test assembleRelease
+      artifacts:
+        'public':
+          type: 'directory'
+          path: '/opt/firefox-tv/app/build/outputs/apk'
+          expires: "{{ '1 week' | $fromNow }}"
+      features:
+        taskclusterProxy: true
+    metadata:
+      name: Firefox for Fire TV - Release build ({{ event.version }})
+      description: Building Firefox for Amazon's Fire TV (via Gradle) - Release
+      owner: '{{ event.head.user.email }}'
+      source: '{{ event.head.repo.url }}'
