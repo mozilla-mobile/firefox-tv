@@ -34,8 +34,9 @@ class FirefoxProgressBar @JvmOverloads constructor(
     fun initialize(browserFrag: BrowserFragment) {
         browserFrag.session.url.observe(browserFrag, Observer { sessionUrl -> url.text = sessionUrl })
         browserFrag.session.loading.observe(browserFrag, object : NonNullObserver<Boolean>() {
-            public override fun onValueChanged(loading: Boolean) {
-                if (loading) {
+            public override fun onValueChanged(value: Boolean) {
+                val isLoading = value
+                if (isLoading) {
                     showBar()
                 } else {
                     scheduleHideBar()

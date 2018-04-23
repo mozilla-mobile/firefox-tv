@@ -63,7 +63,7 @@ class CursorController(
     private val isLoadingObserver = CursorIsLoadingObserver()
 
     init {
-        cursorParent.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+        cursorParent.addOnLayoutChangeListener { _, _, _, right, bottom, _, _, _, _ ->
             viewModel.maxBounds = PointF(right.toFloat(), bottom.toFloat())
         }
     }
@@ -118,7 +118,7 @@ class CursorController(
     }
 
     private inner class CursorIsLoadingObserver : NonNullObserver<Boolean>() {
-        override fun onValueChanged(isLoading: Boolean) {
+        override fun onValueChanged(value: Boolean) {
             setEnabledForCurrentState()
         }
     }

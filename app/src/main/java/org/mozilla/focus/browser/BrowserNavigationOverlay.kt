@@ -163,6 +163,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 value = if (isPinButtonChecked) NavigationEvent.VAL_CHECKED
                 else NavigationEvent.VAL_UNCHECKED
             }
+            else -> Unit // Nothing to do.
         }
         onNavigationEvent?.invoke(event, value, null)
         TelemetryWrapper.overlayClickEvent(event, isTurboButtonChecked, isPinButtonChecked)

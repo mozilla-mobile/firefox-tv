@@ -5,7 +5,6 @@
 package org.mozilla.focus
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -33,13 +32,13 @@ class SettingsFragment : Fragment() {
 
         ic_lock.setImageResource(R.drawable.ic_lock)
         telemetryButton.isChecked = DataUploadPreference.isEnabled(activity)
-        telemetryView.setOnClickListener { view ->
+        telemetryView.setOnClickListener { _ ->
             val newTelemetryState = !DataUploadPreference.isEnabled(activity)
             DataUploadPreference.setIsEnabled(activity, newTelemetryState)
             telemetryButton.isChecked = newTelemetryState
         }
 
-        deleteButton.setOnClickListener { view ->
+        deleteButton.setOnClickListener { _ ->
             val builder1 = AlertDialog.Builder(activity)
             builder1.setTitle(R.string.settings_cookies_dialog_title)
             builder1.setMessage(R.string.settings_cookies_dialog_content)
@@ -47,7 +46,7 @@ class SettingsFragment : Fragment() {
 
             builder1.setPositiveButton(
                     getString(R.string.action_ok),
-                    DialogInterface.OnClickListener { dialog, id ->
+                    { dialog, _ ->
                         settingsWebView.cleanup()
                         SessionManager.getInstance().removeAllSessions()
                         dialog.cancel()
@@ -56,7 +55,7 @@ class SettingsFragment : Fragment() {
 
             builder1.setNegativeButton(
                     getString(R.string.action_cancel),
-                    DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+                    { dialog, _ -> dialog.cancel() })
 
             val alert11 = builder1.create()
             alert11.show()

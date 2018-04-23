@@ -4,7 +4,6 @@
 
 package org.mozilla.focus.ext
 
-import android.content.Context
 import android.webkit.CookieManager
 import android.webkit.WebStorage
 import android.webkit.WebViewDatabase
@@ -27,10 +26,10 @@ fun AmazonWebView.deleteData() {
     webViewDatabase.clearFormData() // Unclear how this differs from WebView.clearFormData()
     webViewDatabase.clearHttpAuthUsernamePassword()
 
-    deleteContentFromKnownLocations(context)
+    deleteContentFromKnownLocations()
 }
 
-private fun deleteContentFromKnownLocations(context: Context) {
+private fun deleteContentFromKnownLocations() {
     /*
     ThreadUtils.postToBackgroundThread(new Runnable() {
         @Override

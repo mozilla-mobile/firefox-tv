@@ -66,7 +66,7 @@ class HomeTileAdapter(
         }
 
         val tvWhiteColor = ContextCompat.getColor(holder.itemView.context, R.color.tv_white)
-        itemView.setOnFocusChangeListener { v, hasFocus ->
+        itemView.setOnFocusChangeListener { _, hasFocus ->
             val backgroundResource: Int
             val textColor: Int
             if (hasFocus) {
