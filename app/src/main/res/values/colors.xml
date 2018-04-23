@@ -9,10 +9,6 @@
 
     <color name="colorAccentSettings">@color/photonBlue50</color>
 
-    <color name="colorCursor">#ccffffff</color>
-
-    <color name="colorTextInactive">#80FFFFFF</color>
-
     <color name="snackbarBackground">#FF414146</color>
     <color name="snackbarTextColor">#ffffffff</color>
 
@@ -22,7 +18,6 @@
     <color name="blue_nav">#0060df</color>
     <color name="ink70">#474959</color>
     <color name="ink80">#333540</color>
-    <color name="homeUrlBarBackground">#30ffffff</color>
     <color name="default_background_gray">#e3e3e5</color>
 
     <color name="onboarding_overlay">#cc000000</color>
@@ -37,9 +32,6 @@
     <color name="button_pressed">@color/tv_blue60</color>
     <color name="button_checked">@color/translucent_tv_ink2</color>
     <color name="button_border">@color/translucent_tv_gray40</color>
-
-    <color name="white_a10p">#1AFFFFFF</color>
-    <color name="white_a20p">#33FFFFFF</color>
 
     <color name="photonGrey10_a60p">#99F9F9FA</color>
     <color name="photonGrey10_a80p">#CCF9F9FA</color>
