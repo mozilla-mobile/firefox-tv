@@ -49,8 +49,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     companion object {
         const val FRAGMENT_TAG = "browser"
         const val APP_URL_PREFIX = "firefox:"
-        const val HOME_SUFFIX = "home"
-        const val APP_URL_HOME = APP_URL_PREFIX + HOME_SUFFIX
+        const val APP_URL_HOME = "${APP_URL_PREFIX}home"
 
         @JvmStatic
         fun createForSession(session: Session) = BrowserFragment().apply {
@@ -288,7 +287,8 @@ private class BrowserIWebViewCallback(
     override fun onBlockingStateChanged(isBlockingEnabled: Boolean) {}
 
     override fun onLongPress(hitTarget: IWebView.HitTarget) {}
-    override fun shouldInterceptRequest(url: String) {
+    override fun onShouldInterceptRequest(url: String) {
+        // This might not be called from the UI thread but needs to be, so we use launch.
         launch(UI) {
             when (url) {
                 APP_URL_HOME -> browserFragment.browserOverlay?.visibility = View.VISIBLE

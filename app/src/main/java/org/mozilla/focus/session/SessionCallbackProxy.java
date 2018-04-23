@@ -73,8 +73,8 @@ public class SessionCallbackProxy implements IWebView.Callback {
     }
 
     @Override
-    public void shouldInterceptRequest(String url) {
-        delegate.shouldInterceptRequest(url);
+    public void onShouldInterceptRequest(String url) {
+        delegate.onShouldInterceptRequest(url);
     }
 
     @Override

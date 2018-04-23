@@ -108,7 +108,7 @@ interface IWebView {
         fun onRequest(isTriggeredByUserGesture: Boolean)
 
         fun onLongPress(hitTarget: HitTarget)
-        fun shouldInterceptRequest(url: String)
+        fun onShouldInterceptRequest(url: String)
 
         /**
          * Notify the host application that the current page has entered full screen mode.
