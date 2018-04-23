@@ -2,12 +2,16 @@
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!-- TODO: figure out how to handle Overdraw in #849 -->
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/photonGrey70">
+    android:background="@color/photonGrey70"
+    tools:ignore="Overdraw"
+    >
 
     <!-- We need to make this view larger than its children to allow the children to scale when
          focused (clipChildren alone doesn't work) so we add vertical padding and center gravity.
