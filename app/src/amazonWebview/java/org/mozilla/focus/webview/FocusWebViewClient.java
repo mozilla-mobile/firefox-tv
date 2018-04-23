@@ -114,12 +114,12 @@ public class FocusWebViewClient extends TrackingProtectionWebViewClient {
     // WebResourceRequest was added in API21 and there is no equivalent AmazonWebResourceRequest
     @Override
     public AmazonWebResourceResponse shouldInterceptRequest(AmazonWebView view, String request) {
-        if ((request != null && request.startsWith(APP_URL_PREFIX))) {
+        if (request != null && request.startsWith(APP_URL_PREFIX)) {
             switch (request) {
                 case APP_URL_HOME:
                     // Home screen should show a blank webview behind the overlay, but keep the url.
-                    callback.shouldInterceptRequest(request);
-                    final ByteArrayInputStream homeDataStream = makeEmptyDataStream();
+                    callback.onShouldInterceptRequest(request);
+                    final ByteArrayInputStream homeDataStream = getBlankPageStream();
                     return new AmazonWebResourceResponse("text/html", "utf-8", homeDataStream);
             }
         }
@@ -127,7 +127,7 @@ public class FocusWebViewClient extends TrackingProtectionWebViewClient {
         return super.shouldInterceptRequest(view, request);
     }
 
-    private ByteArrayInputStream makeEmptyDataStream() {
+    private ByteArrayInputStream getBlankPageStream() {
         // ByteArrayInputStream doesn't need to be closed.
         return new ByteArrayInputStream("<html></html>".getBytes());
     }

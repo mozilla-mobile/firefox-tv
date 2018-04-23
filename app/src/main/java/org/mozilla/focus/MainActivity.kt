@@ -55,9 +55,10 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
             public override fun onValueChanged(sessions: List<Session>) {
                 if (sessions.isEmpty()) {
                     // There's no active session. Start a new session with "homepage".
-                    sessionManager.createSession(Source.USER_ENTERED, APP_URL_HOME)
+                    ScreenController.showBrowserScreenForUrl(supportFragmentManager, APP_URL_HOME, Source.NONE)
+                } else {
+                    ScreenController.showBrowserScreenForCurrentSession(supportFragmentManager, sessionManager)
                 }
-                ScreenController.showBrowserScreenForCurrentSession(supportFragmentManager, sessionManager)
 
                 if (Settings.getInstance(this@MainActivity).shouldShowOnboarding()) {
                     val onboardingIntent = Intent(this@MainActivity, OnboardingActivity::class.java)

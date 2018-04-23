@@ -112,7 +112,6 @@ internal class FirefoxAmazonWebView(
         // called by webview when clicking on a link, and not when opening a new page for the
         // first time using loadUrl().
         if (!client.shouldOverrideUrlLoading(this, url)) {
-            callback?.shouldInterceptRequest(url)
             super.loadUrl(url, mapOf("X-Requested-With" to ""))
         }
 
