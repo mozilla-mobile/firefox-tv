@@ -258,6 +258,8 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     private inner class NavigationStateProvider : BrowserNavigationOverlay.BrowserNavigationStateProvider {
         override fun isBackEnabled() = webView?.canGoBack() ?: false
         override fun isForwardEnabled() = webView?.canGoForward() ?: false
+        override fun isPinEnabled() = !isUrlEqualToHomepage
+        override fun isRefreshEnabled() = !isUrlEqualToHomepage
         override fun getCurrentUrl() = url
         override fun isURLPinned() = url.toUri()?.let {
             // TODO: #569 fix CustomTilesManager to use Uri too

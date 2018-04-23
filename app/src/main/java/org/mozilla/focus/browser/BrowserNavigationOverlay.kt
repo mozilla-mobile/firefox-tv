@@ -13,6 +13,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.browser_overlay.view.*
 import kotlinx.android.synthetic.main.home_tile.view.*
@@ -57,6 +58,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         fun isForwardEnabled(): Boolean
         fun getCurrentUrl(): String?
         fun isURLPinned(): Boolean
+        fun isPinEnabled(): Boolean
+        fun isRefreshEnabled(): Boolean
     }
 
     /**
@@ -170,17 +173,25 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     }
 
     fun updateOverlayForCurrentState() {
+        fun updateOverlayButtonState(isEnabled: Boolean, overlayButton: ImageButton) {
+            overlayButton.isEnabled = isEnabled
+            overlayButton.isFocusable = isEnabled
+            overlayButton.alpha =
+                    if (isEnabled) NAVIGATION_BUTTON_ENABLED_ALPHA else NAVIGATION_BUTTON_DISABLED_ALPHA
+        }
+
         val canGoBack = navigationStateProvider?.isBackEnabled() ?: false
-        navButtonBack.isEnabled = canGoBack
-        navButtonBack.isFocusable = canGoBack
-        navButtonBack.alpha = if (canGoBack) NAVIGATION_BUTTON_ENABLED_ALPHA else NAVIGATION_BUTTON_DISABLED_ALPHA
+        updateOverlayButtonState(canGoBack, navButtonBack)
 
         val canGoForward = navigationStateProvider?.isForwardEnabled() ?: false
-        navButtonForward.isEnabled = canGoForward
-        navButtonForward.isFocusable = canGoForward
-        navButtonForward.alpha = if (canGoForward) NAVIGATION_BUTTON_ENABLED_ALPHA else NAVIGATION_BUTTON_DISABLED_ALPHA
+        updateOverlayButtonState(canGoForward, navButtonForward)
 
+        val isPinEnabled = navigationStateProvider?.isPinEnabled() ?: false
+        updateOverlayButtonState(isPinEnabled, pinButton)
         pinButton.isChecked = navigationStateProvider?.isURLPinned() ?: false
+
+        val isRefreshEnabled = navigationStateProvider?.isRefreshEnabled() ?: false
+        updateOverlayButtonState(isRefreshEnabled, navButtonReload)
 
         // Prevent the focus from looping to the bottom row when reaching the last
         // focusable element in the top row
