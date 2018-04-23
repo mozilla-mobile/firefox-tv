@@ -116,6 +116,8 @@ abstract class IWebViewLifecycleFragment : LocaleAwareFragment() {
             val resources = context.resources
             val config = resources.configuration
             config.setLocale(currentLocale)
+
+            @Suppress("DEPRECATION") // TODO: This is non-trivial to fix: #850.
             resources.updateConfiguration(config, null)
         }
         // We create and destroy a new WebView here to force the internal state of WebView to know

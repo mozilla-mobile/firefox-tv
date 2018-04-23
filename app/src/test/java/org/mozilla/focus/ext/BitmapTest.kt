@@ -6,8 +6,8 @@ package org.mozilla.focus.ext
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import junit.framework.Assert.assertFalse
-import junit.framework.Assert.assertTrue
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner

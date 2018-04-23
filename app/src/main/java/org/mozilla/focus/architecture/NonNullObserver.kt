@@ -7,7 +7,7 @@ package org.mozilla.focus.architecture
 import android.arch.lifecycle.Observer
 
 abstract class NonNullObserver<T> : Observer<T> {
-    protected abstract fun onValueChanged(t: T)
+    protected abstract fun onValueChanged(value: T)
 
     override fun onChanged(value: T?) {
         value?.let {

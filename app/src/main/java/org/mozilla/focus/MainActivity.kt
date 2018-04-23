@@ -52,7 +52,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
 
         IntentValidator.validateOnCreate(this, intent, savedInstanceState, ::onValidBrowserIntent)
         sessionManager.sessions.observe(this, object : NonNullObserver<List<Session>>() {
-            public override fun onValueChanged(sessions: List<Session>) {
+            public override fun onValueChanged(value: List<Session>) {
+                val sessions = value
                 if (sessions.isEmpty()) {
                     // There's no active session. Start a new session with "homepage".
                     ScreenController.showBrowserScreenForUrl(supportFragmentManager, APP_URL_HOME, Source.NONE)
