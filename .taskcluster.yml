@@ -121,6 +121,7 @@ tasks:
           && git config advice.detachedHead false
           && git checkout {{ event.version }}
           && python tools/taskcluster/get-sentry-token.py
+          && python tools/taskcluster/get-pocket-token.py
           && ./gradlew --no-daemon clean test assembleRelease
       artifacts:
         'public':
