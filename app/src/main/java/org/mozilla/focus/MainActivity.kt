@@ -18,6 +18,7 @@ import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.browser.BrowserFragment
 import org.mozilla.focus.browser.BrowserFragment.Companion.APP_URL_HOME
 import org.mozilla.focus.ext.toSafeIntent
+import org.mozilla.focus.home.pocket.Pocket
 import org.mozilla.focus.iwebview.IWebView
 import org.mozilla.focus.iwebview.WebViewProvider
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity
@@ -93,8 +94,14 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
         TelemetryWrapper.stopSession(this)
     }
 
+    override fun onStart() {
+        super.onStart()
+        Pocket.startBackgroundUpdates()
+    }
+
     override fun onStop() {
         super.onStop()
+        Pocket.stopBackgroundUpdates() // Don't regularly hit the network in the background.
         TelemetryWrapper.stopMainActivity()
     }
 
