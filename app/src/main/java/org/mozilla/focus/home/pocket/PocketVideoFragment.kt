@@ -38,12 +38,6 @@ class PocketVideoFragment : Fragment() {
     }
 }
 
-private class PocketVideo(
-        val title: String,
-        val url: String,
-        val imageUrl: String
-)
-
 private class PocketVideoAdapter(context: Context) : RecyclerView.Adapter<PocketVideoViewHolder>() {
 
     private val photonGrey70 = ContextCompat.getColor(context, R.color.photonGrey70)
@@ -55,7 +49,7 @@ private class PocketVideoAdapter(context: Context) : RecyclerView.Adapter<Pocket
     private val feedHorizontalMargin = context.resources.getDimensionPixelSize(R.dimen.pocket_feed_horizontal_margin)
 
     private val feedItems = List(8) {
-        PocketVideo("Mirror-Polished Japanese $it Ball Challenge Crushed", "youtube.com/tv", "youtube.com/tv")
+        PocketVideo("Mirror-Polished Japanese $it Ball Challenge Crushed", "youtube.com/tv", "youtube.com/tv", "youtube.com/tv")
     }
 
     override fun getItemCount() = feedItems.size

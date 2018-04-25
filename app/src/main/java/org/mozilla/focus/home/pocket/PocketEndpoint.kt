@@ -6,10 +6,14 @@ package org.mozilla.focus.home.pocket
 
 import android.net.Uri
 import android.support.annotation.AnyThread
+import android.support.annotation.VisibleForTesting
 import android.util.Log
 import okhttp3.Request
+import org.json.JSONException
+import org.json.JSONObject
 import org.mozilla.focus.BuildConfig
 import org.mozilla.focus.ext.executeAndAwait
+import org.mozilla.focus.ext.flatMapObj
 import org.mozilla.focus.utils.OkHttpWrapper
 import java.io.IOException
 
@@ -23,16 +27,36 @@ private val GLOBAL_VIDEO_ENDPOINT = Uri.parse("https://getpocket.cdn.mozilla.net
         .build()
 
 /**
- * Make requests to the Pocket Endpoint and returns raw data.
+ * Make requests to the Pocket endpoint and returns internal objects.
  *
  * The methods of this class call the endpoint directly and does not cache results or rate limit,
  * outside of the network layer (e.g. with OkHttp).
  */
-internal object PocketEndpoint {
+object PocketEndpoint {
 
-    /**
-     * @return The global video recommendations as a raw JSON str or null on error.
-     */
+    /** @return The global video recommendations or null on error; the list will never be empty. */
+    @AnyThread // via PocketEndpointRaw.
+    suspend fun getRecommendedVideos(): List<PocketVideo>? {
+        val videosJSON = PocketEndpointRaw.getGlobalVideoRecommendations() ?: return null
+        return convertVideosJSON(videosJSON)
+    }
+
+    /** @return The videos or null on error; the list will never be empty. */
+    @VisibleForTesting fun convertVideosJSON(jsonStr: String): List<PocketVideo>? = try {
+        val rawJSON = JSONObject(jsonStr)
+        val videosJSON = rawJSON.getJSONArray("list")
+        val videos = videosJSON.flatMapObj { PocketVideo.fromJSONObject(it) }
+        if (videos.isNotEmpty()) videos else null
+    } catch (e: JSONException) {
+        Log.w(LOGTAG, "convertVideosJSON: invalid JSON from Pocket server")
+        null
+    }
+}
+
+/** Make requests to the Pocket endpoint and returns raw data: see [PocketEndpoint] for more. */
+private object PocketEndpointRaw {
+
+    /** @return The global video recommendations as a raw JSON str or null on error. */
     @AnyThread // executeAndAwait hands off the request to the OkHttp dispatcher.
     suspend fun getGlobalVideoRecommendations(): String? {
         val req = Request.Builder()
@@ -42,7 +66,7 @@ internal object PocketEndpoint {
         val res = try {
             OkHttpWrapper.client.newCall(req).executeAndAwait()
         } catch (e: IOException) {
-            Log.w(LOGTAG, "network error in getGlobalVideoRecommendations")
+            Log.w(LOGTAG, "getGlobalVideoRecommendations: network error")
             return null
         }
 
