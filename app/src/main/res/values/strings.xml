@@ -3,6 +3,9 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <resources>
+    <!-- The brand name of our partner company, Pocket. -->
+    <string name="pocket_brand_name">Pocket</string>
+
     <!-- Label used for buttons, e.g. in dialogs -->
     <string name="action_cancel">Cancel</string>
     <!-- Label used for buttons, e.g. in dialogs -->
@@ -173,6 +176,9 @@ be temporary, and you can try again later.</li>
     <string name="onboarding_turbo_mode_button_on">Keep Turbo Mode Enabled</string>
     <string name="onboarding_turbo_mode_button_off">Turn Turbo Mode Off</string>
 
+    <!-- Text displayed in a toast to explain to the user how to unpin a tile from the homescreen.
+         SELECT refers to a button on the remote: the button at the center of the 4-way directional navigation. -->
+    <string name="homescreen_unpin_tutorial_toast">Press and hold SELECT to unpin from homescreen</string>
     <string name="homescreen_tile_remove">Remove</string>
     <string name="nav_close_hint">Close</string>
 
@@ -180,5 +186,29 @@ be temporary, and you can try again later.</li>
     <string name="notification_pinned_site">Pinned to Firefox TV homescreen</string>
     <string name="notification_unpinned_site">Removed from Firefox TV homescreen</string>
 
+
+    <!-- The title of a tutorial shown to introduce Pocket video recommendations.
+    %1$s will be replaced with the Pocket brand name. -->
+    <string name="pocket_home_tutorial_title">Introducing videos recommended by %1$s</string>
+    <!-- The description text of a tutorial shown to introduce Pocket video recommendations.
+    %1$s will be replaced with the Pocket brand name. -->
+    <string name="pocket_home_tutorial_description">The most interesting videos on the web. Recommended by %1$s, now part of Mozilla.</string>
+    <!-- The text on the dismiss button of a tutorial shown to introduce Pocket video recommendations. -->
+    <string name="pocket_home_tutorial_dismiss_button">Ok, got it</string>
+    <!-- Spoken to screen reader users when they focus the Pocket tile. Clicking this tile will take them to the
+         Pocket video recommendations feed.
+    %1$s will be replaced with the Pocket brand name. -->
+    <string name="pocket_home_a11y_tile_focused">Video recommendation by %1$s</string>
+
     <string name="pocket_video_feed_recommended_videos_title">Recommended videos</string>
+    <!-- Text displayed when the Pocket video recommendations feed failed to load. -->
+    <string name="pocket_video_feed_failed_to_load">Something went wrong while loading the feed.</string>
+    <!-- Text displayed on a button to reload the Pocket video recommendations feed if it failed to load. -->
+    <string name="pocket_video_feed_reload_button">Reload</string>
+    <!-- Spoken to screen reader users to describe how to navigate on the Pocket video recommendations feed. -->
+    <string name="pocket_video_feed_a11y_navigation">Use left and right to move between videos</string>
+    <!-- Spoken to screen reader users when they to describe a Pocket video recommendation they have focused.
+    %1$s will be the title of the recommended video
+    %2$s will be the source of the video (e.g. YouTube). -->
+    <string name="pocket_video_feed_a11y_feed_item_focused">%1$s on %2$s</string>
 </resources>
