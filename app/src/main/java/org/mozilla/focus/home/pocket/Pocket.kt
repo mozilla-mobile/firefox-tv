@@ -24,6 +24,8 @@ import java.util.concurrent.TimeUnit
  */
 private val CACHE_UPDATE_FREQUENCY_MILLIS = TimeUnit.MINUTES.toMillis(45)
 
+typealias PocketVideosDeferred = Deferred<List<PocketVideo>?>
+
 /**
  * A public accessor for getting the Pocket data. This class has the following responsibilities:
  * - Public API access point
@@ -35,7 +37,7 @@ private val CACHE_UPDATE_FREQUENCY_MILLIS = TimeUnit.MINUTES.toMillis(45)
  */
 object Pocket {
 
-    @Volatile private lateinit var videosCache: Deferred<List<PocketVideo>?>
+    @Volatile private lateinit var videosCache: PocketVideosDeferred
     @Volatile private var lastUpdateMillis = -1L
     private val nextUpdateMillis get() = lastUpdateMillis + CACHE_UPDATE_FREQUENCY_MILLIS
 
