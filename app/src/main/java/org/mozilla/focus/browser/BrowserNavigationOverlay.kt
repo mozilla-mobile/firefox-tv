@@ -66,7 +66,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
      * Used to cancel background->UI threads: we attach them as children to this job
      * and cancel this job at the end of the UI lifecycle, cancelling the children.
      */
-    private var uiLifecycleCancelJob: Job
+    var uiLifecycleCancelJob: Job
 
     var onNavigationEvent: ((event: NavigationEvent, value: String?,
                              autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?) -> Unit)? = null
