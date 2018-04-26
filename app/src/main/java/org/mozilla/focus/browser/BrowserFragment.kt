@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.android.synthetic.main.fragment_browser.view.*
+import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.mozilla.focus.MainActivity
@@ -182,6 +183,10 @@ class BrowserFragment : IWebViewLifecycleFragment() {
         lifecycle.removeObserver(cursor!!)
         cursor = null
         overlayVisibleCached = browserOverlay.visibility
+        // Since we start the async jobs in View.init and Android is inflating the view for us,
+        // there's no good way to pass in the uiLifecycleJob. We could consider other solutions
+        // but it'll add complexity that I don't think is probably worth it.
+        browserOverlay.uiLifecycleCancelJob.cancel(CancellationException("Parent lifecycle has ended"))
     }
 
     fun onBackPressed(): Boolean {
