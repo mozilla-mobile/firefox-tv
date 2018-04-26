@@ -203,7 +203,7 @@ be temporary, and you can try again later.</li>
     <string name="pocket_video_feed_recommended_videos_title">Recommended videos</string>
     <!-- Text displayed when the Pocket video recommendations feed failed to load.
     %1$s will be replaced with the Pocket brand name. -->
-    <string name="pocket_video_feed_failed_to_load">Hmm. We\'re having trouble displaying video recommendations by %1$s.</string>
+    <string name="pocket_video_feed_failed_to_load">Hmm. We’re having trouble displaying video recommendations by %1$s.</string>
     <!-- Text displayed on a button to reload the Pocket video recommendations feed if it failed to load. -->
     <string name="pocket_video_feed_reload_button">Try again</string>
     <!-- Spoken to screen reader users to describe how to navigate on the Pocket video recommendations feed. -->
