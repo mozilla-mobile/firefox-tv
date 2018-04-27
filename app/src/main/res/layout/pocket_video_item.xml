@@ -26,7 +26,7 @@
             android:id="@+id/videoThumbnailView"
             android:layout_width="match_parent"
             android:layout_height="135dp"
-            tools:background="#e00"
+            android:background="@color/photonGrey50"
             tools:ignore="ContentDescription" />
 
         <!-- Background colors are set dynamically based on parent focus state.
