@@ -58,5 +58,6 @@ public class FocusApplication extends LocaleAwareApplication {
     public void onLowMemory() {
         super.onLowMemory();
         OkHttpWrapper.onLowMemory();
+        // If you need to dump more memory, you may be able to clear the Picasso cache.
     }
 }
