@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.StrictMode
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -20,8 +21,10 @@ import kotlinx.android.synthetic.main.fragment_pocket_video.view.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.mozilla.focus.R
+import org.mozilla.focus.ScreenController
 import org.mozilla.focus.ext.resetAfter
 import org.mozilla.focus.ext.updateLayoutParams
+import org.mozilla.focus.session.Source
 import org.mozilla.focus.utils.FormattedDomain
 import java.net.URI
 import java.net.URISyntaxException
@@ -48,7 +51,7 @@ class PocketVideoFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         fun displayFeed(layout: View, videos: PocketVideosDeferred) {
-            layout.videoFeed.gridView.adapter = PocketVideoAdapter(context, videos)
+            layout.videoFeed.gridView.adapter = PocketVideoAdapter(context, videos, fragmentManager)
         }
 
         val layout = inflater.inflate(R.layout.fragment_pocket_video, container, false)
@@ -85,7 +88,8 @@ class PocketVideoFragment : Fragment() {
 
 private class PocketVideoAdapter(
         context: Context,
-        feedItemsDeferred: PocketVideosDeferred
+        feedItemsDeferred: PocketVideosDeferred,
+        private val fragmentManager: FragmentManager
 ) : RecyclerView.Adapter<PocketVideoViewHolder>() {
 
     private val photonGrey70 = ContextCompat.getColor(context, R.color.photonGrey70)
@@ -112,6 +116,7 @@ private class PocketVideoAdapter(
         val item = feedItems[position]
         setHorizontalMargins(holder, position)
 
+        holder.itemView.setOnClickListener { ScreenController.showBrowserScreenForUrl(fragmentManager, item.url, Source.POCKET_VIDEO_SUGGESTION) }
         holder.itemView.setOnFocusChangeListener { _, hasFocus -> updateForFocusState(holder, hasFocus) }
         updateForFocusState(holder, holder.itemView.isFocused)
 

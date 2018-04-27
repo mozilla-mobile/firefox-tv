@@ -30,6 +30,11 @@ public enum Source {
     CUSTOM_TAB,
 
     /**
+     * A suggestion from Pocket videos.
+     */
+    POCKET_VIDEO_SUGGESTION,
+
+    /**
      * Only used internally if we need to temporarily create a session object with no specific source.
      */
     NONE
