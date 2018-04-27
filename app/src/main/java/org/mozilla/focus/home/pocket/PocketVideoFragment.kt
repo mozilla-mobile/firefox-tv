@@ -9,7 +9,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.support.v4.widget.TextViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -76,15 +75,12 @@ private class PocketVideoAdapter(context: Context) : RecyclerView.Adapter<Pocket
 
     private fun updateForFocusState(holder: PocketVideoViewHolder, isFocused: Boolean) {
         val titleTextColor: Int
-        val titleTextAppearanceRes: Int
         val cardBackground: Int
         if (isFocused) {
             titleTextColor = photonGrey10
-            titleTextAppearanceRes = R.style.RobotoMediumTextAppearance
             cardBackground = photonGrey60
         } else {
             titleTextColor = photonGrey10_a80p
-            titleTextAppearanceRes = R.style.RobotoRegularTextAppearance
             cardBackground = photonGrey70
         }
 
@@ -93,7 +89,6 @@ private class PocketVideoAdapter(context: Context) : RecyclerView.Adapter<Pocket
             subdomainView.setBackgroundColor(cardBackground)
 
             titleView.setTextColor(titleTextColor)
-            TextViewCompat.setTextAppearance(titleView, titleTextAppearanceRes)
         }
     }
 

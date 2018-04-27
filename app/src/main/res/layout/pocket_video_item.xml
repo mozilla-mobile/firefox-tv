@@ -59,11 +59,11 @@
             android:maxLines="3"
             android:ellipsize="end"
             android:textSize="16sp"
+            android:fontFamily="@string/font_roboto_medium"
             android:lineSpacingExtra="8dp"
             tools:background="@color/photonGrey60"
             tools:text="Mirror-Polished Japanese Foil Ball Challenge Crushed this is a really long line so we can test that there are a maximum"
             tools:textColor="@color/photonGrey10"
-            tools:textAppearance="@style/RobotoMediumTextAppearance"
             />
 
     </LinearLayout>
