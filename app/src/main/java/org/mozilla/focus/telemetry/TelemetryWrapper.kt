@@ -265,10 +265,10 @@ object TelemetryWrapper {
                 TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.PIN_PAGE, boolToOnOff(isPinButtonChecked)).queue()
                 return
             }
+            NavigationEvent.POCKET -> return // TODO: Add telemetry #772.
 
             // Load is handled in a separate event
-            NavigationEvent.LOAD_URL -> return
-            NavigationEvent.LOAD_TILE -> return
+            NavigationEvent.LOAD_URL, NavigationEvent.LOAD_TILE -> return
         }
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.MENU, telemetryValue).queue()
     }
