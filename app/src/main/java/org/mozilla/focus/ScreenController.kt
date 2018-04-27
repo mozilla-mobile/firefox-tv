@@ -9,6 +9,8 @@ import android.content.Context
 import android.support.v4.app.FragmentManager
 import android.text.TextUtils
 import org.mozilla.focus.browser.BrowserFragment
+import org.mozilla.focus.home.pocket.Pocket
+import org.mozilla.focus.home.pocket.PocketVideoFragment
 import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.session.Source
 import org.mozilla.focus.telemetry.TelemetryWrapper
@@ -89,5 +91,12 @@ object ScreenController {
         } else {
             SessionManager.getInstance().createSession(source, url)
         }
+    }
+
+    fun showPocketScreen(fragmentManager: FragmentManager) {
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, PocketVideoFragment.create(Pocket.getRecommendedVideos()))
+                .addToBackStack(null)
+                .commit()
     }
 }
