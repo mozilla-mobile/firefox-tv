@@ -132,6 +132,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
                 (activity as MainActivity).onNonTextInputUrlEntered(value!!)
                 setOverlayVisibleByUser(false)
             }
+            NavigationEvent.POCKET -> ScreenController.showPocketScreen(fragmentManager)
             NavigationEvent.PIN_ACTION -> {
                 this@BrowserFragment.url?.let { url ->
                     when (value) {
