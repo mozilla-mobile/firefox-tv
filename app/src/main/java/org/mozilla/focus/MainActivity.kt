@@ -32,6 +32,7 @@ import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.SafeIntent
 import org.mozilla.focus.utils.Settings
 import org.mozilla.focus.utils.ViewUtils
+import org.mozilla.focus.utils.publicsuffix.PublicSuffix
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 
 class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
@@ -44,6 +45,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
         // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.
         SentryWrapper.init(this)
         Pocket.init()
+        PublicSuffix.init(this) // Used by Pocket Video feed & custom home tiles.
 
         initAmazonFactory()
         val intent = SafeIntent(intent)
