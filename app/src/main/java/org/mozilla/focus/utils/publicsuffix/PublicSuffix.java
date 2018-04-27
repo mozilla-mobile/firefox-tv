@@ -27,6 +27,11 @@ import java.util.Set;
  * project: https://github.com/google/guava
  */
 public class PublicSuffix {
+
+    public static void init(Context context) {
+        PublicSuffixKt.init(context);
+    }
+
     /**
      * Strip the public suffix from the domain. Returns the original domain if no public suffix
      * could be found.
