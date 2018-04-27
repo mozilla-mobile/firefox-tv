@@ -5,7 +5,6 @@
 package org.mozilla.focus.home.pocket
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.os.StrictMode
 import android.support.v4.app.Fragment
@@ -26,6 +25,7 @@ import org.mozilla.focus.ext.resetAfter
 import org.mozilla.focus.ext.updateLayoutParams
 import org.mozilla.focus.session.Source
 import org.mozilla.focus.utils.FormattedDomain
+import org.mozilla.focus.utils.PicassoWrapper
 import java.net.URI
 import java.net.URISyntaxException
 
@@ -121,7 +121,7 @@ private class PocketVideoAdapter(
         updateForFocusState(holder, holder.itemView.isFocused)
 
         titleView.text = item.title
-        videoThumbnailView.setBackgroundColor(Color.parseColor("#ee0000")) // TODO: load async.
+        PicassoWrapper.client.load(item.thumbnailURL).into(videoThumbnailView)
 
         val itemURI = try {
             URI(item.dedupeURL)
