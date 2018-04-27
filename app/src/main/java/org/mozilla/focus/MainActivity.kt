@@ -43,6 +43,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
 
         // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.
         SentryWrapper.init(this)
+        Pocket.init()
 
         initAmazonFactory()
         val intent = SafeIntent(intent)

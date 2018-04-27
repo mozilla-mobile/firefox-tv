@@ -45,7 +45,6 @@ object Pocket {
     @set:UiThread
     private var backgroundUpdates: Job? = null
 
-    @JvmStatic
     fun init() {
         // We set this now, rather than waiting for the background updates, to ensure the first
         // caller gets a Deferred they can wait on, rather than null (which they can't wait on).

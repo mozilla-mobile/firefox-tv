@@ -8,7 +8,6 @@ package org.mozilla.focus;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 
-import org.mozilla.focus.home.pocket.Pocket;
 import org.mozilla.focus.locale.LocaleAwareApplication;
 import org.mozilla.focus.search.SearchEngineManager;
 import org.mozilla.focus.session.VisibilityLifeCycleCallback;
@@ -30,7 +29,6 @@ public class FocusApplication extends LocaleAwareApplication {
         SearchEngineManager.getInstance().init(this);
 
         TelemetryWrapper.init(this);
-        Pocket.init();
 
         registerActivityLifecycleCallbacks(visibilityLifeCycleCallback = new VisibilityLifeCycleCallback(this));
     }
