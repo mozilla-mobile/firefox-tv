@@ -7,6 +7,7 @@ package org.mozilla.focus.home.pocket
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.os.StrictMode
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
@@ -19,7 +20,11 @@ import kotlinx.android.synthetic.main.fragment_pocket_video.view.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.mozilla.focus.R
+import org.mozilla.focus.ext.resetAfter
 import org.mozilla.focus.ext.updateLayoutParams
+import org.mozilla.focus.utils.FormattedDomain
+import java.net.URI
+import java.net.URISyntaxException
 
 /** A feed of Pocket videos. */
 class PocketVideoFragment : Fragment() {
@@ -111,8 +116,25 @@ private class PocketVideoAdapter(
         updateForFocusState(holder, holder.itemView.isFocused)
 
         titleView.text = item.title
-        subdomainView.text = "youtube" // TODO: get from Video.
         videoThumbnailView.setBackgroundColor(Color.parseColor("#ee0000")) // TODO: load async.
+
+        val itemURI = try {
+            URI(item.dedupeURL)
+        } catch (e: Exception) { // Apparently Kotlin doesn't have multi-catch.
+            when (e) {
+                is URISyntaxException, is NullPointerException -> null
+                else -> throw e
+            }
+        }
+        domainView.text = if (itemURI == null) {
+            item.dedupeURL
+        } else {
+            // The first time this method is called ever, it may block until the file is cached on disk.
+            // We pre-cache on startup so I'm hoping this isn't an issue.
+            StrictMode.allowThreadDiskReads().resetAfter {
+                FormattedDomain.format(holder.itemView.context, itemURI, false, 0)
+            }
+        }
     }
 
     private fun updateForFocusState(holder: PocketVideoViewHolder, isFocused: Boolean) {
@@ -128,7 +150,7 @@ private class PocketVideoAdapter(
 
         with (holder) {
             titleView.setBackgroundColor(cardBackground)
-            subdomainView.setBackgroundColor(cardBackground)
+            domainView.setBackgroundColor(cardBackground)
 
             titleView.setTextColor(titleTextColor)
         }
@@ -153,5 +175,5 @@ private class PocketVideoAdapter(
 private class PocketVideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val videoThumbnailView = itemView.findViewById<ImageView>(R.id.videoThumbnailView)
     val titleView = itemView.findViewById<TextView>(R.id.titleView)
-    val subdomainView = itemView.findViewById<TextView>(R.id.subdomainView)
+    val domainView = itemView.findViewById<TextView>(R.id.domainView)
 }

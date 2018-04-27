@@ -32,7 +32,7 @@
         <!-- Background colors are set dynamically based on parent focus state.
              StateListDrawables don't work here because the parent gets focus, not these views. -->
         <TextView
-            android:id="@+id/subdomainView"
+            android:id="@+id/domainView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="12dp"
