@@ -73,13 +73,4 @@
         <item name="android:background">@drawable/navigation_button_background</item>
         <item name="android:tint">@color/tv_white</item>
     </style>
-
-    <style name="RobotoRegularTextAppearance" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@string/font_roboto_regular</item>
-    </style>
-
-    <style name="RobotoMediumTextAppearance" parent="TextAppearance.AppCompat">
-        <item name="android:fontFamily">@string/font_roboto_medium</item>
-    </style>
-
 </resources>
