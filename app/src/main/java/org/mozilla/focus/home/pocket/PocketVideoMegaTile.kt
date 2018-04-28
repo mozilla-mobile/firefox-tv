@@ -1,0 +1,38 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+package org.mozilla.focus.home.pocket
+
+import android.content.Context
+import android.util.AttributeSet
+import android.view.LayoutInflater
+import android.widget.ImageView
+import android.widget.LinearLayout
+import kotlinx.android.synthetic.main.pocket_video_mega_tile.view.*
+import org.mozilla.focus.R
+import org.mozilla.focus.utils.PicassoWrapper
+import kotlin.properties.Delegates
+
+/** A view that contains the Pocket logo and several thumbnails from Pocket videos. */
+class PocketVideoMegaTile(
+        context: Context, attrs: AttributeSet
+) : LinearLayout(context, attrs) {
+
+    var pocketVideos by Delegates.observable<List<PocketVideo>?>(null) { _, _, newVideos ->
+        if (newVideos == null) return@observable
+        thumbnailViews.forEachIndexed { i, thumbnailView ->
+            PicassoWrapper.client.load(newVideos[i].thumbnailURL).into(thumbnailView)
+        }
+    }
+
+    private var thumbnailViews: List<ImageView>
+
+    init {
+        orientation = HORIZONTAL
+
+        LayoutInflater.from(context).inflate(R.layout.pocket_video_mega_tile, this, true)
+        pocketWordmarkView.setImageDrawableAsPocketWordmark()
+        thumbnailViews = listOf(thumbnail1View, thumbnail2View, thumbnail3View, thumbnail4View)
+    }
+}

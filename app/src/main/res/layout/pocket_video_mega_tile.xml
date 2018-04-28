@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.mozilla.focus.MainActivity"
+    tools:parentTag="org.mozilla.focus.home.pocket.PocketVideoMegaTile">
+
+    <!-- We set the SVG & thumbnails in code: see the code for details. -->
+    <ImageView
+        android:id="@+id/pocketWordmarkView"
+        android:layout_width="115.45dp"
+        android:layout_height="30.5dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:contentDescription="@null"
+        tools:src="@drawable/ic_pocket_and_wordmark"
+        tools:tint="@color/tv_white"
+        />
+
+    <ImageView
+        android:id="@+id/thumbnail1View"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:contentDescription="@null"
+        />
+
+    <ImageView
+        android:id="@+id/thumbnail2View"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:contentDescription="@null"
+        />
+
+    <ImageView
+        android:id="@+id/thumbnail3View"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:contentDescription="@null"
+        />
+
+    <ImageView
+        android:id="@+id/thumbnail4View"
+        android:layout_width="150dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:contentDescription="@null"
+        />
+
+</merge>
