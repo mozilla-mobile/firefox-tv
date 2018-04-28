@@ -7,6 +7,8 @@ package org.mozilla.focus.home.pocket
 import android.os.SystemClock
 import android.support.annotation.AnyThread
 import android.support.annotation.UiThread
+import android.support.v4.content.ContextCompat
+import android.widget.ImageView
 import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.Job
@@ -15,6 +17,7 @@ import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import org.json.JSONException
 import org.json.JSONObject
+import org.mozilla.focus.R
 import java.util.concurrent.TimeUnit
 
 /**
@@ -119,4 +122,11 @@ data class PocketVideo(
             null
         }
     }
+}
+
+fun ImageView.setImageDrawableAsPocketWordmark() {
+    // We want to set SVGs in code because they can produce artifacts otherwise.
+    setImageDrawable(context.getDrawable(R.drawable.ic_pocket_and_wordmark).apply {
+        setTint(ContextCompat.getColor(context, R.color.photonGrey10))
+    })
 }
