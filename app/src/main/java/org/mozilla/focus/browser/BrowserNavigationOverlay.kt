@@ -17,11 +17,15 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Toast
 import kotlinx.android.synthetic.main.browser_overlay.view.*
+import kotlinx.android.synthetic.main.browser_overlay_top_nav.view.*
 import kotlinx.android.synthetic.main.home_tile.view.*
 import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.home.HomeTilesManager
+import org.mozilla.focus.home.pocket.Pocket
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.Settings
 import org.mozilla.focus.widget.InlineAutocompleteEditText
@@ -43,7 +47,7 @@ enum class NavigationEvent {
             R.id.navButtonSettings -> SETTINGS
             R.id.turboButton -> TURBO
             R.id.pinButton -> PIN_ACTION
-            R.id.pocketVideoFeedButton -> POCKET
+            R.id.pocketVideoMegaTileView -> POCKET
             else -> null
         }
 
@@ -92,13 +96,15 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             Settings.getInstance(context).isBlockingEnabled = value
         }
 
+    private val pocketVideos = Pocket.getRecommendedVideos()
+
     private var hasUserChangedURLSinceEditTextFocused = false
 
     init {
         LayoutInflater.from(context)
                 .inflate(R.layout.browser_overlay, this, true)
         listOf(navButtonBack, navButtonForward, navButtonReload, navButtonSettings,
-                turboButton, pinButton, pocketVideoFeedButton)
+                turboButton, pinButton, pocketVideoMegaTileView)
                 .forEach {
                     it.setOnClickListener(this)
                 }
@@ -106,6 +112,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         uiLifecycleCancelJob = Job()
 
         initTiles()
+        initMegaTile()
         setupUrlInput()
         turboButton.isChecked = Settings.getInstance(context).isBlockingEnabled
         navButtonSettings.setImageResource(R.drawable.ic_settings) // Must be set in code for SVG to work correctly.
@@ -142,6 +149,17 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         }, onTileLongClick = openHomeTileContextMenu)
         layoutManager = GridLayoutManager(context, COL_COUNT)
         setHasFixedSize(true)
+    }
+
+    private fun initMegaTile() {
+        if (pocketVideos.isCompleted) {
+            pocketVideoMegaTileView.pocketVideos = pocketVideos.getCompleted()
+        } else {
+            // TODO: #864 show loading screen
+            launch(UI) {
+                pocketVideoMegaTileView.pocketVideos = pocketVideos.await()
+            }
+        }
     }
 
     private fun setupUrlInput() = with (navUrlInput) {

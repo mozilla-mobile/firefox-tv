@@ -110,17 +110,14 @@
             android:textColor="@color/tv_white" />
     </LinearLayout>
 
-    <!-- TODO: #774: Make me a megatile! -->
-    <Button
-        android:id="@+id/pocketVideoFeedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/pocket_brand_name"
-        android:textColor="@color/tv_white"
-        android:background="@color/pocket_coral"
+    <org.mozilla.focus.home.pocket.PocketVideoMegaTile
+        android:id="@+id/pocketVideoMegaTileView"
+        android:layout_width="match_parent"
+        android:layout_height="124dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginEnd="45dp"
+        android:background="@drawable/pocket_video_mega_tile_background"
+        android:focusable="true"
         />
 
     <android.support.v7.widget.RecyclerView

@@ -6,6 +6,7 @@ package org.mozilla.focus.home.pocket
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -29,7 +30,11 @@ class PocketVideoMegaTile(
     private var thumbnailViews: List<ImageView>
 
     init {
+        // The layout of this view is dependent on both parent and child layout params. To ensure we
+        // don't lose some of these important parent params in another file (e.g. overlay), we set
+        // them in code.
         orientation = HORIZONTAL
+        gravity = Gravity.CENTER_VERTICAL or Gravity.END
 
         LayoutInflater.from(context).inflate(R.layout.pocket_video_mega_tile, this, true)
         pocketWordmarkView.setImageDrawableAsPocketWordmark()
