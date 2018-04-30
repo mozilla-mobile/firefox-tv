@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageButton
+        android:id="@+id/navButtonBack"
+        style="@style/NavigationButton"
+        android:src="@drawable/ic_back"
+        android:contentDescription="@string/content_description_back"
+        android:nextFocusLeft="@id/navButtonBack"/>
+
+    <ImageButton
+        android:id="@+id/navButtonForward"
+        style="@style/NavigationButton"
+        android:src="@drawable/ic_forward"
+        android:contentDescription="@string/content_description_forward"/>
+
+    <ImageButton
+        android:id="@+id/navButtonReload"
+        style="@style/NavigationButton"
+        android:src="@drawable/ic_refresh"
+        android:contentDescription="@string/content_description_reload"/>
+
+    <org.mozilla.focus.widget.CheckableImageButton
+        android:id="@+id/pinButton"
+        style="@style/NavigationButton"
+        android:src="@drawable/pin_selector"
+        android:contentDescription="@string/pin_label"/>
+
+    <org.mozilla.focus.widget.CheckableImageButton
+        android:id="@+id/turboButton"
+        style="@style/NavigationButton"
+        android:src="@drawable/turbo_selector"
+        android:contentDescription="@string/turbo_mode"
+        android:nextFocusRight="@+id/navButtonSettings"/>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Image src set in code to fix SVG. -->
+    <ImageButton
+        android:id="@+id/navButtonSettings"
+        style="@style/NavigationButton"
+        android:nextFocusLeft="@id/turboButton"
+        android:contentDescription="@string/menu_settings"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_firefox_and_workmark" />
+
+</merge>
