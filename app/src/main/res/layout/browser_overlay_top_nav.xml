@@ -4,6 +4,8 @@
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- We set focusDown targets in code to avoid the redundancy.  -->
+
     <ImageButton
         android:id="@+id/navButtonBack"
         style="@style/NavigationButton"
