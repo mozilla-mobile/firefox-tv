@@ -20,12 +20,16 @@
         android:layout_marginBottom="27dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:focusable="true"
+        android:descendantFocusability="afterDescendants"
         >
 
         <include layout="@layout/browser_overlay_top_nav"/>
     </LinearLayout>
 
-    <!-- Drawable tinted in code (XML needs API 23+). -->
+    <!-- An explicit nextFocusUp seems necessary to make up work consistently.
+
+         Drawable tinted in code (XML needs API 23+). -->
     <org.mozilla.focus.widget.InlineAutocompleteEditText
         android:id="@+id/navUrlInput"
         android:drawableStart="@drawable/ic_search"
@@ -46,6 +50,7 @@
         android:textIsSelectable="false"
         android:textColor="@color/tv_white"
         android:nextFocusRight="@id/navUrlInput"
+        android:nextFocusUp="@id/topNavContainer"
         />
 
     <org.mozilla.focus.home.pocket.PocketVideoMegaTile
