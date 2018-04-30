@@ -120,7 +120,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         navButtonSettings.setImageResource(R.drawable.ic_settings) // Must be set in code for SVG to work correctly.
 
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context, R.color.tv_white)) }
-        navCloseHint.compoundDrawablesRelative.forEach(tintDrawable)
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
 
         tileContainer.addOnScrollListener(object : RecyclerView.OnScrollListener() {

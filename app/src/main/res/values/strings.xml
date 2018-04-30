@@ -180,7 +180,6 @@ be temporary, and you can try again later.</li>
          SELECT refers to a button on the remote: the button at the center of the 4-way directional navigation. -->
     <string name="homescreen_unpin_tutorial_toast">Press and hold SELECT to unpin from homescreen</string>
     <string name="homescreen_tile_remove">Remove</string>
-    <string name="nav_close_hint">Close</string>
 
     <string name="pin_label">Pin to homescreen</string>
     <string name="notification_pinned_site">Pinned to Firefox TV homescreen</string>
