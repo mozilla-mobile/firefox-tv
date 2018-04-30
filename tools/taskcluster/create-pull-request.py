@@ -22,13 +22,13 @@ if len(sys.argv) != 2:
 
 # Get token for GitHub bot account from secrets service
 secrets = taskcluster.Secrets({'baseUrl': 'http://taskcluster/secrets/v1'})
-data = secrets.get('project/focus/github')
+data = secrets.get('project/mobile/github')
 token = data['secret']['botAccountToken']
 
 BRANCH = sys.argv[1]
 OWNER = 'mozilla-mobile'
 USER = 'MickeyMoz'
-REPO = 'focus-android'
+REPO = 'firefox-tv'
 BASE = 'master'
 HEAD = "MickeyMoz:%s" % BRANCH
 URL = "https://%s:%s@github.com/%s/%s/" % (USER, token, USER, REPO)
