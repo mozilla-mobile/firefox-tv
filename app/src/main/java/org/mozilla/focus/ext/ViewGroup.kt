@@ -8,3 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 
 fun ViewGroup.hasChild(childToCheck: View?) = childToCheck != null && indexOfChild(childToCheck) != -1
+
+inline fun ViewGroup.forEachChild(functionBlock: (View) -> Unit) {
+    for (i in 0 until childCount) {
+        functionBlock(getChildAt(i))
+    }
+}
