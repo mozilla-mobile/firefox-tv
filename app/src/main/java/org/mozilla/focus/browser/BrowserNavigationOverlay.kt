@@ -104,12 +104,12 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     init {
         LayoutInflater.from(context)
                 .inflate(R.layout.browser_overlay, this, true)
-        listOf(navButtonBack, navButtonForward, navButtonReload, navButtonSettings,
-                turboButton, pinButton, pocketVideoMegaTileView)
-                .forEach {
-                    it.setOnClickListener(this)
-                }
-        topNavContainer.forEachChild { it.nextFocusDownId = navUrlInput.id }
+
+        topNavContainer.forEachChild {
+            it.nextFocusDownId = navUrlInput.id
+            if (it.isFocusable) it.setOnClickListener(this)
+        }
+        pocketVideoMegaTileView.setOnClickListener(this)
 
         uiLifecycleCancelJob = Job()
 
