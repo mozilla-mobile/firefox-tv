@@ -9,7 +9,6 @@
     android:orientation="vertical"
     android:descendantFocusability="afterDescendants"
     android:paddingTop="27dp"
-    android:paddingBottom="27dp"
     >
 
     <LinearLayout
