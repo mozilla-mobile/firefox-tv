@@ -26,49 +26,28 @@
         <include layout="@layout/browser_overlay_top_nav"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical">
-
-        <!-- Drawable tinted in code (XML needs API 23+). -->
-        <org.mozilla.focus.widget.InlineAutocompleteEditText
-            android:id="@+id/navUrlInput"
-            android:drawableStart="@drawable/ic_search"
-            android:drawablePadding="10dp"
-            android:layout_width="400dp"
-            android:layout_height="@dimen/urlbar_height"
-            android:background="@drawable/nav_urlbar_background"
-            android:hint="@string/urlbar_hint"
-            android:imeOptions="actionGo|flagNoExtractUi|flagNoFullscreen"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:inputType="textUri"
-            android:lines="1"
-            android:importantForAutofill="no"
-            android:cursorVisible="false"
-            android:textIsSelectable="false"
-            android:textColor="@color/tv_white"
-            android:nextFocusRight="@id/navUrlInput"
-            />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
-        <!-- Drawable tinted in code (XML needs API 23+). -->
-        <TextView
-            android:id="@+id/navCloseHint"
-            android:gravity="center_vertical"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_weight="0"
-            android:drawableStart="@drawable/ic_wide_menu"
-            android:drawablePadding="5dp"
-            android:text="@string/nav_close_hint"
-            android:textColor="@color/tv_white" />
-    </LinearLayout>
+    <!-- Drawable tinted in code (XML needs API 23+). -->
+    <org.mozilla.focus.widget.InlineAutocompleteEditText
+        android:id="@+id/navUrlInput"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="10dp"
+        android:layout_width="498dp"
+        android:layout_height="@dimen/urlbar_height"
+        android:layout_marginStart="57dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/nav_urlbar_background"
+        android:hint="@string/urlbar_hint"
+        android:imeOptions="actionGo|flagNoExtractUi|flagNoFullscreen"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:inputType="textUri"
+        android:lines="1"
+        android:importantForAutofill="no"
+        android:cursorVisible="false"
+        android:textIsSelectable="false"
+        android:textColor="@color/tv_white"
+        android:nextFocusRight="@id/navUrlInput"
+        />
 
     <org.mozilla.focus.home.pocket.PocketVideoMegaTile
         android:id="@+id/pocketVideoMegaTileView"
