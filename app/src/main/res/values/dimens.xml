@@ -32,4 +32,6 @@
 
     <dimen name="pocket_feed_horizontal_margin">96dp</dimen>
     <dimen name="pocket_video_item_horizontal_margin">12dp</dimen>
+
+    <dimen name="pocket_video_mega_tile_thumbnail_corner_radius">4dp</dimen>
 </resources>

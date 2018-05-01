@@ -13,6 +13,7 @@ import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.view.*
 import org.mozilla.focus.R
 import org.mozilla.focus.utils.PicassoWrapper
+import org.mozilla.focus.utils.RoundCornerTransformation
 import kotlin.properties.Delegates
 
 /** A view that contains the Pocket logo and several thumbnails from Pocket videos. */
@@ -23,11 +24,16 @@ class PocketVideoMegaTile(
     var pocketVideos by Delegates.observable<List<PocketVideo>?>(null) { _, _, newVideos ->
         if (newVideos == null) return@observable
         thumbnailViews.forEachIndexed { i, thumbnailView ->
-            PicassoWrapper.client.load(newVideos[i].thumbnailURL).into(thumbnailView)
+            PicassoWrapper.client.load(newVideos[i].thumbnailURL)
+                    .transform(roundCornerTransformation)
+                    .into(thumbnailView)
         }
     }
 
     private var thumbnailViews: List<ImageView>
+
+    private val roundCornerTransformation = RoundCornerTransformation(
+            resources.getDimension(R.dimen.pocket_video_mega_tile_thumbnail_corner_radius))
 
     init {
         // The layout of this view is dependent on both parent and child layout params. To ensure we
