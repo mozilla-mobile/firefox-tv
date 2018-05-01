@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
+  <string name="pocket_brand_name">Pocket</string>
   <string name="action_cancel">キャンセル</string>
   <string name="action_ok">OK</string>
   <string name="urlbar_hint">検索語またはアドレスを入力</string>
@@ -54,7 +55,6 @@
   <string name="your_rights_content3"><![CDATA["Mozilla、Firefox、%1$s の名称やロゴを含む、Mozilla Foundation および第三者の商標に関するいかなる権利やライセンスもあなたには与えられていません。追加の情報は "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla &#21830;&#27161;&#12509;&#12522;&#12471;&#12540;</a>" をご覧ください。"]]></string>
   <string name="your_rights_content4"><![CDATA["%1$s の追加ソースコードは、様々な他のフリーおよびオープンソースの "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#12521;&#12452;&#12475;&#12531;&#12473;</a>" に基いて公開されています。"]]></string>
   <string name="your_rights_content5"><![CDATA["%1$s は Disconnect, Inc. により提供されているブロックリストも "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>" の下で単独のリソースとして使用しており、それらは "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">&#12371;&#12385;&#12425;</a>" から入手可能です。"]]></string>
-  <string name="menu_drawer_home">ホーム</string>
   <string name="settings_cookies_dialog_title">すべての Cookie とサイトデータの消去</string>
   <string name="settings_cookies_dialog_content">[今すぐ消去] を選択すると Firefox for Fire TV に保存されたすべての Cookie とサイトデータが消去されます。ウェブサイトからログアウトし、オフライン作業用のウェブページが削除されます。</string>
   <string name="turbo_mode">ターボモード</string>
@@ -62,9 +62,19 @@
   <string name="onboarding_turbo_mode_body">ターボモードは自動的にトラッカーと広告をブロックし、より速くブラウズするのを手助けします。 サイトが期待通りに動作しないなど問題が見られる場合は、ターボモードを無効化してください。</string>
   <string name="onboarding_turbo_mode_button_on">ターボモードを有効のままにする</string>
   <string name="onboarding_turbo_mode_button_off">ターボモードを無効にする</string>
+  <string name="homescreen_unpin_tutorial_toast">ホーム画面からピン留めを外すには [選択] ボタンを長押ししてください</string>
   <string name="homescreen_tile_remove">削除</string>
   <string name="nav_close_hint">閉じる</string>
   <string name="pin_label">ホーム画面にピン留め</string>
   <string name="notification_pinned_site">Firefox TV のホーム画面にピン留めしました</string>
   <string name="notification_unpinned_site">Firefox TV のホーム画面から削除しました</string>
+  <string name="pocket_home_tutorial_title">%1$s からおすすめの動画を紹介します</string>
+  <string name="pocket_home_tutorial_description">ウェブ上で一番興味深い動画。Mozilla の一員となった %1$s がおすすめします。</string>
+  <string name="pocket_home_tutorial_dismiss_button">了解しました</string>
+  <string name="pocket_home_a11y_tile_focused">%1$s のおすすめ動画</string>
+  <string name="pocket_video_feed_recommended_videos_title">おすすめ動画</string>
+  <string name="pocket_video_feed_failed_to_load">申し訳ありませんが、%1$s のおすすめ動画を表示中に何か問題が発生しました。</string>
+  <string name="pocket_video_feed_reload_button">再読み込み</string>
+  <string name="pocket_video_feed_a11y_navigation">動画を選択するには左右のボタンを使ってください</string>
+  <string name="pocket_video_feed_a11y_feed_item_focused">%2$s 上の %1$s</string>
 </resources>

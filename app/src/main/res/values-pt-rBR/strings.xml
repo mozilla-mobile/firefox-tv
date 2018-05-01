@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
+  <string name="pocket_brand_name">Pocket</string>
   <string name="action_cancel">Cancelar</string>
   <string name="action_ok">OK</string>
   <string name="urlbar_hint">Pesquisar ou navegar</string>
@@ -54,7 +55,6 @@
   <string name="your_rights_content3"><![CDATA["Não lhe são concedidos quaisquer direitos ou licenças sobre marcas registradas da Fundação Mozilla ou de terceiros, incluindo os nomes ou logos da Mozilla, Firefox ou %1$s. Informações adicionais podem ser encontradas "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">aqui</a>.]]></string>
   <string name="your_rights_content4"><![CDATA[\"Código fonte adicionais para o %1$s estão disponíveis sobre várias outras \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">licen&amp;#231;as</a>\" livres e de código aberto.\"]]></string>
   <string name="your_rights_content5"><![CDATA[\"O %1$s também utiliza \"<em xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">listas de bloqueios</em>\" disponibilizadas pela Disconnect, Inc. como um trabalho independente disponibilizado \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">aqui</a>\", sob a \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>.]]></string>
-  <string name="menu_drawer_home">Início</string>
   <string name="settings_cookies_dialog_title">Limpar todos os cookies e dados do site</string>
   <string name="settings_cookies_dialog_content">Selecionando ´Limpar agora´ irá limpar todos os cookies e dados dos sites que foram armazenados pelo Firefox para Fire TV. Isso poderá desconectar suas contas das páginas web e remover conteúdos off-line.</string>
   <string name="turbo_mode">Modo Turbo</string>
@@ -62,9 +62,15 @@
   <string name="onboarding_turbo_mode_body">O Modo Turbo bloqueia automaticamente rastreadores e anúncios para ajudá-lo a chegar ao seu destino mais rápido. Se houver algum problema de velocidade - como um site que não está se comportando da forma que você espera - apenas desligue o Modo Turbo.</string>
   <string name="onboarding_turbo_mode_button_on">Manter o Modo Turbo ativado</string>
   <string name="onboarding_turbo_mode_button_off">Desativar Modo Turbo</string>
+  <string name="homescreen_unpin_tutorial_toast">Pressione e segure o SELECT para desafixar da tela inicial</string>
   <string name="homescreen_tile_remove">Remover</string>
   <string name="nav_close_hint">Fechar</string>
   <string name="pin_label">Fixar na tela inicial</string>
   <string name="notification_pinned_site">Fixado à tela inicial do Firefox TV</string>
   <string name="notification_unpinned_site">Removido da tela inicial do Firefox TV</string>
+  <string name="pocket_home_tutorial_title">Introduzindo os vídeos recomendados pelo %1$s</string>
+  <string name="pocket_home_tutorial_dismiss_button">Ok, entendi</string>
+  <string name="pocket_video_feed_recommended_videos_title">Vídeos recomendados</string>
+  <string name="pocket_video_feed_reload_button">Tentar novamente</string>
+  <string name="pocket_video_feed_a11y_feed_item_focused">%1$s em %2$s</string>
 </resources>
