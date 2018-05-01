@@ -2,9 +2,34 @@
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <solid android:color="@color/pocket_coral"/>
-    <corners android:radius="16dp"/>
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="@color/pocket_coral"/>
+            <corners android:radius="16dp"/>
+            <stroke
+                android:width="4dp"
+                android:color="@color/photonBlue60"
+                />
+        </shape>
+    </item>
 
-</shape>
+    <item android:state_focused="true">
+        <shape>
+            <solid android:color="@color/pocket_coral"/>
+            <corners android:radius="16dp"/>
+            <stroke
+                android:width="4dp"
+                android:color="@color/photonBlue50"
+                />
+        </shape>
+    </item>
+
+    <item>
+        <shape>
+            <solid android:color="@color/pocket_coral"/>
+            <corners android:radius="16dp"/>
+        </shape>
+    </item>
+</selector>
