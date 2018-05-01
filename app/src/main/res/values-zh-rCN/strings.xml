@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
+  <string name="pocket_brand_name">Pocket</string>
   <string name="action_cancel">取消</string>
   <string name="action_ok">确定</string>
   <string name="urlbar_hint">搜索或输入网址</string>
@@ -54,7 +55,6 @@
   <string name="your_rights_content3"><![CDATA[您没有取得 Mozilla 基金会或任何一方的商标的任何权利或许可，包括 Mozilla、Firefox 和 %1$s 名称或徽标的许可。有关信息请查阅<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&amp;#27492;&amp;#22788;</a>。]]></string>
   <string name="your_rights_content4"><![CDATA[%1$s 其他源代码以各类自由和开源<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&amp;#35768;&amp;#21487;&amp;#35777;</a>开放。]]></string>
   <string name="your_rights_content5"><![CDATA[\"%1$s 还使用 Disconnect 公司提供的阻止列表，它是以 \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU &amp;#36890;&amp;#29992;&amp;#20844;&amp;#20849;&amp;#35768;&amp;#21487;&amp;#35777; v3</a>\" 提供的一个独立的作品，可在\"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">&amp;#36825;&amp;#37324;</a>找到。]]></string>
-  <string name="menu_drawer_home">主页</string>
   <string name="settings_cookies_dialog_title">清除所有 Cookie 和站点数据</string>
   <string name="settings_cookies_dialog_content">选择“立即清除”将清除 Firefox 存储的所有 Cookie 和站点数据。这可能使您退出网站的登录，以及删除离线的网站内容。</string>
   <string name="turbo_mode">加速模式</string>
@@ -62,9 +62,19 @@
   <string name="onboarding_turbo_mode_body">加速模式会自动拦截跟踪器与广告，访问网站更迅捷。若您发现网站无法正常工作，请退出加速模式。</string>
   <string name="onboarding_turbo_mode_button_on">保持加速模式启用</string>
   <string name="onboarding_turbo_mode_button_off">退出加速模式</string>
+  <string name="homescreen_unpin_tutorial_toast">长按 SELECT 键从主屏幕取消固定</string>
   <string name="homescreen_tile_remove">移除</string>
   <string name="nav_close_hint">关闭</string>
   <string name="pin_label">固定到主屏幕</string>
   <string name="notification_pinned_site">已固定到 Firefox TV 主屏幕</string>
   <string name="notification_unpinned_site">已从 Firefox TV 主屏幕移除</string>
+  <string name="pocket_home_tutorial_title">介绍由“%1$s”推荐的视频</string>
+  <string name="pocket_home_tutorial_description">网络上最有趣的视频。由 Mozilla 旗下 %1$s 为您推荐。</string>
+  <string name="pocket_home_tutorial_dismiss_button">我明白了</string>
+  <string name="pocket_home_a11y_tile_focused">由“%1$s”推荐的视频</string>
+  <string name="pocket_video_feed_recommended_videos_title">推荐视频</string>
+  <string name="pocket_video_feed_failed_to_load">呃，我们在显示由“%1$s”推荐的视频时遇到一些问题。</string>
+  <string name="pocket_video_feed_reload_button">重试</string>
+  <string name="pocket_video_feed_a11y_navigation">使用左键和右键在视频之间移动</string>
+  <string name="pocket_video_feed_a11y_feed_item_focused">%2$s 上的 %1$s</string>
 </resources>

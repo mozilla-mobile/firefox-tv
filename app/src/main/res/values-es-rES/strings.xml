@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
+  <string name="pocket_brand_name">Pocket</string>
   <string name="action_cancel">Cancelar</string>
   <string name="action_ok">Aceptar</string>
   <string name="urlbar_hint">Buscar o escribir dirección</string>
@@ -54,7 +55,6 @@
   <string name="your_rights_content3"><![CDATA[\"No tienes ningún derecho o licencia sobre las marcas registradas de la Fundación Mozilla ni cualquier otra parte interesada, incluidos los nombres o logos de Mozilla, Firefox o %1$s. \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Aqu&amp;#237;</a>\" puedes encontrar más información.\"]]></string>
   <string name="your_rights_content4"><![CDATA[\"Otras \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">licencias</a>\" de código abierto y gratuitas también incluyen código fuente adicional para %1$s.\"]]></string>
   <string name="your_rights_content5"><![CDATA[\"%1$s también utiliza las listas de bloqueo de DIsconnect, Inc. como trabajos separados e independientes bajo la \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Licencia P&amp;#250;blica General de GNU v3</a>\" y que puedes encontrar \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">aqu&amp;#237;</a>.]]></string>
-  <string name="menu_drawer_home">Inicio</string>
   <string name="settings_cookies_dialog_title">Limpiar todas las cookies y datos del sitio</string>
   <string name="settings_cookies_dialog_content">Seleccionar \"Limpiar ahora\" limpiará todas las cookies y datos del sitio guardados por Firefox. Esto puede desconectarle de sitios web y eliminar el contenido web sin conexión.</string>
   <string name="turbo_mode">Modo turbo</string>
@@ -62,9 +62,19 @@
   <string name="onboarding_turbo_mode_body">El modo turbo bloquea automáticamente rastreadores y anuncios para ayudarte a llegar más rápido a donde vas. Si hay un bache de velocidad, como un sitio que no se comporta como esperabas, solo tienes que desactivar el modo turbo.</string>
   <string name="onboarding_turbo_mode_button_on">Mantener activado el modo turbo</string>
   <string name="onboarding_turbo_mode_button_off">Desactivar el modo turbo</string>
+  <string name="homescreen_unpin_tutorial_toast">Mantén presionado SELECT para desanclarlo de la pantalla de inicio</string>
   <string name="homescreen_tile_remove">Eliminar</string>
   <string name="nav_close_hint">Cerrar</string>
   <string name="pin_label">Fijar a la pantalla inicio</string>
   <string name="notification_pinned_site">FIjar a la pantalla de inicio de Firefox TV</string>
   <string name="notification_unpinned_site">Eliminar de la pantalla de inicio de Firefox TV</string>
+  <string name="pocket_home_tutorial_title">Presentando vídeos recomendados por %1$s</string>
+  <string name="pocket_home_tutorial_description">Los videos más interesantes de la web. Recomendado por %1$s, y ahora también parte de Mozilla.</string>
+  <string name="pocket_home_tutorial_dismiss_button">Vale, entendido</string>
+  <string name="pocket_home_a11y_tile_focused">Video recomendado por %1$s</string>
+  <string name="pocket_video_feed_recommended_videos_title">Videos recomendados</string>
+  <string name="pocket_video_feed_failed_to_load">Umm. Estamos teniendo problemas para visualizar los videos recomendados por %1$s.</string>
+  <string name="pocket_video_feed_reload_button">Volver a intentarlo</string>
+  <string name="pocket_video_feed_a11y_navigation">Usar izquierda y derecha para moverse entre los videos</string>
+  <string name="pocket_video_feed_a11y_feed_item_focused">%1$s de %2$s</string>
 </resources>

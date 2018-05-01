@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
+  <string name="pocket_brand_name">Pocket</string>
   <string name="action_cancel">Abbrechen</string>
   <string name="action_ok">OK</string>
   <string name="urlbar_hint">Suchen oder Adresse eingeben</string>
@@ -54,7 +55,6 @@
   <string name="your_rights_content3"><![CDATA[\"Ihnen werden keine Rechte oder Lizenzen an den Markenrechten der Mozilla Foundation oder einer anderen Partei eingeräumt, dazu zählen die Namen und Logos von Mozilla, Firefox oder %1$s. Weitere Informationen finden Sie \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">hier</a>.]]></string>
   <string name="your_rights_content4"><![CDATA[Sonstiger Quelltext für %1$s steht unter diversen anderen freien und Open-Source-<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Lizenzen</a>.]]></string>
   <string name="your_rights_content5"><![CDATA[\"%1$s nutzt auch von Disconnect, Inc. angebotene Blockierlisten als separate und unabhängige Werke unter der \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License3</a>\", die \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">hier</a>\" verfügbar sind.\"]]></string>
-  <string name="menu_drawer_home">Startseite</string>
   <string name="settings_cookies_dialog_title">Alle Cookies und Websitedaten entfernen</string>
   <string name="settings_cookies_dialog_content">Jetzt leeren löscht alle Cookies und Websitedaten, die Firefox gespeichert hat. Dadurch werden Sie wahrscheinlich von Websites abgemeldet und Offline-Webinhalte werden gelöscht.</string>
   <string name="turbo_mode">Turbo-Modus</string>
@@ -62,9 +62,19 @@
   <string name="onboarding_turbo_mode_body">Der Turbo-Modus blockiert automatisch Tracker und Anzeigen, damit Sie schneller ans Ziel kommen. Wenn es ein Problem gibt – wie bei einer Website, die sich nicht so verhält, wie Sie es erwarten – schalten Sie einfach den Turbo-Modus aus.</string>
   <string name="onboarding_turbo_mode_button_on">Turbo-Modus aktiviert lassen</string>
   <string name="onboarding_turbo_mode_button_off">Turbo-Modus deaktivieren</string>
+  <string name="homescreen_unpin_tutorial_toast">Drücken und halten Sie AUSWÄHLEN zum Ablösen vom Startbildschirm</string>
   <string name="homescreen_tile_remove">Entfernen</string>
   <string name="nav_close_hint">Schließen</string>
   <string name="pin_label">An Startbildschirm anheften</string>
   <string name="notification_pinned_site">Am Firefox-TV-Startbildschirm angeheftet</string>
   <string name="notification_unpinned_site">Vom Firefox-TV-Startbildschirm entfernt</string>
+  <string name="pocket_home_tutorial_title">Hier kommen von %1$s empfohlene Videos</string>
+  <string name="pocket_home_tutorial_description">Die interessantesten Videos im Internet. Empfohlen von %1$s und jetzt Teil von Mozilla.</string>
+  <string name="pocket_home_tutorial_dismiss_button">Ok, verstanden</string>
+  <string name="pocket_home_a11y_tile_focused">Von %1$s empfohlene Videos</string>
+  <string name="pocket_video_feed_recommended_videos_title">Empfohlene Videos</string>
+  <string name="pocket_video_feed_failed_to_load">Hmm. Aktuell gibt es Probleme beim Anzeigen von empfohlenen Videos von %1$s.</string>
+  <string name="pocket_video_feed_reload_button">Erneut versuchen</string>
+  <string name="pocket_video_feed_a11y_navigation">Verwenden Sie links und rechts, um zwischen Videos hin- und herzuschalten</string>
+  <string name="pocket_video_feed_a11y_feed_item_focused">%1$s auf %2$s</string>
 </resources>

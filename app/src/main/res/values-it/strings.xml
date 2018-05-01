@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
+  <string name="pocket_brand_name">Pocket</string>
   <string name="action_cancel">Annulla</string>
   <string name="action_ok">OK</string>
   <string name="urlbar_hint">Cerca o inserisci un indirizzo</string>
@@ -54,7 +55,6 @@
   <string name="your_rights_content3"><![CDATA[\"Mozilla non attribuisce all’utente alcun diritto o licenza relativamente all’utilizzo dei marchi registrati da Mozilla Foundation o da altri soggetti, inclusi i nomi Mozilla, Firefox, %1$s e i logo associati. Ulteriori informazioni sono disponibili in \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">questa pagina</a>.]]></string>
   <string name="your_rights_content4"><![CDATA[\"Codice sorgente aggiuntivo per %1$s è disponibile nei termini di altre \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">licenze</a>\" libere e Open Source.\"]]></string>
   <string name="your_rights_content5"><![CDATA[\"%1$s utilizza un servizio di \"<em xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">blocklist</em>\" fornito da Disconnect, Inc. in qualità di opera aggiuntiva e separata, distribuita nei termini della \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>\" e disponibile \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">qui</a>.]]></string>
-  <string name="menu_drawer_home">Home</string>
   <string name="settings_cookies_dialog_title">Elimina tutti i cookie e i dati dei siti web</string>
   <string name="settings_cookies_dialog_content">Selezionando “Elimina adesso” verranno eliminati tutti i cookie e i dati dei siti web salvati in Firefox per Firefox TV. Questo potrebbe disconnettere l’utente da siti web o rimuovere contenuti per l’utilizzo non in linea.</string>
   <string name="turbo_mode">Modalità turbo</string>
@@ -62,9 +62,19 @@
   <string name="onboarding_turbo_mode_body">La modalità turbo blocca in automatico elementi traccianti e pubblicità per caricare le pagine più rapidamente. Se incontri un problema, come un sito che non funziona come dovrebbe, basterà disattivare la modalità turbo.</string>
   <string name="onboarding_turbo_mode_button_on">Mantieni attiva modalità turbo</string>
   <string name="onboarding_turbo_mode_button_off">Disattiva modalità turbo</string>
+  <string name="homescreen_unpin_tutorial_toast">Per sbloccare un elemento nella pagina principale tieni premuto SELECT</string>
   <string name="homescreen_tile_remove">Rimuovi</string>
   <string name="nav_close_hint">Chiudi</string>
   <string name="pin_label">Fissa alla schermata principale</string>
   <string name="notification_pinned_site">Fissato alla schermata principale di Firefox TV</string>
   <string name="notification_unpinned_site">Rimosso dalla schermata principale di Firefox TV</string>
+  <string name="pocket_home_tutorial_title">Ti presentiamo i video consigliati da %1$s</string>
+  <string name="pocket_home_tutorial_description">I video più interessanti del Web. Consigliati da %1$s, ora parte integrante di Mozilla.</string>
+  <string name="pocket_home_tutorial_dismiss_button">OK, ricevuto</string>
+  <string name="pocket_home_a11y_tile_focused">Video consigliato da %1$s</string>
+  <string name="pocket_video_feed_recommended_videos_title">Video consigliati</string>
+  <string name="pocket_video_feed_failed_to_load">Uhm… Sembra che ci sia un problema con la visualizzazione dei video consigliati da %1$s.</string>
+  <string name="pocket_video_feed_reload_button">Riprova</string>
+  <string name="pocket_video_feed_a11y_navigation">Utilizza i tasti verso sinistra e destra per muoverti tra i video</string>
+  <string name="pocket_video_feed_a11y_feed_item_focused">%1$s da %2$s</string>
 </resources>
