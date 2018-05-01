@@ -85,6 +85,7 @@ object TelemetryWrapper {
         val OFF = "off"
         val TILE_BUNDLED = "bundled"
         val TILE_CUSTOM = "custom"
+        val POCKET_VIDEO_MEGATILE = "pocket_video_tile"
     }
 
     private object Extra {
@@ -254,6 +255,7 @@ object TelemetryWrapper {
             NavigationEvent.BACK -> Value.BACK
             NavigationEvent.FORWARD -> Value.FORWARD
             NavigationEvent.RELOAD -> Value.RELOAD
+            NavigationEvent.POCKET -> Value.POCKET_VIDEO_MEGATILE
 
             // For legacy reasons, turbo has different telemetry params so we special case it.
             // Pin has a similar state change so we model it after turbo.
@@ -265,7 +267,6 @@ object TelemetryWrapper {
                 TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.PIN_PAGE, boolToOnOff(isPinButtonChecked)).queue()
                 return
             }
-            NavigationEvent.POCKET -> return // TODO: Add telemetry #772.
 
             // Load is handled in a separate event
             NavigationEvent.LOAD_URL, NavigationEvent.LOAD_TILE -> return
