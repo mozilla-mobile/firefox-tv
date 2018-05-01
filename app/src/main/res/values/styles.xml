@@ -73,4 +73,12 @@
         <item name="android:background">@drawable/navigation_button_background</item>
         <item name="android:tint">@color/tv_white</item>
     </style>
+
+    <style name="PocketVideoMegaTileThumbnail">
+        <item name="android:layout_width">150dp</item>
+        <item name="android:layout_height">100dp</item>
+        <item name="android:layout_marginStart">12dp</item>
+        <item name="android:layout_marginEnd">12dp</item>
+    </style>
+
 </resources>
