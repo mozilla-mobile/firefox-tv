@@ -254,7 +254,7 @@ style:
   ModifierOrder:
     active: true
   MagicNumber:
-    active: true
+    active: false # Has more false positives than value
     ignoreNumbers: '-1,0,1,2'
     ignoreHashCodeFunction: false
     ignorePropertyDeclaration: false
