@@ -143,7 +143,8 @@ class BrowserFragment : IWebViewLifecycleFragment() {
                         }
                         NavigationEvent.VAL_UNCHECKED -> {
                             url.toUri()?.let {
-                                val tileId = BundledTilesManager.getInstance(context).unpinSite(context, it) ?: CustomTilesManager.getInstance(context).unpinSite(context, url)
+                                val tileId = BundledTilesManager.getInstance(context).unpinSite(context, it)
+                                        ?: CustomTilesManager.getInstance(context).unpinSite(context, url)
                                 // tileId should never be null, unless, for some reason we don't
                                 // have a reference to the tile/the tile isn't a Bundled or Custom tile
                                 if (tileId != null && !tileId.isEmpty()) {

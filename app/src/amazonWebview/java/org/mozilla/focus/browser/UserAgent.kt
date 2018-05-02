@@ -2,6 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+// Suppress for literal UA comment below. detekt doesn't support lower-level annotations
+// for MaxLineLength: https://github.com/arturbosch/detekt/issues/715
+@file:Suppress("MaxLineLength")
+
 package org.mozilla.focus.browser
 
 import android.content.Context

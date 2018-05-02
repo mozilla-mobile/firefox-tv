@@ -54,7 +54,9 @@ private class PocketVideoAdapter(context: Context) : RecyclerView.Adapter<Pocket
     private val videoItemHorizontalMargin = context.resources.getDimensionPixelSize(R.dimen.pocket_video_item_horizontal_margin)
     private val feedHorizontalMargin = context.resources.getDimensionPixelSize(R.dimen.pocket_feed_horizontal_margin)
 
-    private val feedItems = List(8) { PocketVideo("Mirror-Polished Japanese $it Ball Challenge Crushed", "youtube.com/tv", "youtube.com/tv") }
+    private val feedItems = List(8) {
+        PocketVideo("Mirror-Polished Japanese $it Ball Challenge Crushed", "youtube.com/tv", "youtube.com/tv")
+    }
 
     override fun getItemCount() = feedItems.size
 
