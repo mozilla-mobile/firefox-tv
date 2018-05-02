@@ -24,6 +24,7 @@ import org.mozilla.focus.ScreenController
 import org.mozilla.focus.ext.resetAfter
 import org.mozilla.focus.ext.updateLayoutParams
 import org.mozilla.focus.session.Source
+import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.FormattedDomain
 import org.mozilla.focus.utils.PicassoWrapper
 import java.net.URI
@@ -116,6 +117,7 @@ private class PocketVideoAdapter(
 
         holder.itemView.setOnClickListener {
             ScreenController.showBrowserScreenForUrl(fragmentManager, item.url, Source.POCKET_VIDEO_SUGGESTION)
+            TelemetryWrapper.pocketVideoClickEvent(item.id)
         }
         holder.itemView.setOnFocusChangeListener { _, hasFocus -> updateForFocusState(holder, hasFocus) }
         updateForFocusState(holder, holder.itemView.isFocused)
