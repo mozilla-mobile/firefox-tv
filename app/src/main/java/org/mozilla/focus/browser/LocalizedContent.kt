@@ -32,6 +32,7 @@ object LocalizedContent {
     /**
      * Load the content for focus:about
      */
+    @Suppress("LongMethod") // This doesn't change much.
     private fun loadAbout(webView: AmazonWebView) {
         val context = webView.context
         val resources = Locales.getLocalizedResources(context)

@@ -162,7 +162,8 @@ private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHold
             val homeTileCornerRadius = itemView.resources.getDimension(R.dimen.home_tile_corner_radius)
             val homeTilePlaceholderCornerRadius = itemView.resources.getDimension(R.dimen.home_tile_placeholder_corner_radius)
             val screenshot = HomeTileScreenshotStore.read(itemView.context, item.id)?.withRoundedCorners(homeTileCornerRadius)
-            screenshot ?: HomeTilePlaceholderGenerator.generate(itemView.context, item.url).withRoundedCorners(homeTilePlaceholderCornerRadius)
+            screenshot ?: HomeTilePlaceholderGenerator.generate(itemView.context, item.url)
+                    .withRoundedCorners(homeTilePlaceholderCornerRadius)
         }
 
         val titleDeferred = if (validUri == null) {
