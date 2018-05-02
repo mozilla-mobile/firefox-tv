@@ -149,7 +149,7 @@ object TelemetryWrapper {
 
         // We call reset in both startSession and stopSession. We call it here to make sure we
         // clean up before a new session if we crashed before stopSession.
-        TelemetryHomeTileUniqueClickPerSessionCounter.resetSessionData(context)
+        resetSessionMeasurements(context)
     }
 
     @UiThread // via TelemetryHomeTileUniqueClickPerSessionCounter
@@ -159,8 +159,15 @@ object TelemetryWrapper {
 
         // We call reset in both startSession and stopSession. We call it here to make sure we
         // don't persist the user's visited tile history on disk longer than strictly necessary.
+        queueSessionMeasurements(context)
+        resetSessionMeasurements(context)
+    }
 
+    private fun queueSessionMeasurements(context: Context) {
         TelemetryHomeTileUniqueClickPerSessionCounter.queueEvent(context)
+    }
+
+    private fun resetSessionMeasurements(context: Context) {
         TelemetryHomeTileUniqueClickPerSessionCounter.resetSessionData(context)
     }
 
