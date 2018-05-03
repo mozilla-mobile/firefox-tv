@@ -116,13 +116,16 @@ private class PocketVideoAdapter(
         val item = feedItems[position]
         setHorizontalMargins(holder, position)
 
-        holder.itemView.setOnClickListener { ScreenController.showBrowserScreenForUrl(fragmentManager, item.url, Source.POCKET_VIDEO_SUGGESTION) }
+        holder.itemView.setOnClickListener {
+            ScreenController.showBrowserScreenForUrl(fragmentManager, item.url, Source.POCKET_VIDEO_SUGGESTION)
+        }
         holder.itemView.setOnFocusChangeListener { _, hasFocus -> updateForFocusState(holder, hasFocus) }
         updateForFocusState(holder, holder.itemView.isFocused)
 
         titleView.text = item.title
         PicassoWrapper.client.load(item.thumbnailURL).into(videoThumbnailView)
 
+        @Suppress("TooGenericExceptionCaught") // See below.
         val itemURI = try {
             URI(item.dedupeURL)
         } catch (e: Exception) { // Apparently Kotlin doesn't have multi-catch.
