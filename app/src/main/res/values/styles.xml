@@ -74,9 +74,11 @@
         <item name="android:tint">@color/tv_white</item>
     </style>
 
+    <!-- These images won't crop or change their aspect ratio so if you modify the dimensions,
+         they need to maintain a 16:9 aspect ratio or else there will be dead-space in the ImageView. -->
     <style name="PocketVideoMegaTileThumbnail">
         <item name="android:layout_width">150dp</item>
-        <item name="android:layout_height">100dp</item>
+        <item name="android:layout_height">84.375dp</item>
         <item name="android:layout_marginStart">12dp</item>
         <item name="android:layout_marginEnd">12dp</item>
     </style>
