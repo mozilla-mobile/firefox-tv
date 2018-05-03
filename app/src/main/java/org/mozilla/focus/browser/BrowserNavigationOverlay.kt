@@ -215,6 +215,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                     if (isEnabled) NAVIGATION_BUTTON_ENABLED_ALPHA else NAVIGATION_BUTTON_DISABLED_ALPHA
         }
 
+        val focusedView = findFocus()
+
         val canGoBack = navigationStateProvider?.isBackEnabled() ?: false
         updateOverlayButtonState(canGoBack, navButtonBack)
 
@@ -240,11 +242,13 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             else -> R.id.navButtonForward
         }
 
-        maybeUpdateOverlayURLForCurrentState()
-
-        if (findFocus() == null) {
-            requestFocus()
+        // We may have lost focus when disabling the focused view above.
+        val isFocusLost = focusedView != null && findFocus() == null
+        if (isFocusLost) {
+            navUrlInput.requestFocus()
         }
+
+        maybeUpdateOverlayURLForCurrentState()
     }
 
     fun getFocusedTilePosition(): Int {
