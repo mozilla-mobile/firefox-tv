@@ -150,7 +150,14 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$architecture_components_version"
 
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
-    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.squareup.picasso:picasso:2.71828', {
+        // We temporarily don't include the packaged the support libs to avoid version mismatch.
+        // This can cause runtime errors so we should remove this ASAP! #883?
+        exclude group: 'com.android.support', module: 'exifinterface'
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-compat'
+        exclude group: 'com.android.support', module: 'support-fragment'
+    }
 
     implementation ("com.google.code.findbugs:annotations:3.0.1") {
         // We really only need the SuppressFBWarnings annotation, everything else can be ignored.
