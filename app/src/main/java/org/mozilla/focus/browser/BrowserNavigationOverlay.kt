@@ -27,6 +27,7 @@ import kotlinx.coroutines.experimental.launch
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.ext.forEachChild
+import org.mozilla.focus.ext.updateLayoutParams
 import org.mozilla.focus.home.HomeTilesManager
 import org.mozilla.focus.home.pocket.Pocket
 import org.mozilla.focus.telemetry.TelemetryWrapper
@@ -152,6 +153,18 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         }, onTileLongClick = openHomeTileContextMenu)
         layoutManager = GridLayoutManager(context, COL_COUNT)
         setHasFixedSize(true)
+
+        // We add bottomMargin to each tile in order to add spacing between them: this makes the
+        // RecyclerView slightly larger than necessary and makes the default start screen scrollable
+        // even though it doesn't need to be. To undo this, we add negative margins on the tile container.
+        // I tried other solutions (ItemDecoration, dynamically changing margins) but this is more
+        // complex because we need to relayout more than the changed view when adding/removing a row.
+        val tileBottomMargin = resources.getDimensionPixelSize(R.dimen.home_tile_margin_bottom) -
+                resources.getDimensionPixelSize(R.dimen.home_tile_container_margin_bottom)
+        updateLayoutParams {
+            val marginLayoutParams = it as MarginLayoutParams
+            marginLayoutParams.bottomMargin = -tileBottomMargin
+        }
     }
 
     private fun initMegaTile() {
