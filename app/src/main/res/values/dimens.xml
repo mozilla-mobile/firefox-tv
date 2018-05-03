@@ -16,6 +16,8 @@
 
     <!-- Specified in AdaptiveIconDrawable docs. -->
 
+    <dimen name="home_tile_container_margin_bottom">4dp</dimen>
+    <dimen name="home_tile_margin_bottom">24dp</dimen>
     <dimen name="home_tile_corner_radius">4dp</dimen>
     <dimen name="home_tile_placeholder_corner_radius">12dp</dimen>
     <dimen name="home_tile_placeholder_icon_size">50dp</dimen>
@@ -36,5 +38,5 @@
     <dimen name="pocket_video_mega_tile_thumbnail_corner_radius">4dp</dimen>
 
     <!-- This value was chosen experimentally: see usages for criteria. -->
-    <dimen name="browser_overlay_delta_scroll_padding">100dp</dimen>
+    <dimen name="browser_overlay_delta_scroll_padding">50dp</dimen>
 </resources>
