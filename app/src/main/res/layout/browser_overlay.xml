@@ -2,78 +2,90 @@
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<org.mozilla.focus.browser.BrowserNavigationOverlayScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/browser_overlay_background"
-    android:orientation="vertical"
-    android:descendantFocusability="afterDescendants"
-    android:paddingTop="27dp"
-    >
+    android:fillViewport="true"
+    android:focusable="false"
+    android:scrollbars="none">
+    <!-- Fill viewport? When don't have enough tiles. -->
 
     <LinearLayout
-        android:id="@+id/topNavContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="57dp"
-        android:layout_marginEnd="57dp"
-        android:layout_marginBottom="27dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:focusable="true"
+        android:background="@color/browser_overlay_background"
+        android:orientation="vertical"
         android:descendantFocusability="afterDescendants"
+        android:paddingTop="27dp"
+        android:paddingBottom="0dp"
         >
 
-        <include layout="@layout/browser_overlay_top_nav"/>
+        <LinearLayout
+            android:id="@+id/topNavContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="57dp"
+            android:layout_marginEnd="57dp"
+            android:layout_marginBottom="27dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:focusable="true"
+            android:descendantFocusability="afterDescendants"
+            >
+
+            <include layout="@layout/browser_overlay_top_nav"/>
+        </LinearLayout>
+
+        <!-- An explicit nextFocusUp seems necessary to make up work consistently.
+
+             Drawable tinted in code (XML needs API 23+). -->
+        <org.mozilla.focus.widget.InlineAutocompleteEditText
+            android:id="@+id/navUrlInput"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="10dp"
+            android:layout_width="498dp"
+            android:layout_height="@dimen/urlbar_height"
+            android:layout_marginStart="57dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/nav_urlbar_background"
+            android:hint="@string/urlbar_hint"
+            android:imeOptions="actionGo|flagNoExtractUi|flagNoFullscreen"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:inputType="textUri"
+            android:lines="1"
+            android:importantForAutofill="no"
+            android:cursorVisible="false"
+            android:textIsSelectable="false"
+            android:textColor="@color/tv_white"
+            android:nextFocusRight="@id/navUrlInput"
+            android:nextFocusUp="@id/topNavContainer"
+            />
+
+        <org.mozilla.focus.home.pocket.PocketVideoMegaTile
+            android:id="@+id/pocketVideoMegaTileView"
+            android:layout_width="match_parent"
+            android:layout_height="108dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginEnd="45dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/pocket_video_mega_tile_background"
+            android:focusable="true"
+            android:nextFocusUp="@id/navUrlInput"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/tileContainer"
+            android:clipToPadding="false"
+            android:clipChildren="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="45dp"
+            android:layout_marginEnd="45dp"
+            android:background="@android:color/transparent"
+            />
+
     </LinearLayout>
-
-    <!-- An explicit nextFocusUp seems necessary to make up work consistently.
-
-         Drawable tinted in code (XML needs API 23+). -->
-    <org.mozilla.focus.widget.InlineAutocompleteEditText
-        android:id="@+id/navUrlInput"
-        android:drawableStart="@drawable/ic_search"
-        android:drawablePadding="10dp"
-        android:layout_width="498dp"
-        android:layout_height="@dimen/urlbar_height"
-        android:layout_marginStart="57dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/nav_urlbar_background"
-        android:hint="@string/urlbar_hint"
-        android:imeOptions="actionGo|flagNoExtractUi|flagNoFullscreen"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:inputType="textUri"
-        android:lines="1"
-        android:importantForAutofill="no"
-        android:cursorVisible="false"
-        android:textIsSelectable="false"
-        android:textColor="@color/tv_white"
-        android:nextFocusRight="@id/navUrlInput"
-        android:nextFocusUp="@id/topNavContainer"
-        />
-
-    <org.mozilla.focus.home.pocket.PocketVideoMegaTile
-        android:id="@+id/pocketVideoMegaTileView"
-        android:layout_width="match_parent"
-        android:layout_height="108dp"
-        android:layout_marginStart="45dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/pocket_video_mega_tile_background"
-        android:focusable="true"
-        android:nextFocusUp="@id/navUrlInput"
-        />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/tileContainer"
-        android:clipToPadding="false"
-        android:clipChildren="false"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_marginStart="45dp"
-        android:layout_marginEnd="45dp"
-        android:paddingBottom="18dp"
-        android:background="@android:color/transparent"/>
-
-</LinearLayout>
+</org.mozilla.focus.browser.BrowserNavigationOverlayScrollView>
