@@ -274,6 +274,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         super.setVisibility(visibility)
 
         if (visibility == View.VISIBLE) {
+            overlayScrollView.scrollTo(0, 0)
             navUrlInput.requestFocus()
             updateOverlayForCurrentState()
         }
