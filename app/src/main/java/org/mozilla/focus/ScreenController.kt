@@ -65,11 +65,11 @@ object ScreenController {
             return
         }
 
+        // BrowserFragment is the base fragment, so don't add a backstack transaction.
         fragmentManager
                 .beginTransaction()
                 .replace(R.id.container,
                         BrowserFragment.createForSession(currentSession), BrowserFragment.FRAGMENT_TAG)
-                .addToBackStack(null)
                 .commit()
     }
 
