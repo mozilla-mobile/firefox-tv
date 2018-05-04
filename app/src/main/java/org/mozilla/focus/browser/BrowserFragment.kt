@@ -229,10 +229,11 @@ class BrowserFragment : IWebViewLifecycleFragment() {
                 webView?.goBack()
                 TelemetryWrapper.browserBackControllerEvent()
             }
-            browserOverlay.isVisible -> setOverlayVisibleByUser(false)
+            browserOverlay.isVisible && !isUrlEqualToHomepage -> setOverlayVisibleByUser(false)
             else -> {
-                fragmentManager.popBackStack()
                 SessionManager.getInstance().removeCurrentSession()
+                // Delete session, but we allow the parent to handle back behavior.
+                return false
             }
         }
         return true
