@@ -225,11 +225,11 @@ class BrowserFragment : IWebViewLifecycleFragment() {
 
     fun onBackPressed(): Boolean {
         when {
+            browserOverlay.isVisible && !isUrlEqualToHomepage -> setOverlayVisibleByUser(false)
             webView?.canGoBack() ?: false -> {
                 webView?.goBack()
                 TelemetryWrapper.browserBackControllerEvent()
             }
-            browserOverlay.isVisible && !isUrlEqualToHomepage -> setOverlayVisibleByUser(false)
             else -> {
                 SessionManager.getInstance().removeCurrentSession()
                 // Delete session, but we allow the parent to handle back behavior.
@@ -259,12 +259,9 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     }
 
     private fun handleSpecialKeyEvent(event: KeyEvent): Boolean {
-        val keyCodeIsMenu = event.keyCode == KeyEvent.KEYCODE_MENU
-        val keyCodeIsBack = event.keyCode == KeyEvent.KEYCODE_BACK
         val actionIsDown = event.action == KeyEvent.ACTION_DOWN
-        val isOverlayToggleKey = (keyCodeIsMenu || (keyCodeIsBack && browserOverlay.isVisible))
 
-        if (isOverlayToggleKey && !isUrlEqualToHomepage) {
+        if (event.keyCode == KeyEvent.KEYCODE_MENU) {
             if (actionIsDown) {
                 val toShow = !browserOverlay.isVisible
                 setOverlayVisibleByUser(toShow)
