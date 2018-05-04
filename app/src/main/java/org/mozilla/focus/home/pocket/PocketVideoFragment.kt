@@ -50,6 +50,8 @@ class PocketVideoFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val context = context!!
+
         fun displayFeed(layout: View, videos: PocketVideosDeferred) {
             layout.videoFeed.gridView.adapter = PocketVideoAdapter(context, videos, fragmentManager)
         }

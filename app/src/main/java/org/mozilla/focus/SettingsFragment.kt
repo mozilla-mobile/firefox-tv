@@ -25,16 +25,17 @@ class SettingsFragment : Fragment() {
         updateForAccessibility()
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater!!.inflate(R.layout.fragment_settings, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+            inflater.inflate(R.layout.fragment_settings, container, false)
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val context = view.context
 
         ic_lock.setImageResource(R.drawable.ic_lock)
-        telemetryButton.isChecked = DataUploadPreference.isEnabled(activity)
+        telemetryButton.isChecked = DataUploadPreference.isEnabled(context)
         telemetryView.setOnClickListener { _ ->
-            val newTelemetryState = !DataUploadPreference.isEnabled(activity)
-            DataUploadPreference.setIsEnabled(activity, newTelemetryState)
+            val newTelemetryState = !DataUploadPreference.isEnabled(context)
+            DataUploadPreference.setIsEnabled(context, newTelemetryState)
             telemetryButton.isChecked = newTelemetryState
         }
 
@@ -72,13 +73,13 @@ class SettingsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        context.getAccessibilityManager().addTouchExplorationStateChangeListener(voiceViewStateChangeListener)
+        context?.getAccessibilityManager()?.addTouchExplorationStateChangeListener(voiceViewStateChangeListener)
         updateForAccessibility()
     }
 
     override fun onStop() {
         super.onStop()
-        context.getAccessibilityManager().removeTouchExplorationStateChangeListener(voiceViewStateChangeListener)
+        context?.getAccessibilityManager()?.removeTouchExplorationStateChangeListener(voiceViewStateChangeListener)
     }
 
     /**
@@ -86,6 +87,8 @@ class SettingsFragment : Fragment() {
      * See the comment at the declaration of these views in XML for more details.
      */
     private fun updateForAccessibility() {
+        val context = context!!
+
         // When VoiceView is enabled, since the parent is initially focusable in the XML, focus is
         // given to the parent when the Settings opens. Here, after we set focusable to false, we
         // must also explicitly clear focus in order to give focus to the child.

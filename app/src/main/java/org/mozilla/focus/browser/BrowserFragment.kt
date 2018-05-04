@@ -98,7 +98,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     }
 
     private fun initSession() {
-        val sessionUUID = arguments.getString(ARGUMENT_SESSION_UUID)
+        val sessionUUID = arguments?.getString(ARGUMENT_SESSION_UUID)
                 ?: throw IllegalAccessError("No session exists")
         session = if (sessionManager.hasSessionWithUUID(sessionUUID))
             sessionManager.getSessionByUUID(sessionUUID)
@@ -119,11 +119,13 @@ class BrowserFragment : IWebViewLifecycleFragment() {
 
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
             autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
+        val context = context!!
+
         when (event) {
             NavigationEvent.BACK -> if (webView?.canGoBack() ?: false) webView?.goBack()
             NavigationEvent.FORWARD -> if (webView?.canGoForward() ?: false) webView?.goForward()
             NavigationEvent.TURBO, NavigationEvent.RELOAD -> webView?.reload()
-            NavigationEvent.SETTINGS -> ScreenController.showSettingsScreen(fragmentManager)
+            NavigationEvent.SETTINGS -> ScreenController.showSettingsScreen(fragmentManager!!)
             NavigationEvent.LOAD_URL -> {
                 (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
                 setOverlayVisibleByUser(false)
@@ -180,7 +182,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
             }
 
             openHomeTileContextMenu = {
-                activity.openContextMenu(browserOverlay.tileContainer)
+                activity?.openContextMenu(browserOverlay.tileContainer)
             }
             registerForContextMenu(browserOverlay.tileContainer)
         }
@@ -199,7 +201,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
 
                 // This assumes that since we're deleting from a Home Tile object that we created
                 // that the Uri is valid, so we do not do error handling here.
-                HomeTilesManager.removeHomeTile(tileToRemove, context)
+                HomeTilesManager.removeHomeTile(tileToRemove, context!!)
                 homeTileAdapter.removeItemAtPosition(browserOverlay.getFocusedTilePosition())
                 TelemetryWrapper.homeTileRemovedEvent(tileToRemove)
                 return true
@@ -220,7 +222,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     }
 
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
-        activity.menuInflater.inflate(R.menu.menu_context_hometile, menu)
+        activity!!.menuInflater.inflate(R.menu.menu_context_hometile, menu)
     }
 
     fun onBackPressed(): Boolean {
@@ -231,7 +233,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
             }
             browserOverlay.isVisible -> setOverlayVisibleByUser(false)
             else -> {
-                fragmentManager.popBackStack()
+                fragmentManager!!.popBackStack()
                 SessionManager.getInstance().removeCurrentSession()
             }
         }
@@ -274,7 +276,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
         if (!browserOverlay.isVisible && webView!!.isYoutubeTV &&
                 event.keyCode == KeyEvent.KEYCODE_BACK) {
             val escKeyEvent = KeyEvent(event.action, KeyEvent.KEYCODE_ESCAPE)
-            activity.dispatchKeyEvent(escKeyEvent)
+            activity?.dispatchKeyEvent(escKeyEvent)
             return true
         }
         return false
@@ -302,8 +304,8 @@ class BrowserFragment : IWebViewLifecycleFragment() {
         override fun getCurrentUrl() = url
         override fun isURLPinned() = url.toUri()?.let {
             // TODO: #569 fix CustomTilesManager to use Uri too
-            CustomTilesManager.getInstance(context).isURLPinned(it.toString()) ||
-                    BundledTilesManager.getInstance(context).isURLPinned(it) } ?: false
+            CustomTilesManager.getInstance(context!!).isURLPinned(it.toString()) ||
+                    BundledTilesManager.getInstance(context!!).isURLPinned(it) } ?: false
     }
 }
 

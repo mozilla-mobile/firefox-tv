@@ -107,7 +107,7 @@ abstract class IWebViewLifecycleFragment : LocaleAwareFragment() {
     }
 
     override fun applyLocale() {
-        val context = context
+        val context = context ?: throw IllegalStateException("Expected Fragment to be bound to context")
         val localeManager = LocaleManager.getInstance()
         if (!localeManager.isMirroringSystemLocale(context)) {
             val currentLocale = localeManager.getCurrentLocale(context)
