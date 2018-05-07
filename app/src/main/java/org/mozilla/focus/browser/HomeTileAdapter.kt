@@ -53,11 +53,11 @@ class HomeTileAdapter(
         when (item) {
             is BundledHomeTile -> {
                 onBindBundledHomeTile(holder, item)
-                setLayoutMarginParams(iconView, R.dimen.bundled_home_tile_margin_value)
+                setIconLayoutMarginParams(iconView, R.dimen.bundled_home_tile_margin_value)
             }
             is CustomHomeTile -> {
                 onBindCustomHomeTile(uiLifecycleCancelJob, holder, item)
-                setLayoutMarginParams(iconView, R.dimen.custom_home_tile_margin_value)
+                setIconLayoutMarginParams(iconView, R.dimen.custom_home_tile_margin_value)
             }
         }.forceExhaustive
 
@@ -87,7 +87,7 @@ class HomeTileAdapter(
         }
     }
 
-    private fun setLayoutMarginParams(iconView: View, tileMarginValue: Int) {
+    private fun setIconLayoutMarginParams(iconView: View, tileMarginValue: Int) {
         val layoutMarginParams = iconView.layoutParams as ViewGroup.MarginLayoutParams
         val marginValue = iconView.resources.getDimensionPixelSize(tileMarginValue)
         layoutMarginParams.setMargins(marginValue, marginValue, marginValue, marginValue)
