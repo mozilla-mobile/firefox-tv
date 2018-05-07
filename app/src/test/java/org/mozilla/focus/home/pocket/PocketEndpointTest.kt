@@ -23,12 +23,14 @@ class PocketEndpointTest {
     fun `convert Videos JSON successfully to internal objects`() {
         val expectedSubset = listOf(
                 PocketVideo(
+                        id = 14772,
                         title = "I Try To Master Jacques Pepin's Perfect Omelet...",
                         url = "https://pocket.co/xQBVNo",
                         thumbnailURL = "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2F5__zptEU9vE%2Fmaxresdefault.jpg&resize=w450",
                         dedupeURL = "https://www.youtube.com/watch?v=5__zptEU9vE"
                 ),
                 PocketVideo(
+                        id = 14767,
                         title = "Next Generation Robots - Boston Dynamics, Asimo, Da Vinci, SoFi",
                         url = "https://pocket.co/xQBVNM",
                         thumbnailURL = "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2F8vIT2da6N_o%2Fmaxresdefault.jpg&resize=w450",
