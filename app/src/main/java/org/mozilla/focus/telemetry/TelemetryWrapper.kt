@@ -82,7 +82,6 @@ object TelemetryWrapper {
         val CLEAR_DATA = "clear_data"
         val BACK = "back"
         val FORWARD = "forward"
-        val HOME = "home"
         val SETTINGS = "settings"
         val ON = "on"
         val OFF = "off"
