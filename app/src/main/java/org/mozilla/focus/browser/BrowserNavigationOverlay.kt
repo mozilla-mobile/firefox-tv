@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageButton
@@ -20,7 +19,6 @@ import android.widget.ScrollView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.browser_overlay.view.*
 import kotlinx.android.synthetic.main.browser_overlay_top_nav.view.*
-import kotlinx.android.synthetic.main.home_tile.view.*
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -124,19 +122,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context, R.color.tv_white)) }
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
-
-        tileContainer.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
-                val gridLayoutManager = recyclerView?.layoutManager as GridLayoutManager
-                val lastVisibleItem = gridLayoutManager.findLastCompletelyVisibleItemPosition()
-                // We add a scroll offset, revealing the next row to hint that there are more home tiles
-                if (dy > 0 && getFocusedTilePosition() > lastVisibleItem) {
-                    val scrollOffset = TypedValue.applyDimension(
-                            TypedValue.COMPLEX_UNIT_DIP, home_tile.height.toFloat() / 2, context.resources.displayMetrics)
-                    recyclerView.smoothScrollBy(0, scrollOffset.toInt())
-                }
-            }
-        })
 
         Toast.makeText(context, R.string.homescreen_unpin_tutorial_toast, Toast.LENGTH_LONG).show()
     }
