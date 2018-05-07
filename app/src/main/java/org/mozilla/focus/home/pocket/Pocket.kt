@@ -104,6 +104,7 @@ object Pocket {
 }
 
 data class PocketVideo(
+        val id: Int,
         val title: String,
         val url: String,
         val dedupeURL: String,
@@ -113,6 +114,7 @@ data class PocketVideo(
     companion object {
         fun fromJSONObject(jsonObj: JSONObject) = try {
             PocketVideo(
+                    id = jsonObj.getInt("id"),
                     title = jsonObj.getString("title"),
                     url = jsonObj.getString("url"),
                     dedupeURL = jsonObj.getString("dedupe_url"),
