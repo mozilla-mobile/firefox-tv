@@ -45,7 +45,8 @@ class HomeTileAdapter(
         private val uiLifecycleCancelJob: Job,
         private var tiles: MutableList<HomeTile>,
         private val loadUrl: (String) -> Unit,
-        var onTileLongClick: (() -> Unit)?
+        var onTileLongClick: (() -> Unit)?,
+        var onTileFocused: (() -> Unit)?
 ) : RecyclerView.Adapter<TileViewHolder>() {
 
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with (holder) {
@@ -78,6 +79,7 @@ class HomeTileAdapter(
             if (hasFocus) {
                 backgroundResource = R.drawable.home_tile_title_focused_background
                 textColor = tvWhiteColor
+                onTileFocused?.invoke()
             } else {
                 backgroundResource = 0
                 textColor = Color.BLACK
