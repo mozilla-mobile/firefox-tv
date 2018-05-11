@@ -4,8 +4,11 @@
 
 package org.mozilla.focus.browser
 
+import android.app.Activity
 import android.arch.lifecycle.Observer
+import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.annotation.UiThread
 import android.text.TextUtils
 import android.view.ContextMenu
@@ -33,6 +36,7 @@ import org.mozilla.focus.ext.toUri
 import org.mozilla.focus.home.BundledTilesManager
 import org.mozilla.focus.home.CustomTilesManager
 import org.mozilla.focus.home.HomeTilesManager
+import org.mozilla.focus.home.pocket.PocketOnboardingActivity
 import org.mozilla.focus.iwebview.IWebView
 import org.mozilla.focus.iwebview.IWebViewLifecycleFragment
 import org.mozilla.focus.session.NullSession
@@ -47,6 +51,9 @@ import org.mozilla.focus.widget.InlineAutocompleteEditText
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 
 private const val TOAST_Y_OFFSET = 200
+
+const val POCKET_ONBOARD_SHOWN_PREF = "pocket_onboarding_shown"
+private const val SHOW_POCKET_FEED_REQUEST_CODE = 1
 
 /**
  * Fragment for displaying the browser UI.
@@ -132,7 +139,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
                 (activity as MainActivity).onNonTextInputUrlEntered(value!!)
                 setOverlayVisibleByUser(false)
             }
-            NavigationEvent.POCKET -> ScreenController.showPocketScreen(fragmentManager)
+            NavigationEvent.POCKET -> handlePocketVideoFeed()
             NavigationEvent.PIN_ACTION -> {
                 this@BrowserFragment.url?.let { url ->
                     when (value) {
@@ -160,6 +167,22 @@ class BrowserFragment : IWebViewLifecycleFragment() {
             }
         }
         Unit
+    }
+
+    private fun handlePocketVideoFeed() {
+        if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
+                        POCKET_ONBOARD_SHOWN_PREF, false)) {
+            val intent = Intent(context, PocketOnboardingActivity::class.java)
+            startActivityForResult(intent, SHOW_POCKET_FEED_REQUEST_CODE)
+        } else {
+            ScreenController.showPocketScreen(fragmentManager)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == SHOW_POCKET_FEED_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            ScreenController.showPocketScreen(fragmentManager)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
