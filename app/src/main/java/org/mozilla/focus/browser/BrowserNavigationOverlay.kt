@@ -110,7 +110,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             it.nextFocusDownId = navUrlInput.id
             if (it.isFocusable) it.setOnClickListener(this)
         }
-        pocketVideoMegaTileView.setOnClickListener(this)
 
         uiLifecycleCancelJob = Job()
 
@@ -153,6 +152,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     }
 
     private fun initMegaTile() {
+        pocketVideoMegaTileView.setOnClickListener(this)
+
         if (pocketVideos.isCompleted) {
             pocketVideoMegaTileView.pocketVideos = pocketVideos.getCompleted()
         } else {
