@@ -5,6 +5,7 @@
 package org.mozilla.focus.home.pocket
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.os.StrictMode
 import android.support.v4.app.Fragment
@@ -16,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import kotlinx.android.synthetic.main.fragment_pocket_video.*
 import kotlinx.android.synthetic.main.fragment_pocket_video.view.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -75,6 +77,12 @@ class PocketVideoFragment : Fragment() {
         // SVGs can have artifacts if we set them in XML so we set it in code.
         layout.pocketWordmarkView.setImageDrawableAsPocketWordmark()
         return layout
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        pocketHelpButton.setOnClickListener { _ ->
+            startActivity(Intent(context, PocketOnboardingActivity::class.java))
+        }
     }
 
     companion object {

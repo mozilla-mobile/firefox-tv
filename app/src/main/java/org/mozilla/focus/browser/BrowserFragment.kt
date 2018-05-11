@@ -36,6 +36,7 @@ import org.mozilla.focus.ext.toUri
 import org.mozilla.focus.home.BundledTilesManager
 import org.mozilla.focus.home.CustomTilesManager
 import org.mozilla.focus.home.HomeTilesManager
+import org.mozilla.focus.home.pocket.POCKET_ONBOARDING_SHOWN_PREF
 import org.mozilla.focus.home.pocket.PocketOnboardingActivity
 import org.mozilla.focus.iwebview.IWebView
 import org.mozilla.focus.iwebview.IWebViewLifecycleFragment
@@ -52,7 +53,6 @@ private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 
 private const val TOAST_Y_OFFSET = 200
 
-const val POCKET_ONBOARD_SHOWN_PREF = "pocket_onboarding_shown"
 private const val SHOW_POCKET_FEED_REQUEST_CODE = 1
 
 /**
@@ -139,7 +139,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
                 (activity as MainActivity).onNonTextInputUrlEntered(value!!)
                 setOverlayVisibleByUser(false)
             }
-            NavigationEvent.POCKET -> handlePocketVideoFeed()
+            NavigationEvent.POCKET -> showPocketContent()
             NavigationEvent.PIN_ACTION -> {
                 this@BrowserFragment.url?.let { url ->
                     when (value) {
@@ -169,9 +169,9 @@ class BrowserFragment : IWebViewLifecycleFragment() {
         Unit
     }
 
-    private fun handlePocketVideoFeed() {
+    private fun showPocketContent() {
         if (!PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
-                        POCKET_ONBOARD_SHOWN_PREF, false)) {
+                        POCKET_ONBOARDING_SHOWN_PREF, false)) {
             val intent = Intent(context, PocketOnboardingActivity::class.java)
             startActivityForResult(intent, SHOW_POCKET_FEED_REQUEST_CODE)
         } else {

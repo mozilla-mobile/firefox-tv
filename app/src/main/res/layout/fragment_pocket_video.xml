@@ -65,6 +65,17 @@
         tools:src="@drawable/ic_pocket_and_wordmark"
         tools:tint="@color/tv_white" />
 
+    <Button
+        android:id="@+id/pocketHelpButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/menu_about"
+        android:layout_marginStart="150dp"
+        app:layout_constraintBottom_toBottomOf="@+id/headerBackgroundView"
+        app:layout_constraintEnd_toEndOf="@+id/headerBackgroundView"
+        app:layout_constraintStart_toStartOf="@+id/headerBackgroundView"
+        app:layout_constraintTop_toTopOf="@+id/headerBackgroundView"/>
+
     <TextView
         android:id="@+id/recommendedTitle"
         android:layout_width="wrap_content"
