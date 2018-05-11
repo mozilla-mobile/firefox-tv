@@ -74,6 +74,9 @@
         <activity android:name=".OnboardingActivity"
                   android:theme="@style/AppTheme"/>
 
+        <activity android:name=".home.pocket.PocketOnboardingActivity"
+                  android:theme="@style/AppTheme.Transparent"/>
+
         <meta-data
             android:name="android.webkit.WebView.MetricsOptOut"
             android:value="true" />
