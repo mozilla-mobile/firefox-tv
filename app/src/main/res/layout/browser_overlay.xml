@@ -63,6 +63,7 @@
             android:nextFocusUp="@id/topNavContainer"
             />
 
+        <!-- Content description added in code. -->
         <org.mozilla.focus.home.pocket.PocketVideoMegaTile
             android:id="@+id/pocketVideoMegaTileView"
             android:layout_width="match_parent"
