@@ -10,7 +10,8 @@ import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.pocket_onboarding.*
 import org.mozilla.focus.R
-import org.mozilla.focus.browser.POCKET_ONBOARD_SHOWN_PREF
+
+const val POCKET_ONBOARDING_SHOWN_PREF = "pocket_onboarding_shown"
 
 class PocketOnboardingActivity : AppCompatActivity() {
 
@@ -26,7 +27,7 @@ class PocketOnboardingActivity : AppCompatActivity() {
         pocket_onboarding_button.setOnClickListener { _ ->
             PreferenceManager.getDefaultSharedPreferences(applicationContext)
                     .edit()
-                    .putBoolean(POCKET_ONBOARD_SHOWN_PREF, true)
+                    .putBoolean(POCKET_ONBOARDING_SHOWN_PREF, true)
                     .apply()
             setResult(Activity.RESULT_OK)
             finish()
