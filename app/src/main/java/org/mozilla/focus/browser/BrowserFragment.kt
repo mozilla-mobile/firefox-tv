@@ -261,7 +261,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     private fun handleSpecialKeyEvent(event: KeyEvent): Boolean {
         val actionIsDown = event.action == KeyEvent.ACTION_DOWN
 
-        if (event.keyCode == KeyEvent.KEYCODE_MENU) {
+        if (event.keyCode == KeyEvent.KEYCODE_MENU && !isUrlEqualToHomepage) {
             if (actionIsDown) {
                 val toShow = !browserOverlay.isVisible
                 setOverlayVisibleByUser(toShow)
