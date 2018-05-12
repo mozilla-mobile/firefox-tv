@@ -7,13 +7,15 @@ _Fast for good, just right for watching video at home. A browser for
 discovering and watching web video on the big screen TV for users to install on
 their Amazon Fire TV and Fire TV stick._
 
-[Get it on Amazon Fire TV.][amazon link]
+[Get it on Amazon Fire TV][amazon link]
 
 ## Getting Involved
-We encourage you to participate in this open source project. We love Pull
-Requests, Bug Reports, ideas, (security) code reviews or any kind of positive
-contribution. Please read the [Community Participation
+Our code is open source and we encourage all positive contributions! We love Pull
+Requests, bug reports, ideas, (security) code reviews and other kinds of contributions.
+Before you contribute, please read the [Community Participation
 Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/).
+
+* [Developer guide][dev guide]
 
 * IRC: [#focus (irc.mozilla.org)](https://wiki.mozilla.org/IRC); logs:
 https://mozilla.logbot.info/focus/; we're available Monday-Friday, GMT and PST
@@ -21,6 +23,14 @@ working hours.
 
 * Mailing list:
 [firefox-focus-public@](https://mail.mozilla.org/listinfo/firefox-focus-public)
+
+* See [our wiki](https://github.com/mozilla-mobile/firefox-tv/wiki) for additional docs
+
+**Beginners!** Watch out for [Issues with the `good first issue` label](https://github.com/mozilla-mobile/firefox-tv/labels/good%20first%20issue).
+These are easy bugs that have been left for first timers to have a go, get involved and make a
+positive contribution to the project!
+
+For other contributor-ready issues, see [the `help wanted` label](https://github.com/mozilla-mobile/firefox-tv/labels/help%20wanted).
 
 ## Build instructions
 1. Clone the repository:
@@ -38,7 +48,8 @@ working hours.
 3. Make sure to select the right build variant in Android Studio: **amazonWebviewDebug**
 
 ### Running
-It is recommended to test directly on a Fire TV. You can connect with:
+It is recommended to test directly on a Fire TV: see the [developer guide][dev guide] for more info.
+You can connect with:
 ```shell
 adb connect <IP address>
 ```
@@ -57,3 +68,4 @@ When using an emulator, you can press `cmd+m` to simulate a menu button press.
     file, You can obtain one at http://mozilla.org/MPL/2.0/
 
 [amazon link]: https://www.amazon.com/dp/B078B5YMPD/ref=sr_1_1
+[dev guide]: https://github.com/mozilla-mobile/firefox-tv/wiki/Developer-guide-and-differences-from-Android
