@@ -61,6 +61,29 @@ relied upon.
 
 When using an emulator, you can press `cmd+m` to simulate a menu button press.
 
+### Building with API keys
+Certain services require an API key, so you'll need to build with the key to use them in the apk.
+
+1. To build with the API key (for services such as Sentry), add a `<project-dir>/.<service>_debug`
+file with your key, for example, `<project-dir>/.sentry_dsn_debug`
+
+    1. To enable Sentry on Debug builds, additionally replace the `DataUploadPreference.isEnabled`
+value with true (upload is disabled by default in dev builds).
+
+2. Verify the key add was successful. The gradle output is the only way to verify this (although
+it won't indicate if the key is valid). You will see a message in the gradle output
+indicating the key was added:
+
+`Sentry DSN (amazonWebviewDebug): Added from /Users/mcomella/dev/moz/firefox-tv/.sentry_dsn_debug`
+
+As opposed to:
+
+`Sentry DSN (amazonWebviewDebug): X_X`
+
+API services currently supported are:
+* sentry_dsn
+* pocket_key
+
 ## License
 
     This Source Code Form is subject to the terms of the Mozilla Public
