@@ -25,7 +25,7 @@
 
     <color name="browser_overlay_background">#e6000000</color>
 
-    <color name="pocket_onboarding_background">#cc38383d</color>
+    <color name="pocket_onboarding_background">#e60c0c0d</color>
 
     <color name="button_highlight">#64ffffff</color>
     <color name="button_default">@color/translucent_tv_ink</color>
