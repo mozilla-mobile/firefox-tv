@@ -6,7 +6,7 @@ package org.mozilla.focus
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 
 /**
  * Asserts the two bitmaps are the same by ensuring their dimensions, config, and
