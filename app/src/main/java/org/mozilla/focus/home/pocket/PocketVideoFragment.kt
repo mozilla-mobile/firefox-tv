@@ -76,6 +76,7 @@ class PocketVideoFragment : Fragment() {
 
         // SVGs can have artifacts if we set them in XML so we set it in code.
         layout.pocketWordmarkView.setImageDrawableAsPocketWordmark()
+        layout.pocketHelpButton.setImageDrawable(context.getDrawable(R.drawable.pocket_onboarding_help_button))
         return layout
     }
 
