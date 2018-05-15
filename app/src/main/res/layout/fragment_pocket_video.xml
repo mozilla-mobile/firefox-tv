@@ -70,6 +70,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="400dp"
+        android:focusable="true"
+        android:background="@drawable/pocket_video_mega_tile_background"
         app:layout_constraintBottom_toBottomOf="@+id/headerBackgroundView"
         app:layout_constraintEnd_toEndOf="@+id/headerBackgroundView"
         app:layout_constraintStart_toStartOf="@+id/headerBackgroundView"
