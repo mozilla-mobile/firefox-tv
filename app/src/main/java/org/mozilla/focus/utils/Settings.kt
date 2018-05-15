@@ -8,11 +8,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.preference.PreferenceManager
-
-import org.mozilla.focus.R
 import org.mozilla.focus.OnboardingActivity
-import org.mozilla.focus.search.SearchEngine
+import org.mozilla.focus.R
+import org.mozilla.focus.home.pocket.PocketOnboardingActivity
 import org.mozilla.focus.iwebview.IWebView
+import org.mozilla.focus.search.SearchEngine
 
 /**
  * A simple wrapper for SharedPreferences that makes reading preference a little bit easier.
@@ -37,8 +37,11 @@ class Settings private constructor(context: Context) {
     val defaultSearchEngineName: String?
         get() = preferences.getString(getPreferenceKey(R.string.pref_key_search_engine), null)
 
-    fun shouldShowOnboarding(): Boolean =
+    fun shouldShowTurboModeOnboarding(): Boolean =
             !preferences.getBoolean(OnboardingActivity.ONBOARD_SHOWN_PREF, false)
+
+    fun shouldShowPocketOnboarding(): Boolean =
+            !preferences.getBoolean(PocketOnboardingActivity.POCKET_ONBOARDING_SHOWN_PREF, false)
 
     fun setDefaultSearchEngine(searchEngine: SearchEngine) {
         preferences.edit()

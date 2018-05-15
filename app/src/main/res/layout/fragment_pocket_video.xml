@@ -67,6 +67,7 @@
 
     <ImageView
         android:id="@+id/pocketHelpButton"
+        tools:ignore="ContentDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="400dp"

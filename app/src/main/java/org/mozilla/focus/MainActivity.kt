@@ -19,6 +19,7 @@ import org.mozilla.focus.browser.BrowserFragment
 import org.mozilla.focus.browser.BrowserFragment.Companion.APP_URL_HOME
 import org.mozilla.focus.ext.toSafeIntent
 import org.mozilla.focus.home.pocket.Pocket
+import org.mozilla.focus.home.pocket.PocketOnboardingActivity
 import org.mozilla.focus.iwebview.IWebView
 import org.mozilla.focus.iwebview.WebViewProvider
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity
@@ -64,13 +65,19 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
                 } else {
                     ScreenController.showBrowserScreenForCurrentSession(supportFragmentManager, sessionManager)
                 }
-
-                if (Settings.getInstance(this@MainActivity).shouldShowOnboarding()) {
-                    val onboardingIntent = Intent(this@MainActivity, OnboardingActivity::class.java)
-                    startActivity(onboardingIntent)
-                }
             }
         })
+
+        if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding()) {
+            val onboardingIntents =
+                    Intent(this@MainActivity, PocketOnboardingActivity::class.java)
+            startActivity(onboardingIntents)
+        }
+
+        if (Settings.getInstance(this@MainActivity).shouldShowTurboModeOnboarding()) {
+            val onboardingIntent = Intent(this@MainActivity, OnboardingActivity::class.java)
+            startActivity(onboardingIntent)
+        }
 
         WebViewProvider.preload(this)
     }
