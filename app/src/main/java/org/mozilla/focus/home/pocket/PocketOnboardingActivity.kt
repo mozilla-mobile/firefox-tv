@@ -4,14 +4,11 @@
 
 package org.mozilla.focus.home.pocket
 
-import android.app.Activity
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.pocket_onboarding.*
 import org.mozilla.focus.R
-
-const val POCKET_ONBOARDING_SHOWN_PREF = "pocket_onboarding_shown"
 
 class PocketOnboardingActivity : AppCompatActivity() {
 
@@ -29,8 +26,11 @@ class PocketOnboardingActivity : AppCompatActivity() {
                     .edit()
                     .putBoolean(POCKET_ONBOARDING_SHOWN_PREF, true)
                     .apply()
-            setResult(Activity.RESULT_OK)
             finish()
         }
+    }
+
+    companion object {
+        const val POCKET_ONBOARDING_SHOWN_PREF = "pocket_onboarding_shown"
     }
 }
