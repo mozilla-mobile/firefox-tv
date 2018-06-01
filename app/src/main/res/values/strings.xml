@@ -171,20 +171,35 @@ be temporary, and you can try again later.</li>
     <string name="settings_cookies_dialog_content">Selecting ‘Clear Now’ will clear all cookies and site data stored by Firefox for Fire TV. This may sign you out of websites and remove offline web content.</string>
 
     <string name="turbo_mode">Turbo Mode</string>
+    <!-- Displayed as notification when Turbo mode is turned on -->
+    <string name="turbo_mode_enabled_toast">Turbo Mode enabled</string>
+    <!-- Displayed as notification when Turbo mode is turned off -->
+    <string name="turbo_mode_disabled_toast">Turbo Mode disabled</string>
     <string name="onboarding_turbo_mode_title">Turbo Mode helps you browse faster</string>
     <string name="onboarding_turbo_mode_body">Turbo Mode automatically blocks trackers and ads to help get you where you\'re going faster. If there\'s a speed bump – like a site that isn\'t behaving the way you expect – just turn Turbo Mode off.</string>
     <string name="onboarding_turbo_mode_button_on">Keep Turbo Mode Enabled</string>
     <string name="onboarding_turbo_mode_button_off">Turn Turbo Mode Off</string>
+    <!-- Spoken to screen reader users to explain "off" action of Turbo mode button -->
+    <string name="turbo_mode_disable_a11y">Turn Turbo Mode Off</string>
+    <!-- Spoken to screen reader users to explain "on" action of Turbo mode button -->
+    <string name="turbo_mode_enable_a11y">Turn Turbo Mode On</string>
 
     <!-- Text displayed in a toast to explain to the user how to unpin a tile from the homescreen.
          SELECT refers to a button on the remote: the button at the center of the 4-way directional navigation. -->
     <string name="homescreen_unpin_tutorial_toast">Press and hold SELECT to unpin from homescreen</string>
     <string name="homescreen_tile_remove">Remove</string>
+    <!-- Spoken to screen reader users to explain action of deactivating Pin button state -->
+    <string name="homescreen_unpin_a11y">Unpin</string>
 
+    <!-- Spoken to screen reader users to describe Firefox homescreen -->
+    <string name="homescreen_title">Homescreen</string>
     <string name="pin_label">Pin to homescreen</string>
+    <!-- Short version of notification displayed when a site is added to homescreen -->
+    <string name="notification_pinned_general">Pinned to homescreen</string>
+    <!-- Short version of notification displayed when a site is removed from homescreen -->
+    <string name="notification_unpinned_general">Removed from homescreen</string>
     <string name="notification_pinned_site">Pinned to Firefox TV homescreen</string>
     <string name="notification_unpinned_site">Removed from Firefox TV homescreen</string>
-
 
     <!-- The title of a tutorial shown to introduce Pocket video recommendations.
     %1$s will be replaced with the Pocket brand name. -->
