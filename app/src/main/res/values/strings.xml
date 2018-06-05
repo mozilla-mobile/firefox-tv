@@ -3,6 +3,9 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <resources>
+    <!-- The brand name of this app -->
+    <string name="firefox_tv_brand_name">Firefox TV</string>
+
     <!-- The brand name of our partner company, Pocket. -->
     <string name="pocket_brand_name">Pocket</string>
 
@@ -194,10 +197,10 @@ be temporary, and you can try again later.</li>
     <!-- Spoken to screen reader users to describe Firefox homescreen -->
     <string name="homescreen_title">Homescreen</string>
     <string name="pin_label">Pin to homescreen</string>
-    <!-- Short version of notification displayed when a site is added to homescreen -->
-    <string name="notification_pinned_general">Pinned to homescreen</string>
-    <!-- Short version of notification displayed when a site is removed from homescreen -->
-    <string name="notification_unpinned_general">Removed from homescreen</string>
+    <!-- Short version of notification displayed when a site is added to homescreen. %1$s will be replaced with the name of the app -->
+    <string name="notification_pinned_general2">Pinned to %1$s homescreen</string>
+    <!-- Short version of notification displayed when a site is removed from homescreen. %1$s will be replaced with the name of the app -->
+    <string name="notification_unpinned_general2">Removed from %1$s homescreen</string>
     <string name="notification_pinned_site">Pinned to Firefox TV homescreen</string>
     <string name="notification_unpinned_site">Removed from Firefox TV homescreen</string>
 
