@@ -64,7 +64,6 @@
   <string name="onboarding_turbo_mode_button_off">Desativar Modo Turbo</string>
   <string name="homescreen_unpin_tutorial_toast">Pressione e segure o SELECT para desafixar da tela inicial</string>
   <string name="homescreen_tile_remove">Remover</string>
-  <string name="nav_close_hint">Fechar</string>
   <string name="pin_label">Fixar na tela inicial</string>
   <string name="notification_pinned_site">Fixado à tela inicial do Firefox TV</string>
   <string name="notification_unpinned_site">Removido da tela inicial do Firefox TV</string>
