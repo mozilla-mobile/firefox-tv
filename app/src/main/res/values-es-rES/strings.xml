@@ -71,8 +71,6 @@
   <string name="homescreen_unpin_a11y">Soltar</string>
   <string name="homescreen_title">Pantalla de inicio</string>
   <string name="pin_label">Fijar a la pantalla inicio</string>
-  <string name="notification_pinned_general">Se fijó a la pantalla de inicio</string>
-  <string name="notification_unpinned_general">Se eliminó de la pantalla de inicio</string>
   <string name="notification_pinned_site">FIjar a la pantalla de inicio de Firefox TV</string>
   <string name="notification_unpinned_site">Eliminar de la pantalla de inicio de Firefox TV</string>
   <string name="pocket_home_tutorial_title">Presentando vídeos recomendados por %1$s</string>

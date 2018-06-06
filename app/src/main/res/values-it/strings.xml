@@ -71,8 +71,6 @@
   <string name="homescreen_unpin_a11y">Rimuovi dalla bacheca</string>
   <string name="homescreen_title">Schermata principale</string>
   <string name="pin_label">Fissa alla schermata principale</string>
-  <string name="notification_pinned_general">Fissato alla schermata principale</string>
-  <string name="notification_unpinned_general">Rimosso dalla schermata principale</string>
   <string name="notification_pinned_site">Fissato alla schermata principale di Firefox TV</string>
   <string name="notification_unpinned_site">Rimosso dalla schermata principale di Firefox TV</string>
   <string name="pocket_home_tutorial_title">Ti presentiamo i video consigliati da %1$s</string>
