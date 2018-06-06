@@ -71,8 +71,6 @@
   <string name="homescreen_unpin_a11y">Ablösen</string>
   <string name="homescreen_title">Startbildschirm</string>
   <string name="pin_label">An Startbildschirm anheften</string>
-  <string name="notification_pinned_general">Am Startbildschirm angeheftet</string>
-  <string name="notification_unpinned_general">Vom Startbildschirm entfernt</string>
   <string name="notification_pinned_site">Am Firefox-TV-Startbildschirm angeheftet</string>
   <string name="notification_unpinned_site">Vom Firefox-TV-Startbildschirm entfernt</string>
   <string name="pocket_home_tutorial_title">Hier kommen von %1$s empfohlene Videos</string>

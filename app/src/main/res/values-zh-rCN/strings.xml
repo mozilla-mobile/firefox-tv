@@ -71,8 +71,6 @@
   <string name="homescreen_unpin_a11y">取消固定</string>
   <string name="homescreen_title">主屏幕</string>
   <string name="pin_label">固定到主屏幕</string>
-  <string name="notification_pinned_general">已固定到主屏幕</string>
-  <string name="notification_unpinned_general">已从主屏幕中移除</string>
   <string name="notification_pinned_site">已固定到 Firefox TV 主屏幕</string>
   <string name="notification_unpinned_site">已从 Firefox TV 主屏幕移除</string>
   <string name="pocket_home_tutorial_title">介绍由“%1$s”推荐的视频</string>
