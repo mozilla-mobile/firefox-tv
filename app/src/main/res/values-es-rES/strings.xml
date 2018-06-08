@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
+  <string name="firefox_tv_brand_name">Firefox TV</string>
   <string name="pocket_brand_name">Pocket</string>
   <string name="action_cancel">Cancelar</string>
   <string name="action_ok">Aceptar</string>
@@ -71,6 +72,8 @@
   <string name="homescreen_unpin_a11y">Soltar</string>
   <string name="homescreen_title">Pantalla de inicio</string>
   <string name="pin_label">Fijar a la pantalla inicio</string>
+  <string name="notification_pinned_general2">Se fijó %1$s a la pantalla de inicio</string>
+  <string name="notification_unpinned_general2">Se eliminó %1$s de la pantalla de inicio</string>
   <string name="notification_pinned_site">FIjar a la pantalla de inicio de Firefox TV</string>
   <string name="notification_unpinned_site">Eliminar de la pantalla de inicio de Firefox TV</string>
   <string name="pocket_home_tutorial_title">Presentando vídeos recomendados por %1$s</string>
