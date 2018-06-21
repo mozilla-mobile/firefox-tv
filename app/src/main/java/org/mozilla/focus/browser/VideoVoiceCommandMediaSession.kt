@@ -94,16 +94,18 @@ class VideoVoiceCommandMediaSession(activity: Activity) : LifecycleObserver {
     }
 
     fun dispatchKeyEvent(event: KeyEvent): Boolean = when (event.keyCode) {
-        // If we do nothing, these keys will be received twice: on key down by the MediaSession API
-        // and on key up by the WebView/web page, causing playback state updates to be undone.
-        // Thus we mute the WebView key up events and handle it all ourselves through MediaSession.
+        // If we did nothing, on key down, hardware media buttons are swallowed and sent to
+        // [MediaSessionCallbacks]. On key up, these key events are sent to the WebView and web
+        // page. This means the key event would be handled twice - once for each key down and up -
+        // which would undo any playback state updates. Thus we mute the WebView key up events and
+        // handle it all ourselves through MediaSession.
         KEYCODE_MEDIA_PLAY_PAUSE, KEYCODE_MEDIA_PLAY, KEYCODE_MEDIA_PAUSE -> event.action == KeyEvent.ACTION_UP
         else -> false
     }
 
     /**
-     * The methods called when a voice command is spoken; these callbacks are also called for
-     * the equivalent hardware remote button presses (e.g. "Alexa play" == hardware play/pause).
+     * Callbacks for voice commands ("Alexa play") and hardware media buttons on key down. See
+     * [dispatchKeyEvent] for more details on hardware media button propagation.
      */
     inner class MediaSessionCallbacks : MediaSessionCompat.Callback() {
         override fun onPlay() {
