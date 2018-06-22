@@ -69,8 +69,6 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     override val initialUrl get() = session.url.value
     override val iWebViewCallback get() = SessionCallbackProxy(session, BrowserIWebViewCallback(this))
 
-    private lateinit var videoVoiceCommandMediaSession: VideoVoiceCommandMediaSession
-
     /**
      * The current URL.
      *
@@ -97,7 +95,6 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSession()
-        initMediaSession()
     }
 
     private fun initSession() {
@@ -118,11 +115,6 @@ class BrowserFragment : IWebViewLifecycleFragment() {
                 }
             }
         })
-    }
-
-    private fun initMediaSession() {
-        videoVoiceCommandMediaSession = VideoVoiceCommandMediaSession(activity!!)
-        lifecycle.addObserver(videoVoiceCommandMediaSession)
     }
 
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
@@ -173,8 +165,6 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val layout = inflater.inflate(R.layout.fragment_browser, container, false)
 
-        videoVoiceCommandMediaSession.iWebView = layout.webview
-
         cursor = CursorController(this, cursorParent = layout.browserFragmentRoot,
                 view = layout.cursorView)
         lifecycle.addObserver(cursor!!)
@@ -221,8 +211,6 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
 
-        videoVoiceCommandMediaSession.iWebView = null
-
         lifecycle.removeObserver(cursor!!)
         cursor = null
         overlayVisibleCached = browserOverlay.visibility
@@ -262,14 +250,12 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     fun dispatchKeyEvent(event: KeyEvent): Boolean {
         /**
          * Key handling order:
-         * - MediaSession overrides
          * - Menu to control overlay
          * - Youtube remap of BACK to ESC
          * - Cursor
          * - Return false, as unhandled
          */
-        return videoVoiceCommandMediaSession.dispatchKeyEvent(event) ||
-                handleSpecialKeyEvent(event) ||
+        return handleSpecialKeyEvent(event) ||
                 (cursor?.keyDispatcher?.dispatchKeyEvent(event) ?: false)
     }
 
