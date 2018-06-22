@@ -16,20 +16,35 @@ import android.support.v4.media.session.PlaybackStateCompat
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_PAUSE
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY_PAUSE
+import android.support.v4.media.session.PlaybackStateCompat.ACTION_SEEK_TO
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_SKIP_TO_NEXT
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
-import android.support.v4.media.session.PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN
 import android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_MEDIA_PAUSE
 import android.view.KeyEvent.KEYCODE_MEDIA_PLAY
 import android.view.KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
 import org.mozilla.focus.iwebview.IWebView
+import java.util.concurrent.TimeUnit
 
 private const val MEDIA_SESSION_TAG = "FirefoxTVMedia"
 
 private const val SUPPORTED_ACTIONS = ACTION_PLAY_PAUSE or ACTION_PLAY or ACTION_PAUSE or
-        ACTION_SKIP_TO_NEXT or ACTION_SKIP_TO_PREVIOUS
+        ACTION_SKIP_TO_NEXT or ACTION_SKIP_TO_PREVIOUS or
+        ACTION_SEEK_TO // "Alexa, rewind/fast-forward <num> <unit-of-time>"
+
+/**
+ * A workaround for playback position. The playback position increments in the MediaSession APIs
+ * automatically based on the given playback speed. The position is used to provide an absolute
+ * position to seek to in `onSeekTo` (triggered by rewind/fast-forward commands). Since these
+ * commands are currently relative ("Alexa fast-forward 10 minutes"), we can avoid syncing with the
+ * JS playback state, simplifying the code, and set the the position to an absolute value with
+ * playback speed 0: when onSeekTo is called, the constant value will be added to the offset we need
+ * so we can subtract to get the offset. See onSeekTo for details. This will break if absolute
+ * seeking is implemented (#941.
+ */
+private const val HACKED_PLAYBACK_POSITION: Long = Long.MAX_VALUE / 2
+private const val HACKED_PLAYBACK_SPEED: Float = 0.0f
 
 private val KEY_EVENT_ACTIONS_DOWN_UP = listOf(KeyEvent.ACTION_DOWN, KeyEvent.ACTION_UP)
 
@@ -66,8 +81,9 @@ class VideoVoiceCommandMediaSession(private val activity: Activity) : LifecycleO
         val pb = PlaybackStateCompat.Builder()
                 .setActions(SUPPORTED_ACTIONS)
 
-                // See class javadoc for details on STATE_PLAYING.
-                .setState(STATE_PLAYING, PLAYBACK_POSITION_UNKNOWN, 1.0f)
+                // See class javadoc for details on STATE_PLAYING. See constant javadoc for
+                // details on HACKED_*.
+                .setState(STATE_PLAYING, HACKED_PLAYBACK_POSITION, HACKED_PLAYBACK_SPEED)
                 .build()
         mediaSession.setPlaybackState(pb)
         mediaSession.setCallback(MediaSessionCallbacks())
@@ -110,6 +126,17 @@ class VideoVoiceCommandMediaSession(private val activity: Activity) : LifecycleO
      * [dispatchKeyEvent] for more details on hardware media button propagation.
      */
     inner class MediaSessionCallbacks : MediaSessionCompat.Callback() {
+        private val ID_TARGET_VIDEO = "targetVideo"
+        private val GET_TARGET_VIDEO_OR_RETURN = """
+            |var videos = Array.from(document.querySelectorAll('video'));
+            |if (videos.length === 0) { return; }
+            |
+            |var $ID_TARGET_VIDEO = videos.find(function (video) { return !video.paused });
+            |if (!$ID_TARGET_VIDEO) {
+            |    $ID_TARGET_VIDEO = videos[0];
+            |}
+            """.trimMargin()
+
         override fun onPlay() {
             onPlayPause() // See class javadoc for details.
         }
@@ -125,18 +152,12 @@ class VideoVoiceCommandMediaSession(private val activity: Activity) : LifecycleO
             // We don't handle audio: see class javadoc for details.
             iWebView?.evalJS("""
                 |(function() {
-                |    var videos = Array.from(document.querySelectorAll('video'));
-                |    if (videos.length === 0) { return; }
+                |    $GET_TARGET_VIDEO_OR_RETURN
                 |
-                |    var videoToOperateOn = videos.find(function (video) { return !video.paused });
-                |    if (!videoToOperateOn) {
-                |        videoToOperateOn = videos[0];
-                |    }
-                |
-                |    if (videoToOperateOn.paused) {
-                |        videoToOperateOn.play();
+                |    if ($ID_TARGET_VIDEO.paused) {
+                |        $ID_TARGET_VIDEO.play();
                 |    } else {
-                |       videoToOperateOn.pause();
+                |       $ID_TARGET_VIDEO.pause();
                 |   }
                 |})();
                 """.trimMargin())
@@ -147,6 +168,18 @@ class VideoVoiceCommandMediaSession(private val activity: Activity) : LifecycleO
 
         private fun dispatchKeyEventDownUp(keyCode: Int) {
             KEY_EVENT_ACTIONS_DOWN_UP.forEach { action -> activity.dispatchKeyEvent(KeyEvent(action, keyCode)) }
+        }
+
+        override fun onSeekTo(posMillis: Long) {
+            val offsetMillis = posMillis - HACKED_PLAYBACK_POSITION
+            val offsetSeconds = TimeUnit.MILLISECONDS.toSeconds(offsetMillis)
+            iWebView?.evalJS("""
+                |(function() {
+                |    $GET_TARGET_VIDEO_OR_RETURN
+                |
+                |    $ID_TARGET_VIDEO.currentTime = $ID_TARGET_VIDEO.currentTime + $offsetSeconds
+                |})();
+                """.trimMargin())
         }
     }
 }
