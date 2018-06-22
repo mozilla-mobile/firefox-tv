@@ -16,6 +16,8 @@ import android.support.v4.media.session.PlaybackStateCompat
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_PAUSE
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY_PAUSE
+import android.support.v4.media.session.PlaybackStateCompat.ACTION_SKIP_TO_NEXT
+import android.support.v4.media.session.PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
 import android.support.v4.media.session.PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN
 import android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING
 import android.view.KeyEvent
@@ -26,10 +28,10 @@ import org.mozilla.focus.iwebview.IWebView
 
 private const val MEDIA_SESSION_TAG = "FirefoxTVMedia"
 
-private const val SUPPORTED_ACTIONS =
-        ACTION_PLAY_PAUSE or
-        ACTION_PLAY or
-        ACTION_PAUSE
+private const val SUPPORTED_ACTIONS = ACTION_PLAY_PAUSE or ACTION_PLAY or ACTION_PAUSE or
+        ACTION_SKIP_TO_NEXT or ACTION_SKIP_TO_PREVIOUS
+
+private val KEY_EVENT_ACTIONS_DOWN_UP = listOf(KeyEvent.ACTION_DOWN, KeyEvent.ACTION_UP)
 
 /**
  * An encapsulation of a [MediaSessionCompat] instance to allow voice commands on videos; we
@@ -54,7 +56,7 @@ private const val SUPPORTED_ACTIONS =
  * [1]: If the initial playback state is PAUSED or NONE, a music selection voice conversation
  * overrides our voice commands.
  */
-class VideoVoiceCommandMediaSession(activity: Activity) : LifecycleObserver {
+class VideoVoiceCommandMediaSession(private val activity: Activity) : LifecycleObserver {
 
     private val mediaSession = MediaSessionCompat(activity, MEDIA_SESSION_TAG)
 
@@ -138,6 +140,13 @@ class VideoVoiceCommandMediaSession(activity: Activity) : LifecycleObserver {
                 |   }
                 |})();
                 """.trimMargin())
+        }
+
+        override fun onSkipToNext() = dispatchKeyEventDownUp(KeyEvent.KEYCODE_MEDIA_NEXT)
+        override fun onSkipToPrevious() = dispatchKeyEventDownUp(KeyEvent.KEYCODE_MEDIA_PREVIOUS)
+
+        private fun dispatchKeyEventDownUp(keyCode: Int) {
+            KEY_EVENT_ACTIONS_DOWN_UP.forEach { action -> activity.dispatchKeyEvent(KeyEvent(action, keyCode)) }
         }
     }
 }
