@@ -9,7 +9,6 @@ import android.arch.lifecycle.Lifecycle.Event.ON_DESTROY
 import android.arch.lifecycle.Lifecycle.Event.ON_START
 import android.arch.lifecycle.Lifecycle.Event.ON_STOP
 import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.OnLifecycleEvent
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -45,7 +44,6 @@ private val KEY_EVENT_ACTIONS_DOWN_UP = listOf(KeyEvent.ACTION_DOWN, KeyEvent.AC
  *
  * Before use, callers should:
  * - Add this as a [LifecycleObserver]
- * - Assign [iWebView]
  * - Add [dispatchKeyEvent] to KeyEvent handling
  *
  * To save time, we don't handle audio through either voice or the remote play/pause button: we don't
@@ -62,11 +60,12 @@ private val KEY_EVENT_ACTIONS_DOWN_UP = listOf(KeyEvent.ACTION_DOWN, KeyEvent.AC
  * [1]: If the initial playback state is PAUSED or NONE, a music selection voice conversation
  * overrides our voice commands.
  */
-class VideoVoiceCommandMediaSession(private val activity: Activity) : LifecycleObserver {
+class VideoVoiceCommandMediaSession(
+        private val activity: Activity,
+        private val getIWebView: () -> IWebView?
+) : LifecycleObserver {
 
     private val mediaSession = MediaSessionCompat(activity, MEDIA_SESSION_TAG)
-
-    var iWebView: IWebView? = null // Expected to be set by caller.
 
     init {
         val pb = PlaybackStateCompat.Builder()
@@ -94,11 +93,7 @@ class VideoVoiceCommandMediaSession(private val activity: Activity) : LifecycleO
     }
 
     @OnLifecycleEvent(ON_DESTROY)
-    fun onDestroy(lifecycleOwner: LifecycleOwner) {
-        // Fragments can be re-used after onDestroy so we must remove the observer
-        // so we don't have two instances when this object is created again.
-        lifecycleOwner.lifecycle.removeObserver(this)
-
+    fun onDestroy() {
         mediaSession.release()
     }
 
@@ -141,7 +136,7 @@ class VideoVoiceCommandMediaSession(private val activity: Activity) : LifecycleO
             // which should cover the majority use case.
             //
             // We don't handle audio: see class javadoc for details.
-            iWebView?.evalJS("""
+            getIWebView()?.evalJS("""
                 |(function() {
                 |    $GET_TARGET_VIDEO_OR_RETURN
                 |
@@ -183,7 +178,7 @@ class VideoVoiceCommandMediaSession(private val activity: Activity) : LifecycleO
             // This will break if absolute seeking is implemented (#941).
             val offsetMillis = absolutePositionMillis - HACKED_PLAYBACK_POSITION
             val offsetSeconds = TimeUnit.MILLISECONDS.toSeconds(offsetMillis)
-            iWebView?.evalJS("""
+            getIWebView()?.evalJS("""
                 |(function() {
                 |    $GET_TARGET_VIDEO_OR_RETURN
                 |

@@ -16,6 +16,7 @@ import com.amazon.android.webkit.AmazonWebKitFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.browser.BrowserFragment
+import org.mozilla.focus.browser.VideoVoiceCommandMediaSession
 import org.mozilla.focus.ext.toSafeIntent
 import org.mozilla.focus.home.HomeFragment
 import org.mozilla.focus.iwebview.IWebView
@@ -37,11 +38,16 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
 
     private val sessionManager = SessionManager.getInstance()
 
+    // There should be at most one MediaSession per process, hence it's in MainActivity.
+    // We crash if we init MediaSession at init time, hence lateinit.
+    private lateinit var videoVoiceCommandMediaSession: VideoVoiceCommandMediaSession
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.
         SentryWrapper.init(this)
+        initMediaSession()
 
         initAmazonFactory()
         val intent = SafeIntent(intent)
@@ -118,6 +124,13 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
         super.onBackPressed()
     }
 
+    private fun initMediaSession() {
+        videoVoiceCommandMediaSession = VideoVoiceCommandMediaSession(this) {
+            (supportFragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment?)?.webView
+        }
+        lifecycle.addObserver(videoVoiceCommandMediaSession)
+    }
+
     private fun initAmazonFactory() {
         if (!isAmazonFactoryInit) {
             factory = AmazonWebKitFactories.getDefaultFactory()
@@ -152,16 +165,17 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         val fragmentManager = supportFragmentManager
-        val browserFragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment?
-        val homeFragment = fragmentManager.findFragmentByTag(HomeFragment.FRAGMENT_TAG) as HomeFragment?
-
-        return if (browserFragment != null && browserFragment.isVisible) {
-            browserFragment.dispatchKeyEvent(event) || super.dispatchKeyEvent(event)
-        } else if (homeFragment != null && homeFragment.isVisible) {
-            homeFragment.dispatchKeyEvent(event) || super.dispatchKeyEvent(event)
-        } else {
-            super.dispatchKeyEvent(event)
+        val maybeBrowserFragment = (fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment?)?.let {
+            if (it.isVisible) it else null
         }
+        val maybeHomeFragment = (fragmentManager.findFragmentByTag(HomeFragment.FRAGMENT_TAG) as HomeFragment?)?.let {
+            if (it.isVisible) it else null
+        }
+
+        return videoVoiceCommandMediaSession.dispatchKeyEvent(event) ||
+                (maybeBrowserFragment?.dispatchKeyEvent(event) ?: false) ||
+                (maybeHomeFragment?.dispatchKeyEvent(event) ?: false) ||
+                super.dispatchKeyEvent(event)
     }
 
     companion object {
