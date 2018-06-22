@@ -23,9 +23,8 @@ interface IWebView {
 
     var callback: Callback?
 
-    fun onPause()
-    fun onResume()
-
+    fun onStop()
+    fun onStart()
     fun pauseTimers()
     fun resumeTimers()
 
