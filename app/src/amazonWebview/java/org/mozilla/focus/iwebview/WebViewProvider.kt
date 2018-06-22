@@ -67,6 +67,8 @@ private fun initWebSettings(context: Context, settings: AmazonWebSettings) = wit
     javaScriptEnabled = true
     domStorageEnabled = true
 
+    mediaPlaybackRequiresUserGesture = false // Allows auto-play (which improves YouTube experience).
+
     // The default for those settings should be "false" - But we want to be explicit.
     setAppCacheEnabled(false)
     databaseEnabled = false
