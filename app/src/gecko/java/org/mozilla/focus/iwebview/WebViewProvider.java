@@ -78,7 +78,12 @@ public class WebViewProvider {
         }
 
         @Override
-        public void onPause() {
+        public void onStop() {
+
+        }
+
+        @Override
+        public void onStart() {
 
         }
 
@@ -89,11 +94,6 @@ public class WebViewProvider {
 
         @Override
         public void resumeTimers() {
-
-        }
-
-        @Override
-        public void onResume() {
 
         }
 
