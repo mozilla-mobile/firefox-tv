@@ -33,16 +33,7 @@ private const val SUPPORTED_ACTIONS = ACTION_PLAY_PAUSE or ACTION_PLAY or ACTION
         ACTION_SKIP_TO_NEXT or ACTION_SKIP_TO_PREVIOUS or
         ACTION_SEEK_TO // "Alexa, rewind/fast-forward <num> <unit-of-time>"
 
-/**
- * A workaround for playback position. The playback position increments in the MediaSession APIs
- * automatically based on the given playback speed. The position is used to provide an absolute
- * position to seek to in `onSeekTo` (triggered by rewind/fast-forward commands). Since these
- * commands are currently relative ("Alexa fast-forward 10 minutes"), we can avoid syncing with the
- * JS playback state, simplifying the code, and set the the position to an absolute value with
- * playback speed 0: when onSeekTo is called, the constant value will be added to the offset we need
- * so we can subtract to get the offset. See onSeekTo for details. This will break if absolute
- * seeking is implemented (#941.
- */
+// See `onSeekTo` for details on HACKED_*.
 private const val HACKED_PLAYBACK_POSITION: Long = Long.MAX_VALUE / 2
 private const val HACKED_PLAYBACK_SPEED: Float = 0.0f
 
@@ -81,8 +72,8 @@ class VideoVoiceCommandMediaSession(private val activity: Activity) : LifecycleO
         val pb = PlaybackStateCompat.Builder()
                 .setActions(SUPPORTED_ACTIONS)
 
-                // See class javadoc for details on STATE_PLAYING. See constant javadoc for
-                // details on HACKED_*.
+                // See class javadoc for details on STATE_PLAYING.
+                // See `onSeekTo` for details on HACKED_*.
                 .setState(STATE_PLAYING, HACKED_PLAYBACK_POSITION, HACKED_PLAYBACK_SPEED)
                 .build()
         mediaSession.setPlaybackState(pb)
@@ -170,8 +161,27 @@ class VideoVoiceCommandMediaSession(private val activity: Activity) : LifecycleO
             KEY_EVENT_ACTIONS_DOWN_UP.forEach { action -> activity.dispatchKeyEvent(KeyEvent(action, keyCode)) }
         }
 
-        override fun onSeekTo(posMillis: Long) {
-            val offsetMillis = posMillis - HACKED_PLAYBACK_POSITION
+        override fun onSeekTo(absolutePositionMillis: Long) {
+            // This method is called for "fast-forward/rewind X <time-unit>" where the args are an
+            // absolute position. The system calculates the absolute position from the current
+            // playback position and the user-provided offset.
+            //
+            // The MediaSession API calculates the current playback time with the last "current time"
+            // value and the playback speed we provide it (in MediaSession.setPlaybackState):
+            //   current_time = time_passed * playback_speed + initial_time
+            //
+            // However, we force STATE_PLAYING for the duration the app is open so this calculated
+            // playback time will be inaccurate to the actual video. We hack around this by setting
+            // HACKED_PLAYBACK_SPEED to 0 and never updating the current playback time so the
+            // calculated position never changes: we can use this to calculate the offset (see the code).
+            //
+            // The system will never provide a negative absolute position so if HACKED_PLAYBACK_POSITION
+            // is 0, we cannot calculate negative offsets and thus can't rewind). To avoid this,
+            // we set it to the middle-most value (MAX_VALUE / 2) to support the widest range of
+            // playback.
+            //
+            // This will break if absolute seeking is implemented (#941).
+            val offsetMillis = absolutePositionMillis - HACKED_PLAYBACK_POSITION
             val offsetSeconds = TimeUnit.MILLISECONDS.toSeconds(offsetMillis)
             iWebView?.evalJS("""
                 |(function() {
