@@ -129,9 +129,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     }
 
     private fun initMediaSession() {
-        videoVoiceCommandMediaSession = VideoVoiceCommandMediaSession(this) {
-            (supportFragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment?)?.webView
-        }
+        videoVoiceCommandMediaSession = VideoVoiceCommandMediaSession(this)
         lifecycle.addObserver(videoVoiceCommandMediaSession)
     }
 
