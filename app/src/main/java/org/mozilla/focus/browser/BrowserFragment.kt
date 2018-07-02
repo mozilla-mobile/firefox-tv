@@ -23,6 +23,7 @@ import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.mozilla.focus.MainActivity
+import org.mozilla.focus.MediaSessionHolder
 import org.mozilla.focus.R
 import org.mozilla.focus.ScreenController
 import org.mozilla.focus.architecture.NonNullObserver
@@ -68,6 +69,8 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     override lateinit var session: Session
     override val initialUrl get() = session.url.value
     override val iWebViewCallback get() = SessionCallbackProxy(session, BrowserIWebViewCallback(this))
+
+    private val mediaSessionHolder get() = activity as MediaSessionHolder? // null when not attached.
 
     /**
      * The current URL.
