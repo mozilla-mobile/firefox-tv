@@ -4,11 +4,11 @@
 
 package org.mozilla.focus.browser
 
-import android.app.Activity
 import android.arch.lifecycle.Lifecycle.Event.ON_DESTROY
 import android.arch.lifecycle.Lifecycle.Event.ON_START
 import android.arch.lifecycle.Lifecycle.Event.ON_STOP
 import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.OnLifecycleEvent
 import android.support.annotation.UiThread
 import android.support.v4.media.session.MediaSessionCompat
@@ -21,6 +21,7 @@ import android.support.v4.media.session.PlaybackStateCompat.ACTION_SKIP_TO_NEXT
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
 import android.support.v4.media.session.PlaybackStateCompat.STATE_PAUSED
 import android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING
+import android.support.v7.app.AppCompatActivity
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_MEDIA_PAUSE
 import android.view.KeyEvent.KEYCODE_MEDIA_PLAY
@@ -28,7 +29,9 @@ import android.view.KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
 import android.webkit.JavascriptInterface
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import org.mozilla.focus.browser.VideoVoiceCommandMediaSession.MediaSessionCallbacks
 import org.mozilla.focus.iwebview.IWebView
+import org.mozilla.focus.session.Session
 import java.util.concurrent.TimeUnit
 
 private const val JS_INTERFACE_IDENTIFIER = "_firefoxTV_playbackStateObserverJava"
@@ -51,6 +54,7 @@ private val KEY_EVENT_ACTIONS_DOWN_UP = listOf(KeyEvent.ACTION_DOWN, KeyEvent.AC
  * Before use, callers should:
  * - Add this as a [LifecycleObserver]
  * - Add [dispatchKeyEvent] to KeyEvent handling
+ * - Call [onCreateWebView] and [onDestroyWebView] for fragment lifecycle handling.
  *
  * To save time, we don't handle audio through either voice or the remote play/pause button: we don't
  * explicitly handle playback changes ourselves and we mute play/pause events from being received
@@ -69,8 +73,7 @@ private val KEY_EVENT_ACTIONS_DOWN_UP = listOf(KeyEvent.ACTION_DOWN, KeyEvent.AC
  * overrides our voice commands.
  */
 class VideoVoiceCommandMediaSession @UiThread constructor(
-        private val activity: Activity,
-        private val getIWebView: () -> IWebView?
+        private val activity: AppCompatActivity
 ) : LifecycleObserver {
 
     @get:UiThread // mediaSession is not thread safe.
@@ -78,6 +81,8 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
     private val cachedPlaybackState = PlaybackStateCompat.Builder()
             .setActions(SUPPORTED_ACTIONS)
 
+    private var webView: IWebView? = null
+    private var sessionIsLoadingObserver: SessionIsLoadingObserver? = null
 
     init {
         val playbackState = cachedPlaybackState
@@ -89,6 +94,24 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         mediaSession.setCallback(MediaSessionCallbacks())
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
                 MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
+    }
+
+    fun onCreateWebView(webView: IWebView, session: Session) {
+        this.webView = webView.apply {
+            addJavascriptInterface(JavascriptVideoPlaybackStateSyncer(), JS_INTERFACE_IDENTIFIER)
+        }
+
+        val sessionIsLoadingObserver = SessionIsLoadingObserver(webView)
+        session.loading.observe(activity, sessionIsLoadingObserver)
+        this.sessionIsLoadingObserver = sessionIsLoadingObserver
+    }
+
+    fun onDestroyWebView(webView: IWebView, session: Session) {
+        webView.removeJavascriptInterface(JS_INTERFACE_IDENTIFIER)
+        this.webView = null
+
+        session.loading.removeObserver(sessionIsLoadingObserver!!)
+        this.sessionIsLoadingObserver = null
     }
 
     @OnLifecycleEvent(ON_START)
@@ -117,6 +140,15 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         else -> false
     }
 
+    class SessionIsLoadingObserver(private val webView: IWebView) : Observer<Boolean> {
+        override fun onChanged(it: Boolean?) {
+            val isLoading = it!! // Observer is attached to NonNullLiveData.
+            if (!isLoading) {
+                webView.evalJS(JS_OBSERVE_PLAYBACK_STATE) // Calls through to JavascriptVideoPlaybackStateSyncer.
+            }
+        }
+    }
+
     inner class JavascriptVideoPlaybackStateSyncer {
         @JavascriptInterface
         fun setIsAnyVideoPlaying(isAnyVideoPlaying: Boolean) {
@@ -134,6 +166,9 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
     /**
      * Callbacks for voice commands ("Alexa play") and hardware media buttons on key down. See
      * [dispatchKeyEvent] for more details on hardware media button propagation.
+     *
+     * These callbacks are expected to update playback state: our code does, but we'll often go
+     * through JavaScript first.
      */
     inner class MediaSessionCallbacks : MediaSessionCompat.Callback() {
         private val ID_TARGET_VIDEO = "targetVideo"
@@ -160,7 +195,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
             // which should cover the majority use case.
             //
             // We don't handle audio: see class javadoc for details.
-            getIWebView()?.evalJS("""
+            webView?.evalJS("""
                 |(function() {
                 |    $GET_TARGET_VIDEO_OR_RETURN
                 |
@@ -202,7 +237,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
             // This will break if absolute seeking is implemented (#941).
             val offsetMillis = absolutePositionMillis - HACKED_PLAYBACK_POSITION
             val offsetSeconds = TimeUnit.MILLISECONDS.toSeconds(offsetMillis)
-            getIWebView()?.evalJS("""
+            webView?.evalJS("""
                 |(function() {
                 |    $GET_TARGET_VIDEO_OR_RETURN
                 |
