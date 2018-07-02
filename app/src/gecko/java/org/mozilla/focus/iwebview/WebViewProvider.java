@@ -225,6 +225,16 @@ public class WebViewProvider {
         }
 
         @Override
+        public void addJavascriptInterface(@Nullable Object obj, @Nullable String interfaceName) {
+
+        }
+
+        @Override
+        public void removeJavascriptInterface(@Nullable String interfaceName) {
+
+        }
+
+        @Override
         public void restoreWebViewState(Session session) {
             // TODO: restore navigation history, and reopen previously opened page
         }

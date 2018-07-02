@@ -39,6 +39,9 @@ interface IWebView {
     fun canGoForward(): Boolean
     fun canGoBack(): Boolean
 
+    fun addJavascriptInterface(obj: Any?, interfaceName: String?)
+    fun removeJavascriptInterface(interfaceName: String?)
+
     /**
      * Scrolls the page but clamps it to the page dimensions, unlike [View.scrollBy].
      *
