@@ -190,6 +190,11 @@ class BrowserFragment : IWebViewLifecycleFragment() {
 
         layout.progressBar.initialize(this)
 
+        // We break encapsulation here: we should use the super.webView reference but it's not init until
+        // onViewCreated. However, overriding both onCreateView and onViewCreated in a single class
+        // is confusing so I'd rather break encapsulation than confuse devs.
+        mediaSessionHolder?.videoVoiceCommandMediaSession?.onCreateWebView(layout.webview, session)
+
         return layout
     }
 
@@ -212,6 +217,8 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     }
 
     override fun onDestroyView() {
+        mediaSessionHolder?.videoVoiceCommandMediaSession?.onDestroyWebView(webView!!, session)
+
         super.onDestroyView()
 
         lifecycle.removeObserver(cursor!!)
