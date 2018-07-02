@@ -10,6 +10,7 @@ import android.arch.lifecycle.Lifecycle.Event.ON_START
 import android.arch.lifecycle.Lifecycle.Event.ON_STOP
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
+import android.support.annotation.UiThread
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_PAUSE
@@ -18,14 +19,19 @@ import android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY_PAUSE
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_SEEK_TO
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_SKIP_TO_NEXT
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+import android.support.v4.media.session.PlaybackStateCompat.STATE_PAUSED
 import android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_MEDIA_PAUSE
 import android.view.KeyEvent.KEYCODE_MEDIA_PLAY
 import android.view.KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
+import android.webkit.JavascriptInterface
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import org.mozilla.focus.iwebview.IWebView
 import java.util.concurrent.TimeUnit
 
+private const val JS_INTERFACE_IDENTIFIER = "_firefoxTV_playbackStateObserverJava"
 private const val MEDIA_SESSION_TAG = "FirefoxTVMedia"
 
 private const val SUPPORTED_ACTIONS = ACTION_PLAY_PAUSE or ACTION_PLAY or ACTION_PAUSE or
@@ -57,25 +63,29 @@ private val KEY_EVENT_ACTIONS_DOWN_UP = listOf(KeyEvent.ACTION_DOWN, KeyEvent.AC
  * playback state so if we lock the initial playback state to PLAYING [1], we can respond to
  * `onPlay/Pause` events by playing the video if it's paused or pausing the video if it's playing.
  *
+ * The constructor should be called from the UiThread because of [mediaSession].
+ *
  * [1]: If the initial playback state is PAUSED or NONE, a music selection voice conversation
  * overrides our voice commands.
  */
-class VideoVoiceCommandMediaSession(
+class VideoVoiceCommandMediaSession @UiThread constructor(
         private val activity: Activity,
         private val getIWebView: () -> IWebView?
 ) : LifecycleObserver {
 
+    @get:UiThread // mediaSession is not thread safe.
     private val mediaSession = MediaSessionCompat(activity, MEDIA_SESSION_TAG)
+    private val cachedPlaybackState = PlaybackStateCompat.Builder()
+            .setActions(SUPPORTED_ACTIONS)
+
 
     init {
-        val pb = PlaybackStateCompat.Builder()
-                .setActions(SUPPORTED_ACTIONS)
-
+        val playbackState = cachedPlaybackState
                 // See class javadoc for details on STATE_PLAYING.
                 // See `onSeekTo` for details on HACKED_*.
                 .setState(STATE_PLAYING, HACKED_PLAYBACK_POSITION, HACKED_PLAYBACK_SPEED)
                 .build()
-        mediaSession.setPlaybackState(pb)
+        mediaSession.setPlaybackState(playbackState)
         mediaSession.setCallback(MediaSessionCallbacks())
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
                 MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
@@ -105,6 +115,20 @@ class VideoVoiceCommandMediaSession(
         // handle it all ourselves through MediaSession.
         KEYCODE_MEDIA_PLAY_PAUSE, KEYCODE_MEDIA_PLAY, KEYCODE_MEDIA_PAUSE -> event.action == KeyEvent.ACTION_UP
         else -> false
+    }
+
+    inner class JavascriptVideoPlaybackStateSyncer {
+        @JavascriptInterface
+        fun setIsAnyVideoPlaying(isAnyVideoPlaying: Boolean) {
+            launch(UI) { // mediaSession is on UI thread only.
+                val playbackStateString = if (isAnyVideoPlaying) STATE_PLAYING else STATE_PAUSED
+                val playbackState = cachedPlaybackState
+                        .setState(playbackStateString, HACKED_PLAYBACK_POSITION, HACKED_PLAYBACK_SPEED)
+                        .build()
+
+                mediaSession.setPlaybackState(playbackState)
+            }
+        }
     }
 
     /**
@@ -188,3 +212,82 @@ class VideoVoiceCommandMediaSession(
         }
     }
 }
+
+/**
+ * This script will:
+ * - Add playback state change listeners to all <video>s in the DOM; it uses a mutation
+ *   observer to attach listeners to new <video> nodes as well
+ * - On playback state change, notify Java about the current playback state
+ * - Prevent this script from being injected more than once per page
+ *
+ * Note that `//` style comments are not supported in `evalJS`.
+ *
+ * Development tips:
+ * - This script was written using Typescript with Visual Studio Code: it may be easier to modify
+ *   it by copy-pasting it back-and-forth.
+ * - Iterating on the Fire TV is slow: you can speed it up by making this a WebExtension content
+ *   script and testing on desktop
+ */
+private val JS_OBSERVE_PLAYBACK_STATE = """
+var _firefoxTV_isPlaybackStateObserverLoaded;
+(function () {
+    const PLAYBACK_STATE_CHANGE_EVENTS = ['play', 'pause'];
+
+    const videosWithListeners = new Set();
+
+    function onDOMChangedForVideos() {
+        addPlaybackStateListeners();
+        syncPlaybackState();
+    }
+
+    function addPlaybackStateListeners() {
+        document.querySelectorAll('video').forEach(videoElement => {
+            if (videosWithListeners.has(videoElement)) { return; }
+            videosWithListeners.add(videoElement);
+
+            PLAYBACK_STATE_CHANGE_EVENTS.forEach(event => {
+                videoElement.addEventListener(event, syncPlaybackState);
+            });
+        });
+    }
+
+    function syncPlaybackState() {
+        _firefoxTV_playbackStateObserverJava.setIsAnyVideoPlaying(isAnyVideoPlaying());
+    }
+
+    function isAnyVideoPlaying() {
+        return Array.from(document.querySelectorAll('video')).some(video => !video.paused);
+    }
+
+    function nodeContainsVideo(node) {
+        return node.nodeName.toLowerCase() === 'video' ||
+                ((node instanceof Element) && !!node.querySelector('video'));
+    }
+
+    const documentChangedObserver = new MutationObserver(mutationList => {
+        const wasVideoAdded = mutationList.some(mutation => {
+            return mutation.type === 'childList' &&
+                    (Array.from(mutation.addedNodes).some(nodeContainsVideo) ||
+                            Array.from(mutation.removedNodes).some(nodeContainsVideo));
+        });
+
+        if (wasVideoAdded) {
+            /* This may traverse the whole DOM so let's only call it if it's necessary. */
+            onDOMChangedForVideos();
+        }
+    });
+
+    /* Sometimes the script is evaluated more than once per page:
+     * only inject code with side effects once. */
+    if (!_firefoxTV_isPlaybackStateObserverLoaded) {
+        _firefoxTV_isPlaybackStateObserverLoaded = true;
+
+        documentChangedObserver.observe(document, {subtree: true, childList: true});
+
+        /* The DOM is changed from blank to filled for the initial page load.
+         * While the function name assumes videos are present, checking for
+         * videos is as expensive as calling the function so we just call it. */
+        onDOMChangedForVideos();
+    }
+})();
+""".trimIndent()
