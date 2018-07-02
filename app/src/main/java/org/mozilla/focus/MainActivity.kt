@@ -37,13 +37,17 @@ import org.mozilla.focus.utils.ViewUtils
 import org.mozilla.focus.utils.publicsuffix.PublicSuffix
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 
-class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener {
+interface MediaSessionHolder {
+    val videoVoiceCommandMediaSession: VideoVoiceCommandMediaSession
+}
+
+class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, MediaSessionHolder {
 
     private val sessionManager = SessionManager.getInstance()
 
     // There should be at most one MediaSession per process, hence it's in MainActivity.
     // We crash if we init MediaSession at init time, hence lateinit.
-    private lateinit var videoVoiceCommandMediaSession: VideoVoiceCommandMediaSession
+    override lateinit var videoVoiceCommandMediaSession: VideoVoiceCommandMediaSession
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
