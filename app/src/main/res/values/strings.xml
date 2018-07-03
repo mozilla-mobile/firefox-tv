@@ -172,7 +172,7 @@ be temporary, and you can try again later.</li>
     video strings -->
     <!-- Settings strings -->
     <string name="settings_cookies_dialog_title">Clear all cookies and site data</string>
-    <string name="settings_cookies_dialog_content">Selecting ‘Clear Now’ will clear all cookies and site data stored by Firefox for Fire TV. This may sign you out of websites and remove offline web content.</string>
+    <string name="settings_cookies_dialog_content2">This will clear all cookies and site data. Clearing this information may sign you out of websites and delete web content that is stored offline.</string>
 
     <string name="turbo_mode">Turbo Mode</string>
     <!-- Displayed as notification when Turbo mode is turned on -->
@@ -183,6 +183,8 @@ be temporary, and you can try again later.</li>
     <string name="onboarding_turbo_mode_body">Turbo Mode automatically blocks trackers and ads to help get you where you\'re going faster. If there\'s a speed bump – like a site that isn\'t behaving the way you expect – just turn Turbo Mode off.</string>
     <string name="onboarding_turbo_mode_button_on">Keep Turbo Mode Enabled</string>
     <string name="onboarding_turbo_mode_button_off">Turn Turbo Mode Off</string>
+    <string name="button_keep_enabled">Keep enabled</string>
+    <string name="button_turn_off">Turn off</string>
     <!-- Spoken to screen reader users to explain "off" action of Turbo mode button -->
     <string name="turbo_mode_disable_a11y">Turn Turbo Mode Off</string>
     <!-- Spoken to screen reader users to explain "on" action of Turbo mode button -->
