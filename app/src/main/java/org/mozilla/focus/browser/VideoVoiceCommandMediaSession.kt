@@ -84,6 +84,8 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
     private var webView: IWebView? = null
     private var sessionIsLoadingObserver: SessionIsLoadingObserver? = null
 
+    private var isStarted = false
+
     init {
         val playbackState = cachedPlaybackState
                 // See class javadoc for details on STATE_PLAYING.
@@ -116,11 +118,25 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
 
     @OnLifecycleEvent(ON_START)
     fun onStart() {
+        isStarted = true
+
         mediaSession.isActive = true
     }
 
     @OnLifecycleEvent(ON_STOP)
     fun onStop() {
+        isStarted = false
+
+        // Videos playing when the app was backgrounded get into an inconsistent state: `paused`
+        // will return false but they won't actually be playing. This makes any user "play" commands
+        // take two clicks: one to "pause" and the second to play for real. We get around this by
+        // pausing all videos before being backgrounded. This issue doesn't affect pages with
+        // autoplay, like YouTube.
+        //
+        // The videos may send playback state update events to , which we're forced to ignore: see
+        // JavascriptVideoPlaybackStateSyncer for the code.
+        webView?.evalJS("document.querySelectorAll('video').forEach(v => v.pause());")
+
         // Video playback stops when backgrounded so we can end the session.
         mediaSession.isActive = false
     }
@@ -152,6 +168,12 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
     inner class JavascriptVideoPlaybackStateSyncer {
         @JavascriptInterface
         fun setIsAnyVideoPlaying(isAnyVideoPlaying: Boolean) {
+            // During onStop we pause all videos which may send playback state updates to this
+            // method. In theory, since the JS is async, this could undo the playback state we set
+            // in onStop so we ignore these updates. In practice, this method doesn't appear to be
+            // called from that JS but we leave this in for safety.
+            if (!isStarted) { return }
+
             launch(UI) { // mediaSession is on UI thread only.
                 val playbackStateString = if (isAnyVideoPlaying) STATE_PLAYING else STATE_PAUSED
                 val playbackState = cachedPlaybackState
