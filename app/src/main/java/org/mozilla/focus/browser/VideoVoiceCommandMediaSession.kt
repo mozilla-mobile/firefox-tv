@@ -19,8 +19,10 @@ import android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY_PAUSE
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_SEEK_TO
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_SKIP_TO_NEXT
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+import android.support.v4.media.session.PlaybackStateCompat.STATE_BUFFERING
 import android.support.v4.media.session.PlaybackStateCompat.STATE_PAUSED
 import android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING
+import android.support.v4.media.session.PlaybackStateCompat.STATE_STOPPED
 import android.support.v7.app.AppCompatActivity
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_MEDIA_PAUSE
@@ -60,12 +62,15 @@ private val KEY_EVENT_ACTIONS_DOWN_UP = listOf(KeyEvent.ACTION_DOWN, KeyEvent.AC
  * explicitly handle playback changes ourselves and we mute play/pause events from being received
  * by the page (see [dispatchKeyEvent]).
  *
- * To save time, this implementation doesn't conform to the [MediaSessionCompat] API but still
- * functions correctly. Conforming to the API requires knowing about playback state, which is
- * complicated because we need to sync Java state with DOM state. For the current feature set,
- * this appears to be unnecessary. "Alexa play/pause" will send either event based on the current
- * playback state so if we lock the initial playback state to PLAYING [1], we can respond to
- * `onPlay/Pause` events by playing the video if it's paused or pausing the video if it's playing.
+ * When a MediaSession is active, it is available to receive MediaController commands (e.g. Alexa
+ * voice commands). MediaSessions begin inactive. They become active when they go to the playing or
+ * buffering states. They are inactivated when they go to stopped, none, or error states.
+ *
+ * For simplicity, we keep our MediaSession active (buffering, playing, paused) while Firefox is
+ * in the foreground and deactivate it (stopped) in the background. If we wanted to be more accurate,
+ * we could add a state (none) when there are no videos present in the DOM (#955).
+ *
+ * We don't support syncing video duration and playback position (#941).
  *
  * The constructor should be called from the UiThread because of [mediaSession].
  *
@@ -87,12 +92,6 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
     private var isStarted = false
 
     init {
-        val playbackState = cachedPlaybackState
-                // See class javadoc for details on STATE_PLAYING.
-                // See `onSeekTo` for details on HACKED_*.
-                .setState(STATE_PLAYING, HACKED_PLAYBACK_POSITION, HACKED_PLAYBACK_SPEED)
-                .build()
-        mediaSession.setPlaybackState(playbackState)
         mediaSession.setCallback(MediaSessionCallbacks())
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
                 MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
@@ -120,6 +119,9 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
     fun onStart() {
         isStarted = true
 
+        // We want to make our MediaSession active: state buffering is more accurate than state
+        // playing. For an explanation of MediaSession (in)active states, see class javadoc.
+        mediaSession.setPlaybackState(cachedPlaybackState.setStateHacked(STATE_BUFFERING).build())
         mediaSession.isActive = true
     }
 
@@ -137,7 +139,8 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         // JavascriptVideoPlaybackStateSyncer for the code.
         webView?.evalJS("document.querySelectorAll('video').forEach(v => v.pause());")
 
-        // Video playback stops when backgrounded so we can end the session.
+        // Move MediaSession to inactive state.
+        mediaSession.setPlaybackState(cachedPlaybackState.setStateHacked(STATE_STOPPED).build())
         mediaSession.isActive = false
     }
 
@@ -177,7 +180,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
             launch(UI) { // mediaSession is on UI thread only.
                 val playbackStateString = if (isAnyVideoPlaying) STATE_PLAYING else STATE_PAUSED
                 val playbackState = cachedPlaybackState
-                        .setState(playbackStateString, HACKED_PLAYBACK_POSITION, HACKED_PLAYBACK_SPEED)
+                        .setStateHacked(playbackStateString)
                         .build()
 
                 mediaSession.setPlaybackState(playbackState)
@@ -269,6 +272,10 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         }
     }
 }
+
+// See onSeekTo for details on this hack.
+private fun PlaybackStateCompat.Builder.setStateHacked(state: Int) =
+        this.setState(state, HACKED_PLAYBACK_POSITION, HACKED_PLAYBACK_SPEED)
 
 /**
  * This script will:
