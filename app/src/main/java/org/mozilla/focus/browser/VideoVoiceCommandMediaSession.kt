@@ -19,6 +19,7 @@ import android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY_PAUSE
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_SEEK_TO
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_SKIP_TO_NEXT
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+import android.support.v4.media.session.PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN
 import android.support.v4.media.session.PlaybackStateCompat.STATE_BUFFERING
 import android.support.v4.media.session.PlaybackStateCompat.STATE_PAUSED
 import android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING
@@ -35,6 +36,7 @@ import org.mozilla.focus.browser.VideoVoiceCommandMediaSession.MediaSessionCallb
 import org.mozilla.focus.iwebview.IWebView
 import org.mozilla.focus.session.Session
 import java.util.concurrent.TimeUnit
+import kotlin.math.roundToLong
 
 private const val JS_INTERFACE_IDENTIFIER = "_firefoxTV_playbackStateObserverJava"
 private const val MEDIA_SESSION_TAG = "FirefoxTVMedia"
@@ -69,8 +71,6 @@ private val KEY_EVENT_ACTIONS_DOWN_UP = listOf(KeyEvent.ACTION_DOWN, KeyEvent.AC
  * For simplicity, we keep our MediaSession active (buffering, playing, paused) while Firefox is
  * in the foreground and deactivate it (stopped) in the background. If we wanted to be more accurate,
  * we could add a state (none) when there are no videos present in the DOM (#955).
- *
- * We don't support syncing video duration and playback position (#941).
  *
  * The constructor should be called from the UiThread because of [mediaSession].
  *
@@ -124,7 +124,13 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
 
         // We want to make our MediaSession active: state buffering is more accurate than state
         // playing. For an explanation of MediaSession (in)active states, see class javadoc.
-        mediaSession.setPlaybackState(cachedPlaybackStateBuilder.setStateHacked(STATE_BUFFERING).build())
+        //
+        // The state should be synced with the DOM on page load (i.e. the script is injected) or
+        // video playback state change (see JS script).
+        val playbackState = cachedPlaybackStateBuilder
+                .setState(STATE_BUFFERING, PLAYBACK_POSITION_UNKNOWN, 0f)
+                .build()
+        mediaSession.setPlaybackState(playbackState)
         mediaSession.isActive = true
     }
 
@@ -143,7 +149,10 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         webView?.evalJS("document.querySelectorAll('video').forEach(v => v.pause());")
 
         // Move MediaSession to inactive state.
-        mediaSession.setPlaybackState(cachedPlaybackStateBuilder.setStateHacked(STATE_STOPPED).build())
+        val playbackState = cachedPlaybackStateBuilder
+                .setState(STATE_STOPPED, PLAYBACK_POSITION_UNKNOWN, 0f)
+                .build()
+        mediaSession.setPlaybackState(playbackState)
         mediaSession.isActive = false
     }
 
@@ -172,20 +181,38 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
     }
 
     inner class JavascriptVideoPlaybackStateSyncer {
+
+        /**
+         * Called by JavaScript to sync playback state to Java's [mediaSession].
+         *
+         * Note: JavaScript calling into Kotlin does not support optionals.
+         */
         @JavascriptInterface
-        fun setIsAnyVideoPlaying(isAnyVideoPlaying: Boolean) {
+        fun syncPlaybackState(isVideoPresent: Boolean, isVideoPlaying: Boolean,
+                              jsPositionSeconds: Double, jsPlaybackSpeed: Float) {
             // During onStop we pause all videos which may send playback state updates to this
             // method. In theory, since the JS is async, this could undo the playback state we set
             // in onStop so we ignore these updates. In practice, this method doesn't appear to be
             // called from that JS but we leave this in for safety.
             if (!isStarted) { return }
 
-            launch(UI) { // mediaSession is on UI thread only.
-                val playbackStateString = if (isAnyVideoPlaying) STATE_PLAYING else STATE_PAUSED
-                val playbackState = cachedPlaybackStateBuilder
-                        .setStateHacked(playbackStateString)
-                        .build()
+            val playbackStateInt: Int
+            val positionMillis: Long
+            val playbackSpeed: Float
+            if (isVideoPresent) {
+                playbackStateInt = if (isVideoPlaying) STATE_PLAYING else STATE_PAUSED
+                positionMillis = TimeUnit.SECONDS.toMillis(jsPositionSeconds.roundToLong())
+                playbackSpeed = if (isVideoPlaying) jsPlaybackSpeed else 0f // setState docs say 0 if paused.
+            } else {
+                playbackStateInt = STATE_PAUSED // We want to keep session active so used paused.
+                positionMillis = PLAYBACK_POSITION_UNKNOWN
+                playbackSpeed = 0f
+            }
 
+            launch(UI) { // mediaSession and cachedPlaybackState is on UI thread only.
+                val playbackState = cachedPlaybackStateBuilder
+                        .setState(playbackStateInt, positionMillis, playbackSpeed)
+                        .build()
                 mediaSession.setPlaybackState(playbackState)
             }
         }
@@ -244,32 +271,12 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         }
 
         override fun onSeekTo(absolutePositionMillis: Long) {
-            // This method is called for "fast-forward/rewind X <time-unit>" where the args are an
-            // absolute position. The system calculates the absolute position from the current
-            // playback position and the user-provided offset.
-            //
-            // The MediaSession API calculates the current playback time with the last "current time"
-            // value and the playback speed we provide it (in MediaSession.setPlaybackState):
-            //   current_time = time_passed * playback_speed + initial_time
-            //
-            // However, we force STATE_PLAYING for the duration the app is open so this calculated
-            // playback time will be inaccurate to the actual video. We hack around this by setting
-            // HACKED_PLAYBACK_SPEED to 0 and never updating the current playback time so the
-            // calculated position never changes: we can use this to calculate the offset (see the code).
-            //
-            // The system will never provide a negative absolute position so if HACKED_PLAYBACK_POSITION
-            // is 0, we cannot calculate negative offsets and thus can't rewind). To avoid this,
-            // we set it to the middle-most value (MAX_VALUE / 2) to support the widest range of
-            // playback.
-            //
-            // This will break if absolute seeking is implemented (#941).
-            val offsetMillis = absolutePositionMillis - HACKED_PLAYBACK_POSITION
-            val offsetSeconds = TimeUnit.MILLISECONDS.toSeconds(offsetMillis)
+            val absolutePositionSeconds = TimeUnit.MILLISECONDS.toSeconds(absolutePositionMillis)
             webView?.evalJS("""
                 |(function() {
                 |    $GET_TARGET_VIDEO_OR_RETURN
                 |
-                |    $ID_TARGET_VIDEO.currentTime = $ID_TARGET_VIDEO.currentTime + $offsetSeconds
+                |    $ID_TARGET_VIDEO.currentTime = $absolutePositionSeconds
                 |})();
                 """.trimMargin())
         }
@@ -320,11 +327,33 @@ var _firefoxTV_isPlaybackStateObserverLoaded;
     }
 
     function syncPlaybackState() {
-        _firefoxTV_playbackStateObserverJava.setIsAnyVideoPlaying(isAnyVideoPlaying());
+        let isVideoPresent;
+        let isPlaying;
+        let positionSeconds;
+        let playbackRate; /* 0.5, 1, etc. */
+        const maybeTargetVideo = getMaybeTargetVideo();
+        if (maybeTargetVideo) {
+            isVideoPresent = true;
+            isPlaying = !maybeTargetVideo.paused;
+            positionSeconds = maybeTargetVideo.currentTime;
+            playbackRate = maybeTargetVideo.playbackRate;
+        } else {
+            isVideoPresent = false;
+            isPlaying = false;
+            positionSeconds = null;
+            playbackRate = null;
+        }
+
+        _firefoxTV_playbackStateObserverJava.syncPlaybackState(
+            isVideoPresent, isPlaying, positionSeconds, playbackRate);
     }
 
-    function isAnyVideoPlaying() {
-        return Array.from(document.querySelectorAll('video')).some(video => !video.paused);
+    function getMaybeTargetVideo() {
+        const maybePlayingVideo = Array.from(document.querySelectorAll('video')).find(video => !video.paused);
+        if (maybePlayingVideo) { return maybePlayingVideo; }
+
+        /* If there are no playing videos, just return the first one. */
+        return document.querySelector('video');
     }
 
     function nodeContainsVideo(node) {
