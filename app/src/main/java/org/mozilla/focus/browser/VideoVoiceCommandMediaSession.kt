@@ -298,7 +298,8 @@ private fun PlaybackStateCompat.Builder.setStateHacked(state: Int) =
 private val JS_OBSERVE_PLAYBACK_STATE = """
 var _firefoxTV_isPlaybackStateObserverLoaded;
 (function () {
-    const PLAYBACK_STATE_CHANGE_EVENTS = ['play', 'pause'];
+    /* seeking will send "pause, play" and so is covered here. */
+    const PLAYBACK_STATE_CHANGE_EVENTS = ['play', 'pause', 'ratechange'];
 
     const videosWithListeners = new Set();
 
