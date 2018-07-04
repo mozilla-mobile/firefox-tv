@@ -140,8 +140,8 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         // pausing all videos before being backgrounded. This issue doesn't affect pages with
         // autoplay, like YouTube.
         //
-        // The videos may send playback state update events to , which we're forced to ignore: see
-        // JavascriptVideoPlaybackStateSyncer for the code.
+        // The videos may send playback state update events to Java, which we're forced to ignore:
+        // see JavascriptVideoPlaybackStateSyncer for the code.
         webView?.evalJS("document.querySelectorAll('video').forEach(v => v.pause());")
 
         // Move MediaSession to inactive state.
