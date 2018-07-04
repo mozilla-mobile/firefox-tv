@@ -45,10 +45,6 @@ private const val SUPPORTED_ACTIONS = ACTION_PLAY_PAUSE or ACTION_PLAY or ACTION
         ACTION_SKIP_TO_NEXT or ACTION_SKIP_TO_PREVIOUS or
         ACTION_SEEK_TO // "Alexa, rewind/fast-forward <num> <unit-of-time>"
 
-// See `onSeekTo` for details on HACKED_*.
-private const val HACKED_PLAYBACK_POSITION: Long = Long.MAX_VALUE / 2
-private const val HACKED_PLAYBACK_SPEED: Float = 0.0f
-
 private val KEY_EVENT_ACTIONS_DOWN_UP = listOf(KeyEvent.ACTION_DOWN, KeyEvent.ACTION_UP)
 
 /**
@@ -282,10 +278,6 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         }
     }
 }
-
-// See onSeekTo for details on this hack.
-private fun PlaybackStateCompat.Builder.setStateHacked(state: Int) =
-        this.setState(state, HACKED_PLAYBACK_POSITION, HACKED_PLAYBACK_SPEED)
 
 /**
  * This script will:
