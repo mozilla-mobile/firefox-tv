@@ -295,12 +295,21 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
  *   script and testing on desktop
  */
 private val JS_OBSERVE_PLAYBACK_STATE = """
+var _firefoxTV_playbackStateObserverJava;
 var _firefoxTV_isPlaybackStateObserverLoaded;
 (function () {
     /* seeking will send "pause, play" and so is covered here. */
     const PLAYBACK_STATE_CHANGE_EVENTS = ['play', 'pause', 'ratechange'];
+    const MILLIS_BETWEEN_PLAYBACK_STATE_SYNC_BY_TIME = 1000 * 10 /* seconds */;
+
+    const javaInterface = _firefoxTV_playbackStateObserverJava;
+    if (!javaInterface) {
+        console.error('Cannot sync playback state to Java: JavascriptInterface is not found.');
+    }
 
     const videosWithListeners = new Set();
+
+    let playbackStateSyncIntervalID;
 
     function onDOMChangedForVideos() {
         addPlaybackStateListeners();
@@ -336,8 +345,30 @@ var _firefoxTV_isPlaybackStateObserverLoaded;
             playbackRate = null;
         }
 
-        _firefoxTV_playbackStateObserverJava.syncPlaybackState(
-            isVideoPresent, isPlaying, positionSeconds, playbackRate);
+        schedulePlaybackStateSyncInterval(isPlaying);
+
+        javaInterface.syncPlaybackState(isVideoPresent, isPlaying, positionSeconds, playbackRate);
+    }
+
+    /**
+     * When a video is playing, schedules a function to repeatedly sync the playback state;
+     * cancels it when there is no video playing.
+     *
+     * Java and JavaScript increment the current playback position independently and run the risk of
+     * getting out of sync (e.g. upon buffering). We could try to handle the buffering case specifically
+     * but its state is difficult to identify with and syncing periodically is a better general solution.
+     * We don't sync with the video's 'timeupdate' event because it's called very frequently and could
+     * detract from performance.
+     */
+    function schedulePlaybackStateSyncInterval(isVideoPlaying) {
+        if (isVideoPlaying && !playbackStateSyncIntervalID) {
+            playbackStateSyncIntervalID = setInterval(syncPlaybackState,
+                MILLIS_BETWEEN_PLAYBACK_STATE_SYNC_BY_TIME);
+
+        } else if (!isVideoPlaying && playbackStateSyncIntervalID) {
+            clearInterval(playbackStateSyncIntervalID);
+            playbackStateSyncIntervalID = null;
+        }
     }
 
     function getMaybeTargetVideo() {
