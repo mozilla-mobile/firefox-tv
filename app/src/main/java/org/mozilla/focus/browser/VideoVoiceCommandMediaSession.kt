@@ -83,7 +83,9 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
 
     @get:UiThread // mediaSession is not thread safe.
     private val mediaSession = MediaSessionCompat(activity, MEDIA_SESSION_TAG)
-    private val cachedPlaybackState = PlaybackStateCompat.Builder()
+
+    /* Since we may update playback state often, we cache this builder to reduce allocation. */
+    private val cachedPlaybackStateBuilder = PlaybackStateCompat.Builder()
             .setActions(SUPPORTED_ACTIONS)
 
     private var webView: IWebView? = null
@@ -121,7 +123,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
 
         // We want to make our MediaSession active: state buffering is more accurate than state
         // playing. For an explanation of MediaSession (in)active states, see class javadoc.
-        mediaSession.setPlaybackState(cachedPlaybackState.setStateHacked(STATE_BUFFERING).build())
+        mediaSession.setPlaybackState(cachedPlaybackStateBuilder.setStateHacked(STATE_BUFFERING).build())
         mediaSession.isActive = true
     }
 
@@ -140,7 +142,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         webView?.evalJS("document.querySelectorAll('video').forEach(v => v.pause());")
 
         // Move MediaSession to inactive state.
-        mediaSession.setPlaybackState(cachedPlaybackState.setStateHacked(STATE_STOPPED).build())
+        mediaSession.setPlaybackState(cachedPlaybackStateBuilder.setStateHacked(STATE_STOPPED).build())
         mediaSession.isActive = false
     }
 
@@ -179,7 +181,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
 
             launch(UI) { // mediaSession is on UI thread only.
                 val playbackStateString = if (isAnyVideoPlaying) STATE_PLAYING else STATE_PAUSED
-                val playbackState = cachedPlaybackState
+                val playbackState = cachedPlaybackStateBuilder
                         .setStateHacked(playbackStateString)
                         .build()
 
