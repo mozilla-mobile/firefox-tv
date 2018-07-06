@@ -54,7 +54,7 @@ class PocketVideoFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         fun displayFeed(layout: View, videos: PocketVideosDeferred) {
-            layout.videoFeed.gridView.adapter = PocketVideoAdapter(context, videos, fragmentManager)
+            layout.videoFeed.gridView.adapter = PocketVideoAdapter(context!!, videos, fragmentManager!!)
         }
 
         val layout = inflater.inflate(R.layout.fragment_pocket_video, container, false)
@@ -76,11 +76,11 @@ class PocketVideoFragment : Fragment() {
 
         // SVGs can have artifacts if we set them in XML so we set it in code.
         layout.pocketWordmarkView.setImageDrawableAsPocketWordmark()
-        layout.pocketHelpButton.setImageDrawable(context.getDrawable(R.drawable.pocket_onboarding_help_button))
+        layout.pocketHelpButton.setImageDrawable(context!!.getDrawable(R.drawable.pocket_onboarding_help_button))
         return layout
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         pocketHelpButton.setOnClickListener { _ ->
             startActivity(Intent(context, PocketOnboardingActivity::class.java))
         }

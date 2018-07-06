@@ -25,16 +25,17 @@ class SettingsFragment : Fragment() {
         updateForAccessibility()
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater!!.inflate(R.layout.fragment_settings, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+            inflater.inflate(R.layout.fragment_settings, container, false)
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val context = view.context
 
         ic_lock.setImageResource(R.drawable.ic_lock)
-        telemetryButton.isChecked = DataUploadPreference.isEnabled(activity)
+        telemetryButton.isChecked = DataUploadPreference.isEnabled(context)
         telemetryView.setOnClickListener { _ ->
-            val newTelemetryState = !DataUploadPreference.isEnabled(activity)
-            DataUploadPreference.setIsEnabled(activity, newTelemetryState)
+            val newTelemetryState = !DataUploadPreference.isEnabled(context)
+            DataUploadPreference.setIsEnabled(context, newTelemetryState)
             telemetryButton.isChecked = newTelemetryState
         }
 
@@ -72,13 +73,13 @@ class SettingsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        context.getAccessibilityManager().addTouchExplorationStateChangeListener(voiceViewStateChangeListener)
+        context?.getAccessibilityManager()?.addTouchExplorationStateChangeListener(voiceViewStateChangeListener)
         updateForAccessibility()
     }
 
     override fun onStop() {
         super.onStop()
-        context.getAccessibilityManager().removeTouchExplorationStateChangeListener(voiceViewStateChangeListener)
+        context?.getAccessibilityManager()?.removeTouchExplorationStateChangeListener(voiceViewStateChangeListener)
     }
 
     /**
@@ -94,7 +95,8 @@ class SettingsFragment : Fragment() {
         // cleared from this setting and nothing is selected. This is fine: the user can press
         // left-right to focus something else and it's an edge case that I don't think it is worth
         // adding code to fix.
-        val shouldFocus = !context.isVoiceViewEnabled()
+        val context = context ?: return
+        val shouldFocus = context.isVoiceViewEnabled()
         telemetryView.isFocusable = shouldFocus
         if (!shouldFocus) { telemetryView.clearFocus() }
     }

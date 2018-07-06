@@ -5,27 +5,41 @@
 # Inspired by:
 # https://hub.docker.com/r/runmymind/docker-android-sdk/~/dockerfile/
 
-FROM ubuntu:17.10
+FROM ubuntu:18.04
 
-MAINTAINER Sebastian Kaspari "skaspari@mozilla.com"
+ENV ANDROID_BUILD_TOOLS "27.0.3"
+
+# Version number of the "Command line tools only" SDK download:
+# https://developer.android.com/studio/#command-tools
+ENV ANDROID_SDK_VERSION "3859397"
+
+ENV ANDROID_PLATFORM_VERSION "27"
+
+ENV PROJECT_REPOSITORY "https://github.com/mozilla-mobile/firefox-tv.git"
 
 # -- System -----------------------------------------------------------------------------
 
 RUN apt-get update -qq
 
+# We need to install tzdata before all of the other packages. Otherwise it will show an interactive dialog that
+# we cannot navigate while building the Docker image.
+RUN apt-get install -y tzdata
+
 RUN apt-get install -y openjdk-8-jdk \
-					   wget \
-					   expect \
-					   git \
-					   curl \
-					   ruby \
-					   ruby-dev \
-					   ruby-build \
-					   python \
-					   python-pip \
-					   optipng \
-					   imagemagick \
-					   locales
+	wget \
+	expect \
+	git \
+	curl \
+	ruby \
+	ruby-dev \
+	ruby-build \
+	python \
+	python-pip \
+	optipng \
+	imagemagick \
+	locales \
+	unzip
+
 RUN gem install fastlane
 
 RUN locale-gen en_US.UTF-8
@@ -34,50 +48,38 @@ ENV LANG en_US.UTF-8
 
 # -- Android SDK ------------------------------------------------------------------------
 
-RUN cd /opt && wget -q https://dl.google.com/android/android-sdk_r24.4.1-linux.tgz -O android-sdk.tgz
-RUN cd /opt && tar -xvzf android-sdk.tgz
-RUN cd /opt && rm -f android-sdk.tgz
+RUN mkdir -p /build/android-sdk
+WORKDIR /build
 
-ENV ANDROID_SDK_HOME /opt/android-sdk-linux
-ENV ANDROID_HOME /opt/android-sdk-linux
-ENV PATH ${PATH}:${ANDROID_SDK_HOME}/tools:${ANDROID_SDK_HOME}/platform-tools:/opt/tools
+ENV ANDROID_HOME /build/android-sdk
+ENV ANDROID_SDK_HOME /build/android-sdk
+ENV PATH ${PATH}:${ANDROID_SDK_HOME}/tools:${ANDROID_SDK_HOME}/tools/bin:${ANDROID_SDK_HOME}/platform-tools:/opt/tools:${ANDROID_SDK_HOME}/build-tools/${ANDROID_BUILD_TOOLS}
 
-# Platform tools
-RUN echo y | android update sdk --no-ui --all --filter platform-tools | grep 'package installed'
+RUN curl -L https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_VERSION}.zip > sdk.zip \
+        && unzip sdk.zip -d ${ANDROID_SDK_HOME} \
+        && rm sdk.zip
 
-# Android SDK
-RUN echo y | android update sdk --no-ui --all --filter android-26 | grep 'package installed'
+RUN mkdir -p /build/android-sdk/.android/
+RUN touch /build/android-sdk/.android/repositories.cfg
 
-# Build tools
-RUN echo y | android update sdk --no-ui --all --filter build-tools-26.0.2 | grep 'package installed'
-RUN echo y | android update sdk --no-ui --all --filter build-tools-27.0.3 | grep 'package installed'
+RUN yes | sdkmanager --licenses
 
-# Extras
-RUN echo y | android update sdk --no-ui --all --filter extra-android-m2repository | grep 'package installed'
-RUN echo y | android update sdk --no-ui --all --filter extra-google-m2repository | grep 'package installed'
-RUN echo y | android update sdk --no-ui --all --filter extra-google-google_play_services | grep 'package installed'
-
-# Copy tools from our repository into the docker image
-COPY tools /opt/tools
-
-# Accept licenses
-COPY licenses ${ANDROID_SDK_HOME}/licenses
-
-# -- Update SDK -------------------------------------------------------------------------
-
-# Update SDK
-RUN /opt/tools/android-accept-licenses.sh android update sdk --no-ui --obsolete --force
+RUN sdkmanager --verbose "platform-tools" \
+    "platforms;android-${ANDROID_PLATFORM_VERSION}" \
+    "build-tools;${ANDROID_BUILD_TOOLS}" \
+    "extras;android;m2repository" \
+    "extras;google;m2repository"
 
 # -- Project setup ----------------------------------------------------------------------
 
 WORKDIR /opt
 
 # Checkout source code
-RUN git clone https://github.com/mozilla-mobile/firefox-tv.git
+RUN git clone ${PROJECT_REPOSITORY}
 
 # Build project and run gradle tasks once to pull all dependencies
 WORKDIR /opt/firefox-tv/
-RUN ./gradlew clean assemble lint checkstyle ktlint pmd test
+RUN ./gradlew --no-daemon clean assemble lint checkstyle ktlint pmd detektCheck
 
 # -- Post setup -------------------------------------------------------------------------
 

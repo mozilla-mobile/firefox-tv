@@ -26,13 +26,14 @@ tasks:
     payload:
       maxRunTime: 3600
       deadline: "{{ '2 hours' | $fromNow }}"
-      image: 'mozillamobile/firefox-tv'
+      image: 'mozillamobile/firefox-tv:2.0'
       command:
         - /bin/bash
         - '--login'
         - '-cx'
         - >-
-          git fetch {{ event.head.repo.url }} {{ event.head.repo.branch }}
+          export TERM=dumb
+          && git fetch {{ event.head.repo.url }} {{ event.head.repo.branch }}
           && git config advice.detachedHead false
           && git checkout {{event.head.sha}}
           && echo "--" > .adjust_token
@@ -70,13 +71,14 @@ tasks:
     payload:
       maxRunTime: 3600
       deadline: "{{ '2 hours' | $fromNow }}"
-      image: 'mozillamobile/firefox-tv'
+      image: 'mozillamobile/firefox-tv:2.0'
       command:
         - /bin/bash
         - '--login'
         - '-cx'
         - >-
-          git fetch {{ event.head.repo.url }}
+          export TERM=dumb
+          && git fetch {{ event.head.repo.url }}
           && git config advice.detachedHead false
           && git checkout {{event.head.sha}}
           && echo "--" > .adjust_token
