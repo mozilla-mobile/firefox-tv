@@ -10,12 +10,12 @@ apply plugin: 'kotlin-android-extensions'
 apply from: "$project.rootDir/tools/gradle/versionCode.gradle"
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 27
+
     defaultConfig {
         applicationId "org.mozilla.tv"
         minSdkVersion 22
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 11 // This versionCode is "frozen" for local builds. For "release" builds we
         // override this with a generated versionCode at build time.
         versionName "2.1"

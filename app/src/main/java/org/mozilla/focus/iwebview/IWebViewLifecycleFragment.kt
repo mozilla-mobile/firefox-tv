@@ -109,7 +109,7 @@ abstract class IWebViewLifecycleFragment : LocaleAwareFragment() {
             val currentLocale = localeManager.getCurrentLocale(context)
             Locale.setDefault(currentLocale)
 
-            val resources = context.resources
+            val resources = context!!.resources
             val config = resources.configuration
             config.setLocale(currentLocale)
 
