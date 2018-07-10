@@ -82,8 +82,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/nav_button_selector"
-                android:text="@string/onboarding_turbo_mode_button_on"
-                tools:text="@string/onboarding_turbo_mode_button_on"
+                android:text="@string/button_turbo_mode_keep_enabled"
                 android:textColor="@color/tv_white"
                 android:nextFocusDown="@+id/disable_turbo_mode"
                 android:nextFocusUp="@id/disable_turbo_mode">
@@ -98,8 +97,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:background="@drawable/nav_button_selector"
-                android:text="@string/onboarding_turbo_mode_button_off"
-                tools:text="@string/onboarding_turbo_mode_button_off"
+                android:text="@string/button_turbo_mode_turn_off"
                 android:textColor="@color/tv_white"
                 android:nextFocusDown="@id/enable_turbo_mode"
                 android:nextFocusUp="@id/enable_turbo_mode" />
