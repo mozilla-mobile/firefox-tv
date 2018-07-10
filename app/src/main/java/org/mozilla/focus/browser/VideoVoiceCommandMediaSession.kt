@@ -220,6 +220,9 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
      *
      * These callbacks are expected to update playback state: our code does, but we'll often go
      * through JavaScript first.
+     *
+     * Due to time constraints, the code is written for a single video on the page,
+     * which should cover the majority use case (#973 for multiple videos, #935 for audio).
      */
     inner class MediaSessionCallbacks : MediaSessionCompat.Callback() {
         private val ID_TARGET_VIDEO = "targetVideo"
@@ -233,30 +236,23 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
             |}
             """.trimMargin()
 
-        override fun onPlay() {
-            onPlayPause() // See class javadoc for details.
-        }
-
-        override fun onPause() {
-            onPlayPause() // See class javadoc for details.
-        }
-
-        private fun onPlayPause() {
-            // Due to time constraints, this code is written for a single video on the page,
-            // which should cover the majority use case.
-            //
-            // We don't handle audio: see class javadoc for details.
+        // NB: this hasn't been tested on expressions that are more than one line.
+        private fun evalJSWithTargetVideo(getExpressionToEval: (videoId: String) -> String) {
+            val expressionToEval = getExpressionToEval(ID_TARGET_VIDEO)
             webView?.evalJS("""
                 |(function() {
                 |    $GET_TARGET_VIDEO_OR_RETURN
-                |
-                |    if ($ID_TARGET_VIDEO.paused) {
-                |        $ID_TARGET_VIDEO.play();
-                |    } else {
-                |       $ID_TARGET_VIDEO.pause();
-                |   }
+                |    $expressionToEval
                 |})();
                 """.trimMargin())
+        }
+
+        override fun onPlay() {
+            evalJSWithTargetVideo { videoId -> "$videoId.play();" }
+        }
+
+        override fun onPause() {
+            evalJSWithTargetVideo { videoId -> "$videoId.pause();" }
         }
 
         override fun onSkipToNext() = dispatchKeyEventDownUp(KeyEvent.KEYCODE_MEDIA_NEXT)
@@ -268,13 +264,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
 
         override fun onSeekTo(absolutePositionMillis: Long) {
             val absolutePositionSeconds = TimeUnit.MILLISECONDS.toSeconds(absolutePositionMillis)
-            webView?.evalJS("""
-                |(function() {
-                |    $GET_TARGET_VIDEO_OR_RETURN
-                |
-                |    $ID_TARGET_VIDEO.currentTime = $absolutePositionSeconds
-                |})();
-                """.trimMargin())
+            evalJSWithTargetVideo { videoId -> "$videoId.currentTime = $absolutePositionSeconds;" }
         }
     }
 }
