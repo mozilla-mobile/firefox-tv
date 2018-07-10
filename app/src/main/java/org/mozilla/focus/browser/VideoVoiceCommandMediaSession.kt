@@ -293,6 +293,8 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
  *   it by copy-pasting it back-and-forth.
  * - Iterating on the Fire TV is slow: you can speed it up by making this a WebExtension content
  *   script and testing on desktop
+ * - For a list of HTMLMediaElement (i.e. video) events, like 'ratechange', see the w3c's HTML5 video
+ *   page: https://www.w3.org/2010/05/video/mediaevents.html
  */
 private val JS_OBSERVE_PLAYBACK_STATE = """
 var _firefoxTV_playbackStateObserverJava;
