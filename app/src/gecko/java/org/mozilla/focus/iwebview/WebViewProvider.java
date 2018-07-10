@@ -78,16 +78,6 @@ public class WebViewProvider {
         }
 
         @Override
-        public void onStop() {
-
-        }
-
-        @Override
-        public void onStart() {
-
-        }
-
-        @Override
         public void pauseTimers() {
 
         }
