@@ -334,7 +334,7 @@ var _firefoxTV_isPlaybackStateObserverLoaded;
         let isPlaying;
         let positionSeconds;
         let playbackRate; /* 0.5, 1, etc. */
-        const maybeTargetVideo = getMaybeTargetVideo();
+        const maybeTargetVideo = getPlayingVideoOrFirstInDOMOrNull();
         if (maybeTargetVideo) {
             isVideoPresent = true;
             isPlaying = !maybeTargetVideo.paused;
@@ -373,7 +373,7 @@ var _firefoxTV_isPlaybackStateObserverLoaded;
         }
     }
 
-    function getMaybeTargetVideo() {
+    function getPlayingVideoOrFirstInDOMOrNull() {
         const maybePlayingVideo = Array.from(document.querySelectorAll('video')).find(video => !video.paused);
         if (maybePlayingVideo) { return maybePlayingVideo; }
 
