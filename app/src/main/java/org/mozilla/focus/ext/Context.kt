@@ -6,6 +6,8 @@ package org.mozilla.focus.ext
 
 import android.content.Context
 import android.view.accessibility.AccessibilityManager
+import org.mozilla.focus.Components
+import org.mozilla.focus.FocusApplication
 
 // Extension functions for the Context class
 
@@ -24,3 +26,15 @@ fun Context.getAccessibilityManager() = getSystemService(Context.ACCESSIBILITY_S
 // AccessibilityManager.isAccessibilityEnabled can be enabled for more things than just VoiceView. If we want
 // VoiceView, we only need to check this one field; via comments on https://stackoverflow.com/a/12362545/582004.
 fun Context.isVoiceViewEnabled() = getAccessibilityManager().isTouchExplorationEnabled
+
+/**
+ * Get the FocusApplication object from a context.
+ */
+val Context.application: FocusApplication
+    get() = applicationContext as FocusApplication
+
+/**
+ * Get the components of this application.
+ */
+val Context.components: Components
+    get() = application.components

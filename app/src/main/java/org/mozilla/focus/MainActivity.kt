@@ -14,18 +14,18 @@ import android.view.View
 import com.amazon.android.webkit.AmazonWebKitFactories
 import com.amazon.android.webkit.AmazonWebKitFactory
 import kotlinx.android.synthetic.main.activity_main.*
-import org.mozilla.focus.architecture.NonNullObserver
+import mozilla.components.browser.session.Session
+import mozilla.components.browser.session.SessionManager
 import org.mozilla.focus.browser.BrowserFragment
 import org.mozilla.focus.browser.BrowserFragment.Companion.APP_URL_HOME
 import org.mozilla.focus.browser.VideoVoiceCommandMediaSession
+import org.mozilla.focus.ext.components
 import org.mozilla.focus.ext.toSafeIntent
 import org.mozilla.focus.home.pocket.Pocket
 import org.mozilla.focus.home.pocket.PocketOnboardingActivity
 import org.mozilla.focus.iwebview.IWebView
 import org.mozilla.focus.iwebview.WebViewProvider
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity
-import org.mozilla.focus.session.Session
-import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.session.Source
 import org.mozilla.focus.telemetry.SentryWrapper
 import org.mozilla.focus.telemetry.TelemetryWrapper
@@ -43,11 +43,30 @@ interface MediaSessionHolder {
 
 class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, MediaSessionHolder {
 
-    private val sessionManager = SessionManager.getInstance()
-
     // There should be at most one MediaSession per process, hence it's in MainActivity.
     // We crash if we init MediaSession at init time, hence lateinit.
     override lateinit var videoVoiceCommandMediaSession: VideoVoiceCommandMediaSession
+
+    private val sessionObserver = object : SessionManager.Observer {
+        override fun onSessionSelected(session: Session) {
+            ScreenController.showBrowserScreenForCurrentSession(supportFragmentManager, session)
+        }
+
+        override fun onSessionRemoved(session: Session) {
+            if (components.sessionManager.sessions.isEmpty()) {
+                onNoActiveSession()
+            }
+        }
+
+        override fun onAllSessionsRemoved() {
+            onNoActiveSession()
+        }
+
+        private fun onNoActiveSession() {
+            // There's no active session. Start a new session with "homepage".
+            ScreenController.showBrowserScreenForUrl(this@MainActivity, supportFragmentManager, APP_URL_HOME, Source.NONE)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,17 +85,14 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         setContentView(R.layout.activity_main)
 
         IntentValidator.validateOnCreate(this, intent, savedInstanceState, ::onValidBrowserIntent)
-        sessionManager.sessions.observe(this, object : NonNullObserver<List<Session>>() {
-            public override fun onValueChanged(value: List<Session>) {
-                val sessions = value
-                if (sessions.isEmpty()) {
-                    // There's no active session. Start a new session with "homepage".
-                    ScreenController.showBrowserScreenForUrl(supportFragmentManager, APP_URL_HOME, Source.NONE)
-                } else {
-                    ScreenController.showBrowserScreenForCurrentSession(supportFragmentManager, sessionManager)
-                }
-            }
-        })
+
+        components.sessionManager.register(sessionObserver, owner = this)
+
+        if (components.sessionManager.sessions.isEmpty()) {
+            ScreenController.showBrowserScreenForUrl(this@MainActivity, supportFragmentManager, APP_URL_HOME, Source.NONE)
+        } else {
+            ScreenController.showBrowserScreenForCurrentSession(supportFragmentManager, components.sessionManager.selectedSession)
+        }
 
         if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding()) {
             val onboardingIntents =
@@ -97,7 +113,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     }
 
     private fun onValidBrowserIntent(url: String, source: Source) {
-        ScreenController.showBrowserScreenForUrl(supportFragmentManager, url, source)
+        ScreenController.showBrowserScreenForUrl(this, supportFragmentManager, url, source)
     }
 
     override fun applyLocale() {

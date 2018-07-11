@@ -13,9 +13,9 @@ import android.view.ViewGroup
 import android.view.accessibility.AccessibilityManager
 import kotlinx.android.synthetic.main.fragment_settings.*
 import org.mozilla.focus.browser.InfoActivity
+import org.mozilla.focus.ext.components
 import org.mozilla.focus.ext.getAccessibilityManager
 import org.mozilla.focus.ext.isVoiceViewEnabled
-import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.DataUploadPreference
 import org.mozilla.focus.telemetry.TelemetryWrapper
 
@@ -46,13 +46,13 @@ class SettingsFragment : Fragment() {
             builder1.setCancelable(true)
 
             builder1.setPositiveButton(
-                    getString(R.string.action_ok),
-                    { dialog, _ ->
-                        settingsWebView.cleanup()
-                        SessionManager.getInstance().removeAllSessions()
-                        dialog.cancel()
-                        TelemetryWrapper.clearDataEvent()
-                    })
+                getString(R.string.action_ok)
+            ) { dialog, _ ->
+                settingsWebView.cleanup()
+                context!!.components.sessionManager.removeAll()
+                dialog.cancel()
+                TelemetryWrapper.clearDataEvent()
+            }
 
             builder1.setNegativeButton(
                     getString(R.string.action_cancel),

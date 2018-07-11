@@ -8,7 +8,7 @@ package org.mozilla.focus.iwebview
 import android.graphics.Bitmap
 import android.support.annotation.CheckResult
 import android.view.View
-import org.mozilla.focus.session.Session
+import mozilla.components.browser.session.Session
 
 interface IWebView {
 

@@ -12,7 +12,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.accessibility.AccessibilityManager
 import kotlinx.android.synthetic.main.fragment_browser.*
-import org.mozilla.focus.architecture.NonNullObserver
+import mozilla.components.browser.session.Session
 import org.mozilla.focus.browser.BrowserFragment
 import org.mozilla.focus.ext.getAccessibilityManager
 import org.mozilla.focus.ext.isVisible
@@ -80,14 +80,14 @@ class CursorController(
         browserFragment.context?.getAccessibilityManager()?.addTouchExplorationStateChangeListener(this)
         setEnabledForCurrentState() // VoiceView state may change.
 
-        browserFragment.session.loading.observe(browserFragment, isLoadingObserver)
+        browserFragment.session.register(isLoadingObserver, owner = browserFragment)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onStop() {
         browserFragment.context?.getAccessibilityManager()?.removeTouchExplorationStateChangeListener(this)
 
-        browserFragment.session.loading.removeObserver(isLoadingObserver)
+        browserFragment.session.unregister(isLoadingObserver)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
@@ -117,8 +117,8 @@ class CursorController(
         browserFragment.webView?.scrollByClamped(scrollX, scrollY)
     }
 
-    private inner class CursorIsLoadingObserver : NonNullObserver<Boolean>() {
-        override fun onValueChanged(value: Boolean) {
+    private inner class CursorIsLoadingObserver : Session.Observer {
+        override fun onLoadingStateChanged() {
             setEnabledForCurrentState()
         }
     }

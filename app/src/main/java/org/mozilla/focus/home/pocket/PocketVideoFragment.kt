@@ -125,7 +125,7 @@ private class PocketVideoAdapter(
         setHorizontalMargins(holder, position)
 
         holder.itemView.setOnClickListener {
-            ScreenController.showBrowserScreenForUrl(fragmentManager, item.url, Source.POCKET_VIDEO_SUGGESTION)
+            ScreenController.showBrowserScreenForUrl(holder.itemView.context, fragmentManager, item.url, Source.POCKET_VIDEO_SUGGESTION)
             TelemetryWrapper.pocketVideoClickEvent(item.id)
         }
         holder.itemView.setOnFocusChangeListener { _, hasFocus -> updateForFocusState(holder, hasFocus) }

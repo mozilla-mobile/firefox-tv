@@ -18,6 +18,16 @@ class FocusApplication : LocaleAwareApplication() {
     lateinit var visibilityLifeCycleCallback: VisibilityLifeCycleCallback
         private set
 
+    /**
+     * Reference to components needed by the application.
+     *
+     * We create this instance lazily because at the time FocusApplication gets constructed it is
+     * not a valid Context object just yet (The Android system needs to call attachBaseContext()
+     * first). Therefore we delay the creation so that the components can access and use the
+     * application context at the time they get created.
+     */
+    val components by lazy { Components() }
+
     override fun onCreate() {
         super.onCreate()
 

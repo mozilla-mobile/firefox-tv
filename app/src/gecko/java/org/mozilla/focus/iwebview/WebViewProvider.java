@@ -14,11 +14,11 @@ import android.view.View;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.mozilla.focus.session.Session;
 import org.mozilla.gecko.GeckoView;
 import org.mozilla.gecko.GeckoViewSettings;
 
 import kotlin.NotImplementedError;
+import mozilla.components.browser.session.Session;
 
 /**
  * WebViewProvider implementation for creating a Gecko based implementation of IWebView.
@@ -233,6 +233,7 @@ public class WebViewProvider {
         public void removeJavascriptInterface(@Nullable String interfaceName) {
 
         }
+
 
         @Override
         public void restoreWebViewState(Session session) {

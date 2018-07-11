@@ -9,10 +9,12 @@ import android.os.Bundle
 import android.support.annotation.UiThread
 import android.view.View
 import android.webkit.WebView
+import mozilla.components.browser.session.Session
 import org.mozilla.focus.R
+import org.mozilla.focus.ext.isBlockingEnabled
+import org.mozilla.focus.ext.savedWebViewState
 import org.mozilla.focus.locale.LocaleAwareFragment
 import org.mozilla.focus.locale.LocaleManager
-import org.mozilla.focus.session.Session
 import java.util.Locale
 
 /**
@@ -51,13 +53,14 @@ abstract class IWebViewLifecycleFragment : LocaleAwareFragment() {
         super.onViewCreated(view, savedInstanceState)
         webView = (view.findViewById<View>(R.id.webview) as IWebView).apply {
             callback = iWebViewCallback
+
             setBlockingEnabled(session.isBlockingEnabled)
             restoreWebViewOrLoadInitialUrl(this)
         }
     }
 
     private fun restoreWebViewOrLoadInitialUrl(webView: IWebView) {
-        if (session.hasWebViewState()) {
+        if (session.savedWebViewState != null) {
             webView.restoreWebViewState(session)
         } else if (!initialUrl.isEmpty()) {
             webView.loadUrl(initialUrl)
