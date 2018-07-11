@@ -10,6 +10,7 @@ import android.arch.lifecycle.Lifecycle.Event.ON_STOP
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.OnLifecycleEvent
+import android.content.Intent
 import android.support.annotation.UiThread
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -26,9 +27,11 @@ import android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING
 import android.support.v4.media.session.PlaybackStateCompat.STATE_STOPPED
 import android.support.v7.app.AppCompatActivity
 import android.view.KeyEvent
+import android.view.KeyEvent.KEYCODE_MEDIA_NEXT
 import android.view.KeyEvent.KEYCODE_MEDIA_PAUSE
 import android.view.KeyEvent.KEYCODE_MEDIA_PLAY
 import android.view.KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
+import android.view.KeyEvent.KEYCODE_MEDIA_PREVIOUS
 import android.webkit.JavascriptInterface
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -46,6 +49,7 @@ private const val SUPPORTED_ACTIONS = ACTION_PLAY_PAUSE or ACTION_PLAY or ACTION
         ACTION_SEEK_TO // "Alexa, rewind/fast-forward <num> <unit-of-time>"
 
 private val KEY_EVENT_ACTIONS_DOWN_UP = listOf(KeyEvent.ACTION_DOWN, KeyEvent.ACTION_UP)
+private val KEY_CODES_MEDIA_NEXT_PREV = listOf(KEYCODE_MEDIA_NEXT, KEYCODE_MEDIA_PREVIOUS)
 
 /**
  * An encapsulation of a [MediaSessionCompat] instance to allow voice commands on videos; we
@@ -157,6 +161,14 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         mediaSession.release()
     }
 
+    /**
+     * Potentially handles key events before they are received by the system for standard handling
+     * (e.g. dispatch to the View hierarchy). If the keys are unhandled here, the [mediaSession]
+     * does key handling (after this) as part of standard handling: see
+     * [MediaSessionCallbacks.onMediaButtonEvent].
+     *
+     * @return true if the key event is handled and no one else should handle it, false otherwise.
+     */
     fun dispatchKeyEvent(event: KeyEvent): Boolean = when (event.keyCode) {
         // Prevent the WebView (and unfortunately anyone else) from handling media play/pause up events:
         // our MediaSession handles the ACTION_DOWN event and will inject our JS to play/pause.
@@ -245,6 +257,31 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
                 |    $expressionToEval
                 |})();
                 """.trimMargin())
+        }
+
+        /**
+         * Potentially handles key events before they are received by the [mediaSession]: this is
+         * called while the system handles key events. This is *only called for key down events*:
+         * key up events continue through standard handling.
+         *
+         * Note: [dispatchKeyEvent] has an opportunity to handle keys before this method.
+         *
+         * @return true for MediaSession to not handle the event but to continue system handling,
+         * false for MediaSession to handle the event and stop system handling.
+         */
+        override fun onMediaButtonEvent(mediaButtonEvent: Intent?): Boolean {
+            val key = mediaButtonEvent?.getParcelableExtra<KeyEvent?>(Intent.EXTRA_KEY_EVENT)
+
+            // Forward media next/prev events to the WebView: the WebView already receives key up
+            // events and we prevent MediaSession from handling the down events by not calling super.
+            // If MediaSession handled the key down events, it'd call onSkipToNext which dispatches
+            // additional key events and we'd have an infinite loop.
+            if (key != null &&
+                    key.action == KeyEvent.ACTION_DOWN && KEY_CODES_MEDIA_NEXT_PREV.contains(key.keyCode)) {
+                return true
+            }
+
+            return super.onMediaButtonEvent(mediaButtonEvent)
         }
 
         /**
