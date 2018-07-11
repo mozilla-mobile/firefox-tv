@@ -8,10 +8,12 @@ package org.mozilla.focus
 import android.content.Context
 import android.support.v4.app.FragmentManager
 import android.text.TextUtils
+import mozilla.components.browser.session.Session
 import org.mozilla.focus.browser.BrowserFragment
+import org.mozilla.focus.ext.components
+import org.mozilla.focus.ext.source
 import org.mozilla.focus.home.pocket.Pocket
 import org.mozilla.focus.home.pocket.PocketVideoFragment
-import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.session.Source
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
@@ -33,7 +35,7 @@ object ScreenController {
         val isUrl = UrlUtils.isUrl(urlStr)
         val updatedUrlStr = if (isUrl) UrlUtils.normalize(urlStr) else UrlUtils.createSearchUrl(context, urlStr)
 
-        showBrowserScreenForUrl(fragmentManager, updatedUrlStr, Source.USER_ENTERED)
+        showBrowserScreenForUrl(context, fragmentManager, updatedUrlStr, Source.USER_ENTERED)
 
         if (isTextInput) {
             // Non-text input events are handled at the source, e.g. home tile click events.
@@ -56,11 +58,9 @@ object ScreenController {
                 .commit()
     }
 
-    fun showBrowserScreenForCurrentSession(fragmentManager: FragmentManager, sessionManager: SessionManager) {
-        val currentSession = sessionManager.currentSession
-
+    fun showBrowserScreenForCurrentSession(fragmentManager: FragmentManager, session: Session) {
         val fragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment?
-        if (fragment != null && fragment.session.isSameAs(currentSession)) {
+        if (fragment != null && fragment.session == session) {
             // There's already a BrowserFragment displaying this session.
             return
         }
@@ -69,11 +69,11 @@ object ScreenController {
         fragmentManager
                 .beginTransaction()
                 .replace(R.id.container,
-                        BrowserFragment.createForSession(currentSession), BrowserFragment.FRAGMENT_TAG)
+                        BrowserFragment.createForSession(session), BrowserFragment.FRAGMENT_TAG)
                 .commit()
     }
 
-    fun showBrowserScreenForUrl(fragmentManager: FragmentManager, url: String, source: Source) {
+    fun showBrowserScreenForUrl(context: Context, fragmentManager: FragmentManager, url: String, source: Source) {
         // This code is not correct:
         // - We only support one session but it creates a new session when there's no BrowserFragment
         // such as each time we open a URL from the home screen.
@@ -89,7 +89,10 @@ object ScreenController {
             // for visibility in addition to existence.
             browserFragment.loadUrl(url)
         } else {
-            SessionManager.getInstance().createSession(source, url)
+            val session = Session(url).apply {
+                this.source = source
+            }
+            context.components.sessionManager.add(session)
         }
     }
 

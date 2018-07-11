@@ -4,7 +4,6 @@
 
 package org.mozilla.focus.browser
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.annotation.UiThread
 import android.text.TextUtils
@@ -22,13 +21,15 @@ import kotlinx.android.synthetic.main.fragment_browser.view.*
 import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import mozilla.components.browser.session.Session
 import org.mozilla.focus.MainActivity
 import org.mozilla.focus.MediaSessionHolder
 import org.mozilla.focus.R
 import org.mozilla.focus.ScreenController
-import org.mozilla.focus.architecture.NonNullObserver
 import org.mozilla.focus.browser.BrowserFragment.Companion.APP_URL_HOME
 import org.mozilla.focus.browser.cursor.CursorController
+import org.mozilla.focus.ext.components
+import org.mozilla.focus.ext.isBlockingEnabled
 import org.mozilla.focus.ext.isVisible
 import org.mozilla.focus.ext.toUri
 import org.mozilla.focus.home.BundledTilesManager
@@ -37,9 +38,7 @@ import org.mozilla.focus.home.HomeTilesManager
 import org.mozilla.focus.iwebview.IWebView
 import org.mozilla.focus.iwebview.IWebViewLifecycleFragment
 import org.mozilla.focus.session.NullSession
-import org.mozilla.focus.session.Session
 import org.mozilla.focus.session.SessionCallbackProxy
-import org.mozilla.focus.session.SessionManager
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.ViewUtils.showCenteredTopToast
@@ -52,7 +51,7 @@ private const val TOAST_Y_OFFSET = 200
 /**
  * Fragment for displaying the browser UI.
  */
-class BrowserFragment : IWebViewLifecycleFragment() {
+class BrowserFragment : IWebViewLifecycleFragment(), Session.Observer {
     companion object {
         const val FRAGMENT_TAG = "browser"
         const val APP_URL_PREFIX = "firefox:"
@@ -60,14 +59,14 @@ class BrowserFragment : IWebViewLifecycleFragment() {
 
         @JvmStatic
         fun createForSession(session: Session) = BrowserFragment().apply {
-            arguments = Bundle().apply { putString(ARGUMENT_SESSION_UUID, session.uuid) }
+            arguments = Bundle().apply { putString(ARGUMENT_SESSION_UUID, session.id) }
         }
     }
 
     // IWebViewLifecycleFragment expects a value for these properties before onViewCreated. We use a getter
     // for the properties that reference session because it is lateinit.
     override lateinit var session: Session
-    override val initialUrl get() = session.url.value
+    override val initialUrl get() = session.url
     override val iWebViewCallback get() = SessionCallbackProxy(session, BrowserIWebViewCallback(this))
 
     private val mediaSessionHolder get() = activity as MediaSessionHolder? // null when not attached.
@@ -82,8 +81,6 @@ class BrowserFragment : IWebViewLifecycleFragment() {
         private set
 
     val isUrlEqualToHomepage: Boolean get() = url == APP_URL_HOME
-
-    private val sessionManager = SessionManager.getInstance()
 
     /**
      * Encapsulates the cursor's components. If this value is null, the Cursor is not attached
@@ -103,21 +100,21 @@ class BrowserFragment : IWebViewLifecycleFragment() {
     private fun initSession() {
         val sessionUUID = arguments?.getString(ARGUMENT_SESSION_UUID)
                 ?: throw IllegalAccessError("No session exists")
-        session = if (sessionManager.hasSessionWithUUID(sessionUUID))
-            sessionManager.getSessionByUUID(sessionUUID)
-        else
-            NullSession()
+        session = context!!.components.sessionManager.findSessionById(sessionUUID) ?: NullSession.create()
 
         webView?.setBlockingEnabled(session.isBlockingEnabled)
-        session.url.observe(this, Observer { url -> this@BrowserFragment.url = url })
-        session.loading.observe(this, object : NonNullObserver<Boolean>() {
-            public override fun onValueChanged(value: Boolean) {
-                // Update state on load start and finish to ensure buttons are updated correctly
-                if (browserOverlay.isVisible) {
-                    browserOverlay.updateOverlayForCurrentState()
-                }
-            }
-        })
+
+        session.register(observer = this, owner = this)
+    }
+
+    override fun onUrlChanged() {
+        url = session.url
+    }
+
+    override fun onLoadingStateChanged() {
+        if (browserOverlay.isVisible) {
+            browserOverlay.updateOverlayForCurrentState()
+        }
     }
 
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
@@ -242,7 +239,7 @@ class BrowserFragment : IWebViewLifecycleFragment() {
                 TelemetryWrapper.browserBackControllerEvent()
             }
             else -> {
-                SessionManager.getInstance().removeCurrentSession()
+                context!!.components.sessionManager.remove()
                 // Delete session, but we allow the parent to handle back behavior.
                 return false
             }

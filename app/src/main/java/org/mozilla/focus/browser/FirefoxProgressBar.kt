@@ -5,19 +5,18 @@
 package org.mozilla.focus.browser
 
 import android.content.Context
-import android.util.AttributeSet
-import android.view.LayoutInflater
-import android.arch.lifecycle.Observer
 import android.graphics.drawable.AnimationDrawable
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.util.AttributeSet
+import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.firefox_progress_bar.view.*
+import mozilla.components.browser.session.Session
 import org.mozilla.focus.R
-import org.mozilla.focus.architecture.NonNullObserver
 import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
 
@@ -26,23 +25,34 @@ private const val HIDE_ANIMATION_DURATION_MILLIS = 250L
 private val HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3)
 
 class FirefoxProgressBar @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
-    : LinearLayout(context, attrs, defStyle) {
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : LinearLayout(context, attrs, defStyle), Session.Observer {
 
     private val hideHandler = FirefoxProgressBarHideHandler(this)
+    private lateinit var session: Session
 
     fun initialize(browserFrag: BrowserFragment) {
-        browserFrag.session.url.observe(browserFrag, Observer { sessionUrl -> url.text = sessionUrl })
-        browserFrag.session.loading.observe(browserFrag, object : NonNullObserver<Boolean>() {
-            public override fun onValueChanged(value: Boolean) {
-                val isLoading = value
-                if (isLoading) {
-                    showBar()
-                } else {
-                    scheduleHideBar()
-                }
-            }
-        })
+        session = browserFrag.session
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+
+        session.register(observer = this, view = this)
+    }
+
+    override fun onLoadingStateChanged() {
+        if (session.loading) {
+            showBar()
+        } else {
+            scheduleHideBar()
+        }
+    }
+
+    override fun onUrlChanged() {
+        url.text = session.url
     }
 
     init {

@@ -10,7 +10,6 @@ import android.arch.lifecycle.Lifecycle.Event.ON_RESUME
 import android.arch.lifecycle.Lifecycle.Event.ON_START
 import android.arch.lifecycle.Lifecycle.Event.ON_STOP
 import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.OnLifecycleEvent
 import android.content.Intent
 import android.support.annotation.UiThread
@@ -37,9 +36,9 @@ import android.view.KeyEvent.KEYCODE_MEDIA_PREVIOUS
 import android.webkit.JavascriptInterface
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import mozilla.components.browser.session.Session
 import org.mozilla.focus.browser.VideoVoiceCommandMediaSession.MediaSessionCallbacks
 import org.mozilla.focus.iwebview.IWebView
-import org.mozilla.focus.session.Session
 import org.mozilla.focus.telemetry.MediaSessionEventType
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import java.util.concurrent.TimeUnit
@@ -111,8 +110,8 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
             addJavascriptInterface(JavascriptVideoPlaybackStateSyncer(), JS_INTERFACE_IDENTIFIER)
         }
 
-        val sessionIsLoadingObserver = SessionIsLoadingObserver(webView)
-        session.loading.observe(activity, sessionIsLoadingObserver)
+        val sessionIsLoadingObserver = SessionIsLoadingObserver(webView, session)
+        session.register(sessionIsLoadingObserver, owner = activity)
         this.sessionIsLoadingObserver = sessionIsLoadingObserver
     }
 
@@ -120,7 +119,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         webView.removeJavascriptInterface(JS_INTERFACE_IDENTIFIER)
         this.webView = null
 
-        session.loading.removeObserver(sessionIsLoadingObserver!!)
+        session.unregister(sessionIsLoadingObserver!!)
         this.sessionIsLoadingObserver = null
     }
 
@@ -195,10 +194,9 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         else -> false
     }
 
-    class SessionIsLoadingObserver(private val webView: IWebView) : Observer<Boolean> {
-        override fun onChanged(it: Boolean?) {
-            val isLoading = it!! // Observer is attached to NonNullLiveData.
-            if (!isLoading) {
+    class SessionIsLoadingObserver(private val webView: IWebView, private val session: Session) : Session.Observer {
+        override fun onLoadingStateChanged() {
+            if (!session.loading) {
                 webView.evalJS(JS_OBSERVE_PLAYBACK_STATE) // Calls through to JavascriptVideoPlaybackStateSyncer.
             }
         }

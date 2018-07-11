@@ -8,7 +8,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import org.mozilla.focus.ext.SessionKt;
 import org.mozilla.focus.iwebview.IWebView;
+
+import mozilla.components.browser.session.Session;
 
 public class SessionCallbackProxy implements IWebView.Callback {
     /* package */ static final int MINIMUM_PROGRESS = 5;
@@ -24,7 +27,7 @@ public class SessionCallbackProxy implements IWebView.Callback {
     @Override
     public void onPageStarted(@NonNull String url) {
         session.setLoading(true);
-        session.setSecure(false);
+        session.setSecurityInfo(new Session.SecurityInfo(false, "", ""));
 
         // We are always setting the progress to 5% when a new page starts loading. Otherwise it might
         // look like the browser is doing nothing (on a slow network) until we receive a progress
@@ -37,7 +40,7 @@ public class SessionCallbackProxy implements IWebView.Callback {
     @Override
     public void onPageFinished(boolean isSecure) {
         session.setLoading(false);
-        session.setSecure(isSecure);
+        session.setSecurityInfo(new Session.SecurityInfo(isSecure, "", ""));
     }
 
     @Override
@@ -63,7 +66,7 @@ public class SessionCallbackProxy implements IWebView.Callback {
 
     @Override
     public void onBlockingStateChanged(boolean isBlockingEnabled) {
-        session.setBlockingEnabled(isBlockingEnabled);
+        SessionKt.setBlockingEnabled(session, isBlockingEnabled);
     }
 
     @Override

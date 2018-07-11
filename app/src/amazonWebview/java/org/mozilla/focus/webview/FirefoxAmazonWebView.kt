@@ -15,10 +15,11 @@ import android.util.AttributeSet
 import android.view.View
 import com.amazon.android.webkit.AmazonWebChromeClient
 import com.amazon.android.webkit.AmazonWebView
+import mozilla.components.browser.session.Session
 import org.mozilla.focus.ext.deleteData
+import org.mozilla.focus.ext.savedWebViewState
 import org.mozilla.focus.iwebview.FirefoxAmazonFocusedDOMElementCache
 import org.mozilla.focus.iwebview.IWebView
-import org.mozilla.focus.session.Session
 import org.mozilla.focus.utils.UrlUtils
 
 private val uiHandler = Handler(Looper.getMainLooper())
@@ -101,10 +102,10 @@ internal class FirefoxAmazonWebView(
     }
 
     override fun restoreWebViewState(session: Session) {
-        val stateData = session.webViewState
+        val stateData = session.savedWebViewState
 
         val backForwardList = if (stateData != null) super.restoreState(stateData) else null
-        val desiredURL = session.url.value
+        val desiredURL = session.url
 
         client.restoreState(stateData)
         client.notifyCurrentURL(desiredURL)
@@ -135,7 +136,7 @@ internal class FirefoxAmazonWebView(
         super.saveState(stateData)
         client.saveState(this, stateData)
 
-        session.saveWebViewState(stateData)
+        session.savedWebViewState = stateData
     }
 
     override fun setBlockingEnabled(enabled: Boolean) {
