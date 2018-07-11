@@ -158,11 +158,11 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
     }
 
     fun dispatchKeyEvent(event: KeyEvent): Boolean = when (event.keyCode) {
-        // If we did nothing, on key down, hardware media buttons are swallowed and sent to
-        // [MediaSessionCallbacks]. On key up, these key events are sent to the WebView and web
-        // page. This means the key event would be handled twice - once for each key down and up -
-        // which would undo any playback state updates. Thus we mute the WebView key up events and
-        // handle it all ourselves through MediaSession.
+        // Prevent the WebView (and unfortunately anyone else) from handling media play/pause up events:
+        // our MediaSession handles the ACTION_DOWN event and will inject our JS to play/pause.
+        // However, MediaSession ignores the ACTION_UP event, which instead will be handled by the
+        // page. The page can then redundantly handle the play/pause event, undoing the MediaSession
+        // action. To prevent this, we swallow play/pause key up events and handle it all via MediaSession.
         KEYCODE_MEDIA_PLAY_PAUSE, KEYCODE_MEDIA_PLAY, KEYCODE_MEDIA_PAUSE -> event.action == KeyEvent.ACTION_UP
         else -> false
     }
