@@ -247,10 +247,21 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
                 """.trimMargin())
         }
 
+        /**
+         * Called to play media.
+         *
+         * If a play or pause voice command is issued, the corresponding method
+         * will be called. In JS, if `play` is called on an already playing video, it's a no-op.
+         *
+         * If a play/pause hardware media button (it's one button, not two) is hit, it will send
+         * either [onPlay] or [onPause] as a toggle, based on current MediaSession playback state.
+         * We've already synced playback state from JS so the correct method should be chosen.
+         */
         override fun onPlay() {
             evalJSWithTargetVideo { videoId -> "$videoId.play();" }
         }
 
+        // See onPlay for details.
         override fun onPause() {
             evalJSWithTargetVideo { videoId -> "$videoId.pause();" }
         }
