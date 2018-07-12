@@ -57,14 +57,14 @@
   <string name="your_rights_content4"><![CDATA[Sonstiger Quelltext für %1$s steht unter diversen anderen freien und Open-Source-<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Lizenzen</a>.]]></string>
   <string name="your_rights_content5"><![CDATA[\"%1$s nutzt auch von Disconnect, Inc. angebotene Blockierlisten als separate und unabhängige Werke unter der \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License3</a>\", die \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">hier</a>\" verfügbar sind.\"]]></string>
   <string name="settings_cookies_dialog_title">Alle Cookies und Websitedaten entfernen</string>
-  <string name="settings_cookies_dialog_content">Jetzt leeren löscht alle Cookies und Websitedaten, die Firefox gespeichert hat. Dadurch werden Sie wahrscheinlich von Websites abgemeldet und Offline-Webinhalte werden gelöscht.</string>
+  <string name="settings_cookies_dialog_content2">Dadurch werden alle Cookies und Website-Daten gelöscht. Wenn Sie diese Daten löschen, werden Sie möglicherweise von Websites abgemeldet und offline gespeicherte Web-Inhalte werden gelöscht.</string>
   <string name="turbo_mode">Turbo-Modus</string>
   <string name="turbo_mode_enabled_toast">Turbo-Modus aktiviert</string>
   <string name="turbo_mode_disabled_toast">Turbo-Modus deaktiviert</string>
   <string name="onboarding_turbo_mode_title">Der Turbo-Modus hilft Ihnen, schneller zu surfen</string>
   <string name="onboarding_turbo_mode_body">Der Turbo-Modus blockiert automatisch Tracker und Anzeigen, damit Sie schneller ans Ziel kommen. Wenn es ein Problem gibt – wie bei einer Website, die sich nicht so verhält, wie Sie es erwarten – schalten Sie einfach den Turbo-Modus aus.</string>
-  <string name="onboarding_turbo_mode_button_on">Turbo-Modus aktiviert lassen</string>
-  <string name="onboarding_turbo_mode_button_off">Turbo-Modus deaktivieren</string>
+  <string name="button_turbo_mode_keep_enabled">Aktiviert belassen</string>
+  <string name="button_turbo_mode_turn_off">Ausschalten</string>
   <string name="turbo_mode_disable_a11y">Turbo-Modus deaktivieren</string>
   <string name="turbo_mode_enable_a11y">Turbo-Modus aktivieren</string>
   <string name="homescreen_unpin_tutorial_toast">Drücken und halten Sie AUSWÄHLEN zum Ablösen vom Startbildschirm</string>

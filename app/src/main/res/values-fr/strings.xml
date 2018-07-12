@@ -57,14 +57,14 @@
   <string name="your_rights_content4"><![CDATA["Le code source complémentaire pour %1$s est disponible sous différentes "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">licences</a>" libres et open source."]]></string>
   <string name="your_rights_content5"><![CDATA["%1$s utilise aussi des listes de blocage fournies par Disconnect Inc, en tant que créations sous la licence "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>" et qui sont disponibles "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">ici</a>.]]></string>
   <string name="settings_cookies_dialog_title">Effacer les cookies et les données de sites</string>
-  <string name="settings_cookies_dialog_content">En cliquant sur « Effacer maintenant », vous effacerez toutes les données de sites et tous les cookies stockés par Firefox pour Fire TV. Cette action peut vous déconnecter de certains sites et supprimer du contenu web disponible hors connexion.</string>
+  <string name="settings_cookies_dialog_content2">Cette action effacera l’ensemble des cookies et des données de sites. Effacer ces données peut vous déconnecter de certains sites web et supprimer du contenu web stocké hors connexion.</string>
   <string name="turbo_mode">Mode turbo</string>
   <string name="turbo_mode_enabled_toast">Mode turbo activé</string>
   <string name="turbo_mode_disabled_toast">Mode turbo désactivé</string>
   <string name="onboarding_turbo_mode_title">Le mode turbo vous permet de naviguer plus rapidement</string>
   <string name="onboarding_turbo_mode_body">Le mode turbo bloque automatiquement les traqueurs et les publicités pour que les pages web se chargent plus vite. S’il y a un hic (comme un site web qui ne fonctionne pas comme vous l’espériez), il vous suffit de désactiver le mode turbo.</string>
-  <string name="onboarding_turbo_mode_button_on">Laisser le mode turbo activé</string>
-  <string name="onboarding_turbo_mode_button_off">Désactiver le mode turbo</string>
+  <string name="button_turbo_mode_keep_enabled">Laisser activé</string>
+  <string name="button_turbo_mode_turn_off">Désactiver</string>
   <string name="turbo_mode_disable_a11y">Désactiver le mode turbo</string>
   <string name="turbo_mode_enable_a11y">Activer le mode turbo</string>
   <string name="homescreen_unpin_tutorial_toast">Effectuez un appui long sur SELECT pour détacher cet élément de l’écran d’accueil</string>

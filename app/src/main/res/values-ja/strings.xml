@@ -57,14 +57,14 @@
   <string name="your_rights_content4"><![CDATA["%1$s の追加ソースコードは、様々な他のフリーおよびオープンソースの "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#12521;&#12452;&#12475;&#12531;&#12473;</a>" に基いて公開されています。"]]></string>
   <string name="your_rights_content5"><![CDATA["%1$s は Disconnect, Inc. により提供されているブロックリストも "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>" の下で単独のリソースとして使用しており、それらは "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">&#12371;&#12385;&#12425;</a>" から入手可能です。"]]></string>
   <string name="settings_cookies_dialog_title">すべての Cookie とサイトデータの消去</string>
-  <string name="settings_cookies_dialog_content">[今すぐ消去] を選択すると Firefox for Fire TV に保存されたすべての Cookie とサイトデータが消去されます。ウェブサイトからログアウトし、オフライン作業用のウェブページが削除されます。</string>
+  <string name="settings_cookies_dialog_content2">これにより、すべての Cookie とサイトデータが消去され、ウェブサイトからログアウトしたり、オフライン用に保存されているコンテンツが削除されたりする可能性があります。</string>
   <string name="turbo_mode">ターボモード</string>
   <string name="turbo_mode_enabled_toast">ターボモード有効</string>
   <string name="turbo_mode_disabled_toast">ターボモード無効</string>
   <string name="onboarding_turbo_mode_title">ターボモードはより速くブラウズするのに役立ちます</string>
   <string name="onboarding_turbo_mode_body">ターボモードは自動的にトラッカーと広告をブロックし、より速くブラウズするのを手助けします。 サイトが期待通りに動作しないなど問題が見られる場合は、ターボモードを無効化してください。</string>
-  <string name="onboarding_turbo_mode_button_on">ターボモードを有効のままにする</string>
-  <string name="onboarding_turbo_mode_button_off">ターボモードを無効にする</string>
+  <string name="button_turbo_mode_keep_enabled">有効なままにする</string>
+  <string name="button_turbo_mode_turn_off">無効にする</string>
   <string name="turbo_mode_disable_a11y">ターボモードを無効にする</string>
   <string name="turbo_mode_enable_a11y">ターボモードを有効にする</string>
   <string name="homescreen_unpin_tutorial_toast">ホーム画面からピン留めを外すには [選択] ボタンを長押ししてください</string>
