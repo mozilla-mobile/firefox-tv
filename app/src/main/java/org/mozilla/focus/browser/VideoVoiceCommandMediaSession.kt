@@ -94,8 +94,8 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
     private var webView: IWebView? = null
     private var sessionIsLoadingObserver: SessionIsLoadingObserver? = null
 
-    private var isResumed = false
-    private var isStarted = false
+    private var isLifecycleResumed = false
+    private var isLifecycleStarted = false
 
     init {
         mediaSession.setCallback(MediaSessionCallbacks())
@@ -123,17 +123,17 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
 
     @OnLifecycleEvent(ON_RESUME)
     fun onResume() {
-        isResumed = true
+        isLifecycleResumed = true
     }
 
     @OnLifecycleEvent(ON_PAUSE)
     fun onPause() {
-        isResumed = false
+        isLifecycleResumed = false
     }
 
     @OnLifecycleEvent(ON_START)
     fun onStart() {
-        isStarted = true
+        isLifecycleStarted = true
 
         // We want to make our MediaSession active: state buffering is more accurate than state
         // playing. For an explanation of MediaSession (in)active states, see class javadoc.
@@ -149,7 +149,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
 
     @OnLifecycleEvent(ON_STOP)
     fun onStop() {
-        isStarted = false
+        isLifecycleStarted = false
 
         // Videos playing when the app was backgrounded get into an inconsistent state: `paused`
         // will return false but they won't actually be playing. This makes any user "play" commands
@@ -215,7 +215,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
             // method. In theory, since the JS is async, this could undo the playback state we set
             // in onStop so we ignore these updates. In practice, this method doesn't appear to be
             // called from that JS but we leave this in for safety.
-            if (!isStarted) { return }
+            if (!isLifecycleStarted) { return }
 
             val playbackStateInt: Int
             val positionMillis: Long
@@ -312,17 +312,19 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
 
         // See onPlay for details.
         override fun onPause() {
-            fun getJS(videoId: String) = if (isResumed) {
+            // If we receive a MediaSession callback while the app is paused, it's coming from a
+            // voice command (which pauses the app to handle them).
+            val isInterruptedByVoiceCommand = !isLifecycleResumed
+
+            fun getJS(videoId: String) = if (!isInterruptedByVoiceCommand) {
                 "$videoId.pause();"
             } else {
-                // If we receive a MediaSession callback will the app is paused, it's coming from a
-                // voice command (which pauses the app to handle them). The video is paused for us
-                // during this time: my theory is that WebView pauses/resumes videos when audio
-                // focus is revoked/granted to it (while it's given to the voice command).
-                // Unfortunately, afaict there is no way to prevent WebView from resuming these
-                // paused videos so we have to pause it after it resumes. Unfortunately, there is no
-                // callback for this (or audio focus changes) so we inject JS to pause the video
-                // immediately after it starts again.
+                // The video is paused for us during a voice command: my theory is that WebView
+                // pauses/resumes videos when audio focus is revoked/granted to it (while it's given
+                // to the voice command). Unfortunately, afaict there is no way to prevent WebView
+                // from resuming these paused videos so we have to pause it after it resumes.
+                // Unfortunately, there is no callback for this (or audio focus changes) so we
+                // inject JS to pause the video immediately after it starts again.
                 //
                 // We timeout the if-playing-starts-pause listener so, if for some reason this
                 // listener isn't called immediately, it doesn't pause the video after the user
