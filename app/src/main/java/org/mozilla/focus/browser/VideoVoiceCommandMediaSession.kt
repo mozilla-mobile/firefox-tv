@@ -5,6 +5,8 @@
 package org.mozilla.focus.browser
 
 import android.arch.lifecycle.Lifecycle.Event.ON_DESTROY
+import android.arch.lifecycle.Lifecycle.Event.ON_PAUSE
+import android.arch.lifecycle.Lifecycle.Event.ON_RESUME
 import android.arch.lifecycle.Lifecycle.Event.ON_START
 import android.arch.lifecycle.Lifecycle.Event.ON_STOP
 import android.arch.lifecycle.LifecycleObserver
@@ -92,6 +94,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
     private var webView: IWebView? = null
     private var sessionIsLoadingObserver: SessionIsLoadingObserver? = null
 
+    private var isResumed = false
     private var isStarted = false
 
     init {
@@ -116,6 +119,16 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
 
         session.loading.removeObserver(sessionIsLoadingObserver!!)
         this.sessionIsLoadingObserver = null
+    }
+
+    @OnLifecycleEvent(ON_RESUME)
+    fun onResume() {
+        isResumed = true
+    }
+
+    @OnLifecycleEvent(ON_PAUSE)
+    fun onPause() {
+        isResumed = false
     }
 
     @OnLifecycleEvent(ON_START)
@@ -248,7 +261,6 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
             |}
             """.trimMargin()
 
-        // NB: this hasn't been tested on expressions that are more than one line.
         private fun evalJSWithTargetVideo(getExpressionToEval: (videoId: String) -> String) {
             val expressionToEval = getExpressionToEval(ID_TARGET_VIDEO)
             webView?.evalJS("""
@@ -300,7 +312,41 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
 
         // See onPlay for details.
         override fun onPause() {
-            evalJSWithTargetVideo { videoId -> "$videoId.pause();" }
+            fun getJS(videoId: String) = if (isResumed) {
+                "$videoId.pause();"
+            } else {
+                // If we receive a MediaSession callback will the app is paused, it's coming from a
+                // voice command (which pauses the app to handle them). The video is paused for us
+                // during this time: my theory is that WebView pauses/resumes videos when audio
+                // focus is revoked/granted to it (while it's given to the voice command).
+                // Unfortunately, afaict there is no way to prevent WebView from resuming these
+                // paused videos so we have to pause it after it resumes. Unfortunately, there is no
+                // callback for this (or audio focus changes) so we inject JS to pause the video
+                // immediately after it starts again.
+                //
+                // We timeout the if-playing-starts-pause listener so, if for some reason this
+                // listener isn't called immediately, it doesn't pause the video after the user
+                // attempts to play it in the future (e.g. user says "pause" while video is already
+                // paused and then requests a play).
+                """
+                    | var playingEvent = 'playing';
+                    | var initialExecuteMillis = new Date();
+                    |
+                    | function onPlay() {
+                    |     var now = new Date();
+                    |     var millisPassed = now.getTime() - initialExecuteMillis.getTime();
+                    |     if (millisPassed < 1000) {
+                    |         $videoId.pause();
+                    |     }
+                    |
+                    |     $videoId.removeEventListener(playingEvent, onPlay);
+                    | }
+                    |
+                    | $videoId.addEventListener(playingEvent, onPlay);
+                """.trimMargin()
+            }
+
+            evalJSWithTargetVideo(::getJS)
         }
 
         override fun onSkipToNext() = dispatchKeyEventDownUp(KeyEvent.KEYCODE_MEDIA_NEXT)
