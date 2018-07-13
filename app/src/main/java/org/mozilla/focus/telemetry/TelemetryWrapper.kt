@@ -52,6 +52,7 @@ object TelemetryWrapper {
         val TYPE_URL = "type_url"
         val TYPE_QUERY = "type_query"
         val CLICK = "click"
+        val CLICK_OR_VOICE = "click_or_voice"
         val CHANGE = "change"
         val FOREGROUND = "foreground"
         val BACKGROUND = "background"
@@ -71,6 +72,7 @@ object TelemetryWrapper {
         const val HOME_TILE = "home_tile"
         val TURBO_MODE = "turbo_mode"
         val PIN_PAGE = "pin_page"
+        val MEDIA_SESSION = "media_session"
     }
 
     internal object Value {
@@ -286,12 +288,28 @@ object TelemetryWrapper {
                 getTileTypeAsStringValue(removedTile)).queue()
     }
 
+    fun mediaSessionEvent(eventType: MediaSessionEventType) {
+        val method = when (eventType) {
+            MediaSessionEventType.PLAY_PAUSE_BUTTON -> Method.CLICK
+            else -> Method.CLICK_OR_VOICE
+        }
+        TelemetryEvent.create(Category.ACTION, method, Object.MEDIA_SESSION, eventType.value).queue()
+    }
+
     private fun boolToOnOff(boolean: Boolean) = if (boolean) Value.ON else Value.OFF
 
     private fun getTileTypeAsStringValue(tile: HomeTile) = when (tile) {
         is BundledHomeTile -> Value.TILE_BUNDLED
         is CustomHomeTile -> Value.TILE_CUSTOM
     }
+}
+
+enum class MediaSessionEventType(internal val value: String) {
+    PLAY("play"), PAUSE("pause"),
+    NEXT("next"), PREV("prev"),
+    SEEK("seek"),
+
+    PLAY_PAUSE_BUTTON("play_pause_btn")
 }
 
 enum class UrlTextInputLocation(internal val extra: String) {
