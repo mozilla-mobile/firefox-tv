@@ -91,7 +91,7 @@ public class PageLoadTest {
                 .check(matches(isDisplayed()))
                 .perform(click());
 
-        onView(allOf(withId(R.id.urlInputView), isDisplayed(), hasFocus()))
+        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()))
                 .perform(typeTextIntoFocusedView(MOZILLA_URL))
                 .perform(pressImeActionButton());
 

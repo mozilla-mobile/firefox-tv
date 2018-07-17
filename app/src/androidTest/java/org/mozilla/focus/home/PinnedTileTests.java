@@ -71,7 +71,7 @@ public class PinnedTileTests {
 
     @Test
     public void testCustomPinnedTile() throws InterruptedException, UiObjectNotFoundException {
-        onView(allOf(withId(R.id.urlInputView), isDisplayed(), hasFocus()))
+        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()))
                 .perform(typeTextIntoFocusedView("example.com"))
                 .perform(pressImeActionButton());
 

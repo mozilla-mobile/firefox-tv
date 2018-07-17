@@ -63,7 +63,7 @@ class IWebViewExecuteJavascriptTest {
         val url = mockServer.url("").toString()
 
         // Load the mock page.
-        onView(withId(R.id.urlInputView))
+        onView(withId(R.id.navUrlInput))
                 .perform(typeText(url), pressImeActionButton())
 
         // Assert loaded.
