@@ -11,10 +11,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
-    <!-- Required for voice control. It's only available on the Cube (so far) which is API 25+
-         so we use sdk-23 to prevent users from manually having to update the app.
-         https://developer.amazon.com/blogs/appstore/post/623addd5-6184-4e7f-a969-123a653cfb1a/implementing-voice-control-with-the-media-session-api-on-amazon-fire-tv -->
-    <uses-permission-sdk-23 android:name="com.amazon.permission.media.session.voicecommandcontrol" />
+    <!-- Required for media playback voice control.
+           https://developer.amazon.com/blogs/appstore/post/623addd5-6184-4e7f-a969-123a653cfb1a/implementing-voice-control-with-the-media-session-api-on-amazon-fire-tv -->
+    <uses-permission android:name="com.amazon.permission.media.session.voicecommandcontrol" />
 
     <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
     <uses-feature android:name="android.software.leanback" android:required="true" />
