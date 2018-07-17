@@ -100,7 +100,7 @@ public class TVScreenshots extends ScreenshotTest {
         /* capture a screenshot of the default home-screen */
         mActivityTestRule.launchActivity(intent);
 
-        onView(withId(R.id.urlInputView))
+        onView(withId(R.id.navUrlInput))
                 .check(matches(isDisplayed()));
         onView(withId(R.id.homeUrlBar))
                 .check(matches(isDisplayed()));
@@ -113,7 +113,7 @@ public class TVScreenshots extends ScreenshotTest {
         /* default home-screen in the main activity should be displayed */
         mActivityTestRule.launchActivity(intent);
 
-        onView(allOf(withId(R.id.urlInputView), isDisplayed(), hasFocus()))
+        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()))
                 .perform(typeTextIntoFocusedView("example.com"))
                 .perform(pressImeActionButton());
 
@@ -138,10 +138,10 @@ public class TVScreenshots extends ScreenshotTest {
         /* default home-screen in the main activity should be displayed */
         mActivityTestRule.launchActivity(intent);
 
-        onView(allOf(withId(R.id.urlInputView), isDisplayed(), hasFocus()));
+        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()));
 
         /* visit settings */
-        onView(allOf(withId(R.id.settingsButton), isDisplayed()))
+        onView(allOf(withId(R.id.navButtonSettings), isDisplayed()))
                 .perform(click());
 
         /* current settings list view */
@@ -189,7 +189,7 @@ public class TVScreenshots extends ScreenshotTest {
         /* default home-screen in the main activity should be displayed */
         mActivityTestRule.launchActivity(intent);
 
-        onView(allOf(withId(R.id.urlInputView), isDisplayed(), hasFocus()));
+        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()));
 
         mDevice.pressDPadDown();
         mDevice.pressMenu();
@@ -207,7 +207,7 @@ public class TVScreenshots extends ScreenshotTest {
         /* default home-screen in the main activity should be displayed */
         mActivityTestRule.launchActivity(intent);
 
-        onView(allOf(withId(R.id.urlInputView), isDisplayed(), hasFocus()))
+        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()))
                 .perform(typeTextIntoFocusedView("example.com"))
                 .perform(pressImeActionButton());
 
@@ -235,7 +235,7 @@ public class TVScreenshots extends ScreenshotTest {
     /* default home-screen in the main activity should be displayed */
         mActivityTestRule.launchActivity(intent);
 
-        onView(allOf(withId(R.id.urlInputView), isDisplayed(), hasFocus()))
+        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()))
                 .perform(typeTextIntoFocusedView("example.com"))
                 .perform(pressImeActionButton());
 

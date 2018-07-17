@@ -72,7 +72,7 @@ public class BrowserOverlayTest {
 
     @Test
     public void testBrowserOverlay() throws InterruptedException, UiObjectNotFoundException {
-        final ViewInteraction URLBar = onView(allOf(withId(R.id.urlInputView), isDisplayed(), hasFocus()))
+        final ViewInteraction URLBar = onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()))
                 .perform(typeTextIntoFocusedView("example.com"))
                 .perform(pressImeActionButton());
 
