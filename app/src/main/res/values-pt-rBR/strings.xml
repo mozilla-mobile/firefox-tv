@@ -57,11 +57,14 @@
   <string name="your_rights_content4"><![CDATA[\"Código fonte adicionais para o %1$s estão disponíveis sobre várias outras \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">licen&amp;#231;as</a>\" livres e de código aberto.\"]]></string>
   <string name="your_rights_content5"><![CDATA[\"O %1$s também utiliza \"<em xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">listas de bloqueios</em>\" disponibilizadas pela Disconnect, Inc. como um trabalho independente disponibilizado \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">aqui</a>\", sob a \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>.]]></string>
   <string name="settings_cookies_dialog_title">Limpar todos os cookies e dados do site</string>
+  <string name="settings_cookies_dialog_content2">Está ação irá limpar todos os dados de cookies e sites, portanto, pode ser que as sessões de sites sejam finalizadas e que conteúdos da web armazenado off-line sejam apagados.</string>
   <string name="turbo_mode">Modo Turbo</string>
   <string name="turbo_mode_enabled_toast">Modo Turbo ativado</string>
   <string name="turbo_mode_disabled_toast">Modo Turbo desativado</string>
   <string name="onboarding_turbo_mode_title">O Modo Turbo auxilia você a navegar mais rápido</string>
   <string name="onboarding_turbo_mode_body">O Modo Turbo bloqueia automaticamente rastreadores e anúncios para ajudá-lo a chegar ao seu destino mais rápido. Se houver algum problema de velocidade - como um site que não está se comportando da forma que você espera - apenas desligue o Modo Turbo.</string>
+  <string name="button_turbo_mode_keep_enabled">Manter habilitado</string>
+  <string name="button_turbo_mode_turn_off">Desativar</string>
   <string name="turbo_mode_disable_a11y">Desativar o Modo Turbo</string>
   <string name="turbo_mode_enable_a11y">Ativar o Modo Turbo</string>
   <string name="homescreen_unpin_tutorial_toast">Pressione e segure o SELECT para desafixar da tela inicial</string>
