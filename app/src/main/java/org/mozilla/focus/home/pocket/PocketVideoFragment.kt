@@ -21,11 +21,11 @@ import kotlinx.android.synthetic.main.fragment_pocket_video.*
 import kotlinx.android.synthetic.main.fragment_pocket_video.view.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import mozilla.components.browser.session.Session
 import org.mozilla.focus.R
 import org.mozilla.focus.ScreenController
 import org.mozilla.focus.ext.resetAfter
 import org.mozilla.focus.ext.updateLayoutParams
-import org.mozilla.focus.session.Source
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.FormattedDomain
 import org.mozilla.focus.utils.PicassoWrapper
@@ -125,7 +125,7 @@ private class PocketVideoAdapter(
         setHorizontalMargins(holder, position)
 
         holder.itemView.setOnClickListener {
-            ScreenController.showBrowserScreenForUrl(holder.itemView.context, fragmentManager, item.url, Source.POCKET_VIDEO_SUGGESTION)
+            ScreenController.showBrowserScreenForUrl(holder.itemView.context, fragmentManager, item.url, Session.Source.HOME_SCREEN)
             TelemetryWrapper.pocketVideoClickEvent(item.id)
         }
         holder.itemView.setOnFocusChangeListener { _, hasFocus -> updateForFocusState(holder, hasFocus) }

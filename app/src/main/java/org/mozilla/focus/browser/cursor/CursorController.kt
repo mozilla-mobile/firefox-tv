@@ -118,7 +118,7 @@ class CursorController(
     }
 
     private inner class CursorIsLoadingObserver : Session.Observer {
-        override fun onLoadingStateChanged() {
+        override fun onLoadingStateChanged(session: Session, loading: Boolean) {
             setEnabledForCurrentState()
         }
     }
