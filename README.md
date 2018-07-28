@@ -10,8 +10,8 @@ their Amazon Fire TV and Fire TV stick._
 [Get it on Amazon Fire TV][amazon link]
 
 ## Getting Involved
-Our code is open source and we encourage all positive contributions! We love Pull
-Requests, bug reports, ideas, (security) code reviews and other kinds of contributions.
+Our code is open source and we encourage all positive contributions! We love pull
+requests, bug reports, ideas, (security) code reviews and other kinds of contributions.
 Before you contribute, please read the [Community Participation
 Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/).
 
