@@ -15,13 +15,14 @@ requests, bug reports, ideas, (security) code reviews and other kinds of contrib
 Before you contribute, please read the [Community Participation
 Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/).
 
-* [Developer guide][dev guide]
-* IRC: [#focus (irc.mozilla.org)](https://wiki.mozilla.org/IRC); logs:
+* [Guide to Contributing][contribute] (**new contributors start here!**)
+* Open issues: https://github.com/mozilla-mobile/firefox-tv/issues
+* Project wiki: https://github.com/mozilla-mobile/firefox-tv/wiki
+* IRC: [#focus (irc.mozilla.org)](https://wiki.mozilla.org/IRC) + logs:
 https://mozilla.logbot.info/focus/; we're available Monday-Friday, GMT and PST
 working hours.
 * Mailing list:
 [firefox-focus-public@](https://mail.mozilla.org/listinfo/firefox-focus-public)
-* See [our wiki](https://github.com/mozilla-mobile/firefox-tv/wiki) for additional docs
 
 **Beginners!** Watch out for [Issues with the `good first issue` label](https://github.com/mozilla-mobile/firefox-tv/labels/good%20first%20issue).
 These are easy bugs that have been left for first timers to have a go, get involved and make a
@@ -89,3 +90,4 @@ API services currently supported are:
 
 [amazon link]: https://www.amazon.com/dp/B078B5YMPD/ref=sr_1_1
 [dev guide]: https://github.com/mozilla-mobile/firefox-tv/wiki/Developer-guide-and-differences-from-Android
+[contribute]: https://github.com/mozilla-mobile/shared-docs/blob/master/android/CONTRIBUTING.md
