@@ -18,9 +18,8 @@ Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participatio
 * [Guide to Contributing][contribute] (**new contributors start here!**)
 * Open issues: https://github.com/mozilla-mobile/firefox-tv/issues
 * Project wiki: https://github.com/mozilla-mobile/firefox-tv/wiki
-* IRC: [#focus (irc.mozilla.org)](https://wiki.mozilla.org/IRC) + logs:
-https://mozilla.logbot.info/focus/; we're available Monday-Friday, GMT and PST
-working hours.
+* IRC: [#focus (irc.mozilla.org)](https://wiki.mozilla.org/IRC) | [view logs](https://mozilla.logbot.info/focus/);
+we're available Monday-Friday, GMT and PST working hours.
 * Mailing list:
 [firefox-focus-public@](https://mail.mozilla.org/listinfo/firefox-focus-public)
 
