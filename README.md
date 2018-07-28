@@ -1,7 +1,7 @@
 # Firefox for Amazon's Fire TV
 
 [![Task Status](https://github.taskcluster.net/v1/repository/mozilla-mobile/firefox-tv/master/badge.svg)](https://github.taskcluster.net/v1/repository/mozilla-mobile/firefox-tv/master/latest)
-[![codecov](https://codecov.io/gh/mozilla-mobile/firefox-tv/branch/master/graph/badge.svg)](https://codecov.io/gh/mozilla-mobile/firefox-tv) 
+[![codecov](https://codecov.io/gh/mozilla-mobile/firefox-tv/branch/master/graph/badge.svg)](https://codecov.io/gh/mozilla-mobile/firefox-tv)
 
 _Fast for good, just right for watching video at home. A browser for
 discovering and watching web video on the big screen TV for users to install on
@@ -16,14 +16,11 @@ Before you contribute, please read the [Community Participation
 Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participation/).
 
 * [Developer guide][dev guide]
-
 * IRC: [#focus (irc.mozilla.org)](https://wiki.mozilla.org/IRC); logs:
 https://mozilla.logbot.info/focus/; we're available Monday-Friday, GMT and PST
 working hours.
-
 * Mailing list:
 [firefox-focus-public@](https://mail.mozilla.org/listinfo/firefox-focus-public)
-
 * See [our wiki](https://github.com/mozilla-mobile/firefox-tv/wiki) for additional docs
 
 **Beginners!** Watch out for [Issues with the `good first issue` label](https://github.com/mozilla-mobile/firefox-tv/labels/good%20first%20issue).
