@@ -17,17 +17,13 @@ Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participatio
 
 * [Guide to Contributing][contribute] (**new contributors start here!**)
 * Open issues: https://github.com/mozilla-mobile/firefox-tv/issues
+  * [`good first issues`][good first] | [`help wanted`][help]
 * Project wiki: https://github.com/mozilla-mobile/firefox-tv/wiki
 * IRC: [#focus (irc.mozilla.org)](https://wiki.mozilla.org/IRC) | [view logs](https://mozilla.logbot.info/focus/);
 we're available Monday-Friday, GMT and PST working hours.
 * Mailing list:
 [firefox-focus-public@](https://mail.mozilla.org/listinfo/firefox-focus-public)
 
-**Beginners!** Look for [issues with the `good first issue` label](https://github.com/mozilla-mobile/firefox-tv/labels/good%20first%20issue).
-These are easy bugs that have been left for first timers to have a go, get involved and make a
-positive contribution to the project!
-
-For other contributor-ready issues, see [the `help wanted` label](https://github.com/mozilla-mobile/firefox-tv/labels/help%20wanted).
 
 ## Build instructions
 1. Clone the repository:
@@ -90,3 +86,5 @@ API services currently supported are:
 [amazon link]: https://www.amazon.com/dp/B078B5YMPD/ref=sr_1_1
 [dev guide]: https://github.com/mozilla-mobile/firefox-tv/wiki/Developer-guide-and-differences-from-Android
 [contribute]: https://github.com/mozilla-mobile/shared-docs/blob/master/android/CONTRIBUTING.md
+[good first]: https://github.com/mozilla-mobile/firefox-tv/labels/good%20first%20issue
+[help]: https://github.com/mozilla-mobile/firefox-tv/labels/help%20wanted
