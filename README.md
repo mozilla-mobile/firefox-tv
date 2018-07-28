@@ -24,7 +24,7 @@ working hours.
 * Mailing list:
 [firefox-focus-public@](https://mail.mozilla.org/listinfo/firefox-focus-public)
 
-**Beginners!** Watch out for [Issues with the `good first issue` label](https://github.com/mozilla-mobile/firefox-tv/labels/good%20first%20issue).
+**Beginners!** Look for [issues with the `good first issue` label](https://github.com/mozilla-mobile/firefox-tv/labels/good%20first%20issue).
 These are easy bugs that have been left for first timers to have a go, get involved and make a
 positive contribution to the project!
 
