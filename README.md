@@ -61,6 +61,22 @@ relied upon.
 
 When using an emulator, you can press `cmd+m` to simulate a menu button press.
 
+### Pre-push hooks
+To reduce review turn-around time, we'd like all pushes to run tests locally. We'd
+recommend you use our provided pre-push hook in `quality/pre-push-recommended.sh`.
+Using this hook will guarantee your hook gets updated as the repository changes.
+This hook tries to run as much as possible without taking too much time.
+
+To add it, run this command from the project root:
+```sh
+ln -s ../../quality/pre-push-recommended.sh .git/hooks/pre-push
+```
+
+To push without running the pre-push hook (e.g. doc updates):
+```sh
+git push <remote> --no-verify
+```
+
 ### Building with API keys
 Certain services require an API key, so you'll need to build with the key to use them in the apk.
 
