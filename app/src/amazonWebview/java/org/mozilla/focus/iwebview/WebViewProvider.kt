@@ -48,19 +48,19 @@ object WebViewProvider {
     }
 }
 
-private fun initWebview(webView: FirefoxAmazonWebView) = with (webView) {
+private fun initWebview(webView: FirefoxAmazonWebView) = with(webView) {
     isVerticalScrollBarEnabled = true
     isHorizontalScrollBarEnabled = true
 
     // TODO This does not exist with the AmazonWebView
-    //if (BuildConfig.DEBUG) {
+    // if (BuildConfig.DEBUG) {
     //    setWebContentsDebuggingEnabled(true);
-    //}
+    // }
 }
 
 @SuppressLint("SetJavaScriptEnabled") // We explicitly want to enable JavaScript
 @Suppress("DEPRECATION") // To be safe, we'll use delete methods as long as they're there.
-private fun initWebSettings(context: Context, settings: AmazonWebSettings) = with (settings) {
+private fun initWebSettings(context: Context, settings: AmazonWebSettings) = with(settings) {
     val appName = context.resources.getString(R.string.useragent_appname)
     userAgentString = UserAgent.buildUserAgentString(context, settings, appName)
 
@@ -87,7 +87,7 @@ private fun initWebSettings(context: Context, settings: AmazonWebSettings) = wit
     // Also increase text size to fill the viewport (this mirrors the behaviour of Firefox,
     // Chrome does this in the current Chrome Dev, but not Chrome release).
     // TODO #33: TEXT_AUTOSIZING does not exist in AmazonWebSettings
-    //settings.setLayoutAlgorithm(AmazonWebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
+    // settings.setLayoutAlgorithm(AmazonWebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
 
     // Disable access to arbitrary local files by webpages - assets can still be loaded
     // via file:///android_asset/res, so at least error page images won't be blocked.

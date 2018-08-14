@@ -95,9 +95,9 @@ class PocketVideoFragment : Fragment() {
 }
 
 private class PocketVideoAdapter(
-        context: Context,
-        feedItemsDeferred: PocketVideosDeferred,
-        private val fragmentManager: FragmentManager
+    context: Context,
+    feedItemsDeferred: PocketVideosDeferred,
+    private val fragmentManager: FragmentManager
 ) : RecyclerView.Adapter<PocketVideoViewHolder>() {
 
     private val photonGrey70 = ContextCompat.getColor(context, R.color.photonGrey70)
@@ -120,7 +120,7 @@ private class PocketVideoAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             PocketVideoViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.pocket_video_item, parent, false))
 
-    override fun onBindViewHolder(holder: PocketVideoViewHolder, position: Int) = with (holder) {
+    override fun onBindViewHolder(holder: PocketVideoViewHolder, position: Int) = with(holder) {
         val item = feedItems[position]
         setHorizontalMargins(holder, position)
 
@@ -165,7 +165,7 @@ private class PocketVideoAdapter(
             cardBackground = photonGrey70
         }
 
-        with (holder) {
+        with(holder) {
             titleView.setBackgroundColor(cardBackground)
             domainView.setBackgroundColor(cardBackground)
 

@@ -169,7 +169,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), Session.Observer {
                 view = layout.cursorView)
         lifecycle.addObserver(cursor!!)
 
-        with (layout.browserOverlay) {
+        with(layout.browserOverlay) {
             onNavigationEvent = this@BrowserFragment.onNavigationEvent
             navigationStateProvider = NavigationStateProvider()
             visibility = overlayVisibleCached ?: View.GONE
@@ -314,7 +314,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), Session.Observer {
 }
 
 private class BrowserIWebViewCallback(
-        private val browserFragment: BrowserFragment
+    private val browserFragment: BrowserFragment
 ) : IWebView.Callback {
 
     private var fullscreenCallback: IWebView.FullscreenCallback? = null
@@ -343,7 +343,7 @@ private class BrowserIWebViewCallback(
         fullscreenCallback = callback
         if (view == null) return
 
-        with (browserFragment) {
+        with(browserFragment) {
             // Hide browser UI and web content
             browserContainer.visibility = View.INVISIBLE
 
@@ -355,7 +355,7 @@ private class BrowserIWebViewCallback(
     }
 
     override fun onExitFullScreen() {
-        with (browserFragment) {
+        with(browserFragment) {
             videoContainer.removeAllViews()
             videoContainer.visibility = View.GONE
 

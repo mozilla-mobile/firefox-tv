@@ -63,8 +63,10 @@ enum class NavigationEvent {
 }
 
 class BrowserNavigationOverlay @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyle: Int = 0 )
-    : LinearLayout(context, attrs, defStyle), View.OnClickListener {
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
+) : LinearLayout(context, attrs, defStyle), View.OnClickListener {
 
     interface BrowserNavigationStateProvider {
         fun isBackEnabled(): Boolean
@@ -89,13 +91,16 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     // since we init the tiles in View.init and Android is inflating the view for us,
     // thus we need to use Delegates.observable to update onTileLongClick.
     var openHomeTileContextMenu: (() -> Unit) by Delegates.observable({}) { _, _, newValue ->
-        with (tileContainer) {
+        with(tileContainer) {
             (adapter as HomeTileAdapter).onTileLongClick = newValue
         }
     }
 
-    var onNavigationEvent: ((event: NavigationEvent, value: String?,
-                             autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?) -> Unit)? = null
+    var onNavigationEvent: ((
+        event: NavigationEvent,
+        value: String?,
+        autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?
+    ) -> Unit)? = null
     var navigationStateProvider: BrowserNavigationStateProvider? = null
     /** Called inside [setVisibility] right before super.setVisibility is called. */
     var onPreSetVisibilityListener: ((isVisible: Boolean) -> Unit)? = null
@@ -131,13 +136,13 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
     }
 
-    private fun initTiles() = with (tileContainer) {
+    private fun initTiles() = with(tileContainer) {
         val homeTiles = HomeTilesManager.getTilesCache(context)
 
         canShowUpinToast = true
 
         adapter = HomeTileAdapter(uiLifecycleCancelJob, homeTiles, loadUrl = { urlStr ->
-            with (navUrlInput) {
+            with(navUrlInput) {
                 if (urlStr.isNotEmpty()) {
                     onNavigationEvent?.invoke(NavigationEvent.LOAD_TILE, urlStr, null)
                 }
@@ -184,7 +189,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         }
     }
 
-    private fun setupUrlInput() = with (navUrlInput) {
+    private fun setupUrlInput() = with(navUrlInput) {
         setOnCommitListener {
             val userInput = text.toString()
             if (userInput.isNotEmpty()) {
@@ -322,7 +327,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
  * this seems fine.
  */
 class BrowserNavigationOverlayScrollView(
-        context: Context, attrs: AttributeSet
+    context: Context,
+    attrs: AttributeSet
 ) : ScrollView(context, attrs) {
 
     private val deltaScrollPadding = resources.getDimensionPixelSize(R.dimen.browser_overlay_delta_scroll_padding)

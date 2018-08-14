@@ -44,8 +44,8 @@ private const val DOWN_TIME_OFFSET_MILLIS = 100
  * @param simulateTouchEvent Takes the given touch event and simulates a touch to the screen.
  */
 class CursorViewModel(
-        private val onUpdate: (x: Float, y: Float, percentMaxScrollVel: PointF, framesPassed: Float) -> Unit,
-        private val simulateTouchEvent: (MotionEvent) -> Unit
+    private val onUpdate: (x: Float, y: Float, percentMaxScrollVel: PointF, framesPassed: Float) -> Unit,
+    private val simulateTouchEvent: (MotionEvent) -> Unit
 ) {
 
     private val scrollVelReturnVal = PointF()
