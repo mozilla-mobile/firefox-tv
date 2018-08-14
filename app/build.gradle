@@ -147,7 +147,7 @@ dependencies {
     implementation "com.android.support:leanback-v17:$support_libraries_version"
     implementation "com.android.support.constraint:constraint-layout:$constrained_layout_version"
 
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'com.squareup.picasso:picasso:2.71828', {
         // We temporarily don't include the packaged the support libs to avoid version mismatch.
         // This can cause runtime errors so we should remove this ASAP! #883?
