@@ -134,10 +134,10 @@ class UrlAutoCompleteFilter : InlineAutocompleteEditText.OnFilterListener {
      * that exactly matches the search text - which is what this method is for:
      */
     private fun prepareAutocompleteResult(
-            rawSearchText: String,
-            lowerCaseResult: String,
-            source: String,
-            totalCount: Int
+        rawSearchText: String,
+        lowerCaseResult: String,
+        source: String,
+        totalCount: Int
     ) =
             AutocompleteResult(
                     rawSearchText + lowerCaseResult.substring(rawSearchText.length),

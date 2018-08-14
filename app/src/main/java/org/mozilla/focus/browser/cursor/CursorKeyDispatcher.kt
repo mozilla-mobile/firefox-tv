@@ -11,9 +11,9 @@ import org.mozilla.focus.utils.RemoteKey
 
 /** Converts raw key events into high-level commands the view model can recognize. */
 class CursorKeyDispatcher(
-        var isEnabled: Boolean,
-        private val onDirectionKey: (dir: Direction, action: Int) -> Unit,
-        private val onSelectKey: (event: KeyEvent) -> Unit
+    var isEnabled: Boolean,
+    private val onDirectionKey: (dir: Direction, action: Int) -> Unit,
+    private val onSelectKey: (event: KeyEvent) -> Unit
 ) {
 
     /**
@@ -24,8 +24,8 @@ class CursorKeyDispatcher(
     @UiThread
     fun dispatchKeyEvent(event: KeyEvent): Boolean {
         if (!isEnabled) return false
-        if (event.action != KeyEvent.ACTION_DOWN
-                && event.action != KeyEvent.ACTION_UP) return false
+        if (event.action != KeyEvent.ACTION_DOWN &&
+                event.action != KeyEvent.ACTION_UP) return false
 
         val remoteKey = RemoteKey.fromKeyEvent(event)
         if (remoteKey == RemoteKey.CENTER ||

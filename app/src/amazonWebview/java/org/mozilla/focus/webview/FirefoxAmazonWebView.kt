@@ -32,9 +32,10 @@ private val uiHandler = Handler(Looper.getMainLooper())
  */
 @Suppress("ViewConstructor") // We only construct this in code.
 internal class FirefoxAmazonWebView(
-        context: Context, attrs: AttributeSet,
-        private val client: FocusWebViewClient,
-        private val chromeClient: FirefoxAmazonWebChromeClient
+    context: Context,
+    attrs: AttributeSet,
+    private val client: FocusWebViewClient,
+    private val chromeClient: FirefoxAmazonWebChromeClient
 ) : NestedWebView(context, attrs), IWebView {
 
     @get:VisibleForTesting

@@ -27,7 +27,9 @@ private val checkedStateSet = intArrayOf(android.R.attr.state_checked)
  * the checked state to the attrs.
  */
 class CheckableImageButton @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyle: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyle: Int = 0
 ) : AppCompatImageButton(context, attrs, defStyle), Checkable {
 
     private var internalIsChecked = false

@@ -104,11 +104,11 @@ object Pocket {
 }
 
 data class PocketVideo(
-        val id: Int,
-        val title: String,
-        val url: String,
-        val dedupeURL: String,
-        val thumbnailURL: String
+    val id: Int,
+    val title: String,
+    val url: String,
+    val dedupeURL: String,
+    val thumbnailURL: String
 ) {
 
     companion object {

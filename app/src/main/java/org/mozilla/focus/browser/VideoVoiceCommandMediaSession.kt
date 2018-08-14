@@ -82,7 +82,7 @@ private val KEY_CODES_MEDIA_PLAY_PAUSE = listOf(KEYCODE_MEDIA_PLAY, KEYCODE_MEDI
  * overrides our voice commands.
  */
 class VideoVoiceCommandMediaSession @UiThread constructor(
-        private val activity: AppCompatActivity
+    private val activity: AppCompatActivity
 ) : LifecycleObserver {
 
     @get:UiThread // MediaSessionCompat is not thread safe.
@@ -210,8 +210,12 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
          * Note: JavaScript calling into Kotlin does not support optionals.
          */
         @JavascriptInterface
-        fun syncPlaybackState(isVideoPresent: Boolean, isVideoPlaying: Boolean,
-                              jsPositionSeconds: Double, jsPlaybackSpeed: Float) {
+        fun syncPlaybackState(
+            isVideoPresent: Boolean,
+            isVideoPlaying: Boolean,
+            jsPositionSeconds: Double,
+            jsPlaybackSpeed: Float
+        ) {
             // During onStop we pause all videos which may send playback state updates to this
             // method. In theory, since the JS is async, this could undo the playback state we set
             // in onStop so we ignore these updates. In practice, this method doesn't appear to be

@@ -18,7 +18,8 @@ import kotlin.properties.Delegates
 
 /** A view that contains the Pocket logo and several thumbnails from Pocket videos. */
 class PocketVideoMegaTile(
-        context: Context, attrs: AttributeSet
+    context: Context,
+    attrs: AttributeSet
 ) : LinearLayout(context, attrs) {
 
     var pocketVideos by Delegates.observable<List<PocketVideo>?>(null) { _, _, newVideos ->

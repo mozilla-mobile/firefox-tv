@@ -42,14 +42,14 @@ private const val CUSTOM_TILE_TO_SHOW_MILLIS = 200L
 private val CUSTOM_TILE_ICON_INTERPOLATOR = DecelerateInterpolator()
 
 class HomeTileAdapter(
-        private val uiLifecycleCancelJob: Job,
-        private var tiles: MutableList<HomeTile>,
-        private val loadUrl: (String) -> Unit,
-        var onTileLongClick: (() -> Unit)?,
-        var onTileFocused: (() -> Unit)?
+    private val uiLifecycleCancelJob: Job,
+    private var tiles: MutableList<HomeTile>,
+    private val loadUrl: (String) -> Unit,
+    var onTileLongClick: (() -> Unit)?,
+    var onTileFocused: (() -> Unit)?
 ) : RecyclerView.Adapter<TileViewHolder>() {
 
-    override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with (holder) {
+    override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with(holder) {
         val item = tiles[position]
         when (item) {
             is BundledHomeTile -> {
@@ -149,14 +149,14 @@ class HomeTileAdapter(
     )
 }
 
-private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledHomeTile) = with (holder) {
+private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledHomeTile) = with(holder) {
     val bitmap = BundledTilesManager.getInstance(itemView.context).loadImageFromPath(itemView.context, tile.imagePath)
     iconView.setImageBitmap(bitmap)
 
     titleView.text = tile.title
 }
 
-private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHolder, item: CustomHomeTile) = with (holder) {
+private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHolder, item: CustomHomeTile) = with(holder) {
     launch(uiLifecycleCancelJob + UI, CoroutineStart.UNDISPATCHED) {
         val validUri = item.url.toJavaURI()
 
@@ -201,7 +201,7 @@ private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHold
 }
 
 class TileViewHolder(
-        itemView: View
+    itemView: View
 ) : RecyclerView.ViewHolder(itemView) {
     val iconView = itemView.tile_icon
     val titleView = itemView.tile_title

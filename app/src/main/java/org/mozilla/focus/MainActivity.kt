@@ -189,9 +189,11 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
                 null, null)
     }
 
-    override fun onTextInputUrlEntered(urlStr: String,
-                                       autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?,
-                                       inputLocation: UrlTextInputLocation?) {
+    override fun onTextInputUrlEntered(
+        urlStr: String,
+        autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?,
+        inputLocation: UrlTextInputLocation?
+    ) {
         ViewUtils.hideKeyboard(container)
         // It'd be much cleaner/safer to do this with a kotlin callback.
         ScreenController.onUrlEnteredInner(this, supportFragmentManager, urlStr, true,

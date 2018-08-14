@@ -33,10 +33,10 @@ private const val MAX_SCROLL_VELOCITY = 13
  * When using this class, don't forget to add it as a [LifecycleObserver].
  */
 class CursorController(
-        // Our lifecycle is shorter than BrowserFragment, so we can hold a reference.
-        private val browserFragment: BrowserFragment,
-        cursorParent: View,
-        private val view: CursorView
+    // Our lifecycle is shorter than BrowserFragment, so we can hold a reference.
+    private val browserFragment: BrowserFragment,
+    cursorParent: View,
+    private val view: CursorView
 ) : AccessibilityManager.TouchExplorationStateChangeListener, LifecycleObserver {
 
     private var isEnabled: Boolean by Delegates.observable(true) { _, _, newValue ->
@@ -71,8 +71,8 @@ class CursorController(
     /** Gets the current state of the browser and updates the cursor enabled state accordingly. */
     fun setEnabledForCurrentState() {
         // These sources have their own navigation controls.
-        isEnabled = !browserFragment.webView!!.isYoutubeTV && !(browserFragment.context?.isVoiceViewEnabled() ?: false)
-                && !browserFragment.browserOverlay.isVisible
+        isEnabled = !browserFragment.webView!!.isYoutubeTV && !(browserFragment.context?.isVoiceViewEnabled() ?: false) &&
+                !browserFragment.browserOverlay.isVisible
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
