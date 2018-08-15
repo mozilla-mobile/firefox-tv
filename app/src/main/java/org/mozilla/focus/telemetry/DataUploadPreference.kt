@@ -17,8 +17,6 @@ private const val PREF_KEY_TELEMETRY = R.string.pref_key_telemetry
 internal object DataUploadPreference {
 
     fun isEnabled(context: Context): Boolean {
-        if (AppConstants.isDevBuild()) return false
-
         // The first access to shared preferences will require a disk read.
         val threadPolicy = StrictMode.allowThreadDiskReads()
         try {
