@@ -5,12 +5,13 @@
 package org.mozilla.focus.utils
 
 import android.arch.lifecycle.Observer
-import android.support.v7.app.AppCompatActivity
-import org.mozilla.focus.ScreenController
-import java.util.*
+import org.mozilla.focus.iwebview.IWebView
 
 /** An observer for when the user clears their browsing data. See [UserClearDataEvent] for details. */
-class UserClearDataEventObserver(private val activity: AppCompatActivity) : Observer<LiveDataEvent> {
+class UserClearDataEventObserver(private val webView: IWebView?) : Observer<LiveDataEvent> {
     override fun onChanged(event: LiveDataEvent?) {
+        event?.getContentIfNotHandled()?.let {
+            webView?.cleanup()
+        }
     }
 }

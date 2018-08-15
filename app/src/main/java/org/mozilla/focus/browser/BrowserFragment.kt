@@ -41,6 +41,8 @@ import org.mozilla.focus.session.NullSession
 import org.mozilla.focus.session.SessionCallbackProxy
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
+import org.mozilla.focus.utils.UserClearDataEvent
+import org.mozilla.focus.utils.UserClearDataEventObserver
 import org.mozilla.focus.utils.ViewUtils.showCenteredTopToast
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 
@@ -186,6 +188,8 @@ class BrowserFragment : IWebViewLifecycleFragment(), Session.Observer {
         }
 
         layout.progressBar.initialize(this)
+
+        UserClearDataEvent.liveData.observe(this, UserClearDataEventObserver(webView))
 
         // We break encapsulation here: we should use the super.webView reference but it's not init until
         // onViewCreated. However, overriding both onCreateView and onViewCreated in a single class
