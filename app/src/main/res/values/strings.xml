@@ -232,4 +232,11 @@ be temporary, and you can try again later.</li>
     %1$s will be the title of the recommended video
     %2$s will be the source of the video (e.g. YouTube). -->
     <string name="pocket_video_feed_a11y_feed_item_focused">%1$s on %2$s</string>
+
+    <!-- The title displayed below the Google Search tile -->
+    <string name="google_search_tile_title">Search with Google</string>
+    <!-- Hint text shown in an EditText that captures user input for Google Searches -->
+    <string name="google_search_hint_text">Search with Google or enter address</string>
+    <!-- The title displayed below blank tiles -->
+    <string name="blank_tile_title">Add website</string>
 </resources>
