@@ -23,7 +23,7 @@
     <color name="onboarding_overlay">#cc000000</color>
     <color name="onboarding_button_highlight">#500060df</color>
 
-    <color name="browser_overlay_background">#e6000000</color>
+    <color name="browser_overlay_background">@color/photonGrey70</color>
 
     <color name="pocket_onboarding_background">#e60c0c0d</color>
 
