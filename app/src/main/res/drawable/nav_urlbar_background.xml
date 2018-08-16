@@ -9,7 +9,7 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:shape="rectangle">
             <corners android:radius="@dimen/urlbar_corner_radius"/>
-            <solid android:color="@color/translucent_tv_ink" />
+            <solid android:color="@color/tv_grey80" />
             <stroke android:color="@color/urlbar_border_focused"
                 android:width="4dp" />
         </shape>
@@ -19,7 +19,7 @@
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:shape="rectangle">
             <corners android:radius="@dimen/urlbar_corner_radius"/>
-            <solid android:color="@color/translucent_tv_ink" />
+            <solid android:color="@color/tv_grey80" />
             <stroke android:color="@color/urlbar_border_default"
                 android:width="0.5dp" />
         </shape>
