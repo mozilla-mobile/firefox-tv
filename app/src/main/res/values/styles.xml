@@ -76,7 +76,7 @@
         <item name="android:layout_marginEnd">24dp</item>
         <item name="android:padding">12dp</item>
         <item name="android:background">@drawable/navigation_button_background</item>
-        <item name="android:tint">@color/tv_white</item>
+        <item name="android:tint">@color/photonGrey10_a80p</item>
     </style>
 
     <!-- These images won't crop or change their aspect ratio so if you modify the dimensions,

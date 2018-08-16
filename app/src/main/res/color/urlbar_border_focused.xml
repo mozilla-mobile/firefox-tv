@@ -4,7 +4,7 @@
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true" android:color="@color/tv_blue60" />
-    <item android:state_focused="true" android:color="@color/tv_blue50" />
+    <item android:state_pressed="true" android:color="@color/photonBlue60" />
+    <item android:state_focused="true" android:color="@color/photonBlue50" />
     <item android:color="@color/tv_ink"/>
 </selector>
