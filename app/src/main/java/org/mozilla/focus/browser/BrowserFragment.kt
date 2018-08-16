@@ -4,6 +4,7 @@
 
 package org.mozilla.focus.browser
 
+import android.content.Context
 import android.os.Bundle
 import android.support.annotation.UiThread
 import android.text.TextUtils
@@ -164,6 +165,12 @@ class BrowserFragment : IWebViewLifecycleFragment(), Session.Observer {
         Unit
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
+        UserClearDataEvent.liveData.observe(this, UserClearDataEventObserver(webView))
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val layout = inflater.inflate(R.layout.fragment_browser, container, false)
 
@@ -188,8 +195,6 @@ class BrowserFragment : IWebViewLifecycleFragment(), Session.Observer {
         }
 
         layout.progressBar.initialize(this)
-
-        UserClearDataEvent.liveData.observe(this, UserClearDataEventObserver(webView))
 
         // We break encapsulation here: we should use the super.webView reference but it's not init until
         // onViewCreated. However, overriding both onCreateView and onViewCreated in a single class
