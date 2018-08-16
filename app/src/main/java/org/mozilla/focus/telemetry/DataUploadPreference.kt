@@ -8,7 +8,6 @@ import android.content.Context
 import android.os.StrictMode
 import android.preference.PreferenceManager
 import org.mozilla.focus.R
-import org.mozilla.focus.utils.AppConstants
 import org.mozilla.telemetry.TelemetryHolder
 
 private const val PREF_KEY_TELEMETRY = R.string.pref_key_telemetry
