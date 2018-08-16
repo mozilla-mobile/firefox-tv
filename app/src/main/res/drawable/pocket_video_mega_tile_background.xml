@@ -6,7 +6,7 @@
 
     <item android:state_pressed="true">
         <shape>
-            <solid android:color="@color/pocket_coral"/>
+            <solid android:color="@color/tv_grey80"/>
             <corners android:radius="16dp"/>
             <stroke
                 android:width="4dp"
@@ -17,7 +17,7 @@
 
     <item android:state_focused="true">
         <shape>
-            <solid android:color="@color/pocket_coral"/>
+            <solid android:color="@color/tv_grey80"/>
             <corners android:radius="16dp"/>
             <stroke
                 android:width="4dp"
@@ -28,7 +28,7 @@
 
     <item>
         <shape>
-            <solid android:color="@color/pocket_coral"/>
+            <solid android:color="@color/tv_grey80"/>
             <corners android:radius="16dp"/>
         </shape>
     </item>
