@@ -32,7 +32,7 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val context = view.context
 
-        ic_lock.setImageResource(R.drawable.ic_lock)
+        ic_lock.setImageResource(R.drawable.mozac_ic_lock)
         telemetryButton.isChecked = DataUploadPreference.isEnabled(context)
         telemetryView.setOnClickListener { _ ->
             val newTelemetryState = !DataUploadPreference.isEnabled(context)

@@ -5,5 +5,5 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_focused="true" android:color="@android:color/transparent" />
-    <item android:color="@color/translucent_tv_gray40"/>
+    <item android:color="@color/photonGrey40_a20p"/>
 </selector>
