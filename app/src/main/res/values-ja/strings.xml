@@ -85,4 +85,7 @@
   <string name="pocket_video_feed_reload_button">再読み込み</string>
   <string name="pocket_video_feed_a11y_navigation">動画を選択するには左右のボタンを使ってください</string>
   <string name="pocket_video_feed_a11y_feed_item_focused">%2$s 上の %1$s</string>
+  <string name="google_search_tile_title">Google で検索</string>
+  <string name="google_search_hint_text">Google で検索またはアドレスを入力</string>
+  <string name="blank_tile_title">ウェブサイトを追加</string>
 </resources>

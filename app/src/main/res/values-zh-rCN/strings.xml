@@ -85,4 +85,7 @@
   <string name="pocket_video_feed_reload_button">重试</string>
   <string name="pocket_video_feed_a11y_navigation">使用左键和右键在视频之间移动</string>
   <string name="pocket_video_feed_a11y_feed_item_focused">%2$s 上的 %1$s</string>
+  <string name="google_search_tile_title">使用 Google 搜索</string>
+  <string name="google_search_hint_text">使用 Google 搜索，或者输入网址</string>
+  <string name="blank_tile_title">添加网站</string>
 </resources>
