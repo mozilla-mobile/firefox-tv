@@ -5,6 +5,7 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true" android:color="@color/button_pressed" />
-    <item android:state_focused="true" android:color="@color/button_focused" />
+    <item android:state_focused="true" android:color="@color/tv_blue50" />
+    <item android:state_checked="true" android:color="@color/button_checked"/>
     <item android:color="@color/button_border"/>
 </selector>

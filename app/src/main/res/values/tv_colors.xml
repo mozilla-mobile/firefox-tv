@@ -11,9 +11,10 @@
     <color name="tv_blue50" tools:keep="@color/tv_blue50">@color/photonBlue50</color>
     <color name="tv_blue60" tools:keep="@color/tv_blue60">@color/photonBlue60</color>
     <color name="tv_ink" tools:keep="@color/tv_ink">#0c0c15</color>
-    <color name="translucent_tv_ink" tools:keep="@color/translucent_tv_ink">#2a2a2e</color>
+    <color name="translucent_tv_ink" tools:keep="@color/translucent_tv_ink">#38383d</color>
     <color name="tv_ink2" tools:keep="@color/tv_ink2">#282938</color>
     <color name="translucent_tv_ink2" tools:keep="@color/translucent_tv_ink2">#cc282938</color>
     <color name="tv_grey10" tools:keep="@color/tv_grey10">@color/photonGrey10</color>
     <color name="tv_grey80" tools:keep="@color/tv_grey80">@color/photonGrey80</color>
+    <color name="tv_grey90" tools:keep="@color/tv_grey90">@color/photonGrey90</color>
 </resources>
