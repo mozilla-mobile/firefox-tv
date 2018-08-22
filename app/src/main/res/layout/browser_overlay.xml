@@ -72,7 +72,8 @@
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/pocket_video_mega_tile_background"
                 android:focusable="true"
-                android:nextFocusUp="@id/navUrlInput" />
+                android:nextFocusUp="@id/navUrlInput"
+                android:nextFocusDown="@+id/tileContainer" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/tileContainer"
