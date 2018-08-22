@@ -59,7 +59,7 @@
             android:importantForAutofill="no"
             android:cursorVisible="false"
             android:textIsSelectable="false"
-            android:textColor="@color/tv_grey10"
+            android:textColor="@color/photonGrey10"
             android:nextFocusRight="@id/navUrlInput"
             android:nextFocusUp="@id/topNavContainer"
             />
