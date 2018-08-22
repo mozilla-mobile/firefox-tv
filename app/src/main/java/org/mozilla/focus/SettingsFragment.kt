@@ -18,6 +18,7 @@ import org.mozilla.focus.ext.getAccessibilityManager
 import org.mozilla.focus.ext.isVoiceViewEnabled
 import org.mozilla.focus.telemetry.DataUploadPreference
 import org.mozilla.focus.telemetry.TelemetryWrapper
+import org.mozilla.focus.utils.UserClearDataEvent
 
 /** The settings for the app. */
 class SettingsFragment : Fragment() {
@@ -50,6 +51,7 @@ class SettingsFragment : Fragment() {
             ) { dialog, _ ->
                 settingsWebView.cleanup()
                 context!!.components.sessionManager.removeAll()
+                UserClearDataEvent.sendUserClearDataEvent()
                 dialog.cancel()
                 TelemetryWrapper.clearDataEvent()
             }

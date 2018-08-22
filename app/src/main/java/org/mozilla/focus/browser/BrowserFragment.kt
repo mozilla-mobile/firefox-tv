@@ -4,6 +4,7 @@
 
 package org.mozilla.focus.browser
 
+import android.content.Context
 import android.os.Bundle
 import android.support.annotation.UiThread
 import android.text.TextUtils
@@ -41,6 +42,8 @@ import org.mozilla.focus.session.NullSession
 import org.mozilla.focus.session.SessionCallbackProxy
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
+import org.mozilla.focus.utils.UserClearDataEvent
+import org.mozilla.focus.utils.UserClearDataEventObserver
 import org.mozilla.focus.utils.ViewUtils.showCenteredTopToast
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 
@@ -160,6 +163,12 @@ class BrowserFragment : IWebViewLifecycleFragment(), Session.Observer {
             }
         }
         Unit
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
+        UserClearDataEvent.liveData.observe(this, UserClearDataEventObserver(webView))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
