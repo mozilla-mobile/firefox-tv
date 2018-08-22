@@ -292,6 +292,11 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             navUrlInput.requestFocus()
         }
 
+        // Update nextFocusUpId of URL bar to leftmost active item in topNavContainer
+        topNavContainer?.getFocusables(FOCUS_LEFT)?.get(0)?.let {
+            navUrlInput.nextFocusUpId = it.id
+        }
+
         maybeUpdateOverlayURLForCurrentState()
     }
 
