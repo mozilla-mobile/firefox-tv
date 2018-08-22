@@ -6,7 +6,7 @@
         </selector>
     </item>
     <item>
-        <ripple android:color="@color/button_highlight">
+        <ripple android:color="@android:color/transparent">
             <item android:id="@android:id/mask">
                 <shape android:shape="oval">
                     <solid android:color="@android:color/black" />
