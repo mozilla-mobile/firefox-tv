@@ -48,7 +48,8 @@
         android:id="@+id/navButtonSettings"
         style="@style/NavigationButton"
         android:nextFocusLeft="@id/turboButton"
-        android:contentDescription="@string/menu_settings"/>
+        android:contentDescription="@string/menu_settings"
+        android:nextFocusRight="@+id/navButtonSettings"/>
 
     <ImageView
         android:layout_width="wrap_content"
