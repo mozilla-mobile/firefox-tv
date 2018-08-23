@@ -107,11 +107,11 @@ class BrowserFragment : IWebViewLifecycleFragment(), Session.Observer {
         session.register(observer = this, owner = this)
     }
 
-    override fun onUrlChanged() {
-        url = session.url
+    override fun onUrlChanged(session: Session, url: String) {
+        this.url = url
     }
 
-    override fun onLoadingStateChanged() {
+    override fun onLoadingStateChanged(session: Session, loading: Boolean) {
         if (browserOverlay.isVisible) {
             browserOverlay.updateOverlayForCurrentState()
         }

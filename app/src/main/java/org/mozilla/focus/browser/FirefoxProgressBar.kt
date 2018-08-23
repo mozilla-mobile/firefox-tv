@@ -43,16 +43,16 @@ class FirefoxProgressBar @JvmOverloads constructor(
         session.register(observer = this, view = this)
     }
 
-    override fun onLoadingStateChanged() {
-        if (session.loading) {
+    override fun onLoadingStateChanged(session: Session, loading: Boolean) {
+        if (loading) {
             showBar()
         } else {
             scheduleHideBar()
         }
     }
 
-    override fun onUrlChanged() {
-        url.text = session.url
+    override fun onUrlChanged(session: Session, url: String) {
+        this.url.text = url
     }
 
     init {

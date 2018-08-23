@@ -110,7 +110,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
             addJavascriptInterface(JavascriptVideoPlaybackStateSyncer(), JS_INTERFACE_IDENTIFIER)
         }
 
-        val sessionIsLoadingObserver = SessionIsLoadingObserver(webView, session)
+        val sessionIsLoadingObserver = SessionIsLoadingObserver(webView)
         session.register(sessionIsLoadingObserver, owner = activity)
         this.sessionIsLoadingObserver = sessionIsLoadingObserver
     }
@@ -194,9 +194,9 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         else -> false
     }
 
-    class SessionIsLoadingObserver(private val webView: IWebView, private val session: Session) : Session.Observer {
-        override fun onLoadingStateChanged() {
-            if (!session.loading) {
+    class SessionIsLoadingObserver(private val webView: IWebView) : Session.Observer {
+        override fun onLoadingStateChanged(session: Session, loading: Boolean) {
+            if (!loading) {
                 webView.evalJS(JS_OBSERVE_PLAYBACK_STATE) // Calls through to JavascriptVideoPlaybackStateSyncer.
             }
         }

@@ -11,10 +11,8 @@ import android.text.TextUtils
 import mozilla.components.browser.session.Session
 import org.mozilla.focus.browser.BrowserFragment
 import org.mozilla.focus.ext.components
-import org.mozilla.focus.ext.source
 import org.mozilla.focus.home.pocket.Pocket
 import org.mozilla.focus.home.pocket.PocketVideoFragment
-import org.mozilla.focus.session.Source
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.UrlUtils
@@ -39,7 +37,7 @@ object ScreenController {
         val isUrl = UrlUtils.isUrl(urlStr)
         val updatedUrlStr = if (isUrl) UrlUtils.normalize(urlStr) else UrlUtils.createSearchUrl(context, urlStr)
 
-        showBrowserScreenForUrl(context, fragmentManager, updatedUrlStr, Source.USER_ENTERED)
+        showBrowserScreenForUrl(context, fragmentManager, updatedUrlStr, Session.Source.USER_ENTERED)
 
         if (isTextInput) {
             // Non-text input events are handled at the source, e.g. home tile click events.
@@ -77,7 +75,7 @@ object ScreenController {
                 .commit()
     }
 
-    fun showBrowserScreenForUrl(context: Context, fragmentManager: FragmentManager, url: String, source: Source) {
+    fun showBrowserScreenForUrl(context: Context, fragmentManager: FragmentManager, url: String, source: Session.Source) {
         // This code is not correct:
         // - We only support one session but it creates a new session when there's no BrowserFragment
         // such as each time we open a URL from the home screen.
@@ -93,9 +91,7 @@ object ScreenController {
             // for visibility in addition to existence.
             browserFragment.loadUrl(url)
         } else {
-            val session = Session(url).apply {
-                this.source = source
-            }
+            val session = Session(url, source)
             context.components.sessionManager.add(session)
         }
     }
