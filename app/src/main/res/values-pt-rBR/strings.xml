@@ -85,4 +85,7 @@
   <string name="pocket_video_feed_reload_button">Tentar novamente</string>
   <string name="pocket_video_feed_a11y_navigation">Utilize esquerda ou direita para mover-se entre os vídeos</string>
   <string name="pocket_video_feed_a11y_feed_item_focused">%1$s em %2$s</string>
+  <string name="google_search_tile_title">Pesquisar com o Google</string>
+  <string name="google_search_hint_text">Pesquise com o Google ou insira o endereço</string>
+  <string name="blank_tile_title">Adicionar site</string>
 </resources>
