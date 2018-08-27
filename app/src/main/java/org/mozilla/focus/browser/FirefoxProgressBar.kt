@@ -31,28 +31,21 @@ class FirefoxProgressBar @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyle), Session.Observer {
 
     private val hideHandler = FirefoxProgressBarHideHandler(this)
-    private lateinit var session: Session
 
     fun initialize(browserFrag: BrowserFragment) {
-        session = browserFrag.session
+        browserFrag.session.register(this, browserFrag)
     }
 
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-
-        session.register(observer = this, view = this)
-    }
-
-    override fun onLoadingStateChanged() {
-        if (session.loading) {
+    override fun onLoadingStateChanged(session: Session, loading: Boolean) {
+        if (loading) {
             showBar()
         } else {
             scheduleHideBar()
         }
     }
 
-    override fun onUrlChanged() {
-        url.text = session.url
+    override fun onUrlChanged(session: Session, url: String) {
+        this.url.text = url
     }
 
     init {

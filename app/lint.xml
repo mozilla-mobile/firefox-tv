@@ -33,4 +33,9 @@
 
     <!-- We don't want to fail the build, nor do we want to to pollute our informational output. -->
     <issue id="Typos" severity="informational"/>
+
+    <!-- This is an Android Components lint check. As long as we are not using the components logger (support-base) here
+         we do not need to treat this as an error. More:
+         https://github.com/mozilla-mobile/android-components/tree/master/components/support/base -->
+    <issue id="LogUsage" severity="informational" />
 </lint>

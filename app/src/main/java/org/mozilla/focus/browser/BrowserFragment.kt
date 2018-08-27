@@ -29,7 +29,6 @@ import org.mozilla.focus.ScreenController
 import org.mozilla.focus.browser.BrowserFragment.Companion.APP_URL_HOME
 import org.mozilla.focus.browser.cursor.CursorController
 import org.mozilla.focus.ext.components
-import org.mozilla.focus.ext.isBlockingEnabled
 import org.mozilla.focus.ext.isVisible
 import org.mozilla.focus.ext.toUri
 import org.mozilla.focus.home.BundledTilesManager
@@ -102,16 +101,16 @@ class BrowserFragment : IWebViewLifecycleFragment(), Session.Observer {
                 ?: throw IllegalAccessError("No session exists")
         session = context!!.components.sessionManager.findSessionById(sessionUUID) ?: NullSession.create()
 
-        webView?.setBlockingEnabled(session.isBlockingEnabled)
+        webView?.setBlockingEnabled(session.trackerBlockingEnabled)
 
         session.register(observer = this, owner = this)
     }
 
-    override fun onUrlChanged() {
-        url = session.url
+    override fun onUrlChanged(session: Session, url: String) {
+        this.url = url
     }
 
-    override fun onLoadingStateChanged() {
+    override fun onLoadingStateChanged(session: Session, loading: Boolean) {
         if (browserOverlay.isVisible) {
             browserOverlay.updateOverlayForCurrentState()
         }

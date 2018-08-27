@@ -10,6 +10,7 @@ import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.Engine
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.EngineView
+import mozilla.components.concept.engine.Settings
 
 /**
  * Helper class for lazily instantiating and keeping references to components needed by the
@@ -21,10 +22,12 @@ class Components {
 
 /**
  * We are not using an "Engine" implementation yet. Therefore we create this dummy that we pass to
- * the <code>SessionManager</code> for now.
+ * the [SessionManager] for now.
  */
 private class DummyEngine : Engine {
-    override fun createSession(): EngineSession {
+    override val settings = object : Settings {}
+
+    override fun createSession(private: Boolean): EngineSession {
         throw NotImplementedError()
     }
 
