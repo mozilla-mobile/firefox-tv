@@ -24,6 +24,7 @@ private const val PARAM_API_KEY = "consumer_key"
 private val GLOBAL_VIDEO_ENDPOINT = Uri.parse("https://getpocket.cdn.mozilla.net/v3/firefox/global-video-recs")
         .buildUpon()
         .appendQueryParameter(PARAM_API_KEY, BuildConfig.POCKET_KEY)
+        .appendQueryParameter("version", "2")
         .build()
 
 /**
@@ -44,7 +45,7 @@ object PocketEndpoint {
     /** @return The videos or null on error; the list will never be empty. */
     @VisibleForTesting fun convertVideosJSON(jsonStr: String): List<PocketVideo>? = try {
         val rawJSON = JSONObject(jsonStr)
-        val videosJSON = rawJSON.getJSONArray("list")
+        val videosJSON = rawJSON.getJSONArray("recommendations")
         val videos = videosJSON.flatMapObj { PocketVideo.fromJSONObject(it) }
         if (videos.isNotEmpty()) videos else null
     } catch (e: JSONException) {
