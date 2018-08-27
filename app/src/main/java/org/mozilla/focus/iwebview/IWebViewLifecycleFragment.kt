@@ -11,7 +11,6 @@ import android.view.View
 import android.webkit.WebView
 import mozilla.components.browser.session.Session
 import org.mozilla.focus.R
-import org.mozilla.focus.ext.isBlockingEnabled
 import org.mozilla.focus.ext.savedWebViewState
 import org.mozilla.focus.locale.LocaleAwareFragment
 import org.mozilla.focus.locale.LocaleManager
@@ -54,7 +53,7 @@ abstract class IWebViewLifecycleFragment : LocaleAwareFragment() {
         webView = (view.findViewById<View>(R.id.webview) as IWebView).apply {
             callback = iWebViewCallback
 
-            setBlockingEnabled(session.isBlockingEnabled)
+            setBlockingEnabled(session.trackerBlockingEnabled)
             restoreWebViewOrLoadInitialUrl(this)
         }
     }

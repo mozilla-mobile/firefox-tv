@@ -26,7 +26,6 @@ import org.mozilla.focus.home.pocket.PocketOnboardingActivity
 import org.mozilla.focus.iwebview.IWebView
 import org.mozilla.focus.iwebview.WebViewProvider
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity
-import org.mozilla.focus.session.Source
 import org.mozilla.focus.telemetry.SentryWrapper
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
@@ -64,7 +63,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         private fun onNoActiveSession() {
             // There's no active session. Start a new session with "homepage".
-            ScreenController.showBrowserScreenForUrl(this@MainActivity, supportFragmentManager, APP_URL_HOME, Source.NONE)
+            ScreenController.showBrowserScreenForUrl(this@MainActivity, supportFragmentManager, APP_URL_HOME, Session.Source.NONE)
         }
     }
 
@@ -89,9 +88,11 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         components.sessionManager.register(sessionObserver, owner = this)
 
         if (components.sessionManager.sessions.isEmpty()) {
-            ScreenController.showBrowserScreenForUrl(this@MainActivity, supportFragmentManager, APP_URL_HOME, Source.NONE)
+            ScreenController.showBrowserScreenForUrl(this@MainActivity, supportFragmentManager, APP_URL_HOME, Session.Source.NONE)
         } else {
-            ScreenController.showBrowserScreenForCurrentSession(supportFragmentManager, components.sessionManager.selectedSession)
+            ScreenController.showBrowserScreenForCurrentSession(
+                supportFragmentManager,
+                components.sessionManager.selectedSessionOrThrow)
         }
 
         if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding()) {
@@ -112,7 +113,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         IntentValidator.validate(this, unsafeIntent.toSafeIntent(), ::onValidBrowserIntent)
     }
 
-    private fun onValidBrowserIntent(url: String, source: Source) {
+    private fun onValidBrowserIntent(url: String, source: Session.Source) {
         ScreenController.showBrowserScreenForUrl(this, supportFragmentManager, url, source)
     }
 

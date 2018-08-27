@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import org.mozilla.focus.ext.SessionKt;
 import org.mozilla.focus.iwebview.IWebView;
 
 import mozilla.components.browser.session.Session;
@@ -66,7 +65,7 @@ public class SessionCallbackProxy implements IWebView.Callback {
 
     @Override
     public void onBlockingStateChanged(boolean isBlockingEnabled) {
-        SessionKt.setBlockingEnabled(session, isBlockingEnabled);
+        session.setTrackerBlockingEnabled(isBlockingEnabled);
     }
 
     @Override
@@ -91,5 +90,4 @@ public class SessionCallbackProxy implements IWebView.Callback {
         // TODO: Replace with session property
         delegate.onExitFullScreen();
     }
-
 }

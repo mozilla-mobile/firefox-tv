@@ -195,8 +195,8 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
     }
 
     class SessionIsLoadingObserver(private val webView: IWebView, private val session: Session) : Session.Observer {
-        override fun onLoadingStateChanged() {
-            if (!session.loading) {
+        override fun onLoadingStateChanged(session: Session, loading: Boolean) {
+            if (!loading) {
                 webView.evalJS(JS_OBSERVE_PLAYBACK_STATE) // Calls through to JavascriptVideoPlaybackStateSyncer.
             }
         }

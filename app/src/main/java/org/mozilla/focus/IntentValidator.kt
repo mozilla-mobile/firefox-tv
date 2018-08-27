@@ -8,11 +8,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
-import org.mozilla.focus.session.Source
+import mozilla.components.browser.session.Session
 import org.mozilla.focus.utils.SafeIntent
 import org.mozilla.focus.utils.UrlUtils
 
-typealias OnValidBrowserIntent = (url: String, source: Source) -> Unit
+typealias OnValidBrowserIntent = (url: String, source: Session.Source) -> Unit
 
 /**
  * A container for functions that parse Intents and notify the application of their validity.
@@ -51,7 +51,7 @@ object IntentValidator {
                 return // If there's no URL in the Intent then we can't create a session.
             }
 
-            onValidBrowserIntent(dataString, Source.VIEW)
+            onValidBrowserIntent(dataString, Session.Source.ACTION_VIEW)
         } else if (Intent.ACTION_SEND.equals(action)) {
             val dataString = intent.getStringExtra(Intent.EXTRA_TEXT)
             if (TextUtils.isEmpty(dataString)) {
@@ -60,7 +60,7 @@ object IntentValidator {
 
             val isSearch = !UrlUtils.isUrl(dataString)
             val url = if (isSearch) UrlUtils.createSearchUrl(context, dataString) else dataString
-            onValidBrowserIntent(url, Source.SHARE)
+            onValidBrowserIntent(url, Session.Source.ACTION_SEND)
         }
     }
 }
