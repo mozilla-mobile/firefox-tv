@@ -37,8 +37,11 @@ import android.webkit.JavascriptInterface
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import mozilla.components.browser.session.Session
+import mozilla.components.concept.engine.EngineView
 import org.mozilla.focus.browser.VideoVoiceCommandMediaSession.MediaSessionCallbacks
-import org.mozilla.focus.iwebview.IWebView
+import org.mozilla.focus.ext.addJavascriptInterface
+import org.mozilla.focus.ext.evalJS
+import org.mozilla.focus.ext.removeJavascriptInterface
 import org.mozilla.focus.telemetry.MediaSessionEventType
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import java.util.concurrent.TimeUnit
@@ -93,7 +96,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
     private val cachedPlaybackStateBuilder = PlaybackStateCompat.Builder()
             .setActions(SUPPORTED_ACTIONS)
 
-    private var webView: IWebView? = null
+    private var webView: EngineView? = null
     private var sessionIsLoadingObserver: SessionIsLoadingObserver? = null
 
     private var isLifecycleResumed = false
@@ -105,7 +108,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
                 MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
     }
 
-    fun onCreateWebView(webView: IWebView, session: Session) {
+    fun onCreateWebView(webView: EngineView, session: Session) {
         this.webView = webView.apply {
             addJavascriptInterface(JavascriptVideoPlaybackStateSyncer(), JS_INTERFACE_IDENTIFIER)
         }
@@ -115,7 +118,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         this.sessionIsLoadingObserver = sessionIsLoadingObserver
     }
 
-    fun onDestroyWebView(webView: IWebView, session: Session) {
+    fun onDestroyWebView(webView: EngineView, session: Session) {
         webView.removeJavascriptInterface(JS_INTERFACE_IDENTIFIER)
         this.webView = null
 
@@ -194,7 +197,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         else -> false
     }
 
-    class SessionIsLoadingObserver(private val webView: IWebView, private val session: Session) : Session.Observer {
+    class SessionIsLoadingObserver(private val webView: EngineView, private val session: Session) : Session.Observer {
         override fun onLoadingStateChanged(session: Session, loading: Boolean) {
             if (!loading) {
                 webView.evalJS(JS_OBSERVE_PLAYBACK_STATE) // Calls through to JavascriptVideoPlaybackStateSyncer.

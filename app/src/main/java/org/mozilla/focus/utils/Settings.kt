@@ -11,7 +11,6 @@ import android.preference.PreferenceManager
 import org.mozilla.focus.OnboardingActivity
 import org.mozilla.focus.R
 import org.mozilla.focus.home.pocket.PocketOnboardingActivity
-import org.mozilla.focus.iwebview.IWebView
 import org.mozilla.focus.search.SearchEngine
 
 /**
@@ -29,6 +28,9 @@ class Settings private constructor(context: Context) {
             }
             return instance ?: throw AssertionError("Instance cleared")
         }
+
+        const val TRACKING_PROTECTION_ENABLED_PREF = "tracking_protection_enabled"
+        const val TRACKING_PROTECTION_ENABLED_DEFAULT = true
     }
 
     val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
@@ -55,7 +57,7 @@ class Settings private constructor(context: Context) {
             resources.getString(resourceId)
 
     var isBlockingEnabled: Boolean // Delegates to shared prefs; could be custom delegate.
-        get() = preferences.getBoolean(IWebView.TRACKING_PROTECTION_ENABLED_PREF,
-                IWebView.TRACKING_PROTECTION_ENABLED_DEFAULT)
-        set(value) = preferences.edit().putBoolean(IWebView.TRACKING_PROTECTION_ENABLED_PREF, value).apply()
+        get() = preferences.getBoolean(Settings.TRACKING_PROTECTION_ENABLED_PREF,
+                TRACKING_PROTECTION_ENABLED_DEFAULT)
+        set(value) = preferences.edit().putBoolean(TRACKING_PROTECTION_ENABLED_PREF, value).apply()
 }

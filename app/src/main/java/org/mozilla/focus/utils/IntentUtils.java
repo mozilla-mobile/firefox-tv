@@ -13,8 +13,10 @@ import android.net.Uri;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AlertDialog;
 
+import mozilla.components.browser.session.Session;
+import mozilla.components.concept.engine.EngineView;
 import org.mozilla.focus.R;
-import org.mozilla.focus.iwebview.IWebView;
+import org.mozilla.focus.ext.ContextKt;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -35,7 +37,7 @@ public class IntentUtils {
      * want to use an external app to open the uri. Ultimately the OS can spy on anything we're
      * doing in the app, so this isn't an actual "bug".
      */
-    public static boolean handleExternalUri(final Context context, final IWebView webView, final String uri) {
+    public static boolean handleExternalUri(final Context context, final EngineView webView, final String uri) {
         // This code is largely based on Fennec's ExternalIntentDuringPrivateBrowsingPromptFragment.java
         final Intent intent;
         try {
@@ -88,10 +90,12 @@ public class IntentUtils {
         }
     }
 
-    private static boolean handleUnsupportedLink(final Context context, final IWebView webView, final Intent intent) {
+    private static boolean handleUnsupportedLink(final Context context, final EngineView webView, final Intent intent) {
         final String fallbackUrl = intent.getStringExtra(EXTRA_BROWSER_FALLBACK_URL);
         if (fallbackUrl != null) {
-            webView.loadUrl(fallbackUrl);
+            // This is not Kotlin code :(
+            final Session session = ContextKt.getComponents(context).getSessionManager().getSelectedSessionOrThrow();
+            ContextKt.getComponents(context).getSessionUseCases().getLoadUrl().invoke(fallbackUrl, session);
             return true;
         }
 

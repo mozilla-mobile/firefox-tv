@@ -11,20 +11,19 @@ import android.os.Bundle
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.View
-import com.amazon.android.webkit.AmazonWebKitFactories
-import com.amazon.android.webkit.AmazonWebKitFactory
 import kotlinx.android.synthetic.main.activity_main.*
+import mozilla.components.browser.engine.system.SystemEngineView
 import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.SessionManager
+import mozilla.components.concept.engine.EngineView
 import org.mozilla.focus.browser.BrowserFragment
 import org.mozilla.focus.browser.BrowserFragment.Companion.APP_URL_HOME
 import org.mozilla.focus.browser.VideoVoiceCommandMediaSession
 import org.mozilla.focus.ext.components
+import org.mozilla.focus.ext.setupForApp
 import org.mozilla.focus.ext.toSafeIntent
 import org.mozilla.focus.home.pocket.Pocket
 import org.mozilla.focus.home.pocket.PocketOnboardingActivity
-import org.mozilla.focus.iwebview.IWebView
-import org.mozilla.focus.iwebview.WebViewProvider
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity
 import org.mozilla.focus.telemetry.SentryWrapper
 import org.mozilla.focus.telemetry.TelemetryWrapper
@@ -76,7 +75,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         PublicSuffix.init(this) // Used by Pocket Video feed & custom home tiles.
         initMediaSession()
 
-        initAmazonFactory()
         val intent = SafeIntent(intent)
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -105,8 +103,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             val onboardingIntent = Intent(this@MainActivity, OnboardingActivity::class.java)
             startActivity(onboardingIntent)
         }
-
-        WebViewProvider.preload(this)
     }
 
     override fun onNewIntent(unsafeIntent: Intent) {
@@ -143,9 +139,10 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     }
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
-        return if (name == IWebView::class.java.name) {
-            // Inject our implementation of IWebView from the WebViewProvider.
-            WebViewProvider.create(this, attrs, factory!!)
+        return if (name == EngineView::class.java.name) {
+            SystemEngineView(context, attrs).apply {
+                setupForApp(context)
+            }
         } else super.onCreateView(name, context, attrs)
     }
 
@@ -165,23 +162,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     private fun initMediaSession() {
         videoVoiceCommandMediaSession = VideoVoiceCommandMediaSession(this)
         lifecycle.addObserver(videoVoiceCommandMediaSession)
-    }
-
-    private fun initAmazonFactory() {
-        if (!isAmazonFactoryInit) {
-            factory = AmazonWebKitFactories.getDefaultFactory()
-            if (factory!!.isRenderProcess(this)) {
-                return // Do nothing if this is on render process
-            }
-            factory!!.initialize(this.applicationContext)
-
-            // factory configuration is done here, for example:
-            factory!!.cookieManager.setAcceptCookie(true)
-
-            isAmazonFactoryInit = true
-        } else {
-            factory = AmazonWebKitFactories.getDefaultFactory()
-        }
     }
 
     override fun onNonTextInputUrlEntered(urlStr: String) {
@@ -210,10 +190,5 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         return videoVoiceCommandMediaSession.dispatchKeyEvent(event) ||
                 (maybeBrowserFragment?.dispatchKeyEvent(event) ?: false) ||
                 super.dispatchKeyEvent(event)
-    }
-
-    companion object {
-        private var isAmazonFactoryInit = false
-        @JvmStatic var factory: AmazonWebKitFactory? = null
     }
 }

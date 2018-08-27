@@ -15,9 +15,9 @@ import org.mozilla.focus.browser.NavigationEvent
 import org.mozilla.focus.home.BundledHomeTile
 import org.mozilla.focus.home.CustomHomeTile
 import org.mozilla.focus.home.HomeTile
-import org.mozilla.focus.iwebview.IWebView
 import org.mozilla.focus.search.SearchEngineManager
 import org.mozilla.focus.utils.Assert
+import org.mozilla.focus.utils.Settings
 import org.mozilla.focus.widget.InlineAutocompleteEditText.AutocompleteResult
 import org.mozilla.telemetry.Telemetry
 import org.mozilla.telemetry.TelemetryHolder
@@ -120,7 +120,7 @@ object TelemetryWrapper {
                     .setAppName(TELEMETRY_APP_NAME_FOCUS_TV)
                     .setUpdateChannel(BuildConfig.BUILD_TYPE)
                     .setPreferencesImportantForTelemetry(
-                            IWebView.TRACKING_PROTECTION_ENABLED_PREF,
+                            Settings.TRACKING_PROTECTION_ENABLED_PREF,
                             TelemetrySettingsProvider.PREF_CUSTOM_HOME_TILE_COUNT,
                             TelemetrySettingsProvider.PREF_TOTAL_HOME_TILE_COUNT
                     )

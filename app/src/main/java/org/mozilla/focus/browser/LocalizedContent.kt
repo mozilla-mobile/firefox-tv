@@ -8,8 +8,7 @@ import android.content.pm.PackageManager
 import android.support.v4.util.ArrayMap
 import android.support.v4.view.ViewCompat
 import android.view.View
-
-import com.amazon.android.webkit.AmazonWebView
+import android.webkit.WebView
 
 import org.mozilla.focus.R
 import org.mozilla.focus.locale.Locales
@@ -21,7 +20,7 @@ object LocalizedContent {
     const val URL_ABOUT = "firefox:about"
 
     @JvmStatic
-    fun handleInternalContent(url: String, webView: AmazonWebView): Boolean {
+    fun handleInternalContent(url: String, webView: WebView): Boolean {
         if (URL_ABOUT == url) {
             loadAbout(webView)
             return true
@@ -33,7 +32,7 @@ object LocalizedContent {
      * Load the content for focus:about
      */
     @Suppress("LongMethod") // This doesn't change much.
-    private fun loadAbout(webView: AmazonWebView) {
+    private fun loadAbout(webView: WebView) {
         val context = webView.context
         val resources = Locales.getLocalizedResources(context)
 
@@ -84,7 +83,7 @@ object LocalizedContent {
         webView.loadDataWithBaseURL("file:///android_asset/about.html", data, "text/html", "UTF-8", null)
     }
 
-    private fun putLayoutDirectionIntoMap(webView: AmazonWebView, substitutionMap: MutableMap<String, String>) {
+    private fun putLayoutDirectionIntoMap(webView: WebView, substitutionMap: MutableMap<String, String>) {
         ViewCompat.setLayoutDirection(webView, View.LAYOUT_DIRECTION_LOCALE)
         val layoutDirection = ViewCompat.getLayoutDirection(webView)
 
