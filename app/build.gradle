@@ -13,7 +13,7 @@ android {
     compileSdkVersion 27
 
     defaultConfig {
-        applicationId "org.mozilla.tv"
+        applicationId "org.mozilla.tv.firefox"
         minSdkVersion 22
         targetSdkVersion 27
         versionCode 11 // This versionCode is "frozen" for local builds. For "release" builds we
@@ -38,9 +38,6 @@ android {
         // unlike a whitelist.
         warningsAsErrors true
     }
-
-    // We have a three dimensional build configuration:
-    // BUILD TYPE (debug, beta, release) X PRODUCT FLAVOR (focus) X ENGINE FLAVOR (webview, gecko)
 
     buildTypes {
         release {
@@ -68,6 +65,7 @@ android {
             testCoverageEnabled true
         }
     }
+
     testOptions {
         unitTests.all {
             jacoco {
@@ -76,31 +74,6 @@ android {
         }
         unitTests.includeAndroidResources true // for robolectric.
         execution 'ANDROID_TEST_ORCHESTRATOR'
-    }
-
-    flavorDimensions "engine"
-
-    productFlavors {
-        // We can build with two engines: amazonWebview or gecko. #399 to restore native Webview.
-        amazonWebview {
-            dimension "engine"
-
-            applicationIdSuffix ".firefox"
-        }
-
-        gecko {
-            dimension "engine"
-
-            applicationIdSuffix ".gecko"
-        }
-    }
-
-    variantFilter { variant ->
-        def flavors = variant.flavors*.name
-        // We only need a gecko debug and beta build for now.
-        if (flavors.contains("gecko") && ((variant.buildType.name != "debug" && variant.buildType.name != "beta"))) {
-            setIgnore(true)
-        }
     }
 
     sourceSets {
@@ -130,10 +103,8 @@ jacocoAndroidUnitTestReport {
 }
 
 repositories {
-    flatDir {
-        dirs 'libs'
-    }
-    mavenCentral()
+    google()
+    jcenter()
 }
 
 dependencies {
@@ -165,14 +136,14 @@ dependencies {
 
     implementation "org.mozilla.components:session:$moz_components_version"
     implementation "org.mozilla.components:engine:$moz_components_version"
+    implementation "org.mozilla.components:engine-system:$moz_components_version"
     implementation "org.mozilla.components:telemetry:$moz_components_version"
     implementation "org.mozilla.photon:colors:$moz_components_version"
     implementation "org.mozilla.photon:fonts:$moz_components_version"
+    implementation "org.mozilla.components:feature-session:$moz_components_version"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
-
-    geckoImplementation(name: 'geckoview-latest', ext: 'aar')
 
     testImplementation 'junit:junit:4.12'
     testImplementation "org.robolectric:robolectric:3.7.1"
@@ -207,9 +178,6 @@ dependencies {
 
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestUtil 'com.android.support.test:orchestrator:1.0.1'
-
-    implementation files('libs/awv_api/awv_interface.jar')
-    implementation files('libs/awv_api/awv_android_factory.jar')
 }
 
 // -------------------------------------------------------------------------------------------------
@@ -269,11 +237,11 @@ def addSecretToBuildConfig(variant, fieldName, fileBaseName) {
     // We separate the debug files from the release files so that we don't
     // accidentally ship a release using the debug key or vice versa.
     def fileSuffix
-    if (variantName.contains("Debug")) {
+    if (variantName.contains("debug")) {
         fileSuffix = "debug"
-    } else if (variantName.contains("Beta") || variantName.contains("Release")) {
+    } else if (variantName.contains("beta") || variantName.contains("release")) {
         fileSuffix = "release"
-    } else if (variantName.contains("Coverage")) {
+    } else if (variantName.contains("coverage")) {
         // We never want to bundle API keys with Coverage.
         variant.buildConfigField 'String', fieldName, 'null'
         println("X_X")

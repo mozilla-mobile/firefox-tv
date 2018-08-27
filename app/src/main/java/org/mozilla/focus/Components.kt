@@ -4,38 +4,19 @@
 
 package org.mozilla.focus
 
-import android.content.Context
-import android.util.AttributeSet
+import mozilla.components.browser.engine.system.SystemEngine
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.Engine
-import mozilla.components.concept.engine.EngineSession
-import mozilla.components.concept.engine.EngineView
-import mozilla.components.concept.engine.Settings
+import mozilla.components.feature.session.SessionUseCases
 
 /**
  * Helper class for lazily instantiating and keeping references to components needed by the
  * application.
  */
 class Components {
-    val sessionManager by lazy { SessionManager(DummyEngine()) }
-}
+    val engine: Engine by lazy { SystemEngine() }
 
-/**
- * We are not using an "Engine" implementation yet. Therefore we create this dummy that we pass to
- * the [SessionManager] for now.
- */
-private class DummyEngine : Engine {
-    override val settings = object : Settings {}
+    val sessionManager by lazy { SessionManager(engine) }
 
-    override fun createSession(private: Boolean): EngineSession {
-        throw NotImplementedError()
-    }
-
-    override fun createView(context: Context, attrs: AttributeSet?): EngineView {
-        throw NotImplementedError()
-    }
-
-    override fun name(): String {
-        throw NotImplementedError()
-    }
+    val sessionUseCases by lazy { SessionUseCases(sessionManager) }
 }

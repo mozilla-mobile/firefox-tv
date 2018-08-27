@@ -17,6 +17,8 @@ import org.mozilla.focus.browser.BrowserFragment
 import org.mozilla.focus.ext.getAccessibilityManager
 import org.mozilla.focus.ext.isVisible
 import org.mozilla.focus.ext.isVoiceViewEnabled
+import org.mozilla.focus.ext.isYoutubeTV
+import org.mozilla.focus.ext.scrollByClamped
 import kotlin.properties.Delegates
 
 private const val MAX_SCROLL_VELOCITY = 13
@@ -71,7 +73,8 @@ class CursorController(
     /** Gets the current state of the browser and updates the cursor enabled state accordingly. */
     fun setEnabledForCurrentState() {
         // These sources have their own navigation controls.
-        isEnabled = !browserFragment.webView!!.isYoutubeTV && !(browserFragment.context?.isVoiceViewEnabled() ?: false) &&
+
+        isEnabled = !browserFragment.session.isYoutubeTV && !(browserFragment.context?.isVoiceViewEnabled() ?: false) &&
                 !browserFragment.browserOverlay.isVisible
     }
 
