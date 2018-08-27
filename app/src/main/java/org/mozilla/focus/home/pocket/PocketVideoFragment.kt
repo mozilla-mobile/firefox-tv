@@ -136,7 +136,7 @@ private class PocketVideoAdapter(
 
         @Suppress("TooGenericExceptionCaught") // See below.
         val itemURI = try {
-            URI(item.dedupeURL)
+            URI(item.url)
         } catch (e: Exception) { // Apparently Kotlin doesn't have multi-catch.
             when (e) {
                 is URISyntaxException, is NullPointerException -> null
@@ -144,7 +144,7 @@ private class PocketVideoAdapter(
             }
         }
         domainView.text = if (itemURI == null) {
-            item.dedupeURL
+            item.url
         } else {
             // The first time this method is called ever, it may block until the file is cached on disk.
             // We pre-cache on startup so I'm hoping this isn't an issue.

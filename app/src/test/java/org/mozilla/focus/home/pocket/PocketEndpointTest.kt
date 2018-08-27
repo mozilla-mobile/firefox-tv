@@ -14,7 +14,7 @@ import org.junit.runner.RunWith
 import org.mozilla.focus.TestResource
 import org.robolectric.RobolectricTestRunner
 
-private const val KEY_INNER = "list"
+private const val KEY_INNER = "recommendations"
 
 @RunWith(RobolectricTestRunner::class)
 class PocketEndpointTest {
@@ -23,18 +23,18 @@ class PocketEndpointTest {
     fun `convert Videos JSON successfully to internal objects`() {
         val expectedSubset = listOf(
                 PocketVideo(
-                        id = 14772,
-                        title = "I Try To Master Jacques Pepin's Perfect Omelet...",
-                        url = "https://pocket.co/xQBVNo",
-                        thumbnailURL = "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2F5__zptEU9vE%2Fmaxresdefault.jpg&resize=w450",
-                        dedupeURL = "https://www.youtube.com/watch?v=5__zptEU9vE"
+                        id = 23227,
+                        title = "How Hands Became the Internet’s New Selfie | Internetting Season 2",
+                        url = "https://www.youtube.com/tv#/watch/video/idle?v=IzvXi8VkxgI",
+                        thumbnailURL = "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FIzvXi8VkxgI%2Fmaxresdefault.jpg&resize=w450",
+                        popularitySortId = 1
                 ),
                 PocketVideo(
-                        id = 14767,
-                        title = "Next Generation Robots - Boston Dynamics, Asimo, Da Vinci, SoFi",
-                        url = "https://pocket.co/xQBVNM",
-                        thumbnailURL = "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2F8vIT2da6N_o%2Fmaxresdefault.jpg&resize=w450",
-                        dedupeURL = "https://www.youtube.com/watch?v=8vIT2da6N_o"
+                        id = 23222,
+                        title = "Why The US Airforce Ejected a Bear",
+                        url = "https://www.youtube.com/watch?v=Rbt2NFCtBh4",
+                        thumbnailURL = "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FRbt2NFCtBh4%2Fmaxresdefault.jpg&resize=w450",
+                        popularitySortId = 2
                 )
         )
 
