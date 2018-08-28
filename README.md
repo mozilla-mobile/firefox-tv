@@ -18,6 +18,7 @@ Guidelines](https://www.mozilla.org/en-US/about/governance/policies/participatio
 * [Guide to Contributing][contribute] (**new contributors start here!**)
 * Open issues: https://github.com/mozilla-mobile/firefox-tv/issues
   * [`good first issues`][good first] | [`help wanted`][help]
+  * [File a security issue][sec issue]
 * Project wiki: https://github.com/mozilla-mobile/firefox-tv/wiki
 * IRC: [#focus (irc.mozilla.org)](https://wiki.mozilla.org/IRC) | [view logs](https://mozilla.logbot.info/focus/);
 we're available Monday-Friday, GMT and PST working hours.
@@ -104,3 +105,4 @@ API services currently supported are:
 [contribute]: https://github.com/mozilla-mobile/shared-docs/blob/master/android/CONTRIBUTING.md
 [good first]: https://github.com/mozilla-mobile/firefox-tv/labels/good%20first%20issue
 [help]: https://github.com/mozilla-mobile/firefox-tv/labels/help%20wanted
+[sec issue]: https://bugzilla.mozilla.org/enter_bug.cgi?assigned_to=nobody%40mozilla.org&bug_file_loc=http%3A%2F%2F&bug_ignored=0&bug_severity=normal&bug_status=NEW&cf_fx_iteration=---&cf_fx_points=---&component=Security%3A%20General&contenttypemethod=autodetect&contenttypeselection=text%2Fplain&defined_groups=1&flag_type-4=X&flag_type-607=X&flag_type-791=X&flag_type-800=X&flag_type-803=X&form_name=enter_bug&groups=firefox-core-security&maketemplate=Remember%20values%20as%20bookmarkable%20template&op_sys=Unspecified&priority=--&product=Firefox%20for%20FireTV&rep_platform=Unspecified&target_milestone=---&version=unspecified
