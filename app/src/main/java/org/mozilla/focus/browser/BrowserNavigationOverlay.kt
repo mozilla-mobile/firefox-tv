@@ -127,7 +127,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         turboButton.isChecked = TurboMode.isEnabled(context)
         navButtonSettings.setImageResource(R.drawable.ic_settings) // Must be set in code for SVG to work correctly.
 
-        val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context, R.color.photonGrey10_a80p)) }
+        val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context, R.color.photonGrey10_a60p)) }
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
     }
 
