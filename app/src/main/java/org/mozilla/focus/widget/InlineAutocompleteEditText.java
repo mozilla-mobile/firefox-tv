@@ -134,7 +134,6 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
     public InlineAutocompleteEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
-        setMovementMethod(new DpadKeyMovementMethod());
     }
 
     public void setOnCommitListener(OnCommitListener listener) {
