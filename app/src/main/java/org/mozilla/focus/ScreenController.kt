@@ -92,7 +92,7 @@ object ScreenController {
             browserFragment.loadUrl(url)
         } else {
             val session = Session(url, source = source)
-            context.components.sessionManager.add(session)
+            context.components.sessionManager.add(session, selected = true)
         }
     }
 
