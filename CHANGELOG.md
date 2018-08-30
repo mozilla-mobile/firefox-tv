@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Pocket video recommendations on navigation overlay
+
+### Changed
+- Merge home screen into navigation overlay
+- Long-click and hold to remove home tile instead of pressing the menu button
 
 ## [2.2] - 2018-08-21
 *Released to Fire TV Cube and Fire TV 4K.*
