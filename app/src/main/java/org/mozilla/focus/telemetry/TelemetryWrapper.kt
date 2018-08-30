@@ -276,7 +276,10 @@ object TelemetryWrapper {
     }
 
     /**
-     * TODO
+     * This event is sent when a user opens the menu and then closes it without
+     * appearing to find what they are looking for.
+     *
+     * See [MenuInteractionMonitor] kdoc for more information.
      */
     @JvmStatic
     fun menuUnusedEvent() {
