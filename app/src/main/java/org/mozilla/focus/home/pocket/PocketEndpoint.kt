@@ -42,8 +42,8 @@ object PocketEndpoint {
         val placeholderList = mutableListOf<PocketVideo>()
         if (placeholderFlag) {
             for (i in 1..4) {
-                placeholderList.add(PocketVideo(i, "mozilla.org", "https://mozilla.org", "https://mozilla.org",
-                        "https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png"))
+                placeholderList.add(PocketVideo(i, "mozilla.org", "https://mozilla.org",
+                        "https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png", i))
             }
             return placeholderList
         } else {
