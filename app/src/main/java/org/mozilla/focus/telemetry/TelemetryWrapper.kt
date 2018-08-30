@@ -63,6 +63,7 @@ object TelemetryWrapper {
         val PAGE = "page"
         val RESOURCE = "resource"
         val REMOVE = "remove"
+        val NO_ACTION_TAKEN = "no_action_taken"
     }
 
     private object Object {
@@ -272,6 +273,14 @@ object TelemetryWrapper {
     fun userShowsHidesDrawerEvent(isOpening: Boolean) {
         val method = if (isOpening) Method.USER_SHOW else Method.USER_HIDE
         TelemetryEvent.create(Category.ACTION, method, Object.MENU).queue()
+    }
+
+    /**
+     * TODO
+     */
+    @JvmStatic
+    fun menuUnusedEvent() {
+        TelemetryEvent.create(Category.AGGREGATE, Method.NO_ACTION_TAKEN, Object.MENU).queue()
     }
 
     fun overlayClickEvent(event: NavigationEvent, isTurboButtonChecked: Boolean, isPinButtonChecked: Boolean) {
