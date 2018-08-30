@@ -52,8 +52,8 @@ object Pocket {
     fun init() {
         // We set this now, rather than waiting for the background updates, to ensure the first
         // caller gets a Deferred they can wait on, rather than null (which they can't wait on).
-        videosCache = if (BuildConfig.POCKET_KEY != null) getRecommendedVideosNoCacheAsync(false)
-        else getRecommendedVideosNoCacheAsync(true)
+        videosCache = if (BuildConfig.POCKET_KEY != null) getRecommendedVideosNoCacheAsync()
+        else getPlaceholderVideos()
         lastUpdateMillis = SystemClock.elapsedRealtime()
     }
 
@@ -81,8 +81,8 @@ object Pocket {
      */
     @AnyThread // videosCache is synchronized.
     fun getRecommendedVideos() = videosCache
-    private fun getRecommendedVideosNoCacheAsync(placeholderFlag: Boolean) =
-            async { PocketEndpoint.getRecommendedVideos(placeholderFlag) }
+    private fun getRecommendedVideosNoCacheAsync() = async { PocketEndpoint.getRecommendedVideos() }
+    private fun getPlaceholderVideos() = async { PocketEndpoint.getPlaceholderVideos() }
 
     private fun startBackgroundUpdatesInner() = launch {
         while (true) {
@@ -91,7 +91,7 @@ object Pocket {
                 delay(delayForMillis, TimeUnit.MILLISECONDS)
             }
 
-            val deferredVideoUpdate = getRecommendedVideosNoCacheAsync(false)
+            val deferredVideoUpdate = getRecommendedVideosNoCacheAsync()
 
             // We only want to update the cache 1) after the request completes so the user never has
             // to see a loading screen except for the initial load and 2) if the request has been
