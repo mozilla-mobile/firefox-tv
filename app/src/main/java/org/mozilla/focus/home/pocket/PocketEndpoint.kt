@@ -37,9 +37,19 @@ object PocketEndpoint {
 
     /** @return The global video recommendations or null on error; the list will never be empty. */
     @AnyThread // via PocketEndpointRaw.
-    suspend fun getRecommendedVideos(): List<PocketVideo>? {
-        val videosJSON = PocketEndpointRaw.getGlobalVideoRecommendations() ?: return null
-        return convertVideosJSON(videosJSON)
+    suspend fun getRecommendedVideos(placeholderFlag: Boolean): List<PocketVideo>? {
+        // When no Pocket API key is provided, show placeholder tiles (developer ergonomics)
+        val placeholderList = mutableListOf<PocketVideo>()
+        if (placeholderFlag) {
+            for (i in 1..4) {
+                placeholderList.add(PocketVideo(i, "mozilla.org", "https://mozilla.org", "https://mozilla.org",
+                        "https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png"))
+            }
+            return placeholderList
+        } else {
+            val videosJSON = PocketEndpointRaw.getGlobalVideoRecommendations() ?: return null
+            return convertVideosJSON(videosJSON)
+        }
     }
 
     /** @return The videos or null on error; the list will never be empty. */

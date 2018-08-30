@@ -17,6 +17,7 @@ import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import org.json.JSONException
 import org.json.JSONObject
+import org.mozilla.focus.BuildConfig
 import org.mozilla.focus.R
 import java.util.concurrent.TimeUnit
 
@@ -51,7 +52,8 @@ object Pocket {
     fun init() {
         // We set this now, rather than waiting for the background updates, to ensure the first
         // caller gets a Deferred they can wait on, rather than null (which they can't wait on).
-        videosCache = getRecommendedVideosNoCacheAsync()
+        videosCache = if (BuildConfig.POCKET_KEY != null) getRecommendedVideosNoCacheAsync(false)
+        else getRecommendedVideosNoCacheAsync(true)
         lastUpdateMillis = SystemClock.elapsedRealtime()
     }
 
@@ -79,7 +81,8 @@ object Pocket {
      */
     @AnyThread // videosCache is synchronized.
     fun getRecommendedVideos() = videosCache
-    private fun getRecommendedVideosNoCacheAsync() = async { PocketEndpoint.getRecommendedVideos() }
+    private fun getRecommendedVideosNoCacheAsync(placeholderFlag: Boolean) =
+            async { PocketEndpoint.getRecommendedVideos(placeholderFlag) }
 
     private fun startBackgroundUpdatesInner() = launch {
         while (true) {
@@ -88,7 +91,7 @@ object Pocket {
                 delay(delayForMillis, TimeUnit.MILLISECONDS)
             }
 
-            val deferredVideoUpdate = getRecommendedVideosNoCacheAsync()
+            val deferredVideoUpdate = getRecommendedVideosNoCacheAsync(false)
 
             // We only want to update the cache 1) after the request completes so the user never has
             // to see a loading screen except for the initial load and 2) if the request has been
