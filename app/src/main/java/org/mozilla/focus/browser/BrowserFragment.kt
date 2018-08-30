@@ -232,7 +232,10 @@ class BrowserFragment : IWebViewLifecycleFragment(), Session.Observer {
 
     fun onBackPressed(): Boolean {
         when {
-            browserOverlay.isVisible && !isUrlEqualToHomepage -> setOverlayVisibleByUser(false)
+            browserOverlay.isVisible && !isUrlEqualToHomepage -> {
+                setOverlayVisibleByUser(false)
+                TelemetryWrapper.userShowsHidesDrawerEvent(false)
+            }
             webView?.canGoBack() ?: false -> {
                 webView?.goBack()
                 TelemetryWrapper.browserBackControllerEvent()
@@ -272,6 +275,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), Session.Observer {
             if (actionIsDown) {
                 val toShow = !browserOverlay.isVisible
                 setOverlayVisibleByUser(toShow)
+                TelemetryWrapper.userShowsHidesDrawerEvent(toShow)
             }
             return true
         }
@@ -296,7 +300,6 @@ class BrowserFragment : IWebViewLifecycleFragment(), Session.Observer {
         browserOverlay.visibility = if (toShow) View.VISIBLE else View.GONE
         if (toShow) cursor?.onPause() else cursor?.onResume()
         cursor?.setEnabledForCurrentState()
-        TelemetryWrapper.drawerShowHideEvent(toShow)
     }
 
     private inner class NavigationStateProvider : BrowserNavigationOverlay.BrowserNavigationStateProvider {

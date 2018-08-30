@@ -58,8 +58,8 @@ object TelemetryWrapper {
         val CHANGE = "change"
         val FOREGROUND = "foreground"
         val BACKGROUND = "background"
-        val SHOW = "show"
-        val HIDE = "hide"
+        val USER_SHOW = "user_show"
+        val USER_HIDE = "user_hide"
         val PAGE = "page"
         val RESOURCE = "resource"
         val REMOVE = "remove"
@@ -258,10 +258,19 @@ object TelemetryWrapper {
         TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.SETTING, Value.CLEAR_DATA).queue()
     }
 
-    /** @param isOpening true if the drawer is opening, close otherwise. */
+    /**
+     * Should only be used when a user action directly results in this change.
+     *
+     * Example:
+     *
+     * User hits the 'open menu' button -> send event
+     * User selects a tile (implicitly hiding the overlay) -> do not send event
+     *
+     * @param isOpening true if the drawer is opening, close otherwise.
+     */
     @JvmStatic
-    fun drawerShowHideEvent(isOpening: Boolean) {
-        val method = if (isOpening) Method.SHOW else Method.HIDE
+    fun userShowsHidesDrawerEvent(isOpening: Boolean) {
+        val method = if (isOpening) Method.USER_SHOW else Method.USER_HIDE
         TelemetryEvent.create(Category.ACTION, method, Object.MENU).queue()
     }
 
