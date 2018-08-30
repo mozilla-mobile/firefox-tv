@@ -38,6 +38,7 @@ import org.mozilla.focus.iwebview.IWebView
 import org.mozilla.focus.iwebview.IWebViewLifecycleFragment
 import org.mozilla.focus.session.NullSession
 import org.mozilla.focus.session.SessionCallbackProxy
+import org.mozilla.focus.telemetry.MenuInteractionMonitor
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.ViewUtils.showCenteredTopToast
@@ -271,6 +272,8 @@ class BrowserFragment : IWebViewLifecycleFragment(), Session.Observer {
     private fun handleSpecialKeyEvent(event: KeyEvent): Boolean {
         val actionIsDown = event.action == KeyEvent.ACTION_DOWN
 
+        if (event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER && actionIsDown) MenuInteractionMonitor.selectPressed()
+
         if (event.keyCode == KeyEvent.KEYCODE_MENU && !isUrlEqualToHomepage) {
             if (actionIsDown) {
                 val toShow = !browserOverlay.isVisible
@@ -300,6 +303,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), Session.Observer {
         browserOverlay.visibility = if (toShow) View.VISIBLE else View.GONE
         if (toShow) cursor?.onPause() else cursor?.onResume()
         cursor?.setEnabledForCurrentState()
+        if (toShow) MenuInteractionMonitor.menuOpened() else MenuInteractionMonitor.menuClosed()
     }
 
     private inner class NavigationStateProvider : BrowserNavigationOverlay.BrowserNavigationStateProvider {
