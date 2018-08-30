@@ -10,7 +10,9 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.view.*
+import org.mozilla.focus.BuildConfig
 import org.mozilla.focus.R
 import org.mozilla.focus.utils.PicassoWrapper
 import org.mozilla.focus.utils.RoundCornerTransformation
@@ -23,11 +25,21 @@ class PocketVideoMegaTile(
 ) : LinearLayout(context, attrs) {
 
     var pocketVideos by Delegates.observable<List<PocketVideo>?>(null) { _, _, newVideos ->
-        if (newVideos == null) return@observable
-        thumbnailViews.forEachIndexed { i, thumbnailView ->
-            PicassoWrapper.client.load(newVideos[i].thumbnailURL)
-                    .transform(roundCornerTransformation)
-                    .into(thumbnailView)
+        // When no Pocket API key is provided, show placeholder tiles (developer ergonomics)
+        if (BuildConfig.POCKET_KEY == null) {
+            thumbnailViews.forEachIndexed { _, thumbnailView ->
+                PicassoWrapper.client.load("https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png")
+                        .transform(roundCornerTransformation)
+                        .into(thumbnailView)
+            }
+            Toast.makeText(context, "Pocket API key was not found.", Toast.LENGTH_LONG).show()
+        } else {
+            if (newVideos == null) return@observable
+            thumbnailViews.forEachIndexed { i, thumbnailView ->
+                PicassoWrapper.client.load(newVideos[i].thumbnailURL)
+                        .transform(roundCornerTransformation)
+                        .into(thumbnailView)
+            }
         }
     }
 
