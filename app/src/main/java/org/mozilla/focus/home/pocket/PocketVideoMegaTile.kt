@@ -26,20 +26,16 @@ class PocketVideoMegaTile(
 
     var pocketVideos by Delegates.observable<List<PocketVideo>?>(null) { _, _, newVideos ->
         // When no Pocket API key is provided, show placeholder tiles (developer ergonomics)
-        if (BuildConfig.POCKET_KEY == null) {
-            thumbnailViews.forEachIndexed { _, thumbnailView ->
-                PicassoWrapper.client.load("https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png")
-                        .transform(roundCornerTransformation)
-                        .into(thumbnailView)
-            }
+        val thumbnails = if (BuildConfig.POCKET_KEY == null) {
             Toast.makeText(context, "Pocket API key was not found.", Toast.LENGTH_LONG).show()
-        } else {
-            if (newVideos == null) return@observable
-            thumbnailViews.forEachIndexed { i, thumbnailView ->
-                PicassoWrapper.client.load(newVideos[i].thumbnailURL)
-                        .transform(roundCornerTransformation)
-                        .into(thumbnailView)
-            }
+            (0 until thumbnailViews.size)
+                    .map { "https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png" }
+        } else newVideos?.map { it.thumbnailURL } ?: return@observable
+
+        thumbnailViews.forEachIndexed { i, thumbnailView ->
+            PicassoWrapper.client.load(thumbnails[i])
+                    .transform(roundCornerTransformation)
+                    .into(thumbnailView)
         }
     }
 
