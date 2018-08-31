@@ -239,4 +239,7 @@ be temporary, and you can try again later.</li>
     <string name="google_search_hint_text">Search with Google or enter address</string>
     <!-- The title displayed below blank tiles -->
     <string name="blank_tile_title">Add website</string>
+
+    <!-- This title is shown on a dialog that prompts the user if they want to clear their cookies and site data.  -->
+    <string name="dialog_clear_cookies_title">Clear Cookies?</string>
 </resources>
