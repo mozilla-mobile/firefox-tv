@@ -9,8 +9,9 @@ package org.mozilla.focus.telemetry
  * understanding the menu overlay.
  *
  * If a user opens a menu and then closes it without performing any action
- * (represented here by clicking), it is assumed that they were unable to find
- * what they were looking for. This is used as a heuristic for confusion.
+ * (represented here by clicking select), it is assumed that they were unable
+ * to find what they were looking for. This is used as a heuristic for
+ * confusion.
  */
 object MenuInteractionMonitor {
     private var selectPressedDuringCurrentMenu = true
