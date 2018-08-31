@@ -126,11 +126,11 @@ class BrowserFragment : IWebViewLifecycleFragment(), Session.Observer {
             NavigationEvent.SETTINGS -> ScreenController.showSettingsScreen(fragmentManager!!)
             NavigationEvent.LOAD_URL -> {
                 (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
-                setOverlayVisibleByUser(false)
+                setOverlayVisible(false)
             }
             NavigationEvent.LOAD_TILE -> {
                 (activity as MainActivity).onNonTextInputUrlEntered(value!!)
-                setOverlayVisibleByUser(false)
+                setOverlayVisible(false)
             }
             NavigationEvent.POCKET -> ScreenController.showPocketScreen(fragmentManager!!)
             NavigationEvent.PIN_ACTION -> {
@@ -234,7 +234,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), Session.Observer {
     fun onBackPressed(): Boolean {
         when {
             browserOverlay.isVisible && !isUrlEqualToHomepage -> {
-                setOverlayVisibleByUser(false)
+                setOverlayVisible(false)
                 TelemetryWrapper.userShowsHidesDrawerEvent(false)
             }
             webView?.canGoBack() ?: false -> {
@@ -277,7 +277,7 @@ class BrowserFragment : IWebViewLifecycleFragment(), Session.Observer {
         if (event.keyCode == KeyEvent.KEYCODE_MENU && !isUrlEqualToHomepage) {
             if (actionIsDown) {
                 val toShow = !browserOverlay.isVisible
-                setOverlayVisibleByUser(toShow)
+                setOverlayVisible(toShow)
                 TelemetryWrapper.userShowsHidesDrawerEvent(toShow)
             }
             return true
@@ -295,11 +295,8 @@ class BrowserFragment : IWebViewLifecycleFragment(), Session.Observer {
     /**
      * Changes the overlay visibility: this should be called instead of changing
      * [BrowserNavigationOverlay.isVisible] directly.
-     *
-     * It's important this is only called for user actions because our Telemetry
-     * is dependent on it.
      */
-    private fun setOverlayVisibleByUser(toShow: Boolean) {
+    private fun setOverlayVisible(toShow: Boolean) {
         browserOverlay.visibility = if (toShow) View.VISIBLE else View.GONE
         if (toShow) cursor?.onPause() else cursor?.onResume()
         cursor?.setEnabledForCurrentState()
