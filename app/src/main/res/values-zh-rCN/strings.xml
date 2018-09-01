@@ -88,4 +88,5 @@
   <string name="google_search_tile_title">使用 Google 搜索</string>
   <string name="google_search_hint_text">使用 Google 搜索，或者输入网址</string>
   <string name="blank_tile_title">添加网站</string>
+  <string name="dialog_clear_cookies_title">清除 Cookie？</string>
 </resources>
