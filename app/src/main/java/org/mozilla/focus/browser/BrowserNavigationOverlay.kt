@@ -25,6 +25,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
+import org.mozilla.focus.ext.components
 import org.mozilla.focus.ext.forEachChild
 import org.mozilla.focus.ext.updateLayoutParams
 import org.mozilla.focus.home.HomeTilesManager
@@ -109,7 +110,15 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     private var isTurboEnabled: Boolean
         get() = Settings.getInstance(context).isBlockingEnabled
         set(value) {
-            Settings.getInstance(context).isBlockingEnabled = value
+            val settings = Settings.getInstance(context)
+            settings.isBlockingEnabled = value
+
+            val engineSession = context.components.sessionManager.getOrCreateEngineSession()
+            if (value) {
+                engineSession.enableTrackingProtection(settings.trackingProtectionPolicy)
+            } else {
+                engineSession.disableTrackingProtection()
+            }
         }
 
     private val pocketVideos = Pocket.getRecommendedVideos()
