@@ -35,7 +35,7 @@ import org.mozilla.focus.ext.toUri
 import org.mozilla.focus.home.BundledTilesManager
 import org.mozilla.focus.home.CustomTilesManager
 import org.mozilla.focus.home.HomeTilesManager
-import org.mozilla.focus.iwebview.EngineViewLifecycleFragment
+import org.mozilla.focus.engine.EngineViewLifecycleFragment
 import org.mozilla.focus.session.NullSession
 import org.mozilla.focus.telemetry.MenuInteractionMonitor
 import org.mozilla.focus.telemetry.TelemetryWrapper
