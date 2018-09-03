@@ -32,7 +32,9 @@ class InfoFragment : EngineViewLifecycleFragment(), Session.Observer {
         val session = Session(arguments!!.getString(ARGUMENT_URL))
         session.register(this, owner = this)
 
-        webView!!.render(requireComponents.sessionManager.getOrCreateEngineSession(session))
+        val engineSession = requireComponents.sessionManager.getOrCreateEngineSession(session)
+        engineSession.disableTrackingProtection()
+        webView!!.render(engineSession)
     }
 
     override fun onProgress(session: Session, progress: Int) {
