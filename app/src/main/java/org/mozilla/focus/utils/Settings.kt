@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.preference.PreferenceManager
+import mozilla.components.concept.engine.EngineSession
 import org.mozilla.focus.OnboardingActivity
 import org.mozilla.focus.R
 import org.mozilla.focus.home.pocket.PocketOnboardingActivity
@@ -60,4 +61,20 @@ class Settings private constructor(context: Context) {
         get() = preferences.getBoolean(Settings.TRACKING_PROTECTION_ENABLED_PREF,
                 TRACKING_PROTECTION_ENABLED_DEFAULT)
         set(value) = preferences.edit().putBoolean(TRACKING_PROTECTION_ENABLED_PREF, value).apply()
+
+    /**
+     * Get the tracking protection policy which is a combination of tracker categories that should be blocked.
+     */
+    val trackingProtectionPolicy: EngineSession.TrackingProtectionPolicy
+        get() {
+            return if (isBlockingEnabled) {
+                EngineSession.TrackingProtectionPolicy.select(
+                    EngineSession.TrackingProtectionPolicy.AD,
+                    EngineSession.TrackingProtectionPolicy.ANALYTICS,
+                    EngineSession.TrackingProtectionPolicy.SOCIAL
+                )
+            } else {
+                EngineSession.TrackingProtectionPolicy.none()
+            }
+        }
 }
