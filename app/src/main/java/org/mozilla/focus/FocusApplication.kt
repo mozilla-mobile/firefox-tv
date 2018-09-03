@@ -26,7 +26,7 @@ class FocusApplication : LocaleAwareApplication() {
      * first). Therefore we delay the creation so that the components can access and use the
      * application context at the time they get created.
      */
-    val components by lazy { Components() }
+    val components by lazy { Components(this) }
 
     override fun onCreate() {
         super.onCreate()

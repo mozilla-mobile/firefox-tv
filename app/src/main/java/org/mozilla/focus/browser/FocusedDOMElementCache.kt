@@ -6,7 +6,7 @@ package org.mozilla.focus.browser
 
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.focus.ext.evalJS
-import org.mozilla.focus.iwebview.FocusedDOMElementCache
+import org.mozilla.focus.engine.FocusedDOMElementCache
 
 private const val CACHE_VAR = "_firefoxForFireTvPreviouslyFocusedElement"
 private const val CACHE_JS = "var $CACHE_VAR = document.activeElement;"

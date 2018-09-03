@@ -12,7 +12,7 @@ import android.widget.ProgressBar
 import mozilla.components.browser.session.Session
 import org.mozilla.focus.R
 import org.mozilla.focus.ext.requireComponents
-import org.mozilla.focus.iwebview.EngineViewLifecycleFragment
+import org.mozilla.focus.engine.EngineViewLifecycleFragment
 
 class InfoFragment : EngineViewLifecycleFragment(), Session.Observer {
     private var progressView: ProgressBar? = null

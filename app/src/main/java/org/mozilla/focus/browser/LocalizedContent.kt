@@ -4,12 +4,10 @@
 
 package org.mozilla.focus.browser
 
+import android.content.Context
 import android.content.pm.PackageManager
 import android.support.v4.util.ArrayMap
-import android.support.v4.view.ViewCompat
 import android.view.View
-import android.webkit.WebView
-
 import org.mozilla.focus.R
 import org.mozilla.focus.locale.Locales
 import org.mozilla.focus.utils.HtmlLoader
@@ -19,21 +17,11 @@ object LocalizedContent {
     // a custom scheme.
     const val URL_ABOUT = "firefox:about"
 
-    @JvmStatic
-    fun handleInternalContent(url: String, webView: WebView): Boolean {
-        if (URL_ABOUT == url) {
-            loadAbout(webView)
-            return true
-        }
-        return false
-    }
-
     /**
-     * Load the content for focus:about
+     * Load the content for firefox:about
      */
     @Suppress("LongMethod") // This doesn't change much.
-    private fun loadAbout(webView: WebView) {
-        val context = webView.context
+    fun generateAboutPage(context: Context): String {
         val resources = Locales.getLocalizedResources(context)
 
         val substitutionMap = ArrayMap<String, String>()
@@ -76,27 +64,13 @@ object LocalizedContent {
         val content5 = resources.getString(R.string.your_rights_content5, appName, gplUrl, trackingProtectionUrl)
         substitutionMap["%your-rights-content5%"] = content5
 
-        putLayoutDirectionIntoMap(webView, substitutionMap)
-
-        val data = HtmlLoader.loadResourceFile(context, R.raw.about, substitutionMap)
-        // We use a file:/// base URL so that we have the right origin to load file:/// css and image resources.
-        webView.loadDataWithBaseURL("file:///android_asset/about.html", data, "text/html", "UTF-8", null)
-    }
-
-    private fun putLayoutDirectionIntoMap(webView: WebView, substitutionMap: MutableMap<String, String>) {
-        ViewCompat.setLayoutDirection(webView, View.LAYOUT_DIRECTION_LOCALE)
-        val layoutDirection = ViewCompat.getLayoutDirection(webView)
-
-        val direction: String
-
-        if (layoutDirection == View.LAYOUT_DIRECTION_LTR) {
-            direction = "ltr"
-        } else if (layoutDirection == View.LAYOUT_DIRECTION_RTL) {
-            direction = "rtl"
-        } else {
-            direction = "auto"
+        substitutionMap["%dir%"] = when (context.resources.configuration.layoutDirection) {
+            View.LAYOUT_DIRECTION_LTR -> "ltr"
+            View.LAYOUT_DIRECTION_RTL -> "rtl"
+            else -> "auto"
         }
 
-        substitutionMap["%dir%"] = direction
+        // We use a file:/// base URL so that we have the right origin to load file:/// css and image resources.
+        return HtmlLoader.loadResourceFile(context, R.raw.about, substitutionMap)
     }
 }
