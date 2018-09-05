@@ -26,6 +26,7 @@ class PocketVideoMegaTile(
 
     var pocketVideos by Delegates.observable<List<PocketVideo>?>(null) { _, _, newVideos ->
         // When no Pocket API key is provided, show placeholder tiles (developer ergonomics)
+        @Suppress("SENSELESS_COMPARISON") // Values of BuildConfig can change but the compiler doesn't know that..
         val thumbnails = if (BuildConfig.POCKET_KEY == null) {
             Toast.makeText(context, "Pocket API key was not found.", Toast.LENGTH_LONG).show()
             (0 until thumbnailViews.size)
