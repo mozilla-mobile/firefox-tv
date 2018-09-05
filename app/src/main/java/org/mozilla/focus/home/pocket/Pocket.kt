@@ -52,6 +52,7 @@ object Pocket {
     fun init() {
         // We set this now, rather than waiting for the background updates, to ensure the first
         // caller gets a Deferred they can wait on, rather than null (which they can't wait on).
+        @Suppress("SENSELESS_COMPARISON") // Values of BuildConfig can change but the compiler doesn't know that..
         videosCache = if (BuildConfig.POCKET_KEY != null) getRecommendedVideosNoCacheAsync()
         else getPlaceholderVideos()
         lastUpdateMillis = SystemClock.elapsedRealtime()
