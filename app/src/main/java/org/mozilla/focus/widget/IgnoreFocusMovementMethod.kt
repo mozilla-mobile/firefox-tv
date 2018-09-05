@@ -11,6 +11,6 @@ import android.widget.TextView
 /**
  * An ArrowKeyMovementMethod that eliminates end cursor selection onFocus
  */
-class DpadKeyMovementMethod : ArrowKeyMovementMethod() {
+class IgnoreFocusMovementMethod : ArrowKeyMovementMethod() {
     override fun onTakeFocus(view: TextView, text: Spannable, dir: Int) {}
 }
