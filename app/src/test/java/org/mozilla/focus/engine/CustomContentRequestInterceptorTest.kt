@@ -7,6 +7,7 @@ package org.mozilla.focus.engine
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.request.RequestInterceptor
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -42,6 +43,16 @@ class CustomContentRequestInterceptorTest {
     fun `Interceptor should not intercept normal URLs`() {
         assertNull(testInterceptor("https://www.mozilla.org"))
         assertNull(testInterceptor("https://youtube.com/tv"))
+    }
+
+    @Test
+    fun `Interceptor should return different content for firefox-home and firefox-about`() {
+        val firefoxAbout = testInterceptor("firefox:about")
+        val firefoxHome = testInterceptor("firefox:home")
+
+        assertEquals(firefoxAbout!!.mimeType, firefoxHome!!.mimeType)
+        assertEquals(firefoxAbout.encoding, firefoxHome.encoding)
+        assertNotEquals(firefoxAbout.data, firefoxHome.data)
     }
 
     private fun testInterceptor(url: String): RequestInterceptor.InterceptionResponse? {
