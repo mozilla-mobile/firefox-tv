@@ -31,7 +31,7 @@ import org.mozilla.focus.home.HomeTilesManager
 import org.mozilla.focus.home.pocket.Pocket
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.Settings
-import org.mozilla.focus.widget.DpadKeyMovementMethod
+import org.mozilla.focus.widget.IgnoreFocusMovementMethod
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 import kotlin.properties.Delegates
 
@@ -199,7 +199,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 onNavigationEvent?.invoke(NavigationEvent.LOAD_URL, userInput, cachedAutocompleteResult)
             }
         }
-        this.movementMethod = DpadKeyMovementMethod()
+        this.movementMethod = IgnoreFocusMovementMethod()
         val autocompleteFilter = UrlAutoCompleteFilter()
         autocompleteFilter.load(context.applicationContext)
         setOnFilterListener { searchText, view -> autocompleteFilter.onFilter(searchText, view) }
