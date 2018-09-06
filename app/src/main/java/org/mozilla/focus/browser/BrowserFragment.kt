@@ -66,16 +66,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     private val mediaSessionHolder get() = activity as MediaSessionHolder? // null when not attached.
 
-    /**
-     * The current URL.
-     *
-     * Use this instead of the WebView's URL which can return null, return a null URL, or return
-     * data: URLs (for error pages).
-     */
-    var url: String? = null
-        private set
-
-    val isUrlEqualToHomepage: Boolean get() = url == APP_URL_HOME
+    val isUrlEqualToHomepage: Boolean get() = session.url == APP_URL_HOME
 
     /**
      * Encapsulates the cursor's components. If this value is null, the Cursor is not attached
@@ -102,8 +93,6 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
     }
 
     override fun onUrlChanged(session: Session, url: String) {
-        this.url = url
-
         if (url == APP_URL_HOME) {
             browserOverlay?.visibility = View.VISIBLE
         }
@@ -132,7 +121,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
             }
             NavigationEvent.POCKET -> ScreenController.showPocketScreen(fragmentManager!!)
             NavigationEvent.PIN_ACTION -> {
-                this@BrowserFragment.url?.let { url ->
+                this@BrowserFragment.session.url.let { url ->
                     when (value) {
                         NavigationEvent.VAL_CHECKED -> {
                             CustomTilesManager.getInstance(context!!).pinSite(context!!, url,
@@ -332,8 +321,8 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
         override fun isForwardEnabled() = session.canGoForward
         override fun isPinEnabled() = !isUrlEqualToHomepage
         override fun isRefreshEnabled() = !isUrlEqualToHomepage
-        override fun getCurrentUrl() = url
-        override fun isURLPinned() = url.toUri()?.let {
+        override fun getCurrentUrl() = session.url
+        override fun isURLPinned() = session.url.toUri()?.let {
             // TODO: #569 fix CustomTilesManager to use Uri too
             CustomTilesManager.getInstance(context!!).isURLPinned(it.toString()) ||
                     BundledTilesManager.getInstance(context!!).isURLPinned(it) } ?: false
