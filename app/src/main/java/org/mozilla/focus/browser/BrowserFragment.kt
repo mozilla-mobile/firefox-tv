@@ -257,8 +257,20 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
             }
             else -> {
                 context!!.components.sessionManager.remove()
-                // Delete session, but we allow the parent to handle back behavior.
-                return false
+
+                // We can get into this state in two situations:
+                // - (1) The user is on the "home page" and the overlay is visible. In this situation we just want to
+                //       let the activity handle the back press (and leave the app).
+                // - (2) The overlay is not visible and we are on a website and can't go back further. In this case
+                //       "back" should show the overlay (the next back press closes the app). In this situation we
+                //       cannot look at the URL. We just removed the session and the new session may not be loaded yet.
+                if (!browserOverlay.isVisible) {
+                    // If the browser overlay is not visible then we show it now immediately. Depending on the loading
+                    // state of the page we m
+                    setOverlayVisible(true)
+                } else {
+                    return false
+                }
             }
         }
         return true
