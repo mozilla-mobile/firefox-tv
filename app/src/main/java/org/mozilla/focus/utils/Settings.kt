@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Resources
 import android.preference.PreferenceManager
+import android.support.annotation.VisibleForTesting
 import mozilla.components.concept.engine.EngineSession
 import org.mozilla.focus.OnboardingActivity
 import org.mozilla.focus.R
@@ -32,6 +33,10 @@ class Settings private constructor(context: Context) {
 
         const val TRACKING_PROTECTION_ENABLED_PREF = "tracking_protection_enabled"
         const val TRACKING_PROTECTION_ENABLED_DEFAULT = true
+
+        @VisibleForTesting internal fun reset() {
+            instance = null
+        }
     }
 
     val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
@@ -57,7 +62,8 @@ class Settings private constructor(context: Context) {
     private fun getPreferenceKey(resourceId: Int): String =
             resources.getString(resourceId)
 
-    var isBlockingEnabled: Boolean // Delegates to shared prefs; could be custom delegate.
+    // Accessible via TurboMode.isEnabled()
+    internal var isBlockingEnabled: Boolean // Delegates to shared prefs; could be custom delegate.
         get() = preferences.getBoolean(Settings.TRACKING_PROTECTION_ENABLED_PREF,
                 TRACKING_PROTECTION_ENABLED_DEFAULT)
         set(value) = preferences.edit().putBoolean(TRACKING_PROTECTION_ENABLED_PREF, value).apply()

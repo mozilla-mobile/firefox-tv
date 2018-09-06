@@ -25,13 +25,12 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
-import org.mozilla.focus.ext.components
 import org.mozilla.focus.ext.forEachChild
 import org.mozilla.focus.ext.updateLayoutParams
 import org.mozilla.focus.home.HomeTilesManager
 import org.mozilla.focus.home.pocket.Pocket
 import org.mozilla.focus.telemetry.TelemetryWrapper
-import org.mozilla.focus.utils.Settings
+import org.mozilla.focus.utils.TurboMode
 import org.mozilla.focus.widget.IgnoreFocusMovementMethod
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 import kotlin.properties.Delegates
@@ -107,20 +106,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     /** Called inside [setVisibility] right before super.setVisibility is called. */
     var onPreSetVisibilityListener: ((isVisible: Boolean) -> Unit)? = null
 
-    private var isTurboEnabled: Boolean
-        get() = Settings.getInstance(context).isBlockingEnabled
-        set(value) {
-            val settings = Settings.getInstance(context)
-            settings.isBlockingEnabled = value
-
-            val engineSession = context.components.sessionManager.getOrCreateEngineSession()
-            if (value) {
-                engineSession.enableTrackingProtection(settings.trackingProtectionPolicy)
-            } else {
-                engineSession.disableTrackingProtection()
-            }
-        }
-
     private val pocketVideos = Pocket.getRecommendedVideos()
 
     private var hasUserChangedURLSinceEditTextFocused = false
@@ -139,7 +124,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         initTiles()
         initMegaTile()
         setupUrlInput()
-        turboButton.isChecked = Settings.getInstance(context).isBlockingEnabled
+        turboButton.isChecked = TurboMode.isEnabled(context)
         navButtonSettings.setImageResource(R.drawable.ic_settings) // Must be set in code for SVG to work correctly.
 
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context, R.color.tv_white)) }
@@ -230,7 +215,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         val isPinButtonChecked = pinButton.isChecked
         when (event) {
             NavigationEvent.TURBO -> {
-                isTurboEnabled = isTurboButtonChecked
+                TurboMode.toggle(context, isTurboButtonChecked)
             }
             NavigationEvent.PIN_ACTION -> {
                 value = if (isPinButtonChecked) NavigationEvent.VAL_CHECKED
