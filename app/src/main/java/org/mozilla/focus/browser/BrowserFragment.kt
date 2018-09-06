@@ -266,7 +266,15 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     fun loadUrl(url: String) {
         if (url.isNotEmpty()) {
-            requireComponents.sessionUseCases.loadUrl.invoke(url)
+            val session = requireComponents.sessionManager.selectedSession
+
+            if (session != null) {
+                // We already have an active session, let's just load the URL.
+                requireComponents.sessionUseCases.loadUrl.invoke(url)
+            } else {
+                // There's no session (anymore). Let's create a new one.
+                requireComponents.sessionManager.add(Session(url), selected = true)
+            }
         }
     }
 
