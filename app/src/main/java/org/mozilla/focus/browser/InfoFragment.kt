@@ -56,6 +56,8 @@ class InfoFragment : EngineViewLifecycleFragment(), Session.Observer {
     override fun onLoadingStateChanged(session: Session, loading: Boolean) {
         if (loading) {
             progressView?.announceForAccessibility(getString(R.string.accessibility_announcement_loading))
+        } else {
+            progressView?.announceForAccessibility(getString(R.string.accessibility_announcement_loading_finished))
         }
 
         progressView?.visibility = if (loading) {
