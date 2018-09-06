@@ -18,7 +18,7 @@
         ktlint \
         pmd \
         detektCheck \
-        testAmazonWebViewDebug
+        testdebug
 
 # Tasks omitted because they take a long time to run:
 # - unit test on all variants
