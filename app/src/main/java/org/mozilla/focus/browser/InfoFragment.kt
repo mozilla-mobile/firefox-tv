@@ -33,7 +33,19 @@ class InfoFragment : EngineViewLifecycleFragment(), Session.Observer {
         session.register(this, owner = this)
 
         val engineSession = requireComponents.sessionManager.getOrCreateEngineSession(session)
+
+        // We explicitly disable tracking protection for the InfoFragment in order to:
+        // - Not break linked pages (like support articles)
+        // - Not count trackers that have been blocked *outside* of the actual browsing session
+        //
+        // This decision was originally made in Focus:
+        // https://github.com/mozilla-mobile/focus-android/issues/717
+        //
+        // I assume this may no longer be needed as we have fully separated [Session]s now. There was only *one* global
+        // state in the first version of Focus (Single tab). So other loads could have influenced this single state
+        // (e.g. wrong tracker count). However disabling tracking protection here shouldn't have any negative effects.
         engineSession.disableTrackingProtection()
+
         webView!!.render(engineSession)
     }
 
