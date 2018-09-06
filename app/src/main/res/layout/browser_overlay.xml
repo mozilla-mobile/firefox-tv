@@ -42,7 +42,7 @@
              Drawable tinted in code (XML needs API 23+). -->
         <org.mozilla.focus.widget.InlineAutocompleteEditText
             android:id="@+id/navUrlInput"
-            android:drawableStart="@drawable/ic_search"
+            android:drawableStart="@drawable/mozac_ic_search"
             android:drawablePadding="10dp"
             android:layout_width="498dp"
             android:layout_height="@dimen/urlbar_height"
@@ -50,6 +50,7 @@
             android:layout_marginBottom="24dp"
             android:background="@drawable/nav_urlbar_background"
             android:hint="@string/urlbar_hint"
+            android:textColorHint="@color/photonGrey10_a80p"
             android:imeOptions="actionGo|flagNoExtractUi|flagNoFullscreen"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
@@ -58,7 +59,7 @@
             android:importantForAutofill="no"
             android:cursorVisible="false"
             android:textIsSelectable="false"
-            android:textColor="@color/tv_white"
+            android:textColor="@color/photonGrey10"
             android:nextFocusRight="@id/navUrlInput"
             android:nextFocusUp="@id/topNavContainer"
             />

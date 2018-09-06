@@ -9,26 +9,27 @@
     <ImageButton
         android:id="@+id/navButtonBack"
         style="@style/NavigationButton"
-        android:src="@drawable/ic_back"
+        android:src="@drawable/mozac_ic_back"
         android:contentDescription="@string/content_description_back"
         android:nextFocusLeft="@id/navButtonBack"/>
 
     <ImageButton
         android:id="@+id/navButtonForward"
         style="@style/NavigationButton"
-        android:src="@drawable/ic_forward"
+        android:src="@drawable/mozac_ic_forward"
         android:contentDescription="@string/content_description_forward"/>
 
     <ImageButton
         android:id="@+id/navButtonReload"
         style="@style/NavigationButton"
-        android:src="@drawable/ic_refresh"
+        android:src="@drawable/mozac_ic_refresh"
         android:contentDescription="@string/content_description_reload"/>
 
     <org.mozilla.focus.widget.CheckableImageButton
         android:id="@+id/pinButton"
         style="@style/NavigationButton"
         android:src="@drawable/pin_selector"
+        android:scaleX="-1"
         android:contentDescription="@string/pin_label"/>
 
     <org.mozilla.focus.widget.CheckableImageButton
