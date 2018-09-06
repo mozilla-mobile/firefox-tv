@@ -36,10 +36,10 @@ we're available Monday-Friday, GMT and PST working hours.
 2. Import the project into Android Studio or build on the command line:
 
   ```shell
-  ./gradlew clean app:assembleAmazonWebviewDebug
+  ./gradlew clean app:assembledebug
   ```
 
-3. Make sure to select the right build variant in Android Studio: **amazonWebviewDebug**
+3. Make sure to select the right build variant in Android Studio: **debug**
 
 ### Running
 It is recommended to test directly on a Fire TV: see the [developer guide][dev guide] for more info.
