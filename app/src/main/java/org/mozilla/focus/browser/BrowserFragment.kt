@@ -96,9 +96,17 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
         if (url == APP_URL_HOME) {
             browserOverlay?.visibility = View.VISIBLE
         }
+
+        updateOverlayIfVisible()
     }
 
-    override fun onLoadingStateChanged(session: Session, loading: Boolean) {
+    override fun onLoadingStateChanged(session: Session, loading: Boolean) =
+        updateOverlayIfVisible()
+
+    override fun onNavigationStateChanged(session: Session, canGoBack: Boolean, canGoForward: Boolean) =
+        updateOverlayIfVisible()
+
+    private fun updateOverlayIfVisible() {
         if (browserOverlay.isVisible) {
             browserOverlay.updateOverlayForCurrentState()
         }
