@@ -19,6 +19,7 @@ import android.widget.ScrollView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.browser_overlay.view.*
 import kotlinx.android.synthetic.main.browser_overlay_top_nav.view.*
+import kotlinx.android.synthetic.main.pocket_video_mega_tile.view.*
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
@@ -103,9 +104,11 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     ) -> Unit)? = null
     var navigationStateProvider: BrowserNavigationStateProvider? = null
 
-    private val pocketVideos = Pocket.getRecommendedVideos()
+    private var pocketVideos = Pocket.getRecommendedVideos()
 
     private var hasUserChangedURLSinceEditTextFocused = false
+
+    private var isMegaTileEnabled = true
 
     init {
         LayoutInflater.from(context)
@@ -150,7 +153,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 canShowUpinToast = false
             }
         })
-        layoutManager = GridLayoutManager(context, COL_COUNT)
+        layoutManager = HomeTileManager(context, COL_COUNT)
+
         setHasFixedSize(true)
 
         // We add bottomMargin to each tile in order to add spacing between them: this makes the
@@ -173,6 +177,21 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         if (pocketVideos.isCompleted) {
             pocketVideoMegaTileView.pocketVideos = pocketVideos.getCompleted()
+
+            if (pocketVideoMegaTileView.pocketVideos == null) {
+                pocketVideosContainer.visibility = View.GONE
+                pocketErrorContainer.visibility = View.VISIBLE
+                pocketMegaTileLoadError.text = resources.getString(R.string.pocket_video_feed_failed_to_load,
+                        resources.getString(R.string.pocket_brand_name))
+                pocketVideoMegaTileView.isEnabled = false
+                megaTileTryAgainButton.setOnClickListener { _ ->
+                    pocketVideos = Pocket.getRecommendedVideos()
+                    initMegaTile()
+                }
+            } else {
+                pocketVideosContainer.visibility = View.VISIBLE
+                pocketErrorContainer.visibility = View.GONE
+            }
         } else {
             // TODO: #864 show loading screen
             launch(UI) {
@@ -247,6 +266,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         val isRefreshEnabled = navigationStateProvider?.isRefreshEnabled() ?: false
         updateOverlayButtonState(isRefreshEnabled, navButtonReload)
 
+        isMegaTileEnabled = pocketVideoMegaTileView.isEnabled
+
         // Prevent the focus from looping to the bottom row when reaching the last
         // focusable element in the top row
         navButtonReload.nextFocusLeftId = when {
@@ -257,6 +278,11 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         navButtonForward.nextFocusLeftId = when {
             canGoBack -> R.id.navButtonBack
             else -> R.id.navButtonForward
+        }
+
+        navUrlInput.nextFocusDownId = when {
+            isMegaTileEnabled -> R.id.pocketVideoMegaTileView
+            else -> R.id.megaTileTryAgainButton
         }
 
         // We may have lost focus when disabling the focused view above.
@@ -304,6 +330,19 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     fun removePinnedSiteFromTiles(tileId: String) {
         val adapter = tileContainer.adapter as HomeTileAdapter
         adapter.removeTile(tileId)
+    }
+
+    inner class HomeTileManager(
+        context: Context,
+        colCount: Int
+    ) : GridLayoutManager(context, colCount) {
+        override fun onRequestChildFocus(parent: RecyclerView?, state: RecyclerView.State?, child: View?, focused: View?): Boolean {
+            focused?.nextFocusUpId = when {
+                isMegaTileEnabled -> R.id.pocketVideoMegaTileView
+                else -> R.id.megaTileTryAgainButton
+            }
+            return super.onRequestChildFocus(parent, state, child, focused)
+        }
     }
 }
 
