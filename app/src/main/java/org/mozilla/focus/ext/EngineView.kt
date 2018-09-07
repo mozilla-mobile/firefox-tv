@@ -33,7 +33,7 @@ private val uiHandler = Handler(Looper.getMainLooper())
 @SuppressLint("SetJavaScriptEnabled")
 @Suppress("DEPRECATION")
 fun EngineView.setupForApp(context: Context) {
-    val webView = extractWebView().apply {
+    webView.apply {
         isVerticalScrollBarEnabled = true
         isHorizontalScrollBarEnabled = true
     }
@@ -106,7 +106,7 @@ fun EngineView.setupForApp(context: Context) {
  * requires JS injection to browser-engine-system.
  */
 fun EngineView.evalJS(javascript: String) {
-    extractWebView().loadUrl("javascript:$javascript")
+    webView.loadUrl("javascript:$javascript")
 }
 
 /**
@@ -114,14 +114,14 @@ fun EngineView.evalJS(javascript: String) {
  */
 @SuppressLint("JavascriptInterface")
 fun EngineView.addJavascriptInterface(obj: Any, name: String) {
-    extractWebView().addJavascriptInterface(obj, name)
+    webView.addJavascriptInterface(obj, name)
 }
 
 /**
  * This functionality is not supported by browser-engine-system yet. See [EngineView.evalJS] comment for details.
  */
 fun EngineView.removeJavascriptInterface(interfaceName: String?) {
-    extractWebView().removeJavascriptInterface(interfaceName)
+    webView.removeJavascriptInterface(interfaceName)
 }
 
 /**
@@ -131,16 +131,16 @@ fun EngineView.removeJavascriptInterface(interfaceName: String?) {
  * https://github.com/mozilla-mobile/android-components/issues/495
  */
 fun EngineView.takeScreenshot(): Bitmap {
-    return extractWebView().let { webView ->
-        webView.buildDrawingCache()
+    return with(webView) {
+        buildDrawingCache()
         val outBitmap = Bitmap.createBitmap(webView.drawingCache)
-        webView.destroyDrawingCache()
+        destroyDrawingCache()
         outBitmap
     }
 }
 
 fun EngineView.scrollByClamped(vx: Int, vy: Int) {
-    extractWebView().apply {
+    webView.apply {
         fun clampScroll(scroll: Int, canScroll: (direction: Int) -> Boolean) = if (scroll != 0 && canScroll(scroll)) {
             scroll
         } else {
@@ -162,9 +162,9 @@ fun EngineView.scrollByClamped(vx: Int, vy: Int) {
  * Component upstream issue:
  * https://github.com/mozilla-mobile/android-components/issues/657
  */
-fun EngineView.pauseTimers() = extractWebView().pauseTimers()
-fun EngineView.resumeTimers() = extractWebView().resumeTimers()
-fun EngineView.onStop() = extractWebView().apply {
+fun EngineView.pauseTimers() = webView.pauseTimers()
+fun EngineView.resumeTimers() = webView.resumeTimers()
+fun EngineView.onStop() = webView.apply {
     // NB: onStop unexpectedly calls onPause: see below.
     //
     // When the user says "Alexa pause [the video]", the Activity will be paused/resumed while
@@ -180,28 +180,42 @@ fun EngineView.onStop() = extractWebView().apply {
     // called in onPause.
     onPause()
 }
-fun EngineView.onStart() = extractWebView().apply {
+fun EngineView.onStart() = webView.apply {
     // NB: onStart unexpectedly calls onResume: see onStop for details.
     onResume()
 }
-fun EngineView.destroy() = extractWebView().destroy()
+fun EngineView.destroy() = webView.destroy()
 
 val EngineView.focusedDOMElement: FocusedDOMElementCache
-    get() = domElementCache.getOrPut(this) {
-        FocusedDOMElementCache(this)
-    }
+    get() = getOrPutExtension(this).domElementCache
 
-/**
- * Extract the wrapped WebView from the EngineView. This is a temporary workaround until all required functionality has
- * been implemented in the upstream component.
- *
- * For now EngineView wraps a single WebView and we can easily extract that and apply workarounds. Later EngineView may
- * keep multiple WebView instances to animate tab switches. However this part is not implemented yet and we should make
- * sure that we upstream the missing functionality first.
- */
-private fun EngineView.extractWebView(): WebView {
-    val viewGroup = (asView() as FrameLayout)
-    return viewGroup.getChildAt(0) as WebView
+// This method is only for adding extension methods here (as a workaround). Do not expose WebView to the app.
+private val EngineView.webView: WebView
+    get() = getOrPutExtension(this).webView
+
+private val extensions = WeakHashMap<EngineView, EngineViewExtension>()
+
+private fun getOrPutExtension(engineView: EngineView): EngineViewExtension {
+    extensions[engineView]?.let { return it }
+
+    return EngineViewExtension(engineView).also {
+        extensions[engineView] = it
+    }
 }
 
-private val domElementCache: WeakHashMap<EngineView, FocusedDOMElementCache> = WeakHashMap()
+/**
+ * Cache of additional properties on [EngineView].
+ */
+private class EngineViewExtension(engineView: EngineView) {
+    val domElementCache: FocusedDOMElementCache = FocusedDOMElementCache(engineView)
+
+    /**
+     * Extract the wrapped WebView from the EngineView. This is a temporary workaround until all required functionality has
+     * been implemented in the upstream component.
+     *
+     * For now EngineView wraps a single WebView and we can easily extract that and apply workarounds. Later EngineView may
+     * keep multiple WebView instances to animate tab switches. However this part is not implemented yet and we should make
+     * sure that we upstream the missing functionality first.
+     */
+    val webView: WebView = (engineView.asView() as FrameLayout).getChildAt(0) as WebView
+}
