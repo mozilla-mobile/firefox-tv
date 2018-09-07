@@ -7,6 +7,8 @@ package org.mozilla.focus.ext
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
+import android.os.Handler
+import android.os.Looper
 import android.webkit.WebView
 import android.widget.FrameLayout
 import mozilla.components.concept.engine.EngineView
@@ -18,6 +20,8 @@ import java.util.WeakHashMap
 
 // Extension methods on the EngineView class. This is used for additional features that are not part
 // of the upstream browser-engine(-system) component yet.
+
+private val uiHandler = Handler(Looper.getMainLooper())
 
 /**
  * Firefox for Fire TV needs to configure every WebView appropriately.
@@ -75,6 +79,23 @@ fun EngineView.setupForApp(context: Context) {
 
     if (AppConstants.isDevBuild()) {
         WebView.setWebContentsDebuggingEnabled(true)
+    }
+
+    webView.setOnFocusChangeListener { _, hasFocus ->
+        if (!hasFocus) {
+            // For why we're modifying the focusedDOMElement, see FocusedDOMElementCache.
+            //
+            // Any views (like BrowserNavigationOverlay) that may clear the cache, e.g. by
+            // reloading the page, are required to handle their own caching. Here we'll handle
+            // cases where the page cache isn't cleared.
+            focusedDOMElement.cache()
+        } else {
+            // Trying to restore immediately doesn't work - perhaps the WebView hasn't actually
+            // received focus yet? Posting to the end of the UI queue seems to solve the problem.
+            uiHandler.post {
+                uiHandler.post { focusedDOMElement.restore() }
+            }
+        }
     }
 }
 
