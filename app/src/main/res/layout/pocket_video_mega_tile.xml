@@ -10,38 +10,90 @@
     <!-- To ensure this lays out consistently, we declare some attributes in code.
 
          We set the SVG & thumbnails in code: see the code for details. -->
-    <ImageView
-        android:id="@+id/pocketWordmarkView"
-        android:layout_width="0dp"
-        android:layout_height="30.5dp"
-        android:layout_weight="1"
-        android:contentDescription="@null"
-        tools:src="@drawable/ic_pocket_and_wordmark"
-        tools:tint="@color/photonGrey10"
-        />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/thumbnail1View"
-        style="@style/PocketVideoMegaTileThumbnail"
-        android:contentDescription="@null"
-        />
+        <LinearLayout
+            android:id="@+id/pocketVideosContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
 
-    <ImageView
-        android:id="@+id/thumbnail2View"
-        style="@style/PocketVideoMegaTileThumbnail"
-        android:contentDescription="@null"
-        />
+            <ImageView
+                android:id="@+id/pocketWordmarkView"
+                android:layout_width="0dp"
+                android:layout_height="30.5dp"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:contentDescription="@null"
+                tools:src="@drawable/ic_pocket_and_wordmark"
+                tools:tint="@color/photonGrey10"
+                />
 
-    <ImageView
-        android:id="@+id/thumbnail3View"
-        style="@style/PocketVideoMegaTileThumbnail"
-        android:contentDescription="@null"
-        />
+            <ImageView
+                android:id="@+id/thumbnail1View"
+                style="@style/PocketVideoMegaTileThumbnail"
+                android:contentDescription="@null"
+                />
 
-    <ImageView
-        android:id="@+id/thumbnail4View"
-        style="@style/PocketVideoMegaTileThumbnail"
-        android:contentDescription="@null"
-        />
+            <ImageView
+                android:id="@+id/thumbnail2View"
+                style="@style/PocketVideoMegaTileThumbnail"
+                android:contentDescription="@null"
+                />
+
+            <ImageView
+                android:id="@+id/thumbnail3View"
+                style="@style/PocketVideoMegaTileThumbnail"
+                android:contentDescription="@null"
+                />
+
+            <ImageView
+                android:id="@+id/thumbnail4View"
+                style="@style/PocketVideoMegaTileThumbnail"
+                android:contentDescription="@null"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/pocketErrorContainer"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="gone"
+            >
+
+            <TextView
+                android:id="@+id/pocketMegaTileLoadError"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/pocket_video_feed_failed_to_load"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:textColor="@color/photonGrey10"
+                android:fontFamily="@string/font_roboto_regular"
+                />
+
+            <Button
+                android:id="@+id/megaTileTryAgainButton"
+                android:layout_height="36dp"
+                android:layout_width="89dp"
+                android:text="@string/pocket_video_feed_reload_button"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/pocket_megatile_try_again_button"
+                android:textAllCaps="false"
+                android:fontFamily="@string/font_roboto_regular"
+                android:textSize="14sp"
+                />
+
+        </LinearLayout>
+
+    </FrameLayout>
 
 </merge>
