@@ -286,15 +286,18 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             else -> R.id.megaTileTryAgainButton
         }
 
+        navUrlInput.nextFocusUpId = when {
+            canGoBack -> R.id.navButtonBack
+            canGoForward -> R.id.navButtonForward
+            isRefreshEnabled -> R.id.navButtonReload
+            isPinEnabled -> R.id.pinButton
+            else -> R.id.navButtonSettings
+        }
+
         // We may have lost focus when disabling the focused view above.
         val isFocusLost = focusedView != null && findFocus() == null
         if (isFocusLost) {
             navUrlInput.requestFocus()
-        }
-
-        // Update nextFocusUpId of URL bar to leftmost active item in topNavContainer
-        topNavContainer?.getFocusables(FOCUS_LEFT)?.get(0)?.let {
-            navUrlInput.nextFocusUpId = it.id
         }
 
         maybeUpdateOverlayURLForCurrentState()
