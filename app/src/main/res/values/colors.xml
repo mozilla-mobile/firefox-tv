@@ -23,20 +23,21 @@
     <color name="onboarding_overlay">#cc000000</color>
     <color name="onboarding_button_highlight">#500060df</color>
 
-    <color name="browser_overlay_background">#e6000000</color>
+    <color name="browser_overlay_background">@color/photonGrey70</color>
 
     <color name="pocket_onboarding_background">#e60c0c0d</color>
 
-    <color name="button_highlight">#64ffffff</color>
-    <color name="button_default">@color/translucent_tv_ink</color>
-    <color name="button_disabled">@color/tv_ink</color>
-    <color name="button_focused">@color/tv_blue50</color>
-    <color name="button_pressed">@color/tv_blue60</color>
-    <color name="button_checked">@color/translucent_tv_ink2</color>
-    <color name="button_border">@color/translucent_tv_gray40</color>
+    <color name="button_pressed">@color/photonBlue60</color>
+    <color name="button_checked">@color/photonGrey90</color>
+    <color name="button_focus_border">@color/photonBlue50</color>
 
     <color name="photonGrey10_a60p">#99F9F9FA</color>
     <color name="photonGrey10_a80p">#CCF9F9FA</color>
+    <color name="photonGrey40_a20p">#33b1b1b3</color>
+
+    <color name="tv_white">#eeeeee</color>
+    <color name="tv_gray2">#a0a0a3</color>
+    <color name="tv_ink">#0c0c15</color>
 
     <!-- via https://github.com/mozilla-mobile/firefox-tv/issues/759#issuecomment-381702769 -->
     <color name="pocket_coral">#EF4056</color>

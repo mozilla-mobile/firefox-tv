@@ -10,5 +10,5 @@
         android:width="40dp" />
     <solid android:color="@color/overlay_button_selector" />
     <stroke android:color="@color/overlay_button_border"
-        android:width="0.5dp" />
+        android:width="4dp" />
 </shape>
