@@ -41,4 +41,6 @@
 
     <!-- via https://github.com/mozilla-mobile/firefox-tv/issues/759#issuecomment-381702769 -->
     <color name="pocket_coral">#EF4056</color>
+
+    <color name="black_10_percent_opacity">#1A000000</color>
 </resources>

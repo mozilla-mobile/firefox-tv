@@ -35,6 +35,7 @@ class PocketVideoMegaTile(
 
         thumbnailViews.forEachIndexed { i, thumbnailView ->
             PicassoWrapper.client.load(thumbnails[i])
+                    .placeholder(R.drawable.pocket_placeholder)
                     .transform(roundCornerTransformation)
                     .into(thumbnailView)
         }

@@ -86,6 +86,7 @@
         <item name="android:layout_height">84.375dp</item>
         <item name="android:layout_marginStart">12dp</item>
         <item name="android:layout_marginEnd">12dp</item>
+        <item name="android:src">@drawable/pocket_placeholder</item>
     </style>
 
 </resources>
