@@ -46,6 +46,9 @@ class InfoFragment : EngineViewLifecycleFragment(), Session.Observer {
         // (e.g. wrong tracker count). However disabling tracking protection here shouldn't have any negative effects.
         engineSession.disableTrackingProtection()
 
+        // To avoid a visual glitch hide the WebView until the page is loaded.
+        webView!!.asView().visibility = View.GONE
+
         webView!!.render(engineSession)
     }
 
@@ -58,6 +61,7 @@ class InfoFragment : EngineViewLifecycleFragment(), Session.Observer {
             progressView?.announceForAccessibility(getString(R.string.accessibility_announcement_loading))
         } else {
             progressView?.announceForAccessibility(getString(R.string.accessibility_announcement_loading_finished))
+            webView?.asView()?.visibility = View.VISIBLE
         }
 
         progressView?.visibility = if (loading) {
