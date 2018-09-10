@@ -156,36 +156,6 @@ fun EngineView.scrollByClamped(vx: Int, vy: Int) {
     }
 }
 
-/**
- * Forwarding lifecycle method to WebView.
- *
- * Component upstream issue:
- * https://github.com/mozilla-mobile/android-components/issues/657
- */
-fun EngineView.pauseTimers() = webView.pauseTimers()
-fun EngineView.resumeTimers() = webView.resumeTimers()
-fun EngineView.onStop() = webView.apply {
-    // NB: onStop unexpectedly calls onPause: see below.
-    //
-    // When the user says "Alexa pause [the video]", the Activity will be paused/resumed while
-    // Alexa handles the request. If the WebView is paused during video playback, the video will
-    // have poor behavior (on YouTube the screen goes black, may rebuffer, and may lose the voice
-    // command). Unfortunately, there does not appear to be any way to prevent this other than
-    // to not call WebView.onPause so we pause the WebView later, here in onStop, when it isn't
-    // affected by Alexa voice commands. Luckily, Alexa pauses the video for us. afaict, on
-    // Fire TV, `onPause` without `onStop` isn't called very often so I don't think there will
-    // be many side effects (#936).
-    //
-    // The problem is not reproducible when onPause is called here, even if pauseTimers is
-    // called in onPause.
-    onPause()
-}
-fun EngineView.onStart() = webView.apply {
-    // NB: onStart unexpectedly calls onResume: see onStop for details.
-    onResume()
-}
-fun EngineView.destroy() = webView.destroy()
-
 val EngineView.focusedDOMElement: FocusedDOMElementCache
     get() = getOrPutExtension(this).domElementCache
 

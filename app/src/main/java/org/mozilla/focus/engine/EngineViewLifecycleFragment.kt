@@ -11,11 +11,6 @@ import android.view.View
 import android.webkit.WebView
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.focus.R
-import org.mozilla.focus.ext.destroy
-import org.mozilla.focus.ext.onStart
-import org.mozilla.focus.ext.onStop
-import org.mozilla.focus.ext.pauseTimers
-import org.mozilla.focus.ext.resumeTimers
 import org.mozilla.focus.locale.LocaleAwareFragment
 import org.mozilla.focus.locale.LocaleManager
 import java.util.Locale
@@ -51,24 +46,30 @@ abstract class EngineViewLifecycleFragment : LocaleAwareFragment() {
 
     open fun onWebViewCreated(webView: EngineView) = Unit
 
-    override fun onPause() {
-        webView!!.pauseTimers()
-        super.onPause()
-    }
-
-    override fun onResume() {
-        webView!!.resumeTimers()
-        super.onResume()
-    }
-
     override fun onStop() {
         super.onStop()
-        webView!!.onStop() // internally calls WebView.onPause: see impl for details.
+
+        // NB: onStop unexpectedly calls onPause: see below.
+        //
+        // When the user says "Alexa pause [the video]", the Activity will be paused/resumed while
+        // Alexa handles the request. If the WebView is paused during video playback, the video will
+        // have poor behavior (on YouTube the screen goes black, may rebuffer, and may lose the voice
+        // command). Unfortunately, there does not appear to be any way to prevent this other than
+        // to not call WebView.onPause so we pause the WebView later, here in onStop, when it isn't
+        // affected by Alexa voice commands. Luckily, Alexa pauses the video for us. afaict, on
+        // Fire TV, `onPause` without `onStop` isn't called very often so I don't think there will
+        // be many side effects (#936).
+        //
+        // The problem is not reproducible when onPause is called here, even if pauseTimers is
+        // called in onPause.
+        webView!!.onPause() // internally calls WebView.onPause: see impl for details.
     }
 
     override fun onStart() {
         super.onStart()
-        webView!!.onStart() // internally calls WebView.onResume: see impl for details.
+
+        // NB: onStart unexpectedly calls onResume: see onStop for details.
+        onResume()
     }
 
     override fun onDestroy() {
@@ -82,7 +83,7 @@ abstract class EngineViewLifecycleFragment : LocaleAwareFragment() {
         //
         // Note: Focus does this null check too.
         if (webView != null) {
-            webView!!.destroy()
+            webView!!.onDestroy()
             webView = null
         }
     }
