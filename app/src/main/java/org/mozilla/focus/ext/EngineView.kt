@@ -106,7 +106,7 @@ fun EngineView.setupForApp(context: Context) {
  * requires JS injection to browser-engine-system.
  */
 fun EngineView.evalJS(javascript: String) {
-    webView.loadUrl("javascript:$javascript")
+    webView.evaluateJavascript(javascript, null)
 }
 
 /**
