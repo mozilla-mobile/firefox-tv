@@ -26,7 +26,6 @@ import org.mozilla.focus.R
 import org.mozilla.focus.ScreenController
 import org.mozilla.focus.browser.cursor.CursorController
 import org.mozilla.focus.ext.components
-import org.mozilla.focus.ext.focusedDOMElement
 import org.mozilla.focus.ext.isVisible
 import org.mozilla.focus.ext.isYoutubeTV
 import org.mozilla.focus.ext.requireComponents
