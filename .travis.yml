@@ -22,7 +22,7 @@ before_install:
 script:
   - ./gradlew clean assemble
   - echo "--" > .adjust_token
-  - ./gradlew jacocoTestReport
+  - ./gradlew -Pcoverage jacocoDebugTestReport
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
