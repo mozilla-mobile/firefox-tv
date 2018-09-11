@@ -13,7 +13,7 @@ coverage:
        if_not_found: success
     patch:
       default:
-        enabled: no
+        enabled: yes
         if_not_found: success
     changes:
       default:
