@@ -163,6 +163,8 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
                 view = layout.cursorView)
         lifecycle.addObserver(cursor!!)
 
+        val bundle: Bundle? = arguments
+
         with(layout.browserOverlay) {
             onNavigationEvent = this@BrowserFragment.onNavigationEvent
             navigationStateProvider = NavigationStateProvider()
@@ -172,6 +174,10 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
                 activity?.openContextMenu(browserOverlay.tileContainer)
             }
             registerForContextMenu(browserOverlay.tileContainer)
+
+            if (bundle?.getSerializable("PARENT_FRAGMENT") != null) {
+                parentFrag = bundle.getSerializable("PARENT_FRAGMENT") as BrowserNavigationOverlay.ParentFragment
+            }
         }
 
         layout.progressBar.initialize(this)
@@ -244,6 +250,12 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
         activity?.menuInflater?.inflate(R.menu.menu_context_hometile, menu)
+    }
+
+    fun handleBackPressFromSettings() {
+//        if (browserOverlay.isVisible) {
+//            browserOverlay.handleBackPressFromSettings()
+//        }
     }
 
     fun onBackPressed(): Boolean {

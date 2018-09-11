@@ -79,6 +79,12 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         fun isRefreshEnabled(): Boolean
     }
 
+    enum class ParentFragment {
+        SETTINGS,
+        POCKET,
+        DEFAULT
+    }
+
     /**
      * Used to cancel background->UI threads: we attach them as children to this job
      * and cancel this job at the end of the UI lifecycle, cancelling the children.
@@ -106,6 +112,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     var navigationStateProvider: BrowserNavigationStateProvider? = null
 
     private var pocketVideos = Pocket.getRecommendedVideos()
+
+    var parentFrag = ParentFragment.DEFAULT
 
     private var hasUserChangedURLSinceEditTextFocused = false
 
@@ -326,7 +334,17 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         if (visibility == View.VISIBLE) {
             overlayScrollView.scrollTo(0, 0)
-            navUrlInput.requestFocus()
+            when (parentFrag) {
+                ParentFragment.SETTINGS -> {
+                    navButtonSettings.requestFocus()
+                }
+                ParentFragment.POCKET -> {
+                    pocketVideoMegaTileView.requestFocus()
+                }
+                ParentFragment.DEFAULT -> {
+                    navUrlInput.requestFocus()
+                }
+            }
             updateOverlayForCurrentState()
         }
     }
