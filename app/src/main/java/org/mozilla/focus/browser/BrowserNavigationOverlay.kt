@@ -291,7 +291,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             canGoForward -> R.id.navButtonForward
             isRefreshEnabled -> R.id.navButtonReload
             isPinEnabled -> R.id.pinButton
-            else -> R.id.navButtonSettings
+            else -> R.id.turboButton
         }
 
         // We may have lost focus when disabling the focused view above.
