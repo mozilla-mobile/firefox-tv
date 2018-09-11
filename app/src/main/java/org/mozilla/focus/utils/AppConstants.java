@@ -9,7 +9,6 @@ import org.mozilla.focus.BuildConfig;
 
 public final class AppConstants {
     private static final String BUILD_TYPE_DEBUG = "debug";
-    private static final String BUILD_TYPE_BETA = "beta";
     private static final String BUILD_TYPE_RELEASE = "release";
 
     private AppConstants() {}
@@ -21,9 +20,4 @@ public final class AppConstants {
     public static boolean isReleaseBuild() {
         return BUILD_TYPE_RELEASE.equals(BuildConfig.BUILD_TYPE);
     }
-
-    public static boolean isBetaBuild() {
-        return BUILD_TYPE_BETA.equals(BuildConfig.BUILD_TYPE);
-    }
-
 }
