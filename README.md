@@ -57,6 +57,19 @@ If using an emulator, we recommend the Android TV device image: either 720p or
 1080p is fine. API 22 (Stick) and 25 (4K) are best. You can press `cmd+m` to
 simulate a menu button press.
 
+### Testing
+To run a reasonable subset of the unit tests, we recommend:
+```sh
+./gradlew testDebug
+```
+
+To generate code coverage reports, run:
+```sh
+./gradlew -Pcoverage jacocoDebugTestReport
+```
+
+Reports can be found at `app/build/jacoco/jacoco<buildVariant>TestReport/html/index.html`
+
 ### Pre-push hooks
 To reduce review turn-around time, we'd like all pushes to run tests locally. We'd
 recommend you use our provided pre-push hook in `quality/pre-push-recommended.sh`.
