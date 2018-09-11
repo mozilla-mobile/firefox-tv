@@ -45,13 +45,6 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-        beta {
-            initWith debug
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            applicationIdSuffix ".beta"
-        }
         debug {
             applicationIdSuffix ".debug"
         }
@@ -186,9 +179,7 @@ dependencies {
 
 android.applicationVariants.all { variant ->
     def buildType = variant.buildType.name
-    def isBetaOrRelease = buildType == "release" || buildType == "beta"
-
-    if (isBetaOrRelease) {
+    if (buildType == "release") {
         variant.outputs.all { output ->
             setVersionCodeOverride(generatedVersionCode)
         }
@@ -239,7 +230,7 @@ def addSecretToBuildConfig(variant, fieldName, fileBaseName) {
     def fileSuffix
     if (variantName.contains("debug")) {
         fileSuffix = "debug"
-    } else if (variantName.contains("beta") || variantName.contains("release")) {
+    } else if (variantName.contains("release")) {
         fileSuffix = "release"
     } else if (variantName.contains("coverage")) {
         // We never want to bundle API keys with Coverage.
