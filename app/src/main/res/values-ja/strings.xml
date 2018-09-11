@@ -88,4 +88,5 @@
   <string name="google_search_tile_title">Google で検索</string>
   <string name="google_search_hint_text">Google で検索またはアドレスを入力</string>
   <string name="blank_tile_title">ウェブサイトを追加</string>
+  <string name="dialog_clear_cookies_title">Cookie を消去しますか？</string>
 </resources>
