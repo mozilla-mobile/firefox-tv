@@ -18,12 +18,14 @@ import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.focus.browser.BrowserFragment
 import org.mozilla.focus.browser.BrowserFragment.Companion.APP_URL_HOME
+import org.mozilla.focus.browser.BrowserNavigationOverlay
 import org.mozilla.focus.browser.VideoVoiceCommandMediaSession
 import org.mozilla.focus.ext.components
 import org.mozilla.focus.ext.setupForApp
 import org.mozilla.focus.ext.toSafeIntent
 import org.mozilla.focus.home.pocket.Pocket
 import org.mozilla.focus.home.pocket.PocketOnboardingActivity
+import org.mozilla.focus.home.pocket.PocketVideoFragment
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity
 import org.mozilla.focus.telemetry.SentryWrapper
 import org.mozilla.focus.telemetry.TelemetryWrapper
@@ -149,13 +151,36 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     override fun onBackPressed() {
         val fragmentManager = supportFragmentManager
         val browserFragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment?
-        if (browserFragment != null &&
-                browserFragment.isVisible &&
-                browserFragment.onBackPressed()) {
-            // The Browser fragment handles back presses on its own because it might just go back
-            // in the browsing history.
-            return
+
+        if (browserFragment != null) {
+            if (browserFragment.isVisible &&
+                    browserFragment.onBackPressed()) {
+                // The Browser fragment handles back presses on its own because it might just go back
+                // in the browsing history.
+                return
+            }
+
+            val currFragment = fragmentManager.findFragmentByTag(SettingsFragment.FRAGMENT_TAG)
+
+            if (browserFragment.arguments == null) {
+                browserFragment.arguments = Bundle()
+            }
+
+            // Set ParentFragment flag to the BrowserFragment based on currFragment and let
+            // fragment lifecycle handle the rest
+            when (currFragment) {
+                is SettingsFragment -> {
+                    browserFragment.arguments!!.putSerializable("PARENT_FRAGMENT", BrowserNavigationOverlay.ParentFragment.SETTINGS)
+                }
+                is PocketVideoFragment -> {
+                    browserFragment.arguments!!.putSerializable("PARENT_FRAGMENT", BrowserNavigationOverlay.ParentFragment.POCKET)
+                }
+                else -> {
+                    browserFragment.arguments!!.putSerializable("PARENT_FRAGMENT", BrowserNavigationOverlay.ParentFragment.DEFAULT)
+                }
+            }
         }
+
         super.onBackPressed()
     }
 
