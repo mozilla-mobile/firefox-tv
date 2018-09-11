@@ -103,8 +103,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?
     ) -> Unit)? = null
     var navigationStateProvider: BrowserNavigationStateProvider? = null
-    /** Called inside [setVisibility] right before super.setVisibility is called. */
-    var onPreSetVisibilityListener: ((isVisible: Boolean) -> Unit)? = null
 
     private val pocketVideos = Pocket.getRecommendedVideos()
 
@@ -294,7 +292,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     }
 
     override fun setVisibility(visibility: Int) {
-        onPreSetVisibilityListener?.invoke(visibility == View.VISIBLE)
         super.setVisibility(visibility)
 
         if (visibility == View.VISIBLE) {
