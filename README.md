@@ -99,11 +99,11 @@ value with true (upload is disabled by default in dev builds).
 it won't indicate if the key is valid). You will see a message in the gradle output
 indicating the key was added:
 
-`Sentry DSN (amazonWebviewDebug): Added from /Users/mcomella/dev/moz/firefox-tv/.sentry_dsn_debug`
+`Sentry DSN (debug): Added from /Users/mcomella/dev/moz/firefox-tv/.sentry_dsn_debug`
 
 As opposed to:
 
-`Sentry DSN (amazonWebviewDebug): X_X`
+`Sentry DSN (debug): X_X`
 
 API services currently supported are:
 * sentry_dsn
