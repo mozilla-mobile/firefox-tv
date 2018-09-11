@@ -47,7 +47,7 @@
             android:layout_width="498dp"
             android:layout_height="@dimen/urlbar_height"
             android:layout_marginStart="57dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="48dp"
             android:background="@drawable/nav_urlbar_background"
             android:hint="@string/urlbar_hint"
             android:textColorHint="@color/photonGrey10_a80p"
