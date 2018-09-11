@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'findbugs'
 apply plugin: 'jacoco'
-apply plugin: 'jacoco-android'
 apply plugin: 'pmd'
 apply plugin: 'checkstyle'
 apply plugin: 'kotlin-android-extensions'
@@ -55,23 +54,9 @@ android {
         debug {
             applicationIdSuffix ".debug"
         }
-        // Use a separate buildType for coverage: testCoverageEnabled produces slower code (4-5x slower
-        // in places that I've benchmarked), and more importantly seems to break debugging with Android Studio
-        // for some developers (i.e. variables can't be inspected or seen).
-        coverage {
-            initWith debug
-
-            applicationIdSuffix ".coverage"
-            testCoverageEnabled true
-        }
     }
 
     testOptions {
-        unitTests.all {
-            jacoco {
-                includeNoLocationClasses = true
-            }
-        }
         unitTests.includeAndroidResources true // for robolectric.
         execution 'ANDROID_TEST_ORCHESTRATOR'
     }
@@ -94,12 +79,6 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 
 kotlin {
     experimental { coroutines 'enable' }
-}
-
-jacocoAndroidUnitTestReport {
-    csv.enabled false
-    html.enabled true
-    xml.enabled true
 }
 
 repositories {
@@ -241,11 +220,6 @@ def addSecretToBuildConfig(variant, fieldName, fileBaseName) {
         fileSuffix = "debug"
     } else if (variantName.contains("beta") || variantName.contains("release")) {
         fileSuffix = "release"
-    } else if (variantName.contains("coverage")) {
-        // We never want to bundle API keys with Coverage.
-        variant.buildConfigField 'String', fieldName, 'null'
-        println("X_X")
-        return
     } else {
         throw new IllegalStateException("Unhandled variant $variantName")
     }
