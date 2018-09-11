@@ -29,7 +29,6 @@
         android:id="@+id/pinButton"
         style="@style/NavigationButton"
         android:src="@drawable/pin_selector"
-        android:scaleX="-1"
         android:contentDescription="@string/pin_label"/>
 
     <org.mozilla.focus.widget.CheckableImageButton
