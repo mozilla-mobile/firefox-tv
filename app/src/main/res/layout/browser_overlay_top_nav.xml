@@ -53,7 +53,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_firefox_and_workmark"
+        android:src="@drawable/ic_firefox_and_wordmark"
         android:contentDescription="@null" />
 
 </merge>
