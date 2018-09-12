@@ -47,7 +47,7 @@ class InfoFragment : EngineViewLifecycleFragment(), Session.Observer {
         engineSession.disableTrackingProtection()
 
         // To avoid a visual glitch hide the WebView until the page is loaded.
-        webView!!.asView().visibility = View.GONE
+        webView!!.asView().visibility = View.INVISIBLE
 
         webView!!.render(engineSession)
     }
