@@ -252,12 +252,6 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
         activity?.menuInflater?.inflate(R.menu.menu_context_hometile, menu)
     }
 
-    fun handleBackPressFromSettings() {
-//        if (browserOverlay.isVisible) {
-//            browserOverlay.handleBackPressFromSettings()
-//        }
-    }
-
     fun onBackPressed(): Boolean {
         when {
             browserOverlay.isVisible && !isUrlEqualToHomepage -> {
@@ -343,6 +337,10 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
      * [BrowserNavigationOverlay.isVisible] directly.
      */
     private fun setOverlayVisible(toShow: Boolean) {
+        if (browserOverlay.parentFrag != BrowserNavigationOverlay.ParentFragment.DEFAULT) {
+            browserOverlay.parentFrag = BrowserNavigationOverlay.ParentFragment.DEFAULT
+        }
+        
         browserOverlay.visibility = if (toShow) View.VISIBLE else View.GONE
         if (toShow) cursor?.onPause() else cursor?.onResume()
         cursor?.setEnabledForCurrentState()
