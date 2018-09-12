@@ -60,8 +60,8 @@ abstract class EngineViewLifecycleFragment : LocaleAwareFragment() {
         // Fire TV, `onPause` without `onStop` isn't called very often so I don't think there will
         // be many side effects (#936).
         //
-        // The problem is not reproducible when onPause is called here, even if pauseTimers is
-        // called in onPause.
+        // The problem is not reproducible when onPause is called here in onStop (even if pauseTimers is
+        // called in onPause, in the android-components library).
         webView!!.onPause() // internally calls WebView.onPause: see impl for details.
     }
 
