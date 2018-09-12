@@ -166,6 +166,10 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
         val bundle: Bundle? = arguments
 
         with(layout.browserOverlay) {
+            if (bundle?.getSerializable("PARENT_FRAGMENT") != null) {
+                parentFrag = bundle.getSerializable("PARENT_FRAGMENT") as BrowserNavigationOverlay.ParentFragment
+            }
+
             onNavigationEvent = this@BrowserFragment.onNavigationEvent
             navigationStateProvider = NavigationStateProvider()
             visibility = overlayVisibleCached ?: View.GONE
@@ -174,10 +178,6 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
                 activity?.openContextMenu(browserOverlay.tileContainer)
             }
             registerForContextMenu(browserOverlay.tileContainer)
-
-            if (bundle?.getSerializable("PARENT_FRAGMENT") != null) {
-                parentFrag = bundle.getSerializable("PARENT_FRAGMENT") as BrowserNavigationOverlay.ParentFragment
-            }
         }
 
         layout.progressBar.initialize(this)
@@ -340,7 +340,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
         if (browserOverlay.parentFrag != BrowserNavigationOverlay.ParentFragment.DEFAULT) {
             browserOverlay.parentFrag = BrowserNavigationOverlay.ParentFragment.DEFAULT
         }
-        
+
         browserOverlay.visibility = if (toShow) View.VISIBLE else View.GONE
         if (toShow) cursor?.onPause() else cursor?.onResume()
         cursor?.setEnabledForCurrentState()
