@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable
 import android.preference.PreferenceManager
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -269,10 +268,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         maybeUpdateOverlayURLForCurrentState()
     }
 
-    fun getFocusedTilePosition(): Int {
-        return (rootView.findFocus().parent as? RecyclerView)?.getChildAdapterPosition(rootView.findFocus()) ?: RecyclerView.NO_POSITION
-    }
-
     private fun maybeUpdateOverlayURLForCurrentState() {
         // The url can get updated in the background, e.g. if a loading page is redirected. We
         // don't want a url update to interrupt the user typing so we don't update the url from
@@ -308,7 +303,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
     fun removePinnedSiteFromTiles(tileId: String) {
         val adapter = tileContainer.adapter as HomeTileAdapter
-        adapter.removeTileFromAdapter(tileId)
+        adapter.removeTile(tileId)
     }
 }
 

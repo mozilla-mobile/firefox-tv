@@ -213,13 +213,12 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
         when (item.itemId) {
             R.id.remove -> {
                 val homeTileAdapter = tileContainer.adapter as HomeTileAdapter
-                val tileToRemove = homeTileAdapter.getItemAtPosition(browserOverlay.getFocusedTilePosition())
-                        ?: return false
+                val tileToRemove = homeTileAdapter.lastLongClickedTile ?: return false
 
                 // This assumes that since we're deleting from a Home Tile object that we created
                 // that the Uri is valid, so we do not do error handling here.
                 HomeTilesManager.removeHomeTile(tileToRemove, context!!)
-                homeTileAdapter.removeItemAtPosition(browserOverlay.getFocusedTilePosition())
+                homeTileAdapter.removeTile(tileToRemove.idToString())
                 TelemetryWrapper.homeTileRemovedEvent(tileToRemove)
                 return true
             }
