@@ -19,11 +19,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_pocket_video.*
 import kotlinx.android.synthetic.main.fragment_pocket_video.view.*
+import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.withContext
 import mozilla.components.browser.session.Session
 import org.mozilla.focus.R
 import org.mozilla.focus.ScreenController
+import org.mozilla.focus.ext.isNotCompleted
 import org.mozilla.focus.ext.resetAfter
 import org.mozilla.focus.ext.updateLayoutParams
 import org.mozilla.focus.telemetry.TelemetryWrapper
@@ -36,6 +39,7 @@ import java.net.URISyntaxException
 class PocketVideoFragment : Fragment() {
 
     private lateinit var deferredVideos: PocketVideosDeferred
+    private var job: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,37 +57,47 @@ class PocketVideoFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        fun displayFeed(layout: View, videos: PocketVideosDeferred) {
-            layout.videoFeed.gridView.adapter = PocketVideoAdapter(context!!, videos, fragmentManager!!)
+        return inflater.inflate(R.layout.fragment_pocket_video, container, false)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        fun displayFeed(videos: List<PocketVideo>) {
+            videoFeed.gridView.adapter = PocketVideoAdapter(context!!, videos, fragmentManager!!)
         }
-
-        val layout = inflater.inflate(R.layout.fragment_pocket_video, container, false)
-
-        if (deferredVideos.isCompleted) {
-            displayFeed(layout, deferredVideos)
-        } else {
-            // TODO: #769?: display loading screen.
-
-            launch(UI) {
-                val videos = deferredVideos.await()
-                if (videos != null) {
-                    displayFeed(layout, deferredVideos)
-                } else {
-                    // TODO: #769: display error screen.
-                }
+        fun setupLoadingIfApplicable() {
+            if (deferredVideos.isNotCompleted()) {
+                //TODO set up loading UI
+            }
+        }
+        fun displayFeedOrError(videos: List<PocketVideo>?) {
+            if (videos != null) {
+                displayFeed(videos)
+            } else {
+                // TODO: #769: display error screen.
             }
         }
 
+        job = launch(UI) {
+            setupLoadingIfApplicable()
+            val videos = deferredVideos.await()
+            displayFeedOrError(videos)
+        }
+
         // SVGs can have artifacts if we set them in XML so we set it in code.
-        layout.pocketWordmarkView.setImageDrawableAsPocketWordmark()
-        layout.pocketHelpButton.setImageDrawable(context!!.getDrawable(R.drawable.pocket_onboarding_help_button))
-        return layout
+        pocketWordmarkView.setImageDrawableAsPocketWordmark()
+        pocketHelpButton.setImageDrawable(context!!.getDrawable(R.drawable.pocket_onboarding_help_button))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         pocketHelpButton.setOnClickListener { _ ->
             startActivity(Intent(context, PocketOnboardingActivity::class.java))
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        job?.cancel()
     }
 
     companion object {
@@ -96,7 +110,7 @@ class PocketVideoFragment : Fragment() {
 
 private class PocketVideoAdapter(
     context: Context,
-    feedItemsDeferred: PocketVideosDeferred,
+    private val pocketVideos: List<PocketVideo>,
     private val fragmentManager: FragmentManager
 ) : RecyclerView.Adapter<PocketVideoViewHolder>() {
 
@@ -108,20 +122,13 @@ private class PocketVideoAdapter(
     private val videoItemHorizontalMargin = context.resources.getDimensionPixelSize(R.dimen.pocket_video_item_horizontal_margin)
     private val feedHorizontalMargin = context.resources.getDimensionPixelSize(R.dimen.pocket_feed_horizontal_margin)
 
-    private var feedItems: List<PocketVideo> = if (!feedItemsDeferred.isCompleted) {
-        // We let the parent wait for this to complete to simplify the code here.
-        throw IllegalStateException("Expected deferred to be completed in parent before creation")
-    } else {
-        feedItemsDeferred.getCompleted() ?: emptyList()
-    }
-
-    override fun getItemCount() = feedItems.size
+    override fun getItemCount() = pocketVideos.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             PocketVideoViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.pocket_video_item, parent, false))
 
     override fun onBindViewHolder(holder: PocketVideoViewHolder, position: Int) = with(holder) {
-        val item = feedItems[position]
+        val item = pocketVideos[position]
         setHorizontalMargins(holder, position)
 
         holder.itemView.setOnClickListener {
@@ -184,7 +191,7 @@ private class PocketVideoAdapter(
         (it as ViewGroup.MarginLayoutParams).apply {
             // We need to reset margins on every view, not just first/last, because the View instance can be re-used.
             marginStart = if (position == 0) feedHorizontalMargin else videoItemHorizontalMargin
-            marginEnd = if (position == feedItems.size - 1) feedHorizontalMargin else videoItemHorizontalMargin
+            marginEnd = if (position == pocketVideos.size - 1) feedHorizontalMargin else videoItemHorizontalMargin
         }
     }
 }
