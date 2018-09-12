@@ -49,6 +49,9 @@ class HomeTileAdapter(
     var onTileFocused: (() -> Unit)?
 ) : RecyclerView.Adapter<TileViewHolder>() {
 
+    var lastLongClickedTile: HomeTile? = null
+        private set
+
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with(holder) {
         val item = tiles[position]
         when (item) {
@@ -69,6 +72,8 @@ class HomeTileAdapter(
 
         itemView.setOnLongClickListener {
             onTileLongClick?.invoke()
+            lastLongClickedTile = item
+
             true
         }
 
@@ -120,22 +125,16 @@ class HomeTileAdapter(
         notifyItemInserted(homeTiles.lastIndex)
     }
 
-    fun getItemAtPosition(position: Int): HomeTile? = if (position > -1 && position < itemCount) {
-        tiles[position]
-    } else {
-        null
-    }
-
-    fun removeTileFromAdapter(tileId: String) {
+    fun removeTile(tileId: String) {
         for ((index, tile) in tiles.withIndex()) {
             if (tile is CustomHomeTile && tile.id.toString() == tileId || tile is BundledHomeTile && tile.id == tileId) {
-                removeItemAtPosition(index)
+                removeTile(index)
                 break
             }
         }
     }
 
-    fun removeItemAtPosition(position: Int) {
+    fun removeTile(position: Int) {
         if (position > -1 && position < itemCount) {
             tiles.removeAt(position)
             notifyItemRemoved(position)
