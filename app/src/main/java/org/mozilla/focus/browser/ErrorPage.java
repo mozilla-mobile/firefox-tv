@@ -4,12 +4,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 package org.mozilla.focus.browser;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.util.Pair;
 
 import android.util.SparseArray;
-import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import org.mozilla.focus.R;
 import org.mozilla.focus.utils.HtmlLoader;
@@ -85,7 +85,7 @@ public class ErrorPage {
         return (errorDescriptionMap.get(errorCode) != null);
     }
 
-    public static void loadErrorPage(final WebView webView, final String desiredURL, final int errorCode) {
+    public static String loadErrorPage(final Context context, final String desiredURL, final int errorCode) {
         final Pair<Integer, Integer> errorResourceIDs = errorDescriptionMap.get(errorCode);
 
         if (errorResourceIDs == null) {
@@ -104,25 +104,18 @@ public class ErrorPage {
         // https://code.google.com/p/android/issues/detail?id=211768 (this breaks loading css via file:///
         // references when running debug builds, and probably klar too) - which means this wouldn't
         // be possible even if we hacked around the mixed content issues.
-        final String cssString = HtmlLoader.loadResourceFile(webView.getContext(), R.raw.errorpage_style, null);
+        final String cssString = HtmlLoader.loadResourceFile(context, R.raw.errorpage_style, null);
 
         final Map<String, String> substitutionMap = new ArrayMap<>();
 
-        final Resources resources = webView.getContext().getResources();
+        final Resources resources = context.getResources();
 
         substitutionMap.put("%page-title%", resources.getString(R.string.errorpage_title));
         substitutionMap.put("%button%", resources.getString(R.string.errorpage_refresh));
-
         substitutionMap.put("%messageShort%", resources.getString(errorResourceIDs.first));
         substitutionMap.put("%messageLong%", resources.getString(errorResourceIDs.second, desiredURL));
-
         substitutionMap.put("%css%", cssString);
 
-        final String errorPage = HtmlLoader.loadResourceFile(webView.getContext(), R.raw.errorpage, substitutionMap);
-
-        // We could load the raw html file directly into the webview using a file:///android_res/
-        // URI - however we'd then need to do some JS hacking to do our String substitutions. Moreover
-        // we'd have to deal with the mixed-content issues detailed above in that case.
-        webView.loadDataWithBaseURL(desiredURL, errorPage, "text/html", "UTF8", desiredURL);
+        return HtmlLoader.loadResourceFile(context, R.raw.errorpage, substitutionMap);
     }
 }
