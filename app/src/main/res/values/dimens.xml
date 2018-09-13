@@ -37,6 +37,8 @@
 
     <dimen name="pocket_video_mega_tile_thumbnail_corner_radius">4dp</dimen>
 
+    <dimen name="pocket_video_mega_tile_error_margin">16dp</dimen>
+
     <!-- This value was chosen experimentally: see usages for criteria. -->
     <dimen name="browser_overlay_delta_scroll_padding">50dp</dimen>
 </resources>
