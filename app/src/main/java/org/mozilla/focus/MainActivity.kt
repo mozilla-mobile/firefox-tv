@@ -170,13 +170,13 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             // fragment lifecycle handle the rest
             when (currFragment) {
                 is SettingsFragment -> {
-                    browserFragment.arguments!!.putSerializable("PARENT_FRAGMENT", BrowserNavigationOverlay.ParentFragment.SETTINGS)
+                    browserFragment.arguments!!.putSerializable(PARENT_FRAGMENT, BrowserNavigationOverlay.ParentFragment.SETTINGS)
                 }
                 is PocketVideoFragment -> {
-                    browserFragment.arguments!!.putSerializable("PARENT_FRAGMENT", BrowserNavigationOverlay.ParentFragment.POCKET)
+                    browserFragment.arguments!!.putSerializable(PARENT_FRAGMENT, BrowserNavigationOverlay.ParentFragment.POCKET)
                 }
                 else -> {
-                    browserFragment.arguments!!.putSerializable("PARENT_FRAGMENT", BrowserNavigationOverlay.ParentFragment.DEFAULT)
+                    browserFragment.arguments!!.putSerializable(PARENT_FRAGMENT, BrowserNavigationOverlay.ParentFragment.DEFAULT)
                 }
             }
         }
@@ -215,5 +215,9 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         return videoVoiceCommandMediaSession.dispatchKeyEvent(event) ||
                 (maybeBrowserFragment?.dispatchKeyEvent(event) ?: false) ||
                 super.dispatchKeyEvent(event)
+    }
+
+    companion object {
+        const val PARENT_FRAGMENT = "PARENT_FRAGMENT"
     }
 }
