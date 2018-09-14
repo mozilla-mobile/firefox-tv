@@ -163,6 +163,16 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
                 view = layout.cursorView)
         lifecycle.addObserver(cursor!!)
 
+        /**
+         * TODO: #1085
+         * When navigating fragment back stack through MainActivity.onBackPressed(),
+         * FragmentManager.transaction recreates BrowserFragment which results in
+         * browserOverlay.setVisibility to be called. For now, due to lack of NavigationOverlay
+         * UI state, we must update browserOverlay's parent state in onCreateView due to
+         * inconsistency in the existence of the browserOverlay instance elsewhere in the fragment
+         * lifecycle (refer to Issue #1107) and the timing from which browserOverlay.setVisibility
+         * is called
+         */
         val bundle: Bundle? = arguments
 
         with(layout.browserOverlay) {
