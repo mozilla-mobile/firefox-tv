@@ -19,13 +19,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_pocket_video.*
 import kotlinx.android.synthetic.main.fragment_pocket_video.view.*
+import kotlinx.coroutines.experimental.CoroutineStart
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.withContext
 import mozilla.components.browser.session.Session
 import org.mozilla.focus.R
 import org.mozilla.focus.ScreenController
+import org.mozilla.focus.ext.forceExhaustive
 import org.mozilla.focus.ext.isNotCompleted
 import org.mozilla.focus.ext.resetAfter
 import org.mozilla.focus.ext.updateLayoutParams
@@ -39,7 +40,7 @@ import java.net.URISyntaxException
 class PocketVideoFragment : Fragment() {
 
     private lateinit var deferredVideos: PocketVideosDeferred
-    private var job: Job? = null
+    private var uiLifecycleCancelJob: Job? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,36 +58,35 @@ class PocketVideoFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_pocket_video, container, false)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        fun displayFeed(videos: List<PocketVideo>) {
-            videoFeed.gridView.adapter = PocketVideoAdapter(context!!, videos, fragmentManager!!)
+        val layout = inflater.inflate(R.layout.fragment_pocket_video, container, false)
+        val adapter = PocketVideoAdapter(context!!, fragmentManager!!).also {
+            layout.videoFeed.gridView.adapter = it
         }
         fun setupLoadingIfApplicable() {
             if (deferredVideos.isNotCompleted()) {
-                //TODO set up loading UI
+                // We show 20 placeholders because our feed will be updated to show 20 items
+                val placeholders = List(20) { PocketPlaceholder }
+                adapter.setVideos(placeholders)
             }
         }
         fun displayFeedOrError(videos: List<PocketVideo>?) {
             if (videos != null) {
-                displayFeed(videos)
+                adapter.setVideos(videos)
             } else {
                 // TODO: #769: display error screen.
             }
         }
 
-        job = launch(UI) {
+        // SVGs can have artifacts if we set them in XML so we set it in code.
+        layout.pocketWordmarkView.setImageDrawableAsPocketWordmark()
+        layout.pocketHelpButton.setImageDrawable(context!!.getDrawable(R.drawable.pocket_onboarding_help_button))
+
+        uiLifecycleCancelJob = launch(UI, CoroutineStart.UNDISPATCHED) {
             setupLoadingIfApplicable()
             val videos = deferredVideos.await()
             displayFeedOrError(videos)
         }
-
-        // SVGs can have artifacts if we set them in XML so we set it in code.
-        pocketWordmarkView.setImageDrawableAsPocketWordmark()
-        pocketHelpButton.setImageDrawable(context!!.getDrawable(R.drawable.pocket_onboarding_help_button))
+        return layout
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -95,9 +95,10 @@ class PocketVideoFragment : Fragment() {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        job?.cancel()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        uiLifecycleCancelJob?.cancel()
+        uiLifecycleCancelJob = null
     }
 
     companion object {
@@ -110,9 +111,10 @@ class PocketVideoFragment : Fragment() {
 
 private class PocketVideoAdapter(
     context: Context,
-    private val pocketVideos: List<PocketVideo>,
     private val fragmentManager: FragmentManager
 ) : RecyclerView.Adapter<PocketVideoViewHolder>() {
+
+    private val pocketVideos = mutableListOf<PocketFeedItem>()
 
     private val photonGrey70 = ContextCompat.getColor(context, R.color.photonGrey70)
     private val photonGrey60 = ContextCompat.getColor(context, R.color.photonGrey60)
@@ -121,6 +123,12 @@ private class PocketVideoAdapter(
 
     private val videoItemHorizontalMargin = context.resources.getDimensionPixelSize(R.dimen.pocket_video_item_horizontal_margin)
     private val feedHorizontalMargin = context.resources.getDimensionPixelSize(R.dimen.pocket_feed_horizontal_margin)
+
+    fun setVideos(videos: List<PocketFeedItem>) {
+        pocketVideos.clear()
+        pocketVideos.addAll(videos)
+        notifyDataSetChanged()
+    }
 
     override fun getItemCount() = pocketVideos.size
 
@@ -131,12 +139,27 @@ private class PocketVideoAdapter(
         val item = pocketVideos[position]
         setHorizontalMargins(holder, position)
 
-        holder.itemView.setOnClickListener {
-            ScreenController.showBrowserScreenForUrl(holder.itemView.context, fragmentManager, item.url, Session.Source.HOME_SCREEN)
+        when (item) {
+            is PocketPlaceholder -> holder.bindPlaceholder()
+            is PocketVideo -> holder.bindPocketVideo(item)
+        }.forceExhaustive
+    }
+
+    private fun PocketVideoViewHolder.bindPlaceholder() {
+        itemView.setOnClickListener(null)
+        itemView.onFocusChangeListener = null
+        titleView.text = ""
+        domainView.text = ""
+        videoThumbnailView.setImageResource(R.color.photonGrey50)
+    }
+
+    private fun PocketVideoViewHolder.bindPocketVideo(item: PocketVideo) {
+        itemView.setOnClickListener {
+            ScreenController.showBrowserScreenForUrl(itemView.context, fragmentManager, item.url, Session.Source.HOME_SCREEN)
             TelemetryWrapper.pocketVideoClickEvent(item.id)
         }
-        holder.itemView.setOnFocusChangeListener { _, hasFocus -> updateForFocusState(holder, hasFocus) }
-        updateForFocusState(holder, holder.itemView.isFocused)
+        itemView.setOnFocusChangeListener { _, hasFocus -> updateForFocusState(this, hasFocus) }
+        updateForFocusState(this, itemView.isFocused)
 
         titleView.text = item.title
         PicassoWrapper.client.load(item.thumbnailURL).into(videoThumbnailView)
@@ -156,7 +179,7 @@ private class PocketVideoAdapter(
             // The first time this method is called ever, it may block until the file is cached on disk.
             // We pre-cache on startup so I'm hoping this isn't an issue.
             StrictMode.allowThreadDiskReads().resetAfter {
-                FormattedDomain.format(holder.itemView.context, itemURI, false, 0)
+                FormattedDomain.format(itemView.context, itemURI, false, 0)
             }
         }
     }

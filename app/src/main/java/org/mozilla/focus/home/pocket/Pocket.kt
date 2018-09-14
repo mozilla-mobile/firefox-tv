@@ -107,13 +107,15 @@ object Pocket {
     }
 }
 
+sealed class PocketFeedItem
+object PocketPlaceholder : PocketFeedItem()
 data class PocketVideo(
     val id: Int,
     val title: String,
     val url: String,
     val thumbnailURL: String,
     val popularitySortId: Int
-) {
+) : PocketFeedItem() {
 
     companion object {
         fun fromJSONObject(jsonObj: JSONObject): PocketVideo? = try {
