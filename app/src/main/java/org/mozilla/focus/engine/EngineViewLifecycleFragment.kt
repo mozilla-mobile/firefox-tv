@@ -69,7 +69,7 @@ abstract class EngineViewLifecycleFragment : LocaleAwareFragment() {
         super.onStart()
 
         // NB: onStart unexpectedly calls onResume: see onStop for details.
-        onResume()
+        webView!!.onResume()
     }
 
     override fun onDestroy() {
