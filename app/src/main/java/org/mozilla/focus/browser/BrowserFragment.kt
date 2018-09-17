@@ -107,7 +107,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
         updateOverlayIfVisible()
 
     private fun updateOverlayIfVisible() {
-        if (browserOverlay.isVisible) {
+        if (browserOverlay?.isVisible == true) {
             browserOverlay.updateOverlayForCurrentState()
         }
     }
