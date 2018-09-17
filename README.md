@@ -54,7 +54,8 @@ Android TV emulator, the behavior is different from Fire TV's and should not be
 relied upon.
 
 If using an emulator, we recommend the Android TV device image: either 720p or
-1080p is fine. You can press `cmd+m` to simulate a menu button press.
+1080p is fine. API 22 (Stick) and 25 (4K) are best. You can press `cmd+m` to
+simulate a menu button press.
 
 ### Pre-push hooks
 To reduce review turn-around time, we'd like all pushes to run tests locally. We'd
