@@ -375,6 +375,8 @@ task checkstyle(type: Checkstyle) {
     classpath = files()
 }
 
+// Set up jacoco for code coverage. We originally used the jacoco-android plugin
+// but it doesn't support kotlin so we're configuring it manually.
 if (project.hasProperty("coverage")) {
     tasks.withType(Test) {
         jacoco.includeNoLocationClasses = true
