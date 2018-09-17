@@ -364,9 +364,17 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         colCount: Int
     ) : GridLayoutManager(context, colCount) {
         override fun onRequestChildFocus(parent: RecyclerView?, state: RecyclerView.State?, child: View?, focused: View?): Boolean {
-            focused?.nextFocusUpId = when {
-                isMegaTileEnabled -> R.id.pocketVideoMegaTileView
-                else -> R.id.megaTileTryAgainButton
+            var position = spanCount
+            if (focused != null) {
+                position = getPosition(focused)
+            }
+
+            // if position is less than spanCount, implies first row
+            if (position < spanCount) {
+                focused?.nextFocusUpId = when {
+                    isMegaTileEnabled -> R.id.pocketVideoMegaTileView
+                    else -> R.id.megaTileTryAgainButton
+                }
             }
             return super.onRequestChildFocus(parent, state, child, focused)
         }
