@@ -25,12 +25,13 @@ class ContextTest {
     }
 
     @Test
-    fun `isScreenReaderEnabled() returns true when TouchExploration enabled`() {
+    fun `isVoiceViewEnabled() returns true when TouchExploration enabled`() {
         shadowOf(accessibilityManager).isTouchExplorationEnabled = true
         assertTrue(context!!.isVoiceViewEnabled())
     }
+
     @Test
-    fun `isScreenReaderEnabled() returns false when TouchExploration disabled`() {
+    fun `isVoiceViewEnabled() returns false when TouchExploration disabled`() {
         shadowOf(accessibilityManager).isTouchExplorationEnabled = false
         assertFalse(context!!.isVoiceViewEnabled())
     }
