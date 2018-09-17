@@ -210,6 +210,11 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         if (session.url == APP_URL_HOME) {
             browserOverlay?.visibility = View.VISIBLE
+        } else {
+            // TODO #1132: This is a workaround to prevent us from losing all browser state
+            // when the fragment is destroyed.  It should be replaced by us not destroying
+            // the fragment at all
+            webView.asView().post { loadUrl(session.url) }
         }
     }
 
