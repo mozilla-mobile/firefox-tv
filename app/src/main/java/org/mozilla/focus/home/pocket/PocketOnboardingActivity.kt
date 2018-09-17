@@ -18,7 +18,7 @@ class PocketOnboardingActivity : AppCompatActivity() {
 
         titleText.text = resources.getString(R.string.pocket_home_tutorial_title,
                 resources.getString(R.string.pocket_brand_name))
-        descriptionText.text = resources.getString(R.string.pocket_home_tutorial_title,
+        descriptionText.text = resources.getString(R.string.pocket_home_tutorial_description,
                 resources.getString(R.string.pocket_brand_name))
 
         pocket_onboarding_button.setOnClickListener { _ ->
