@@ -61,7 +61,7 @@
         app:layout_constraintEnd_toEndOf="@+id/headerBackgroundView"
         app:layout_constraintStart_toStartOf="@+id/headerBackgroundView"
         app:layout_constraintTop_toTopOf="@+id/headerBackgroundView"
-        tools:ignore="ContentDescription"
+        android:contentDescription="@string/pocket_brand_name"
         tools:src="@drawable/ic_pocket_and_wordmark"
         tools:tint="@color/tv_white" />
 
