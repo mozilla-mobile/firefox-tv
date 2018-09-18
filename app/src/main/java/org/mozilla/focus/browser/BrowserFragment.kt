@@ -329,7 +329,14 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         if (event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER && actionIsDown) MenuInteractionMonitor.selectPressed()
 
-        if (event.keyCode == KeyEvent.KEYCODE_MENU && !isUrlEqualToHomepage) {
+        /**
+         * [Session.url] is currently set late in the loading process, so while loading the first
+         * site of a session [isUrlEqualToHomepage] will return true for some time (often several
+         * seconds).  We check [Session.loading] to prevent the menu button from being unresponsive
+         * during that time
+         */
+        val overlayCanBeInvisible = !isUrlEqualToHomepage || session.loading
+        if (event.keyCode == KeyEvent.KEYCODE_MENU && overlayCanBeInvisible) {
             if (actionIsDown) {
                 val toShow = !browserOverlay.isVisible
                 setOverlayVisible(toShow)
