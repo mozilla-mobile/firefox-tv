@@ -181,8 +181,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
     private fun initMegaTile() {
         pocketVideoMegaTileView.setOnClickListener(this)
-        pocketVideoMegaTileView.contentDescription = resources.getString(R.string.pocket_home_a11y_tile_focused,
-                resources.getString(R.string.pocket_brand_name))
 
         if (pocketVideos.isCompleted) {
             pocketVideoMegaTileView.pocketVideos = pocketVideos.getCompleted()
@@ -200,6 +198,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             } else {
                 pocketVideosContainer.visibility = View.VISIBLE
                 pocketErrorContainer.visibility = View.GONE
+                pocketVideosContainer.contentDescription = resources.getString(R.string.pocket_home_a11y_tile_focused,
+                        resources.getString(R.string.pocket_brand_name))
             }
         } else {
             // TODO: #864 show loading screen
