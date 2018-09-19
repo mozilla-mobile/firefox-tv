@@ -26,16 +26,17 @@ import org.mozilla.focus.MediaSessionHolder
 import org.mozilla.focus.R
 import org.mozilla.focus.ScreenController
 import org.mozilla.focus.browser.cursor.CursorController
-import org.mozilla.focus.ext.components
-import org.mozilla.focus.ext.isVisible
-import org.mozilla.focus.ext.isYoutubeTV
-import org.mozilla.focus.ext.requireComponents
-import org.mozilla.focus.ext.takeScreenshot
-import org.mozilla.focus.ext.toUri
 import org.mozilla.focus.home.BundledTilesManager
 import org.mozilla.focus.home.CustomTilesManager
 import org.mozilla.focus.home.HomeTilesManager
 import org.mozilla.focus.engine.EngineViewLifecycleFragment
+import org.mozilla.focus.ext.components
+import org.mozilla.focus.ext.isVisible
+import org.mozilla.focus.ext.requireComponents
+import org.mozilla.focus.ext.toUri
+import org.mozilla.focus.ext.isYoutubeTV
+import org.mozilla.focus.ext.focusedDOMElement
+import org.mozilla.focus.ext.takeScreenshot
 import org.mozilla.focus.session.NullSession
 import org.mozilla.focus.telemetry.MenuInteractionMonitor
 import org.mozilla.focus.telemetry.TelemetryWrapper
@@ -183,10 +184,16 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
             onNavigationEvent = this@BrowserFragment.onNavigationEvent
             navigationStateProvider = NavigationStateProvider()
             visibility = overlayVisibleCached ?: View.GONE
+            onPreSetVisibilityListener = { isVisible ->
+                // The overlay can clear the DOM and a previous focused element cache (e.g. reload)
+                // so we need to do our own caching: see FocusedDOMElementCache for details.
+                if (!isVisible) { webView?.focusedDOMElement?.cache() }
+            }
 
             openHomeTileContextMenu = {
                 activity?.openContextMenu(browserOverlay.tileContainer)
             }
+
             registerForContextMenu(browserOverlay.tileContainer)
         }
 

@@ -111,6 +111,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     ) -> Unit)? = null
     var navigationStateProvider: BrowserNavigationStateProvider? = null
 
+    var onPreSetVisibilityListener: ((isVisible: Boolean) -> Unit)? = null
+
     private var pocketVideos = Pocket.getRecommendedVideos()
 
     var parentFrag = ParentFragment.DEFAULT
@@ -330,6 +332,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     }
 
     override fun setVisibility(visibility: Int) {
+        onPreSetVisibilityListener?.invoke(visibility == View.VISIBLE)
         super.setVisibility(visibility)
 
         if (visibility == View.VISIBLE) {
