@@ -10,27 +10,18 @@ import android.net.http.SslError
 import android.os.StrictMode
 import android.support.annotation.AnyThread
 import android.support.annotation.UiThread
-import org.mozilla.focus.BuildConfig
 import org.mozilla.focus.browser.NavigationEvent
 import org.mozilla.focus.home.BundledHomeTile
 import org.mozilla.focus.home.CustomHomeTile
 import org.mozilla.focus.home.HomeTile
 import org.mozilla.focus.search.SearchEngineManager
 import org.mozilla.focus.utils.Assert
-import org.mozilla.focus.utils.Settings
 import org.mozilla.focus.widget.InlineAutocompleteEditText.AutocompleteResult
-import org.mozilla.telemetry.Telemetry
 import org.mozilla.telemetry.TelemetryHolder
-import org.mozilla.telemetry.config.TelemetryConfiguration
 import org.mozilla.telemetry.event.TelemetryEvent
-import org.mozilla.telemetry.measurement.DefaultSearchMeasurement
 import org.mozilla.telemetry.measurement.SearchesMeasurement
-import org.mozilla.telemetry.net.HttpURLConnectionTelemetryClient
 import org.mozilla.telemetry.ping.TelemetryCorePingBuilder
 import org.mozilla.telemetry.ping.TelemetryMobileEventPingBuilder
-import org.mozilla.telemetry.schedule.jobscheduler.JobSchedulerTelemetryScheduler
-import org.mozilla.telemetry.serialize.JSONPingSerializer
-import org.mozilla.telemetry.storage.FileTelemetryStorage
 import java.util.Collections
 
 private const val SHARED_PREFS_KEY = "telemetryLib" // Don't call it TelemetryWrapper to avoid accidental IDE rename.
@@ -42,7 +33,6 @@ private const val KEY_CLICKED_HOME_TILE_IDS_PER_SESSION = "clickedHomeTileIDsPer
         "LargeClass"
 )
 object TelemetryWrapper {
-    private const val TELEMETRY_APP_NAME_FOCUS_TV = "FirefoxForFireTV"
 
     private object Category {
         val ACTION = "action"
@@ -64,6 +54,7 @@ object TelemetryWrapper {
         val RESOURCE = "resource"
         val REMOVE = "remove"
         val NO_ACTION_TAKEN = "no_action_taken"
+        val ONPAUSE_CALLED_BEFORE_ONRESUME = "pause_before_resume"
     }
 
     private object Object {
@@ -113,40 +104,9 @@ object TelemetryWrapper {
         // are readable/writable.
         val threadPolicy = StrictMode.allowThreadDiskWrites()
         try {
-            val telemetryEnabled = DataUploadPreference.isEnabled(context)
-
-            val configuration = TelemetryConfiguration(context)
-                    .setServerEndpoint("https://incoming.telemetry.mozilla.org")
-                    .setAppName(TELEMETRY_APP_NAME_FOCUS_TV)
-                    .setUpdateChannel(BuildConfig.BUILD_TYPE)
-                    .setPreferencesImportantForTelemetry(
-                            Settings.TRACKING_PROTECTION_ENABLED_PREF,
-                            TelemetrySettingsProvider.PREF_CUSTOM_HOME_TILE_COUNT,
-                            TelemetrySettingsProvider.PREF_TOTAL_HOME_TILE_COUNT
-                    )
-                    .setSettingsProvider(TelemetrySettingsProvider(context))
-                    .setCollectionEnabled(telemetryEnabled)
-                    .setUploadEnabled(telemetryEnabled)
-
-            val serializer = JSONPingSerializer()
-            val storage = FileTelemetryStorage(configuration, serializer)
-            val client = HttpURLConnectionTelemetryClient()
-            val scheduler = JobSchedulerTelemetryScheduler()
-
-            TelemetryHolder.set(Telemetry(configuration, storage, client, scheduler)
-                    .addPingBuilder(TelemetryCorePingBuilder(configuration))
-                    .addPingBuilder(TelemetryMobileEventPingBuilder(configuration))
-                    .setDefaultSearchProvider(createDefaultSearchProvider(context)))
+            TelemetryHolder.set(TelemetryFactory.createTelemetry(context))
         } finally {
             StrictMode.setThreadPolicy(threadPolicy)
-        }
-    }
-
-    private fun createDefaultSearchProvider(context: Context): DefaultSearchMeasurement.DefaultSearchEngineProvider {
-        return DefaultSearchMeasurement.DefaultSearchEngineProvider {
-            SearchEngineManager.getInstance()
-                    .getDefaultSearchEngine(context)
-                    .identifier
         }
     }
 
@@ -162,7 +122,15 @@ object TelemetryWrapper {
 
     @UiThread // via TelemetryHomeTileUniqueClickPerSessionCounter
     fun stopSession(context: Context) {
-        TelemetryHolder.get().recordSessionEnd()
+        fun sendEndSessionFailedEvent() {
+            // In rare instances, we have seen stopSession called before startSession.
+            // It is unknown at this time how this happens, but it is very infrequent
+            // so we are logging the event and otherwise dropping the error
+            // See https://bugzilla.mozilla.org/show_bug.cgi?id=1405192
+            TelemetryEvent.create(Category.ERROR, Method.ONPAUSE_CALLED_BEFORE_ONRESUME, Object.APP).queue()
+        }
+
+        TelemetryHolder.get().recordSessionEnd { sendEndSessionFailedEvent() }
         TelemetryEvent.create(Category.ACTION, Method.BACKGROUND, Object.APP).queue()
 
         // We call reset in both startSession and stopSession. We call it here to make sure we
