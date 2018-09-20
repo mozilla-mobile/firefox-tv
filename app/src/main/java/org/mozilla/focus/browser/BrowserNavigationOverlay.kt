@@ -27,6 +27,7 @@ import kotlinx.coroutines.experimental.launch
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.ext.forEachChild
+import org.mozilla.focus.ext.isVisible
 import org.mozilla.focus.ext.updateLayoutParams
 import org.mozilla.focus.home.HomeTilesManager
 import org.mozilla.focus.home.pocket.Pocket
@@ -119,8 +120,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
     private var hasUserChangedURLSinceEditTextFocused = false
 
-    private var isMegaTileEnabled = true
-
     init {
         LayoutInflater.from(context)
                 .inflate(R.layout.browser_overlay, this, true)
@@ -181,6 +180,22 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Used to show an error screen on the Pocket megatile when Pocket does not return any videos.
+     */
+    fun showMegaTileError() {
+        pocketVideosContainer.visibility = View.GONE
+        pocketErrorContainer.visibility = View.VISIBLE
+        pocketMegaTileLoadError.text = resources.getString(R.string.pocket_video_feed_failed_to_load,
+                resources.getString(R.string.pocket_brand_name))
+        megaTileTryAgainButton.setOnClickListener { _ ->
+            pocketVideos = Pocket.getRecommendedVideos()
+            initMegaTile()
+            updateOverlayForCurrentState()
+            pocketVideoMegaTileView.requestFocus()
+        }
+    }
+
     private fun initMegaTile() {
         pocketVideoMegaTileView.setOnClickListener(this)
 
@@ -188,15 +203,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             pocketVideoMegaTileView.pocketVideos = pocketVideos.getCompleted()
 
             if (pocketVideoMegaTileView.pocketVideos == null) {
-                pocketVideosContainer.visibility = View.GONE
-                pocketErrorContainer.visibility = View.VISIBLE
-                pocketMegaTileLoadError.text = resources.getString(R.string.pocket_video_feed_failed_to_load,
-                        resources.getString(R.string.pocket_brand_name))
-                pocketVideoMegaTileView.isEnabled = false
-                megaTileTryAgainButton.setOnClickListener { _ ->
-                    pocketVideos = Pocket.getRecommendedVideos()
-                    initMegaTile()
-                }
+                showMegaTileError()
             } else {
                 pocketVideosContainer.visibility = View.VISIBLE
                 pocketErrorContainer.visibility = View.GONE
@@ -277,8 +284,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         val isRefreshEnabled = navigationStateProvider?.isRefreshEnabled() ?: false
         updateOverlayButtonState(isRefreshEnabled, navButtonReload)
 
-        isMegaTileEnabled = pocketVideoMegaTileView.isEnabled
-
         // Prevent the focus from looping to the bottom row when reaching the last
         // focusable element in the top row
         navButtonReload.nextFocusLeftId = when {
@@ -292,7 +297,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         }
 
         navUrlInput.nextFocusDownId = when {
-            isMegaTileEnabled -> R.id.pocketVideoMegaTileView
+            pocketVideosContainer.isVisible -> R.id.pocketVideoMegaTileView
             else -> R.id.megaTileTryAgainButton
         }
 
@@ -375,7 +380,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             // if position is less than spanCount, implies first row
             if (position < spanCount) {
                 focused?.nextFocusUpId = when {
-                    isMegaTileEnabled -> R.id.pocketVideoMegaTileView
+                    pocketVideosContainer.isVisible -> R.id.pocketVideoMegaTileView
                     else -> R.id.megaTileTryAgainButton
                 }
             }

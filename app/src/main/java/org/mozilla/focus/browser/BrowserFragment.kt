@@ -56,6 +56,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
         const val FRAGMENT_TAG = "browser"
         const val APP_URL_PREFIX = "firefox:"
         const val APP_URL_HOME = "${APP_URL_PREFIX}home"
+        const val APP_URL_POCKET_ERROR = "${APP_URL_PREFIX}error:pocketconnection"
 
         @JvmStatic
         fun createForSession(session: Session) = BrowserFragment().apply {
@@ -94,8 +95,13 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
     }
 
     override fun onUrlChanged(session: Session, url: String) {
-        if (url == APP_URL_HOME) {
-            browserOverlay?.visibility = View.VISIBLE
+        when (url) {
+            APP_URL_HOME -> browserOverlay?.visibility = View.VISIBLE
+            APP_URL_POCKET_ERROR -> {
+                browserOverlay?.showMegaTileError()
+                browserOverlay?.visibility = View.VISIBLE
+            }
+            else -> Unit
         }
 
         updateOverlayIfVisible()

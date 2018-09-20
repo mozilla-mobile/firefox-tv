@@ -90,6 +90,7 @@
                 android:textAllCaps="false"
                 android:fontFamily="@string/font_roboto_regular"
                 android:textSize="14sp"
+                android:nextFocusDown="@+id/tileContainer"
                 />
 
         </LinearLayout>
