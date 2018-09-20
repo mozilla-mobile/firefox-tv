@@ -27,7 +27,7 @@ class CustomContentRequestInterceptor(
         currentPageURL = uri
 
         return when (uri) {
-            BrowserFragment.APP_URL_HOME -> RequestInterceptor.InterceptionResponse("<html></html>")
+            BrowserFragment.APP_URL_HOME, BrowserFragment.APP_URL_POCKET_ERROR -> RequestInterceptor.InterceptionResponse("<html></html>")
 
             LocalizedContent.URL_ABOUT -> RequestInterceptor.InterceptionResponse(
                 LocalizedContent.generateAboutPage(context))
