@@ -8,26 +8,23 @@ package org.mozilla.focus.browser;
 import android.content.Context;
 import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObjectNotFoundException;
 
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mozilla.focus.R;
 import org.mozilla.focus.MainActivity;
+import org.mozilla.focus.R;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
 import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.action.ViewActions.typeTextIntoFocusedView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasFocus;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
@@ -41,9 +38,10 @@ import static android.support.test.espresso.web.sugar.Web.onWebView;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
 import static org.mozilla.focus.OnboardingActivity.ONBOARD_SHOWN_PREF;
+import static org.mozilla.focus.home.pocket.PocketOnboardingActivity.POCKET_ONBOARDING_SHOWN_PREF;
 
 @RunWith(AndroidJUnit4.class)
-public class BrowserOverlayTest {
+public class BrowserBFT {
 
     private UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
@@ -61,23 +59,23 @@ public class BrowserOverlayTest {
             PreferenceManager.getDefaultSharedPreferences(appContext)
                     .edit()
                     .putBoolean(ONBOARD_SHOWN_PREF, true)
+                    .putBoolean(POCKET_ONBOARDING_SHOWN_PREF, true)
                     .apply();
         }
     };
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mActivityTestRule.getActivity().finishAndRemoveTask();
     }
 
     @Test
-    public void testBrowserOverlay() throws InterruptedException, UiObjectNotFoundException {
-        final ViewInteraction URLBar = onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()))
-                .perform(typeTextIntoFocusedView("example.com"))
+    public void testBrowserBFT() {
+        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()))
+                .perform(replaceText("example.com"))
                 .perform(pressImeActionButton());
 
-        final ViewInteraction webView;
-        webView = onView(ViewMatchers.withId(R.id.webview))
+        onView(ViewMatchers.withId(R.id.webview))
                 .check(matches(isDisplayed()));
 
         mDevice.pressMenu();
@@ -90,20 +88,6 @@ public class BrowserOverlayTest {
         onView(ViewMatchers.withId(R.id.pinButton))
                 .check(matches(isNotChecked()));
 
-        /* Home Button */
-
-        onView(ViewMatchers.withId(R.id.navButtonHome))
-                .check(matches(isDisplayed()))
-                .perform(click());
-
-        URLBar
-                .perform(typeTextIntoFocusedView("example.com"))
-                .perform(pressImeActionButton());
-
-        webView.check(matches(isDisplayed()));
-
-        mDevice.pressMenu();
-
         /* Settings */
 
         onView(ViewMatchers.withId(R.id.navButtonSettings))
@@ -115,23 +99,21 @@ public class BrowserOverlayTest {
 
         pressBack();
 
-        webView.check(matches(isDisplayed()));
-
         /* Navigation: visit/back/forward */
 
         onView(ViewMatchers.withId(R.id.navUrlInput))
                 .check(matches(isDisplayed()))
                 .perform(click())
-                .perform(replaceText("example.org"))
+                .perform(replaceText("mozilla.org"))
                 .perform(pressImeActionButton());
 
         onWebView()
-                .check(webMatches(getCurrentUrl(), containsString("example.org")));
+                .check(webMatches(getCurrentUrl(), containsString("mozilla.org")));
 
         mDevice.pressMenu();
 
         onView(ViewMatchers.withId(R.id.navUrlInput))
-                .check(matches(withText(containsString("example.org"))));
+                .check(matches(withText(containsString("mozilla.org"))));
 
         onView(ViewMatchers.withId(R.id.pinButton))
                 .check(matches(isNotChecked()));
@@ -152,6 +134,6 @@ public class BrowserOverlayTest {
                 .perform(click());
 
         onView(ViewMatchers.withId(R.id.navUrlInput))
-                .check(matches(withText(containsString("example.org"))));
+                .check(matches(withText(containsString("mozilla.org"))));
     }
 }
