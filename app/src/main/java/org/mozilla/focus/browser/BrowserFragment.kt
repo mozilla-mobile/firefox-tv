@@ -184,6 +184,8 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
             onNavigationEvent = this@BrowserFragment.onNavigationEvent
             navigationStateProvider = NavigationStateProvider()
             visibility = overlayVisibleCached ?: View.GONE
+
+            // This is needed for YouTube to properly gain focus after a refresh (refer to issue #1149)
             onPreSetVisibilityListener = { isVisible ->
                 // The overlay can clear the DOM and a previous focused element cache (e.g. reload)
                 // so we need to do our own caching: see FocusedDOMElementCache for details.
