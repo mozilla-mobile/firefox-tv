@@ -14,19 +14,18 @@ import android.support.test.espresso.web.webdriver.Locator;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObjectNotFoundException;
 
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mozilla.focus.R;
 import org.mozilla.focus.MainActivity;
+import org.mozilla.focus.R;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
-import static android.support.test.espresso.action.ViewActions.typeTextIntoFocusedView;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasFocus;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -35,8 +34,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.espresso.web.sugar.Web.onWebView;
 import static android.support.test.espresso.web.webdriver.DriverAtoms.findElement;
 import static org.hamcrest.Matchers.allOf;
-import static org.mozilla.focus.OnboardingActivity.ONBOARD_SHOWN_PREF;
 import static org.hamcrest.core.StringContains.containsString;
+import static org.mozilla.focus.OnboardingActivity.ONBOARD_SHOWN_PREF;
+import static org.mozilla.focus.home.pocket.PocketOnboardingActivity.POCKET_ONBOARDING_SHOWN_PREF;
 
 @RunWith(AndroidJUnit4.class)
 public class PageLoadTest {
@@ -45,7 +45,7 @@ public class PageLoadTest {
     private static final Integer TILE_POSITION = 1; // Google Video Search
     private static final String TILE_WEBSITE_ELEMENT = "hplogo"; // Google logo
     private static final String MOZILLA_URL = "mozilla.org";
-    private static final String MOZILLA_PAGE_ELEMENT = ".content h2";
+    private static final String MOZILLA_PAGE_ELEMENT = ".primary-title";
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule
@@ -61,17 +61,18 @@ public class PageLoadTest {
             PreferenceManager.getDefaultSharedPreferences(appContext)
                     .edit()
                     .putBoolean(ONBOARD_SHOWN_PREF, true)
+                    .putBoolean(POCKET_ONBOARDING_SHOWN_PREF, true)
                     .apply();
         }
     };
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mActivityTestRule.getActivity().finishAndRemoveTask();
     }
 
     @Test
-    public void PageLoadTest() throws InterruptedException, UiObjectNotFoundException {
+    public void PageLoadTest() {
         onView(ViewMatchers.withId(R.id.tileContainer))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(TILE_POSITION, click()));
 
@@ -87,12 +88,8 @@ public class PageLoadTest {
                 .check(matches(isDisplayed()))
                 .check(matches(withText(containsString("google"))));
 
-        onView(ViewMatchers.withId(R.id.navButtonHome))
-                .check(matches(isDisplayed()))
-                .perform(click());
-
         onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()))
-                .perform(typeTextIntoFocusedView(MOZILLA_URL))
+                .perform(replaceText(MOZILLA_URL))
                 .perform(pressImeActionButton());
 
         onView(ViewMatchers.withId(R.id.webview))

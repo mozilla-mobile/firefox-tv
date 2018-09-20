@@ -14,20 +14,19 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
-import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mozilla.focus.R;
 import org.mozilla.focus.MainActivity;
+import org.mozilla.focus.R;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
-import static android.support.test.espresso.action.ViewActions.typeTextIntoFocusedView;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.hasFocus;
@@ -35,11 +34,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isNotChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.junit.Assert.assertFalse;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertFalse;
 import static org.mozilla.focus.OnboardingActivity.ONBOARD_SHOWN_PREF;
+import static org.mozilla.focus.home.pocket.PocketOnboardingActivity.POCKET_ONBOARDING_SHOWN_PREF;
 
 @RunWith(AndroidJUnit4.class)
 public class PinnedTileTests {
@@ -60,19 +60,20 @@ public class PinnedTileTests {
             PreferenceManager.getDefaultSharedPreferences(appContext)
                     .edit()
                     .putBoolean(ONBOARD_SHOWN_PREF, true)
+                    .putBoolean(POCKET_ONBOARDING_SHOWN_PREF, true)
                     .apply();
         }
     };
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mActivityTestRule.getActivity().finishAndRemoveTask();
     }
 
     @Test
-    public void testCustomPinnedTile() throws InterruptedException, UiObjectNotFoundException {
+    public void testCustomPinnedTile() {
         onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()))
-                .perform(typeTextIntoFocusedView("example.com"))
+                .perform(replaceText("example.com"))
                 .perform(pressImeActionButton());
 
         onView(ViewMatchers.withId(R.id.webview))
@@ -89,21 +90,12 @@ public class PinnedTileTests {
                 .inRoot(withDecorView(not(is(mActivityTestRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
 
-        final ViewInteraction goHome = onView(ViewMatchers.withId(R.id.navButtonHome))
-                .check(matches(isDisplayed()));
-
-        goHome.perform(click());
-
-        // UIAutomator work-around waiting for tile existence
         UiObject newTile = mDevice.findObject(new UiSelector()
                 .resourceId("org.mozilla.tv.firefox.debug:id/tile_title")
                 .text("example")
                 .enabled(true));
+
         newTile.waitForExists(5000);
-
-        newTile.click();
-
-        mDevice.pressMenu();
 
         pinButton.perform(click());
 
@@ -111,9 +103,6 @@ public class PinnedTileTests {
                 .inRoot(withDecorView(not(is(mActivityTestRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
 
-        goHome.perform(click());
-
-        // UIAutomator work-around waiting for tile non-existence
         newTile.waitUntilGone(5000);
         assertFalse(newTile.exists());
     }

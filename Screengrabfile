@@ -10,8 +10,8 @@
 use_tests_in_packages ['org.mozilla.focus.screenshots']
 app_package_name 'org.mozilla.tv.firefox.debug'
 
-app_apk_path 'app/build/outputs/apk/amazonWebview/debug/app-amazonWebview-debug.apk'
-tests_apk_path 'app/build/outputs/apk/androidTest/amazonWebview/debug/app-amazonWebview-debug-androidTest.apk'
+app_apk_path 'app/build/outputs/apk/debug/app-debug.apk'
+tests_apk_path 'app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk'
 
 # Supported locales
 locales ['en-US', 'de', 'zh-cn', 'fr', 'it', 'ja', 'pt-BR', 'es-ES']

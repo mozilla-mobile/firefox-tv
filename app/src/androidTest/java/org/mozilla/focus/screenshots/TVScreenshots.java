@@ -11,10 +11,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObjectNotFoundException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,29 +22,29 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mozilla.focus.R;
 import org.mozilla.focus.MainActivity;
+import org.mozilla.focus.R;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.locale.LocaleTestRule;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.pressBack;
-import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
-import static android.support.test.espresso.action.ViewActions.typeTextIntoFocusedView;
+import static android.support.test.espresso.action.ViewActions.longClick;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.hasFocus;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.mozilla.focus.OnboardingActivity.ONBOARD_SHOWN_PREF;
+import static org.mozilla.focus.home.pocket.PocketOnboardingActivity.POCKET_ONBOARDING_SHOWN_PREF;
+
 
 @RunWith(AndroidJUnit4.class)
 public class TVScreenshots extends ScreenshotTest {
@@ -61,7 +61,7 @@ public class TVScreenshots extends ScreenshotTest {
             false, false);
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         intent = new Intent();
 
         Context appContext = InstrumentationRegistry.getInstrumentation()
@@ -69,16 +69,23 @@ public class TVScreenshots extends ScreenshotTest {
                 .getApplicationContext();
 
         preferencesEditor = PreferenceManager.getDefaultSharedPreferences(appContext).edit();
+
+        PreferenceManager.getDefaultSharedPreferences(appContext)
+                .edit()
+                .clear()
+                .putBoolean(ONBOARD_SHOWN_PREF, true)
+                .putBoolean(POCKET_ONBOARDING_SHOWN_PREF, true)
+                .apply();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mActivityTestRule.getActivity().finishAndRemoveTask();
     }
 
     @Test
-    public void firstLaunchScreen() throws InterruptedException, UiObjectNotFoundException {
-        /* Overwrite the app preference before main activity launch */
+    public void firstLaunchScreen() {
+        // Overwrite the app preference before main activity launch
         preferencesEditor
                 .putBoolean(ONBOARD_SHOWN_PREF, false)
                 .apply();
@@ -96,81 +103,76 @@ public class TVScreenshots extends ScreenshotTest {
     }
 
     @Test
-    public void defaultHomeScreen() throws InterruptedException, UiObjectNotFoundException {
-        /* capture a screenshot of the default home-screen */
+    public void pocketOnboarding() {
+        // Overwrite the app preference before main activity launch
+        preferencesEditor
+                .putBoolean(POCKET_ONBOARDING_SHOWN_PREF, false)
+                .apply();
+
         mActivityTestRule.launchActivity(intent);
 
-        onView(withId(R.id.navUrlInput))
+        onView(withId(R.id.pocket_onboarding_button))
                 .check(matches(isDisplayed()));
-        onView(withId(R.id.homeUrlBar))
-                .check(matches(isDisplayed()));
+
+        Screengrab.screenshot("pocket-onboarding");
+
+        mDevice.pressDPadCenter();
+    }
+
+    @Test
+    public void defaultHomeScreen() {
+        // capture a screenshot of the default home-screen
+        mActivityTestRule.launchActivity(intent);
+
+        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()));
+
+        onView(allOf(withId(R.id.tileContainer), isDisplayed()));
 
         Screengrab.screenshot("home-screen");
     }
 
     @Test
-    public void browserNavOverlay () throws InterruptedException, UiObjectNotFoundException {
-        /* default home-screen in the main activity should be displayed */
+    public void pocketRecommendation() {
+        // default home-screen in the main activity should be displayed
         mActivityTestRule.launchActivity(intent);
 
-        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()))
-                .perform(typeTextIntoFocusedView("example.com"))
-                .perform(pressImeActionButton());
+        onView(allOf(withId(R.id.pocketVideoMegaTileView), isDisplayed()))
+                .perform(click());
 
-        onView(withId(R.id.webview))
-                .check(matches(isDisplayed()));
+        onView(allOf(withId(R.id.videoFeed), isDisplayed()));
+        onView(allOf(withId(R.id.recommendedTitle), isDisplayed()));
 
-        mDevice.pressMenu();
+        Screengrab.screenshot("pocket-default-recommendations");
 
-        onView(withId(R.id.navCloseHint))
-                .check(matches(isDisplayed()));
-
-        onView(withId(R.id.navUrlInput))
-                .check(matches(isDisplayed()));
-
-        Screengrab.screenshot("browser-overlay");
-
-        onView(withId(R.id.navButtonHome)).perform(click());
+        mDevice.pressBack();
     }
 
     @Test
-    public void settingsView() throws InterruptedException, UiObjectNotFoundException {
-        /* default home-screen in the main activity should be displayed */
+    public void settingsView() {
+        // default home-screen in the main activity should be displayed
         mActivityTestRule.launchActivity(intent);
 
         onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()));
 
-        /* visit settings */
+        // visit settings
         onView(allOf(withId(R.id.navButtonSettings), isDisplayed()))
                 .perform(click());
 
-        /* current settings list view */
+        // current settings list view
         onView(allOf(withId(R.id.container), isDisplayed()));
 
         ViewInteraction clearButton = onView(
                 allOf(withId(R.id.deleteButton), isDisplayed()));
 
-        /* capture a screenshot of the default settings list */
+        // capture a screenshot of the default settings list
         Screengrab.screenshot("settings");
 
-        /* capture a screenshot of the clear data dialog */
+        // capture a screenshot of the clear data dialog
         clearButton.perform(click());
 
-        ViewInteraction confirmClear = onView(
-                allOf(withText(R.string.settings_cookies_dialog_content), isDisplayed()))
-                .inRoot(isDialog());
+        onView(allOf(withText(R.string.settings_cookies_dialog_content), isDisplayed())).inRoot(isDialog());
 
         Screengrab.screenshot("clear-all-data");
-
-        confirmClear.perform(pressBack());
-
-        /* capture a screenshot of the privacy notice */
-        onView(allOf(withId(R.id.privacyNoticeButton), isDisplayed()))
-                .perform(click());
-
-        onView(allOf(withId(R.id.webview), isDisplayed()));
-
-        Screengrab.screenshot("privacy-notice");
 
         mDevice.pressBack();
 
@@ -178,6 +180,9 @@ public class TVScreenshots extends ScreenshotTest {
                 .perform(click());
 
         onView(allOf(withId(R.id.webview), isDisplayed()));
+        onView(allOf(withId(R.string.your_rights), isDisplayed()));
+
+        mDevice.waitForIdle();
 
         Screengrab.screenshot("about-screen");
 
@@ -185,76 +190,31 @@ public class TVScreenshots extends ScreenshotTest {
     }
 
     @Test
-    public void unpinTileInHome() throws InterruptedException, UiObjectNotFoundException {
-        /* default home-screen in the main activity should be displayed */
+    public void unpinTileFromContextMenu() {
+        // default home-screen in the main activity should be displayed
         mActivityTestRule.launchActivity(intent);
 
         onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()));
 
         mDevice.pressDPadDown();
-        mDevice.pressMenu();
+        mDevice.pressDPadDown();
+
+        onView(withText(R.string.homescreen_unpin_tutorial_toast))
+                .inRoot(withDecorView(not(is(mActivityTestRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
+
+        Screengrab.screenshot("unpin-toast");
+
+        mDevice.waitForIdle();
+
+        onView(ViewMatchers.withId(R.id.tileContainer))
+                .perform(actionOnItemAtPosition(0, longClick()));
 
         onView(withText(R.string.homescreen_tile_remove))
                 .check(matches(isDisplayed()));
 
         Screengrab.screenshot("menu-remove-tile");
 
-        mDevice.pressBack();
-    }
-
-    @Test
-    public void pinTileFromOverlay() throws InterruptedException, UiObjectNotFoundException {
-        /* default home-screen in the main activity should be displayed */
-        mActivityTestRule.launchActivity(intent);
-
-        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()))
-                .perform(typeTextIntoFocusedView("example.com"))
-                .perform(pressImeActionButton());
-
-        onView(withId(R.id.webview))
-                .check(matches(isDisplayed()));
-
-        mDevice.pressMenu();
-
-        onView(withId(R.id.pinButton))
-                .check(matches(isDisplayed()))
-                .perform(click());
-
-        onView(withText(R.string.notification_pinned_site))
-                .inRoot(withDecorView(not(is(mActivityTestRule.getActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
-
-        Screengrab.screenshot("overlay-pinned-tile");
-
-        mDevice.pressBack();
-        mDevice.pressBack();
-    }
-
-    @Test
-    public void unpinTileFromOverlay() throws InterruptedException, UiObjectNotFoundException {
-    /* default home-screen in the main activity should be displayed */
-        mActivityTestRule.launchActivity(intent);
-
-        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()))
-                .perform(typeTextIntoFocusedView("example.com"))
-                .perform(pressImeActionButton());
-
-        onView(withId(R.id.webview))
-                .check(matches(isDisplayed()));
-
-        mDevice.pressMenu();
-
-        onView(withId(R.id.pinButton))
-                .check(matches(isDisplayed()))
-                .perform(click());
-
-        onView(withText(R.string.notification_unpinned_site))
-                .inRoot(withDecorView(not(is(mActivityTestRule.getActivity().getWindow().getDecorView()))))
-                .check(matches(isDisplayed()));
-
-        Screengrab.screenshot("overlay-unpinned-tile");
-
-        mDevice.pressBack();
         mDevice.pressBack();
     }
 }
