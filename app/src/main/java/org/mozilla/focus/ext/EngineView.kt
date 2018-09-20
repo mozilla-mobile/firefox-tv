@@ -92,7 +92,7 @@ fun EngineView.setupForApp(context: Context) {
         } else {
             // Trying to restore immediately doesn't work - perhaps the WebView hasn't actually
             // received focus yet? Posting to the end of the UI queue seems to solve the problem.
-                uiHandler.post { focusedDOMElement.restore() }
+            uiHandler.post { focusedDOMElement.restore() }
         }
     }
 }
