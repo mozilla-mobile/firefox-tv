@@ -18,6 +18,7 @@
         ktlint \
         pmd \
         detektCheck \
+        assembleAndroidTest \
         testdebug
 
 # Tasks omitted because they take a long time to run:
