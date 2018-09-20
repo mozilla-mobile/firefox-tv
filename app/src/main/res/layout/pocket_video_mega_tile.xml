@@ -86,7 +86,7 @@
                 android:text="@string/pocket_video_feed_reload_button"
                 android:layout_marginTop="@dimen/pocket_video_mega_tile_error_margin"
                 android:layout_marginBottom="@dimen/pocket_video_mega_tile_error_margin"
-                android:background="@drawable/pocket_megatile_try_again_button"
+                android:background="@drawable/pocket_button_background"
                 android:textAllCaps="false"
                 android:fontFamily="@string/font_roboto_regular"
                 android:textSize="14sp"
