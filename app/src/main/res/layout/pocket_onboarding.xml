@@ -46,13 +46,7 @@
 
     <Button
         android:id="@+id/pocket_onboarding_button"
-        android:layout_width="88dp"
-        android:layout_height="36dp"
-        android:layout_gravity="center"
-        android:background="@drawable/pocket_button_background"
-        android:textSize="14sp"
-        android:textColor="#FFF9F9FA"
-        android:fontFamily="@string/font_roboto_regular"
+        style="@style/PocketVideoButton"
         android:text="@string/pocket_home_tutorial_dismiss_button" />
 
 </LinearLayout>

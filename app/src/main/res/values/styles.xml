@@ -89,4 +89,18 @@
         <item name="android:src">@drawable/pocket_placeholder</item>
     </style>
 
+    <style name="PocketVideoButton">
+        <item name="android:background">@drawable/pocket_button_background</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:minWidth">@dimen/pocket_video_mega_tile_button_width</item>
+        <item name="android:layout_height">@dimen/pocket_video_mega_tile_button_height</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">#FFF9F9FA</item>
+        <item name="android:fontFamily">@string/font_roboto_regular</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+    </style>
+
 </resources>
