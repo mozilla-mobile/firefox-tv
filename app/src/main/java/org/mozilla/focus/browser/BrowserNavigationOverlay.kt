@@ -367,6 +367,20 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         adapter.removeTile(tileId)
     }
 
+    /**
+     * Focus may be lost if all pinned items are removed via onContextItemSelected()
+     */
+    fun checkIfTilesFocusNeedRefresh() {
+        val adapter = tileContainer.adapter as HomeTileAdapter
+        if (adapter.itemCount == 0) {
+            if (pocketVideosContainer.isVisible) {
+                pocketVideoMegaTileView.requestFocus()
+            } else {
+                megaTileTryAgainButton.requestFocus()
+            }
+        }
+    }
+
     inner class HomeTileManager(
         context: Context,
         colCount: Int
