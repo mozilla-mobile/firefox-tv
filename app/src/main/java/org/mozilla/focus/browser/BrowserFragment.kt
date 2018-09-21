@@ -255,6 +255,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
                 // that the Uri is valid, so we do not do error handling here.
                 HomeTilesManager.removeHomeTile(tileToRemove, context!!)
                 homeTileAdapter.removeTile(tileToRemove.idToString())
+                browserOverlay?.checkIfTilesFocusNeedRefresh()
                 TelemetryWrapper.homeTileRemovedEvent(tileToRemove)
                 return true
             }
