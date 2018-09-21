@@ -122,7 +122,12 @@ class HomeTileAdapter(
             }
         }
         tiles = homeTiles
-        notifyItemInserted(homeTiles.lastIndex)
+        if (tiles.size > 1) {
+            notifyItemInserted(homeTiles.lastIndex)
+        } else {
+            // the entire DataSet needs to be notified when adding to an empty container
+            notifyDataSetChanged()
+        }
     }
 
     fun removeTile(tileId: String) {
