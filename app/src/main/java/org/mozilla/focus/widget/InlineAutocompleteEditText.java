@@ -520,7 +520,7 @@ public class InlineAutocompleteEditText extends android.support.v7.widget.AppCom
             final int textLength = text.length();
             boolean doAutocomplete = true;
 
-            if (UrlUtils.isSearchQuery(text) ||
+            if (UrlUtils.INSTANCE.isSearchQuery(text) ||
                     isKeyFromRemoteAppOrSoftKeyboardClear) { // See var use in onAutocomplete.
                 doAutocomplete = false;
             } else if (textLength == textLengthBeforeChange - 1 || textLength == 0) {
