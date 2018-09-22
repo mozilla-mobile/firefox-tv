@@ -12,16 +12,15 @@ import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
-import mozilla.components.browser.engine.system.SystemEngineView
 import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.focus.browser.BrowserFragment
 import org.mozilla.focus.browser.BrowserFragment.Companion.APP_URL_HOME
 import org.mozilla.focus.browser.BrowserNavigationOverlay
+import org.mozilla.focus.browser.WebViewCache
 import org.mozilla.focus.browser.VideoVoiceCommandMediaSession
 import org.mozilla.focus.ext.components
-import org.mozilla.focus.ext.setupForApp
 import org.mozilla.focus.ext.toSafeIntent
 import org.mozilla.focus.home.pocket.Pocket
 import org.mozilla.focus.home.pocket.PocketOnboardingActivity
@@ -140,11 +139,14 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         TelemetryWrapper.stopMainActivity()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        WebViewCache.clear()
+    }
+
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
         return if (name == EngineView::class.java.name) {
-            SystemEngineView(context, attrs).apply {
-                setupForApp(context)
-            }
+            return WebViewCache.getWebView(context, attrs)
         } else super.onCreateView(name, context, attrs)
     }
 
