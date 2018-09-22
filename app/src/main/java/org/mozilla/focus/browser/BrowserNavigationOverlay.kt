@@ -33,6 +33,7 @@ import org.mozilla.focus.home.HomeTilesManager
 import org.mozilla.focus.home.pocket.Pocket
 import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.TurboMode
+import org.mozilla.focus.utils.UrlUtils
 import org.mozilla.focus.widget.IgnoreFocusMovementMethod
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 import kotlin.properties.Delegates
@@ -332,7 +333,9 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         // we can focus the EditText without opening the soft keyboard and the user won't even know
         // these are inaccurate!
         if (!hasUserChangedURLSinceEditTextFocused) {
-            navUrlInput.setText(navigationStateProvider?.getCurrentUrl())
+            val displayText = navigationStateProvider?.getCurrentUrl()
+                    ?.let { UrlUtils.toDisplayUrl(it) }
+            navUrlInput.setText(displayText)
         }
     }
 
