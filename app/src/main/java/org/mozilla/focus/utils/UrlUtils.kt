@@ -8,6 +8,7 @@ package org.mozilla.focus.utils
 import android.content.Context
 import android.net.Uri
 import android.webkit.URLUtil
+import org.mozilla.focus.browser.BrowserFragment
 
 import org.mozilla.focus.search.SearchEngineManager
 
@@ -154,6 +155,9 @@ object UrlUtils {
 
     @JvmStatic
     fun toDisplayUrl(url: String): String {
-        return ""
+        return when (url) {
+            BrowserFragment.APP_URL_HOME -> ""
+            else -> url
+        }
     }
 }
