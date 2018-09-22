@@ -61,7 +61,7 @@ public class SearchEngine {
 
         final String template = Uri.decode(searchUri.toString());
         final String urlWithSubstitutions = paramSubstitution(template, Uri.encode(searchTerm));
-        return UrlUtils.normalize(urlWithSubstitutions); // User-entered search engines may need normalization.
+        return UrlUtils.INSTANCE.normalize(urlWithSubstitutions); // User-entered search engines may need normalization.
     }
 
     /**

@@ -16,104 +16,104 @@ import static org.junit.Assert.assertTrue;
 public class UrlUtilsTest {
     @Test
     public void isValidSearchQueryUrl() {
-        assertTrue(UrlUtils.isValidSearchQueryUrl("https://example.com/search/?q=%s"));
-        assertTrue(UrlUtils.isValidSearchQueryUrl("http://example.com/search/?q=%s"));
-        assertTrue(UrlUtils.isValidSearchQueryUrl("http-test-site.com/search/?q=%s"));
-        assertFalse(UrlUtils.isValidSearchQueryUrl("httpss://example.com/search/?q=%s"));
+        assertTrue(UrlUtils.INSTANCE.isValidSearchQueryUrl("https://example.com/search/?q=%s"));
+        assertTrue(UrlUtils.INSTANCE.isValidSearchQueryUrl("http://example.com/search/?q=%s"));
+        assertTrue(UrlUtils.INSTANCE.isValidSearchQueryUrl("http-test-site.com/search/?q=%s"));
+        assertFalse(UrlUtils.INSTANCE.isValidSearchQueryUrl("httpss://example.com/search/?q=%s"));
 
-        assertTrue(UrlUtils.isValidSearchQueryUrl("example.com/search/?q=%s"));
-        assertTrue(UrlUtils.isValidSearchQueryUrl(" example.com/search/?q=%s "));
+        assertTrue(UrlUtils.INSTANCE.isValidSearchQueryUrl("example.com/search/?q=%s"));
+        assertTrue(UrlUtils.INSTANCE.isValidSearchQueryUrl(" example.com/search/?q=%s "));
 
-        assertFalse(UrlUtils.isValidSearchQueryUrl("htps://example.com/search/?q=%s"));
+        assertFalse(UrlUtils.INSTANCE.isValidSearchQueryUrl("htps://example.com/search/?q=%s"));
 
-        assertFalse(UrlUtils.isValidSearchQueryUrl(" example.com/search/?q= "));
+        assertFalse(UrlUtils.INSTANCE.isValidSearchQueryUrl(" example.com/search/?q= "));
     }
 
     @Test
     public void urlsMatchExceptForTrailingSlash() throws Exception {
-        assertTrue(UrlUtils.urlsMatchExceptForTrailingSlash("http://www.mozilla.org", "http://www.mozilla.org"));
-        assertTrue(UrlUtils.urlsMatchExceptForTrailingSlash("http://www.mozilla.org/", "http://www.mozilla.org"));
-        assertTrue(UrlUtils.urlsMatchExceptForTrailingSlash("http://www.mozilla.org", "http://www.mozilla.org/"));
+        assertTrue(UrlUtils.INSTANCE.urlsMatchExceptForTrailingSlash("http://www.mozilla.org", "http://www.mozilla.org"));
+        assertTrue(UrlUtils.INSTANCE.urlsMatchExceptForTrailingSlash("http://www.mozilla.org/", "http://www.mozilla.org"));
+        assertTrue(UrlUtils.INSTANCE.urlsMatchExceptForTrailingSlash("http://www.mozilla.org", "http://www.mozilla.org/"));
 
-        assertFalse(UrlUtils.urlsMatchExceptForTrailingSlash("http://mozilla.org", "http://www.mozilla.org"));
-        assertFalse(UrlUtils.urlsMatchExceptForTrailingSlash("http://www.mozilla.org/", "http://mozilla.org"));
+        assertFalse(UrlUtils.INSTANCE.urlsMatchExceptForTrailingSlash("http://mozilla.org", "http://www.mozilla.org"));
+        assertFalse(UrlUtils.INSTANCE.urlsMatchExceptForTrailingSlash("http://www.mozilla.org/", "http://mozilla.org"));
 
-        assertFalse(UrlUtils.urlsMatchExceptForTrailingSlash("http://www.mozilla.org", "https://www.mozilla.org"));
-        assertFalse(UrlUtils.urlsMatchExceptForTrailingSlash("https://www.mozilla.org", "http://www.mozilla.org"));
+        assertFalse(UrlUtils.INSTANCE.urlsMatchExceptForTrailingSlash("http://www.mozilla.org", "https://www.mozilla.org"));
+        assertFalse(UrlUtils.INSTANCE.urlsMatchExceptForTrailingSlash("https://www.mozilla.org", "http://www.mozilla.org"));
 
         // Same length of domain, but otherwise different:
-        assertFalse(UrlUtils.urlsMatchExceptForTrailingSlash("http://www.allizom.org", "http://www.mozilla.org"));
-        assertFalse(UrlUtils.urlsMatchExceptForTrailingSlash("http://www.allizom.org/", "http://www.mozilla.org"));
-        assertFalse(UrlUtils.urlsMatchExceptForTrailingSlash("http://www.allizom.org", "http://www.mozilla.org/"));
+        assertFalse(UrlUtils.INSTANCE.urlsMatchExceptForTrailingSlash("http://www.allizom.org", "http://www.mozilla.org"));
+        assertFalse(UrlUtils.INSTANCE.urlsMatchExceptForTrailingSlash("http://www.allizom.org/", "http://www.mozilla.org"));
+        assertFalse(UrlUtils.INSTANCE.urlsMatchExceptForTrailingSlash("http://www.allizom.org", "http://www.mozilla.org/"));
 
         // Check upper/lower case is OK:
-        assertTrue(UrlUtils.urlsMatchExceptForTrailingSlash("http://www.MOZILLA.org", "http://www.mozilla.org"));
-        assertTrue(UrlUtils.urlsMatchExceptForTrailingSlash("http://www.MOZILLA.org/", "http://www.mozilla.org"));
-        assertTrue(UrlUtils.urlsMatchExceptForTrailingSlash("http://www.MOZILLA.org", "http://www.mozilla.org/"));
+        assertTrue(UrlUtils.INSTANCE.urlsMatchExceptForTrailingSlash("http://www.MOZILLA.org", "http://www.mozilla.org"));
+        assertTrue(UrlUtils.INSTANCE.urlsMatchExceptForTrailingSlash("http://www.MOZILLA.org/", "http://www.mozilla.org"));
+        assertTrue(UrlUtils.INSTANCE.urlsMatchExceptForTrailingSlash("http://www.MOZILLA.org", "http://www.mozilla.org/"));
     }
 
     @Test
     public void isPermittedResourceProtocol() {
-        assertFalse(UrlUtils.isPermittedResourceProtocol(""));
-        assertFalse(UrlUtils.isPermittedResourceProtocol(null));
+        assertFalse(UrlUtils.INSTANCE.isPermittedResourceProtocol(""));
+        assertFalse(UrlUtils.INSTANCE.isPermittedResourceProtocol(null));
 
-        assertTrue(UrlUtils.isPermittedResourceProtocol("http"));
-        assertTrue(UrlUtils.isPermittedResourceProtocol("https"));
+        assertTrue(UrlUtils.INSTANCE.isPermittedResourceProtocol("http"));
+        assertTrue(UrlUtils.INSTANCE.isPermittedResourceProtocol("https"));
 
-        assertTrue(UrlUtils.isPermittedResourceProtocol("data"));
-        assertTrue(UrlUtils.isPermittedResourceProtocol("file"));
+        assertTrue(UrlUtils.INSTANCE.isPermittedResourceProtocol("data"));
+        assertTrue(UrlUtils.INSTANCE.isPermittedResourceProtocol("file"));
 
-        assertFalse(UrlUtils.isPermittedResourceProtocol("nielsenwebid"));
+        assertFalse(UrlUtils.INSTANCE.isPermittedResourceProtocol("nielsenwebid"));
     }
 
     @Test
     public void isPermittedProtocol() {
-        assertFalse(UrlUtils.isSupportedProtocol(""));
-        assertFalse(UrlUtils.isSupportedProtocol(null));
+        assertFalse(UrlUtils.INSTANCE.isSupportedProtocol(""));
+        assertFalse(UrlUtils.INSTANCE.isSupportedProtocol(null));
 
-        assertTrue(UrlUtils.isSupportedProtocol("http"));
-        assertTrue(UrlUtils.isSupportedProtocol("https"));
-        assertTrue(UrlUtils.isSupportedProtocol("error"));
-        assertTrue(UrlUtils.isSupportedProtocol("data"));
+        assertTrue(UrlUtils.INSTANCE.isSupportedProtocol("http"));
+        assertTrue(UrlUtils.INSTANCE.isSupportedProtocol("https"));
+        assertTrue(UrlUtils.INSTANCE.isSupportedProtocol("error"));
+        assertTrue(UrlUtils.INSTANCE.isSupportedProtocol("data"));
 
-        assertFalse(UrlUtils.isSupportedProtocol("market"));
+        assertFalse(UrlUtils.INSTANCE.isSupportedProtocol("market"));
     }
 
     @Test
     public void testIsUrl() {
-        assertTrue(UrlUtils.isUrl("http://www.mozilla.org"));
-        assertTrue(UrlUtils.isUrl("https://www.mozilla.org"));
-        assertTrue(UrlUtils.isUrl("https://www.mozilla.org "));
-        assertTrue(UrlUtils.isUrl(" https://www.mozilla.org"));
-        assertTrue(UrlUtils.isUrl(" https://www.mozilla.org "));
-        assertTrue(UrlUtils.isUrl("https://www.mozilla.org/en-US/internet-health/"));
-        assertTrue(UrlUtils.isUrl("file:///mnt/sdcard/"));
-        assertTrue(UrlUtils.isUrl("mozilla.org"));
+        assertTrue(UrlUtils.INSTANCE.isUrl("http://www.mozilla.org"));
+        assertTrue(UrlUtils.INSTANCE.isUrl("https://www.mozilla.org"));
+        assertTrue(UrlUtils.INSTANCE.isUrl("https://www.mozilla.org "));
+        assertTrue(UrlUtils.INSTANCE.isUrl(" https://www.mozilla.org"));
+        assertTrue(UrlUtils.INSTANCE.isUrl(" https://www.mozilla.org "));
+        assertTrue(UrlUtils.INSTANCE.isUrl("https://www.mozilla.org/en-US/internet-health/"));
+        assertTrue(UrlUtils.INSTANCE.isUrl("file:///mnt/sdcard/"));
+        assertTrue(UrlUtils.INSTANCE.isUrl("mozilla.org"));
 
-        assertFalse(UrlUtils.isUrl("Hello World"));
-        assertFalse(UrlUtils.isUrl("Mozilla"));
+        assertFalse(UrlUtils.INSTANCE.isUrl("Hello World"));
+        assertFalse(UrlUtils.INSTANCE.isUrl("Mozilla"));
     }
 
     @Test
     public void testNormalize() {
-        assertEquals("http://www.mozilla.org", UrlUtils.normalize("http://www.mozilla.org"));
-        assertEquals("https://www.mozilla.org", UrlUtils.normalize("https://www.mozilla.org"));
-        assertEquals("https://www.mozilla.org/en-US/internet-health/", UrlUtils.normalize("https://www.mozilla.org/en-US/internet-health/"));
-        assertEquals("file:///mnt/sdcard/", UrlUtils.normalize("file:///mnt/sdcard/"));
+        assertEquals("http://www.mozilla.org", UrlUtils.INSTANCE.normalize("http://www.mozilla.org"));
+        assertEquals("https://www.mozilla.org", UrlUtils.INSTANCE.normalize("https://www.mozilla.org"));
+        assertEquals("https://www.mozilla.org/en-US/internet-health/", UrlUtils.INSTANCE.normalize("https://www.mozilla.org/en-US/internet-health/"));
+        assertEquals("file:///mnt/sdcard/", UrlUtils.INSTANCE.normalize("file:///mnt/sdcard/"));
 
-        assertEquals("http://mozilla.org", UrlUtils.normalize("mozilla.org"));
-        assertEquals("http://mozilla.org", UrlUtils.normalize("http://mozilla.org "));
-        assertEquals("http://mozilla.org", UrlUtils.normalize(" http://mozilla.org "));
-        assertEquals("http://mozilla.org", UrlUtils.normalize(" http://mozilla.org"));
-        assertEquals("http://localhost", UrlUtils.normalize("localhost"));
+        assertEquals("http://mozilla.org", UrlUtils.INSTANCE.normalize("mozilla.org"));
+        assertEquals("http://mozilla.org", UrlUtils.INSTANCE.normalize("http://mozilla.org "));
+        assertEquals("http://mozilla.org", UrlUtils.INSTANCE.normalize(" http://mozilla.org "));
+        assertEquals("http://mozilla.org", UrlUtils.INSTANCE.normalize(" http://mozilla.org"));
+        assertEquals("http://localhost", UrlUtils.INSTANCE.normalize("localhost"));
     }
 
     @Test
     public void testIsSearchQuery() {
-        assertTrue(UrlUtils.isSearchQuery("hello world"));
+        assertTrue(UrlUtils.INSTANCE.isSearchQuery("hello world"));
 
-        assertFalse(UrlUtils.isSearchQuery("mozilla.org"));
-        assertFalse(UrlUtils.isSearchQuery("mozilla"));
+        assertFalse(UrlUtils.INSTANCE.isSearchQuery("mozilla.org"));
+        assertFalse(UrlUtils.INSTANCE.isSearchQuery("mozilla"));
     }
 
     @Test public void testCreateSearchUrl() {
@@ -123,7 +123,7 @@ public class UrlUtilsTest {
     }
 
     private void assertCreatedUrlContainsBase(String searchTerm, String base) {
-        String searchString = UrlUtils.createSearchUrl(RuntimeEnvironment.application, searchTerm);
+        String searchString = UrlUtils.INSTANCE.createSearchUrl(RuntimeEnvironment.application, searchTerm);
         assertTrue("\"" + searchString + "\" does not contain \"" + base + "\"",
                 searchString.contains(base));
     }
@@ -131,55 +131,55 @@ public class UrlUtilsTest {
     @Test
     @SuppressLint("AuthLeak")
     public void testStripUserInfo() {
-        assertEquals("", UrlUtils.stripUserInfo(null));
-        assertEquals("", UrlUtils.stripUserInfo(""));
+        assertEquals("", UrlUtils.INSTANCE.stripUserInfo(null));
+        assertEquals("", UrlUtils.INSTANCE.stripUserInfo(""));
 
-        assertEquals("https://www.mozilla.org", UrlUtils.stripUserInfo("https://user:password@www.mozilla.org"));
-        assertEquals("https://www.mozilla.org", UrlUtils.stripUserInfo("https://user@www.mozilla.org"));
+        assertEquals("https://www.mozilla.org", UrlUtils.INSTANCE.stripUserInfo("https://user:password@www.mozilla.org"));
+        assertEquals("https://www.mozilla.org", UrlUtils.INSTANCE.stripUserInfo("https://user@www.mozilla.org"));
 
-        assertEquals("user@mozilla.org", UrlUtils.stripUserInfo("user@mozilla.org"));
+        assertEquals("user@mozilla.org", UrlUtils.INSTANCE.stripUserInfo("user@mozilla.org"));
 
-        assertEquals("ftp://mozilla.org", UrlUtils.stripUserInfo("ftp://user:password@mozilla.org"));
+        assertEquals("ftp://mozilla.org", UrlUtils.INSTANCE.stripUserInfo("ftp://user:password@mozilla.org"));
 
-        assertEquals("öäü102ß", UrlUtils.stripUserInfo("öäü102ß"));
+        assertEquals("öäü102ß", UrlUtils.INSTANCE.stripUserInfo("öäü102ß"));
 
         String badUri = "https://user:password@www.i/have/percentage/signs/%.org%";
-        assertEquals(badUri, UrlUtils.stripUserInfo(badUri));
+        assertEquals(badUri, UrlUtils.INSTANCE.stripUserInfo(badUri));
         badUri = "://user:password@i/have/no/scheme.org";
-        assertEquals(badUri, UrlUtils.stripUserInfo(badUri));
+        assertEquals(badUri, UrlUtils.INSTANCE.stripUserInfo(badUri));
     }
 
     @Test
     public void isInternalErrorURL() {
-        assertTrue(UrlUtils.isInternalErrorURL("data:text/html;charset=utf-8;base64,"));
+        assertTrue(UrlUtils.INSTANCE.isInternalErrorURL("data:text/html;charset=utf-8;base64,"));
 
-        assertFalse(UrlUtils.isInternalErrorURL("http://www.mozilla.org"));
-        assertFalse(UrlUtils.isInternalErrorURL("https://www.mozilla.org/en-us/about"));
-        assertFalse(UrlUtils.isInternalErrorURL("www.mozilla.org"));
-        assertFalse(UrlUtils.isInternalErrorURL("error:-8"));
-        assertFalse(UrlUtils.isInternalErrorURL("hello world"));
+        assertFalse(UrlUtils.INSTANCE.isInternalErrorURL("http://www.mozilla.org"));
+        assertFalse(UrlUtils.INSTANCE.isInternalErrorURL("https://www.mozilla.org/en-us/about"));
+        assertFalse(UrlUtils.INSTANCE.isInternalErrorURL("www.mozilla.org"));
+        assertFalse(UrlUtils.INSTANCE.isInternalErrorURL("error:-8"));
+        assertFalse(UrlUtils.INSTANCE.isInternalErrorURL("hello world"));
     }
 
     @Test
     public void isHttpOrHttpsUrl() {
-        assertFalse(UrlUtils.isHttpOrHttps(null));
-        assertFalse(UrlUtils.isHttpOrHttps(""));
-        assertFalse(UrlUtils.isHttpOrHttps("     "));
-        assertFalse(UrlUtils.isHttpOrHttps("mozilla.org"));
-        assertFalse(UrlUtils.isHttpOrHttps("httpstrf://example.org"));
+        assertFalse(UrlUtils.INSTANCE.isHttpOrHttps(null));
+        assertFalse(UrlUtils.INSTANCE.isHttpOrHttps(""));
+        assertFalse(UrlUtils.INSTANCE.isHttpOrHttps("     "));
+        assertFalse(UrlUtils.INSTANCE.isHttpOrHttps("mozilla.org"));
+        assertFalse(UrlUtils.INSTANCE.isHttpOrHttps("httpstrf://example.org"));
 
-        assertTrue(UrlUtils.isHttpOrHttps("https://www.mozilla.org"));
-        assertTrue(UrlUtils.isHttpOrHttps("http://example.org"));
-        assertTrue(UrlUtils.isHttpOrHttps("http://192.168.0.1"));
+        assertTrue(UrlUtils.INSTANCE.isHttpOrHttps("https://www.mozilla.org"));
+        assertTrue(UrlUtils.INSTANCE.isHttpOrHttps("http://example.org"));
+        assertTrue(UrlUtils.INSTANCE.isHttpOrHttps("http://192.168.0.1"));
     }
 
     @Test
     public void testStripCommonSubdomains() {
-        assertEquals("mozilla.org", UrlUtils.stripCommonSubdomains("mozilla.org"));
-        assertEquals("mozilla.org", UrlUtils.stripCommonSubdomains("www.mozilla.org"));
-        assertEquals("mozilla.org", UrlUtils.stripCommonSubdomains("m.mozilla.org"));
-        assertEquals("mozilla.org", UrlUtils.stripCommonSubdomains("mobile.mozilla.org"));
-        assertEquals("random.mozilla.org", UrlUtils.stripCommonSubdomains("random.mozilla.org"));
-        assertEquals(null, UrlUtils.stripCommonSubdomains(null));
+        assertEquals("mozilla.org", UrlUtils.INSTANCE.stripCommonSubdomains("mozilla.org"));
+        assertEquals("mozilla.org", UrlUtils.INSTANCE.stripCommonSubdomains("www.mozilla.org"));
+        assertEquals("mozilla.org", UrlUtils.INSTANCE.stripCommonSubdomains("m.mozilla.org"));
+        assertEquals("mozilla.org", UrlUtils.INSTANCE.stripCommonSubdomains("mobile.mozilla.org"));
+        assertEquals("random.mozilla.org", UrlUtils.INSTANCE.stripCommonSubdomains("random.mozilla.org"));
+        assertEquals(null, UrlUtils.INSTANCE.stripCommonSubdomains(null));
     }
 }
