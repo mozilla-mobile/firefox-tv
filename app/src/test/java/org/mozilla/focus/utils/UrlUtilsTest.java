@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mozilla.focus.search.SearchEngineManager;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -23,6 +25,8 @@ public class UrlUtilsTest {
         assertTrue(UrlUtils.isValidSearchQueryUrl(" example.com/search/?q=%s "));
 
         assertFalse(UrlUtils.isValidSearchQueryUrl("htps://example.com/search/?q=%s"));
+
+        assertFalse(UrlUtils.isValidSearchQueryUrl(" example.com/search/?q= "));
     }
 
     @Test
@@ -112,6 +116,18 @@ public class UrlUtilsTest {
         assertFalse(UrlUtils.isSearchQuery("mozilla"));
     }
 
+    @Test public void testCreateSearchUrl() {
+        assertCreatedUrlContainsBase("dogs are cool", "https://www.google.com/search?q=dogs%20are%20cool");
+        assertCreatedUrlContainsBase("how can mirrors be real if our eyes arent real?",
+                "https://www.google.com/search?q=how%20can%20mirrors%20be%20real%20if%20our%20eyes%20arent%20real");
+    }
+
+    private void assertCreatedUrlContainsBase(String searchTerm, String base) {
+        String searchString = UrlUtils.createSearchUrl(RuntimeEnvironment.application, searchTerm);
+        assertTrue("\"" + searchString + "\" does not contain \"" + base + "\"",
+                searchString.contains(base));
+    }
+
     @Test
     @SuppressLint("AuthLeak")
     public void testStripUserInfo() {
@@ -126,6 +142,11 @@ public class UrlUtilsTest {
         assertEquals("ftp://mozilla.org", UrlUtils.stripUserInfo("ftp://user:password@mozilla.org"));
 
         assertEquals("öäü102ß", UrlUtils.stripUserInfo("öäü102ß"));
+
+        String badUri = "https://user:password@www.i/have/percentage/signs/%.org%";
+        assertEquals(badUri, UrlUtils.stripUserInfo(badUri));
+        badUri = "://user:password@i/have/no/scheme.org";
+        assertEquals(badUri, UrlUtils.stripUserInfo(badUri));
     }
 
     @Test
@@ -159,5 +180,6 @@ public class UrlUtilsTest {
         assertEquals("mozilla.org", UrlUtils.stripCommonSubdomains("m.mozilla.org"));
         assertEquals("mozilla.org", UrlUtils.stripCommonSubdomains("mobile.mozilla.org"));
         assertEquals("random.mozilla.org", UrlUtils.stripCommonSubdomains("random.mozilla.org"));
+        assertEquals(null, UrlUtils.stripCommonSubdomains(null));
     }
 }
