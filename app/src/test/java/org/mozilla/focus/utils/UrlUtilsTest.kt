@@ -4,13 +4,13 @@ import android.annotation.SuppressLint
 
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mozilla.focus.search.SearchEngineManager
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.mozilla.focus.browser.BrowserFragment
 
 @RunWith(RobolectricTestRunner::class)
 class UrlUtilsTest {
@@ -185,5 +185,28 @@ class UrlUtilsTest {
         assertEquals("mozilla.org", UrlUtils.stripCommonSubdomains("mobile.mozilla.org"))
         assertEquals("random.mozilla.org", UrlUtils.stripCommonSubdomains("random.mozilla.org"))
         assertEquals(null, UrlUtils.stripCommonSubdomains(null))
+    }
+
+    @Test
+    fun testToDisplayUrl() {
+        infix fun String.shouldBecome(output: String) {
+            val displayUrl = UrlUtils.toDisplayUrl(this)
+            assertEquals(output, displayUrl)
+        }
+        fun String.shouldBeUnchanged() {
+            val displayUrl = UrlUtils.toDisplayUrl(this)
+            this shouldBecome displayUrl
+        }
+
+        "error:-8".shouldBeUnchanged()
+        "hello world".shouldBeUnchanged()
+        "http://example.org".shouldBeUnchanged()
+        "http://192.168.0.1".shouldBeUnchanged()
+        "mozilla.org".shouldBeUnchanged()
+        "www.mozilla.org".shouldBeUnchanged()
+        "m.mozilla.org".shouldBeUnchanged()
+        "mobile.mozilla.org".shouldBeUnchanged()
+
+        BrowserFragment.APP_URL_HOME shouldBecome ""
     }
 }

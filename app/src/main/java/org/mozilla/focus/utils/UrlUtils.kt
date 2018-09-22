@@ -151,4 +151,9 @@ object UrlUtils {
 
         return host.substring(start)
     }
+
+    @JvmStatic
+    fun toDisplayUrl(url: String): String {
+        return ""
+    }
 }
