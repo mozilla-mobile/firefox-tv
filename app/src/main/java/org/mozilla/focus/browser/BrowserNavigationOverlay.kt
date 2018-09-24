@@ -39,12 +39,13 @@ import org.mozilla.focus.widget.IgnoreFocusMovementMethod
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 import kotlin.properties.Delegates
 import org.mozilla.focus.ext.isVoiceViewEnabled
+import java.lang.ref.WeakReference
 
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
 private const val NAVIGATION_BUTTON_DISABLED_ALPHA = 0.3f
 
 private const val SHOW_UNPIN_TOAST_COUNTER_PREF = "show_upin_toast_counter"
-private const val MAX_UNPIN_TOAST_COUNT = 3
+private const val MAX_UNPIN_TOAST_COUNT = 100
 
 private const val COL_COUNT = 5
 private val uiHandler = Handler(Looper.getMainLooper())
@@ -164,11 +165,13 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                         .putInt(SHOW_UNPIN_TOAST_COUNTER_PREF, prefInt + 1)
                         .apply()
 
-                // With VoiceView enabled, the toast is not announced if it disappears before the home tile description
-                // is finished. This adds a short delay to the display of the toast so it will always be announced
-                if (context.isVoiceViewEnabled())
-                    uiHandler.postDelayed(
-                        { Toast.makeText(context, R.string.homescreen_unpin_tutorial_toast, Toast.LENGTH_LONG).show() }, 1500)
+                val contextReference = WeakReference(context)
+                val showToast = postDelayed@{
+                    val context = contextReference.get() ?: return@postDelayed
+                    Toast.makeText(context, R.string.homescreen_unpin_tutorial_toast, Toast.LENGTH_LONG).show()
+                }
+                if (context.isVoiceViewEnabled()) uiHandler.postDelayed(showToast, 1500)
+                else showToast.invoke()
 
                 canShowUpinToast = false
             }
