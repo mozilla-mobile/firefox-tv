@@ -40,7 +40,6 @@ import org.mozilla.focus.widget.InlineAutocompleteEditText
 import kotlin.properties.Delegates
 import org.mozilla.focus.ext.isVoiceViewEnabled
 
-
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
 private const val NAVIGATION_BUTTON_DISABLED_ALPHA = 0.3f
 
@@ -69,7 +68,7 @@ enum class NavigationEvent {
         const val VAL_UNCHECKED = "unchecked"
     }
 }
-
+@Suppress("LargeClass")
 class BrowserNavigationOverlay @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -169,8 +168,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 // is finished. This adds a short delay to the display of the toast so it will always be announced
                 if (context.isVoiceViewEnabled())
                     uiHandler.postDelayed(
-                        { Toast.makeText(context, R.string.homescreen_unpin_tutorial_toast, Toast.LENGTH_LONG).show() }
-                        , 1500)
+                        { Toast.makeText(context, R.string.homescreen_unpin_tutorial_toast, Toast.LENGTH_LONG).show() }, 1500)
 
                 canShowUpinToast = false
             }
@@ -200,6 +198,9 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         pocketErrorContainer.visibility = View.VISIBLE
         pocketMegaTileLoadError.text = resources.getString(R.string.pocket_video_feed_failed_to_load,
                 resources.getString(R.string.pocket_brand_name))
+        megaTileTryAgainButton.contentDescription = resources.getString(R.string.pocket_video_feed_failed_to_load,
+                resources.getString(R.string.pocket_brand_name)) + " " + resources.getString(R.string.pocket_video_feed_reload_button)
+
         megaTileTryAgainButton.setOnClickListener { _ ->
             pocketVideos = Pocket.getRecommendedVideos()
             initMegaTile()
