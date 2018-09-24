@@ -45,7 +45,7 @@ private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
 private const val NAVIGATION_BUTTON_DISABLED_ALPHA = 0.3f
 
 private const val SHOW_UNPIN_TOAST_COUNTER_PREF = "show_upin_toast_counter"
-private const val MAX_UNPIN_TOAST_COUNT = 100
+private const val MAX_UNPIN_TOAST_COUNT = 3
 
 private const val COL_COUNT = 5
 private val uiHandler = Handler(Looper.getMainLooper())
@@ -166,8 +166,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                         .apply()
 
                 val contextReference = WeakReference(context)
-                val showToast = postDelayed@{
-                    val context = contextReference.get() ?: return@postDelayed
+                val showToast = showToast@{
+                    val context = contextReference.get() ?: return@showToast
                     Toast.makeText(context, R.string.homescreen_unpin_tutorial_toast, Toast.LENGTH_LONG).show()
                 }
                 if (context.isVoiceViewEnabled()) uiHandler.postDelayed(showToast, 1500)
