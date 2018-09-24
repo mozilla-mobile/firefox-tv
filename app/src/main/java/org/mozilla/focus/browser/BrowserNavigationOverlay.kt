@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.pocket_video_mega_tile.view.*
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.ext.forEachChild
@@ -70,7 +71,8 @@ enum class NavigationEvent {
         const val VAL_UNCHECKED = "unchecked"
     }
 }
-@Suppress("LargeClass")
+
+@Suppress("LargeClass") // TODO remove this. See https://github.com/mozilla-mobile/firefox-tv/issues/1187
 class BrowserNavigationOverlay @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -238,6 +240,13 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     private fun setupUrlInput() = with(navUrlInput) {
         setOnCommitListener {
             val userInput = text.toString()
+            if (userInput == BrowserFragment.APP_URL_HOME) {
+                // If the input points to home, we short circuit and hide the keyboard, returning
+                // the user to the home screen
+                this.hideKeyboard()
+                return@setOnCommitListener
+            }
+
             if (userInput.isNotEmpty()) {
                 val cachedAutocompleteResult = lastAutocompleteResult // setText clears the reference so we cache it here.
                 setText(cachedAutocompleteResult.text)
