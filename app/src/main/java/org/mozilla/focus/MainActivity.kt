@@ -21,6 +21,7 @@ import org.mozilla.focus.browser.BrowserNavigationOverlay
 import org.mozilla.focus.browser.WebViewCache
 import org.mozilla.focus.browser.VideoVoiceCommandMediaSession
 import org.mozilla.focus.ext.components
+import org.mozilla.focus.ext.setupForApp
 import org.mozilla.focus.ext.toSafeIntent
 import org.mozilla.focus.home.pocket.Pocket
 import org.mozilla.focus.home.pocket.PocketOnboardingActivity
@@ -45,6 +46,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     // There should be at most one MediaSession per process, hence it's in MainActivity.
     // We crash if we init MediaSession at init time, hence lateinit.
     override lateinit var videoVoiceCommandMediaSession: VideoVoiceCommandMediaSession
+    private lateinit var webViewCache: WebViewCache
 
     private val sessionObserver = object : SessionManager.Observer {
         override fun onSessionSelected(session: Session) {
@@ -75,6 +77,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         Pocket.init()
         PublicSuffix.init(this) // Used by Pocket Video feed & custom home tiles.
         initMediaSession()
+        webViewCache = WebViewCache()
 
         val intent = SafeIntent(intent)
 
@@ -139,14 +142,11 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         TelemetryWrapper.stopMainActivity()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        WebViewCache.clear()
-    }
-
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
         return if (name == EngineView::class.java.name) {
-            return WebViewCache.getWebView(context, attrs)
+            webViewCache.getWebView(context, attrs) {
+                setupForApp(context)
+            }
         } else super.onCreateView(name, context, attrs)
     }
 
