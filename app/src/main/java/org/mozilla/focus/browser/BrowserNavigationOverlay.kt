@@ -350,7 +350,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         // these are inaccurate!
         if (!hasUserChangedURLSinceEditTextFocused) {
             val displayText = navigationStateProvider?.getCurrentUrl()
-                    ?.let { UrlUtils.toDisplayUrl(it) }
+                    ?.let { UrlUtils.toUrlBarDisplay(it) }
             navUrlInput.setText(displayText)
         }
     }

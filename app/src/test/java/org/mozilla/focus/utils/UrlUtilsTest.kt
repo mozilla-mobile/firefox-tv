@@ -1,16 +1,13 @@
 package org.mozilla.focus.utils
 
-import android.annotation.SuppressLint
-
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
-
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Test
+import org.junit.runner.RunWith
 import org.mozilla.focus.browser.BrowserFragment
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
 class UrlUtilsTest {
@@ -124,33 +121,39 @@ class UrlUtilsTest {
                 "https://www.google.com/search?q=how%20can%20mirrors%20be%20real%20if%20our%20eyes%20arent%20real")
     }
 
-    private fun assertCreatedUrlContainsBase(searchTerm: String, base: String) {
+    private fun assertCreatedUrlContainsBase(searchTerm: String, baseUrl: String) {
         val searchString = UrlUtils.createSearchUrl(RuntimeEnvironment.application, searchTerm)
-        assertTrue("\"$searchString\" does not contain \"$base\"",
-                searchString.contains(base))
+        assertTrue("\"$searchString\" does not contain \"$baseUrl\"",
+                searchString.contains(baseUrl))
     }
 
     @Test
-    @SuppressLint("AuthLeak")
-    fun testStripUserInfo() {
-        infix fun String?.shouldBecome(output: String?) {
-            val stripped = UrlUtils.stripUserInfo(this)
-            assertEquals(output, stripped)
+    fun `WHEN input has no user info THEN should return unchanged`() {
+        listOf(
+                "",
+                "öäü102ß",
+                "user@mozilla.org",
+                "https://user:password@www.uri-contains-%-percentage-marks-that-are-not-associated-with-numbers.org%",
+                "://user:password@i/have/no/scheme.org"
+        ).forEach {
+            val transformed = UrlUtils.stripUserInfo(it)
+            assertEquals(it, transformed)
         }
-        fun String?.shouldBeUnchanged() {
-            this shouldBecome this
+    }
+
+    @Test
+    fun `WHEN null is passed THEN should return blank`() {
+        assertEquals("", UrlUtils.stripUserInfo(null))
+    }
+
+    @Test
+    fun `WHEN user info is included THEN should return url without user info`() {
+        fun String.stripped(): String {
+            return UrlUtils.stripUserInfo(this)
         }
-
-        null shouldBecome ""
-        "https://user:password@www.mozilla.org" shouldBecome "https://www.mozilla.org"
-        "https://user@www.mozilla.org" shouldBecome "https://www.mozilla.org"
-        "ftp://user:password@mozilla.org" shouldBecome "ftp://mozilla.org"
-
-        "".shouldBeUnchanged()
-        "öäü102ß".shouldBeUnchanged()
-        "user@mozilla.org".shouldBeUnchanged()
-        "https://user:password@www.i/have/percentage/signs/%.org%".shouldBeUnchanged()
-        "://user:password@i/have/no/scheme.org".shouldBeUnchanged()
+        assertEquals("https://www.mozilla.org", "https://user:password@www.mozilla.org".stripped())
+        assertEquals("https://www.mozilla.org", "https://user@www.mozilla.org".stripped())
+        assertEquals("ftp://mozilla.org", "ftp://user:password@mozilla.org".stripped())
     }
 
     @Test
@@ -188,25 +191,24 @@ class UrlUtilsTest {
     }
 
     @Test
-    fun testToDisplayUrl() {
-        infix fun String.shouldBecome(output: String) {
-            val displayUrl = UrlUtils.toDisplayUrl(this)
-            assertEquals(output, displayUrl)
+    fun `GIVEN input is not 'home' WHEN input is transformed THEN it should be unchanged`() {
+        listOf(
+                "error:-8",
+                "hello world",
+                "http://example.org",
+                "http://192.168.0.1",
+                "mozilla.org",
+                "www.mozilla.org",
+                "m.mozilla.org",
+                "mobile.mozilla.org"
+        ).forEach {
+            val itTransformed = UrlUtils.toUrlBarDisplay(it)
+            assertEquals(it, itTransformed)
         }
-        fun String.shouldBeUnchanged() {
-            val displayUrl = UrlUtils.toDisplayUrl(this)
-            this shouldBecome displayUrl
-        }
+    }
 
-        "error:-8".shouldBeUnchanged()
-        "hello world".shouldBeUnchanged()
-        "http://example.org".shouldBeUnchanged()
-        "http://192.168.0.1".shouldBeUnchanged()
-        "mozilla.org".shouldBeUnchanged()
-        "www.mozilla.org".shouldBeUnchanged()
-        "m.mozilla.org".shouldBeUnchanged()
-        "mobile.mozilla.org".shouldBeUnchanged()
-
-        BrowserFragment.APP_URL_HOME shouldBecome ""
+    @Test
+    fun `GIVEN input is 'home' WHEN input is transformed THEN it should return blank`() {
+        assertEquals("", UrlUtils.toUrlBarDisplay(BrowserFragment.APP_URL_HOME))
     }
 }
