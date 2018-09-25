@@ -17,6 +17,7 @@ import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.firefox_progress_bar.view.*
 import mozilla.components.browser.session.Session
 import org.mozilla.focus.R
+import org.mozilla.focus.utils.UrlUtils
 import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
 
@@ -45,7 +46,7 @@ class FirefoxProgressBar @JvmOverloads constructor(
     }
 
     override fun onUrlChanged(session: Session, url: String) {
-        this.url.text = url
+        this.url.text = UrlUtils.toDisplayUrl(url)
     }
 
     init {

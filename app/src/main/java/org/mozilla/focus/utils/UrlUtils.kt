@@ -158,7 +158,7 @@ object UrlUtils {
      * in the url bar EditText
      */
     @JvmStatic
-    fun toUrlBarDisplay(url: String): String {
+    fun toDisplayUrl(url: String): String {
         return when {
             url == Urls.APP_HOME -> "" // Empty string forces the EditText to show hint text
             url.startsWith(Urls.DATA_PREFIX) -> ""
