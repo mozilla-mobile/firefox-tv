@@ -4,14 +4,12 @@
 
 package org.mozilla.focus.browser
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import mozilla.components.browser.engine.system.SystemEngineView
-import org.mozilla.focus.ext.setupForApp
 
 /**
  * Caches a [SystemEngineView], which internally maintains a [WebView].
@@ -19,31 +17,29 @@ import org.mozilla.focus.ext.setupForApp
  * This allows us to maintain [WebView] state when the view would otherwise
  * be destroyed
  */
-object WebViewCache {
+class WebViewCache {
 
-    @SuppressLint("StaticFieldLeak")
     private var cachedView: SystemEngineView? = null
 
-    fun getWebView(context: Context, attrs: AttributeSet): SystemEngineView {
+    fun getWebView(
+        context: Context,
+        attrs: AttributeSet,
+        initialize: SystemEngineView.() -> Unit
+    ): SystemEngineView {
         fun View?.removeFromParentIfAble() {
+            // If the WebView has already been added to the view hierarchy, we
+            // need to remove it from its parent before attempting to add it
+            // again. Otherwise an IllegalStateException will be thrown
             (this?.parent as? ViewGroup)?.removeView(cachedView)
         }
+
         fun createAndCacheEngineView(): SystemEngineView {
             return SystemEngineView(context, attrs).apply {
-                setupForApp(context)
+                initialize()
             }.also { cachedView = it }
         }
 
         cachedView?.removeFromParentIfAble()
         return cachedView ?: createAndCacheEngineView()
-    }
-
-    /**
-     * After [WebView.destroy] is called that instance will be unusable and most
-     * method calls on it will throw exceptions.  It is important that we clear
-     * the cache on destroy, so that future requests receive a new instance.
-     */
-    fun clear() {
-        cachedView = null
     }
 }
