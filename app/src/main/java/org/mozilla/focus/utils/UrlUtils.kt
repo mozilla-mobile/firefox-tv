@@ -153,10 +153,14 @@ object UrlUtils {
         return host.substring(start)
     }
 
+    /**
+     * Accepts a url in String form and returns whatever text should be displayed
+     * in the url bar EditText
+     */
     @JvmStatic
-    fun toDisplayUrl(url: String): String {
+    fun toUrlBarDisplay(url: String): String {
         return when (url) {
-            BrowserFragment.APP_URL_HOME -> ""
+            BrowserFragment.APP_URL_HOME -> "" // Empty string forces the EditText to show hint text
             else -> url
         }
     }
