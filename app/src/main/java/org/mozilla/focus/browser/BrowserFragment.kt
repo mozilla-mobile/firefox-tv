@@ -54,9 +54,6 @@ private const val TOAST_Y_OFFSET = 200
 class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
     companion object {
         const val FRAGMENT_TAG = "browser"
-        const val APP_URL_PREFIX = "firefox:"
-        const val APP_URL_HOME = "${APP_URL_PREFIX}home"
-        const val APP_URL_POCKET_ERROR = "${APP_URL_PREFIX}error:pocketconnection"
 
         @JvmStatic
         fun createForSession(session: Session) = BrowserFragment().apply {
@@ -68,7 +65,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     private val mediaSessionHolder get() = activity as MediaSessionHolder? // null when not attached.
 
-    val isUrlEqualToHomepage: Boolean get() = session.url == APP_URL_HOME
+    val isUrlEqualToHomepage: Boolean get() = session.url == Urls.APP_HOME
 
     /**
      * Encapsulates the cursor's components. If this value is null, the Cursor is not attached
@@ -96,8 +93,8 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     override fun onUrlChanged(session: Session, url: String) {
         when (url) {
-            APP_URL_HOME -> browserOverlay?.visibility = View.VISIBLE
-            APP_URL_POCKET_ERROR -> {
+            Urls.APP_HOME -> browserOverlay?.visibility = View.VISIBLE
+            Urls.APP_POCKET_ERROR -> {
                 browserOverlay?.showMegaTileError()
                 browserOverlay?.visibility = View.VISIBLE
             }
@@ -223,7 +220,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
             requireComponents.sessionUseCases,
             webView)
 
-        if (session.url == APP_URL_HOME) {
+        if (session.url == Urls.APP_HOME) {
             browserOverlay?.visibility = View.VISIBLE
         }
     }
