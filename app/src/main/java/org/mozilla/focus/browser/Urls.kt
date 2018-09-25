@@ -10,5 +10,6 @@ package org.mozilla.focus.browser
 object Urls {
     const val APP_HOME = "firefox:home"
     const val APP_PREFIX = "firefox:"
+    const val DATA_PREFIX = "data:"
     const val APP_POCKET_ERROR = "${Urls.APP_PREFIX}error:pocketconnection"
 }
