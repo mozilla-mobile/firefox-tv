@@ -52,6 +52,11 @@ class SettingsFragment : Fragment() {
                     requireComponents.engine.deleteData(this)
                     requireComponents.sessionManager.removeAll()
                     dialog.cancel()
+                    // The call to recreate destroys state being maintained in the WebView (including
+                    // navigation history) and Activity. This implementation will need to change
+                    // if/when we add session restoration logic.
+                    // See https://github.com/mozilla-mobile/firefox-tv/issues/1192
+                    activity?.recreate()
                     TelemetryWrapper.clearDataEvent()
                 }
             }
