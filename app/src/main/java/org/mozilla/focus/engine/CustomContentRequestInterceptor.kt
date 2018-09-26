@@ -37,7 +37,13 @@ class CustomContentRequestInterceptor(
     }
 
     @Suppress("NestedBlockDepth")
-    override fun onErrorRequest(session: EngineSession, errorCode: Int, uri: String?) {
+    override fun onErrorRequest(session: EngineSession, errorCode: Int, uri: String?): RequestInterceptor.ErrorResponse? {
+
+        fun createErrorResponse(withUri: String, withErrorCode: Int): RequestInterceptor.ErrorResponse {
+            val data = ErrorPage.loadErrorPage(context, withUri, withErrorCode)
+            return RequestInterceptor.ErrorResponse(data, withUri)
+        }
+
         uri?.let {
             // This is a hack: onReceivedError(WebView, WebResourceRequest, WebResourceError) is API 23+ only,
             // - the WebResourceRequest would let us know if the error affects the main frame or not. As a workaround
@@ -65,15 +71,14 @@ class CustomContentRequestInterceptor(
                 } catch (e: NumberFormatException) {
                     desiredErrorCode = WebViewClient.ERROR_BAD_URL
                 }
-                val errorPageContent = ErrorPage.loadErrorPage(context, it, desiredErrorCode)
-                session.loadData(errorPageContent)
+                return createErrorResponse(it, desiredErrorCode)
             }
             // The API 23+ version also return a *slightly* more usable description, via WebResourceError.getError();
             // e.g.. "There was a network error.", whereas this version provides things like "net::ERR_NAME_NOT_RESOLVED"
             else if (it == currentPageURL && ErrorPage.supportsErrorCode(errorCode)) {
-                val errorPageContent = ErrorPage.loadErrorPage(context, currentPageURL, errorCode)
-                session.loadData(errorPageContent)
+                return createErrorResponse(currentPageURL, errorCode)
             }
         }
+        return null
     }
 }
