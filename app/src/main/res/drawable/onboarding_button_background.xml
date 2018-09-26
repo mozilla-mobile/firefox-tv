@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="4dp"/>
+            <solid android:color="@color/blue_nav"/>
+            <stroke android:width="8px" android:color="@color/onboarding_button_highlight"/>
+        </shape>
+    </item>
+
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <corners android:radius="4dp"/>
+            <solid android:color="@color/blue_nav"/>
+            <stroke android:width="8px" android:color="@color/onboarding_button_highlight"/>
+        </shape>
+    </item>
+
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="4dp"/>
+            <solid android:color="#2A2A2E"/>
+        </shape>
+    </item>
+</selector>
