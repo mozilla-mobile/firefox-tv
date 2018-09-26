@@ -42,4 +42,7 @@
 
     <!-- This value was chosen experimentally: see usages for criteria. -->
     <dimen name="browser_overlay_delta_scroll_padding">50dp</dimen>
+
+    <dimen name="onboarding_button_height">36dp</dimen>
+    <dimen name="onboarding_button_width">192dp</dimen>
 </resources>

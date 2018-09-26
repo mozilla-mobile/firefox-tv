@@ -8,100 +8,104 @@
     tools:context="org.mozilla.focus.OnboardingActivity"
     tools:showIn="@layout/activity_onboarding">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="end"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_left_quarter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".25" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_right_quarter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".75" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:contentDescription="TEMP"
+        app:layout_constraintHeight_default="wrap"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/turbo_mode_onboarding" />
+
+    <TextView
+        android:id="@+id/turbo_mode_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@string/font_roboto_light"
+        android:text="@string/onboarding_turbo_mode_title"
+        android:textColor="@color/photonGrey10"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@id/onboarding_main_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintVertical_chainStyle="packed" />
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/onboarding_main_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:fontFamily="@string/font_roboto_regular"
+        android:text="@string/onboarding_turbo_mode_body"
+        android:textColor="@color/photonGrey10"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/enable_turbo_mode"
+        app:layout_constraintEnd_toEndOf="@id/guideline_right_quarter"
+        app:layout_constraintStart_toStartOf="@id/guideline_left_quarter"
+        app:layout_constraintTop_toBottomOf="@+id/turbo_mode_title" />
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="124dp"
-                android:adjustViewBounds="false"
-                android:alpha="0.1"
-                android:cropToPadding="false"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_turbo_illustration" />
+    <Button
+        android:id="@+id/enable_turbo_mode"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/onboarding_button_background"
+        android:fontFamily="@string/font_roboto_regular"
+        android:minWidth="@dimen/onboarding_button_width"
+        android:minHeight="@dimen/onboarding_button_height"
+        android:nextFocusUp="@id/disable_turbo_mode"
+        android:nextFocusDown="@+id/disable_turbo_mode"
+        android:text="@string/button_turbo_mode_keep_enabled2"
+        android:textAllCaps="false"
+        android:textColor="@color/photonGrey10"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/disable_turbo_mode"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/onboarding_main_text" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/onboarding_overlay">
+    <Button
+        android:id="@id/disable_turbo_mode"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/onboarding_button_background"
+        android:fontFamily="@string/font_roboto_regular"
+        android:minWidth="@dimen/onboarding_button_width"
+        android:minHeight="@dimen/onboarding_button_height"
+        android:nextFocusUp="@id/enable_turbo_mode"
+        android:nextFocusDown="@id/enable_turbo_mode"
+        android:text="@string/turbo_mode_disable_a11y"
+        android:textAllCaps="false"
+        android:textColor="@color/photonGrey10"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/enable_turbo_mode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/enable_turbo_mode"
+        app:layout_constraintTop_toTopOf="@id/enable_turbo_mode" />
 
-            </RelativeLayout>
-
-            <TextView
-                android:id="@+id/turbo_mode_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignStart="@+id/turbo_mode_caption"
-                android:layout_marginTop="200dp"
-                android:text="@string/onboarding_turbo_mode_title"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textColor="@color/tv_white"
-                tools:text="@string/onboarding_turbo_mode_title" />
-
-            <TextView
-                android:id="@+id/turbo_mode_caption"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/turbo_mode_title"
-                android:layout_marginStart="306dp"
-                android:layout_marginTop="30dp"
-                android:text="@string/onboarding_turbo_mode_body"
-                android:paddingEnd="20dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                tools:text="@string/onboarding_turbo_mode_body" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="250dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/drawer_background"
-            android:gravity="center_vertical|center_horizontal"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/enable_turbo_mode"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/nav_button_selector"
-                android:text="@string/button_turbo_mode_keep_enabled"
-                android:textColor="@color/tv_white"
-                android:nextFocusDown="@+id/disable_turbo_mode"
-                android:nextFocusUp="@id/disable_turbo_mode">
-                <requestFocus />
-            </Button>
-
-            <Button
-                android:id="@id/disable_turbo_mode"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/nav_button_selector"
-                android:text="@string/button_turbo_mode_turn_off"
-                android:textColor="@color/tv_white"
-                android:nextFocusDown="@id/enable_turbo_mode"
-                android:nextFocusUp="@id/enable_turbo_mode" />
-
-        </LinearLayout>
-    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
