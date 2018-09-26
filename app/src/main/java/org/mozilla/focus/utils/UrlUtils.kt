@@ -8,7 +8,7 @@ package org.mozilla.focus.utils
 import android.content.Context
 import android.net.Uri
 import android.webkit.URLUtil
-import org.mozilla.focus.browser.BrowserFragment
+import org.mozilla.focus.browser.Urls
 
 import org.mozilla.focus.search.SearchEngineManager
 
@@ -158,9 +158,10 @@ object UrlUtils {
      * in the url bar EditText
      */
     @JvmStatic
-    fun toUrlBarDisplay(url: String): String {
-        return when (url) {
-            BrowserFragment.APP_URL_HOME -> "" // Empty string forces the EditText to show hint text
+    fun toDisplayUrl(url: String): String {
+        return when {
+            url == Urls.APP_HOME -> "" // Empty string forces the EditText to show hint text
+            url.startsWith(Urls.DATA_PREFIX) -> ""
             else -> url
         }
     }

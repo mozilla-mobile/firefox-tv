@@ -11,14 +11,14 @@ import android.os.Bundle
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.View
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.container
 import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.focus.browser.BrowserFragment
-import org.mozilla.focus.browser.BrowserFragment.Companion.APP_URL_HOME
 import org.mozilla.focus.browser.BrowserNavigationOverlay
 import org.mozilla.focus.browser.WebViewCache
+import org.mozilla.focus.browser.Urls
 import org.mozilla.focus.browser.VideoVoiceCommandMediaSession
 import org.mozilla.focus.ext.components
 import org.mozilla.focus.ext.setupForApp
@@ -65,7 +65,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         private fun onNoActiveSession() {
             // There's no active session. Start a new session with "homepage".
-            ScreenController.showBrowserScreenForUrl(this@MainActivity, supportFragmentManager, APP_URL_HOME, Session.Source.NONE)
+            ScreenController.showBrowserScreenForUrl(this@MainActivity, supportFragmentManager, Urls.APP_HOME, Session.Source.NONE)
         }
     }
 
@@ -90,7 +90,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         components.sessionManager.register(sessionObserver, owner = this)
 
         if (components.sessionManager.sessions.isEmpty()) {
-            ScreenController.showBrowserScreenForUrl(this@MainActivity, supportFragmentManager, APP_URL_HOME, Session.Source.NONE)
+            ScreenController.showBrowserScreenForUrl(this@MainActivity, supportFragmentManager, Urls.APP_HOME, Session.Source.NONE)
         } else {
             ScreenController.showBrowserScreenForCurrentSession(
                 supportFragmentManager,

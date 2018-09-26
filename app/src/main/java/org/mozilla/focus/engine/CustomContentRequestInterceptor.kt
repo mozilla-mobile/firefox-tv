@@ -8,9 +8,9 @@ import android.content.Context
 import android.webkit.WebViewClient
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.request.RequestInterceptor
-import org.mozilla.focus.browser.BrowserFragment
 import org.mozilla.focus.browser.ErrorPage
 import org.mozilla.focus.browser.LocalizedContent
+import org.mozilla.focus.browser.Urls
 
 const val ERROR_PROTOCOL = "error:"
 
@@ -27,7 +27,7 @@ class CustomContentRequestInterceptor(
         currentPageURL = uri
 
         return when (uri) {
-            BrowserFragment.APP_URL_HOME, BrowserFragment.APP_URL_POCKET_ERROR -> RequestInterceptor.InterceptionResponse("<html></html>")
+            Urls.APP_HOME, Urls.APP_POCKET_ERROR -> RequestInterceptor.InterceptionResponse("<html></html>")
 
             LocalizedContent.URL_ABOUT -> RequestInterceptor.InterceptionResponse(
                 LocalizedContent.generateAboutPage(context))

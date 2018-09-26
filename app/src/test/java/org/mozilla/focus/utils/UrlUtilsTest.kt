@@ -5,7 +5,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mozilla.focus.browser.BrowserFragment
+import org.mozilla.focus.browser.Urls
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
@@ -202,13 +202,13 @@ class UrlUtilsTest {
                 "m.mozilla.org",
                 "mobile.mozilla.org"
         ).forEach {
-            val itTransformed = UrlUtils.toUrlBarDisplay(it)
+            val itTransformed = UrlUtils.toDisplayUrl(it)
             assertEquals(it, itTransformed)
         }
     }
 
     @Test
     fun `GIVEN input is 'home' WHEN input is transformed THEN it should return blank`() {
-        assertEquals("", UrlUtils.toUrlBarDisplay(BrowserFragment.APP_URL_HOME))
+        assertEquals("", UrlUtils.toDisplayUrl(Urls.APP_HOME))
     }
 }
