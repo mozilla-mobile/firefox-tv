@@ -30,27 +30,15 @@ private val uiHandler = Handler(Looper.getMainLooper())
  * for Fire TV yet. As a workaround we extract the actual WebView instance and set it up manually until the engine
  * component is powerful enough.
  */
-@SuppressLint("SetJavaScriptEnabled")
-@Suppress("DEPRECATION")
 fun EngineView.setupForApp(context: Context) {
-    webView.apply {
-        isVerticalScrollBarEnabled = true
-        isHorizontalScrollBarEnabled = true
-    }
-
     webView.settings.apply {
         val appName = context.resources.getString(R.string.useragent_appname)
         userAgentString = UserAgent.buildUserAgentString(context, this, appName)
 
-        javaScriptEnabled = true
-        domStorageEnabled = true
-
         mediaPlaybackRequiresUserGesture = false // Allows auto-play (which improves YouTube experience).
 
-        // The default for those settings should be "false" - But we want to be explicit.
         setAppCacheEnabled(false)
         databaseEnabled = false
-        javaScriptCanOpenWindowsAutomatically = false
 
         saveFormData = false
         savePassword = false
@@ -70,8 +58,6 @@ fun EngineView.setupForApp(context: Context) {
         // Disable access to arbitrary local files by webpages - assets can still be loaded
         // via file:///android_asset/res, so at least error page images won't be blocked.
         allowFileAccess = false
-        allowFileAccessFromFileURLs = false
-        allowUniversalAccessFromFileURLs = false
 
         // Right now I do not know why we should allow loading content from a content provider
         allowContentAccess = false
