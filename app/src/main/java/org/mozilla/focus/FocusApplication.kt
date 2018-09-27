@@ -6,7 +6,7 @@ package org.mozilla.focus
 
 import android.os.StrictMode
 import android.preference.PreferenceManager
-
+import org.mozilla.focus.browser.UserAgent
 import org.mozilla.focus.locale.LocaleAwareApplication
 import org.mozilla.focus.search.SearchEngineManager
 import org.mozilla.focus.session.VisibilityLifeCycleCallback
@@ -26,7 +26,7 @@ class FocusApplication : LocaleAwareApplication() {
      * first). Therefore we delay the creation so that the components can access and use the
      * application context at the time they get created.
      */
-    val components by lazy { Components(this) }
+    val components by lazy { Components(this, UserAgent.systemUAProvider(this)) }
 
     override fun onCreate() {
         super.onCreate()

@@ -12,6 +12,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mozilla.focus.browser.UserAgent
 import org.mozilla.focus.ext.components
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
@@ -25,6 +26,8 @@ class TurboModeTest {
 
     @Before
     fun setUp() {
+        UserAgent.systemUAProvider = { "Mozilla/5.0 (Linux; Android 7.1.2) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Focus/2.2.0.2 Chrome/59.0.3071.125 Mobile Safari/537.36" }
+
         // Avoid [Settings] from keeping a references to a shared preference instance from a previous test run.
         Settings.reset()
 

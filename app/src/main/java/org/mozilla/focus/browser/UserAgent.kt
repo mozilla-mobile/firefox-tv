@@ -17,6 +17,20 @@ import android.webkit.WebSettings
 
 /** A collection of user agent functionality. */
 object UserAgent {
+
+    /**
+     * A function to retrieve the system user agent. The default implementation, used by the
+     * production app, runs a static method that breaks the tests. We can't mock static methods
+     * so we return this provider whose implementation is swapped at runtime during tests.
+     *
+     * If you want to change the user agent, see Components.kt.
+     *
+     * TODO: replace this with the components implementation which may remove the need for this workaround:
+     * https://github.com/mozilla-mobile/android-components/issues/899
+     */
+    @VisibleForTesting
+    var systemUAProvider: (Context) -> String = { WebSettings.getDefaultUserAgent(it) }
+
     /**
      * Build the browser specific portion of the UA String, based on the webview's existing UA String.
      */
@@ -56,7 +70,7 @@ object UserAgent {
     }
 
     @JvmStatic
-    fun buildUserAgentString(context: Context, settings: WebSettings, appName: String): String {
+    fun buildUserAgentString(context: Context, systemUserAgent: String, appName: String): String {
         val uaBuilder = StringBuilder()
 
         uaBuilder.append("Mozilla/5.0")
@@ -68,8 +82,6 @@ object UserAgent {
         // so we skip that too.
         uaBuilder.append(" (Linux; Android ").append(Build.VERSION.RELEASE).append(") ")
 
-        val existingWebViewUA = settings.userAgentString
-
         val appVersion: String? // unknown if Android framework returns null but not worth crashing over.
         try {
             appVersion = context.packageManager.getPackageInfo(context.packageName, 0).versionName
@@ -79,7 +91,7 @@ object UserAgent {
         }
 
         val focusToken = appName + "/" + appVersion
-        uaBuilder.append(getUABrowserString(existingWebViewUA, focusToken))
+        uaBuilder.append(getUABrowserString(systemUserAgent, focusToken))
 
         return uaBuilder.toString()
     }

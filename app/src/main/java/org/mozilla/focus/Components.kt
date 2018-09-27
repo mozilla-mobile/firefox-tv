@@ -10,6 +10,7 @@ import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.DefaultSettings
 import mozilla.components.concept.engine.Engine
 import mozilla.components.feature.session.SessionUseCases
+import org.mozilla.focus.browser.UserAgent
 import org.mozilla.focus.engine.CustomContentRequestInterceptor
 import org.mozilla.focus.utils.Settings
 
@@ -17,11 +18,17 @@ import org.mozilla.focus.utils.Settings
  * Helper class for lazily instantiating and keeping references to components needed by the
  * application.
  */
-class Components(applicationContext: Context) {
+class Components(applicationContext: Context, systemUserAgent: String) {
     val engine: Engine by lazy {
+        fun getUserAgent(): String = UserAgent.buildUserAgentString(
+                applicationContext,
+                systemUserAgent = systemUserAgent,
+                appName = applicationContext.resources.getString(R.string.useragent_appname))
+
         SystemEngine(DefaultSettings(
                 trackingProtectionPolicy = Settings.getInstance(applicationContext).trackingProtectionPolicy,
                 requestInterceptor = CustomContentRequestInterceptor(applicationContext),
+                userAgentString = getUserAgent(),
 
                 displayZoomControls = false,
                 loadWithOverviewMode = true, // To respect the html viewport
