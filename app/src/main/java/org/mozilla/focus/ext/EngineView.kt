@@ -5,16 +5,13 @@
 package org.mozilla.focus.ext
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Bitmap
 import android.os.Handler
 import android.os.Looper
 import android.webkit.WebView
 import android.widget.FrameLayout
 import mozilla.components.concept.engine.EngineView
-import org.mozilla.focus.R
 import org.mozilla.focus.browser.FocusedDOMElementCache
-import org.mozilla.focus.browser.UserAgent
 import org.mozilla.focus.utils.AppConstants
 import java.util.WeakHashMap
 
@@ -25,21 +22,12 @@ private val uiHandler = Handler(Looper.getMainLooper())
 
 /**
  * Firefox for Fire TV needs to configure every WebView appropriately.
- *
- * We are going to have an API for engine default settings in 0.21 but it doesn't cover all settings used by Firefox
- * for Fire TV yet. As a workaround we extract the actual WebView instance and set it up manually until the engine
- * component is powerful enough.
  */
-fun EngineView.setupForApp(context: Context) {
-    webView.settings.apply {
-        val appName = context.resources.getString(R.string.useragent_appname)
-        userAgentString = UserAgent.buildUserAgentString(context, this, appName)
-
-        // Also increase text size to fill the viewport (this mirrors the behaviour of Firefox,
-        // Chrome does this in the current Chrome Dev, but not Chrome release).
-        // TODO #33: TEXT_AUTOSIZING does not exist in AmazonWebSettings
-        // settings.setLayoutAlgorithm(AmazonWebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
-    }
+fun EngineView.setupForApp() {
+    // Also increase text size to fill the viewport (this mirrors the behaviour of Firefox,
+    // Chrome does this in the current Chrome Dev, but not Chrome release).
+    // TODO #33: TEXT_AUTOSIZING does not exist in AmazonWebSettings
+    // webView.settings.setLayoutAlgorithm(AmazonWebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
 
     if (AppConstants.isDevBuild()) {
         WebView.setWebContentsDebuggingEnabled(true)
