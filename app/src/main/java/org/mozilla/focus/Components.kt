@@ -20,8 +20,8 @@ import org.mozilla.focus.utils.Settings
 class Components(applicationContext: Context) {
     val engine: Engine by lazy {
         SystemEngine(DefaultSettings(
-            trackingProtectionPolicy = Settings.getInstance(applicationContext).trackingProtectionPolicy,
-            requestInterceptor = CustomContentRequestInterceptor(applicationContext)
+                trackingProtectionPolicy = Settings.getInstance(applicationContext).trackingProtectionPolicy,
+                requestInterceptor = CustomContentRequestInterceptor(applicationContext)
         ))
     }
 
