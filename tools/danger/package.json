@@ -1,0 +1,20 @@
+{
+  "main": "dangerfile.js",
+  "scripts": {
+    "pr": "./gradlew build && cd build/classes/kotlin/main && danger pr"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mozilla-mobile/firefox-tv.git"
+  },
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/mozilla-mobile/firefox-tv/issues"
+  },
+  "homepage": "https://github.com/mozilla-mobile/firefox-tv#readme",
+  "dependencies": {
+    "kotlin": "^1.2.71",
+    "danger": "^4.0.2"
+  },
+  "devDependencies": {}
+}
