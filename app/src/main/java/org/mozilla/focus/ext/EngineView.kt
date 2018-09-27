@@ -35,23 +35,10 @@ fun EngineView.setupForApp(context: Context) {
         val appName = context.resources.getString(R.string.useragent_appname)
         userAgentString = UserAgent.buildUserAgentString(context, this, appName)
 
-        mediaPlaybackRequiresUserGesture = false // Allows auto-play (which improves YouTube experience).
-
-        displayZoomControls = false // Hide by default
-
-        loadWithOverviewMode = true // To respect the html viewport
-
         // Also increase text size to fill the viewport (this mirrors the behaviour of Firefox,
         // Chrome does this in the current Chrome Dev, but not Chrome release).
         // TODO #33: TEXT_AUTOSIZING does not exist in AmazonWebSettings
         // settings.setLayoutAlgorithm(AmazonWebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
-
-        // Disable access to arbitrary local files by webpages - assets can still be loaded
-        // via file:///android_asset/res, so at least error page images won't be blocked.
-        allowFileAccess = false
-
-        // Right now I do not know why we should allow loading content from a content provider
-        allowContentAccess = false
     }
 
     if (AppConstants.isDevBuild()) {

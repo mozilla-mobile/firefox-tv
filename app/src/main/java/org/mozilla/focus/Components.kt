@@ -21,7 +21,17 @@ class Components(applicationContext: Context) {
     val engine: Engine by lazy {
         SystemEngine(DefaultSettings(
                 trackingProtectionPolicy = Settings.getInstance(applicationContext).trackingProtectionPolicy,
-                requestInterceptor = CustomContentRequestInterceptor(applicationContext)
+                requestInterceptor = CustomContentRequestInterceptor(applicationContext),
+
+                displayZoomControls = false,
+                loadWithOverviewMode = true, // To respect the html viewport
+
+                // We don't have a reason for users to access local files; assets can still
+                // be loaded via file:///android_asset/
+                allowFileAccess = false,
+                allowContentAccess = false,
+
+                mediaPlaybackRequiresUserGesture = false // Allows auto-play (which improves YouTube experience).
         ))
     }
 
