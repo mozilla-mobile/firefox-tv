@@ -37,15 +37,6 @@ fun EngineView.setupForApp(context: Context) {
 
         mediaPlaybackRequiresUserGesture = false // Allows auto-play (which improves YouTube experience).
 
-        setAppCacheEnabled(false)
-        databaseEnabled = false
-
-        saveFormData = false
-        savePassword = false
-
-        setGeolocationEnabled(false) // We do not implement the callbacks
-
-        builtInZoomControls = true
         displayZoomControls = false // Hide by default
 
         loadWithOverviewMode = true // To respect the html viewport
