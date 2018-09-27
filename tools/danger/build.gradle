@@ -1,0 +1,15 @@
+plugins {
+    id 'kotlin2js' version '1.2.51'
+}
+
+group 'org.mozilla.danger'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js"
+    testCompile "org.jetbrains.kotlin:kotlin-test-js"
+}
