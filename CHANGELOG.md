@@ -4,14 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+
 ## [3.0]
 ### Added
 - Pocket video recommendations on navigation overlay
 
 ### Changed
-- Merge home screen into navigation overlay
+- UI improvements
+    - Merge home screen into navigation overlay
 - Long-click and hold to remove home tile instead of pressing the menu button
-- UI improvements on navigation overlay
 
 ## [2.2] - 2018-08-21
 *Released to Fire TV Cube and Fire TV 4K.*
@@ -75,6 +78,7 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 ## [1.0] - 2017-12-20
 *Initial release! A browser including home tile shortcuts.*
 
+[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.0...HEAD
 [3.0]: https://github.com/mozilla-mobile/firefox-tv/compare/v2.2...v3.0
 [2.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v2.1...v2.2
 [2.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v2.0.1...v2.1
