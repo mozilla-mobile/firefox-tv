@@ -6,7 +6,8 @@ package org.mozilla.focus
 
 import android.os.StrictMode
 import android.preference.PreferenceManager
-import org.mozilla.focus.browser.UserAgent
+import android.support.annotation.VisibleForTesting
+import android.webkit.WebSettings
 import org.mozilla.focus.locale.LocaleAwareApplication
 import org.mozilla.focus.search.SearchEngineManager
 import org.mozilla.focus.session.VisibilityLifeCycleCallback
@@ -14,9 +15,14 @@ import org.mozilla.focus.telemetry.TelemetryWrapper
 import org.mozilla.focus.utils.AppConstants
 import org.mozilla.focus.utils.OkHttpWrapper
 
-class FocusApplication : LocaleAwareApplication() {
+open class FocusApplication : LocaleAwareApplication() {
     lateinit var visibilityLifeCycleCallback: VisibilityLifeCycleCallback
         private set
+
+    // TODO: Replace with components implementation, which may remove need for test workaround:
+    // https://github.com/mozilla-mobile/android-components/issues/899
+    @VisibleForTesting // See TestFocusApplication for why this method exists.
+    protected open fun getSystemUserAgent(): String = WebSettings.getDefaultUserAgent(this)
 
     /**
      * Reference to components needed by the application.
@@ -26,7 +32,7 @@ class FocusApplication : LocaleAwareApplication() {
      * first). Therefore we delay the creation so that the components can access and use the
      * application context at the time they get created.
      */
-    val components by lazy { Components(this, UserAgent.systemUAProvider(this)) }
+    val components by lazy { Components(this, getSystemUserAgent()) }
 
     override fun onCreate() {
         super.onCreate()
