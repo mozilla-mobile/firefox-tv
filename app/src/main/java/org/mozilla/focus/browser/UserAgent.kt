@@ -13,23 +13,9 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.support.annotation.VisibleForTesting
 import android.text.TextUtils
-import android.webkit.WebSettings
 
 /** A collection of user agent functionality. */
 object UserAgent {
-
-    /**
-     * A function to retrieve the system user agent. The default implementation, used by the
-     * production app, runs a static method that breaks the tests. We can't mock static methods
-     * so we return this provider whose implementation is swapped at runtime during tests.
-     *
-     * If you want to change the user agent, see Components.kt.
-     *
-     * TODO: replace this with the components implementation which may remove the need for this workaround:
-     * https://github.com/mozilla-mobile/android-components/issues/899
-     */
-    @VisibleForTesting
-    var systemUAProvider: (Context) -> String = { WebSettings.getDefaultUserAgent(it) }
 
     /**
      * Build the browser specific portion of the UA String, based on the webview's existing UA String.
