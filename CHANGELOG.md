@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     - Merge home screen into navigation overlay
 - Long-click and hold to remove home tile instead of pressing the menu button
 
+### Fixed
+- Startup time improvements
+
 ## [2.2] - 2018-08-21
 *Released to Fire TV Cube and Fire TV 4K.*
 
