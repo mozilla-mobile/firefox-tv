@@ -23,16 +23,25 @@
         app:layout_constraintGuide_percent=".75" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/turbo_image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:contentDescription="TEMP"
+        android:contentDescription="@string/turbo_mode_image_a11y"
         app:layout_constraintHeight_default="wrap"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/turbo_mode_onboarding" />
+
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/photonGrey70"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/turbo_image_view" />
 
     <TextView
         android:id="@+id/turbo_mode_title"
@@ -41,12 +50,13 @@
         android:layout_marginBottom="16dp"
         android:fontFamily="@string/font_roboto_light"
         android:text="@string/onboarding_turbo_mode_title"
-        android:textColor="@color/photonGrey10"
+        android:textColor="@color/photonGrey10_a80p"
         android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@id/onboarding_main_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView"
+        app:layout_constraintTop_toBottomOf="@id/turbo_image_view"
+        app:layout_constraintVertical_bias="0.36"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
@@ -55,8 +65,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:fontFamily="@string/font_roboto_regular"
-        android:text="@string/onboarding_turbo_mode_body"
-        android:textColor="@color/photonGrey10"
+        android:lineSpacingExtra="2sp"
+        android:text="@string/onboarding_turbo_mode_body2"
+        android:textAlignment="center"
+        android:textColor="@color/photonGrey10_a80p"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/enable_turbo_mode"
         app:layout_constraintEnd_toEndOf="@id/guideline_right_quarter"
@@ -70,7 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="12dp"
-        android:background="@drawable/onboarding_button_background"
+        android:background="@drawable/turbo_button_enable"
         android:fontFamily="@string/font_roboto_regular"
         android:minWidth="@dimen/onboarding_button_width"
         android:minHeight="@dimen/onboarding_button_height"
@@ -84,7 +96,10 @@
         app:layout_constraintEnd_toStartOf="@+id/disable_turbo_mode"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/onboarding_main_text" />
+        app:layout_constraintTop_toBottomOf="@id/onboarding_main_text">
+
+        <requestFocus />
+    </Button>
 
     <Button
         android:id="@id/disable_turbo_mode"
@@ -93,13 +108,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginEnd="8dp"
-        android:background="@drawable/onboarding_button_background"
+        android:background="@drawable/turbo_button_disable"
         android:fontFamily="@string/font_roboto_regular"
         android:minWidth="@dimen/onboarding_button_width"
         android:minHeight="@dimen/onboarding_button_height"
         android:nextFocusUp="@id/enable_turbo_mode"
         android:nextFocusDown="@id/enable_turbo_mode"
-        android:text="@string/turbo_mode_disable_a11y"
+        android:text="@string/button_turbo_mode_turn_off2"
         android:textAllCaps="false"
         android:textColor="@color/photonGrey10"
         android:textSize="14sp"
