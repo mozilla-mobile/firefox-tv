@@ -8,7 +8,7 @@
         <shape android:shape="rectangle">
             <corners android:radius="4dp"/>
             <solid android:color="@color/blue_nav"/>
-            <stroke android:width="8px" android:color="@color/onboarding_button_highlight"/>
+            <stroke android:width="8px" android:color="@color/onboarding_button_higlight_stroke"/>
         </shape>
     </item>
 
@@ -16,14 +16,14 @@
         <shape android:shape="rectangle">
             <corners android:radius="4dp"/>
             <solid android:color="@color/blue_nav"/>
-            <stroke android:width="8px" android:color="@color/onboarding_button_highlight"/>
+            <stroke android:width="8px" android:color="@color/onboarding_button_higlight_stroke"/>
         </shape>
     </item>
 
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="4dp"/>
-            <solid android:color="#2A2A2E"/>
+            <solid android:color="@color/blue_nav"/>
         </shape>
     </item>
 </selector>

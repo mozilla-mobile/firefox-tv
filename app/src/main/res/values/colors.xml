@@ -21,7 +21,7 @@
     <color name="default_background_gray">#e3e3e5</color>
 
     <color name="onboarding_overlay">#cc000000</color>
-    <color name="onboarding_button_highlight">#4D0A84FF</color>
+    <color name="onboarding_button_higlight_stroke">@color/photonBlue50</color>
 
     <color name="browser_overlay_background">@color/photonGrey70</color>
 

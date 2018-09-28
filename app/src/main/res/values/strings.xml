@@ -180,18 +180,17 @@ be temporary, and you can try again later.</li>
     <!-- Displayed as notification when Turbo mode is turned off -->
     <string name="turbo_mode_disabled_toast">Turbo Mode disabled</string>
     <string name="onboarding_turbo_mode_title">Turbo Mode helps you browse faster</string>
-    <string name="onboarding_turbo_mode_body">Turbo Mode automatically blocks trackers and ads to help get you where you\'re going faster. If there\'s a speed bump – like a site that isn\'t behaving the way you expect – just turn Turbo Mode off.</string>
-    <string name="onboarding_turbo_mode_body2">Turbo Mode automatically blocks trackers and ads to help get you where you’re going faster. If there’s a speed bump – like a site that isn’t behaving the way you expect – just turn Turbo Mode off.</string>
+    <string name="onboarding_turbo_mode_body2">Turbo Mode automatically blocks ads and trackers.\nIf a site doesn’t act the way you expect, try turning it off.</string>
     <!-- Button text for keeping Turbo Mode enabled in onboarding -->
-    <string name="button_turbo_mode_keep_enabled">Keep enabled</string>
     <string name="button_turbo_mode_keep_enabled2">Keep Turbo Mode enabled</string>
     <!-- Button text for turning off Turbo Mode in onboarding -->
-    <string name="button_turbo_mode_turn_off">Turn off</string>
     <string name="button_turbo_mode_turn_off2">Turn Turbo Mode off</string>
     <!-- Spoken to screen reader users to explain "off" action of Turbo mode button -->
     <string name="turbo_mode_disable_a11y">Turn Turbo Mode Off</string>
     <!-- Spoken to screen reader users to explain "on" action of Turbo mode button -->
     <string name="turbo_mode_enable_a11y">Turn Turbo Mode On</string>
+    <!-- Spoken to screen reader users to explain image on Turbo mode onboarding -->
+    <string name="turbo_mode_image_a11y">Example of Turbo Mode enabled</string>
 
     <!-- Text displayed in a toast to explain to the user how to unpin a tile from the homescreen.
          SELECT refers to a button on the remote: the button at the center of the 4-way directional navigation. -->
