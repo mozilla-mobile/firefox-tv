@@ -4,6 +4,9 @@
 
 package org.mozilla.focus.browser
 
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.OnLifecycleEvent
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
@@ -17,7 +20,7 @@ import mozilla.components.browser.engine.system.SystemEngineView
  * This allows us to maintain [WebView] state when the view would otherwise
  * be destroyed
  */
-class WebViewCache {
+class WebViewCache : LifecycleObserver {
 
     private var cachedView: SystemEngineView? = null
 
@@ -41,5 +44,11 @@ class WebViewCache {
 
         cachedView?.removeFromParentIfAble()
         return cachedView ?: createAndCacheEngineView()
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    private fun onDestroy() {
+        cachedView?.onDestroy()
+        cachedView = null
     }
 }
