@@ -5,8 +5,6 @@
 
 package org.mozilla.focus.browser;
 
-import android.content.Context;
-import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -21,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mozilla.focus.MainActivity;
 import org.mozilla.focus.R;
+import org.mozilla.focus.SkipOnboardingMainActivityTestRule;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -35,8 +34,6 @@ import static android.support.test.espresso.web.sugar.Web.onWebView;
 import static android.support.test.espresso.web.webdriver.DriverAtoms.findElement;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.StringContains.containsString;
-import static org.mozilla.focus.OnboardingActivity.ONBOARD_SHOWN_PREF;
-import static org.mozilla.focus.home.pocket.PocketOnboardingActivity.POCKET_ONBOARDING_SHOWN_PREF;
 
 @RunWith(AndroidJUnit4.class)
 public class PageLoadTest {
@@ -48,23 +45,7 @@ public class PageLoadTest {
     private static final String MOZILLA_PAGE_ELEMENT = ".primary-title";
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule
-            = new ActivityTestRule<MainActivity>(MainActivity.class) {
-        @Override
-        protected void beforeActivityLaunched() {
-            super.beforeActivityLaunched();
-
-            Context appContext = InstrumentationRegistry.getInstrumentation()
-                    .getTargetContext()
-                    .getApplicationContext();
-
-            PreferenceManager.getDefaultSharedPreferences(appContext)
-                    .edit()
-                    .putBoolean(ONBOARD_SHOWN_PREF, true)
-                    .putBoolean(POCKET_ONBOARDING_SHOWN_PREF, true)
-                    .apply();
-        }
-    };
+    public ActivityTestRule<MainActivity> mActivityTestRule = new SkipOnboardingMainActivityTestRule();
 
     @After
     public void tearDown() {

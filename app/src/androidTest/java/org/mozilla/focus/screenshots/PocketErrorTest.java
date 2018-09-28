@@ -5,8 +5,6 @@
 
 package org.mozilla.focus.screenshots;
 
-import android.content.Context;
-import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -21,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mozilla.focus.MainActivity;
 import org.mozilla.focus.R;
+import org.mozilla.focus.SkipOnboardingMainActivityTestRule;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.locale.LocaleTestRule;
@@ -32,8 +31,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.hasFocus;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
-import static org.mozilla.focus.OnboardingActivity.ONBOARD_SHOWN_PREF;
-import static org.mozilla.focus.home.pocket.PocketOnboardingActivity.POCKET_ONBOARDING_SHOWN_PREF;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -46,23 +43,7 @@ public class PocketErrorTest extends ScreenshotTest {
     public static final LocaleTestRule localeTestRule = new LocaleTestRule();
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule
-            = new ActivityTestRule<MainActivity>(MainActivity.class) {
-        @Override
-        protected void beforeActivityLaunched() {
-            super.beforeActivityLaunched();
-
-            Context appContext = InstrumentationRegistry.getInstrumentation()
-                    .getTargetContext()
-                    .getApplicationContext();
-
-            PreferenceManager.getDefaultSharedPreferences(appContext)
-                    .edit()
-                    .putBoolean(ONBOARD_SHOWN_PREF, true)
-                    .putBoolean(POCKET_ONBOARDING_SHOWN_PREF, true)
-                    .apply();
-        }
-    };
+    public ActivityTestRule<MainActivity> mActivityTestRule = new SkipOnboardingMainActivityTestRule();
 
     @After
     public void tearDown() {
