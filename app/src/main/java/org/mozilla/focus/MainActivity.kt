@@ -77,7 +77,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         Pocket.init()
         PublicSuffix.init(this) // Used by Pocket Video feed & custom home tiles.
         initMediaSession()
-        webViewCache = WebViewCache()
+        initWebViewCache()
 
         val intent = SafeIntent(intent)
 
@@ -189,6 +189,11 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     private fun initMediaSession() {
         videoVoiceCommandMediaSession = VideoVoiceCommandMediaSession(this)
         lifecycle.addObserver(videoVoiceCommandMediaSession)
+    }
+
+    private fun initWebViewCache() {
+        webViewCache = WebViewCache()
+        lifecycle.addObserver(webViewCache)
     }
 
     override fun onNonTextInputUrlEntered(urlStr: String) {

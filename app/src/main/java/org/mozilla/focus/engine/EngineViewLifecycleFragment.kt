@@ -72,22 +72,6 @@ abstract class EngineViewLifecycleFragment : LocaleAwareFragment() {
         webView!!.onResume()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-        // onDestroy may be called when the webView is null. We think it's because Activities
-        // that are being restored (with savedInstanceState) will automatically restore the
-        // fragment state and if we perform a FragmentTransaction during the onCreate lifecycle, it
-        // will tear the restored state back down (i.e. onDestroy is called twice or without
-        // onViewCreated): #694.
-        //
-        // Note: Focus does this null check too.
-        if (webView != null) {
-            webView!!.onDestroy()
-            webView = null
-        }
-    }
-
     override fun applyLocale() {
         val context = context
         val localeManager = LocaleManager.getInstance()
