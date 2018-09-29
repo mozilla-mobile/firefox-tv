@@ -26,7 +26,7 @@ private fun checkJVMLicenseHeaders() {
         }.map { it.first }
 
         filesWithoutLicenses.forEach {
-            fail("File contains no license or license is improperly formatted.", it, 0)
+            fail("File contains no license or license is improperly formatted.", it, 1)
         }
 
         if (filesWithoutLicenses.isNotEmpty()) {
