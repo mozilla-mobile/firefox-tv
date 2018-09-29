@@ -36,10 +36,12 @@ matrix:
       node_js:
         - "lts/*"
       install:
-        - cd tools/danger
+        - pushd tools/danger
         - npm ci
+        - popd
       script:
-        - cd tools/danger
+        - pushd tools/danger
         - ./gradlew build
-        - cd build/classes/kotlin/main
-        - ../../../../node_modules/.bin/danger ci
+        - pushd build/classes/kotlin/main
+        - ../../../../node_modules/.bin/danger ci --verbose
+        - popd
