@@ -66,7 +66,6 @@ class HomeRobot {
     fun openTile(title: String) {
         homeTiles().perform(RecyclerViewActions.actionOnItem<TileViewHolder>(hasDescendant(withText(title)), click()))
     }
-
 }
 
 /**

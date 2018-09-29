@@ -27,7 +27,6 @@ class SettingsRobot {
         clearDataButton().click()
         dialogOkButton().click()
     }
-
 }
 
 /**
