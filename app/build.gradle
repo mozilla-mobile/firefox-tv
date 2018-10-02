@@ -90,6 +90,10 @@ kotlin {
 repositories {
     google()
     jcenter()
+    // GeckoView_ARM
+    maven {
+        url "https://index.taskcluster.net/v1/task/gecko.v2.mozilla-release.revision.${geckoRelease['revision']}.mobile.android-api-16-opt/artifacts/public/android/maven"
+    }
 }
 
 configurations {
@@ -137,6 +141,7 @@ dependencies {
 
     systemImplementation "org.mozilla.components:engine-system:$moz_components_version"
     geckoImplementation "org.mozilla.components:engine-gecko:$moz_components_version"
+    geckoImplementation "org.mozilla:geckoview-release-armeabi-v7a:${geckoRelease['version']}"
 
     testImplementation 'junit:junit:4.12'
     testImplementation "org.robolectric:robolectric:3.7.1"

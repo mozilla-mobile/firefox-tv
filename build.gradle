@@ -8,6 +8,12 @@ buildscript {
     ext.moz_components_version = '0.25.1'
     ext.kotlin_coroutines_version = '0.22.5'
 
+    ext.geckoRelease = [
+            // mozilla-release: FENNEC_62_0_RELEASE
+            revision: '9cbae12a3fff404ed2c12070ad475424d0ae869f',
+            version: '62.0.20180830143136'
+    ]
+
     repositories {
         jcenter()
         google()
