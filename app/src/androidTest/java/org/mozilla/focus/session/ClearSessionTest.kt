@@ -12,6 +12,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.focus.SkipOnboardingMainActivityTestRule
+import org.mozilla.focus.robots.browser
 import org.mozilla.focus.robots.home
 import org.mozilla.focus.robots.settings
 
@@ -55,8 +56,18 @@ class ClearSessionTest {
             openSettings()
         }
 
+        browser {
+            addTestCookie()
+
+            assertCookieExists()
+        }
+
         settings {
             clearAllDataAndReturnHome()
+        }
+
+        browser {
+            assertCookieDoesNotExist()
         }
 
         home {
