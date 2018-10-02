@@ -12,9 +12,9 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.AttributeSet
 import android.view.View
-import mozilla.components.browser.engine.system.SystemEngineView
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.focus.R
+import org.mozilla.focus.ext.components
 import org.mozilla.focus.locale.Locales
 
 /**
@@ -50,7 +50,7 @@ class InfoActivity : AppCompatActivity() {
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
         return if (name == EngineView::class.java.name) {
-            SystemEngineView(context, attrs)
+            context.components.createEngineView(context, attrs)
         } else super.onCreateView(name, context, attrs)
     }
 

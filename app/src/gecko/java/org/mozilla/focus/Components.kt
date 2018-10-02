@@ -5,7 +5,8 @@
 package org.mozilla.focus
 
 import android.content.Context
-import mozilla.components.browser.engine.system.SystemEngine
+import mozilla.components.browser.engine.gecko.GeckoEngine
+import mozilla.components.browser.engine.gecko.GeckoEngineView
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.DefaultSettings
 import mozilla.components.concept.engine.Engine
@@ -13,6 +14,7 @@ import mozilla.components.feature.session.SessionUseCases
 import org.mozilla.focus.browser.UserAgent
 import org.mozilla.focus.engine.CustomContentRequestInterceptor
 import org.mozilla.focus.utils.Settings
+import org.mozilla.geckoview.GeckoRuntime
 
 /**
  * Helper class for lazily instantiating and keeping references to components needed by the
@@ -25,7 +27,7 @@ class Components(applicationContext: Context, systemUserAgent: String) {
                 systemUserAgent = systemUserAgent,
                 appName = applicationContext.resources.getString(R.string.useragent_appname))
 
-        SystemEngine(DefaultSettings(
+        GeckoEngine(GeckoRuntime.getDefault(applicationContext), DefaultSettings(
                 trackingProtectionPolicy = Settings.getInstance(applicationContext).trackingProtectionPolicy,
                 requestInterceptor = CustomContentRequestInterceptor(applicationContext),
                 userAgentString = getUserAgent(),
@@ -45,4 +47,8 @@ class Components(applicationContext: Context, systemUserAgent: String) {
     val sessionManager by lazy { SessionManager(engine) }
 
     val sessionUseCases by lazy { SessionUseCases(sessionManager) }
+
+    fun createEngineView(context: Context, attrs: android.util.AttributeSet): GeckoEngineView {
+        return GeckoEngineView(context, attrs)
+    }
 }
