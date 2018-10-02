@@ -49,6 +49,27 @@ android {
         }
     }
 
+
+    flavorDimensions "engine"
+
+    productFlavors {
+        chromium {
+            dimension "engine"
+        }
+
+        geckoNightly {
+            dimension "engine"
+        }
+
+        geckoBeta {
+            dimension "engine"
+        }
+
+        geckoRelease {
+            dimension "engine"
+        }
+    }
+
     testOptions {
         unitTests.includeAndroidResources true // for robolectric.
         execution 'ANDROID_TEST_ORCHESTRATOR'
@@ -205,12 +226,14 @@ def addSecretToBuildConfig(variant, fieldName, fileBaseName) {
     def variantName = variant.getName()
     print("${fieldName} (" + variantName + "): ")
 
+    println("VariantName = " + variantName)
+
     // We separate the debug files from the release files so that we don't
     // accidentally ship a release using the debug key or vice versa.
     def fileSuffix
-    if (variantName.contains("debug")) {
+    if (variantName.contains("Debug")) {
         fileSuffix = "debug"
-    } else if (variantName.contains("release")) {
+    } else if (variantName.contains("Release")) {
         fileSuffix = "release"
     } else {
         throw new IllegalStateException("Unhandled variant $variantName")
