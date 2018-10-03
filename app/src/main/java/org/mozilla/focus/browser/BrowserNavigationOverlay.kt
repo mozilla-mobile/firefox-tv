@@ -335,6 +335,11 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             else -> R.id.turboButton
         }
 
+        pocketVideoMegaTileView.nextFocusDownId = when {
+            tileContainer.adapter.itemCount == 0 -> R.id.pocketVideoMegaTileView
+            else -> R.id.tileContainer
+        }
+
         // We may have lost focus when disabling the focused view above.
         val isFocusLost = focusedView != null && findFocus() == null
         if (isFocusLost) {
@@ -388,11 +393,13 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     fun refreshTilesForInsertion() {
         val adapter = tileContainer.adapter as HomeTileAdapter
         adapter.updateAdapterSingleInsertion(HomeTilesManager.getTilesCache(context))
+        updateOverlayForCurrentState()
     }
 
     fun removePinnedSiteFromTiles(tileId: String) {
         val adapter = tileContainer.adapter as HomeTileAdapter
         adapter.removeTile(tileId)
+        updateOverlayForCurrentState()
     }
 
     /**
@@ -406,6 +413,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 megaTileTryAgainButton.requestFocus()
             }
         }
+        updateOverlayForCurrentState()
     }
 
     inner class HomeTileManager(
