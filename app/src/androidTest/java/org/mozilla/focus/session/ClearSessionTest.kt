@@ -6,12 +6,16 @@
 
 package org.mozilla.focus.session
 
+import android.support.test.espresso.IdlingRegistry
 import android.support.test.runner.AndroidJUnit4
 import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.focus.SkipOnboardingMainActivityTestRule
+import org.mozilla.focus.helpers.MockServerHelper
+import org.mozilla.focus.helpers.SessionLoadedIdlingResource
 import org.mozilla.focus.robots.browser
 import org.mozilla.focus.robots.home
 import org.mozilla.focus.robots.settings
@@ -22,25 +26,38 @@ class ClearSessionTest {
     @Rule @JvmField
     val activityTestRule = SkipOnboardingMainActivityTestRule()
 
+    private lateinit var loadingIdlingResource: SessionLoadedIdlingResource
+
+    @Before
+    fun setup() {
+        loadingIdlingResource = SessionLoadedIdlingResource()
+        IdlingRegistry.getInstance().register(loadingIdlingResource)
+    }
+
     @After
     fun tearDown() {
+        IdlingRegistry.getInstance().unregister(loadingIdlingResource)
         activityTestRule.activity.finishAndRemoveTask()
     }
 
     @Test
     fun WHEN_data_is_cleared_THEN_back_and_forward_should_be_unavailable() {
+
+        val endpoints = MockServerHelper
+                .initMockServerAndReturnEndpoints("This is Google", "This is YouTube")
+
         home {
             assertCannotGoBack()
 
             assertCannotGoForward()
 
-            openTile(1)
+            navigateToPage(endpoints[0])
 
             openMenu()
 
             assertCanGoBack()
 
-            openTile(2)
+            navigateToPage(endpoints[1])
 
             openMenu()
 
@@ -48,10 +65,7 @@ class ClearSessionTest {
 
             assertCanGoBack()
 
-            // Forward currently takes a while to update
-            // TODO uncomment this assertion when this has been fixed
-            // See: https://github.com/mozilla-mobile/firefox-tv/issues/1231
-            // assertCanGoForward()
+            assertCanGoForward()
 
             openSettings()
         }

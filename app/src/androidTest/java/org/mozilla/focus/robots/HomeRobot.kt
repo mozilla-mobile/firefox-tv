@@ -4,9 +4,12 @@
 
 package org.mozilla.focus.robots
 
+import android.net.Uri
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.click
+import android.support.test.espresso.action.ViewActions.pressImeActionButton
+import android.support.test.espresso.action.ViewActions.replaceText
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.contrib.RecyclerViewActions
 import android.support.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE
@@ -59,6 +62,10 @@ class HomeRobot {
     fun assertCanGoForward() = forwardButton().assertEnabled()
     fun assertCannotGoForward() = forwardButton().assertDisabled()
 
+    fun navigateToPage(url: Uri) {
+        urlBar().perform(replaceText(url.toString()), pressImeActionButton())
+    }
+
     fun openTile(index: Int) {
         homeTiles().perform(RecyclerViewActions.actionOnItemAtPosition<TileViewHolder>(index, click()))
     }
@@ -81,5 +88,6 @@ private fun reloadButton() = onView(withId(R.id.navButtonReload))
 private fun pinButton() = onView(withId(R.id.pinButton))
 private fun turboButton() = onView(withId(R.id.turboButton))
 private fun settingsButton() = onView(withId(R.id.navButtonSettings))
+private fun urlBar() = onView(withId(R.id.navUrlInput))
 private fun homeTiles() = onView(withId(R.id.tileContainer))
 private fun overlay() = onView(withId(R.id.browserOverlay))
