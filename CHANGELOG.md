@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+
+### Changed
+
+### Fixed
+- Blank screen when pressing back from a full-screened video
 
 ## [3.0] - 2018-10-16
 *Released to Fire TV Cube and Fire TV 4K.*
