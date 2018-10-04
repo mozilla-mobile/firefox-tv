@@ -45,6 +45,7 @@ object Pocket {
     @Volatile private var lastUpdateMillis = -1L
     private val nextUpdateMillis get() = lastUpdateMillis + CACHE_UPDATE_FREQUENCY_MILLIS
 
+    @Suppress("ANNOTATION_TARGETS_NON_EXISTENT_ACCESSOR") // Private properties generate fields so method annotations can't apply.
     @get:UiThread
     @set:UiThread
     private var backgroundUpdates: Job? = null

@@ -88,10 +88,12 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
     private val activity: AppCompatActivity
 ) : LifecycleObserver {
 
+    @Suppress("ANNOTATION_TARGETS_NON_EXISTENT_ACCESSOR") // Private properties generate fields so method annotations can't apply.
     @get:UiThread // MediaSessionCompat is not thread safe.
     private val mediaSession = MediaSessionCompat(activity, MEDIA_SESSION_TAG)
 
     /* Since we may update playback state often, we cache this builder to reduce allocation. */
+    @Suppress("ANNOTATION_TARGETS_NON_EXISTENT_ACCESSOR") // Private properties generate fields so method annotations can't apply.
     @get:UiThread // PlaybackStateCompat.Builder is not thread safe.
     private val cachedPlaybackStateBuilder = PlaybackStateCompat.Builder()
             .setActions(SUPPORTED_ACTIONS)
