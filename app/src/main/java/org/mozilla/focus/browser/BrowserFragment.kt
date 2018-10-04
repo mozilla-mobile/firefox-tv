@@ -53,6 +53,7 @@ private const val TOAST_Y_OFFSET = 200
 /**
  * Fragment for displaying the browser UI.
  */
+@Suppress("LargeClass") // TODO this will be removed as part of the upcoming architecture refactor
 class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
     companion object {
         const val FRAGMENT_TAG = "browser"
@@ -132,7 +133,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
             autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
         when (event) {
-            NavigationEvent.BACK -> if (session.canGoBack) requireComponents.sessionUseCases.goBack.invoke()
+            NavigationEvent.BACK -> exitFullScreenIfPossibleAndBack()
             NavigationEvent.FORWARD -> if (session.canGoForward) requireComponents.sessionUseCases.goForward.invoke()
             NavigationEvent.TURBO, NavigationEvent.RELOAD -> requireComponents.sessionUseCases.reload.invoke()
             NavigationEvent.SETTINGS -> ScreenController.showSettingsScreen(fragmentManager!!)
@@ -288,6 +289,13 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
         activity?.menuInflater?.inflate(R.menu.menu_context_hometile, menu)
     }
 
+    private fun exitFullScreenIfPossibleAndBack() {
+        // Backing while full-screened can lead to unstable behavior (see #1224),
+        // so we always attempt to exit full-screen before backing
+        requireComponents.sessionManager.getEngineSession()?.exitFullScreenMode()
+        if (session.canGoBack) requireComponents.sessionUseCases.goBack.invoke()
+    }
+
     fun onBackPressed(): Boolean {
         when {
             browserOverlay.isVisible && !isUrlEqualToHomepage -> {
@@ -295,7 +303,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
                 TelemetryWrapper.userShowsHidesDrawerEvent(false)
             }
             session.canGoBack -> {
-                requireComponents.sessionUseCases.goBack.invoke()
+                exitFullScreenIfPossibleAndBack()
                 TelemetryWrapper.browserBackControllerEvent()
             }
             else -> {
