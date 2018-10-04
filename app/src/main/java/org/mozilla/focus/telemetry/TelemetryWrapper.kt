@@ -104,7 +104,7 @@ object TelemetryWrapper {
         val AUTOCOMPLETE_SOURCE = "autocompl_src"
     }
 
-    @get:AnyThread // Synchronize so we don't have to worry which thread telemetry is called on.
+    // Available on any thread: we synchronize.
     private val pocketUniqueClickedVideoIDs = Collections.synchronizedSet(mutableSetOf<Int>())
 
     @JvmStatic
