@@ -4,6 +4,7 @@
 
 package org.mozilla.focus.browser
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.annotation.UiThread
 import android.view.ContextMenu
@@ -12,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import kotlinx.android.synthetic.main.browser_overlay.*
 import kotlinx.android.synthetic.main.browser_overlay.view.*
 import kotlinx.android.synthetic.main.fragment_browser.*
@@ -112,6 +114,14 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     override fun onNavigationStateChanged(session: Session, canGoBack: Boolean, canGoForward: Boolean) =
         updateOverlayIfVisible()
+
+    override fun onFullScreenChanged(session: Session, enabled: Boolean) {
+        val window = (context as? Activity)?.window ?: return
+        val dontSleep = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+
+        if (enabled) window.addFlags(dontSleep)
+        else window.clearFlags(dontSleep)
+    }
 
     private fun updateOverlayIfVisible() {
         if (browserOverlay?.isVisible == true) {
