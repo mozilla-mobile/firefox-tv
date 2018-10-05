@@ -25,7 +25,7 @@ class Components(applicationContext: Context, systemUserAgent: String) {
                 systemUserAgent = systemUserAgent,
                 appName = applicationContext.resources.getString(R.string.useragent_appname))
 
-        SystemEngine(DefaultSettings(
+        SystemEngine(applicationContext, DefaultSettings(
                 trackingProtectionPolicy = Settings.getInstance(applicationContext).trackingProtectionPolicy,
                 requestInterceptor = CustomContentRequestInterceptor(applicationContext),
                 userAgentString = getUserAgent(),

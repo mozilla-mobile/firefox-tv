@@ -106,14 +106,14 @@ dependencies {
         transitive = false
     }
 
-    implementation "org.mozilla.components:session:$moz_components_version"
-    implementation "org.mozilla.components:engine:$moz_components_version"
-    implementation "org.mozilla.components:engine-system:$moz_components_version"
-    implementation "org.mozilla.components:telemetry:$moz_components_version"
-    implementation "org.mozilla.photon:colors:$moz_components_version"
-    implementation "org.mozilla.photon:fonts:$moz_components_version"
+    implementation "org.mozilla.components:browser-session:$moz_components_version"
+    implementation "org.mozilla.components:concept-engine:$moz_components_version"
+    implementation "org.mozilla.components:browser-engine-system:$moz_components_version"
+    implementation "org.mozilla.components:service-telemetry:$moz_components_version"
+    implementation "org.mozilla.components:ui-colors:$moz_components_version"
+    implementation "org.mozilla.components:ui-fonts:$moz_components_version"
     implementation "org.mozilla.components:feature-session:$moz_components_version"
-    implementation "org.mozilla.photon:icons:$moz_components_version"
+    implementation "org.mozilla.components:ui-icons:$moz_components_version"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
