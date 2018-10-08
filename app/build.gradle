@@ -88,7 +88,7 @@ dependencies {
     implementation "com.android.support:design:$support_libraries_version"
     implementation "com.android.support:leanback-v17:$support_libraries_version"
     implementation "com.android.support:recyclerview-v7:$support_libraries_version"
-    implementation "com.android.support.constraint:constraint-layout:1.1.2"
+    implementation "com.android.support.constraint:constraint-layout:1.1.3"
 
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'com.squareup.picasso:picasso:2.71828', {
@@ -119,8 +119,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
 
     testImplementation 'junit:junit:4.12'
-    testImplementation "org.robolectric:robolectric:3.7.1"
-    testImplementation 'org.mockito:mockito-core:2.12.0'
+    testImplementation "org.robolectric:robolectric:3.8"
+    testImplementation 'org.mockito:mockito-core:2.21.0'
 
     androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
 
@@ -142,15 +142,15 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
 
-    androidTestImplementation 'com.squareup.okhttp3:mockwebserver:3.7.0'
-    testImplementation 'com.squareup.okhttp3:mockwebserver:3.7.0'
+    androidTestImplementation 'com.squareup.okhttp3:mockwebserver:3.10.0'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:3.10.0'
 
     androidTestImplementation "tools.fastlane:screengrab:1.2.0", {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
 
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestUtil 'com.android.support.test:orchestrator:1.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestUtil 'com.android.support.test:orchestrator:1.0.2'
 }
 
 // -------------------------------------------------------------------------------------------------
