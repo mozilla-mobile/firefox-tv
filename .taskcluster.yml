@@ -37,7 +37,7 @@ tasks:
           && git config advice.detachedHead false
           && git checkout {{event.head.sha}}
           && echo "--" > .adjust_token
-          && ./gradlew clean assemble assembleAndroidTest lint checkstyle ktlint pmd detektCheck test
+          && ./gradlew clean assemble assembleAndroidTest lint checkstyle ktlint pmd detekt test
       artifacts:
         'public':
           type: 'directory'
@@ -82,7 +82,7 @@ tasks:
           && git config advice.detachedHead false
           && git checkout {{event.head.sha}}
           && echo "--" > .adjust_token
-          && ./gradlew clean assemble lint checkstyle ktlint pmd detektCheck test
+          && ./gradlew clean assemble lint checkstyle ktlint pmd detekt test
       artifacts:
         'public':
           type: 'directory'

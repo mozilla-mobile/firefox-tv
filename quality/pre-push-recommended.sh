@@ -17,7 +17,7 @@
         checkstyle \
         ktlint \
         pmd \
-        detektCheck \
+        detekt \
         assembleAndroidTest \
         testdebug
 
