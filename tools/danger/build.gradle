@@ -1,0 +1,36 @@
+plugins {
+    id 'kotlin2js' version '1.2.70'
+}
+
+group 'org.mozilla.danger'
+version '1.0-SNAPSHOT'
+
+sourceSets {
+    main.kotlin.srcDirs += 'src'
+}
+
+compileKotlin2Js.kotlinOptions {
+    // reference docs: https://kotlinlang.org/docs/reference/using-gradle.html#attributes-specific-for-js
+    main = "call"
+    moduleKind = "commonjs"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js"
+    testCompile "org.jetbrains.kotlin:kotlin-test-js"
+}
+
+// todo
+//build.doLast {
+//    configurations.compile.each { File file ->
+//        copy {
+//            // TODO: don't hardcode my path!
+//            from "${buildDir}/classes/kotlin/main/dangerfile.js"
+//            into "${projectDir}/"
+//        }
+//    }
+//}
