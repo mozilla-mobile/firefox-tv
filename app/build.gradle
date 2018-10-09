@@ -361,7 +361,7 @@ task pmd(type: Pmd, group: 'verification') {
         xml.enabled = false
         html.enabled = true
         html {
-            destination "$projectDir.absolutePath/build/reports/pmd/pmd.html"
+            destination file("$projectDir.absolutePath/build/reports/pmd/pmd.html")
         }
     }
 }
