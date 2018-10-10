@@ -146,7 +146,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         return if (name == EngineView::class.java.name) {
             webViewCache.getWebView(context, attrs) {
                 setupForApp()
-            }
+            }.asView()
         } else super.onCreateView(name, context, attrs)
     }
 

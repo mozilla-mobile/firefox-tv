@@ -49,6 +49,7 @@ class CursorViewModel(
 ) {
 
     private val scrollVelReturnVal = PointF()
+    private var currDownTime = 0L
 
     /**
      * The bounds inside which this cursor should remain, i.e. the screen bounds.
@@ -166,7 +167,12 @@ class CursorViewModel(
     /** Dispatches a touch event on the current position, sending a click where the cursor is. */
     fun onSelectKeyEvent(action: Int) {
         val now = SystemClock.uptimeMillis()
-        MotionEvent.obtain(now - DOWN_TIME_OFFSET_MILLIS, now, action, pos.x, pos.y, 0).use {
+
+        if (action == 0) {
+            currDownTime = now
+        }
+
+        MotionEvent.obtain(currDownTime - DOWN_TIME_OFFSET_MILLIS, currDownTime, action, pos.x, pos.y, 0).use {
             simulateTouchEvent(it)
         }
     }
