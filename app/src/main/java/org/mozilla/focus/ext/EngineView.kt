@@ -6,6 +6,7 @@ package org.mozilla.focus.ext
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.webkit.WebView
@@ -108,6 +109,16 @@ fun EngineView.scrollByClamped(vx: Int, vy: Int) {
 
 val EngineView.focusedDOMElement: FocusedDOMElementCache
     get() = getOrPutExtension(this).domElementCache
+
+fun EngineView.saveState(): Bundle {
+    val bundle = Bundle()
+    getOrPutExtension(this).webView.saveState(bundle)
+    return bundle
+}
+
+fun EngineView.restoreState(state: Bundle) {
+    getOrPutExtension(this).webView.restoreState(state)
+}
 
 // This method is only for adding extension methods here (as a workaround). Do not expose WebView to the app.
 private val EngineView.webView: WebView

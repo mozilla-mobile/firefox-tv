@@ -8,11 +8,14 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
 import android.content.Context
+import android.os.Bundle
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import mozilla.components.browser.engine.system.SystemEngineView
+import org.mozilla.focus.ext.restoreState
+import org.mozilla.focus.ext.saveState
 
 /**
  * Caches a [SystemEngineView], which internally maintains a [WebView].
@@ -21,6 +24,10 @@ import mozilla.components.browser.engine.system.SystemEngineView
  * be destroyed
  */
 class WebViewCache : LifecycleObserver {
+
+    companion object {
+        private var state: Bundle? = null
+    }
 
     private var cachedView: SystemEngineView? = null
 
@@ -39,6 +46,7 @@ class WebViewCache : LifecycleObserver {
         fun createAndCacheEngineView(): SystemEngineView {
             return SystemEngineView(context, attrs).apply {
                 initialize()
+                state?.also { this.restoreState(it) }
             }.also { cachedView = it }
         }
 
@@ -48,6 +56,7 @@ class WebViewCache : LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     private fun onDestroy() {
+        state = cachedView?.saveState()
         cachedView?.onDestroy()
         cachedView = null
     }
