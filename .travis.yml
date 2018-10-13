@@ -20,7 +20,7 @@ before_install:
   - touch local.properties
 
 script:
-  - ./gradlew clean assemble
+  - ./gradlew clean assembleDebug
   - echo "--" > .adjust_token
   - ./gradlew -Pcoverage jacocoDebugTestReport
 
