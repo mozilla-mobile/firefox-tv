@@ -36,7 +36,6 @@ tasks:
           && git fetch {{ event.head.repo.url }} {{ event.head.repo.branch }}
           && git config advice.detachedHead false
           && git checkout {{event.head.sha}}
-          && echo "--" > .adjust_token
           && ./gradlew clean assemble assembleAndroidTest lint checkstyle ktlint pmd detekt test
       artifacts:
         'public':
@@ -81,7 +80,6 @@ tasks:
           && git fetch {{ event.head.repo.url }}
           && git config advice.detachedHead false
           && git checkout {{event.head.sha}}
-          && echo "--" > .adjust_token
           && ./gradlew clean assemble lint checkstyle ktlint pmd detekt test
       artifacts:
         'public':
@@ -100,7 +98,7 @@ tasks:
 # Triggered when a new tag or release is published (in any branch)
 #
 # - Build (unsigned) release versions of the app with release translations and
-#   adjust token.
+#   secrets.
 ###############################################################################
   - provisionerId: '{{ taskcluster.docker.provisionerId }}'
     workerType: '{{ taskcluster.docker.workerType }}'
