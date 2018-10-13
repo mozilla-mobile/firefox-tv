@@ -86,7 +86,20 @@ To push without running the pre-push hook (e.g. doc updates):
 git push <remote> --no-verify
 ```
 
-### Building with API keys
+### Building release builds
+Release builds can be built in Android Studio or via the command line:
+```sh
+./gradlew assembleRelease # unsigned build
+```
+
+These builds will run validation checks that the build is ready for a production release. If you
+do not want to run these checks (e.g. building release builds for local debugging), you can add the
+`-Pno-validate` argument:
+```sh
+./gradlew assembleRelease -Pno-validate
+```
+
+#### API keys
 Certain services require an API key, so you'll need to build with the key to use them in the apk.
 
 1. To build with the API key (for services such as Sentry), add a `<project-dir>/.<service>_debug`
