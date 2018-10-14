@@ -36,7 +36,7 @@ tasks:
           && git fetch {{ event.head.repo.url }} {{ event.head.repo.branch }}
           && git config advice.detachedHead false
           && git checkout {{event.head.sha}}
-          && ./gradlew clean assemble assembleAndroidTest lint checkstyle ktlint pmd detekt test
+          && ./gradlew -PisPullRequest clean assemble assembleAndroidTest lint checkstyle ktlint pmd detekt test
       artifacts:
         'public':
           type: 'directory'
@@ -80,7 +80,7 @@ tasks:
           && git fetch {{ event.head.repo.url }}
           && git config advice.detachedHead false
           && git checkout {{event.head.sha}}
-          && ./gradlew clean assemble lint checkstyle ktlint pmd detekt test
+          && ./gradlew -PisPullRequest clean assemble assembleAndroidTest lint checkstyle ktlint pmd detekt test
       artifacts:
         'public':
           type: 'directory'

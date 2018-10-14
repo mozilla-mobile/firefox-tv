@@ -13,11 +13,12 @@ import org.mozilla.gradle.ext.androidDSLOrThrow
  * Validates that an Android app is correctly configured for release. When created, this
  * task will automatically create dependencies upon the release tasks.
  *
- * This task currently asserts:
- * - There are no uncommitted changes in git
- * - The buildVersion in gradle matches the checked out git tag
+ * There are three states this task can run in:
+ * - Run all checks
+ * - Run checks appropriate for pull requests (add `-PisPullRequest`)
+ * - Run no checks, e.g. when debugging locally (add `-PnoValidate`)
  *
- * This task can be skipped by supplying the `-PnoValidate` argument.
+ * For a list of current checks, see [validateAndroidAppRelease].
  */
 open class ValidateAndroidAppReleaseConfiguration : DefaultTask() {
     init {
@@ -50,7 +51,10 @@ open class ValidateAndroidAppReleaseConfiguration : DefaultTask() {
     fun validateAndroidAppRelease() {
         // If you update which validations run, update the class kdoc too.
         validateNoUncommittedChanges()
-        validateVersions()
+
+        if (!project.hasProperty("isPullRequest")) {
+            validateBuildVersionIsGitTagVersion() // There is no version git tag on a PR.
+        }
     }
 
     private fun validateNoUncommittedChanges() {
@@ -62,7 +66,7 @@ open class ValidateAndroidAppReleaseConfiguration : DefaultTask() {
     // May not work correctly if there are multiple git tags.
     // In practice, this is uncommon for app releases.
     @Suppress("ThrowsCount") // Throwing to stop gradle builds is necessary.
-    private fun validateVersions() {
+    private fun validateBuildVersionIsGitTagVersion() {
         fun getGitTagVersionName(): String {
             // Expected: "v1.1"
             val gitTag = GitAggregates.getCheckedOutGitTag()
