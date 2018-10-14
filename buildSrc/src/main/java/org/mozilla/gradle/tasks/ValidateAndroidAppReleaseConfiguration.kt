@@ -17,14 +17,14 @@ import org.mozilla.gradle.ext.androidDSLOrThrow
  * - There are no uncommitted changes in git
  * - The buildVersion in gradle matches the checked out git tag
  *
- * This task can be skipped by supplying the `-Pno-validate` argument.
+ * This task can be skipped by supplying the `-PnoValidate` argument.
  */
 open class ValidateAndroidAppReleaseConfiguration : DefaultTask() {
     init {
         group = "Verification"
         description = "Validates an Android app is correctly configured for release"
 
-        this.onlyIf { !project.hasProperty("no-validate") }
+        this.onlyIf { !project.hasProperty("noValidate") }
 
         project.gradle.projectsEvaluated {
             getAssembleReleaseTasks().forEach {

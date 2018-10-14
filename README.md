@@ -93,10 +93,10 @@ Release builds can be built in Android Studio or via the command line:
 ```
 
 These builds will run validation checks that the build is ready for a production release. If you
-do not want to run these checks (e.g. building release builds for local debugging), you can add the
-`-Pno-validate` argument:
+do not want to run these checks (e.g. building release builds for local debugging), you can add this
+argument:
 ```sh
-./gradlew assembleRelease -Pno-validate
+./gradlew assembleRelease -PnoValidate
 ```
 
 #### API keys
