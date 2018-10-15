@@ -5,7 +5,6 @@
 package org.mozilla.focus.ext
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -73,21 +72,6 @@ fun EngineView.addJavascriptInterface(obj: Any, name: String) {
  */
 fun EngineView.removeJavascriptInterface(interfaceName: String) {
     webView.removeJavascriptInterface(interfaceName)
-}
-
-/**
- * Creating a screenshot (thumbnail) of the currently visible page.
- *
- * Component upstream issue:
- * https://github.com/mozilla-mobile/android-components/issues/495
- */
-fun EngineView.takeScreenshot(): Bitmap {
-    return with(webView) {
-        buildDrawingCache()
-        val outBitmap = Bitmap.createBitmap(webView.drawingCache)
-        destroyDrawingCache()
-        outBitmap
-    }
 }
 
 fun EngineView.scrollByClamped(vx: Int, vy: Int) {

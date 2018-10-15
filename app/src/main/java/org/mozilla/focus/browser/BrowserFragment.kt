@@ -38,7 +38,6 @@ import org.mozilla.focus.ext.requireComponents
 import org.mozilla.focus.ext.toUri
 import org.mozilla.focus.ext.isYoutubeTV
 import org.mozilla.focus.ext.focusedDOMElement
-import org.mozilla.focus.ext.takeScreenshot
 import org.mozilla.focus.session.NullSession
 import org.mozilla.focus.telemetry.MenuInteractionMonitor
 import org.mozilla.focus.telemetry.TelemetryWrapper
@@ -150,7 +149,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
                     when (value) {
                         NavigationEvent.VAL_CHECKED -> {
                             CustomTilesManager.getInstance(context!!).pinSite(context!!, url,
-                                    webView?.takeScreenshot())
+                                    context!!.components.sessionManager.selectedSession?.thumbnail)
                             browserOverlay.refreshTilesForInsertion()
                             showCenteredTopToast(context, R.string.notification_pinned_site, 0, TOAST_Y_OFFSET)
                         }
