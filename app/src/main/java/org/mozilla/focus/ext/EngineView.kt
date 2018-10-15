@@ -71,7 +71,7 @@ fun EngineView.addJavascriptInterface(obj: Any, name: String) {
 /**
  * This functionality is not supported by browser-engine-system yet. See [EngineView.evalJS] comment for details.
  */
-fun EngineView.removeJavascriptInterface(interfaceName: String?) {
+fun EngineView.removeJavascriptInterface(interfaceName: String) {
     webView.removeJavascriptInterface(interfaceName)
 }
 
