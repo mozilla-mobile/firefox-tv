@@ -29,7 +29,7 @@ class InfoFragment : EngineViewLifecycleFragment(), Session.Observer {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val session = Session(arguments!!.getString(ARGUMENT_URL))
+        val session = Session(arguments!!.getString(ARGUMENT_URL)!!)
         session.register(this, owner = this)
 
         val engineSession = requireComponents.sessionManager.getOrCreateEngineSession(session)
