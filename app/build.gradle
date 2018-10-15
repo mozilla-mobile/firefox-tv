@@ -19,7 +19,7 @@ android {
         targetSdkVersion 26
         versionCode 11 // This versionCode is "frozen" for local builds. For "release" builds we
         // override this with a generated versionCode at build time.
-        versionName "2.1"
+        versionName "2.1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         multiDexEnabled true
@@ -131,6 +131,7 @@ repositories {
         dirs 'libs'
     }
     mavenCentral()
+    "https://dl.bintray.com/pocmo/Mozilla-Mobile/"
 }
 
 dependencies {
@@ -151,7 +152,7 @@ dependencies {
         transitive = false
     }
 
-    implementation 'org.mozilla.telemetry:telemetry:1.2.0'
+    implementation 'org.mozilla.components:telemetry:0.6'
     implementation "org.mozilla.photon:colors:$moz_components_version"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
