@@ -13,6 +13,8 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.mozilla.focus.R;
@@ -268,7 +270,8 @@ public class LocaleManager {
         settings.edit().putString(PREF_LOCALE, localeCode).apply();
     }
 
-    public Locale getCurrentLocale(Context context) {
+    @Nullable
+    public Locale getCurrentLocale(@NonNull Context context) {
         if (currentLocale != null) {
             return currentLocale;
         }

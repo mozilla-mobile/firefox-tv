@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.LocaleList;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import java.util.LinkedHashSet;
@@ -51,7 +52,7 @@ public class Locales {
      *
      * @return a language string, such as "he" for the Hebrew locales.
      */
-    public static String getLanguage(final Locale locale) {
+    public static String getLanguage(@NonNull final Locale locale) {
         // Can, but should never be, an empty string.
         final String language = locale.getLanguage();
 
