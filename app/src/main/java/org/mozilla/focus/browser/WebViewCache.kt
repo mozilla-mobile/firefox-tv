@@ -26,6 +26,22 @@ import org.mozilla.focus.ext.saveState
 class WebViewCache : LifecycleObserver {
 
     companion object {
+        // According to Android docs, WebView.saveState and WebView.restoreState do "not restore
+        // display data"[1] (the exact meaning of this is not specified). Some discussion about
+        // them online implies that they do not behave as expected[2][3], and that previous
+        // versions had broken implementations[4]. However, we ship to a limited number of devices,
+        // and after thorough testing on each these methods have been found to restore state
+        // relatively well.
+        //
+        // If we encounter strange state bugs in the WebView, this code should be considered
+        // suspect. But until then, it solves some very important problems[5][6].
+        //
+        // [1] https://developer.android.com/reference/android/webkit/WebView.html?hl=es#restoreState(android.os.Bundle)
+        // [2] https://stackoverflow.com/a/32867602
+        // [3] https://stackoverflow.com/a/33326970
+        // [4] https://stackoverflow.com/a/17543769
+        // [5] https://github.com/mozilla-mobile/firefox-tv/issues/1276
+        // [6] https://github.com/mozilla-mobile/firefox-tv/issues/1256
         private var state: Bundle? = null
     }
 
@@ -45,8 +61,8 @@ class WebViewCache : LifecycleObserver {
 
         fun createAndCacheEngineView(): SystemEngineView {
             return SystemEngineView(context, attrs).apply {
+                state?.let { this.restoreState(it) }
                 initialize()
-                state?.also { this.restoreState(it) }
             }.also { cachedView = it }
         }
 
