@@ -10,6 +10,7 @@ apply from: "$project.rootDir/tools/gradle/versionCode.gradle"
 
 android {
     compileSdkVersion 28
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "org.mozilla.tv.firefox"
@@ -119,7 +120,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
 
     testImplementation 'junit:junit:4.12'
-    testImplementation "org.robolectric:robolectric:3.8"
+    testImplementation "org.robolectric:robolectric:4.0-alpha-3" // required for SDK 28
     testImplementation 'org.mockito:mockito-core:2.21.0'
 
     androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'

@@ -10,5 +10,5 @@ private const val POCKET_DIR = "pocket"
 enum class TestResource(private val path: String) {
     POCKET_VIDEO_RECOMMENDATION("$POCKET_DIR/video_recommendations.json");
 
-    fun get(): String = this::class.java.classLoader.getResource(path).readText()
+    fun get(): String = this::class.java.classLoader!!.getResource(path)!!.readText()
 }

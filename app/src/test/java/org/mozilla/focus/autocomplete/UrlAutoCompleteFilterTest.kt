@@ -15,7 +15,6 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentCaptor
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
-import org.mozilla.focus.BuildConfig
 import org.mozilla.focus.R
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 import org.mozilla.focus.widget.InlineAutocompleteEditText.AutocompleteResult
@@ -24,7 +23,7 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class, packageName = "org.mozilla.focus")
+@Config(packageName = "org.mozilla.focus")
 class UrlAutoCompleteFilterTest {
     @After
     fun tearDown() {
