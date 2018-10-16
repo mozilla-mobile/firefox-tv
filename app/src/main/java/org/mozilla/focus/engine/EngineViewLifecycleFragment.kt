@@ -73,13 +73,13 @@ abstract class EngineViewLifecycleFragment : LocaleAwareFragment() {
     }
 
     override fun applyLocale() {
-        val context = context
+        val context = context!!
         val localeManager = LocaleManager.getInstance()
         if (!localeManager.isMirroringSystemLocale(context)) {
             val currentLocale = localeManager.getCurrentLocale(context)
             Locale.setDefault(currentLocale)
 
-            val resources = context!!.resources
+            val resources = context.resources
             val config = resources.configuration
             config.setLocale(currentLocale)
 
