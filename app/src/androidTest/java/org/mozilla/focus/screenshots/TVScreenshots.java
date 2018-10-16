@@ -170,7 +170,7 @@ public class TVScreenshots extends ScreenshotTest {
         // capture a screenshot of the clear data dialog
         clearButton.perform(click());
 
-        onView(allOf(withText(R.string.settings_cookies_dialog_content), isDisplayed())).inRoot(isDialog());
+        onView(allOf(withText(R.string.settings_cookies_dialog_content2), isDisplayed())).inRoot(isDialog());
 
         Screengrab.screenshot("clear-all-data");
 
