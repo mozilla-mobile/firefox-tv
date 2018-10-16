@@ -361,7 +361,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
         if (!browserOverlay.isVisible && session.isYoutubeTV &&
                 event.keyCode == KeyEvent.KEYCODE_BACK) {
             val escKeyEvent = KeyEvent(event.action, KeyEvent.KEYCODE_ESCAPE)
-            activity?.dispatchKeyEvent(escKeyEvent)
+            (activity as MainActivity).dispatchKeyEvent(escKeyEvent)
             return true
         }
         return false
