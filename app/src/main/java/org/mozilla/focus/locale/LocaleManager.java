@@ -290,7 +290,7 @@ public class LocaleManager {
             current = context.getResources().getConfiguration().locale;
         }
         String language = Locales.getLanguage(current);
-        return language.toLowerCase().contains("en");
+        return language.toLowerCase(current).contains("en");
     }
 
     /**
