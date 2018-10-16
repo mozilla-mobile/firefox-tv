@@ -41,6 +41,7 @@ import org.mozilla.focus.widget.IgnoreFocusMovementMethod
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 import kotlin.properties.Delegates
 import org.mozilla.focus.ext.isVoiceViewEnabled
+import org.mozilla.focus.locale.LocaleManager
 import java.lang.ref.WeakReference
 
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
@@ -216,6 +217,19 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     }
 
     private fun initMegaTile() {
+
+        if (LocaleManager.getInstance().currentLanguageIsEnglish(context)) {
+            pocketVideoMegaTileView.visibility = View.VISIBLE
+        } else {
+            // We only show the Pocket mega tile if the current language is English
+            //
+            // If any other language is set, do not show the mega tile and short this method
+            //
+            // See issue: https://github.com/mozilla-mobile/firefox-tv/issues/1283
+            pocketVideoMegaTileView.visibility = View.GONE
+            return
+        }
+
         pocketVideoMegaTileView.setOnClickListener(this)
 
         if (pocketVideos.isCompleted) {
