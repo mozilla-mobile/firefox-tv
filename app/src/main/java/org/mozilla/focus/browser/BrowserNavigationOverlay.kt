@@ -30,6 +30,7 @@ import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
 import org.mozilla.focus.ext.forEachChild
+import org.mozilla.focus.ext.isEffectivelyVisible
 import org.mozilla.focus.ext.isVisible
 import org.mozilla.focus.ext.updateLayoutParams
 import org.mozilla.focus.home.HomeTilesManager
@@ -337,8 +338,10 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         }
 
         navUrlInput.nextFocusDownId = when {
-            pocketVideosContainer.isVisible -> R.id.pocketVideoMegaTileView
-            else -> R.id.megaTileTryAgainButton
+            pocketVideosContainer.isEffectivelyVisible -> R.id.pocketVideoMegaTileView
+            megaTileTryAgainButton.isEffectivelyVisible -> R.id.megaTileTryAgainButton
+            tileContainer.adapter.itemCount == 0 -> R.id.navUrlInput
+            else -> R.id.tileContainer
         }
 
         navUrlInput.nextFocusUpId = when {
@@ -435,8 +438,9 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             // if position is less than spanCount, implies first row
             if (position < spanCount) {
                 focused?.nextFocusUpId = when {
-                    pocketVideosContainer.isVisible -> R.id.pocketVideoMegaTileView
-                    else -> R.id.megaTileTryAgainButton
+                    pocketVideosContainer.isEffectivelyVisible -> R.id.pocketVideoMegaTileView
+                    megaTileTryAgainButton.isEffectivelyVisible -> R.id.megaTileTryAgainButton
+                    else -> R.id.navUrlInput
                 }
             }
             return super.onRequestChildFocus(parent, state, child, focused)
