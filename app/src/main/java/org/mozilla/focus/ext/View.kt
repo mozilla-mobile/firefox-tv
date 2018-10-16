@@ -9,6 +9,18 @@ import android.view.ViewGroup
 
 val View.isVisible: Boolean get() = (visibility == View.VISIBLE)
 
+/**
+ * Returns false if the view or any of its ancestors are not visible
+ */
+val View.isEffectivelyVisible: Boolean get() {
+    var node: View? = this
+    while (node != null) {
+        if (node.visibility != View.VISIBLE) return false
+        node = node.parent as? View
+    }
+    return true
+}
+
 /** Updates the layout params with the mutations provided to [mutateLayoutParams]. */
 inline fun View.updateLayoutParams(mutateLayoutParams: (ViewGroup.LayoutParams) -> Unit) {
     val layoutParams = this.layoutParams
