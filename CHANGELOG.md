@@ -4,8 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
 
+## [3.0.1] - 2018-10-17
+### Added
+
+### Changed
+- Hide Pocket video tile on non-EN locales
+    - Pocket does not yet provide content for other languages
+
+### Fixed
+- Issue that would cause browsing history to be lost when navigating to device home screen
 
 ## [3.0]
 ### Added
