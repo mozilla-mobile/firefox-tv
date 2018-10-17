@@ -26,7 +26,7 @@ class TurboModeTest {
 
     @Before
     fun setUp() {
-        applyUserAgentWorkAround() // TODO remove. See kdoc
+        SystemEngine.defaultUserAgent = "test-ua-string"
 
         // Avoid [Settings] from keeping a references to a shared preference instance from a previous test run.
         Settings.reset()
@@ -41,20 +41,6 @@ class TurboModeTest {
         // Add a session so that we can verify the state of it
         session = Session("about:blank")
         context.components.sessionManager.add(session)
-    }
-
-    /**
-     * A-C v0.26 broke Robolectric tests that instantiate [SystemEngine]s.  A-C is
-     * setting [SystemEngine.defaultUserAgent] internally to avoid this problem,
-     * but has not yet exposed this functionality.  That will be exposed in the
-     * next release, and this workaround will then be deleted.
-     *
-     * See: https://github.com/mozilla-mobile/android-components/issues/997
-     */
-    private fun applyUserAgentWorkAround() {
-        val defaultUserAgentField = SystemEngine::class.java.getDeclaredField("defaultUserAgent")
-        defaultUserAgentField.isAccessible = true
-        defaultUserAgentField.set(null, "test-ua-string")
     }
 
     @Test

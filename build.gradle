@@ -5,7 +5,7 @@ buildscript {
     ext.architecture_components_version = '1.1.1'
     ext.espresso_version = '3.0.1'
     ext.kotlin_version = '1.2.71'
-    ext.moz_components_version = '0.26.0'
+    ext.moz_components_version = '0.27.0'
     ext.kotlin_coroutines_version = '0.22.5'
 
     repositories {
