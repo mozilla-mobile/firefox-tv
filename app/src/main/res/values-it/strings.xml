@@ -62,11 +62,12 @@
   <string name="turbo_mode_enabled_toast">Modalità turbo attivata</string>
   <string name="turbo_mode_disabled_toast">Modalità turbo disattivata</string>
   <string name="onboarding_turbo_mode_title">La modalità turbo ti permette di navigare più velocemente</string>
-  <string name="onboarding_turbo_mode_body">La modalità turbo blocca in automatico elementi traccianti e pubblicità per caricare le pagine più rapidamente. Se incontri un problema, come un sito che non funziona come dovrebbe, basterà disattivare la modalità turbo.</string>
-  <string name="button_turbo_mode_keep_enabled">Mantieni attiva</string>
-  <string name="button_turbo_mode_turn_off">Disattiva</string>
+  <string name="onboarding_turbo_mode_body2">La modalità turbo blocca automaticamente pubblicità ed elementi traccianti.\nSe un sito non funziona nel modo previsto, prova a disattivarla.</string>
+  <string name="button_turbo_mode_keep_enabled2">Mantieni modalità turbo</string>
+  <string name="button_turbo_mode_turn_off2">Disattiva modalità turbo</string>
   <string name="turbo_mode_disable_a11y">Disattiva modalità turbo</string>
   <string name="turbo_mode_enable_a11y">Attiva modalità turbo</string>
+  <string name="turbo_mode_image_a11y">Esempio con la modalità turbo attiva</string>
   <string name="homescreen_unpin_tutorial_toast">Per sbloccare un elemento nella pagina principale tieni premuto SELECT</string>
   <string name="homescreen_tile_remove">Rimuovi</string>
   <string name="homescreen_unpin_a11y">Rimuovi dalla bacheca</string>
