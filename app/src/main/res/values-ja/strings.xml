@@ -62,9 +62,6 @@
   <string name="turbo_mode_enabled_toast">ターボモード有効</string>
   <string name="turbo_mode_disabled_toast">ターボモード無効</string>
   <string name="onboarding_turbo_mode_title">ターボモードはより速くブラウズするのに役立ちます</string>
-  <string name="onboarding_turbo_mode_body">ターボモードは自動的にトラッカーと広告をブロックし、より速くブラウズするのを手助けします。 サイトが期待通りに動作しないなど問題が見られる場合は、ターボモードを無効化してください。</string>
-  <string name="button_turbo_mode_keep_enabled">有効なままにする</string>
-  <string name="button_turbo_mode_turn_off">無効にする</string>
   <string name="turbo_mode_disable_a11y">ターボモードを無効にする</string>
   <string name="turbo_mode_enable_a11y">ターボモードを有効にする</string>
   <string name="homescreen_unpin_tutorial_toast">ホーム画面からピン留めを外すには [選択] ボタンを長押ししてください</string>

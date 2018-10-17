@@ -62,11 +62,12 @@
   <string name="turbo_mode_enabled_toast">Turbo-Modus aktiviert</string>
   <string name="turbo_mode_disabled_toast">Turbo-Modus deaktiviert</string>
   <string name="onboarding_turbo_mode_title">Der Turbo-Modus hilft Ihnen, schneller zu surfen</string>
-  <string name="onboarding_turbo_mode_body">Der Turbo-Modus blockiert automatisch Tracker und Anzeigen, damit Sie schneller ans Ziel kommen. Wenn es ein Problem gibt – wie bei einer Website, die sich nicht so verhält, wie Sie es erwarten – schalten Sie einfach den Turbo-Modus aus.</string>
-  <string name="button_turbo_mode_keep_enabled">Aktiviert belassen</string>
-  <string name="button_turbo_mode_turn_off">Ausschalten</string>
+  <string name="onboarding_turbo_mode_body2">Der Turbo-Modus blockiert automatisch Werbung und Tracker.\nWenn eine Website nicht wie erwartet funktioniert, deaktivieren Sie ihn.</string>
+  <string name="button_turbo_mode_keep_enabled2">Turbo-Modus aktiviert lassen</string>
+  <string name="button_turbo_mode_turn_off2">Turbo-Modus deaktivieren</string>
   <string name="turbo_mode_disable_a11y">Turbo-Modus deaktivieren</string>
   <string name="turbo_mode_enable_a11y">Turbo-Modus aktivieren</string>
+  <string name="turbo_mode_image_a11y">Beispiel von aktiviertem Turbo-Modus</string>
   <string name="homescreen_unpin_tutorial_toast">Drücken und halten Sie AUSWÄHLEN zum Ablösen vom Startbildschirm</string>
   <string name="homescreen_tile_remove">Entfernen</string>
   <string name="homescreen_unpin_a11y">Ablösen</string>
