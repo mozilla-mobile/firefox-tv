@@ -18,6 +18,7 @@
     <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
     <uses-feature android:name="android.software.leanback" android:required="true" />
 
+    <!-- Attribute usesCleartextTraffic requires API 23+, tools:ignore="UnusedAttribute" for lint check-->
     <application
         android:allowBackup="false"
         android:banner="@mipmap/app_banner"
@@ -25,7 +26,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name=".FocusApplication">
+        android:name=".FocusApplication"
+        android:usesCleartextTraffic="true"
+        tools:ignore="UnusedAttribute">
 
         <provider
             android:name="android.support.v4.content.FileProvider"
