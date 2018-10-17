@@ -130,6 +130,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
     private var hasUserChangedURLSinceEditTextFocused = false
 
+    private lateinit var tileAdapter: HomeTileAdapter
+
     init {
         LayoutInflater.from(context)
                 .inflate(R.layout.browser_overlay, this, true)
@@ -156,7 +158,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         canShowUpinToast = true
 
-        adapter = HomeTileAdapter(uiLifecycleCancelJob, homeTiles, loadUrl = { urlStr ->
+        tileAdapter = HomeTileAdapter(uiLifecycleCancelJob, homeTiles, loadUrl = { urlStr ->
             with(navUrlInput) {
                 if (urlStr.isNotEmpty()) {
                     onNavigationEvent?.invoke(NavigationEvent.LOAD_TILE, urlStr, null)
@@ -181,6 +183,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 canShowUpinToast = false
             }
         })
+        adapter = tileAdapter
+
         layoutManager = HomeTileManager(context, COL_COUNT)
 
         setHasFixedSize(true)
@@ -340,7 +344,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         navUrlInput.nextFocusDownId = when {
             pocketVideosContainer.isEffectivelyVisible -> R.id.pocketVideoMegaTileView
             megaTileTryAgainButton.isEffectivelyVisible -> R.id.megaTileTryAgainButton
-            tileContainer.adapter.itemCount == 0 -> R.id.navUrlInput
+            tileAdapter.itemCount == 0 -> R.id.navUrlInput
             else -> R.id.tileContainer
         }
 
@@ -353,7 +357,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         }
 
         pocketVideoMegaTileView.nextFocusDownId = when {
-            tileContainer.adapter.itemCount == 0 -> R.id.pocketVideoMegaTileView
+            tileAdapter.itemCount == 0 -> R.id.pocketVideoMegaTileView
             else -> R.id.tileContainer
         }
 
@@ -408,14 +412,12 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     }
 
     fun refreshTilesForInsertion() {
-        val adapter = tileContainer.adapter as HomeTileAdapter
-        adapter.updateAdapterSingleInsertion(HomeTilesManager.getTilesCache(context))
+        tileAdapter.updateAdapterSingleInsertion(HomeTilesManager.getTilesCache(context))
         updateOverlayForCurrentState()
     }
 
     fun removePinnedSiteFromTiles(tileId: String) {
-        val adapter = tileContainer.adapter as HomeTileAdapter
-        adapter.removeTile(tileId)
+        tileAdapter.removeTile(tileId)
         updateOverlayForCurrentState()
     }
 
@@ -423,7 +425,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
      * Focus may be lost if all pinned items are removed via onContextItemSelected()
      */
     fun checkIfTilesFocusNeedRefresh() {
-        if (tileContainer.adapter.itemCount == 0) {
+        if (tileAdapter.itemCount == 0) {
             if (pocketVideosContainer.isVisible) {
                 pocketVideoMegaTileView.requestFocus()
             } else {
@@ -437,7 +439,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         context: Context,
         colCount: Int
     ) : GridLayoutManager(context, colCount) {
-        override fun onRequestChildFocus(parent: RecyclerView?, state: RecyclerView.State?, child: View?, focused: View?): Boolean {
+        override fun onRequestChildFocus(parent: RecyclerView, state: RecyclerView.State, child: View, focused: View?): Boolean {
             var position = spanCount
             if (focused != null) {
                 position = getPosition(focused)
