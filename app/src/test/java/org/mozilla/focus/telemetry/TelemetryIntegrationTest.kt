@@ -30,7 +30,7 @@ class TelemetryIntegrationTest {
     }
 
     @Test
-    fun `WHEN session events are called on TelemetryWrapper THEN associated Telemetry methods should be called`() {
+    fun `WHEN startSession and stopSession are called on TelemetryWrapper THEN associated Telemetry methods should be called`() {
         telemetryIntegration.startSession(RuntimeEnvironment.application)
         telemetryIntegration.stopSession(RuntimeEnvironment.application)
         verify(telemetrySpy, times(1)).recordSessionStart()
@@ -60,5 +60,5 @@ class TelemetryIntegrationTest {
  * purposes
  */
 private class TestTelemetryIntegration(
-        sentryIntegration: SentryIntegration
+    sentryIntegration: SentryIntegration
 ) : TelemetryIntegration(sentryIntegration)

@@ -34,7 +34,7 @@ private const val KEY_CLICKED_HOME_TILE_IDS_PER_SESSION = "clickedHomeTileIDsPer
         "LargeClass"
 )
 open class TelemetryIntegration protected constructor(
-        private val sentryIntegration: SentryIntegration = SentryIntegration
+    private val sentryIntegration: SentryIntegration = SentryIntegration
 ) {
 
     companion object {
