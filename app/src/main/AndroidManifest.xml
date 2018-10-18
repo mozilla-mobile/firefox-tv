@@ -82,27 +82,6 @@
         <activity android:name=".home.pocket.PocketOnboardingActivity"
                   android:theme="@style/AppTheme.Transparent"/>
 
-        <!-- Allows MediaSessionCallbacks to be called while a voice command is active. Without
-             this, the video pauses for the voice command, resumes when the voice command ends, and
-             then MediaSessionCallbacks can be executed (e.g. pausing the video again for a pause
-             command). For docs, see:
-               https://developer.amazon.com/docs/fire-tv/mediasession-api-integration.html#enhanced-experience-for-voice-enabled-playback-controls-using-media-session-optional
-
-             Unfortunately, in practice, we can't stop the video from playing after a voice command:
-             see `VideoVoiceCommandMediaSession.MediaSessionCallbacks.onPause`.
-
-             We add this meta-data tag anyway because:
-             - On Cube, it sometimes decreases the playing time in pause-playing-pause by a few hundred milliseconds
-             - This "execute callbacks during a voice command" is the default behavior on the 4K but
-               not the Cube. Adding this flag allows us to opt into this behavior on the Cube,
-               reducing our device fragmentation.
-
-             Unfortunately, this opt-in behavior is more fragile than not opting in (see the code
-             mentioned above for details). -->
-        <meta-data
-            android:name="com.amazon.voice.supports_background_media_session"
-            android:value="true" />
-
         <meta-data
             android:name="android.webkit.WebView.MetricsOptOut"
             android:value="true" />

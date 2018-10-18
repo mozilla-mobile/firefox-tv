@@ -328,41 +328,8 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
 
         // See onPlay for details.
         override fun onPause() {
-            // If we receive a MediaSession callback while the app is paused, it's coming from a
-            // voice command (which pauses the app to handle them).
-            val isInterruptedByVoiceCommand = !isLifecycleResumed
-
-            fun getJS(videoId: String) = if (!isInterruptedByVoiceCommand) {
+            fun getJS(videoId: String) =
                 "$videoId.pause();"
-            } else {
-                // The video is paused for us during a voice command: my theory is that WebView
-                // pauses/resumes videos when audio focus is revoked/granted to it (while it's given
-                // to the voice command). Unfortunately, afaict there is no way to prevent WebView
-                // from resuming these paused videos so we have to pause it after it resumes.
-                // Unfortunately, there is no callback for this (or audio focus changes) so we
-                // inject JS to pause the video immediately after it starts again.
-                //
-                // We timeout the if-playing-starts-pause listener so, if for some reason this
-                // listener isn't called immediately, it doesn't pause the video after the user
-                // attempts to play it in the future (e.g. user says "pause" while video is already
-                // paused and then requests a play).
-                """
-                    | var playingEvent = 'playing';
-                    | var initialExecuteMillis = new Date();
-                    |
-                    | function onPlay() {
-                    |     var now = new Date();
-                    |     var millisPassed = now.getTime() - initialExecuteMillis.getTime();
-                    |     if (millisPassed < 1000) {
-                    |         $videoId.pause();
-                    |     }
-                    |
-                    |     $videoId.removeEventListener(playingEvent, onPlay);
-                    | }
-                    |
-                    | $videoId.addEventListener(playingEvent, onPlay);
-                """.trimMargin()
-            }
 
             evalJSWithTargetVideo(::getJS)
             TelemetryWrapper.mediaSessionEvent(MediaSessionEventType.PAUSE)
