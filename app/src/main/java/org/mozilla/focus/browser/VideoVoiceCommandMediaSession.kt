@@ -43,7 +43,7 @@ import org.mozilla.focus.ext.addJavascriptInterface
 import org.mozilla.focus.ext.evalJS
 import org.mozilla.focus.ext.removeJavascriptInterface
 import org.mozilla.focus.telemetry.MediaSessionEventType
-import org.mozilla.focus.telemetry.TelemetryWrapper
+import org.mozilla.focus.telemetry.TelemetryIntegration
 import java.util.concurrent.TimeUnit
 import kotlin.math.roundToLong
 
@@ -298,7 +298,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
                 // Our overall goal is to see how often voice commands are used. play/pause are the
                 // only keys on a standard Alexa remote that also have voice commands so it's the
                 // only one we need to record in order to disambiguate voice commands from buttons.
-                TelemetryWrapper.mediaSessionEvent(MediaSessionEventType.PLAY_PAUSE_BUTTON)
+                TelemetryIntegration.mediaSessionEvent(MediaSessionEventType.PLAY_PAUSE_BUTTON)
             }
 
             // Forward media next/prev events to the WebView: the WebView already receives key up
@@ -325,7 +325,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
          */
         override fun onPlay() {
             evalJSWithTargetVideo { videoId -> "$videoId.play();" }
-            TelemetryWrapper.mediaSessionEvent(MediaSessionEventType.PLAY)
+            TelemetryIntegration.mediaSessionEvent(MediaSessionEventType.PLAY)
         }
 
         // See onPlay for details.
@@ -367,17 +367,17 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
             }
 
             evalJSWithTargetVideo(::getJS)
-            TelemetryWrapper.mediaSessionEvent(MediaSessionEventType.PAUSE)
+            TelemetryIntegration.mediaSessionEvent(MediaSessionEventType.PAUSE)
         }
 
         override fun onSkipToNext() {
             dispatchKeyEventDownUp(KeyEvent.KEYCODE_MEDIA_NEXT)
-            TelemetryWrapper.mediaSessionEvent(MediaSessionEventType.NEXT)
+            TelemetryIntegration.mediaSessionEvent(MediaSessionEventType.NEXT)
         }
 
         override fun onSkipToPrevious() {
             dispatchKeyEventDownUp(KeyEvent.KEYCODE_MEDIA_PREVIOUS)
-            TelemetryWrapper.mediaSessionEvent(MediaSessionEventType.PREV)
+            TelemetryIntegration.mediaSessionEvent(MediaSessionEventType.PREV)
         }
 
         private fun dispatchKeyEventDownUp(keyCode: Int) {
@@ -387,7 +387,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         override fun onSeekTo(absolutePositionMillis: Long) {
             val absolutePositionSeconds = TimeUnit.MILLISECONDS.toSeconds(absolutePositionMillis)
             evalJSWithTargetVideo { videoId -> "$videoId.currentTime = $absolutePositionSeconds;" }
-            TelemetryWrapper.mediaSessionEvent(MediaSessionEventType.SEEK)
+            TelemetryIntegration.mediaSessionEvent(MediaSessionEventType.SEEK)
         }
     }
 }

@@ -11,7 +11,7 @@ import android.webkit.WebSettings
 import org.mozilla.focus.locale.LocaleAwareApplication
 import org.mozilla.focus.search.SearchEngineManager
 import org.mozilla.focus.session.VisibilityLifeCycleCallback
-import org.mozilla.focus.telemetry.TelemetryWrapper
+import org.mozilla.focus.telemetry.TelemetryIntegration
 import org.mozilla.focus.utils.AppConstants
 import org.mozilla.focus.utils.OkHttpWrapper
 
@@ -43,7 +43,7 @@ open class FocusApplication : LocaleAwareApplication() {
 
         SearchEngineManager.getInstance().init(this)
 
-        TelemetryWrapper.init(this)
+        TelemetryIntegration.init(this)
 
         visibilityLifeCycleCallback = VisibilityLifeCycleCallback(this).also {
             registerActivityLifecycleCallbacks(it)

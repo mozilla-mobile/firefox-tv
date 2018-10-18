@@ -27,7 +27,7 @@ import org.mozilla.focus.BuildConfig
  * As opposed to:
  * "Sentry DSN (amazonWebviewRelease): X_X"
  */
-object SentryWrapper {
+object SentryIntegration {
 
     fun init(context: Context) {
         onIsEnabledChanged(context, DataUploadPreference.isEnabled(context))

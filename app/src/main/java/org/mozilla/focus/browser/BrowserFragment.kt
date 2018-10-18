@@ -41,7 +41,7 @@ import org.mozilla.focus.ext.focusedDOMElement
 import org.mozilla.focus.ext.takeScreenshot
 import org.mozilla.focus.session.NullSession
 import org.mozilla.focus.telemetry.MenuInteractionMonitor
-import org.mozilla.focus.telemetry.TelemetryWrapper
+import org.mozilla.focus.telemetry.TelemetryIntegration
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.ViewUtils.showCenteredTopToast
 import org.mozilla.focus.widget.InlineAutocompleteEditText
@@ -262,7 +262,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
                 HomeTilesManager.removeHomeTile(tileToRemove, context!!)
                 homeTileAdapter.removeTile(tileToRemove.idToString())
                 browserOverlay?.checkIfTilesFocusNeedRefresh()
-                TelemetryWrapper.homeTileRemovedEvent(tileToRemove)
+                TelemetryIntegration.homeTileRemovedEvent(tileToRemove)
                 return true
             }
             else -> return false
@@ -300,11 +300,11 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
         when {
             browserOverlay.isVisible && !isUrlEqualToHomepage -> {
                 setOverlayVisible(false)
-                TelemetryWrapper.userShowsHidesDrawerEvent(false)
+                TelemetryIntegration.userShowsHidesDrawerEvent(false)
             }
             session.canGoBack -> {
                 exitFullScreenIfPossibleAndBack()
-                TelemetryWrapper.browserBackControllerEvent()
+                TelemetryIntegration.browserBackControllerEvent()
             }
             else -> {
                 context!!.components.sessionManager.remove()
@@ -362,7 +362,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
             if (actionIsDown) {
                 val toShow = !browserOverlay.isVisible
                 setOverlayVisible(toShow)
-                TelemetryWrapper.userShowsHidesDrawerEvent(toShow)
+                TelemetryIntegration.userShowsHidesDrawerEvent(toShow)
             }
             return true
         }

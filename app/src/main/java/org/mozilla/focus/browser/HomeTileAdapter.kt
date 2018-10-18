@@ -30,7 +30,7 @@ import org.mozilla.focus.home.CustomHomeTile
 import org.mozilla.focus.home.HomeTile
 import org.mozilla.focus.home.HomeTilePlaceholderGenerator
 import org.mozilla.focus.home.HomeTileScreenshotStore
-import org.mozilla.focus.telemetry.TelemetryWrapper
+import org.mozilla.focus.telemetry.TelemetryIntegration
 import org.mozilla.focus.utils.FormattedDomain
 
 /**
@@ -67,7 +67,7 @@ class HomeTileAdapter(
 
         itemView.setOnClickListener {
             loadUrl(item.url)
-            TelemetryWrapper.homeTileClickEvent(it.context, item)
+            TelemetryIntegration.homeTileClickEvent(it.context, item)
         }
 
         itemView.setOnLongClickListener {

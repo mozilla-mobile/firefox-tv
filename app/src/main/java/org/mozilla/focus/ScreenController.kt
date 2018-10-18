@@ -13,7 +13,7 @@ import org.mozilla.focus.browser.BrowserFragment
 import org.mozilla.focus.ext.components
 import org.mozilla.focus.home.pocket.Pocket
 import org.mozilla.focus.home.pocket.PocketVideoFragment
-import org.mozilla.focus.telemetry.TelemetryWrapper
+import org.mozilla.focus.telemetry.TelemetryIntegration
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.UrlUtils
 import org.mozilla.focus.widget.InlineAutocompleteEditText
@@ -48,7 +48,7 @@ object ScreenController {
                 throw IllegalArgumentException("Expected non-null input location for text input")
             }
 
-            TelemetryWrapper.urlBarEvent(isUrl, autocompleteResult, inputLocation)
+            TelemetryIntegration.urlBarEvent(isUrl, autocompleteResult, inputLocation)
         }
     }
 

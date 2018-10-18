@@ -13,7 +13,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
-class TelemetryWrapperTest {
+class TelemetryIntegrationTest {
 
     private lateinit var telemetrySpy: Telemetry
 
@@ -26,18 +26,18 @@ class TelemetryWrapperTest {
 
     @Test
     fun `WHEN session events are called on TelemetryWrapper THEN associated Telemetry methods should be called`() {
-        TelemetryWrapper.startSession(RuntimeEnvironment.application)
-        TelemetryWrapper.stopSession(RuntimeEnvironment.application)
+        TelemetryIntegration.startSession(RuntimeEnvironment.application)
+        TelemetryIntegration.stopSession(RuntimeEnvironment.application)
         verify(telemetrySpy, times(1)).recordSessionStart()
         verify(telemetrySpy, times(1)).recordSessionEnd(any())
     }
 
     /**
-     * See comment in [TelemetryWrapper.stopSession]
+     * See comment in [TelemetryIntegration.stopSession]
      */
     @Test
     fun `WHEN TelemetryWrapper is called out of order THEN we should not crash`() {
-        TelemetryWrapper.stopSession(RuntimeEnvironment.application)
-        TelemetryWrapper.startSession(RuntimeEnvironment.application)
+        TelemetryIntegration.stopSession(RuntimeEnvironment.application)
+        TelemetryIntegration.startSession(RuntimeEnvironment.application)
     }
 }
