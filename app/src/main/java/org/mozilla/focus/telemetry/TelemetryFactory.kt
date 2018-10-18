@@ -18,12 +18,12 @@ import org.mozilla.telemetry.schedule.jobscheduler.JobSchedulerTelemetrySchedule
 import org.mozilla.telemetry.serialize.JSONPingSerializer
 import org.mozilla.telemetry.storage.FileTelemetryStorage
 
+private const val TELEMETRY_APP_NAME_FOCUS_TV = "FirefoxForFireTV"
+
 /**
  * Constructs objects related to telemetry
  */
 object TelemetryFactory {
-
-    private const val TELEMETRY_APP_NAME_FOCUS_TV = "FirefoxForFireTV"
 
     fun createTelemetry(context: Context): Telemetry {
         val telemetryEnabled = DataUploadPreference.isEnabled(context)
