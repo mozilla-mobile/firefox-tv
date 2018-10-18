@@ -26,8 +26,8 @@ class TelemetryIntegrationTest {
 
     @Test
     fun `WHEN session events are called on TelemetryWrapper THEN associated Telemetry methods should be called`() {
-        TelemetryIntegration.startSession(RuntimeEnvironment.application)
-        TelemetryIntegration.stopSession(RuntimeEnvironment.application)
+        TelemetryIntegration.INSTANCE.startSession(RuntimeEnvironment.application)
+        TelemetryIntegration.INSTANCE.stopSession(RuntimeEnvironment.application)
         verify(telemetrySpy, times(1)).recordSessionStart()
         verify(telemetrySpy, times(1)).recordSessionEnd(any())
     }
@@ -37,7 +37,7 @@ class TelemetryIntegrationTest {
      */
     @Test
     fun `WHEN TelemetryWrapper is called out of order THEN we should not crash`() {
-        TelemetryIntegration.stopSession(RuntimeEnvironment.application)
-        TelemetryIntegration.startSession(RuntimeEnvironment.application)
+        TelemetryIntegration.INSTANCE.stopSession(RuntimeEnvironment.application)
+        TelemetryIntegration.INSTANCE.startSession(RuntimeEnvironment.application)
     }
 }

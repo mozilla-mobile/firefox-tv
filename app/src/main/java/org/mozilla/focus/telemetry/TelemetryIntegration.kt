@@ -32,7 +32,11 @@ private const val KEY_CLICKED_HOME_TILE_IDS_PER_SESSION = "clickedHomeTileIDsPer
         "TooManyFunctions",
         "LargeClass"
 )
-object TelemetryIntegration {
+open class TelemetryIntegration protected constructor() {
+
+    companion object {
+        val INSTANCE: TelemetryIntegration by lazy { TelemetryIntegration() }
+    }
 
     private object Category {
         val ACTION = "action"
@@ -98,7 +102,6 @@ object TelemetryIntegration {
     // Available on any thread: we synchronize.
     private val pocketUniqueClickedVideoIDs = Collections.synchronizedSet(mutableSetOf<Int>())
 
-    @JvmStatic
     fun init(context: Context) {
         // When initializing the telemetry library it will make sure that all directories exist and
         // are readable/writable.
@@ -150,7 +153,6 @@ object TelemetryIntegration {
         pocketUniqueClickedVideoIDs.clear()
     }
 
-    @JvmStatic
     fun stopMainActivity() {
         TelemetryHolder.get()
                 .queuePing(TelemetryCorePingBuilder.TYPE)
@@ -158,12 +160,11 @@ object TelemetryIntegration {
                 .scheduleUpload()
     }
 
-    @JvmStatic
     fun urlBarEvent(isUrl: Boolean, autocompleteResult: AutocompleteResult, inputLocation: UrlTextInputLocation) {
         if (isUrl) {
-            TelemetryIntegration.browseEvent(autocompleteResult, inputLocation)
+            TelemetryIntegration.INSTANCE.browseEvent(autocompleteResult, inputLocation)
         } else {
-            TelemetryIntegration.searchEnterEvent(inputLocation)
+            TelemetryIntegration.INSTANCE.searchEnterEvent(inputLocation)
         }
     }
 
@@ -193,7 +194,6 @@ object TelemetryIntegration {
         telemetry.recordSearch(SearchesMeasurement.LOCATION_ACTIONBAR, searchEngine.identifier)
     }
 
-    @JvmStatic
     fun sslErrorEvent(fromPage: Boolean, error: SslError) {
         // SSL Errors from https://developer.android.com/reference/android/net/http/SslError.html
         val primaryErrorMessage = when (error.primaryError) {
@@ -222,7 +222,6 @@ object TelemetryIntegration {
                 .queue()
     }
 
-    @JvmStatic
     fun clearDataEvent() {
         TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.SETTING, Value.CLEAR_DATA).queue()
     }
@@ -237,7 +236,6 @@ object TelemetryIntegration {
      *
      * @param isOpening true if the drawer is opening, close otherwise.
      */
-    @JvmStatic
     fun userShowsHidesDrawerEvent(isOpening: Boolean) {
         val method = if (isOpening) Method.USER_SHOW else Method.USER_HIDE
         TelemetryEvent.create(Category.ACTION, method, Object.MENU).queue()
@@ -249,7 +247,6 @@ object TelemetryIntegration {
      *
      * See [MenuInteractionMonitor] kdoc for more information.
      */
-    @JvmStatic
     fun menuUnusedEvent() {
         TelemetryEvent.create(Category.AGGREGATE, Method.NO_ACTION_TAKEN, Object.MENU).queue()
     }
@@ -281,7 +278,6 @@ object TelemetryIntegration {
     }
 
     /** The browser goes back from a controller press. */
-    @JvmStatic
     fun browserBackControllerEvent() {
         TelemetryEvent.create(Category.ACTION, Method.PAGE, Object.BROWSER, Value.BACK)
                 .extra(Extra.SOURCE, "controller")
@@ -353,7 +349,7 @@ private object TelemetryHomeTileUniqueClickPerSessionCounter {
 
         val uniqueClickCount = getSharedPrefs(context)
                 .getStringSet(KEY_CLICKED_HOME_TILE_IDS_PER_SESSION, null)?.size ?: 0
-        TelemetryIntegration.homeTileUniqueClickCountPerSessionEvent(uniqueClickCount)
+        TelemetryIntegration.INSTANCE.homeTileUniqueClickCountPerSessionEvent(uniqueClickCount)
     }
 
     fun resetSessionData(context: Context) {

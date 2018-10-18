@@ -156,7 +156,7 @@ private class PocketVideoAdapter(
     private fun PocketVideoViewHolder.bindPocketVideo(item: PocketVideo) {
         itemView.setOnClickListener {
             ScreenController.showBrowserScreenForUrl(itemView.context, fragmentManager, item.url, Session.Source.HOME_SCREEN)
-            TelemetryIntegration.pocketVideoClickEvent(item.id)
+            TelemetryIntegration.INSTANCE.pocketVideoClickEvent(item.id)
         }
         itemView.setOnFocusChangeListener { _, hasFocus -> updateForFocusState(this, hasFocus) }
         updateForFocusState(this, itemView.isFocused)

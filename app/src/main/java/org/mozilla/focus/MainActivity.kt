@@ -123,12 +123,12 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
     override fun onResume() {
         super.onResume()
-        TelemetryIntegration.startSession(this)
+        TelemetryIntegration.INSTANCE.startSession(this)
     }
 
     override fun onPause() {
         super.onPause()
-        TelemetryIntegration.stopSession(this)
+        TelemetryIntegration.INSTANCE.stopSession(this)
     }
 
     override fun onStart() {
@@ -139,7 +139,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     override fun onStop() {
         super.onStop()
         Pocket.stopBackgroundUpdates() // Don't regularly hit the network in the background.
-        TelemetryIntegration.stopMainActivity()
+        TelemetryIntegration.INSTANCE.stopMainActivity()
     }
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {

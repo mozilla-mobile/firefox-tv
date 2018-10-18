@@ -48,7 +48,7 @@ object ScreenController {
                 throw IllegalArgumentException("Expected non-null input location for text input")
             }
 
-            TelemetryIntegration.urlBarEvent(isUrl, autocompleteResult, inputLocation)
+            TelemetryIntegration.INSTANCE.urlBarEvent(isUrl, autocompleteResult, inputLocation)
         }
     }
 
