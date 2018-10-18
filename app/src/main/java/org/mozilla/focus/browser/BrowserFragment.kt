@@ -262,7 +262,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
                 HomeTilesManager.removeHomeTile(tileToRemove, context!!)
                 homeTileAdapter.removeTile(tileToRemove.idToString())
                 browserOverlay?.checkIfTilesFocusNeedRefresh()
-                TelemetryIntegration.homeTileRemovedEvent(tileToRemove)
+                TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileToRemove)
                 return true
             }
             else -> return false
@@ -300,11 +300,11 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
         when {
             browserOverlay.isVisible && !isUrlEqualToHomepage -> {
                 setOverlayVisible(false)
-                TelemetryIntegration.userShowsHidesDrawerEvent(false)
+                TelemetryIntegration.INSTANCE.userShowsHidesDrawerEvent(false)
             }
             session.canGoBack -> {
                 exitFullScreenIfPossibleAndBack()
-                TelemetryIntegration.browserBackControllerEvent()
+                TelemetryIntegration.INSTANCE.browserBackControllerEvent()
             }
             else -> {
                 context!!.components.sessionManager.remove()
@@ -362,7 +362,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
             if (actionIsDown) {
                 val toShow = !browserOverlay.isVisible
                 setOverlayVisible(toShow)
-                TelemetryIntegration.userShowsHidesDrawerEvent(toShow)
+                TelemetryIntegration.INSTANCE.userShowsHidesDrawerEvent(toShow)
             }
             return true
         }

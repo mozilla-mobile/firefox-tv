@@ -57,7 +57,7 @@ class SettingsFragment : Fragment() {
                     // if/when we add session restoration logic.
                     // See https://github.com/mozilla-mobile/firefox-tv/issues/1192
                     activity?.recreate()
-                    TelemetryIntegration.clearDataEvent()
+                    TelemetryIntegration.INSTANCE.clearDataEvent()
                 }
             }
 

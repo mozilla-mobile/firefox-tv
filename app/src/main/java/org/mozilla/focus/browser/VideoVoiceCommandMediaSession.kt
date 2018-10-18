@@ -298,7 +298,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
                 // Our overall goal is to see how often voice commands are used. play/pause are the
                 // only keys on a standard Alexa remote that also have voice commands so it's the
                 // only one we need to record in order to disambiguate voice commands from buttons.
-                TelemetryIntegration.mediaSessionEvent(MediaSessionEventType.PLAY_PAUSE_BUTTON)
+                TelemetryIntegration.INSTANCE.mediaSessionEvent(MediaSessionEventType.PLAY_PAUSE_BUTTON)
             }
 
             // Forward media next/prev events to the WebView: the WebView already receives key up
@@ -325,7 +325,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
          */
         override fun onPlay() {
             evalJSWithTargetVideo { videoId -> "$videoId.play();" }
-            TelemetryIntegration.mediaSessionEvent(MediaSessionEventType.PLAY)
+            TelemetryIntegration.INSTANCE.mediaSessionEvent(MediaSessionEventType.PLAY)
         }
 
         // See onPlay for details.
@@ -367,17 +367,17 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
             }
 
             evalJSWithTargetVideo(::getJS)
-            TelemetryIntegration.mediaSessionEvent(MediaSessionEventType.PAUSE)
+            TelemetryIntegration.INSTANCE.mediaSessionEvent(MediaSessionEventType.PAUSE)
         }
 
         override fun onSkipToNext() {
             dispatchKeyEventDownUp(KeyEvent.KEYCODE_MEDIA_NEXT)
-            TelemetryIntegration.mediaSessionEvent(MediaSessionEventType.NEXT)
+            TelemetryIntegration.INSTANCE.mediaSessionEvent(MediaSessionEventType.NEXT)
         }
 
         override fun onSkipToPrevious() {
             dispatchKeyEventDownUp(KeyEvent.KEYCODE_MEDIA_PREVIOUS)
-            TelemetryIntegration.mediaSessionEvent(MediaSessionEventType.PREV)
+            TelemetryIntegration.INSTANCE.mediaSessionEvent(MediaSessionEventType.PREV)
         }
 
         private fun dispatchKeyEventDownUp(keyCode: Int) {
@@ -387,7 +387,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         override fun onSeekTo(absolutePositionMillis: Long) {
             val absolutePositionSeconds = TimeUnit.MILLISECONDS.toSeconds(absolutePositionMillis)
             evalJSWithTargetVideo { videoId -> "$videoId.currentTime = $absolutePositionSeconds;" }
-            TelemetryIntegration.mediaSessionEvent(MediaSessionEventType.SEEK)
+            TelemetryIntegration.INSTANCE.mediaSessionEvent(MediaSessionEventType.SEEK)
         }
     }
 }

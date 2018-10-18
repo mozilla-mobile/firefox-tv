@@ -299,7 +299,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             else -> Unit // Nothing to do.
         }
         onNavigationEvent?.invoke(event, value, null)
-        TelemetryIntegration.overlayClickEvent(event, isTurboButtonChecked, isPinButtonChecked)
+        TelemetryIntegration.INSTANCE.overlayClickEvent(event, isTurboButtonChecked, isPinButtonChecked)
     }
 
     fun updateOverlayForCurrentState() {

@@ -21,7 +21,7 @@ object MenuInteractionMonitor {
     }
 
     fun menuClosed() {
-        if (!selectPressedDuringCurrentMenu) TelemetryIntegration.menuUnusedEvent()
+        if (!selectPressedDuringCurrentMenu) TelemetryIntegration.INSTANCE.menuUnusedEvent()
     }
 
     fun selectPressed() {

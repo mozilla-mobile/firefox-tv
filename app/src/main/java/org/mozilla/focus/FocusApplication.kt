@@ -43,7 +43,7 @@ open class FocusApplication : LocaleAwareApplication() {
 
         SearchEngineManager.getInstance().init(this)
 
-        TelemetryIntegration.init(this)
+        TelemetryIntegration.INSTANCE.init(this)
 
         visibilityLifeCycleCallback = VisibilityLifeCycleCallback(this).also {
             registerActivityLifecycleCallbacks(it)
