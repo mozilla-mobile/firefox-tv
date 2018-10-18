@@ -61,7 +61,6 @@ open class TelemetryIntegration protected constructor(
         val RESOURCE = "resource"
         val REMOVE = "remove"
         val NO_ACTION_TAKEN = "no_action_taken"
-        val ONPAUSE_CALLED_BEFORE_ONRESUME = "pause_before_resume"
     }
 
     private object Object {
