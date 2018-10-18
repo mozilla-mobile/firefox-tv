@@ -44,6 +44,15 @@ class TelemetryIntegrationTest {
 
         verify(sentrySpy, times(1)).capture(anyNonNull())
     }
+
+    @Test
+    fun `GIVEN session is running WHEN stopSession is called twice in a row THEN sentry should capture callstack`() {
+        telemetryIntegration.startSession(RuntimeEnvironment.application)
+        telemetryIntegration.stopSession(RuntimeEnvironment.application)
+        telemetryIntegration.stopSession(RuntimeEnvironment.application)
+
+        verify(sentrySpy, times(1)).capture(anyNonNull())
+    }
 }
 
 /**
