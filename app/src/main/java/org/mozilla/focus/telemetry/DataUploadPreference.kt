@@ -39,6 +39,6 @@ internal object DataUploadPreference {
                 .configuration
                 .setUploadEnabled(enabled).isCollectionEnabled = enabled
 
-        SentryWrapper.onIsEnabledChanged(context, enabled)
+        SentryIntegration.onIsEnabledChanged(context, enabled)
     }
 }

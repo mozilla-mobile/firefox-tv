@@ -35,7 +35,7 @@ import org.mozilla.focus.ext.isVisible
 import org.mozilla.focus.ext.updateLayoutParams
 import org.mozilla.focus.home.HomeTilesManager
 import org.mozilla.focus.home.pocket.Pocket
-import org.mozilla.focus.telemetry.TelemetryWrapper
+import org.mozilla.focus.telemetry.TelemetryIntegration
 import org.mozilla.focus.utils.TurboMode
 import org.mozilla.focus.utils.UrlUtils
 import org.mozilla.focus.widget.IgnoreFocusMovementMethod
@@ -299,7 +299,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             else -> Unit // Nothing to do.
         }
         onNavigationEvent?.invoke(event, value, null)
-        TelemetryWrapper.overlayClickEvent(event, isTurboButtonChecked, isPinButtonChecked)
+        TelemetryIntegration.overlayClickEvent(event, isTurboButtonChecked, isPinButtonChecked)
     }
 
     fun updateOverlayForCurrentState() {

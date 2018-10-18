@@ -32,7 +32,7 @@ private const val KEY_CLICKED_HOME_TILE_IDS_PER_SESSION = "clickedHomeTileIDsPer
         "TooManyFunctions",
         "LargeClass"
 )
-object TelemetryWrapper {
+object TelemetryIntegration {
 
     private object Category {
         val ACTION = "action"
@@ -161,9 +161,9 @@ object TelemetryWrapper {
     @JvmStatic
     fun urlBarEvent(isUrl: Boolean, autocompleteResult: AutocompleteResult, inputLocation: UrlTextInputLocation) {
         if (isUrl) {
-            TelemetryWrapper.browseEvent(autocompleteResult, inputLocation)
+            TelemetryIntegration.browseEvent(autocompleteResult, inputLocation)
         } else {
-            TelemetryWrapper.searchEnterEvent(inputLocation)
+            TelemetryIntegration.searchEnterEvent(inputLocation)
         }
     }
 
@@ -353,7 +353,7 @@ private object TelemetryHomeTileUniqueClickPerSessionCounter {
 
         val uniqueClickCount = getSharedPrefs(context)
                 .getStringSet(KEY_CLICKED_HOME_TILE_IDS_PER_SESSION, null)?.size ?: 0
-        TelemetryWrapper.homeTileUniqueClickCountPerSessionEvent(uniqueClickCount)
+        TelemetryIntegration.homeTileUniqueClickCountPerSessionEvent(uniqueClickCount)
     }
 
     fun resetSessionData(context: Context) {

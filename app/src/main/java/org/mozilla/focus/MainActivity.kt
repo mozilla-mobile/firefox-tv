@@ -27,8 +27,8 @@ import org.mozilla.focus.home.pocket.Pocket
 import org.mozilla.focus.home.pocket.PocketOnboardingActivity
 import org.mozilla.focus.home.pocket.PocketVideoFragment
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity
-import org.mozilla.focus.telemetry.SentryWrapper
-import org.mozilla.focus.telemetry.TelemetryWrapper
+import org.mozilla.focus.telemetry.SentryIntegration
+import org.mozilla.focus.telemetry.TelemetryIntegration
 import org.mozilla.focus.telemetry.UrlTextInputLocation
 import org.mozilla.focus.utils.OnUrlEnteredListener
 import org.mozilla.focus.utils.SafeIntent
@@ -73,7 +73,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         super.onCreate(savedInstanceState)
 
         // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.
-        SentryWrapper.init(this)
+        SentryIntegration.init(this)
         Pocket.init()
         PublicSuffix.init(this) // Used by Pocket Video feed & custom home tiles.
         initMediaSession()
@@ -123,12 +123,12 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
     override fun onResume() {
         super.onResume()
-        TelemetryWrapper.startSession(this)
+        TelemetryIntegration.startSession(this)
     }
 
     override fun onPause() {
         super.onPause()
-        TelemetryWrapper.stopSession(this)
+        TelemetryIntegration.stopSession(this)
     }
 
     override fun onStart() {
@@ -139,7 +139,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     override fun onStop() {
         super.onStop()
         Pocket.stopBackgroundUpdates() // Don't regularly hit the network in the background.
-        TelemetryWrapper.stopMainActivity()
+        TelemetryIntegration.stopMainActivity()
     }
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {

@@ -30,7 +30,7 @@ import org.mozilla.focus.ext.forceExhaustive
 import org.mozilla.focus.ext.isNotCompleted
 import org.mozilla.focus.ext.resetAfter
 import org.mozilla.focus.ext.updateLayoutParams
-import org.mozilla.focus.telemetry.TelemetryWrapper
+import org.mozilla.focus.telemetry.TelemetryIntegration
 import org.mozilla.focus.utils.FormattedDomain
 import org.mozilla.focus.utils.PicassoWrapper
 import java.net.URI
@@ -156,7 +156,7 @@ private class PocketVideoAdapter(
     private fun PocketVideoViewHolder.bindPocketVideo(item: PocketVideo) {
         itemView.setOnClickListener {
             ScreenController.showBrowserScreenForUrl(itemView.context, fragmentManager, item.url, Session.Source.HOME_SCREEN)
-            TelemetryWrapper.pocketVideoClickEvent(item.id)
+            TelemetryIntegration.pocketVideoClickEvent(item.id)
         }
         itemView.setOnFocusChangeListener { _, hasFocus -> updateForFocusState(this, hasFocus) }
         updateForFocusState(this, itemView.isFocused)

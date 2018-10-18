@@ -18,7 +18,7 @@ import org.mozilla.focus.ext.getAccessibilityManager
 import org.mozilla.focus.ext.isVoiceViewEnabled
 import org.mozilla.focus.ext.requireComponents
 import org.mozilla.focus.telemetry.DataUploadPreference
-import org.mozilla.focus.telemetry.TelemetryWrapper
+import org.mozilla.focus.telemetry.TelemetryIntegration
 
 /** The settings for the app. */
 class SettingsFragment : Fragment() {
@@ -57,7 +57,7 @@ class SettingsFragment : Fragment() {
                     // if/when we add session restoration logic.
                     // See https://github.com/mozilla-mobile/firefox-tv/issues/1192
                     activity?.recreate()
-                    TelemetryWrapper.clearDataEvent()
+                    TelemetryIntegration.clearDataEvent()
                 }
             }
 
