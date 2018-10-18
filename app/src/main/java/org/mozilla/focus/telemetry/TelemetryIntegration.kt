@@ -32,7 +32,9 @@ private const val KEY_CLICKED_HOME_TILE_IDS_PER_SESSION = "clickedHomeTileIDsPer
         "TooManyFunctions",
         "LargeClass"
 )
-open class TelemetryIntegration protected constructor() {
+open class TelemetryIntegration protected constructor(
+        private val sentryIntegration: SentryIntegration = SentryIntegration
+) {
 
     companion object {
         val INSTANCE: TelemetryIntegration by lazy { TelemetryIntegration() }
@@ -125,15 +127,11 @@ open class TelemetryIntegration protected constructor() {
 
     @UiThread // via TelemetryHomeTileUniqueClickPerSessionCounter
     fun stopSession(context: Context) {
-        fun sendEndSessionFailedEvent() {
-            // In rare instances, we have seen stopSession called before startSession.
-            // It is unknown at this time how this happens, but it is very infrequent
-            // so we are logging the event and otherwise dropping the error
-            // See https://bugzilla.mozilla.org/show_bug.cgi?id=1405192
-            TelemetryEvent.create(Category.ERROR, Method.ONPAUSE_CALLED_BEFORE_ONRESUME, Object.APP).queue()
+        // We cannot use named arguments here as we are calling into Java code
+        TelemetryHolder.get().recordSessionEnd { // onFailure =
+            sentryIntegration.capture(IllegalStateException("Telemetry#recordSessionEnd called when no session was active"))
         }
 
-        TelemetryHolder.get().recordSessionEnd { sendEndSessionFailedEvent() }
         TelemetryEvent.create(Category.ACTION, Method.BACKGROUND, Object.APP).queue()
 
         // We call reset in both startSession and stopSession. We call it here to make sure we
