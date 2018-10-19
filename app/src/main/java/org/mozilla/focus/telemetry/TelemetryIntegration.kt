@@ -11,6 +11,7 @@ import android.os.StrictMode
 import android.support.annotation.AnyThread
 import android.support.annotation.UiThread
 import org.mozilla.focus.browser.NavigationEvent
+import org.mozilla.focus.ext.resetAfter
 import org.mozilla.focus.home.BundledHomeTile
 import org.mozilla.focus.home.CustomHomeTile
 import org.mozilla.focus.home.HomeTile
@@ -107,11 +108,8 @@ open class TelemetryIntegration protected constructor(
     fun init(context: Context) {
         // When initializing the telemetry library it will make sure that all directories exist and
         // are readable/writable.
-        val threadPolicy = StrictMode.allowThreadDiskWrites()
-        try {
+        StrictMode.allowThreadDiskWrites().resetAfter {
             TelemetryHolder.set(TelemetryFactory.createTelemetry(context))
-        } finally {
-            StrictMode.setThreadPolicy(threadPolicy)
         }
     }
 
