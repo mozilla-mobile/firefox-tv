@@ -33,5 +33,5 @@ object Git {
     fun status(): String = runtime.execWaitForStdOut("git status --porcelain")
 
     fun nameRev(vararg args: String): String =
-            Runtime.getRuntime().execWaitForStdOut("git name-rev ${args.joinToString(" ")}")
+            runtime.execWaitForStdOut("git name-rev ${args.joinToString(" ")}")
 }
