@@ -8,6 +8,8 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import org.mozilla.gradle.GitAggregates
 import org.mozilla.gradle.ext.androidDSLOrThrow
+import org.mozilla.gradle.ext.getAssembleReleaseTasks
+import org.mozilla.gradle.ext.getCompileReleaseTasks
 
 /**
  * Validates that an Android app is correctly configured for release. When created, this
@@ -27,25 +29,13 @@ open class ValidateAndroidAppReleaseConfiguration : DefaultTask() {
 
         this.onlyIf { !project.hasProperty("noValidate") }
 
-        project.gradle.projectsEvaluated {
-            getAssembleReleaseTasks().forEach {
-                it.dependsOn(this@ValidateAndroidAppReleaseConfiguration)
-            }
-
-            // The assemble release tasks run late during execution so we make
-            getCompileReleaseTasks().forEach {
-                it.mustRunAfter(this@ValidateAndroidAppReleaseConfiguration)
-            }
-        }
+        project.gradle.projectsEvaluated { project.tasks.let { tasks ->
+            // The assemble release tasks run late during execution but the compile tasks run
+            // early and assemble depends on them so we make our new task run before these compile tasks.
+            tasks.getAssembleReleaseTasks().forEach { it.dependsOn(this@ValidateAndroidAppReleaseConfiguration) }
+            tasks.getCompileReleaseTasks().forEach { it.mustRunAfter(this@ValidateAndroidAppReleaseConfiguration) }
+        } }
     }
-
-    private fun getAssembleReleaseTasks() = project.tasks.filter { task -> task.name.let {
-        it.startsWith("assemble") && it.endsWith("Release")
-    } }
-
-    private fun getCompileReleaseTasks() = project.tasks.filter { task -> task.name.let {
-        it.startsWith("compile") && it.endsWith("ReleaseSources")
-    } }
 
     @TaskAction
     fun validateAndroidAppRelease() {
