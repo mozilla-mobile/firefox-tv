@@ -1,3 +1,8 @@
+/* -*- Mode: Java; c-basic-offset: 4; tab-width: 20; indent-tabs-mode: nil; -*-
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 package org.mozilla.focus.telemetry
 
 import org.junit.Before
@@ -32,6 +37,9 @@ class TelemetryIntegrationTest {
     @Test
     fun `WHEN startSession and stopSession are called on TelemetryWrapper THEN associated Telemetry methods should be called`() {
         telemetryIntegration.startSession(RuntimeEnvironment.application)
+        verify(telemetrySpy, times(1)).recordSessionStart()
+        verify(telemetrySpy, times(0)).recordSessionEnd(any())
+
         telemetryIntegration.stopSession(RuntimeEnvironment.application)
         verify(telemetrySpy, times(1)).recordSessionStart()
         verify(telemetrySpy, times(1)).recordSessionEnd(any())
