@@ -51,36 +51,7 @@ object SentryIntegration {
         Sentry.getContext().user = SentryUnknownUser()
     }
 
-    /**
-     * One way to test calls to static methods is to pass instances of their objects into the
-     * class being tested. This allows tests to pass spies or mocks instead.
-     *
-     * Example:
-     *
-     *  class SimpleClass(private val singleton: Singleton = Singleton) {
-     *      fun testThis() {
-     *          singleton.callMethod()
-     *      }
-     *  }
-     *
-     *  class SimpleClassTest {
-     *
-     *      @Test
-     *      fun testSimpleClass() {
-     *          val spy = spy(Singleton)
-     *          val simpleClass = SimpleClass(spy)
-     *          simpleClass.testThis()
-     *          verify(spy).callMethod()
-     *      }
-     *  }
-     *
-     * [Sentry] has a private constructor, disallowing this pattern, so instead we delegate
-     * [SentryIntegration.capture] to [Sentry.capture]. By injecting [SentryIntegration] into
-     * classes that we test, we can now verify that this method is being called in our tests.
-     *
-     * See [TelemetryIntegrationTest.setup] for an example.
-     */
-    internal fun capture(exception: Exception) {
+    fun capture(exception: Exception) {
         Sentry.capture(exception)
     }
 }
