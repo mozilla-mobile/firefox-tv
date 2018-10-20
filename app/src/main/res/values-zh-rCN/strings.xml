@@ -62,8 +62,12 @@
   <string name="turbo_mode_enabled_toast">已启用加速模式</string>
   <string name="turbo_mode_disabled_toast">已禁用加速模式</string>
   <string name="onboarding_turbo_mode_title">加速模式下浏览更快更轻巧</string>
+  <string name="onboarding_turbo_mode_body2">加速模式会自动拦截广告和跟踪器。\n如果网站的行为不符合您的预期，请尝试将其关闭。</string>
+  <string name="button_turbo_mode_keep_enabled2">保持加速模式启用</string>
+  <string name="button_turbo_mode_turn_off2">退出加速模式</string>
   <string name="turbo_mode_disable_a11y">已关闭加速模式</string>
   <string name="turbo_mode_enable_a11y">已打开加速模式</string>
+  <string name="turbo_mode_image_a11y">加速模式启用范例</string>
   <string name="homescreen_unpin_tutorial_toast">长按 SELECT 键从主屏幕取消固定</string>
   <string name="homescreen_tile_remove">移除</string>
   <string name="homescreen_unpin_a11y">取消固定</string>
