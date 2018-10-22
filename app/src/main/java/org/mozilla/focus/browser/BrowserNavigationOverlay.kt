@@ -29,7 +29,9 @@ import kotlinx.coroutines.experimental.launch
 import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
+import org.mozilla.focus.ext.application
 import org.mozilla.focus.ext.forEachChild
+import org.mozilla.focus.ext.forceExhaustive
 import org.mozilla.focus.ext.isEffectivelyVisible
 import org.mozilla.focus.ext.isVisible
 import org.mozilla.focus.ext.updateLayoutParams
@@ -42,6 +44,7 @@ import org.mozilla.focus.widget.IgnoreFocusMovementMethod
 import org.mozilla.focus.widget.InlineAutocompleteEditText
 import kotlin.properties.Delegates
 import org.mozilla.focus.ext.isVoiceViewEnabled
+import org.mozilla.focus.ext.serviceLocator
 import org.mozilla.focus.locale.LocaleManager
 import java.lang.ref.WeakReference
 
@@ -124,7 +127,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
     var onPreSetVisibilityListener: ((isVisible: Boolean) -> Unit)? = null
 
-    private var pocketVideos = Pocket.getRecommendedVideos()
+    private var pocketVideos = context.serviceLocator.pocket.getRecommendedVideos()
 
     var parentFrag = ParentFragment.DEFAULT
 
@@ -214,7 +217,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 resources.getString(R.string.pocket_brand_name)) + " " + resources.getString(R.string.pocket_video_feed_reload_button)
 
         megaTileTryAgainButton.setOnClickListener { _ ->
-            pocketVideos = Pocket.getRecommendedVideos()
+            pocketVideos = context!!.serviceLocator.pocket.getRecommendedVideos()
             initMegaTile()
             updateOverlayForCurrentState()
             pocketVideoMegaTileView.requestFocus()
