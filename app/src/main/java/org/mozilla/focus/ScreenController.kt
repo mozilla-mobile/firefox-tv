@@ -11,8 +11,6 @@ import android.text.TextUtils
 import mozilla.components.browser.session.Session
 import org.mozilla.focus.browser.BrowserFragment
 import org.mozilla.focus.ext.components
-import org.mozilla.focus.ext.serviceLocator
-import org.mozilla.focus.home.pocket.Pocket
 import org.mozilla.focus.home.pocket.PocketVideoFragment
 import org.mozilla.focus.telemetry.TelemetryIntegration
 import org.mozilla.focus.telemetry.UrlTextInputLocation

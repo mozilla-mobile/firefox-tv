@@ -24,7 +24,6 @@ import org.mozilla.focus.ext.components
 import org.mozilla.focus.ext.serviceLocator
 import org.mozilla.focus.ext.setupForApp
 import org.mozilla.focus.ext.toSafeIntent
-import org.mozilla.focus.home.pocket.Pocket
 import org.mozilla.focus.home.pocket.PocketOnboardingActivity
 import org.mozilla.focus.home.pocket.PocketVideoFragment
 import org.mozilla.focus.locale.LocaleAwareAppCompatActivity

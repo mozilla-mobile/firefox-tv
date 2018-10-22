@@ -29,14 +29,11 @@ import kotlinx.coroutines.experimental.launch
 import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.focus.R
 import org.mozilla.focus.autocomplete.UrlAutoCompleteFilter
-import org.mozilla.focus.ext.application
 import org.mozilla.focus.ext.forEachChild
-import org.mozilla.focus.ext.forceExhaustive
 import org.mozilla.focus.ext.isEffectivelyVisible
 import org.mozilla.focus.ext.isVisible
 import org.mozilla.focus.ext.updateLayoutParams
 import org.mozilla.focus.home.HomeTilesManager
-import org.mozilla.focus.home.pocket.Pocket
 import org.mozilla.focus.telemetry.TelemetryIntegration
 import org.mozilla.focus.utils.TurboMode
 import org.mozilla.focus.utils.UrlUtils
