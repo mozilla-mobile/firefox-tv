@@ -177,6 +177,19 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                     }
                 }
             }
+            NavigationEvent.DESKTOP_MODE -> {
+                when (value) {
+                    NavigationEvent.VAL_CHECKED -> {
+                        requireWebRenderComponents.sessionUseCases.reload.invoke()
+
+                    }
+                    NavigationEvent.VAL_UNCHECKED -> {
+                        requireWebRenderComponents.sessionUseCases.reload.invoke()
+
+                    }
+                    else -> throw IllegalArgumentException("Unexpected value for DESKTOP_MODE: " + value)
+                }
+            }
         }
         Unit
     }
@@ -407,5 +420,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             // TODO: #569 fix CustomTilesManager to use Uri too
             CustomTilesManager.getInstance(context!!).isURLPinned(it.toString()) ||
                     BundledTilesManager.getInstance(context!!).isURLPinned(it) } ?: false
+        override fun isDesktopModeEnabled() = !isUrlEqualToHomepage
+        override fun isDesktopModeOn() = false //TODO
     }
 }
