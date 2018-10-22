@@ -57,7 +57,7 @@ private const val COL_COUNT = 5
 private val uiHandler = Handler(Looper.getMainLooper())
 
 enum class NavigationEvent {
-    SETTINGS, BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION, POCKET;
+    SETTINGS, BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION, POCKET, DESKTOP_MODE;
 
     companion object {
         fun fromViewClick(viewId: Int?) = when (viewId) {
@@ -68,6 +68,7 @@ enum class NavigationEvent {
             R.id.turboButton -> TURBO
             R.id.pinButton -> PIN_ACTION
             R.id.pocketVideoMegaTileView -> POCKET
+            R.id.desktopModeButton -> DESKTOP_MODE
             else -> null
         }
 
@@ -90,6 +91,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         fun isURLPinned(): Boolean
         fun isPinEnabled(): Boolean
         fun isRefreshEnabled(): Boolean
+        fun isDesktopModeEnabled(): Boolean
+        fun isDesktopModeOn(): Boolean
     }
 
     enum class ParentFragment {
@@ -295,6 +298,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         val isTurboButtonChecked = turboButton.isChecked
         val isPinButtonChecked = pinButton.isChecked
+        val isDesktopButtonChecked = desktopModeButton.isChecked
         when (event) {
             NavigationEvent.TURBO -> {
                 TurboMode.toggle(context, isTurboButtonChecked)
@@ -303,10 +307,14 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 value = if (isPinButtonChecked) NavigationEvent.VAL_CHECKED
                 else NavigationEvent.VAL_UNCHECKED
             }
+            NavigationEvent.DESKTOP_MODE -> {
+                value = if (isDesktopButtonChecked) NavigationEvent.VAL_CHECKED
+                else NavigationEvent.VAL_UNCHECKED
+            }
             else -> Unit // Nothing to do.
         }
         onNavigationEvent?.invoke(event, value, null)
-        TelemetryIntegration.INSTANCE.overlayClickEvent(event, isTurboButtonChecked, isPinButtonChecked)
+        TelemetryIntegration.INSTANCE.overlayClickEvent(event, isTurboButtonChecked, isPinButtonChecked, isDesktopButtonChecked)
     }
 
     fun updateOverlayForCurrentState() {
@@ -331,6 +339,10 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         val isRefreshEnabled = navigationStateProvider?.isRefreshEnabled() ?: false
         updateOverlayButtonState(isRefreshEnabled, navButtonReload)
+
+        val isDesktopModeEnabled = navigationStateProvider?.isDesktopModeEnabled() ?: false
+        updateOverlayButtonState(isDesktopModeEnabled, desktopModeButton)
+        desktopModeButton.isChecked = navigationStateProvider?.isDesktopModeOn() ?: false
 
         // Prevent the focus from looping to the bottom row when reaching the last
         // focusable element in the top row
