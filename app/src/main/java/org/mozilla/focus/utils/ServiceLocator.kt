@@ -7,7 +7,36 @@ package org.mozilla.focus.utils
 import org.mozilla.focus.home.pocket.Pocket
 
 /**
- * TODO
+ * Implementation of the Service Locator pattern. Use this class to provide dependencies without
+ * making client code aware of their specific implementations (i.e., make it easier to program to
+ * an interface).
+ *
+ * This also makes it easier to mock out dependencies during testing.
+ *
+ * See: https://en.wikipedia.org/wiki/Service_locator_pattern
+ *
+ * ### Dependencies can be defined as follows:
+ *
+ *   #### Lazy, app-wide Singleton:
+ *   ```
+ *   open val pocket by lazy { Pocket() }
+ *   ```
+ *
+ *   #### Eager, app-wide singleton:
+ *   ```
+ *   open val pocket = Pocket()
+ *   ```
+ *
+ *   #### New value each time:
+ *   ```
+ *   open val pocket: Pocket
+ *     get() = Pocket()
+ *   ```
+ *
+ *   #### Concrete value for interface:
+ *   ```
+ *   open val telemetry: TelemetryInterface by lazy { SentryWrapper() }
+ *   ```
  */
 open class ServiceLocator {
     open val pocket by lazy { Pocket() }
