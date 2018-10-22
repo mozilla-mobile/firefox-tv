@@ -39,7 +39,7 @@ typealias PocketVideosDeferred = Deferred<List<PocketVideo>?>
  * We cache in memory only. We chose not to cache on disk because it adds complexity and the cache
  * is likely to be severely outdated between runs of the application anyway.
  */
-object Pocket {
+open class Pocket {
 
     @Volatile private lateinit var videosCache: PocketVideosDeferred
     @Volatile private var lastUpdateMillis = -1L
@@ -82,7 +82,7 @@ object Pocket {
      * This method assumes [startBackgroundUpdates] has been called before being accessed.
      */
     @AnyThread // videosCache is synchronized.
-    fun getRecommendedVideos() = videosCache
+    open fun getRecommendedVideos() = videosCache
     private fun getRecommendedVideosNoCacheAsync() = async { PocketEndpoint.getRecommendedVideos() }
     private fun getPlaceholderVideos() = async { PocketEndpoint.getPlaceholderVideos() }
 
