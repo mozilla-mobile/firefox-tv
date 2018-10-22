@@ -34,7 +34,14 @@ open class FocusApplication : LocaleAwareApplication() {
      * application context at the time they get created.
      */
     val components by lazy { Components(this, getSystemUserAgent()) }
-    val serviceLocator by lazy { ServiceLocator() }
+    var serviceLocator = ServiceLocator()
+        private set
+
+    // TODO document why
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    fun setTestServiceLocator(serviceLocator: ServiceLocator) {
+        this.serviceLocator = serviceLocator
+    }
 
     override fun onCreate() {
         super.onCreate()

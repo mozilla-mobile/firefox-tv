@@ -9,6 +9,6 @@ import org.mozilla.focus.home.pocket.Pocket
 /**
  * TODO
  */
-class ServiceLocator {
-    val pocket by lazy { Pocket() }
+open class ServiceLocator {
+    open val pocket by lazy { Pocket() }
 }
