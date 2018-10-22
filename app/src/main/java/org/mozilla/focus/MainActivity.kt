@@ -21,6 +21,7 @@ import org.mozilla.focus.browser.BrowserNavigationOverlay
 import org.mozilla.focus.browser.WebViewCache
 import org.mozilla.focus.browser.VideoVoiceCommandMediaSession
 import org.mozilla.focus.ext.components
+import org.mozilla.focus.ext.serviceLocator
 import org.mozilla.focus.ext.setupForApp
 import org.mozilla.focus.ext.toSafeIntent
 import org.mozilla.focus.home.pocket.Pocket
@@ -74,7 +75,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.
         SentryIntegration.init(this)
-        Pocket.init()
+        serviceLocator.pocket.init()
         PublicSuffix.init(this) // Used by Pocket Video feed & custom home tiles.
         initMediaSession()
         initWebViewCache()
@@ -133,12 +134,12 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
     override fun onStart() {
         super.onStart()
-        Pocket.startBackgroundUpdates()
+        serviceLocator.pocket.startBackgroundUpdates()
     }
 
     override fun onStop() {
         super.onStop()
-        Pocket.stopBackgroundUpdates() // Don't regularly hit the network in the background.
+        serviceLocator.pocket.stopBackgroundUpdates() // Don't regularly hit the network in the background.
         TelemetryIntegration.INSTANCE.stopMainActivity()
     }
 

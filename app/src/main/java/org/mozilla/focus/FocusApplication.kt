@@ -14,6 +14,7 @@ import org.mozilla.focus.session.VisibilityLifeCycleCallback
 import org.mozilla.focus.telemetry.TelemetryIntegration
 import org.mozilla.focus.utils.AppConstants
 import org.mozilla.focus.utils.OkHttpWrapper
+import org.mozilla.focus.utils.ServiceLocator
 
 open class FocusApplication : LocaleAwareApplication() {
     lateinit var visibilityLifeCycleCallback: VisibilityLifeCycleCallback
@@ -33,6 +34,7 @@ open class FocusApplication : LocaleAwareApplication() {
      * application context at the time they get created.
      */
     val components by lazy { Components(this, getSystemUserAgent()) }
+    val serviceLocator by lazy { ServiceLocator() }
 
     override fun onCreate() {
         super.onCreate()

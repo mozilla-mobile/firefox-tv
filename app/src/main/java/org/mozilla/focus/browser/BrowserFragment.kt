@@ -38,6 +38,7 @@ import org.mozilla.focus.ext.requireComponents
 import org.mozilla.focus.ext.toUri
 import org.mozilla.focus.ext.isYoutubeTV
 import org.mozilla.focus.ext.focusedDOMElement
+import org.mozilla.focus.ext.serviceLocator
 import org.mozilla.focus.session.NullSession
 import org.mozilla.focus.telemetry.MenuInteractionMonitor
 import org.mozilla.focus.telemetry.TelemetryIntegration
@@ -144,7 +145,12 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
                 (activity as MainActivity).onNonTextInputUrlEntered(value!!)
                 setOverlayVisible(false)
             }
-            NavigationEvent.POCKET -> ScreenController.showPocketScreen(fragmentManager!!)
+            NavigationEvent.POCKET -> {
+                val (fragmentManager, activity) = fragmentManager to activity
+                if (fragmentManager != null && activity != null) {
+                    ScreenController.showPocketScreen(fragmentManager, activity.serviceLocator)
+                }
+            }
             NavigationEvent.PIN_ACTION -> {
                 this@BrowserFragment.session.url.let { url ->
                     when (value) {
