@@ -43,7 +43,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.mozilla.tv.firefox.OnboardingActivity.ONBOARD_SHOWN_PREF;
-import static org.mozilla.tv.firefox.home.pocket.PocketOnboardingActivity.POCKET_ONBOARDING_SHOWN_PREF;
+import static org.mozilla.tv.firefox.pocket.PocketOnboardingActivity.POCKET_ONBOARDING_SHOWN_PREF;
 
 
 @RunWith(AndroidJUnit4.class)

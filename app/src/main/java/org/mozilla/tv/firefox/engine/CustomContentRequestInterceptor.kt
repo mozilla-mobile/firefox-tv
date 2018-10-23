@@ -8,9 +8,9 @@ import android.content.Context
 import mozilla.components.browser.errorpages.ErrorType
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.request.RequestInterceptor
-import org.mozilla.tv.firefox.browser.BrowserFragment
-import org.mozilla.tv.firefox.browser.ErrorPage
-import org.mozilla.tv.firefox.browser.LocalizedContent
+import org.mozilla.tv.firefox.webrender.BrowserFragment
+import org.mozilla.tv.firefox.webrender.ErrorPage
+import org.mozilla.tv.firefox.webrender.LocalizedContent
 
 /**
  * [RequestInterceptor] implementation to inject custom content for firefox:* pages.

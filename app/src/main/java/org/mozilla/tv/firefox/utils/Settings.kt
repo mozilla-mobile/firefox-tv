@@ -12,7 +12,7 @@ import android.support.annotation.VisibleForTesting
 import mozilla.components.concept.engine.EngineSession
 import org.mozilla.tv.firefox.OnboardingActivity
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.home.pocket.PocketOnboardingActivity
+import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity
 import org.mozilla.tv.firefox.search.SearchEngine
 
 /**

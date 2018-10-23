@@ -20,7 +20,7 @@ import android.support.test.espresso.matcher.ViewMatchers.withText
 import android.support.test.uiautomator.UiDevice
 import org.hamcrest.CoreMatchers.not
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.browser.TileViewHolder
+import org.mozilla.tv.firefox.webrender.TileViewHolder
 import org.mozilla.tv.firefox.ext.assertDisabled
 import org.mozilla.tv.firefox.ext.assertEnabled
 import org.mozilla.tv.firefox.ext.click

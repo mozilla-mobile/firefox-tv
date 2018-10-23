@@ -9,9 +9,9 @@ import android.content.Context
 import android.support.v4.app.FragmentManager
 import android.text.TextUtils
 import mozilla.components.browser.session.Session
-import org.mozilla.tv.firefox.browser.BrowserFragment
+import org.mozilla.tv.firefox.webrender.BrowserFragment
 import org.mozilla.tv.firefox.ext.components
-import org.mozilla.tv.firefox.home.pocket.PocketVideoFragment
+import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.ServiceLocator

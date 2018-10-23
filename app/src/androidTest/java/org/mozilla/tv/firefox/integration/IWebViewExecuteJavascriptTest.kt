@@ -26,7 +26,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.MainActivity
-import org.mozilla.tv.firefox.browser.BrowserFragment
+import org.mozilla.tv.firefox.webrender.BrowserFragment
 import org.mozilla.tv.firefox.ext.evalJS
 import org.mozilla.tv.firefox.helpers.SessionLoadedIdlingResource
 
