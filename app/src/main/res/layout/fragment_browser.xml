@@ -41,7 +41,7 @@
         android:background="@android:color/black"
         android:visibility="gone" />
 
-    <org.mozilla.tv.firefox.browser.cursor.CursorView
+    <org.mozilla.tv.firefox.webrender.cursor.CursorView
         android:id="@+id/cursorView"
         android:layout_width="@dimen/remote_cursor_size"
         android:layout_height="@dimen/remote_cursor_size"
@@ -50,7 +50,7 @@
         android:scaleType="centerInside"
         />
 
-    <org.mozilla.tv.firefox.browser.FirefoxProgressBar
+    <org.mozilla.tv.firefox.webrender.FirefoxProgressBar
         android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
         android:descendantFocusability="blocksDescendants"
         />
 
-    <org.mozilla.tv.firefox.browser.BrowserNavigationOverlay
+    <org.mozilla.tv.firefox.webrender.BrowserNavigationOverlay
         android:id="@+id/browserOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

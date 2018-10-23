@@ -4,7 +4,7 @@
 
 package org.mozilla.tv.firefox.utils
 
-import org.mozilla.tv.firefox.home.pocket.Pocket
+import org.mozilla.tv.firefox.pocket.Pocket
 
 /**
  * Implementation of the Service Locator pattern. Use this class to provide dependencies without

@@ -8,7 +8,7 @@ package org.mozilla.tv.firefox.utils
 import android.content.Context
 import android.net.Uri
 import android.webkit.URLUtil
-import org.mozilla.tv.firefox.browser.BrowserFragment
+import org.mozilla.tv.firefox.webrender.BrowserFragment
 
 import org.mozilla.tv.firefox.search.SearchEngineManager
 

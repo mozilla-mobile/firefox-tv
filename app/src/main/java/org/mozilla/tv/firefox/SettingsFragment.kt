@@ -12,7 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityManager
 import kotlinx.android.synthetic.main.fragment_settings.*
-import org.mozilla.tv.firefox.browser.InfoActivity
+import org.mozilla.tv.firefox.webrender.InfoActivity
 import org.mozilla.tv.firefox.ext.deleteData
 import org.mozilla.tv.firefox.ext.getAccessibilityManager
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled

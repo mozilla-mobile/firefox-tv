@@ -76,13 +76,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".browser.InfoActivity"
+        <activity android:name=".webrender.InfoActivity"
                   android:theme="@style/InfoTheme"/>
 
         <activity android:name=".OnboardingActivity"
                   android:theme="@style/AppTheme"/>
 
-        <activity android:name=".home.pocket.PocketOnboardingActivity"
+        <activity android:name=".pocket.PocketOnboardingActivity"
                   android:theme="@style/AppTheme.Transparent"/>
 
         <!-- Allows MediaSessionCallbacks to be called while a voice command is active. Without

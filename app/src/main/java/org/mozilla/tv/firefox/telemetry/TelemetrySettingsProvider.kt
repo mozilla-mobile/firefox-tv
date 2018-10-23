@@ -5,8 +5,8 @@
 package org.mozilla.tv.firefox.telemetry
 
 import android.content.Context
-import org.mozilla.tv.firefox.home.BundledTilesManager
-import org.mozilla.tv.firefox.home.CustomTilesManager
+import org.mozilla.tv.firefox.pinnedtile.BundledTilesManager
+import org.mozilla.tv.firefox.pinnedtile.CustomTilesManager
 import org.mozilla.telemetry.measurement.SettingsMeasurement
 
 /**

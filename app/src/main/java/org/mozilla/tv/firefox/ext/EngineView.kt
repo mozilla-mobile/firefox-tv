@@ -11,7 +11,7 @@ import android.os.Looper
 import android.webkit.WebView
 import android.widget.FrameLayout
 import mozilla.components.concept.engine.EngineView
-import org.mozilla.tv.firefox.browser.FocusedDOMElementCache
+import org.mozilla.tv.firefox.webrender.FocusedDOMElementCache
 import org.mozilla.tv.firefox.utils.AppConstants
 import java.util.WeakHashMap
 

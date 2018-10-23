@@ -10,11 +10,11 @@ import android.net.http.SslError
 import android.os.StrictMode
 import android.support.annotation.AnyThread
 import android.support.annotation.UiThread
-import org.mozilla.tv.firefox.browser.NavigationEvent
+import org.mozilla.tv.firefox.webrender.NavigationEvent
 import org.mozilla.tv.firefox.ext.resetAfter
-import org.mozilla.tv.firefox.home.BundledHomeTile
-import org.mozilla.tv.firefox.home.CustomHomeTile
-import org.mozilla.tv.firefox.home.HomeTile
+import org.mozilla.tv.firefox.pinnedtile.BundledHomeTile
+import org.mozilla.tv.firefox.pinnedtile.CustomHomeTile
+import org.mozilla.tv.firefox.pinnedtile.HomeTile
 import org.mozilla.tv.firefox.search.SearchEngineManager
 import org.mozilla.tv.firefox.utils.Assert
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText.AutocompleteResult

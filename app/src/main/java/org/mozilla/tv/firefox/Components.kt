@@ -10,7 +10,7 @@ import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.DefaultSettings
 import mozilla.components.concept.engine.Engine
 import mozilla.components.feature.session.SessionUseCases
-import org.mozilla.tv.firefox.browser.UserAgent
+import org.mozilla.tv.firefox.webrender.UserAgent
 import org.mozilla.tv.firefox.engine.CustomContentRequestInterceptor
 import org.mozilla.tv.firefox.utils.Settings
 
