@@ -6,7 +6,7 @@ package org.mozilla.tv.firefox.ext
 
 import android.content.Context
 import android.view.accessibility.AccessibilityManager
-import org.mozilla.tv.firefox.Components
+import org.mozilla.tv.firefox.webrender.Components
 import org.mozilla.tv.firefox.FirefoxApplication
 
 // Extension functions for the Context class

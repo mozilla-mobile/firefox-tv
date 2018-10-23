@@ -8,7 +8,7 @@ package org.mozilla.tv.firefox.utils;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
-import org.mozilla.tv.firefox.locale.Locales;
+import org.mozilla.tv.firefox.components.locale.Locales;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

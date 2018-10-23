@@ -2,15 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.tv.firefox.engine
+package org.mozilla.tv.firefox.webrender
 
 import android.content.Context
 import mozilla.components.browser.errorpages.ErrorType
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.request.RequestInterceptor
-import org.mozilla.tv.firefox.webrender.BrowserFragment
-import org.mozilla.tv.firefox.webrender.ErrorPage
-import org.mozilla.tv.firefox.webrender.LocalizedContent
 
 /**
  * [RequestInterceptor] implementation to inject custom content for firefox:* pages.

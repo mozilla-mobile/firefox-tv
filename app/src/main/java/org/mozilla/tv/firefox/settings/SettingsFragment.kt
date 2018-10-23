@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.tv.firefox
+package org.mozilla.tv.firefox.settings
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -12,7 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityManager
 import kotlinx.android.synthetic.main.fragment_settings.*
-import org.mozilla.tv.firefox.webrender.InfoActivity
+import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.deleteData
 import org.mozilla.tv.firefox.ext.getAccessibilityManager
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled

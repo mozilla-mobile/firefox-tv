@@ -16,6 +16,7 @@ import org.mockito.ArgumentCaptor
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.components.UrlAutoCompleteFilter
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText.AutocompleteResult
 import org.robolectric.RobolectricTestRunner

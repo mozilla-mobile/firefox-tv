@@ -10,10 +10,10 @@ import android.content.res.Resources
 import android.preference.PreferenceManager
 import android.support.annotation.VisibleForTesting
 import mozilla.components.concept.engine.EngineSession
-import org.mozilla.tv.firefox.OnboardingActivity
+import org.mozilla.tv.firefox.onboarding.OnboardingActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity
-import org.mozilla.tv.firefox.search.SearchEngine
+import org.mozilla.tv.firefox.components.search.SearchEngine
 
 /**
  * A simple wrapper for SharedPreferences that makes reading preference a little bit easier.

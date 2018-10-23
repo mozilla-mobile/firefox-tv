@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.tv.firefox.webrender
+package org.mozilla.tv.firefox.settings
 
 import android.content.Context
 import android.content.Intent
@@ -15,7 +15,8 @@ import android.view.View
 import mozilla.components.browser.engine.system.SystemEngineView
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.locale.Locales
+import org.mozilla.tv.firefox.components.locale.Locales
+import org.mozilla.tv.firefox.webrender.LocalizedContent
 
 /**
  * A generic activity that supports showing additional information in a WebView. This is useful

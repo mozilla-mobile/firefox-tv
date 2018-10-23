@@ -14,8 +14,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 import org.mozilla.tv.firefox.R;
-import org.mozilla.tv.firefox.locale.LocaleManager;
-import org.mozilla.tv.firefox.locale.Locales;
+import org.mozilla.tv.firefox.components.locale.LocaleManager;
+import org.mozilla.tv.firefox.components.locale.Locales;
 
 import java.nio.ByteBuffer;
 import java.text.Collator;

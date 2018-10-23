@@ -75,11 +75,11 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".webrender.InfoActivity"
+        
+        <activity android:name=".settings.InfoActivity"
                   android:theme="@style/InfoTheme"/>
 
-        <activity android:name=".OnboardingActivity"
+        <activity android:name=".onboarding.OnboardingActivity"
                   android:theme="@style/AppTheme"/>
 
         <activity android:name=".pocket.PocketOnboardingActivity"

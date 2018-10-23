@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.tv.firefox.engine
+package org.mozilla.tv.firefox.webrender
 
 import android.os.Bundle
 import android.support.annotation.UiThread
@@ -11,8 +11,8 @@ import android.view.View
 import android.webkit.WebView
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.locale.LocaleAwareFragment
-import org.mozilla.tv.firefox.locale.LocaleManager
+import org.mozilla.tv.firefox.components.locale.LocaleAwareFragment
+import org.mozilla.tv.firefox.components.locale.LocaleManager
 import java.util.Locale
 
 /**

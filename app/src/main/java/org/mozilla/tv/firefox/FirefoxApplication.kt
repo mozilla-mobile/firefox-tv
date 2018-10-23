@@ -8,13 +8,14 @@ import android.os.StrictMode
 import android.preference.PreferenceManager
 import android.support.annotation.VisibleForTesting
 import android.webkit.WebSettings
-import org.mozilla.tv.firefox.locale.LocaleAwareApplication
-import org.mozilla.tv.firefox.search.SearchEngineManager
-import org.mozilla.tv.firefox.session.VisibilityLifeCycleCallback
+import org.mozilla.tv.firefox.components.locale.LocaleAwareApplication
+import org.mozilla.tv.firefox.components.search.SearchEngineManager
+import org.mozilla.tv.firefox.webrender.VisibilityLifeCycleCallback
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.AppConstants
 import org.mozilla.tv.firefox.utils.OkHttpWrapper
 import org.mozilla.tv.firefox.utils.ServiceLocator
+import org.mozilla.tv.firefox.webrender.Components
 
 open class FirefoxApplication : LocaleAwareApplication() {
     lateinit var visibilityLifeCycleCallback: VisibilityLifeCycleCallback

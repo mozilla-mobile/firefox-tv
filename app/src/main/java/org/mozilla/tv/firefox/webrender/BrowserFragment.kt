@@ -31,7 +31,6 @@ import org.mozilla.tv.firefox.webrender.cursor.CursorController
 import org.mozilla.tv.firefox.pinnedtile.BundledTilesManager
 import org.mozilla.tv.firefox.pinnedtile.CustomTilesManager
 import org.mozilla.tv.firefox.pinnedtile.HomeTilesManager
-import org.mozilla.tv.firefox.engine.EngineViewLifecycleFragment
 import org.mozilla.tv.firefox.ext.components
 import org.mozilla.tv.firefox.ext.isVisible
 import org.mozilla.tv.firefox.ext.requireComponents
@@ -39,7 +38,9 @@ import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.serviceLocator
-import org.mozilla.tv.firefox.session.NullSession
+import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
+import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
+import org.mozilla.tv.firefox.pinnedtile.HomeTileAdapter
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
@@ -131,7 +132,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
     }
 
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
-            autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
+                                      autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
         when (event) {
             NavigationEvent.BACK -> exitFullScreenIfPossibleAndBack()
             NavigationEvent.FORWARD -> if (session.canGoForward) requireComponents.sessionUseCases.goForward.invoke()
@@ -210,7 +211,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
             // This is needed for YouTube to properly gain focus after a refresh (refer to issue #1149)
             onPreSetVisibilityListener = { isVisible ->
                 // The overlay can clear the DOM and a previous focused element cache (e.g. reload)
-                // so we need to do our own caching: see FocusedDOMElementCache for details.
+                // so we need to do our own caching: see FocusedDOMElementCacheInterface for details.
                 if (!isVisible) { webView?.focusedDOMElement?.cache() }
             }
 

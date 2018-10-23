@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.tv.firefox.search;
+package org.mozilla.tv.firefox.components.search;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,7 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.mozilla.tv.firefox.ext.AssetManagerKt;
-import org.mozilla.tv.firefox.locale.Locales;
+import org.mozilla.tv.firefox.components.locale.Locales;
 import org.mozilla.tv.firefox.utils.Settings;
 import org.xmlpull.v1.XmlPullParserException;
 
