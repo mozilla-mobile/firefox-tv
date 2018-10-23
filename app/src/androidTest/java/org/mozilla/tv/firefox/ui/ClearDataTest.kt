@@ -23,7 +23,7 @@ import org.mozilla.tv.firefox.ui.robots.home
  * A test to verify that session data is erased when "Clear data" is pressed.
  */
 @RunWith(AndroidJUnit4::class)
-class ClearSessionTest {
+class ClearDataTest {
 
     @Rule @JvmField
     val activityTestRule = SkipOnboardingMainActivityTestRule()
