@@ -17,7 +17,7 @@ import org.mozilla.tv.firefox.helpers.MockServerHelper
 import org.mozilla.tv.firefox.helpers.SessionLoadedIdlingResource
 import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule
 import org.mozilla.tv.firefox.ui.robots.engineInternals
-import org.mozilla.tv.firefox.ui.robots.home
+import org.mozilla.tv.firefox.ui.robots.navigationOverlay
 
 /**
  * A test to verify that session data is erased when "Clear data" is pressed.
@@ -47,7 +47,7 @@ class ClearDataTest {
         val endpoints = MockServerHelper
                 .initMockServerAndReturnEndpoints("This is Google", "This is YouTube")
 
-        home {
+        navigationOverlay {
             assertCanGoBackForward(false, false)
 
         }.enterUrlAndEnterToBrowser(endpoints[0]) {

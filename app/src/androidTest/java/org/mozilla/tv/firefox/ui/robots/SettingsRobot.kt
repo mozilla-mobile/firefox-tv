@@ -6,7 +6,6 @@ package org.mozilla.tv.firefox.ui.robots
 
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.matcher.ViewMatchers.withId
-import android.support.test.espresso.matcher.ViewMatchers.withText
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.helpers.ext.click
 
@@ -16,12 +15,12 @@ import org.mozilla.tv.firefox.helpers.ext.click
 class SettingsRobot {
 
     class Transition {
-        fun clearAllDataToOverlay(interact: HomeRobot.() -> Unit): HomeRobot.Transition {
+        fun clearAllDataToOverlay(interact: NavigationOverlayRobot.() -> Unit): NavigationOverlayRobot.Transition {
             clearDataButton().click()
             dialogOkButton().click() // TODO: This fails. I think it's because we restart the activity so assertions fail.
 
-            HomeRobot().interact()
-            return HomeRobot.Transition()
+            NavigationOverlayRobot().interact()
+            return NavigationOverlayRobot.Transition()
         }
     }
 }
