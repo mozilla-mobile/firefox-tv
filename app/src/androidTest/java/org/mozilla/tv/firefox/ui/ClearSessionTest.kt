@@ -13,13 +13,15 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule
 import org.mozilla.tv.firefox.helpers.MockServerHelper
 import org.mozilla.tv.firefox.helpers.SessionLoadedIdlingResource
-import org.mozilla.tv.firefox.ui.robots.browser
+import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule
+import org.mozilla.tv.firefox.ui.robots.engineInternals
 import org.mozilla.tv.firefox.ui.robots.home
-import org.mozilla.tv.firefox.ui.robots.settings
 
+/**
+ * A test to verify that session data is erased when "Clear data" is pressed.
+ */
 @RunWith(AndroidJUnit4::class)
 class ClearSessionTest {
 
@@ -42,46 +44,33 @@ class ClearSessionTest {
 
     @Test
     fun WHEN_data_is_cleared_THEN_back_and_forward_should_be_unavailable() {
-
         val endpoints = MockServerHelper
                 .initMockServerAndReturnEndpoints("This is Google", "This is YouTube")
 
         home {
             assertCanGoBackForward(false, false)
 
-            navigateToPage(endpoints[0])
+        }.enterUrlAndEnterToBrowser(endpoints[0]) {
+        }.openOverlay {
+            assertCanGoBackForward(true, false)
 
-            openMenu()
-
-            assertCanGoBack(true)
-
-            navigateToPage(endpoints[1])
-
-            openMenu()
-
+        }.enterUrlAndEnterToBrowser(endpoints[1]) {
+        }.openOverlay {
             goBack()
-
             assertCanGoBackForward(true, true)
 
-            openSettings()
-        }
+            engineInternals {
+                addCookie()
+                assertCookieExists()
+            }
 
-        browser {
-            addTestCookie()
-
-            assertCookieExists()
-        }
-
-        settings {
-            clearAllDataAndReturnHome()
-        }
-
-        browser {
-            assertCookieDoesNotExist()
-        }
-
-        home {
+        }.openSettings {
+        }.clearAllDataToOverlay {
             assertCanGoBackForward(false, false)
+
+            engineInternals {
+                assertCookieDoesNotExist()
+            }
         }
     }
 }

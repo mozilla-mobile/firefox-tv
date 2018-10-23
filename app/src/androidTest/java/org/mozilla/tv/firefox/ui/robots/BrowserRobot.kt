@@ -4,28 +4,24 @@
 
 package org.mozilla.tv.firefox.ui.robots
 
-import android.webkit.CookieManager
-import junit.framework.TestCase.assertNotNull
-import junit.framework.TestCase.assertNull
-
-const val TEST_COOKIE_URL = "TEST_COOKIE_KEY"
-const val TEST_COOKIE_VALUE = "TEST_COOKIE_VALUE"
+import android.support.test.InstrumentationRegistry
+import android.support.test.uiautomator.UiDevice
 
 class BrowserRobot {
 
-    private val cookieManager = CookieManager.getInstance()
+    class Transition {
+        private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
-    fun addTestCookie() {
-        cookieManager.setCookie(TEST_COOKIE_URL, TEST_COOKIE_VALUE)
-    }
+        fun openOverlay(interact: HomeRobot.() -> Unit): HomeRobot.Transition {
+            device.pressMenu()
 
-    fun assertCookieExists() {
-        assertNotNull(cookieManager.getCookie(TEST_COOKIE_URL))
-    }
-
-    fun assertCookieDoesNotExist() {
-        assertNull(cookieManager.getCookie(TEST_COOKIE_URL))
+            HomeRobot().interact()
+            return HomeRobot.Transition()
+        }
     }
 }
 
-fun browser(func: BrowserRobot.() -> Unit) = BrowserRobot().func()
+fun browser(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
+    BrowserRobot().interact()
+    return BrowserRobot.Transition()
+}
