@@ -5,7 +5,7 @@
 package org.mozilla.tv.firefox.utils
 
 import android.content.Context
-import org.mozilla.tv.firefox.ext.components
+import org.mozilla.tv.firefox.ext.webRenderComponents
 
 /**
  * Facade hiding the ceremony needed to toggle Turbo Mode.
@@ -25,7 +25,7 @@ object TurboMode {
         val settings = Settings.getInstance(context)
         settings.isBlockingEnabled = enabled
 
-        val engineSession = context.components.sessionManager.getOrCreateEngineSession()
+        val engineSession = context.webRenderComponents.sessionManager.getOrCreateEngineSession()
         if (enabled) {
             engineSession.enableTrackingProtection(settings.trackingProtectionPolicy)
         } else {

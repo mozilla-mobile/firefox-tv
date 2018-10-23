@@ -94,8 +94,8 @@ public class IntentUtils {
         final String fallbackUrl = intent.getStringExtra(EXTRA_BROWSER_FALLBACK_URL);
         if (fallbackUrl != null) {
             // This is not Kotlin code :(
-            final Session session = ContextKt.getComponents(context).getSessionManager().getSelectedSessionOrThrow();
-            ContextKt.getComponents(context).getSessionUseCases().getLoadUrl().invoke(fallbackUrl, session);
+            final Session session = ContextKt.getWebRenderComponents(context).getSessionManager().getSelectedSessionOrThrow();
+            ContextKt.getWebRenderComponents(context).getSessionUseCases().getLoadUrl().invoke(fallbackUrl, session);
             return true;
         }
 
