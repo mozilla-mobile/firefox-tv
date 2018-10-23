@@ -81,11 +81,6 @@ kotlin {
     experimental { coroutines 'enable' }
 }
 
-repositories {
-    google()
-    jcenter()
-}
-
 dependencies {
     implementation 'io.sentry:sentry-android:1.7.9'
 

@@ -11,8 +11,8 @@ buildscript {
     ext.kotlin_coroutines_version = '0.22.5'
 
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
 
     dependencies {
@@ -43,8 +43,8 @@ allprojects {
         maven {
             url "https://maven.mozilla.org/maven2"
         }
-        jcenter()
         google()
+        jcenter()
     }
 }
 
