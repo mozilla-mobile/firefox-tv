@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox.robots
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.ext.click
 
 /**
  * Implementation of Robot Pattern for the settings page.
