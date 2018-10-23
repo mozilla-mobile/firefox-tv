@@ -14,8 +14,8 @@ import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.sync.Mutex
 import kotlinx.coroutines.experimental.sync.withLock
 import org.mozilla.tv.firefox.ext.arePixelsAllTheSame
-import org.mozilla.tv.firefox.pinnedtile.HomeTileScreenshotStore.DIR
-import org.mozilla.tv.firefox.pinnedtile.HomeTileScreenshotStore.uuidToFileSystemMutex
+import org.mozilla.tv.firefox.pinnedtile.PinnedTileScreenshotStore.DIR
+import org.mozilla.tv.firefox.pinnedtile.PinnedTileScreenshotStore.uuidToFileSystemMutex
 import java.io.File
 import java.util.UUID
 
@@ -79,7 +79,7 @@ private val BITMAP_FACTORY_OPTIONS = BitmapFactory.Options().apply {
  *
  * This class is thread-safe: see [uuidToFileSystemMutex] javadoc for details.
  */
-object HomeTileScreenshotStore {
+object PinnedTileScreenshotStore {
 
     @VisibleForTesting const val DIR = "home_screenshots"
 

@@ -40,7 +40,7 @@ import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
-import org.mozilla.tv.firefox.pinnedtile.HomeTileAdapter
+import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
@@ -260,7 +260,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     override fun onContextItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.remove -> {
-                val homeTileAdapter = tileContainer.adapter as HomeTileAdapter
+                val homeTileAdapter = tileContainer.adapter as PinnedTileAdapter
                 val tileToRemove = homeTileAdapter.lastLongClickedTile ?: return false
 
                 // This assumes that since we're deleting from a Home Tile object that we created
