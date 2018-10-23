@@ -13,7 +13,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mozilla.tv.firefox.helpers.MockServerHelper
+import org.mozilla.tv.firefox.helpers.MockWebServerHelper
 import org.mozilla.tv.firefox.helpers.SessionLoadedIdlingResource
 import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule
 import org.mozilla.tv.firefox.ui.robots.engineInternals
@@ -44,8 +44,8 @@ class ClearDataTest {
 
     @Test
     fun WHEN_data_is_cleared_THEN_back_and_forward_should_be_unavailable() {
-        val endpoints = MockServerHelper
-                .initMockServerAndReturnEndpoints("This is Google", "This is YouTube")
+        val endpoints = MockWebServerHelper
+                .initMockWebServerAndReturnEndpoints("This is Google", "This is YouTube")
 
         navigationOverlay {
             assertCanGoBackForward(false, false)
