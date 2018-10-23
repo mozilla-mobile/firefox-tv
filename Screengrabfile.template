@@ -7,10 +7,10 @@
 # file and generate the final configuration that we use inside
 # a taskcluster task.
 
-use_tests_in_packages ['org.mozilla.focus.activity.screenshots']
+use_tests_in_packages ['org.mozilla.tv.firefox.activity.screenshots']
 
 app_package_name 'org.mozilla.tv.firefox.debug'
-use_tests_in_packages ['org.mozilla.focus.activity']
+use_tests_in_packages ['org.mozilla.tv.firefox.activity']
 
 app_apk_path 'app/build/outputs/apk/amazonWebview/debug/app-amazonWebview-debug.apk'
 tests_apk_path 'app/build/outputs/apk/amazonWebview/debug/app-amazonWebview-debug-androidTest.apk'
