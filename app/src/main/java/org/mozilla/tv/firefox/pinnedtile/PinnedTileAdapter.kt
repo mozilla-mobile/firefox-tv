@@ -35,25 +35,25 @@ import org.mozilla.tv.firefox.utils.FormattedDomain
 private const val CUSTOM_TILE_TO_SHOW_MILLIS = 200L
 private val CUSTOM_TILE_ICON_INTERPOLATOR = DecelerateInterpolator()
 
-class HomeTileAdapter(
+class PinnedTileAdapter(
     private val uiLifecycleCancelJob: Job,
-    private var tiles: MutableList<HomeTile>,
+    private var tiles: MutableList<PinnedTile>,
     private val loadUrl: (String) -> Unit,
     var onTileLongClick: (() -> Unit)?,
     var onTileFocused: (() -> Unit)?
 ) : RecyclerView.Adapter<TileViewHolder>() {
 
-    var lastLongClickedTile: HomeTile? = null
+    var lastLongClickedTile: PinnedTile? = null
         private set
 
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with(holder) {
         val item = tiles[position]
         when (item) {
-            is BundledHomeTile -> {
+            is BundledPinnedTile -> {
                 onBindBundledHomeTile(holder, item)
                 setIconLayoutMarginParams(iconView, R.dimen.bundled_home_tile_margin_value)
             }
-            is CustomHomeTile -> {
+            is CustomPinnedTile -> {
                 onBindCustomHomeTile(uiLifecycleCancelJob, holder, item)
                 setIconLayoutMarginParams(iconView, R.dimen.custom_home_tile_margin_value)
             }
@@ -99,8 +99,8 @@ class HomeTileAdapter(
      * takes in the home tiles cache and updates the adapter's data source
      * and UI accordingly, assuming only one new tile is added
      */
-    fun updateAdapterSingleInsertion(homeTiles: MutableList<HomeTile>) {
-        if (homeTiles.size == tiles.size) {
+    fun updateAdapterSingleInsertion(pinnedTiles: MutableList<PinnedTile>) {
+        if (pinnedTiles.size == tiles.size) {
             // The lists must not be the same size in order
             // for an insertion to be valid
             return
@@ -109,15 +109,15 @@ class HomeTileAdapter(
             // Due to insertion, the inserted tile will be
             // the first tile that will not match the
             // previous list of tiles
-            if (tile != homeTiles[index]) {
-                tiles = homeTiles
+            if (tile != pinnedTiles[index]) {
+                tiles = pinnedTiles
                 notifyItemInserted(index)
                 return
             }
         }
-        tiles = homeTiles
+        tiles = pinnedTiles
         if (tiles.size > 1) {
-            notifyItemInserted(homeTiles.lastIndex)
+            notifyItemInserted(pinnedTiles.lastIndex)
         } else {
             // the entire DataSet needs to be notified when adding to an empty container
             notifyDataSetChanged()
@@ -126,7 +126,7 @@ class HomeTileAdapter(
 
     fun removeTile(tileId: String) {
         for ((index, tile) in tiles.withIndex()) {
-            if (tile is CustomHomeTile && tile.id.toString() == tileId || tile is BundledHomeTile && tile.id == tileId) {
+            if (tile is CustomPinnedTile && tile.id.toString() == tileId || tile is BundledPinnedTile && tile.id == tileId) {
                 removeTile(index)
                 break
             }
@@ -147,21 +147,21 @@ class HomeTileAdapter(
     )
 }
 
-private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledHomeTile) = with(holder) {
+private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledPinnedTile) = with(holder) {
     val bitmap = BundledTilesManager.getInstance(itemView.context).loadImageFromPath(itemView.context, tile.imagePath)
     iconView.setImageBitmap(bitmap)
 
     titleView.text = tile.title
 }
 
-private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHolder, item: CustomHomeTile) = with(holder) {
+private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHolder, item: CustomPinnedTile) = with(holder) {
     launch(uiLifecycleCancelJob + UI, CoroutineStart.UNDISPATCHED) {
         val validUri = item.url.toJavaURI()
 
         val screenshotDeferred = async {
             val homeTileCornerRadius = itemView.resources.getDimension(R.dimen.home_tile_corner_radius)
             val homeTilePlaceholderCornerRadius = itemView.resources.getDimension(R.dimen.home_tile_placeholder_corner_radius)
-            val screenshot = HomeTileScreenshotStore.read(itemView.context, item.id)?.withRoundedCorners(homeTileCornerRadius)
+            val screenshot = PinnedTileScreenshotStore.read(itemView.context, item.id)?.withRoundedCorners(homeTileCornerRadius)
             screenshot ?: PinnedTilePlaceholderGenerator.generate(itemView.context, item.url)
                     .withRoundedCorners(homeTilePlaceholderCornerRadius)
         }

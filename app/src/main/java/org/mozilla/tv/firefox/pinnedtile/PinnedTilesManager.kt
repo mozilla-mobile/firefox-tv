@@ -51,13 +51,13 @@ class BundledTilesManager private constructor(context: Context) {
      */
     val tileCount get() = bundledTilesCache.size
 
-    private fun loadBundledTilesCache(context: Context): LinkedHashMap<Uri, BundledHomeTile> {
+    private fun loadBundledTilesCache(context: Context): LinkedHashMap<Uri, BundledPinnedTile> {
         val tilesJSONString = context.assets.open(HOME_TILES_JSON_PATH).bufferedReader().use { it.readText() }
         val tilesJSONArray = JSONArray(tilesJSONString)
-        val lhm = LinkedHashMap<Uri, BundledHomeTile>(tilesJSONArray.length())
+        val lhm = LinkedHashMap<Uri, BundledPinnedTile>(tilesJSONArray.length())
         val blacklist = loadBlacklist(context)
         for (i in 0 until tilesJSONArray.length()) {
-            val tile = BundledHomeTile.fromJSONObject(tilesJSONArray.getJSONObject(i))
+            val tile = BundledPinnedTile.fromJSONObject(tilesJSONArray.getJSONObject(i))
             if (!blacklist.contains(tile.id)) {
                 lhm.put(tile.url.toUri()!!, tile)
             }
@@ -145,12 +145,12 @@ class CustomTilesManager private constructor(context: Context) {
      */
     val tileCount get() = customTilesCache.size
 
-    private fun loadCustomTilesCache(context: Context): LinkedHashMap<String, CustomHomeTile> {
+    private fun loadCustomTilesCache(context: Context): LinkedHashMap<String, CustomPinnedTile> {
         val tilesJSONArray = getCustomSitesJSONArray(getHomeTilesPreferences(context))
-        val lhm = LinkedHashMap<String, CustomHomeTile>()
+        val lhm = LinkedHashMap<String, CustomPinnedTile>()
         for (i in 0 until tilesJSONArray.length()) {
             val tileJSON = tilesJSONArray.getJSONObject(i)
-            val tile = CustomHomeTile.fromJSONObject(tileJSON)
+            val tile = CustomPinnedTile.fromJSONObject(tileJSON)
             lhm.put(tile.url, tile)
         }
         return lhm
@@ -166,11 +166,11 @@ class CustomTilesManager private constructor(context: Context) {
     fun pinSite(context: Context, url: String, screenshot: Bitmap?) {
         // TODO: titles
         val uuid = UUID.randomUUID()
-        customTilesCache[url] = CustomHomeTile(url, "custom", uuid)
+        customTilesCache[url] = CustomPinnedTile(url, "custom", uuid)
         writeCacheToSharedPreferences(context)
 
         if (screenshot != null) {
-            HomeTileScreenshotStore.saveAsync(context, uuid, screenshot)
+            PinnedTileScreenshotStore.saveAsync(context, uuid, screenshot)
         }
     }
 
@@ -182,7 +182,7 @@ class CustomTilesManager private constructor(context: Context) {
     fun unpinSite(context: Context, url: String): String? {
         val tile = customTilesCache.remove(url) ?: return null
         writeCacheToSharedPreferences(context)
-        HomeTileScreenshotStore.removeAsync(context, tile.id)
+        PinnedTileScreenshotStore.removeAsync(context, tile.id)
         return tile.id.toString()
     }
 
@@ -209,22 +209,22 @@ private fun getHomeTilesPreferences(context: Context): SharedPreferences {
 
 class HomeTilesManager {
     companion object {
-        fun getTilesCache(context: Context): MutableList<HomeTile> {
-            return mutableListOf<HomeTile>().apply {
+        fun getTilesCache(context: Context): MutableList<PinnedTile> {
+            return mutableListOf<PinnedTile>().apply {
                 addAll(BundledTilesManager.getInstance(context).getBundledHomeTilesList())
                 addAll(CustomTilesManager.getInstance(context).getCustomHomeTilesList())
             }
         }
 
-        fun removeHomeTile(homeTile: HomeTile, context: Context) {
-            when (homeTile) {
-                is BundledHomeTile -> {
-                    val tileUri = homeTile.url.toUri()
+        fun removeHomeTile(pinnedTile: PinnedTile, context: Context) {
+            when (pinnedTile) {
+                is BundledPinnedTile -> {
+                    val tileUri = pinnedTile.url.toUri()
                     if (tileUri != null) {
                         BundledTilesManager.getInstance(context).unpinSite(context, tileUri)
                     }
                 }
-                is CustomHomeTile -> CustomTilesManager.getInstance(context).unpinSite(context, homeTile.url)
+                is CustomPinnedTile -> CustomTilesManager.getInstance(context).unpinSite(context, pinnedTile.url)
             }
         }
     }

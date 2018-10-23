@@ -12,9 +12,9 @@ import android.support.annotation.AnyThread
 import android.support.annotation.UiThread
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
 import org.mozilla.tv.firefox.ext.resetAfter
-import org.mozilla.tv.firefox.pinnedtile.BundledHomeTile
-import org.mozilla.tv.firefox.pinnedtile.CustomHomeTile
-import org.mozilla.tv.firefox.pinnedtile.HomeTile
+import org.mozilla.tv.firefox.pinnedtile.BundledPinnedTile
+import org.mozilla.tv.firefox.pinnedtile.CustomPinnedTile
+import org.mozilla.tv.firefox.pinnedtile.PinnedTile
 import org.mozilla.tv.firefox.components.search.SearchEngineManager
 import org.mozilla.tv.firefox.utils.Assert
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText.AutocompleteResult
@@ -206,7 +206,7 @@ open class TelemetryIntegration protected constructor(
     }
 
     @UiThread // via TelemetryHomeTileUniqueClickPerSessionCounter
-    fun homeTileClickEvent(context: Context, tile: HomeTile) {
+    fun homeTileClickEvent(context: Context, tile: PinnedTile) {
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE,
                 getTileTypeAsStringValue(tile)).queue()
         TelemetryHomeTileUniqueClickPerSessionCounter.countTile(context, tile)
@@ -279,7 +279,7 @@ open class TelemetryIntegration protected constructor(
                 .queue()
     }
 
-    fun homeTileRemovedEvent(removedTile: HomeTile) {
+    fun homeTileRemovedEvent(removedTile: PinnedTile) {
         TelemetryEvent.create(Category.ACTION, Method.REMOVE, Object.HOME_TILE,
                 getTileTypeAsStringValue(removedTile)).queue()
     }
@@ -299,9 +299,9 @@ open class TelemetryIntegration protected constructor(
 
     private fun boolToOnOff(boolean: Boolean) = if (boolean) Value.ON else Value.OFF
 
-    private fun getTileTypeAsStringValue(tile: HomeTile) = when (tile) {
-        is BundledHomeTile -> Value.TILE_BUNDLED
-        is CustomHomeTile -> Value.TILE_CUSTOM
+    private fun getTileTypeAsStringValue(tile: PinnedTile) = when (tile) {
+        is BundledPinnedTile -> Value.TILE_BUNDLED
+        is CustomPinnedTile -> Value.TILE_CUSTOM
     }
 }
 
@@ -323,7 +323,7 @@ enum class UrlTextInputLocation(internal val extra: String) {
 @UiThread // We get-and-set over SharedPreferences in countTile so we need resource protection.
 private object TelemetryHomeTileUniqueClickPerSessionCounter {
 
-    fun countTile(context: Context, tile: HomeTile) {
+    fun countTile(context: Context, tile: PinnedTile) {
         Assert.isUiThread()
         if (!TelemetryHolder.get().configuration.isCollectionEnabled) { return }
 

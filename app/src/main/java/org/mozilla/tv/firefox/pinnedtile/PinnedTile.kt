@@ -13,10 +13,10 @@ private const val KEY_TITLE = "title"
 private const val KEY_IMG = "img"
 private const val KEY_ID = "id"
 
-sealed class HomeTile(val url: String, val title: String) {
+sealed class PinnedTile(val url: String, val title: String) {
     fun idToString() = when (this) {
-        is BundledHomeTile -> id
-        is CustomHomeTile -> id.toString()
+        is BundledPinnedTile -> id
+        is CustomPinnedTile -> id.toString()
     }
 
     protected open fun toJSONObject() = JSONObject().apply {
@@ -25,13 +25,13 @@ sealed class HomeTile(val url: String, val title: String) {
     }
 }
 
-class BundledHomeTile(
+class BundledPinnedTile(
     url: String,
     title: String,
     val imagePath: String,
     /** Unique id used to identify specific home tiles, e.g. for deletion, etc. **/
     val id: String
-) : HomeTile(url, title) {
+) : PinnedTile(url, title) {
 
     public override fun toJSONObject() = super.toJSONObject().apply {
         put(KEY_IMG, imagePath)
@@ -39,8 +39,8 @@ class BundledHomeTile(
     }
 
     companion object {
-        fun fromJSONObject(jsonObject: JSONObject): BundledHomeTile {
-            return BundledHomeTile(jsonObject.getString(KEY_URL),
+        fun fromJSONObject(jsonObject: JSONObject): BundledPinnedTile {
+            return BundledPinnedTile(jsonObject.getString(KEY_URL),
                     jsonObject.getString(KEY_TITLE),
                     jsonObject.getString(KEY_IMG),
                     jsonObject.getString(KEY_ID))
@@ -48,19 +48,19 @@ class BundledHomeTile(
     }
 }
 
-class CustomHomeTile(
+class CustomPinnedTile(
     url: String,
     title: String,
-    /** Used by [HomeTileScreenshotStore] to uniquely identify tiles. */
+    /** Used by [PinnedTileScreenshotStore] to uniquely identify tiles. */
     val id: UUID
-) : HomeTile(url, title) {
+) : PinnedTile(url, title) {
 
     public override fun toJSONObject() = super.toJSONObject().apply {
         put(KEY_ID, id.toString())
     }
 
     companion object {
-        fun fromJSONObject(jsonObject: JSONObject) = CustomHomeTile(
+        fun fromJSONObject(jsonObject: JSONObject) = CustomPinnedTile(
                 url = jsonObject.getString(KEY_URL),
                 title = jsonObject.getString(KEY_TITLE),
                 id = UUID.fromString(jsonObject.getString(KEY_ID))
