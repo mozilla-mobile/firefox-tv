@@ -8,6 +8,7 @@ import android.support.test.espresso.ViewInteraction
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.isEnabled
+import org.hamcrest.CoreMatchers.not
 
 fun ViewInteraction.click() = this.perform(ViewActions.click())!!
 
