@@ -1,0 +1,1 @@
+The classes under this package are intended to be refactored out to qndroid-components in the future.
