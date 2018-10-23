@@ -10,7 +10,7 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 
-import org.mozilla.tv.firefox.FocusApplication;
+import org.mozilla.tv.firefox.FirefoxApplication;
 
 /**
  * This ActivityLifecycleCallbacks implementations tracks if there is at least one activity in the
@@ -23,7 +23,7 @@ public class VisibilityLifeCycleCallback implements Application.ActivityLifecycl
      * that the app won't show up in "recent apps" anymore.
      */
     /* package */ static void finishAndRemoveTaskIfInBackground(Context context) {
-        ((FocusApplication) context.getApplicationContext())
+        ((FirefoxApplication) context.getApplicationContext())
                 .getVisibilityLifeCycleCallback()
                 .finishAndRemoveTaskIfInBackground();
     }

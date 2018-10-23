@@ -8,7 +8,7 @@ package org.mozilla.tv.firefox
  * The application class used by the robolectric test runner. This class may be used to add
  * additional test setup code.
  */
-class TestFocusApplication : FocusApplication() {
+class TestFirefoxApplication : FirefoxApplication() {
 
     /**
      * A function to retrieve the system user agent. The default implementation, used by the
