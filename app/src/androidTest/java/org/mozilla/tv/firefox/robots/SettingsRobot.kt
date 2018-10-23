@@ -2,15 +2,24 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.tv.firefox.ui.robots
+package org.mozilla.tv.firefox.robots
 
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.helpers.ext.click
+import org.mozilla.tv.firefox.ext.click
 
 /**
  * Implementation of Robot Pattern for the settings page.
+ *
+ * This has two primary benefits: 1) less brittle code, and 2) more declarative tests.
+ *
+ * 1) If our UI changes, we can update the robot to match and other tests should remain valid
+ *
+ * 2) Tests written using robots include no implementation details, only what is being tested
+ *
+ * See: https://academy.realm.io/posts/kau-jake-wharton-testing-robots/
+ * See: https://medium.com/android-bits/espresso-robot-pattern-in-kotlin-fc820ce250f7
  */
 class SettingsRobot {
 
