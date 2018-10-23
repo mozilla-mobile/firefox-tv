@@ -75,7 +75,7 @@ class HomeRobot {
 /**
  * Applies [func] to a new [HomeRobot]
  *
- * @sample org.mozilla.focus.session.ClearSessionTest.WHEN_data_is_cleared_THEN_back_and_forward_should_be_unavailable
+ * @sample org.mozilla.tv.firefox.session.ClearSessionTest.WHEN_data_is_cleared_THEN_back_and_forward_should_be_unavailable
  */
 fun home(func: HomeRobot.() -> Unit) = HomeRobot().apply(func)
 

@@ -31,7 +31,7 @@ class SettingsRobot {
 /**
  * Applies [func] to a new [SettingsRobot]
  *
- * @sample org.mozilla.focus.session.ClearSessionTest.WHEN_data_is_cleared_THEN_back_and_forward_should_be_unavailable
+ * @sample org.mozilla.tv.firefox.session.ClearSessionTest.WHEN_data_is_cleared_THEN_back_and_forward_should_be_unavailable
  */
 fun settings(func: SettingsRobot.() -> Unit) = SettingsRobot().apply(func)
 

@@ -7,7 +7,7 @@
         errorLine1="        domain = domain.toLowerCase();"
         errorLine2="                        ~~~~~~~~~~~">
         <location
-            file="src/main/java/org/mozilla/focus/utils/publicsuffix/PublicSuffix.java"
+            file="src/main/java/org/mozilla/tv/firefox/utils/publicsuffix/PublicSuffix.java"
             line="127"
             column="25"/>
     </issue>
@@ -29,7 +29,7 @@
         errorLine1="                customEngines.add(SearchEngineParser.load(engine, engineInputStream));"
         errorLine2="                                                     ~~~~">
         <location
-            file="src/main/java/org/mozilla/focus/search/SearchEngineManager.java"
+            file="src/main/java/org/mozilla/tv/firefox/search/SearchEngineManager.java"
             line="147"
             column="54"/>
     </issue>
@@ -42,7 +42,7 @@
         includedVariants="amazonWebviewBeta,amazonWebviewCoverage,amazonWebviewDebug,amazonWebviewRelease"
         excludedVariants="geckoBeta,geckoDebug">
         <location
-            file="src/amazonWebview/java/org/mozilla/focus/webview/LinkHandler.java"
+            file="src/amazonWebview/java/org/mozilla/tv/firefox/webview/LinkHandler.java"
             line="55"
             column="35"/>
     </issue>
@@ -55,7 +55,7 @@
         includedVariants="amazonWebviewBeta,amazonWebviewCoverage,amazonWebviewDebug,amazonWebviewRelease"
         excludedVariants="geckoBeta,geckoDebug">
         <location
-            file="src/amazonWebview/java/org/mozilla/focus/webview/ErrorPage.java"
+            file="src/amazonWebview/java/org/mozilla/tv/firefox/webview/ErrorPage.java"
             line="25"
             column="31"/>
     </issue>
@@ -5058,7 +5058,7 @@
         includedVariants="geckoBeta,geckoDebug"
         excludedVariants="amazonWebviewBeta,amazonWebviewCoverage,amazonWebviewDebug,amazonWebviewRelease">
         <location
-            file="src/gecko/java/org/mozilla/focus/iwebview/NestedGeckoView.java"
+            file="src/gecko/java/org/mozilla/tv/firefox/iwebview/NestedGeckoView.java"
             line="35"
             column="20"/>
     </issue>
@@ -5071,7 +5071,7 @@
         includedVariants="amazonWebviewBeta,amazonWebviewCoverage,amazonWebviewDebug,amazonWebviewRelease"
         excludedVariants="geckoBeta,geckoDebug">
         <location
-            file="src/amazonWebview/java/org/mozilla/focus/webview/NestedWebView.java"
+            file="src/amazonWebview/java/org/mozilla/tv/firefox/webview/NestedWebView.java"
             line="42"
             column="20"/>
     </issue>

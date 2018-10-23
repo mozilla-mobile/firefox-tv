@@ -23,7 +23,7 @@ import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
-@Config(packageName = "org.mozilla.focus")
+@Config(packageName = "org.mozilla.tv.firefox")
 class UrlAutoCompleteFilterTest {
     @After
     fun tearDown() {
