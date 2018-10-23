@@ -14,7 +14,6 @@ import android.support.test.espresso.web.sugar.Web.onWebView
 import android.support.test.espresso.web.webdriver.DriverAtoms.findElement
 import android.support.test.espresso.web.webdriver.DriverAtoms.getText
 import android.support.test.espresso.web.webdriver.Locator
-import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -25,19 +24,17 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.MainActivity
-import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.ext.evalJS
 import org.mozilla.tv.firefox.helpers.SessionLoadedIdlingResource
+import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule
+import org.mozilla.tv.firefox.webrender.WebRenderFragment
 
 /** An integration test to verify [IWebView.executeJS] works correctly. */
 @RunWith(AndroidJUnit4::class)
 class IWebViewExecuteJavascriptTest {
 
     @Rule @JvmField
-    val activityTestRule = object : ActivityTestRule<MainActivity>(MainActivity::class.java) {
-        override fun beforeActivityLaunched() { super.beforeActivityLaunched() }
-    }
+    val activityTestRule = SkipOnboardingMainActivityTestRule()
 
     private lateinit var loadingIdlingResource: SessionLoadedIdlingResource
     private lateinit var mockServer: MockWebServer
