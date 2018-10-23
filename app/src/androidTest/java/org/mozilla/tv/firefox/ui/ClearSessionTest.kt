@@ -4,7 +4,7 @@
 
 @file:Suppress("TestFunctionName")
 
-package org.mozilla.tv.firefox.session
+package org.mozilla.tv.firefox.ui
 
 import android.support.test.espresso.IdlingRegistry
 import android.support.test.runner.AndroidJUnit4
@@ -16,9 +16,9 @@ import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.SkipOnboardingMainActivityTestRule
 import org.mozilla.tv.firefox.helpers.MockServerHelper
 import org.mozilla.tv.firefox.helpers.SessionLoadedIdlingResource
-import org.mozilla.tv.firefox.robots.browser
-import org.mozilla.tv.firefox.robots.home
-import org.mozilla.tv.firefox.robots.settings
+import org.mozilla.tv.firefox.ui.robots.browser
+import org.mozilla.tv.firefox.ui.robots.home
+import org.mozilla.tv.firefox.ui.robots.settings
 
 @RunWith(AndroidJUnit4::class)
 class ClearSessionTest {
