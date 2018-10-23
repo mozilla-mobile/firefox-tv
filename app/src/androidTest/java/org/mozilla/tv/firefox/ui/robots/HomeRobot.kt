@@ -21,9 +21,9 @@ import android.support.test.uiautomator.UiDevice
 import org.hamcrest.CoreMatchers.not
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.browser.TileViewHolder
-import org.mozilla.tv.firefox.ext.assertDisabled
-import org.mozilla.tv.firefox.ext.assertEnabled
-import org.mozilla.tv.firefox.ext.click
+import org.mozilla.tv.firefox.helpers.ext.assertDisabled
+import org.mozilla.tv.firefox.helpers.ext.assertEnabled
+import org.mozilla.tv.firefox.helpers.ext.click
 
 /**
  * Implementation of Robot Pattern for the home menu.
