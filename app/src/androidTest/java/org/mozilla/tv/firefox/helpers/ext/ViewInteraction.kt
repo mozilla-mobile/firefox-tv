@@ -7,11 +7,10 @@ package org.mozilla.tv.firefox.helpers.ext
 import android.support.test.espresso.ViewInteraction
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.assertion.ViewAssertions.matches
-import android.support.test.espresso.matcher.ViewMatchers.isEnabled
-import org.hamcrest.CoreMatchers.not
+import org.mozilla.focus.helpers.isEnabled
 
 fun ViewInteraction.click(): ViewInteraction = this.perform(ViewActions.click())
 
-fun ViewInteraction.assertEnabled() = this.check(matches(isEnabled()))!!
-
-fun ViewInteraction.assertDisabled() = this.check(matches(not(isEnabled())))!!
+fun ViewInteraction.assertIsEnabled(isEnabled: Boolean): ViewInteraction {
+    return this.check(matches(isEnabled(isEnabled)))
+}

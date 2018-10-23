@@ -47,15 +47,13 @@ class ClearSessionTest {
                 .initMockServerAndReturnEndpoints("This is Google", "This is YouTube")
 
         home {
-            assertCannotGoBack()
-
-            assertCannotGoForward()
+            assertCanGoBackForward(false, false)
 
             navigateToPage(endpoints[0])
 
             openMenu()
 
-            assertCanGoBack()
+            assertCanGoBack(true)
 
             navigateToPage(endpoints[1])
 
@@ -63,9 +61,7 @@ class ClearSessionTest {
 
             goBack()
 
-            assertCanGoBack()
-
-            assertCanGoForward()
+            assertCanGoBackForward(true, true)
 
             openSettings()
         }
@@ -85,9 +81,7 @@ class ClearSessionTest {
         }
 
         home {
-            assertCannotGoBack()
-
-            assertCannotGoForward()
+            assertCanGoBackForward(false, false)
         }
     }
 }

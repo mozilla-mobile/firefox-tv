@@ -20,10 +20,9 @@ import android.support.test.espresso.matcher.ViewMatchers.withText
 import android.support.test.uiautomator.UiDevice
 import org.hamcrest.CoreMatchers.not
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.pinnedtile.TileViewHolder
-import org.mozilla.tv.firefox.helpers.ext.assertDisabled
-import org.mozilla.tv.firefox.helpers.ext.assertEnabled
+import org.mozilla.tv.firefox.helpers.ext.assertIsEnabled
 import org.mozilla.tv.firefox.helpers.ext.click
+import org.mozilla.tv.firefox.pinnedtile.TileViewHolder
 
 /**
  * Implementation of Robot Pattern for the home menu.
@@ -48,10 +47,12 @@ class HomeRobot {
     fun toggleTurbo() = turboButton().click()
     fun openSettings() = settingsButton().click()
 
-    fun assertCanGoBack() = backButton().assertEnabled()
-    fun assertCannotGoBack() = backButton().assertDisabled()
-    fun assertCanGoForward() = forwardButton().assertEnabled()
-    fun assertCannotGoForward() = forwardButton().assertDisabled()
+    fun assertCanGoBack(canGoBack: Boolean) = backButton().assertIsEnabled(canGoBack)
+    fun assertCanGoForward(canGoForward: Boolean) = forwardButton().assertIsEnabled(canGoForward)
+    fun assertCanGoBackForward(canGoBack: Boolean, canGoForward: Boolean) {
+        assertCanGoBack(canGoBack)
+        assertCanGoForward(canGoForward)
+    }
 
     fun navigateToPage(url: Uri) {
         urlBar().perform(replaceText(url.toString()), pressImeActionButton())
