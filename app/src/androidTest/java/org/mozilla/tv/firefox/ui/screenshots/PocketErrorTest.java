@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mozilla.tv.firefox.MainActivity;
 import org.mozilla.tv.firefox.R;
-import org.mozilla.tv.firefox.SkipOnboardingMainActivityTestRule;
+import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.locale.LocaleTestRule;

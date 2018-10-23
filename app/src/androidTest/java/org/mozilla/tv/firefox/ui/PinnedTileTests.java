@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mozilla.tv.firefox.MainActivity;
 import org.mozilla.tv.firefox.R;
-import org.mozilla.tv.firefox.SkipOnboardingMainActivityTestRule;
+import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
