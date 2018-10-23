@@ -55,7 +55,7 @@ private const val TOAST_Y_OFFSET = 200
  * Fragment for displaying the browser UI.
  */
 @Suppress("LargeClass") // TODO this will be removed as part of the upcoming architecture refactor
-class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
+class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     companion object {
         const val FRAGMENT_TAG = "browser"
         const val APP_URL_PREFIX = "firefox:"
@@ -63,7 +63,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
         const val APP_URL_POCKET_ERROR = "${APP_URL_PREFIX}error:pocketconnection"
 
         @JvmStatic
-        fun createForSession(session: Session) = BrowserFragment().apply {
+        fun createForSession(session: Session) = WebRenderFragment().apply {
             arguments = Bundle().apply { putString(ARGUMENT_SESSION_UUID, session.id) }
         }
     }
@@ -153,7 +153,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
                 }
             }
             NavigationEvent.PIN_ACTION -> {
-                this@BrowserFragment.session.url.let { url ->
+                this@WebRenderFragment.session.url.let { url ->
                     when (value) {
                         NavigationEvent.VAL_CHECKED -> {
                             CustomTilesManager.getInstance(context!!).pinSite(context!!, url,
@@ -204,7 +204,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
                 parentFrag = bundle.getSerializable(PARENT_FRAGMENT) as BrowserNavigationOverlay.ParentFragment
             }
 
-            onNavigationEvent = this@BrowserFragment.onNavigationEvent
+            onNavigationEvent = this@WebRenderFragment.onNavigationEvent
             navigationStateProvider = NavigationStateProvider()
             visibility = overlayVisibleCached ?: View.GONE
 
