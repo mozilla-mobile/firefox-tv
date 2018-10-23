@@ -13,7 +13,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mozilla.tv.firefox.SkipOnboardingMainActivityTestRule
+import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule
 import org.mozilla.tv.firefox.helpers.MockServerHelper
 import org.mozilla.tv.firefox.helpers.SessionLoadedIdlingResource
 import org.mozilla.tv.firefox.ui.robots.browser
