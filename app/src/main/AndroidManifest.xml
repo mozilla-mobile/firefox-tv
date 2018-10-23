@@ -26,7 +26,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:name="org.mozilla.tv.firefox.FirefoxApplication"
+        android:name=".FirefoxApplication"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
 
@@ -39,7 +39,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
         </provider>
-        <activity android:name="org.mozilla.tv.firefox.MainActivity"
+        <activity android:name=".MainActivity"
             android:launchMode="singleTask"
             android:configChanges="keyboard|keyboardHidden|mcc|mnc|orientation|screenSize|locale|layoutDirection|smallestScreenSize|screenLayout"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
@@ -76,13 +76,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="org.mozilla.tv.firefox.browser.InfoActivity"
+        <activity android:name=".browser.InfoActivity"
                   android:theme="@style/InfoTheme"/>
 
-        <activity android:name="org.mozilla.tv.firefox.OnboardingActivity"
+        <activity android:name=".OnboardingActivity"
                   android:theme="@style/AppTheme"/>
 
-        <activity android:name="org.mozilla.tv.firefox.home.pocket.PocketOnboardingActivity"
+        <activity android:name=".home.pocket.PocketOnboardingActivity"
                   android:theme="@style/AppTheme.Transparent"/>
 
         <!-- Allows MediaSessionCallbacks to be called while a voice command is active. Without
