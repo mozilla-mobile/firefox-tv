@@ -10,7 +10,7 @@ import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.isEnabled
 import org.hamcrest.CoreMatchers.not
 
-fun ViewInteraction.click() = this.perform(ViewActions.click())!!
+fun ViewInteraction.click(): ViewInteraction = this.perform(ViewActions.click())
 
 fun ViewInteraction.assertEnabled() = this.check(matches(isEnabled()))!!
 
