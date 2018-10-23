@@ -15,8 +15,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
-import org.mozilla.tv.firefox.webrender.BrowserFragment
-import org.mozilla.tv.firefox.webrender.BrowserFragment.Companion.APP_URL_HOME
+import org.mozilla.tv.firefox.webrender.WebRenderFragment
+import org.mozilla.tv.firefox.webrender.WebRenderFragment.Companion.APP_URL_HOME
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.webrender.WebViewCache
 import org.mozilla.tv.firefox.webrender.VideoVoiceCommandMediaSession
@@ -154,7 +154,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
     override fun onBackPressed() {
         val fragmentManager = supportFragmentManager
-        val browserFragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment?
+        val browserFragment = fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as WebRenderFragment?
 
         if (browserFragment != null) {
             if (browserFragment.isVisible &&
@@ -217,7 +217,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         val fragmentManager = supportFragmentManager
-        val maybeBrowserFragment = (fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment?)?.let {
+        val maybeBrowserFragment = (fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as WebRenderFragment?)?.let {
             if (it.isVisible) it else null
         }
 

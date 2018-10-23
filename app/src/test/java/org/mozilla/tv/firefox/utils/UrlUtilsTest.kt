@@ -5,7 +5,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mozilla.tv.firefox.webrender.BrowserFragment
+import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
@@ -209,6 +209,6 @@ class UrlUtilsTest {
 
     @Test
     fun `GIVEN input is 'home' WHEN input is transformed THEN it should return blank`() {
-        assertEquals("", UrlUtils.toUrlBarDisplay(BrowserFragment.APP_URL_HOME))
+        assertEquals("", UrlUtils.toUrlBarDisplay(WebRenderFragment.APP_URL_HOME))
     }
 }

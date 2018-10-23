@@ -32,8 +32,8 @@ class FirefoxProgressBar @JvmOverloads constructor(
 
     private val hideHandler = FirefoxProgressBarHideHandler(this)
 
-    fun initialize(browserFrag: BrowserFragment) {
-        browserFrag.session.register(this, browserFrag)
+    fun initialize(webRenderFrag: WebRenderFragment) {
+        webRenderFrag.session.register(this, webRenderFrag)
     }
 
     override fun onLoadingStateChanged(session: Session, loading: Boolean) {

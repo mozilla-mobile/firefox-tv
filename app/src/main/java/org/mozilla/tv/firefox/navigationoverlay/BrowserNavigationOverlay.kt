@@ -43,7 +43,7 @@ import kotlin.properties.Delegates
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.components.locale.LocaleManager
-import org.mozilla.tv.firefox.webrender.BrowserFragment
+import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.pinnedtile.HomeTileAdapter
 import java.lang.ref.WeakReference
 
@@ -261,7 +261,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     private fun setupUrlInput() = with(navUrlInput) {
         setOnCommitListener {
             val userInput = text.toString()
-            if (userInput == BrowserFragment.APP_URL_HOME) {
+            if (userInput == WebRenderFragment.APP_URL_HOME) {
                 // If the input points to home, we short circuit and hide the keyboard, returning
                 // the user to the home screen
                 this.hideKeyboard()

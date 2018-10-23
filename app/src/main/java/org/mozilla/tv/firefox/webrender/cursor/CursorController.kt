@@ -13,7 +13,7 @@ import android.view.View
 import android.view.accessibility.AccessibilityManager
 import kotlinx.android.synthetic.main.fragment_browser.*
 import mozilla.components.browser.session.Session
-import org.mozilla.tv.firefox.webrender.BrowserFragment
+import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.ext.getAccessibilityManager
 import org.mozilla.tv.firefox.ext.isVisible
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
@@ -36,9 +36,9 @@ private const val MAX_SCROLL_VELOCITY = 13
  */
 class CursorController(
     // Our lifecycle is shorter than BrowserFragment, so we can hold a reference.
-    private val browserFragment: BrowserFragment,
-    cursorParent: View,
-    private val view: CursorView
+        private val webRenderFragment: WebRenderFragment,
+        cursorParent: View,
+        private val view: CursorView
 ) : AccessibilityManager.TouchExplorationStateChangeListener, LifecycleObserver {
 
     private var isEnabled: Boolean by Delegates.observable(true) { _, _, newValue ->
@@ -49,7 +49,7 @@ class CursorController(
     private val viewModel = CursorViewModel(onUpdate = { x, y, percentMaxScrollVel, framesPassed ->
         view.updatePosition(x, y)
         scrollWebView(percentMaxScrollVel, framesPassed)
-    }, simulateTouchEvent = { browserFragment.activity?.dispatchTouchEvent(it) })
+    }, simulateTouchEvent = { webRenderFragment.activity?.dispatchTouchEvent(it) })
 
     val keyDispatcher = CursorKeyDispatcher(isEnabled, onDirectionKey = { dir, action ->
         when (action) {
@@ -74,23 +74,23 @@ class CursorController(
     fun setEnabledForCurrentState() {
         // These sources have their own navigation controls.
 
-        isEnabled = !browserFragment.session.isYoutubeTV && !(browserFragment.context?.isVoiceViewEnabled() ?: false) &&
-                !browserFragment.browserOverlay.isVisible
+        isEnabled = !webRenderFragment.session.isYoutubeTV && !(webRenderFragment.context?.isVoiceViewEnabled() ?: false) &&
+                !webRenderFragment.browserOverlay.isVisible
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onStart() {
-        browserFragment.context?.getAccessibilityManager()?.addTouchExplorationStateChangeListener(this)
+        webRenderFragment.context?.getAccessibilityManager()?.addTouchExplorationStateChangeListener(this)
         setEnabledForCurrentState() // VoiceView state may change.
 
-        browserFragment.session.register(isLoadingObserver, owner = browserFragment)
+        webRenderFragment.session.register(isLoadingObserver, owner = webRenderFragment)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onStop() {
-        browserFragment.context?.getAccessibilityManager()?.removeTouchExplorationStateChangeListener(this)
+        webRenderFragment.context?.getAccessibilityManager()?.removeTouchExplorationStateChangeListener(this)
 
-        browserFragment.session.unregister(isLoadingObserver)
+        webRenderFragment.session.unregister(isLoadingObserver)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
@@ -117,7 +117,7 @@ class CursorController(
         val scrollX = getDeltaScrollAdjustedForTime(percentMaxScrollVel.x)
         val scrollY = getDeltaScrollAdjustedForTime(percentMaxScrollVel.y)
 
-        browserFragment.webView?.scrollByClamped(scrollX, scrollY)
+        webRenderFragment.webView?.scrollByClamped(scrollX, scrollY)
     }
 
     private inner class CursorIsLoadingObserver : Session.Observer {

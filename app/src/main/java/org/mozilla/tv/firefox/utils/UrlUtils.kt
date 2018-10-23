@@ -8,7 +8,7 @@ package org.mozilla.tv.firefox.utils
 import android.content.Context
 import android.net.Uri
 import android.webkit.URLUtil
-import org.mozilla.tv.firefox.webrender.BrowserFragment
+import org.mozilla.tv.firefox.webrender.WebRenderFragment
 
 import org.mozilla.tv.firefox.components.search.SearchEngineManager
 
@@ -160,7 +160,7 @@ object UrlUtils {
     @JvmStatic
     fun toUrlBarDisplay(url: String): String {
         return when (url) {
-            BrowserFragment.APP_URL_HOME -> "" // Empty string forces the EditText to show hint text
+            WebRenderFragment.APP_URL_HOME -> "" // Empty string forces the EditText to show hint text
             else -> url
         }
     }
