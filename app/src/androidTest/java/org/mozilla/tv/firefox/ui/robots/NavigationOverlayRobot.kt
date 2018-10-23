@@ -5,16 +5,20 @@
 package org.mozilla.tv.firefox.ui.robots
 
 import android.net.Uri
+import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.clearText
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.action.ViewActions.pressImeActionButton
-import android.support.test.espresso.action.ViewActions.replaceText
 import android.support.test.espresso.action.ViewActions.typeText
+import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.contrib.RecyclerViewActions
 import android.support.test.espresso.matcher.ViewMatchers.hasDescendant
+import android.support.test.espresso.matcher.ViewMatchers.withHint
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.espresso.matcher.ViewMatchers.withText
+import android.support.test.uiautomator.UiDevice
+import org.hamcrest.CoreMatchers.containsString
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.helpers.ext.assertIsEnabled
 import org.mozilla.tv.firefox.helpers.ext.click
@@ -38,12 +42,29 @@ class NavigationOverlayRobot {
         assertCanGoForward(canGoForward)
     }
 
+    fun assertCanReload(canReload: Boolean) = reload().assertIsEnabled(canReload)
+
+    fun assertURLBarText(expectedText: String) = urlBar().check(matches(withText(containsString(expectedText))))
+
+    fun assertURLBarDisplaysHint() {
+        assertURLBarText("")
+                .check(matches(withHint(R.string.urlbar_hint)))
+    }
+
     class Transition {
+        private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
         fun enterUrlAndEnterToBrowser(url: Uri, interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
             urlBar().perform(clearText(),
                     typeText(url.toString()),
                     pressImeActionButton())
+
+            BrowserRobot().interact()
+            return BrowserRobot.Transition()
+        }
+
+        fun closeToBrowser(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
+            device.pressMenu()
 
             BrowserRobot().interact()
             return BrowserRobot.Transition()
