@@ -7,7 +7,7 @@ package org.mozilla.tv.firefox.ext
 import android.content.Context
 import android.view.accessibility.AccessibilityManager
 import org.mozilla.tv.firefox.Components
-import org.mozilla.tv.firefox.FocusApplication
+import org.mozilla.tv.firefox.FirefoxApplication
 
 // Extension functions for the Context class
 
@@ -28,10 +28,10 @@ fun Context.getAccessibilityManager() = getSystemService(Context.ACCESSIBILITY_S
 fun Context.isVoiceViewEnabled() = getAccessibilityManager().isTouchExplorationEnabled
 
 /**
- * Get the FocusApplication object from a context.
+ * Get the FirefoxApplication object from a context.
  */
-val Context.application: FocusApplication
-    get() = applicationContext as FocusApplication
+val Context.application: FirefoxApplication
+    get() = applicationContext as FirefoxApplication
 
 /**
  * Get the components of this application.

@@ -6,7 +6,7 @@ package org.mozilla.tv.firefox.helpers
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.IdlingResource
-import org.mozilla.tv.firefox.FocusApplication
+import org.mozilla.tv.firefox.FirefoxApplication
 
 /**
  * An IdlingResource implementation that waits until the current session is not loading anymore.
@@ -20,7 +20,7 @@ class SessionLoadedIdlingResource : IdlingResource {
     }
 
     override fun isIdleNow(): Boolean {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as FocusApplication
+        val context = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as FirefoxApplication
         val sessionManager = context.components.sessionManager
 
         val session = sessionManager.selectedSession

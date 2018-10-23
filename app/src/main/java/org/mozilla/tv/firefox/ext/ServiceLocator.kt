@@ -8,11 +8,11 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.support.v4.app.Fragment
-import org.mozilla.tv.firefox.FocusApplication
+import org.mozilla.tv.firefox.FirefoxApplication
 import org.mozilla.tv.firefox.utils.ServiceLocator
 
 val Application.serviceLocator: ServiceLocator
-    get() = (this as FocusApplication).serviceLocator
+    get() = (this as FirefoxApplication).serviceLocator
 
 val Activity.serviceLocator: ServiceLocator
     get() = this.application.serviceLocator
