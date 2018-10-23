@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.tv.firefox.engine
+package org.mozilla.tv.firefox.webrender
 
 /**
  * When using spatial navigation (i.e. no Cursor) and the WebView loses and regains focus,
@@ -25,7 +25,7 @@ package org.mozilla.tv.firefox.engine
  * the last possible moment before the WebView regains Android focus and loses the focused
  * DOMElement, which is in [View.setVisibility].
  */
-interface FocusedDOMElementCache {
+interface FocusedDOMElementCacheInterface {
     /** Caches the currently focused DOMElement in the DOM (i.e. it will be cleared if the page is reloaded). */
     fun cache()
 

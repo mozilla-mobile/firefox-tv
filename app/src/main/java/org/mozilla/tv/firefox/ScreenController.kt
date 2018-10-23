@@ -12,6 +12,7 @@ import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.webrender.BrowserFragment
 import org.mozilla.tv.firefox.ext.components
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
+import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.ServiceLocator

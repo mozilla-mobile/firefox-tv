@@ -5,7 +5,7 @@
 package org.mozilla.tv.firefox.ext
 
 import android.support.v4.app.Fragment
-import org.mozilla.tv.firefox.Components
+import org.mozilla.tv.firefox.webrender.Components
 
 /**
  * Get the components of this application's context.

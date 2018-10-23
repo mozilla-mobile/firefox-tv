@@ -7,7 +7,7 @@ package org.mozilla.tv.firefox
 import android.preference.PreferenceManager
 import android.support.test.InstrumentationRegistry
 import android.support.test.rule.ActivityTestRule
-import org.mozilla.tv.firefox.OnboardingActivity.Companion.ONBOARD_SHOWN_PREF
+import org.mozilla.tv.firefox.onboarding.OnboardingActivity.Companion.ONBOARD_SHOWN_PREF
 import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity.Companion.POCKET_ONBOARDING_SHOWN_PREF
 
 class SkipOnboardingMainActivityTestRule : ActivityTestRule<MainActivity>(MainActivity::class.java) {

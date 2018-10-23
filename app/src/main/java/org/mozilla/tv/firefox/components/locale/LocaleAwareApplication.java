@@ -1,4 +1,4 @@
-package org.mozilla.tv.firefox.locale;
+package org.mozilla.tv.firefox.components.locale;
 
 import android.app.Application;
 import android.content.res.Configuration;

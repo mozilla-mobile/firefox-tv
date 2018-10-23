@@ -59,7 +59,7 @@
         android:descendantFocusability="blocksDescendants"
         />
 
-    <org.mozilla.tv.firefox.webrender.BrowserNavigationOverlay
+    <org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
         android:id="@+id/browserOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

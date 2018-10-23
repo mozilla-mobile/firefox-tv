@@ -9,7 +9,7 @@ import android.content.pm.PackageManager
 import android.support.v4.util.ArrayMap
 import android.view.View
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.locale.Locales
+import org.mozilla.tv.firefox.components.locale.Locales
 import org.mozilla.tv.firefox.utils.HtmlLoader
 
 object LocalizedContent {

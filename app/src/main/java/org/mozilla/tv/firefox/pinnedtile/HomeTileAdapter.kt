@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.tv.firefox.webrender
+package org.mozilla.tv.firefox.pinnedtile
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -24,12 +24,6 @@ import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.toJavaURI
 import org.mozilla.tv.firefox.ext.withRoundedCorners
-import org.mozilla.tv.firefox.pinnedtile.BundledHomeTile
-import org.mozilla.tv.firefox.pinnedtile.BundledTilesManager
-import org.mozilla.tv.firefox.pinnedtile.CustomHomeTile
-import org.mozilla.tv.firefox.pinnedtile.HomeTile
-import org.mozilla.tv.firefox.pinnedtile.HomeTilePlaceholderGenerator
-import org.mozilla.tv.firefox.pinnedtile.HomeTileScreenshotStore
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.FormattedDomain
 

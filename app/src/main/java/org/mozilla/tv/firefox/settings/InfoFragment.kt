@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.tv.firefox.webrender
+package org.mozilla.tv.firefox.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +12,7 @@ import android.widget.ProgressBar
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.requireComponents
-import org.mozilla.tv.firefox.engine.EngineViewLifecycleFragment
+import org.mozilla.tv.firefox.webrender.EngineViewLifecycleFragment
 
 class InfoFragment : EngineViewLifecycleFragment(), Session.Observer {
     private var progressView: ProgressBar? = null

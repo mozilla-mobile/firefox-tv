@@ -6,7 +6,7 @@ package org.mozilla.tv.firefox.telemetry
 
 import android.content.Context
 import org.mozilla.tv.firefox.BuildConfig
-import org.mozilla.tv.firefox.search.SearchEngineManager
+import org.mozilla.tv.firefox.components.search.SearchEngineManager
 import org.mozilla.tv.firefox.utils.Settings
 import org.mozilla.telemetry.Telemetry
 import org.mozilla.telemetry.config.TelemetryConfiguration

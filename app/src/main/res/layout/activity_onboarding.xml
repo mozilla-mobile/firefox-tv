@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="org.mozilla.tv.firefox.OnboardingActivity">
+    tools:context="org.mozilla.tv.firefox.onboarding.OnboardingActivity">
 
     <include
         layout="@layout/content_onboarding"

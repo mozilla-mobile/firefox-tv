@@ -10,7 +10,7 @@ import android.net.Uri
 import android.webkit.URLUtil
 import org.mozilla.tv.firefox.webrender.BrowserFragment
 
-import org.mozilla.tv.firefox.search.SearchEngineManager
+import org.mozilla.tv.firefox.components.search.SearchEngineManager
 
 import java.net.URI
 import java.net.URISyntaxException

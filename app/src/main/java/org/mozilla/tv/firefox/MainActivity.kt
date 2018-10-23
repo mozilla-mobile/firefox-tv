@@ -17,7 +17,7 @@ import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.webrender.BrowserFragment
 import org.mozilla.tv.firefox.webrender.BrowserFragment.Companion.APP_URL_HOME
-import org.mozilla.tv.firefox.webrender.BrowserNavigationOverlay
+import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.webrender.WebViewCache
 import org.mozilla.tv.firefox.webrender.VideoVoiceCommandMediaSession
 import org.mozilla.tv.firefox.ext.components
@@ -26,7 +26,9 @@ import org.mozilla.tv.firefox.ext.setupForApp
 import org.mozilla.tv.firefox.ext.toSafeIntent
 import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
-import org.mozilla.tv.firefox.locale.LocaleAwareAppCompatActivity
+import org.mozilla.tv.firefox.components.locale.LocaleAwareAppCompatActivity
+import org.mozilla.tv.firefox.onboarding.OnboardingActivity
+import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation

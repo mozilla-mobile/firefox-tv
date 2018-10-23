@@ -35,7 +35,7 @@ fun EngineView.setupForApp() {
 
     webView.setOnFocusChangeListener { _, hasFocus ->
         if (!hasFocus) {
-            // For why we're modifying the focusedDOMElement, see FocusedDOMElementCache.
+            // For why we're modifying the focusedDOMElement, see FocusedDOMElementCacheInterface.
             //
             // Any views (like BrowserNavigationOverlay) that may clear the cache, e.g. by
             // reloading the page, are required to handle their own caching. Here we'll handle

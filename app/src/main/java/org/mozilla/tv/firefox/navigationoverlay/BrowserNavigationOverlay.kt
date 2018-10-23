@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.tv.firefox.webrender
+package org.mozilla.tv.firefox.navigationoverlay
 
 import android.content.Context
 import android.graphics.Rect
@@ -28,7 +28,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.autocomplete.UrlAutoCompleteFilter
+import org.mozilla.tv.firefox.components.UrlAutoCompleteFilter
 import org.mozilla.tv.firefox.ext.forEachChild
 import org.mozilla.tv.firefox.ext.isEffectivelyVisible
 import org.mozilla.tv.firefox.ext.isVisible
@@ -42,7 +42,9 @@ import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 import kotlin.properties.Delegates
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
 import org.mozilla.tv.firefox.ext.serviceLocator
-import org.mozilla.tv.firefox.locale.LocaleManager
+import org.mozilla.tv.firefox.components.locale.LocaleManager
+import org.mozilla.tv.firefox.webrender.BrowserFragment
+import org.mozilla.tv.firefox.pinnedtile.HomeTileAdapter
 import java.lang.ref.WeakReference
 
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
@@ -116,9 +118,9 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     }
 
     var onNavigationEvent: ((
-        event: NavigationEvent,
-        value: String?,
-        autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?
+            event: NavigationEvent,
+            value: String?,
+            autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?
     ) -> Unit)? = null
     var navigationStateProvider: BrowserNavigationStateProvider? = null
 
@@ -287,7 +289,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     }
 
     override fun onClick(view: View?) {
-        val event = NavigationEvent.fromViewClick(view?.id) ?: return
+        val event = NavigationEvent.fromViewClick(view?.id)
+                ?: return
         var value: String? = null
 
         val isTurboButtonChecked = turboButton.isChecked

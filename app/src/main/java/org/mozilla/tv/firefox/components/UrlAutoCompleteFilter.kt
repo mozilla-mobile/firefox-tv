@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.tv.firefox.autocomplete
+package org.mozilla.tv.firefox.components
 
 import android.content.Context
 import android.util.Log
@@ -10,7 +10,7 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
-import org.mozilla.tv.firefox.locale.Locales
+import org.mozilla.tv.firefox.components.locale.Locales
 import org.mozilla.tv.firefox.utils.Settings
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText.AutocompleteResult
