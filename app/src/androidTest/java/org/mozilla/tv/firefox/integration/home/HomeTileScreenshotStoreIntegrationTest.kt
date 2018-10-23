@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.tv.firefox.integration
+package org.mozilla.tv.firefox.integration.home
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -14,7 +14,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mozilla.tv.firefox.helpers.assertEqualsWithDelta
+import org.mozilla.tv.firefox.assertEqualsWithDelta
 import org.mozilla.tv.firefox.home.HomeTileScreenshotStore
 import java.util.UUID
 

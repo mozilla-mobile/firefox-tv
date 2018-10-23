@@ -2,12 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.tv.firefox.helpers
+package org.mozilla.tv.firefox
 
 import android.preference.PreferenceManager
 import android.support.test.InstrumentationRegistry
 import android.support.test.rule.ActivityTestRule
-import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.OnboardingActivity.Companion.ONBOARD_SHOWN_PREF
 import org.mozilla.tv.firefox.home.pocket.PocketOnboardingActivity.Companion.POCKET_ONBOARDING_SHOWN_PREF
 
