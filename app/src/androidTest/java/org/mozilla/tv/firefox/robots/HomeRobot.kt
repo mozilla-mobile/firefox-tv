@@ -27,15 +27,6 @@ import org.mozilla.tv.firefox.ext.click
 
 /**
  * Implementation of Robot Pattern for the home menu.
- *
- * This has two primary benefits: 1) less brittle code, and 2) more declarative tests.
- *
- * 1) If our UI changes, we can update the robot to match and other tests should remain valid
- *
- * 2) Tests written using robots include no implementation details, only what is being tested
- *
- * See: https://academy.realm.io/posts/kau-jake-wharton-testing-robots/
- * See: https://medium.com/android-bits/espresso-robot-pattern-in-kotlin-fc820ce250f7
  */
 class HomeRobot {
 
