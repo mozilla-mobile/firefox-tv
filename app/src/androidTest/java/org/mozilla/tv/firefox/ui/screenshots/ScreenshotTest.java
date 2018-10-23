@@ -1,4 +1,4 @@
-package org.mozilla.tv.firefox.screenshots;
+package org.mozilla.tv.firefox.ui.screenshots;
 
 import android.app.Instrumentation;
 import android.content.Context;

@@ -7,7 +7,7 @@
 # file and generate the final configuration that we use inside
 # a taskcluster task.
 
-use_tests_in_packages ['org.mozilla.tv.firefox.screenshots']
+use_tests_in_packages ['org.mozilla.tv.firefox.ui.screenshots']
 app_package_name 'org.mozilla.tv.firefox.debug'
 
 app_apk_path 'app/build/outputs/apk/debug/app-debug.apk'
