@@ -15,9 +15,9 @@ import okhttp3.mockwebserver.RecordedRequest
 import org.mozilla.tv.firefox.ext.toUri
 import java.io.IOException
 
-object MockServerHelper {
+object MockWebServerHelper {
 
-    fun initMockServerAndReturnEndpoints(vararg messages: String): List<Uri> {
+    fun initMockWebServerAndReturnEndpoints(vararg messages: String): List<Uri> {
         val mockServer = MockWebServer()
         var uniquePath = 0
         val uris = mutableListOf<Uri>()
