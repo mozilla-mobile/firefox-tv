@@ -25,13 +25,13 @@
         android:src="@drawable/mozac_ic_refresh"
         android:contentDescription="@string/content_description_reload"/>
 
-    <org.mozilla.focus.widget.CheckableImageButton
+    <org.mozilla.tv.firefox.widget.CheckableImageButton
         android:id="@+id/pinButton"
         style="@style/NavigationButton"
         android:src="@drawable/pin_selector"
         android:contentDescription="@string/pin_label"/>
 
-    <org.mozilla.focus.widget.CheckableImageButton
+    <org.mozilla.tv.firefox.widget.CheckableImageButton
         android:id="@+id/turboButton"
         style="@style/NavigationButton"
         android:src="@drawable/turbo_selector"

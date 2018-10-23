@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <org.mozilla.focus.widget.ResizableKeyboardCoordinatorLayout
+        <org.mozilla.tv.firefox.widget.ResizableKeyboardCoordinatorLayout
             app:viewToHideWhenActivated="@+id/erase"
             android:layout_marginTop="0dp"
             android:id="@+id/main_content"
@@ -31,7 +31,7 @@
                     <requestFocus />
             </mozilla.components.concept.engine.EngineView>
 
-        </org.mozilla.focus.widget.ResizableKeyboardCoordinatorLayout>
+        </org.mozilla.tv.firefox.widget.ResizableKeyboardCoordinatorLayout>
     </LinearLayout>
 
     <FrameLayout
@@ -41,7 +41,7 @@
         android:background="@android:color/black"
         android:visibility="gone" />
 
-    <org.mozilla.focus.browser.cursor.CursorView
+    <org.mozilla.tv.firefox.browser.cursor.CursorView
         android:id="@+id/cursorView"
         android:layout_width="@dimen/remote_cursor_size"
         android:layout_height="@dimen/remote_cursor_size"
@@ -50,7 +50,7 @@
         android:scaleType="centerInside"
         />
 
-    <org.mozilla.focus.browser.FirefoxProgressBar
+    <org.mozilla.tv.firefox.browser.FirefoxProgressBar
         android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
         android:descendantFocusability="blocksDescendants"
         />
 
-    <org.mozilla.focus.browser.BrowserNavigationOverlay
+    <org.mozilla.tv.firefox.browser.BrowserNavigationOverlay
         android:id="@+id/browserOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
