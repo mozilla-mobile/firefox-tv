@@ -146,7 +146,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
                 setOverlayVisible(false)
             }
             NavigationEvent.POCKET -> {
-                val (fragmentManager, activity) = fragmentManager to activity
+                val (fragmentManager, activity) = Pair(fragmentManager, activity)
                 if (fragmentManager != null && activity != null) {
                     ScreenController.showPocketScreen(fragmentManager, activity.serviceLocator)
                 }

@@ -26,10 +26,10 @@ import kotlinx.coroutines.experimental.launch
 import mozilla.components.browser.session.Session
 import org.mozilla.focus.R
 import org.mozilla.focus.ScreenController
-import org.mozilla.focus.ext.application
 import org.mozilla.focus.ext.forceExhaustive
 import org.mozilla.focus.ext.isNotCompleted
 import org.mozilla.focus.ext.resetAfter
+import org.mozilla.focus.ext.serviceLocator
 import org.mozilla.focus.ext.updateLayoutParams
 import org.mozilla.focus.telemetry.TelemetryIntegration
 import org.mozilla.focus.utils.FormattedDomain
@@ -54,7 +54,7 @@ class PocketVideoFragment : Fragment() {
         // being reconstructed, the user probably cares more about an up-to-date feed rather than
         // consistency with the home screen they saw a while ago.
         if (!this::deferredVideos.isInitialized) {
-            deferredVideos = context!!.application.serviceLocator.pocket.getRecommendedVideos()
+            deferredVideos = context!!.serviceLocator.pocket.getRecommendedVideos()
         }
     }
 

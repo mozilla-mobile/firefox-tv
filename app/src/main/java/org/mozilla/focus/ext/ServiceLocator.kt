@@ -20,5 +20,5 @@ val Activity.serviceLocator: ServiceLocator
 val Context.serviceLocator: ServiceLocator
     get() = this.application.serviceLocator
 
-val Fragment.serviceLocator: ServiceLocator
-    get() = this.context!!.serviceLocator
+val Fragment.serviceLocator: ServiceLocator?
+    get() = this.context?.serviceLocator

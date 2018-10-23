@@ -1,9 +1,9 @@
 ## Context
 ##### What is DI?
 
-In DI, client code does not create it's own dependencies.
+In DI (dependency injection), client code does not create its own dependencies.
 ```kotlin
-// Without DI, Repository creates it's own PocketEndpoint
+// Without DI, Repository creates its own PocketEndpoint
 class Repository {
     val endpoint = PocketEndpoint()
 }
