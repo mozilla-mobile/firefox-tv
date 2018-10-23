@@ -15,13 +15,13 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.helpers.assertEqualsWithDelta
-import org.mozilla.tv.firefox.pinnedtile.HomeTileScreenshotStore
+import org.mozilla.tv.firefox.pinnedtile.PinnedTileScreenshotStore
 import java.util.UUID
 
 private const val DIMEN = 140 // should be divisible by 4.
 
 @RunWith(AndroidJUnit4::class)
-class HomeTileScreenshotStoreIntegrationTest {
+class PinnedTileScreenshotStoreIntegrationTest {
 
     private lateinit var andyContext: Context // coroutines shadow `context` name.
 
@@ -43,12 +43,12 @@ class HomeTileScreenshotStoreIntegrationTest {
         val originalBitmap = getRedishSquare()
 
         val uuid = UUID.randomUUID()
-        HomeTileScreenshotStore.saveAsync(andyContext, uuid, originalBitmap).join()
+        PinnedTileScreenshotStore.saveAsync(andyContext, uuid, originalBitmap).join()
 
         // Reading scales the bitmap by 4 so they don't take up as much space in memory.
         val expectedDimen = DIMEN / 4
         val expectedBitmap = Bitmap.createScaledBitmap(originalBitmap, expectedDimen, expectedDimen, false)
-        val actualBitmap = HomeTileScreenshotStore.read(andyContext, uuid)
+        val actualBitmap = PinnedTileScreenshotStore.read(andyContext, uuid)
 
         // Delta chosen by testing against our compression quality.
         assertNotNull(actualBitmap)

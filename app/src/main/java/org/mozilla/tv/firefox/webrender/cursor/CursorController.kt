@@ -36,9 +36,9 @@ private const val MAX_SCROLL_VELOCITY = 13
  */
 class CursorController(
     // Our lifecycle is shorter than BrowserFragment, so we can hold a reference.
-        private val webRenderFragment: WebRenderFragment,
-        cursorParent: View,
-        private val view: CursorView
+    private val webRenderFragment: WebRenderFragment,
+    cursorParent: View,
+    private val view: CursorView
 ) : AccessibilityManager.TouchExplorationStateChangeListener, LifecycleObserver {
 
     private var isEnabled: Boolean by Delegates.observable(true) { _, _, newValue ->

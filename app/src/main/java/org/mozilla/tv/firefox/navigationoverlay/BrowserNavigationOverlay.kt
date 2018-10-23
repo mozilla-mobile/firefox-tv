@@ -44,7 +44,7 @@ import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
-import org.mozilla.tv.firefox.pinnedtile.HomeTileAdapter
+import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import java.lang.ref.WeakReference
 
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
@@ -113,7 +113,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     // thus we need to use Delegates.observable to update onTileLongClick.
     var openHomeTileContextMenu: (() -> Unit) by Delegates.observable({}) { _, _, newValue ->
         with(tileContainer) {
-            (adapter as HomeTileAdapter).onTileLongClick = newValue
+            (adapter as PinnedTileAdapter).onTileLongClick = newValue
         }
     }
 
@@ -132,7 +132,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
     private var hasUserChangedURLSinceEditTextFocused = false
 
-    private lateinit var tileAdapter: HomeTileAdapter
+    private lateinit var tileAdapter: PinnedTileAdapter
 
     init {
         LayoutInflater.from(context)
@@ -160,7 +160,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         canShowUpinToast = true
 
-        tileAdapter = HomeTileAdapter(uiLifecycleCancelJob, homeTiles, loadUrl = { urlStr ->
+        tileAdapter = PinnedTileAdapter(uiLifecycleCancelJob, homeTiles, loadUrl = { urlStr ->
             with(navUrlInput) {
                 if (urlStr.isNotEmpty()) {
                     onNavigationEvent?.invoke(NavigationEvent.LOAD_TILE, urlStr, null)
