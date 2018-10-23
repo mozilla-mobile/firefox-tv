@@ -12,7 +12,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mozilla.tv.firefox.ext.components
+import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import mozilla.components.browser.engine.system.SystemEngine
@@ -40,7 +40,7 @@ class TurboModeTest {
 
         // Add a session so that we can verify the state of it
         session = Session("about:blank")
-        context.components.sessionManager.add(session)
+        context.webRenderComponents.sessionManager.add(session)
     }
 
     @Test

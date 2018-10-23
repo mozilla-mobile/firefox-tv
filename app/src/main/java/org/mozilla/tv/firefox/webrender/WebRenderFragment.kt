@@ -31,9 +31,9 @@ import org.mozilla.tv.firefox.webrender.cursor.CursorController
 import org.mozilla.tv.firefox.pinnedtile.BundledTilesManager
 import org.mozilla.tv.firefox.pinnedtile.CustomTilesManager
 import org.mozilla.tv.firefox.pinnedtile.HomeTilesManager
-import org.mozilla.tv.firefox.ext.components
+import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.ext.isVisible
-import org.mozilla.tv.firefox.ext.requireComponents
+import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.focusedDOMElement
@@ -94,7 +94,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
     private fun initSession() {
         val sessionUUID = arguments?.getString(ARGUMENT_SESSION_UUID)
                 ?: throw IllegalAccessError("No session exists")
-        session = context!!.components.sessionManager.findSessionById(sessionUUID) ?: NullSession.create()
+        session = context!!.webRenderComponents.sessionManager.findSessionById(sessionUUID) ?: NullSession.create()
         session.register(observer = this, owner = this)
     }
 
@@ -135,8 +135,8 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
                                       autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
         when (event) {
             NavigationEvent.BACK -> exitFullScreenIfPossibleAndBack()
-            NavigationEvent.FORWARD -> if (session.canGoForward) requireComponents.sessionUseCases.goForward.invoke()
-            NavigationEvent.TURBO, NavigationEvent.RELOAD -> requireComponents.sessionUseCases.reload.invoke()
+            NavigationEvent.FORWARD -> if (session.canGoForward) requireWebRenderComponents.sessionUseCases.goForward.invoke()
+            NavigationEvent.TURBO, NavigationEvent.RELOAD -> requireWebRenderComponents.sessionUseCases.reload.invoke()
             NavigationEvent.SETTINGS -> ScreenController.showSettingsScreen(fragmentManager!!)
             NavigationEvent.LOAD_URL -> {
                 (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
@@ -157,7 +157,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
                     when (value) {
                         NavigationEvent.VAL_CHECKED -> {
                             CustomTilesManager.getInstance(context!!).pinSite(context!!, url,
-                                    context!!.components.sessionManager.selectedSession?.thumbnail)
+                                    context!!.webRenderComponents.sessionManager.selectedSession?.thumbnail)
                             browserOverlay.refreshTilesForInsertion()
                             showCenteredTopToast(context, R.string.notification_pinned_site, 0, TOAST_Y_OFFSET)
                         }
@@ -236,8 +236,8 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
         // The SessionFeature implementation will take care of making sure that we always render the currently selected
         // session in our engine view.
         sessionFeature = SessionFeature(
-            requireComponents.sessionManager,
-            requireComponents.sessionUseCases,
+            requireWebRenderComponents.sessionManager,
+            requireWebRenderComponents.sessionUseCases,
             webView)
 
         if (session.url == APP_URL_HOME) {
@@ -298,8 +298,8 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
     private fun exitFullScreenIfPossibleAndBack() {
         // Backing while full-screened can lead to unstable behavior (see #1224),
         // so we always attempt to exit full-screen before backing
-        requireComponents.sessionManager.getEngineSession()?.exitFullScreenMode()
-        if (session.canGoBack) requireComponents.sessionUseCases.goBack.invoke()
+        requireWebRenderComponents.sessionManager.getEngineSession()?.exitFullScreenMode()
+        if (session.canGoBack) requireWebRenderComponents.sessionUseCases.goBack.invoke()
     }
 
     fun onBackPressed(): Boolean {
@@ -313,7 +313,7 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
                 TelemetryIntegration.INSTANCE.browserBackControllerEvent()
             }
             else -> {
-                context!!.components.sessionManager.remove()
+                context!!.webRenderComponents.sessionManager.remove()
 
                 // We can get into this state in two situations:
                 // - (1) The user is on the "home page" and the overlay is visible. In this situation we just want to
@@ -335,14 +335,14 @@ class BrowserFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     fun loadUrl(url: String) {
         if (url.isNotEmpty()) {
-            val session = requireComponents.sessionManager.selectedSession
+            val session = requireWebRenderComponents.sessionManager.selectedSession
 
             if (session != null) {
                 // We already have an active session, let's just load the URL.
-                requireComponents.sessionUseCases.loadUrl.invoke(url)
+                requireWebRenderComponents.sessionUseCases.loadUrl.invoke(url)
             } else {
                 // There's no session (anymore). Let's create a new one.
-                requireComponents.sessionManager.add(Session(url), selected = true)
+                requireWebRenderComponents.sessionManager.add(Session(url), selected = true)
             }
         }
     }

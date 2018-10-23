@@ -20,7 +20,7 @@ import org.mozilla.tv.firefox.webrender.BrowserFragment.Companion.APP_URL_HOME
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.webrender.WebViewCache
 import org.mozilla.tv.firefox.webrender.VideoVoiceCommandMediaSession
-import org.mozilla.tv.firefox.ext.components
+import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.setupForApp
 import org.mozilla.tv.firefox.ext.toSafeIntent
@@ -56,7 +56,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         }
 
         override fun onSessionRemoved(session: Session) {
-            if (components.sessionManager.sessions.isEmpty()) {
+            if (webRenderComponents.sessionManager.sessions.isEmpty()) {
                 onNoActiveSession()
             }
         }
@@ -89,14 +89,14 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         IntentValidator.validateOnCreate(this, intent, savedInstanceState, ::onValidBrowserIntent)
 
-        components.sessionManager.register(sessionObserver, owner = this)
+        webRenderComponents.sessionManager.register(sessionObserver, owner = this)
 
-        if (components.sessionManager.sessions.isEmpty()) {
+        if (webRenderComponents.sessionManager.sessions.isEmpty()) {
             ScreenController.showBrowserScreenForUrl(this@MainActivity, supportFragmentManager, APP_URL_HOME, Session.Source.NONE)
         } else {
             ScreenController.showBrowserScreenForCurrentSession(
                 supportFragmentManager,
-                components.sessionManager.selectedSessionOrThrow)
+                webRenderComponents.sessionManager.selectedSessionOrThrow)
         }
 
         if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding()) {

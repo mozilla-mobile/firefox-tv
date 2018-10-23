@@ -14,7 +14,7 @@ import android.util.TypedValue
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.utils.UrlUtils
 
-class HomeTilePlaceholderGenerator {
+class PinnedTilePlaceholderGenerator {
 
     companion object {
         private val TEXT_SIZE_DP = 22f

@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.ext.requireComponents
+import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.webrender.EngineViewLifecycleFragment
 
 class InfoFragment : EngineViewLifecycleFragment(), Session.Observer {
@@ -32,7 +32,7 @@ class InfoFragment : EngineViewLifecycleFragment(), Session.Observer {
         val session = Session(arguments!!.getString(ARGUMENT_URL)!!)
         session.register(this, owner = this)
 
-        val engineSession = requireComponents.sessionManager.getOrCreateEngineSession(session)
+        val engineSession = requireWebRenderComponents.sessionManager.getOrCreateEngineSession(session)
 
         // We explicitly disable tracking protection for the InfoFragment in order to:
         // - Not break linked pages (like support articles)

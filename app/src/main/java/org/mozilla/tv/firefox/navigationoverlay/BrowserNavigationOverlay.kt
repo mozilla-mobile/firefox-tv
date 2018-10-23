@@ -118,9 +118,9 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     }
 
     var onNavigationEvent: ((
-            event: NavigationEvent,
-            value: String?,
-            autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?
+        event: NavigationEvent,
+        value: String?,
+        autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?
     ) -> Unit)? = null
     var navigationStateProvider: BrowserNavigationStateProvider? = null
 

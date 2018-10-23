@@ -6,7 +6,7 @@ package org.mozilla.tv.firefox.ext
 
 import android.content.Context
 import android.view.accessibility.AccessibilityManager
-import org.mozilla.tv.firefox.webrender.Components
+import org.mozilla.tv.firefox.webrender.WebRenderComponents
 import org.mozilla.tv.firefox.FirefoxApplication
 
 // Extension functions for the Context class
@@ -36,5 +36,5 @@ val Context.application: FirefoxApplication
 /**
  * Get the components of this application.
  */
-val Context.components: Components
+val Context.webRenderComponents: WebRenderComponents
     get() = application.components

@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentManager
 import android.text.TextUtils
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.webrender.BrowserFragment
-import org.mozilla.tv.firefox.ext.components
+import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
@@ -93,7 +93,7 @@ object ScreenController {
             browserFragment.loadUrl(url)
         } else {
             val session = Session(url, source = source)
-            context.components.sessionManager.add(session, selected = true)
+            context.webRenderComponents.sessionManager.add(session, selected = true)
         }
     }
 

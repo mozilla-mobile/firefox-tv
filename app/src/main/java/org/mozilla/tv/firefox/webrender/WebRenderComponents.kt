@@ -17,7 +17,7 @@ import org.mozilla.tv.firefox.utils.Settings
  * Helper class for lazily instantiating and keeping references to components needed by the
  * application.
  */
-class Components(applicationContext: Context, systemUserAgent: String) {
+class WebRenderComponents(applicationContext: Context, systemUserAgent: String) {
     val engine: Engine by lazy {
         fun getUserAgent(): String = UserAgent.buildUserAgentString(
                 applicationContext,

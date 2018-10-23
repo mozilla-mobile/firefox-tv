@@ -15,7 +15,7 @@ import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.AppConstants
 import org.mozilla.tv.firefox.utils.OkHttpWrapper
 import org.mozilla.tv.firefox.utils.ServiceLocator
-import org.mozilla.tv.firefox.webrender.Components
+import org.mozilla.tv.firefox.webrender.WebRenderComponents
 
 open class FirefoxApplication : LocaleAwareApplication() {
     lateinit var visibilityLifeCycleCallback: VisibilityLifeCycleCallback
@@ -34,7 +34,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
      * first). Therefore we delay the creation so that the components can access and use the
      * application context at the time they get created.
      */
-    val components by lazy { Components(this, getSystemUserAgent()) }
+    val components by lazy { WebRenderComponents(this, getSystemUserAgent()) }
     var serviceLocator = ServiceLocator()
         private set
 

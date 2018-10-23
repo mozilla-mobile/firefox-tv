@@ -16,7 +16,7 @@ import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.deleteData
 import org.mozilla.tv.firefox.ext.getAccessibilityManager
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
-import org.mozilla.tv.firefox.ext.requireComponents
+import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.telemetry.DataUploadPreference
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
@@ -49,8 +49,8 @@ class SettingsFragment : Fragment() {
             builder1.setPositiveButton(
                 getString(R.string.action_ok)
             ) { dialog, _ -> with(requireContext()) {
-                    requireComponents.engine.deleteData(this)
-                    requireComponents.sessionManager.removeAll()
+                    requireWebRenderComponents.engine.deleteData(this)
+                    requireWebRenderComponents.sessionManager.removeAll()
                     dialog.cancel()
                     // The call to recreate destroys state being maintained in the WebView (including
                     // navigation history) and Activity. This implementation will need to change
