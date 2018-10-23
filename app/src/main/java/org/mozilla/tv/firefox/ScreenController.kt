@@ -9,7 +9,7 @@ import android.content.Context
 import android.support.v4.app.FragmentManager
 import android.text.TextUtils
 import mozilla.components.browser.session.Session
-import org.mozilla.tv.firefox.webrender.BrowserFragment
+import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.settings.SettingsFragment
@@ -62,7 +62,7 @@ object ScreenController {
     }
 
     fun showBrowserScreenForCurrentSession(fragmentManager: FragmentManager, session: Session) {
-        val fragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as BrowserFragment?
+        val fragment = fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as WebRenderFragment?
         if (fragment != null && fragment.session == session) {
             // There's already a BrowserFragment displaying this session.
             return
@@ -72,7 +72,7 @@ object ScreenController {
         fragmentManager
                 .beginTransaction()
                 .replace(R.id.container,
-                        BrowserFragment.createForSession(session), BrowserFragment.FRAGMENT_TAG)
+                        WebRenderFragment.createForSession(session), WebRenderFragment.FRAGMENT_TAG)
                 .commit()
     }
 
@@ -86,7 +86,7 @@ object ScreenController {
         //
         // However, from a user perspective, the behavior is correct (e.g. back stack functions
         // correctly with multiple sessions).
-        val browserFragment = fragmentManager.findFragmentByTag(BrowserFragment.FRAGMENT_TAG) as? BrowserFragment
+        val browserFragment = fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as? WebRenderFragment
         if (browserFragment != null && browserFragment.isVisible) {
             // We can't call loadUrl on the Fragment until the view hierarchy is inflated so we check
             // for visibility in addition to existence.
