@@ -12,11 +12,11 @@ class BrowserRobot {
     class Transition {
         private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
-        fun openOverlay(interact: HomeRobot.() -> Unit): HomeRobot.Transition {
+        fun openOverlay(interact: NavigationOverlayRobot.() -> Unit): NavigationOverlayRobot.Transition {
             device.pressMenu()
 
-            HomeRobot().interact()
-            return HomeRobot.Transition()
+            NavigationOverlayRobot().interact()
+            return NavigationOverlayRobot.Transition()
         }
     }
 }

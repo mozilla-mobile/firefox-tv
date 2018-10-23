@@ -21,9 +21,9 @@ import org.mozilla.tv.firefox.helpers.ext.click
 import org.mozilla.tv.firefox.pinnedtile.TileViewHolder
 
 /**
- * Implementation of Robot Pattern for the home menu.
+ * Implementation of Robot Pattern for the navigation overlay menu.
  */
-class HomeRobot {
+class NavigationOverlayRobot {
 
     fun goBack() = backButton().click()
     fun goForward() = forwardButton().click()
@@ -67,13 +67,13 @@ class HomeRobot {
 }
 
 /**
- * Applies [interact] to a new [HomeRobot]
+ * Applies [interact] to a new [NavigationOverlayRobot]
  *
  * @sample org.mozilla.tv.firefox.session.ClearSessionTest.WHEN_data_is_cleared_THEN_back_and_forward_should_be_unavailable
  */
-fun home(interact: HomeRobot.() -> Unit): HomeRobot.Transition {
-    HomeRobot().interact()
-    return HomeRobot.Transition()
+fun navigationOverlay(interact: NavigationOverlayRobot.() -> Unit): NavigationOverlayRobot.Transition {
+    NavigationOverlayRobot().interact()
+    return NavigationOverlayRobot.Transition()
 }
 
 private fun backButton() = onView(withId(R.id.navButtonBack))
