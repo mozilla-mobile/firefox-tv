@@ -5,20 +5,16 @@
 package org.mozilla.tv.firefox.ui.robots
 
 import android.net.Uri
-import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.onView
+import android.support.test.espresso.action.ViewActions.clearText
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.action.ViewActions.pressImeActionButton
 import android.support.test.espresso.action.ViewActions.replaceText
-import android.support.test.espresso.assertion.ViewAssertions.matches
+import android.support.test.espresso.action.ViewActions.typeText
 import android.support.test.espresso.contrib.RecyclerViewActions
-import android.support.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE
 import android.support.test.espresso.matcher.ViewMatchers.hasDescendant
-import android.support.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.espresso.matcher.ViewMatchers.withText
-import android.support.test.uiautomator.UiDevice
-import org.hamcrest.CoreMatchers.not
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.helpers.ext.assertIsEnabled
 import org.mozilla.tv.firefox.helpers.ext.click
@@ -28,18 +24,6 @@ import org.mozilla.tv.firefox.pinnedtile.TileViewHolder
  * Implementation of Robot Pattern for the home menu.
  */
 class HomeRobot {
-
-    private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-
-    fun openMenu() {
-        overlay().check(matches(not(withEffectiveVisibility(VISIBLE))))
-        device.pressMenu()
-    }
-
-    fun closeMenu() {
-        overlay().check(matches(withEffectiveVisibility(VISIBLE)))
-        device.pressMenu()
-    }
 
     fun goBack() = backButton().click()
     fun goForward() = forwardButton().click()
@@ -54,25 +38,43 @@ class HomeRobot {
         assertCanGoForward(canGoForward)
     }
 
-    fun navigateToPage(url: Uri) {
-        urlBar().perform(replaceText(url.toString()), pressImeActionButton())
-    }
+    class Transition {
 
-    fun openTile(index: Int) {
-        homeTiles().perform(RecyclerViewActions.actionOnItemAtPosition<TileViewHolder>(index, click()))
-    }
+        fun enterUrlAndEnterToBrowser(url: Uri, interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
+            urlBar().perform(clearText(),
+                    typeText(url.toString()),
+                    pressImeActionButton())
 
-    fun openTile(title: String) {
-        homeTiles().perform(RecyclerViewActions.actionOnItem<TileViewHolder>(hasDescendant(withText(title)), click()))
+            BrowserRobot().interact()
+            return BrowserRobot.Transition()
+        }
+
+        fun openTileToBrowser(index: Int) {
+            homeTiles().perform(RecyclerViewActions.actionOnItemAtPosition<TileViewHolder>(index, click()))
+        }
+
+        fun openTileToBrowser(title: String) {
+            homeTiles().perform(RecyclerViewActions.actionOnItem<TileViewHolder>(hasDescendant(withText(title)), click()))
+        }
+
+        fun openSettings(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
+            settingsButton().click()
+
+            SettingsRobot().interact()
+            return SettingsRobot.Transition()
+        }
     }
 }
 
 /**
- * Applies [func] to a new [HomeRobot]
+ * Applies [interact] to a new [HomeRobot]
  *
  * @sample org.mozilla.tv.firefox.session.ClearSessionTest.WHEN_data_is_cleared_THEN_back_and_forward_should_be_unavailable
  */
-fun home(func: HomeRobot.() -> Unit) = HomeRobot().apply(func)
+fun home(interact: HomeRobot.() -> Unit): HomeRobot.Transition {
+    HomeRobot().interact()
+    return HomeRobot.Transition()
+}
 
 private fun backButton() = onView(withId(R.id.navButtonBack))
 private fun forwardButton() = onView(withId(R.id.navButtonForward))

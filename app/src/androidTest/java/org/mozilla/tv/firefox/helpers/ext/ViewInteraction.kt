@@ -7,7 +7,7 @@ package org.mozilla.tv.firefox.helpers.ext
 import android.support.test.espresso.ViewInteraction
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.assertion.ViewAssertions.matches
-import org.mozilla.focus.helpers.isEnabled
+import org.mozilla.tv.firefox.helpers.isEnabled
 
 fun ViewInteraction.click(): ViewInteraction = this.perform(ViewActions.click())
 
