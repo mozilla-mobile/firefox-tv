@@ -4,8 +4,8 @@
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="org.mozilla.focus.MainActivity"
-    tools:parentTag="org.mozilla.focus.home.pocket.PocketVideoMegaTile">
+    tools:context="org.mozilla.tv.firefox.MainActivity"
+    tools:parentTag="org.mozilla.tv.firefox.home.pocket.PocketVideoMegaTile">
 
     <!-- To ensure this lays out consistently, we declare some attributes in code.
 

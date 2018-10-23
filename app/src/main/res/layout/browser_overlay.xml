@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
-<org.mozilla.focus.browser.BrowserNavigationOverlayScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<org.mozilla.tv.firefox.browser.BrowserNavigationOverlayScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/overlayScrollView"
     android:layout_width="match_parent"
@@ -43,7 +43,7 @@
             Drawable tinted in code (XML needs API 23+).
 
             android:importantForAutofill (XML needs API 26+) requires tools:ignore="UnusedAttribute" for lint check -->
-            <org.mozilla.focus.widget.InlineAutocompleteEditText
+            <org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
                 android:id="@+id/navUrlInput"
                 android:layout_width="498dp"
                 android:layout_height="@dimen/urlbar_height"
@@ -68,7 +68,7 @@
                 android:textIsSelectable="false" />
 
             <!-- Content description added in code. -->
-            <org.mozilla.focus.home.pocket.PocketVideoMegaTile
+            <org.mozilla.tv.firefox.home.pocket.PocketVideoMegaTile
                 android:id="@+id/pocketVideoMegaTileView"
                 android:layout_width="match_parent"
                 android:layout_height="108dp"
@@ -91,4 +91,4 @@
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
-</org.mozilla.focus.browser.BrowserNavigationOverlayScrollView>
+</org.mozilla.tv.firefox.browser.BrowserNavigationOverlayScrollView>
