@@ -14,7 +14,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mozilla.tv.firefox.assertEqualsWithDelta
+import org.mozilla.tv.firefox.helpers.assertEqualsWithDelta
 import org.mozilla.tv.firefox.home.HomeTileScreenshotStore
 import java.util.UUID
 
