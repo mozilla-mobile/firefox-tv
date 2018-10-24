@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.helpers.ext
 
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
 import android.support.test.runner.AndroidJUnit4
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -58,6 +59,23 @@ class LiveDataMapTest {
                 .map { it.toString() }
             mapped.observeForever { assertEquals("5", it) }
             source.value = 1
+        }
+    }
+
+    @Test
+    fun WHEN_source_is_updated_THEN_mapped_should_continue_to_emit_values() {
+        activityTestRule.runOnUiThread {
+            val firstObserver = Observer<Int> { assertEquals(2, it) }
+            val mapped = source.map { it * 2 }
+            mapped.observeForever(firstObserver)
+
+            source.value = 1
+
+            mapped.removeObserver(firstObserver)
+
+            source.value = 2
+
+            mapped.observeForever { assertEquals(4, it) }
         }
     }
 }
