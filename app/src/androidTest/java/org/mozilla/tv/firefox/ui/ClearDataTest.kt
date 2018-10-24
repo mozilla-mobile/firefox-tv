@@ -42,6 +42,7 @@ class ClearDataTest {
         activityTestRule.activity.finishAndRemoveTask()
     }
 
+    /* ktlint-disable no-blank-line-before-rbrace */ // This imposes unreadable grouping.
     @Test
     fun WHEN_data_is_cleared_THEN_back_and_forward_should_be_unavailable() {
         val endpoints = MockWebServerHelper
@@ -73,4 +74,5 @@ class ClearDataTest {
             }
         }
     }
+    /* ktlint-enable no-blank-line-before-rbrace */
 }
