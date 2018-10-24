@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.tv.firefox
+package org.mozilla.tv.firefox.helpers.ext
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
@@ -14,13 +14,13 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule
-import org.mozilla.tv.firefox.utils.LiveData
+import org.mozilla.tv.firefox.ext.LiveData
 
 @RunWith(AndroidJUnit4::class)
 @Suppress("TestFunctionName")
 // Espresso test functions can't have spaces in their names, even between backticks. This prevents
 // the linting error for starting a function with an uppercase letter
-class LiveDataTest {
+class LiveDataCombineLatestTest {
 
     @Rule @JvmField
     val activityTestRule = SkipOnboardingMainActivityTestRule()
