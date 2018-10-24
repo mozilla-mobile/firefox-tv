@@ -35,7 +35,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
      * application context at the time they get created.
      */
     val components by lazy { WebRenderComponents(this, getSystemUserAgent()) }
-    var serviceLocator = ServiceLocator()
+    lateinit var serviceLocator: ServiceLocator
         private set
 
     // [setTestServiceLocator] is used during testing to pass in a [ServiceLocator] with mocked dependencies.
@@ -57,6 +57,8 @@ open class FirefoxApplication : LocaleAwareApplication() {
         super.onCreate()
 
         PreferenceManager.setDefaultValues(this, R.xml.settings, false)
+
+        serviceLocator = ServiceLocator(this)
 
         enableStrictMode()
 
