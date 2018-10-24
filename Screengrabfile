@@ -24,3 +24,4 @@ clear_previous_screenshots true
 exit_on_test_failure false
 
 skip_open_summary false
+reinstall_app true

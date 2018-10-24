@@ -6,11 +6,10 @@
 package org.mozilla.tv.firefox.ui.screenshots;
 
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObject;
-import android.support.test.uiautomator.UiSelector;
 
 import org.junit.After;
 import org.junit.ClassRule;
@@ -25,17 +24,21 @@ import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.locale.LocaleTestRule;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
-import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.longClick;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
 import static android.support.test.espresso.matcher.ViewMatchers.hasFocus;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsNot.not;
 
 
 @RunWith(AndroidJUnit4.class)
-public class PocketErrorTest extends ScreenshotTest {
+public class PinTileTests extends ScreenshotTest {
 
     private UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
@@ -51,20 +54,28 @@ public class PocketErrorTest extends ScreenshotTest {
     }
 
     @Test
-    public void showPocketTileError() {
-        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()))
-                .perform(replaceText("firefox:error:pocketconnection"))
-                .perform(pressImeActionButton());
+    public void unpinTileFromContextMenu() {
+        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()));
 
-        UiObject errorMsg = mDevice.findObject(new UiSelector()
-                .resourceId("org.mozilla.tv.firefox.debug:id/pocketMegaTileLoadError")
-                .enabled(true));
+        mDevice.pressDPadDown();
+        mDevice.pressDPadDown();
 
-        errorMsg.waitForExists(5000);
+        onView(withText(R.string.homescreen_unpin_tutorial_toast))
+                .inRoot(withDecorView(not(is(mActivityTestRule.getActivity().getWindow().getDecorView()))))
+                .check(matches(isDisplayed()));
 
-        Screengrab.screenshot("pocket-tile-error");
+        Screengrab.screenshot("unpin-toast");
 
-        onView(allOf(withId(R.id.megaTileTryAgainButton), isDisplayed()))
-                .perform(click());
+        mDevice.waitForIdle();
+
+        onView(ViewMatchers.withId(R.id.tileContainer))
+                .perform(actionOnItemAtPosition(0, longClick()));
+
+        onView(withText(R.string.homescreen_tile_remove))
+                .check(matches(isDisplayed()));
+
+        Screengrab.screenshot("menu-remove-tile");
+
+        mDevice.pressBack();
     }
 }

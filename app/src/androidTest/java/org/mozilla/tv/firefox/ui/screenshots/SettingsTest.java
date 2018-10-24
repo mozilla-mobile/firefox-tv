@@ -6,11 +6,10 @@
 package org.mozilla.tv.firefox.ui.screenshots;
 
 import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObject;
-import android.support.test.uiautomator.UiSelector;
 
 import org.junit.After;
 import org.junit.ClassRule;
@@ -26,16 +25,16 @@ import tools.fastlane.screengrab.locale.LocaleTestRule;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
-import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.hasFocus;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
 
 @RunWith(AndroidJUnit4.class)
-public class PocketErrorTest extends ScreenshotTest {
+public class SettingsTest extends ScreenshotTest {
 
     private UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
@@ -51,20 +50,41 @@ public class PocketErrorTest extends ScreenshotTest {
     }
 
     @Test
-    public void showPocketTileError() {
-        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()))
-                .perform(replaceText("firefox:error:pocketconnection"))
-                .perform(pressImeActionButton());
+    public void showSettingsViews() {
+        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()));
 
-        UiObject errorMsg = mDevice.findObject(new UiSelector()
-                .resourceId("org.mozilla.tv.firefox.debug:id/pocketMegaTileLoadError")
-                .enabled(true));
-
-        errorMsg.waitForExists(5000);
-
-        Screengrab.screenshot("pocket-tile-error");
-
-        onView(allOf(withId(R.id.megaTileTryAgainButton), isDisplayed()))
+        // visit settings
+        onView(allOf(withId(R.id.navButtonSettings), isDisplayed()))
                 .perform(click());
+
+        // current settings list view
+        onView(allOf(withId(R.id.container), isDisplayed()));
+
+        ViewInteraction clearButton = onView(
+                allOf(withId(R.id.deleteButton), isDisplayed()));
+
+        // capture a screenshot of the default settings list
+        Screengrab.screenshot("settings");
+
+        // capture a screenshot of the clear data dialog
+        clearButton.perform(click());
+
+        onView(allOf(withText(R.string.settings_cookies_dialog_content2), isDisplayed())).inRoot(isDialog());
+
+        Screengrab.screenshot("clear-all-data");
+
+        mDevice.pressBack();
+
+        onView(allOf(withId(R.id.aboutButton), isDisplayed()))
+                .perform(click());
+
+        onView(allOf(withId(R.id.webview), isDisplayed()));
+        onView(allOf(withId(R.string.your_rights), isDisplayed()));
+
+        mDevice.waitForIdle();
+
+        Screengrab.screenshot("about-screen");
+
+        mDevice.pressBack();
     }
 }
