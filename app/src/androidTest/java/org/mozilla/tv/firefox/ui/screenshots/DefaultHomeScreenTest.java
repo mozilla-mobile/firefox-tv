@@ -9,8 +9,6 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObject;
-import android.support.test.uiautomator.UiSelector;
 
 import org.junit.After;
 import org.junit.ClassRule;
@@ -25,9 +23,6 @@ import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.locale.LocaleTestRule;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
-import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.matcher.ViewMatchers.hasFocus;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -35,7 +30,7 @@ import static org.hamcrest.Matchers.allOf;
 
 
 @RunWith(AndroidJUnit4.class)
-public class PocketErrorTest extends ScreenshotTest {
+public class DefaultHomeScreenTest extends ScreenshotTest {
 
     private UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
@@ -51,20 +46,9 @@ public class PocketErrorTest extends ScreenshotTest {
     }
 
     @Test
-    public void showPocketTileError() {
-        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()))
-                .perform(replaceText("firefox:error:pocketconnection"))
-                .perform(pressImeActionButton());
-
-        UiObject errorMsg = mDevice.findObject(new UiSelector()
-                .resourceId("org.mozilla.tv.firefox.debug:id/pocketMegaTileLoadError")
-                .enabled(true));
-
-        errorMsg.waitForExists(5000);
-
-        Screengrab.screenshot("pocket-tile-error");
-
-        onView(allOf(withId(R.id.megaTileTryAgainButton), isDisplayed()))
-                .perform(click());
+    public void showDefaultHomeScreen() {
+        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()));
+        onView(allOf(withId(R.id.tileContainer), isDisplayed()));
+        Screengrab.screenshot("home-screen");
     }
 }
