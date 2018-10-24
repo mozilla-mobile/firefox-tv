@@ -37,7 +37,7 @@ import java.nio.charset.StandardCharsets;
         }
     }
 
-    /* package */ @VisibleForTesting static SearchEngine load(String identifier, InputStream stream) throws IOException, XmlPullParserException {
+    /* package */ @VisibleForTesting(otherwise = VisibleForTesting.PACKAGE_PRIVATE) static SearchEngine load(String identifier, InputStream stream) throws IOException, XmlPullParserException {
         final SearchEngine searchEngine = new SearchEngine(identifier);
 
         XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
