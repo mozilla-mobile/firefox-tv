@@ -51,6 +51,7 @@ class BasicNavigationTest {
         activityTestRule.activity.finishAndRemoveTask()
     }
 
+    /* ktlint-disable no-blank-line-before-rbrace */ // This imposes unreadable grouping.
     @Test
     fun basicNavigationTest() {
         val server = MockWebServer().apply {
@@ -141,4 +142,5 @@ class BasicNavigationTest {
             assertNotEquals(preReloadTitle, getPageTitle())
         }
     }
+    /* ktlint-enable no-blank-line-before-rbrace */
 }
