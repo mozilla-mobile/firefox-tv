@@ -45,6 +45,7 @@ import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
+import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import java.lang.ref.WeakReference
 
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
@@ -88,8 +89,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         fun isBackEnabled(): Boolean
         fun isForwardEnabled(): Boolean
         fun getCurrentUrl(): String?
-        fun isURLPinned(): Boolean
-        fun isPinEnabled(): Boolean
+        fun isURLPinned(): Boolean // TODO: ToolbarVM + PinnedTileRepo
+        fun isPinEnabled(): Boolean // TODO: ToolbarVM + PinnedTileRepo
         fun isRefreshEnabled(): Boolean
         fun isDesktopModeEnabled(): Boolean
         fun isDesktopModeOn(): Boolean
@@ -137,6 +138,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
     private lateinit var tileAdapter: PinnedTileAdapter
 
+    private lateinit var pinnedTileViewModel: PinnedTileViewModel
+
     init {
         LayoutInflater.from(context)
                 .inflate(R.layout.browser_overlay, this, true)
@@ -161,8 +164,11 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     private fun initTiles() = with(tileContainer) {
         val homeTiles = HomeTilesManager.getTilesCache(context)
 
+//        val pinnedTileViewModel = ViewModelProviders.of(this).get(PinnedTileViewModel::class.java) TODO: needs NavigationOverlayFragment
+
         canShowUpinToast = true
 
+        // TODO: pass in VM live data instead of "homeTiles"
         tileAdapter = PinnedTileAdapter(uiLifecycleCancelJob, homeTiles, loadUrl = { urlStr ->
             with(navUrlInput) {
                 if (urlStr.isNotEmpty()) {
@@ -297,8 +303,9 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         var value: String? = null
 
         val isTurboButtonChecked = turboButton.isChecked
-        val isPinButtonChecked = pinButton.isChecked
+        val isPinButtonChecked = pinButton.isChecked // TODO: ToolbarVM + PinnedTileRepo
         val isDesktopButtonChecked = desktopModeButton.isChecked
+
         when (event) {
             NavigationEvent.TURBO -> {
                 TurboMode.toggle(context, isTurboButtonChecked)
@@ -335,7 +342,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         val isPinEnabled = navigationStateProvider?.isPinEnabled() ?: false
         updateOverlayButtonState(isPinEnabled, pinButton)
-        pinButton.isChecked = navigationStateProvider?.isURLPinned() ?: false
+        pinButton.isChecked = navigationStateProvider?.isURLPinned() ?: false // TODO: ToolbarVM + PinnedTileRepo
 
         val isRefreshEnabled = navigationStateProvider?.isRefreshEnabled() ?: false
         updateOverlayButtonState(isRefreshEnabled, navButtonReload)
@@ -432,7 +439,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     }
 
     fun removePinnedSiteFromTiles(tileId: String) {
-        tileAdapter.removeTile(tileId)
+        tileAdapter.removeTile(tileId) // TODO: PinnedTileViewModel.remove; tileAdapter.setList()
         updateOverlayForCurrentState()
     }
 
