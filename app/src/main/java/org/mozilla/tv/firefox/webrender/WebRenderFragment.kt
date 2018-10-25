@@ -36,7 +36,6 @@ import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.focusedDOMElement
-import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
@@ -165,7 +164,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             NavigationEvent.POCKET -> {
                 val (fragmentManager, activity) = Pair(fragmentManager, activity)
                 if (fragmentManager != null && activity != null) {
-                    ScreenController.showPocketScreen(fragmentManager, activity.serviceLocator)
+                    ScreenController.showPocketScreen(fragmentManager)
                 }
             }
             NavigationEvent.PIN_ACTION -> {
