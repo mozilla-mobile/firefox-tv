@@ -4,25 +4,24 @@
 
 package org.mozilla.tv.firefox.pinnedtile
 
-import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.Transformations
+import android.arch.lifecycle.ViewModel
 
 /**
  * TODO
  *
  * AndroidViewModel() is a context aware ViewModel => Used for PinnedTileRepo
  */
-class PinnedTileViewModel(application: Application, pinnedTileRepo: PinnedTileRepo) : AndroidViewModel(application) {
+class PinnedTileViewModel(pinnedTileRepo: PinnedTileRepo) : ViewModel() {
 
     private val _tilesList = MediatorLiveData<List<PinnedTile>>()
     val isEmpty: LiveData<Boolean> = Transformations.map(_tilesList) { input -> input.isEmpty() }
 
     init {
         // TODO: mediate data from PinnedTileRepo.tileList
-        _tilesList.addSource(pinnedTileRepo.loadTilesCache(application)) { pinnedTileMap ->
+        _tilesList.addSource(pinnedTileRepo.loadTilesCache()) { pinnedTileMap ->
             // FIXME: how to match type?
             val feedTileList: List<PinnedTile>? = pinnedTileMap?.values?.toMutableList()
             if ((feedTileList) != null) {
