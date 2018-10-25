@@ -7,13 +7,13 @@ package org.mozilla.tv.firefox
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.annotation.VisibleForTesting
 import android.text.TextUtils
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.utils.SafeIntent
 import org.mozilla.tv.firefox.utils.UrlUtils
 
 typealias OnValidBrowserIntent = (url: String, source: Session.Source) -> Unit
-private const val DIAL_PARAMS_KEY = "com.amazon.extra.DIAL_PARAM"
 
 /**
  * A container for functions that parse Intents and notify the application of their validity.
@@ -25,6 +25,7 @@ private const val DIAL_PARAMS_KEY = "com.amazon.extra.DIAL_PARAM"
  * in their code.
  */
 object IntentValidator {
+    @VisibleForTesting const val DIAL_PARAMS_KEY = "com.amazon.extra.DIAL_PARAM"
 
     fun validateOnCreate(context: Context, intent: SafeIntent, savedInstanceState: Bundle?, onValidBrowserIntent: OnValidBrowserIntent) {
         if ((intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0) {
