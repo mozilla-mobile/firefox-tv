@@ -4,10 +4,12 @@
 
 package org.mozilla.tv.firefox.pocket
 
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.support.annotation.VisibleForTesting
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.ext.map
+import org.mozilla.tv.firefox.pocket.PocketViewModelState.Error
+import org.mozilla.tv.firefox.pocket.PocketViewModelState.Feed
 
 const val POCKET_VIDEO_COUNT = 20
 
@@ -37,7 +39,14 @@ sealed class PocketFeedItem {
  */
 class PocketViewModel(pocketRepo: PocketRepo) : ViewModel() {
 
-    val state = MutableLiveData<PocketViewModelState>()
+    val state = pocketRepo.state.map { repoState ->
+        when (repoState) {
+            is PocketRepoState.Loading -> Feed(loadingPlaceholders)
+            is PocketRepoState.LoadComplete -> Feed(repoState.videos)
+            is PocketRepoState.NoKey -> Feed(noKeyPlaceholders)
+            is PocketRepoState.FetchFailed -> Error
+        }
+    }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     val loadingPlaceholders: List<PocketFeedItem> =
@@ -50,6 +59,6 @@ class PocketViewModel(pocketRepo: PocketRepo) : ViewModel() {
         url = "https://www.mozilla.org/en-US/",
         thumbnailURL = "https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png",
         popularitySortId = it
-        )
+    )
     }
 }
