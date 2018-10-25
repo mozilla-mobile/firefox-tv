@@ -108,33 +108,6 @@ open class Pocket {
     }
 }
 
-sealed class PocketFeedItem
-object PocketPlaceholder : PocketFeedItem()
-data class PocketVideo(
-    val id: Int,
-    val title: String,
-    val url: String,
-    val thumbnailURL: String,
-    val popularitySortId: Int
-) : PocketFeedItem() {
-
-    companion object {
-        fun fromJSONObject(jsonObj: JSONObject): PocketVideo? = try {
-            PocketVideo(
-                    id = jsonObj.getInt("id"),
-                    title = jsonObj.getString("title"),
-                    // Note that the 'url' property of our domain object can be retrieved from
-                    // either of two JSON fields, and we make no distinction internally
-                    url = jsonObj.optString("tv_url", null) ?: jsonObj.getString("url"),
-                    thumbnailURL = jsonObj.getString("image_src"),
-                    popularitySortId = jsonObj.getInt("popularity_sort_id")
-            )
-        } catch (e: JSONException) {
-            null
-        }
-    }
-}
-
 fun ImageView.setImageDrawableAsPocketWordmark() {
     // We want to set SVGs in code because they can produce artifacts otherwise.
     setImageDrawable(context.getDrawable(R.drawable.ic_pocket_and_wordmark)!!.apply {
