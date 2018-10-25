@@ -180,18 +180,22 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             NavigationEvent.DESKTOP_MODE -> {
                 when (value) {
                     NavigationEvent.VAL_CHECKED -> {
-                        requireWebRenderComponents.sessionUseCases.reload.invoke()
-
+                        session.desktopMode = true
+                        setOverlayVisible(false)
                     }
                     NavigationEvent.VAL_UNCHECKED -> {
-                        requireWebRenderComponents.sessionUseCases.reload.invoke()
-
+                        session.desktopMode = false
+                        setOverlayVisible(false)
                     }
                     else -> throw IllegalArgumentException("Unexpected value for DESKTOP_MODE: " + value)
                 }
             }
         }
         Unit
+    }
+
+    override fun onDesktopModeChanged(session: Session, enabled: Boolean) {
+        requireWebRenderComponents.sessionUseCases.requestDesktopSite.invoke(enabled, session)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -421,6 +425,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             CustomTilesManager.getInstance(context!!).isURLPinned(it.toString()) ||
                     BundledTilesManager.getInstance(context!!).isURLPinned(it) } ?: false
         override fun isDesktopModeEnabled() = !isUrlEqualToHomepage
-        override fun isDesktopModeOn() = false //TODO
+        override fun isDesktopModeOn() = session.desktopMode
     }
 }
