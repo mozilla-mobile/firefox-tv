@@ -4,6 +4,8 @@
 
 package org.mozilla.tv.firefox.pocket
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -19,43 +21,33 @@ import android.widget.ImageView
 import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_pocket_video.*
 import kotlinx.android.synthetic.main.fragment_pocket_video.view.*
-import kotlinx.coroutines.experimental.CoroutineStart
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
+import org.mozilla.tv.firefox.ViewModelFactory
 import org.mozilla.tv.firefox.ext.forceExhaustive
-import org.mozilla.tv.firefox.ext.isNotCompleted
 import org.mozilla.tv.firefox.ext.resetAfter
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.updateLayoutParams
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.FormattedDomain
 import org.mozilla.tv.firefox.utils.PicassoWrapper
+import org.mozilla.tv.firefox.utils.ServiceLocator
 import java.net.URI
 import java.net.URISyntaxException
 
 /** A feed of Pocket videos. */
 class PocketVideoFragment : Fragment() {
 
-    private lateinit var deferredVideos: PocketVideosDeferred
-    private var uiLifecycleCancelJob: Job? = null
+    private lateinit var viewModel: PocketViewModel
+    private lateinit var serviceLocator: ServiceLocator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // The video feed is typically provided by the creator of this fragment such that the videos
-        // on that view (the home screen) match the ones in this feed. However, if this fragment is
-        // being reconstructed, the data will no longer be in memory so we get retrieve the data again
-        // here. Typically, the data would be provided with `Fragment.getArguments`, which would be
-        // provided to reconstructed fragment but we intentionally don't do that: if the feed is
-        // being reconstructed, the user probably cares more about an up-to-date feed rather than
-        // consistency with the home screen they saw a while ago.
-        if (!this::deferredVideos.isInitialized) {
-            deferredVideos = context!!.serviceLocator.pocket.getRecommendedVideos()
-        }
+        serviceLocator = context!!.serviceLocator
+        val factory = ViewModelFactory(serviceLocator)
+        viewModel = ViewModelProviders.of(this, factory).get(PocketViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -63,49 +55,24 @@ class PocketVideoFragment : Fragment() {
         val adapter = PocketVideoAdapter(context!!, fragmentManager!!).also {
             layout.videoFeed.gridView.adapter = it
         }
-        fun setupLoadingIfApplicable() {
-            if (deferredVideos.isNotCompleted()) {
-                // We show 20 placeholders because our feed will be updated to show 20 items
-                val placeholders = List(20) { PocketPlaceholder }
-                adapter.setVideos(placeholders)
-            }
-        }
-        fun displayFeedOrError(videos: List<PocketVideo>?) {
-            if (videos != null) {
-                adapter.setVideos(videos)
-            } else {
-                // TODO: #769: display error screen.
-            }
-        }
 
         // SVGs can have artifacts if we set them in XML so we set it in code.
-        layout.pocketWordmarkView.setImageDrawableAsPocketWordmark()
+        PocketDrawable.setImageDrawableAsPocketWordmark(layout.pocketWordmarkView)
         layout.pocketHelpButton.setImageDrawable(context!!.getDrawable(R.drawable.pocket_onboarding_help_button))
 
-        uiLifecycleCancelJob = launch(UI, CoroutineStart.UNDISPATCHED) {
-            setupLoadingIfApplicable()
-            val videos = deferredVideos.await()
-            displayFeedOrError(videos)
-        }
+        viewModel.state.observe(viewLifecycleOwner, Observer<PocketViewModelState> { state ->
+            state ?: return@Observer
+            when (state) {
+                is PocketViewModelState.Error -> { /* TODO: #769: display error screen */ }
+                is PocketViewModelState.Feed -> adapter.setVideos(state.feed)
+            }.forceExhaustive
+        })
         return layout
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         pocketHelpButton.setOnClickListener { _ ->
             startActivity(Intent(context, PocketOnboardingActivity::class.java))
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        uiLifecycleCancelJob?.cancel()
-        uiLifecycleCancelJob = null
-    }
-
-    companion object {
-        fun create(videos: PocketVideosDeferred) = PocketVideoFragment().apply {
-            // See onCreate for why we don't use `arguments`.
-            this.deferredVideos = videos
         }
     }
 }
@@ -141,8 +108,8 @@ private class PocketVideoAdapter(
         setHorizontalMargins(holder, position)
 
         when (item) {
-            is PocketPlaceholder -> holder.bindPlaceholder()
-            is PocketVideo -> holder.bindPocketVideo(item)
+            is PocketFeedItem.Loading -> holder.bindPlaceholder()
+            is PocketFeedItem.Video -> holder.bindPocketVideo(item)
         }.forceExhaustive
     }
 
@@ -154,7 +121,7 @@ private class PocketVideoAdapter(
         videoThumbnailView.setImageResource(R.color.photonGrey50)
     }
 
-    private fun PocketVideoViewHolder.bindPocketVideo(item: PocketVideo) {
+    private fun PocketVideoViewHolder.bindPocketVideo(item: PocketFeedItem.Video) {
         itemView.setOnClickListener {
             ScreenController.showBrowserScreenForUrl(itemView.context, fragmentManager, item.url, Session.Source.HOME_SCREEN)
             TelemetryIntegration.INSTANCE.pocketVideoClickEvent(item.id)
