@@ -314,9 +314,9 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             else -> Unit // Nothing to do.
         }
         onNavigationEvent?.invoke(event, value, null)
-        TelemetryIntegration.INSTANCE.overlayClickEvent(event, isTurboButtonChecked, isPinButtonChecked, isDesktopButtonChecked)
+        TelemetryIntegration.INSTANCE.overlayClickEvent(event, isTurboButtonChecked, isPinButtonChecked)
     }
-
+    @SuppressWarnings("LongMethod")
     fun updateOverlayForCurrentState() {
         fun updateOverlayButtonState(isEnabled: Boolean, overlayButton: ImageButton) {
             overlayButton.isEnabled = isEnabled

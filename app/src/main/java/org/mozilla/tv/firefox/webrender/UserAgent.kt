@@ -16,7 +16,6 @@ import android.text.TextUtils
 
 /** A collection of user agent functionality. */
 object UserAgent {
-
     /**
      * Build the browser specific portion of the UA String, based on the webview's existing UA String.
      */

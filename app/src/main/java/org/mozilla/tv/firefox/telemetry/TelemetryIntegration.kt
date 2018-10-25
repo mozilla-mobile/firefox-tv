@@ -247,7 +247,7 @@ open class TelemetryIntegration protected constructor(
         TelemetryEvent.create(Category.AGGREGATE, Method.NO_ACTION_TAKEN, Object.MENU).queue()
     }
 
-    fun overlayClickEvent(event: NavigationEvent, isTurboButtonChecked: Boolean, isPinButtonChecked: Boolean, isDesktopModeButtonChecked: Boolean) {
+    fun overlayClickEvent(event: NavigationEvent, isTurboButtonChecked: Boolean, isPinButtonChecked: Boolean) {
         val telemetryValue = when (event) {
             NavigationEvent.SETTINGS -> Value.SETTINGS
 
@@ -267,7 +267,8 @@ open class TelemetryIntegration protected constructor(
                 return
             }
             NavigationEvent.DESKTOP_MODE -> {
-                //TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.DESKTOP_MODE, boolToOnOff(isDesktopModeButtonChecked)).queue()
+                // TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.DESKTOP_MODE,
+                // boolToOnOff(isDesktopModeButtonChecked)).queue()
                 return
             }
 
