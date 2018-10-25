@@ -344,6 +344,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 // There's no session (anymore). Let's create a new one.
                 requireWebRenderComponents.sessionManager.add(Session(url), selected = true)
             }
+            setOverlayVisible(false)
         }
     }
 

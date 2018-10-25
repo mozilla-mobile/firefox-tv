@@ -13,6 +13,7 @@ import org.mozilla.tv.firefox.utils.SafeIntent
 import org.mozilla.tv.firefox.utils.UrlUtils
 
 typealias OnValidBrowserIntent = (url: String, source: Session.Source) -> Unit
+private const val DIAL_PARAMS_KEY = "com.amazon.extra.DIAL_PARAM"
 
 /**
  * A container for functions that parse Intents and notify the application of their validity.
@@ -46,6 +47,13 @@ object IntentValidator {
         val action = intent.action
 
         when (action) {
+            Intent.ACTION_MAIN -> {
+                val dialParams = intent.extras?.getString(DIAL_PARAMS_KEY) ?: return
+                if (dialParams.isNotEmpty()) {
+                    onValidBrowserIntent("https://www.youtube.com/tv?$dialParams",
+                            Session.Source.ACTION_VIEW)
+                }
+            }
             Intent.ACTION_VIEW -> {
                 val dataString = intent.dataString
                 if (TextUtils.isEmpty(dataString)) {
