@@ -76,7 +76,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.
         SentryIntegration.init(this)
-        serviceLocator.pocket.init()
         PublicSuffix.init(this) // Used by Pocket Video feed & custom home tiles.
         initMediaSession()
         initWebViewCache()
@@ -135,12 +134,12 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
     override fun onStart() {
         super.onStart()
-        serviceLocator.pocket.startBackgroundUpdates()
+        serviceLocator.pocketRepo.startBackgroundUpdates()
     }
 
     override fun onStop() {
         super.onStop()
-        serviceLocator.pocket.stopBackgroundUpdates() // Don't regularly hit the network in the background.
+        serviceLocator.pocketRepo.stopBackgroundUpdates() // Don't regularly hit the network in the background.
         TelemetryIntegration.INSTANCE.stopMainActivity()
     }
 
