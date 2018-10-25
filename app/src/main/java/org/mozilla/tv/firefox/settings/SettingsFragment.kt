@@ -34,11 +34,15 @@ class SettingsFragment : Fragment() {
 
         ic_lock.setImageResource(R.drawable.mozac_ic_lock)
         telemetryButton.isChecked = DataUploadPreference.isEnabled(context)
-        telemetryView.setOnClickListener { _ ->
+        val dataPreferenceClickListener = { _: View ->
             val newTelemetryState = !DataUploadPreference.isEnabled(context)
             DataUploadPreference.setIsEnabled(context, newTelemetryState)
             telemetryButton.isChecked = newTelemetryState
         }
+        // Due to accessibility hack for #293, either of these views could be unfocusable, so we
+        // need to set the click listener on both.
+        telemetryView.setOnClickListener(dataPreferenceClickListener)
+        telemetryButton.setOnClickListener(dataPreferenceClickListener)
 
         deleteButton.setOnClickListener { _ ->
             val builder1 = AlertDialog.Builder(activity)
@@ -94,18 +98,20 @@ class SettingsFragment : Fragment() {
      * See the comment at the declaration of these views in XML for more details.
      */
     private fun updateForAccessibility() {
-        // When VoiceView is enabled, since the parent is initially focusable in the XML, focus is
-        // given to the parent when the Settings opens. Here, after we set focusable to false, we
-        // must also explicitly clear focus in order to give focus to the child.
+        // In order to read Accessibility text for the Telemetry checkbox WITH checked state,
+        // we need to focus the checkbox in VoiceView instead of the containing view.
         //
         // When we change VoiceView from enabled -> disabled and this setting is focused, focus is
         // cleared from this setting and nothing is selected. This is fine: the user can press
         // left-right to focus something else and it's an edge case that I don't think it is worth
         // adding code to fix.
         val context = context ?: return
-        val shouldFocus = context.isVoiceViewEnabled()
-        telemetryView.isFocusable = shouldFocus
-        if (!shouldFocus) { telemetryView.clearFocus() }
+        val shouldFocusButton = context.isVoiceViewEnabled()
+        telemetryView.isFocusable = !shouldFocusButton
+        // Clear focus so that focus passes to child telemetryButton view.
+        if (shouldFocusButton) {
+            telemetryView.clearFocus()
+        }
     }
 
     companion object {
