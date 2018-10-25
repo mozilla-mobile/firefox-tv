@@ -20,24 +20,7 @@ sealed class PocketFeedItem {
         val url: String,
         val thumbnailURL: String,
         val popularitySortId: Int
-    ) : PocketFeedItem() {
-
-        companion object {
-            fun fromJSONObject(jsonObj: JSONObject): PocketVideo? = try {
-                PocketVideo(
-                    id = jsonObj.getInt("id"),
-                    title = jsonObj.getString("title"),
-                    // Note that the 'url' property of our domain object can be retrieved from
-                    // either of two JSON fields, and we make no distinction internally
-                    url = jsonObj.optString("tv_url", null) ?: jsonObj.getString("url"),
-                    thumbnailURL = jsonObj.getString("image_src"),
-                    popularitySortId = jsonObj.getInt("popularity_sort_id")
-                )
-            } catch (e: JSONException) {
-                null
-            }
-        }
-    }
+    ) : PocketFeedItem()
 }
 
 /**
