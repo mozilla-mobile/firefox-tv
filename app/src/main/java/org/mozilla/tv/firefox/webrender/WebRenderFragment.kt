@@ -253,6 +253,8 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             }
 
             registerForContextMenu(browserOverlay.tileContainer)
+
+            observeForMegaTile(this@WebRenderFragment)
         }
 
         layout.progressBar.initialize(this)

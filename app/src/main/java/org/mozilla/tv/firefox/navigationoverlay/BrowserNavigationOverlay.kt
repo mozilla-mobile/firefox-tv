@@ -6,12 +6,14 @@ package org.mozilla.tv.firefox.navigationoverlay
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
 import android.preference.PreferenceManager
+import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -26,10 +28,9 @@ import kotlinx.android.synthetic.main.browser_overlay.view.*
 import kotlinx.android.synthetic.main.browser_overlay_top_nav.view.*
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.view.*
 import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
 import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.ViewModelFactory
 import org.mozilla.tv.firefox.components.UrlAutoCompleteFilter
 import org.mozilla.tv.firefox.ext.forEachChild
 import org.mozilla.tv.firefox.ext.isEffectivelyVisible
@@ -47,6 +48,8 @@ import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
+import org.mozilla.tv.firefox.pocket.PocketViewModel
+import org.mozilla.tv.firefox.pocket.PocketViewModelState
 import java.lang.ref.WeakReference
 
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
@@ -253,24 +256,26 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         }
 
         pocketVideoMegaTileView.setOnClickListener(this)
+    }
 
-        if (pocketVideos.isCompleted) {
-            pocketVideoMegaTileView.pocketVideos = pocketVideos.getCompleted()
+    fun observeForMegaTile(fragment: Fragment) {
+        // TODO remove this
+        // This function is necessary because BrowserNavigationOverlay is not a LifecycleOwner,
+        // and so cannot subscribe to PocketRepo's LiveData. When the overlay is turned into a
+        // fragment, this can be moved into the overlay fragment
+        val serviceLocator = fragment.context!!.serviceLocator
+        val factory = ViewModelFactory(serviceLocator)
+        val pocketViewModel = ViewModelProviders.of(fragment, factory).get(PocketViewModel::class.java)
 
-            if (pocketVideoMegaTileView.pocketVideos == null) {
-                showMegaTileError()
-            } else {
-                pocketVideosContainer.visibility = View.VISIBLE
-                pocketErrorContainer.visibility = View.GONE
-                pocketVideosContainer.contentDescription = resources.getString(R.string.pocket_home_a11y_tile_focused,
-                        resources.getString(R.string.pocket_brand_name))
+        pocketViewModel.state.observe(fragment.viewLifecycleOwner, Observer { state ->
+            state ?: return@Observer
+            when (state) {
+                is PocketViewModelState.Error -> showMegaTileError()
+                is PocketViewModelState.Feed -> {
+                    pocketVideoMegaTileView.setContent(state.feed)
+                }
             }
-        } else {
-            // TODO: #864 show loading screen
-            launch(UI) {
-                pocketVideoMegaTileView.pocketVideos = pocketVideos.await()
-            }
-        }
+        })
     }
 
     private fun setupUrlInput() = with(navUrlInput) {
