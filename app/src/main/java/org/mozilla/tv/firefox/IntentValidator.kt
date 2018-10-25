@@ -26,7 +26,7 @@ typealias OnValidBrowserIntent = (url: String, source: Session.Source) -> Unit
 object IntentValidator {
 
     fun validateOnCreate(context: Context, intent: SafeIntent, savedInstanceState: Bundle?, onValidBrowserIntent: OnValidBrowserIntent) {
-        if ((intent.getFlags() and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0) {
+        if ((intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0) {
             // This Intent was launched from history (recent apps). Android will redeliver the
             // original Intent (which might be a VIEW intent). However if there's no active browsing
             // session then we do not want to re-process the Intent and potentially re-open a website
@@ -45,22 +45,25 @@ object IntentValidator {
     fun validate(context: Context, intent: SafeIntent, onValidBrowserIntent: OnValidBrowserIntent) {
         val action = intent.action
 
-        if (Intent.ACTION_VIEW.equals(action)) {
-            val dataString = intent.getDataString()
-            if (TextUtils.isEmpty(dataString)) {
-                return // If there's no URL in the Intent then we can't create a session.
-            }
+        when (action) {
+            Intent.ACTION_VIEW -> {
+                val dataString = intent.dataString
+                if (TextUtils.isEmpty(dataString)) {
+                    return // If there's no URL in the Intent then we can't create a session.
+                }
 
-            onValidBrowserIntent(dataString, Session.Source.ACTION_VIEW)
-        } else if (Intent.ACTION_SEND.equals(action)) {
-            val dataString = intent.getStringExtra(Intent.EXTRA_TEXT)
-            if (TextUtils.isEmpty(dataString)) {
-                return
+                onValidBrowserIntent(dataString, Session.Source.ACTION_VIEW)
             }
+            Intent.ACTION_SEND -> {
+                val dataString = intent.getStringExtra(Intent.EXTRA_TEXT)
+                if (TextUtils.isEmpty(dataString)) {
+                    return
+                }
 
-            val isSearch = !UrlUtils.isUrl(dataString)
-            val url = if (isSearch) UrlUtils.createSearchUrl(context, dataString) else dataString
-            onValidBrowserIntent(url, Session.Source.ACTION_SEND)
+                val isSearch = !UrlUtils.isUrl(dataString)
+                val url = if (isSearch) UrlUtils.createSearchUrl(context, dataString) else dataString
+                onValidBrowserIntent(url, Session.Source.ACTION_SEND)
+            }
         }
     }
 }
