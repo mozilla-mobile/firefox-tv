@@ -39,9 +39,6 @@ import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
-import org.mozilla.tv.firefox.pinnedtile.BundledTilesManager
-import org.mozilla.tv.firefox.pinnedtile.CustomTilesManager
-import org.mozilla.tv.firefox.pinnedtile.HomeTilesManager
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
@@ -88,14 +85,14 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     var sessionFeature: SessionFeature? = null
     private var currentPageHost = ""
-    private lateinit var _pinnedTileViewModel: PinnedTileViewModel
+    private lateinit var pinnedTileViewModel: PinnedTileViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSession()
 
         val factory = ViewModelFactory(context!!.serviceLocator)
-        _pinnedTileViewModel = ViewModelProviders.of(this, factory).get(PinnedTileViewModel::class.java)
+        pinnedTileViewModel = ViewModelProviders.of(this, factory).get(PinnedTileViewModel::class.java)
     }
 
     private fun initSession() {
@@ -175,22 +172,16 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 this@WebRenderFragment.session.url.let { url ->
                     when (value) {
                         NavigationEvent.VAL_CHECKED -> {
-                            CustomTilesManager.getInstance(context!!).pinSite(context!!, url,
+                            // FIXME: OverlayVM -> ToolbarVM -> PinnedTileRepo
+                            context!!.serviceLocator.pinnedTileRepo.addPinnedTile(url,
                                     context!!.webRenderComponents.sessionManager.selectedSession?.thumbnail)
                             browserOverlay.refreshTilesForInsertion()
                             showCenteredTopToast(context, R.string.notification_pinned_site)
                         }
                         NavigationEvent.VAL_UNCHECKED -> {
-                            url.toUri()?.let {
-                                val tileId = BundledTilesManager.getInstance(context!!).unpinSite(context!!, it)
-                                        ?: CustomTilesManager.getInstance(context!!).unpinSite(context!!, url)
-                                // tileId should never be null, unless, for some reason we don't
-                                // have a reference to the tile/the tile isn't a Bundled or Custom tile
-                                if (tileId != null && !tileId.isEmpty()) {
-                                    browserOverlay.removePinnedSiteFromTiles(tileId)
-                                    showCenteredTopToast(context, R.string.notification_unpinned_site)
-                                }
-                            }
+                            // FIXME: OverlayVM -> ToolbarVM -> PinnedTileRepo
+                            pinnedTileViewModel.unpin(url)
+                            showCenteredTopToast(context, R.string.notification_unpinned_site)
                         }
                         else -> throw IllegalArgumentException("Unexpected value for PIN_ACTION: " + value)
                     }
@@ -242,7 +233,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 parentFrag = bundle.getSerializable(PARENT_FRAGMENT) as BrowserNavigationOverlay.ParentFragment
             }
 
-            pinnedTileViewModel = _pinnedTileViewModel
+            pinnedTileViewModel = this@WebRenderFragment.pinnedTileViewModel
             lifeCycleOwner = this@WebRenderFragment.viewLifecycleOwner
 
             onNavigationEvent = this@WebRenderFragment.onNavigationEvent
@@ -306,8 +297,8 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
                 // This assumes that since we're deleting from a Home Tile object that we created
                 // that the Uri is valid, so we do not do error handling here.
-                HomeTilesManager.removeHomeTile(tileToRemove, context!!) // TODO
-                homeTileAdapter.removeTile(tileToRemove.idToString())
+                // TODO: NavigationOverlayFragment->ViewModel->Repo
+                pinnedTileViewModel.unpin(tileToRemove.idToString())
                 browserOverlay?.checkIfTilesFocusNeedRefresh()
                 TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileToRemove)
                 return true

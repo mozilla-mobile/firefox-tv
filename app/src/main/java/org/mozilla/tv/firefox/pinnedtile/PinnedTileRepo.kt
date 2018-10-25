@@ -57,22 +57,22 @@ class PinnedTileRepo(private val applicationContext: Application) {
      * it doesn't exist in the cache
      */
     @UiThread
-    fun removePinnedTile(pinnedTile: PinnedTile): String? {
-        val tile = _pinnedTiles.value?.remove(pinnedTile.url) ?: return null
+    fun removePinnedTile(url: String): String? {
+        val tileToRemove = _pinnedTiles.value?.remove(url) ?: return null
 
-        when (tile) {
+        when (tileToRemove) {
             is BundledPinnedTile -> {
                 val blackList = loadBlacklist()
-                blackList.add(tile.id)
+                blackList.add(tileToRemove.id)
                 saveBlackList(blackList)
             }
             is CustomPinnedTile -> {
                 saveCustomTiles()
-                PinnedTileScreenshotStore.removeAsync(applicationContext, tile.id)
+                PinnedTileScreenshotStore.removeAsync(applicationContext, tileToRemove.id)
             }
         }
 
-        return tile.idToString()
+        return tileToRemove.idToString()
     }
 
     @UiThread

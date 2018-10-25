@@ -14,16 +14,14 @@ import android.arch.lifecycle.ViewModel
  *
  * AndroidViewModel() is a context aware ViewModel => Used for PinnedTileRepo
  */
-class PinnedTileViewModel(pinnedTileRepo: PinnedTileRepo) : ViewModel() {
+class PinnedTileViewModel(private val pinnedTileRepo: PinnedTileRepo) : ViewModel() {
 
     private val _tilesList = MediatorLiveData<List<PinnedTile>>()
     val isEmpty: LiveData<Boolean> = Transformations.map(_tilesList) { input -> input.isEmpty() }
 
     init {
-        // TODO: mediate data from PinnedTileRepo.tileList
         _tilesList.addSource(pinnedTileRepo.loadTilesCache()) { pinnedTileMap ->
-            // FIXME: how to match type?
-            val feedTileList: List<PinnedTile>? = pinnedTileMap?.values?.toMutableList()
+            val feedTileList: List<PinnedTile>? = pinnedTileMap?.values?.toList()
             if ((feedTileList) != null) {
                 _tilesList.value = feedTileList
             }
@@ -35,6 +33,7 @@ class PinnedTileViewModel(pinnedTileRepo: PinnedTileRepo) : ViewModel() {
         return _tilesList
     }
 
-    // TODO: PinnedTileRepo.removePinnedTile
-    fun unpin() {}
+    fun unpin(tileId: String) {
+        pinnedTileRepo.removePinnedTile(tileId)
+    }
 }
