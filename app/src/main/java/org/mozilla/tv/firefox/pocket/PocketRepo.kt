@@ -6,6 +6,18 @@ package org.mozilla.tv.firefox.pocket
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.os.SystemClock
+import android.support.annotation.UiThread
+import kotlinx.coroutines.experimental.CancellationException
+import kotlinx.coroutines.experimental.DefaultDispatcher
+import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.withContext
+import org.mozilla.tv.firefox.BuildConfig
+import java.util.concurrent.TimeUnit
+
+private val CACHE_UPDATE_FREQUENCY_MILLIS = TimeUnit.MINUTES.toMillis(45)
 
 sealed class PocketRepoState {
     data class LoadComplete(val videos: List<PocketFeedItem>) : PocketRepoState()
@@ -23,4 +35,72 @@ open class PocketRepo(private val pocketEndpoint: PocketEndpoint) {
     private val mutableState = MutableLiveData<PocketRepoState>()
     open val state: LiveData<PocketRepoState> = mutableState
 
+    @Suppress("ANNOTATION_TARGETS_NON_EXISTENT_ACCESSOR") // Private properties generate fields so method annotations can't apply.
+    @get:UiThread
+    @set:UiThread
+    private var backgroundUpdates: Job? = null
+    @Volatile private var lastUpdateMillis = -1L
+    private val nextUpdateMillis get() = lastUpdateMillis + CACHE_UPDATE_FREQUENCY_MILLIS
+
+    init {
+        // mutableState.value should always be initialized at the top of init, because we treat
+        // it as non-null
+        @Suppress("SENSELESS_COMPARISON")
+        // Values of BuildConfig can change but the compiler doesn't know that
+        mutableState.value = when {
+            BuildConfig.POCKET_KEY == null -> PocketRepoState.NoKey
+            else -> PocketRepoState.Loading
+        }
+
+        update()
+    }
+
+    fun update() {
+        launch {
+            val fetchedState = requestVideos()
+            updateState(fetchedState)
+        }
+    }
+
+    @UiThread // update backgroundUpdates.
+    fun startBackgroundUpdates() {
+        backgroundUpdates?.cancel(CancellationException("Cancelling unexpectedly active job to ensure only one is running"))
+        backgroundUpdates = startBackgroundUpdatesInner()
+    }
+
+    @UiThread // update backgroundUpdates.
+    fun stopBackgroundUpdates() {
+        backgroundUpdates?.cancel(CancellationException("Stopping background updates"))
+        backgroundUpdates = null
+    }
+
+    private fun startBackgroundUpdatesInner() = launch {
+        while (true) {
+            val delayForMillis = nextUpdateMillis - SystemClock.elapsedRealtime()
+            if (delayForMillis > 0) {
+                delay(delayForMillis, TimeUnit.MILLISECONDS)
+            }
+
+            val newState = requestVideos()
+            // Delay next request if the previous was successful, otherwise try again immediately
+            if (newState is PocketRepoState.LoadComplete) lastUpdateMillis = SystemClock.elapsedRealtime()
+            updateState(newState)
+        }
+    }
+
+    private suspend fun requestVideos(): PocketRepoState {
+        val videos = withContext(DefaultDispatcher) { pocketEndpoint.getRecommendedVideos() }
+
+        return videos?.let { PocketRepoState.LoadComplete(it) } ?: PocketRepoState.FetchFailed
+    }
+
+    private fun updateState(newState: PocketRepoState) {
+        val oldState = mutableState.value!! // State is initialized at the top of init
+
+        val computedState = PocketRepoStateMachine(newState, oldState).computedState()
+
+        if (oldState != computedState) {
+            mutableState.postValue(computedState)
+        }
+    }
 }
