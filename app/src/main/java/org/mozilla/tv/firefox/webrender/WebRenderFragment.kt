@@ -175,7 +175,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                             // FIXME: OverlayVM -> ToolbarVM -> PinnedTileRepo
                             context!!.serviceLocator.pinnedTileRepo.addPinnedTile(url,
                                     context!!.webRenderComponents.sessionManager.selectedSession?.thumbnail)
-                            browserOverlay.refreshTilesForInsertion()
                             showCenteredTopToast(context, R.string.notification_pinned_site)
                         }
                         NavigationEvent.VAL_UNCHECKED -> {
@@ -233,8 +232,10 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 parentFrag = bundle.getSerializable(PARENT_FRAGMENT) as BrowserNavigationOverlay.ParentFragment
             }
 
+            // FIXME: Need [WebRenderFragment] as lifeCycle owner until NavOverlayFragment breakout
             pinnedTileViewModel = this@WebRenderFragment.pinnedTileViewModel
             lifeCycleOwner = this@WebRenderFragment.viewLifecycleOwner
+            initTiles()
 
             onNavigationEvent = this@WebRenderFragment.onNavigationEvent
             navigationStateProvider = NavigationStateProvider()
@@ -298,7 +299,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 // This assumes that since we're deleting from a Home Tile object that we created
                 // that the Uri is valid, so we do not do error handling here.
                 // TODO: NavigationOverlayFragment->ViewModel->Repo
-                pinnedTileViewModel.unpin(tileToRemove.idToString())
+                pinnedTileViewModel.unpin(tileToRemove.url)
                 browserOverlay?.checkIfTilesFocusNeedRefresh()
                 TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileToRemove)
                 return true

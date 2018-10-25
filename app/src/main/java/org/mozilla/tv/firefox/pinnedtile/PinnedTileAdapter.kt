@@ -37,11 +37,12 @@ private val CUSTOM_TILE_ICON_INTERPOLATOR = DecelerateInterpolator()
 
 class PinnedTileAdapter(
     private val uiLifecycleCancelJob: Job,
-    private var tiles: MutableList<PinnedTile>,
     private val loadUrl: (String) -> Unit,
     var onTileLongClick: (() -> Unit)?,
     var onTileFocused: (() -> Unit)?
 ) : RecyclerView.Adapter<TileViewHolder>() {
+
+    private var tiles = mutableListOf<PinnedTile>()
 
     var lastLongClickedTile: PinnedTile? = null
         private set
@@ -122,6 +123,11 @@ class PinnedTileAdapter(
             // the entire DataSet needs to be notified when adding to an empty container
             notifyDataSetChanged()
         }
+    }
+
+    fun setTiles(newTiles: MutableList<PinnedTile>) {
+        tiles = newTiles
+        notifyDataSetChanged()
     }
 
     fun removeTile(tileId: String) {

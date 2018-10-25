@@ -33,7 +33,7 @@ class PinnedTileViewModel(private val pinnedTileRepo: PinnedTileRepo) : ViewMode
         return _tilesList
     }
 
-    fun unpin(tileId: String) {
-        pinnedTileRepo.removePinnedTile(tileId)
+    fun unpin(url: String) {
+        pinnedTileRepo.removePinnedTile(url)
     }
 }

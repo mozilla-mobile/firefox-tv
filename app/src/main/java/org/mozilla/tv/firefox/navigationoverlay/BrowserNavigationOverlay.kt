@@ -140,8 +140,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
     private lateinit var tileAdapter: PinnedTileAdapter
 
-    var pinnedTileViewModel: PinnedTileViewModel? = null
-    var lifeCycleOwner: LifecycleOwner? = null
+    lateinit var pinnedTileViewModel: PinnedTileViewModel
+    lateinit var lifeCycleOwner: LifecycleOwner
 
     init {
         LayoutInflater.from(context)
@@ -154,7 +154,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         uiLifecycleCancelJob = Job()
 
-        initTiles()
         initMegaTile()
         setupUrlInput()
         turboButton.isChecked = TurboMode.isEnabled(context)
@@ -164,15 +163,12 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
     }
 
-    private fun initTiles() = with(tileContainer) {
-        val homeTiles = HomeTilesManager.getTilesCache(context)
-
+    // FIXME: Called from [WebRenderFragment] until NavigationOverlayFragment breakout
+    fun initTiles() = with(tileContainer) {
         canShowUpinToast = true
 
-        pinnedTileViewModel?.isEmpty?.observe(lifeCycleOwner!!, Observer {})
-
         // TODO: pass in VM live data instead of "homeTiles"
-        tileAdapter = PinnedTileAdapter(uiLifecycleCancelJob, homeTiles, loadUrl = { urlStr ->
+        tileAdapter = PinnedTileAdapter(uiLifecycleCancelJob, loadUrl = { urlStr ->
             with(navUrlInput) {
                 if (urlStr.isNotEmpty()) {
                     onNavigationEvent?.invoke(NavigationEvent.LOAD_TILE, urlStr, null)
@@ -197,6 +193,14 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 canShowUpinToast = false
             }
         })
+
+        pinnedTileViewModel.getTileList().observe(lifeCycleOwner, Observer {
+            if (it != null) {
+                tileAdapter.setTiles(it)
+                updateOverlayForCurrentState()
+            }
+        })
+
         adapter = tileAdapter
 
         layoutManager = HomeTileManager(context, COL_COUNT)
