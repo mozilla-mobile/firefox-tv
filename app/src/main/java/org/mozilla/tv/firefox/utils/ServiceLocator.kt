@@ -5,12 +5,8 @@
 package org.mozilla.tv.firefox.utils
 
 import android.app.Application
-import android.content.Context.MODE_PRIVATE
-import android.content.SharedPreferences
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.pocket.Pocket
-
-private const val PREF_HOME_TILES = "homeTiles"
 
 /**
  * Implementation of the Service Locator pattern. Use this class to provide dependencies without
@@ -47,9 +43,5 @@ private const val PREF_HOME_TILES = "homeTiles"
 open class ServiceLocator(val app: Application) {
 
     open val pocket by lazy { Pocket() }
-    open val pinnedTileRepo by lazy { PinnedTileRepo(getTileRepoSharedPreferences()) }
-
-    private fun getTileRepoSharedPreferences(): SharedPreferences {
-        return app.getSharedPreferences(PREF_HOME_TILES, MODE_PRIVATE)
-    }
+    open val pinnedTileRepo by lazy { PinnedTileRepo(app) }
 }

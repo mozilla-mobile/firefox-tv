@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.pinnedtile
 
+import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.content.SharedPreferences
@@ -13,7 +14,7 @@ import org.json.JSONArray
 
 private const val BUNDLED_SITES_ID_BLACKLIST = "blacklist"
 private const val CUSTOM_SITES_LIST = "customSitesList"
-
+private const val PREF_HOME_TILES = "homeTiles"
 private const val BUNDLED_HOME_TILES_DIR = "bundled"
 private const val HOME_TILES_JSON_PATH = "$BUNDLED_HOME_TILES_DIR/bundled_tiles.json"
 
@@ -21,17 +22,15 @@ private const val HOME_TILES_JSON_PATH = "$BUNDLED_HOME_TILES_DIR/bundled_tiles.
  * TODO
  * Some methods require applicationContext in order to access /assets/
  */
-class PinnedTileRepo(sharedPreferences: SharedPreferences) {
-
+class PinnedTileRepo(private val applicationContext: Application) {
     private val _pinnedTiles = MutableLiveData<LinkedHashMap<String, PinnedTile>>() // FIXME: URI? String?
     val tileCount get() = _pinnedTiles.value?.size
 
-    // TODO:  applicationContext.getSharedPreferences(PREF_HOME_TILES, Context.MODE_PRIVATE)
-    private var _sharedPreferences: SharedPreferences = sharedPreferences
+    private val _sharedPreferences: SharedPreferences = applicationContext.getSharedPreferences(PREF_HOME_TILES, Context.MODE_PRIVATE)
 
-    fun loadTilesCache(applicationContext: Context): MutableLiveData<LinkedHashMap<String, PinnedTile>> {
+    fun loadTilesCache(): MutableLiveData<LinkedHashMap<String, PinnedTile>> {
         val pinnedTiles = linkedMapOf<String, PinnedTile>().apply {
-            putAll(loadBundledTilesCache(applicationContext))
+            putAll(loadBundledTilesCache())
             putAll(loadCustomTilesCache())
         }
 
@@ -50,7 +49,7 @@ class PinnedTileRepo(sharedPreferences: SharedPreferences) {
         return _sharedPreferences.getStringSet(BUNDLED_SITES_ID_BLACKLIST, mutableSetOf())!!
     }
 
-    private fun loadBundledTilesCache(applicationContext: Context): LinkedHashMap<String, BundledPinnedTile> {
+    private fun loadBundledTilesCache(): LinkedHashMap<String, BundledPinnedTile> {
         val tilesJSONString = applicationContext.assets.open(HOME_TILES_JSON_PATH).bufferedReader().use { it.readText() }
         val tilesJSONArray = JSONArray(tilesJSONString)
         val lhm = LinkedHashMap<String, BundledPinnedTile>(tilesJSONArray.length())
