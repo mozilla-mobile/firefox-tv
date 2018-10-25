@@ -8,9 +8,12 @@ import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.support.annotation.AnyThread
+import android.support.annotation.UiThread
 import org.json.JSONArray
+import java.util.UUID
 
 private const val BUNDLED_SITES_ID_BLACKLIST = "blacklist"
 private const val CUSTOM_SITES_LIST = "customSitesList"
@@ -39,14 +42,57 @@ class PinnedTileRepo(private val applicationContext: Application) {
         return _pinnedTiles
     }
 
-    fun addPinnedTile() {} // TODO
+    fun addPinnedTile(url: String, screenshot: Bitmap?) {
+        val newPinnedTile = CustomPinnedTile(url, "custom", UUID.randomUUID()) // TODO: titles
+        _pinnedTiles.value?.put(url, newPinnedTile)
+        saveCustomTiles()
 
-    fun removePinnedTile() {} // TODO
+        if (screenshot != null) {
+            PinnedTileScreenshotStore.saveAsync(applicationContext, newPinnedTile.id, screenshot)
+        }
+    }
 
+    /**
+     * returns tile id of a Bundled tile or null if
+     * it doesn't exist in the cache
+     */
+    @UiThread
+    fun removePinnedTile(pinnedTile: PinnedTile): String? {
+        val tile = _pinnedTiles.value?.remove(pinnedTile.url) ?: return null
+
+        when (tile) {
+            is BundledPinnedTile -> {
+                val blackList = loadBlacklist()
+                blackList.add(tile.id)
+                saveBlackList(blackList)
+            }
+            is CustomPinnedTile -> {
+                saveCustomTiles()
+                PinnedTileScreenshotStore.removeAsync(applicationContext, tile.id)
+            }
+        }
+
+        return tile.idToString()
+    }
+
+    @UiThread
     fun isUrlPinned(url: String): Boolean? = _pinnedTiles.value?.containsKey(url)
 
-    private fun loadBlacklist(): MutableSet<String> { // TODO
+    private fun loadBlacklist(): MutableSet<String> {
         return _sharedPreferences.getStringSet(BUNDLED_SITES_ID_BLACKLIST, mutableSetOf())!!
+    }
+
+    private fun saveBlackList(blackList: MutableSet<String>) {
+        _sharedPreferences.edit().putStringSet(BUNDLED_SITES_ID_BLACKLIST, blackList).apply()
+    }
+
+    private fun saveCustomTiles() {
+        val tilesJSONArray = JSONArray()
+        for (tile in _pinnedTiles.value!!.values) {
+            if (tile is CustomPinnedTile) tilesJSONArray.put(tile.toJSONObject())
+        }
+
+        _sharedPreferences.edit().putString(CUSTOM_SITES_LIST, tilesJSONArray.toString()).apply()
     }
 
     private fun loadBundledTilesCache(): LinkedHashMap<String, BundledPinnedTile> {
