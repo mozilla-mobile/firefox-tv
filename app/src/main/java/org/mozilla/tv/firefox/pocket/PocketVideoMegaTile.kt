@@ -10,41 +10,16 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Toast
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.view.*
-import org.mozilla.tv.firefox.BuildConfig
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.utils.PicassoWrapper
 import org.mozilla.tv.firefox.utils.RoundCornerTransformation
-import kotlin.properties.Delegates
 
 /** A view that contains the Pocket logo and several thumbnails from Pocket videos. */
 class PocketVideoMegaTile(
     context: Context,
     attrs: AttributeSet
 ) : LinearLayout(context, attrs) {
-
-    var pocketVideos by Delegates.observable<List<PocketVideo>?>(null) { _, _, newVideos ->
-        // When no Pocket API key is provided, show placeholder tiles (developer ergonomics)
-        @Suppress("SENSELESS_COMPARISON") // Values of BuildConfig can change but the compiler doesn't know that..
-        val thumbnails = if (BuildConfig.POCKET_KEY == null) {
-            Toast.makeText(context, "Pocket API key was not found.", Toast.LENGTH_LONG).show()
-            (0 until thumbnailViews.size)
-                    .map { "https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png" }
-        } else newVideos?.map { it.thumbnailURL } ?: return@observable
-
-        thumbnailViews.forEachIndexed { i, thumbnailView ->
-            PicassoWrapper.client.load(thumbnails[i])
-                    .placeholder(R.drawable.pocket_placeholder)
-                    .transform(roundCornerTransformation)
-                    .into(thumbnailView)
-        }
-    }
-
-    private var thumbnailViews: List<ImageView>
-
-    private val roundCornerTransformation = RoundCornerTransformation(
-            resources.getDimension(R.dimen.pocket_video_mega_tile_thumbnail_corner_radius))
 
     init {
         // The layout of this view is dependent on both parent and child layout params. To ensure we
@@ -54,7 +29,31 @@ class PocketVideoMegaTile(
         gravity = Gravity.CENTER_VERTICAL or Gravity.END
 
         LayoutInflater.from(context).inflate(R.layout.pocket_video_mega_tile, this, true)
-        pocketWordmarkView.setImageDrawableAsPocketWordmark()
-        thumbnailViews = listOf(thumbnail1View, thumbnail2View, thumbnail3View, thumbnail4View)
+        PocketDrawable.setImageDrawableAsPocketWordmark(pocketWordmarkView)
+    }
+
+    fun setContent(feedItems: List<PocketFeedItem>) {
+        listOf(thumbnail1View, thumbnail2View, thumbnail3View, thumbnail4View)
+            .zip(feedItems)
+            .forEach { (view, item) ->
+                when (item) {
+                    is PocketFeedItem.Video -> showFetchedImage(view, item.thumbnailURL)
+                    is PocketFeedItem.Loading -> showLocalDrawable(view, item.thumbnailResource)
+                }
+            }
+    }
+
+    private fun showLocalDrawable(view: ImageView, drawable: Int) {
+        view.setImageResource(drawable)
+    }
+
+    private fun showFetchedImage(imageView: ImageView, url: String) {
+        val roundCornerTransformation =
+            RoundCornerTransformation(resources.getDimension(R.dimen.pocket_video_mega_tile_thumbnail_corner_radius))
+
+        PicassoWrapper.client.load(url)
+            .placeholder(R.drawable.pocket_placeholder)
+            .transform(roundCornerTransformation)
+            .into(imageView)
     }
 }
