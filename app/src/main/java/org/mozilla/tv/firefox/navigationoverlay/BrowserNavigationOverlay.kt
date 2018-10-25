@@ -134,8 +134,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
     var onPreSetVisibilityListener: ((isVisible: Boolean) -> Unit)? = null
 
-    private var pocketVideos = context.serviceLocator.pocket.getRecommendedVideos()
-
     var parentFrag = ParentFragment.DEFAULT
 
     private var hasUserChangedURLSinceEditTextFocused = false
@@ -234,7 +232,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 resources.getString(R.string.pocket_brand_name)) + " " + resources.getString(R.string.pocket_video_feed_reload_button)
 
         megaTileTryAgainButton.setOnClickListener { _ ->
-            pocketVideos = context!!.serviceLocator.pocket.getRecommendedVideos()
+            context!!.serviceLocator.pocketRepo.update()
             initMegaTile()
             updateOverlayForCurrentState()
             pocketVideoMegaTileView.requestFocus()
