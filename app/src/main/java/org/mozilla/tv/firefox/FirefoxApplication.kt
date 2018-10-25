@@ -36,22 +36,6 @@ open class FirefoxApplication : LocaleAwareApplication() {
      */
     val components by lazy { WebRenderComponents(this, getSystemUserAgent()) }
     lateinit var serviceLocator: ServiceLocator
-        private set
-
-    // [setTestServiceLocator] is used during testing to pass in a [ServiceLocator] with mocked dependencies.
-    // This is particularly useful for mocking endpoint singletons.
-    //
-    // This should NEVER be used by production code.
-    //
-    // The fact that this method is visible to production code is a Bad Design™. A better solution
-    // would be to load different versions of ServiceLocator using source sets, which would make it
-    // impossible to abuse this method in production. At this time, however, we have no source set
-    // for instrumentation testing, and introducing one just for this purpose seems like overkill.
-    // We can take that approach in the future without significant changes if it becomes necessary.
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
-    fun setTestServiceLocator(serviceLocator: ServiceLocator) {
-        this.serviceLocator = serviceLocator
-    }
 
     override fun onCreate() {
         super.onCreate()

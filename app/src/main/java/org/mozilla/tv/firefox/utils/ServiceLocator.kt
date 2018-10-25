@@ -6,7 +6,8 @@ package org.mozilla.tv.firefox.utils
 
 import android.app.Application
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
-import org.mozilla.tv.firefox.pocket.Pocket
+import org.mozilla.tv.firefox.pocket.PocketEndpoint
+import org.mozilla.tv.firefox.pocket.PocketRepo
 
 /**
  * Implementation of the Service Locator pattern. Use this class to provide dependencies without
@@ -42,6 +43,8 @@ import org.mozilla.tv.firefox.pocket.Pocket
  */
 open class ServiceLocator(val app: Application) {
 
-    open val pocket by lazy { Pocket() }
+    private val pocketEndpoint by lazy { PocketEndpoint }
+
     open val pinnedTileRepo by lazy { PinnedTileRepo(app) }
+    open val pocketRepo = PocketRepo(pocketEndpoint)
 }
