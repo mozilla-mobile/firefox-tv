@@ -97,9 +97,9 @@ object ScreenController {
         }
     }
 
-    fun showPocketScreen(fragmentManager: FragmentManager, serviceLocator: ServiceLocator) {
+    fun showPocketScreen(fragmentManager: FragmentManager) {
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PocketVideoFragment.create(serviceLocator.pocket.getRecommendedVideos()))
+                .replace(R.id.container, PocketVideoFragment())
                 .addToBackStack(null)
                 .commit()
     }
