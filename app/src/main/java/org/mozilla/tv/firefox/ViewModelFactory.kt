@@ -6,7 +6,9 @@ package org.mozilla.tv.firefox
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
+import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.utils.ServiceLocator
 
 /**
@@ -22,13 +24,13 @@ class ViewModelFactory(private val serviceLocator: ServiceLocator) : ViewModelPr
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return when (modelClass) {
-//            PocketViewModel::class -> PocketViewModel(serviceLocator.pocketRepo) as T // TODO this class is not present in master
             PinnedTileViewModel::class.java -> PinnedTileViewModel(serviceLocator.pinnedTileRepo) as T
+            PocketViewModel::class.java -> PocketViewModel(serviceLocator.pocketRepo) as T
             // This class needs to either return a ViewModel or throw, so we have no good way of silently handling
             // failures in production. However a failure could only occur if code requests a VM that we have not added
             // to this factory, so any problems should be caught in dev.
             else -> throw IllegalArgumentException("A class was passed to ViewModelFactory#create that it does not " +
-                "know how to handle")
+                "know how to handle\nClass name: ${modelClass.simpleName}")
         }
     }
 }
