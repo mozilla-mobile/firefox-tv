@@ -22,20 +22,20 @@ class PocketEndpointTest {
     @Test
     fun `convert Videos JSON successfully to internal objects`() {
         val expectedSubset = listOf(
-                PocketVideo(
-                        id = 23227,
-                        title = "How Hands Became the Internet’s New Selfie | Internetting Season 2",
-                        url = "https://www.youtube.com/tv#/watch/video/idle?v=IzvXi8VkxgI",
-                        thumbnailURL = "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FIzvXi8VkxgI%2Fmaxresdefault.jpg&resize=w450",
-                        popularitySortId = 1
-                ),
-                PocketVideo(
-                        id = 23222,
-                        title = "Why The US Airforce Ejected a Bear",
-                        url = "https://www.youtube.com/watch?v=Rbt2NFCtBh4",
-                        thumbnailURL = "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FRbt2NFCtBh4%2Fmaxresdefault.jpg&resize=w450",
-                        popularitySortId = 2
-                )
+            PocketFeedItem.Video(
+                id = 23227,
+                title = "How Hands Became the Internet’s New Selfie | Internetting Season 2",
+                url = "https://www.youtube.com/tv#/watch/video/idle?v=IzvXi8VkxgI",
+                thumbnailURL = "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FIzvXi8VkxgI%2Fmaxresdefault.jpg&resize=w450",
+                popularitySortId = 1
+            ),
+            PocketFeedItem.Video(
+                id = 23222,
+                title = "Why The US Airforce Ejected a Bear",
+                url = "https://www.youtube.com/watch?v=Rbt2NFCtBh4",
+                thumbnailURL = "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FRbt2NFCtBh4%2Fmaxresdefault.jpg&resize=w450",
+                popularitySortId = 2
+            )
         )
 
         val pocketJSON = TestResource.POCKET_VIDEO_RECOMMENDATION.get()
