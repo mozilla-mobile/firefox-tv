@@ -4,6 +4,8 @@
 
 package org.mozilla.tv.firefox.navigationoverlay
 
+import android.arch.lifecycle.LifecycleOwner
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
@@ -138,7 +140,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
     private lateinit var tileAdapter: PinnedTileAdapter
 
-    private lateinit var pinnedTileViewModel: PinnedTileViewModel
+    var pinnedTileViewModel: PinnedTileViewModel? = null
+    var lifeCycleOwner: LifecycleOwner? = null
 
     init {
         LayoutInflater.from(context)
@@ -164,9 +167,9 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     private fun initTiles() = with(tileContainer) {
         val homeTiles = HomeTilesManager.getTilesCache(context)
 
-//        val pinnedTileViewModel = ViewModelProviders.of(this).get(PinnedTileViewModel::class.java) TODO: needs NavigationOverlayFragment
-
         canShowUpinToast = true
+
+        pinnedTileViewModel?.isEmpty?.observe(lifeCycleOwner!!, Observer {})
 
         // TODO: pass in VM live data instead of "homeTiles"
         tileAdapter = PinnedTileAdapter(uiLifecycleCancelJob, homeTiles, loadUrl = { urlStr ->

@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.webrender
 
 import android.app.Activity
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.annotation.UiThread
 import android.view.ContextMenu
@@ -27,10 +28,8 @@ import org.mozilla.tv.firefox.MainActivity.Companion.PARENT_FRAGMENT
 import org.mozilla.tv.firefox.MediaSessionHolder
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
+import org.mozilla.tv.firefox.ViewModelFactory
 import org.mozilla.tv.firefox.webrender.cursor.CursorController
-import org.mozilla.tv.firefox.pinnedtile.BundledTilesManager
-import org.mozilla.tv.firefox.pinnedtile.CustomTilesManager
-import org.mozilla.tv.firefox.pinnedtile.HomeTilesManager
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.ext.isVisible
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
@@ -40,7 +39,11 @@ import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
+import org.mozilla.tv.firefox.pinnedtile.BundledTilesManager
+import org.mozilla.tv.firefox.pinnedtile.CustomTilesManager
+import org.mozilla.tv.firefox.pinnedtile.HomeTilesManager
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
+import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
@@ -84,12 +87,15 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     private var overlayVisibleCached: Int? = null
 
     var sessionFeature: SessionFeature? = null
-
     private var currentPageHost = ""
+    private lateinit var _pinnedTileViewModel: PinnedTileViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSession()
+
+        val factory = ViewModelFactory(context!!.serviceLocator)
+        _pinnedTileViewModel = ViewModelProviders.of(this, factory).get(PinnedTileViewModel::class.java)
     }
 
     private fun initSession() {
@@ -236,6 +242,9 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 parentFrag = bundle.getSerializable(PARENT_FRAGMENT) as BrowserNavigationOverlay.ParentFragment
             }
 
+            pinnedTileViewModel = _pinnedTileViewModel
+            lifeCycleOwner = this@WebRenderFragment.viewLifecycleOwner
+
             onNavigationEvent = this@WebRenderFragment.onNavigationEvent
             navigationStateProvider = NavigationStateProvider()
             visibility = overlayVisibleCached ?: View.GONE
@@ -297,7 +306,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
                 // This assumes that since we're deleting from a Home Tile object that we created
                 // that the Uri is valid, so we do not do error handling here.
-                HomeTilesManager.removeHomeTile(tileToRemove, context!!)
+                HomeTilesManager.removeHomeTile(tileToRemove, context!!) // TODO
                 homeTileAdapter.removeTile(tileToRemove.idToString())
                 browserOverlay?.checkIfTilesFocusNeedRefresh()
                 TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileToRemove)
@@ -437,9 +446,8 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         override fun isRefreshEnabled() = !isUrlEqualToHomepage
         override fun getCurrentUrl() = session.url
         override fun isURLPinned() = session.url.toUri()?.let {
-            // TODO: #569 fix CustomTilesManager to use Uri too
-            CustomTilesManager.getInstance(context!!).isURLPinned(it.toString()) ||
-                    BundledTilesManager.getInstance(context!!).isURLPinned(it) } ?: false
+            // TODO: ToolBar VM
+            context!!.serviceLocator.pinnedTileRepo.isUrlPinned(it.toString()) } ?: false
         override fun isDesktopModeEnabled() = !isUrlEqualToHomepage
         override fun isDesktopModeOn() = session.desktopMode
     }

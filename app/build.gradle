@@ -121,6 +121,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
 
     implementation "android.arch.lifecycle:extensions:$architecture_components_version"
+    implementation "android.arch.lifecycle:viewmodel:$architecture_components_version"
     testImplementation "android.arch.core:core-testing:$architecture_components_version"
 
     testImplementation 'junit:junit:4.12'
