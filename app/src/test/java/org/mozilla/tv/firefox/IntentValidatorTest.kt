@@ -122,4 +122,30 @@ class IntentValidatorTest {
 
         assertTrue("Expected share intent to be valid", isCalled)
     }
+
+    @Test
+    fun `WHEN receiving MAIN intent with DIAL extra THEN call browser intent with Youtube and params`() {
+        val param = "parameter"
+        val expectedURL = "https://www.youtube.com/tv?$param"
+        val intent = Intent(Intent.ACTION_MAIN).apply {
+            putExtra(IntentValidator.DIAL_PARAMS_KEY, param)
+        }.toSafeIntent()
+
+        var isCalled = false
+        IntentValidator.validate(RuntimeEnvironment.application, intent) { url, source ->
+            isCalled = true
+            assertEquals(Session.Source.ACTION_VIEW, source)
+            assertEquals(expectedURL, url)
+        }
+        assertTrue("Expected MAIN intent to be valid", isCalled)
+    }
+
+    @Test
+    fun `WHEN receiving MAIN intent without DIAL extra THEN do not call browser intent`() {
+        val intent = Intent(Intent.ACTION_MAIN).toSafeIntent()
+
+        IntentValidator.validateOnCreate(RuntimeEnvironment.application, intent, null) { _, _ ->
+            fail("Intent without DIAL params should not be valid")
+        }
+    }
 }
