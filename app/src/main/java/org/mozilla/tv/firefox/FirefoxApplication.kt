@@ -35,7 +35,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
      * application context at the time they get created.
      */
     val components by lazy { WebRenderComponents(this, getSystemUserAgent()) }
-    lateinit var serviceLocator: ServiceLocator
+    open lateinit var serviceLocator: ServiceLocator
 
     override fun onCreate() {
         super.onCreate()
