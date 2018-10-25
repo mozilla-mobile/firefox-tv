@@ -107,10 +107,3 @@ open class Pocket {
         }
     }
 }
-
-fun ImageView.setImageDrawableAsPocketWordmark() {
-    // We want to set SVGs in code because they can produce artifacts otherwise.
-    setImageDrawable(context.getDrawable(R.drawable.ic_pocket_and_wordmark)!!.apply {
-        setTint(ContextCompat.getColor(context, R.color.photonGrey10))
-    })
-}
