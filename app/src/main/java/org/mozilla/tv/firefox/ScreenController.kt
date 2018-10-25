@@ -15,7 +15,6 @@ import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
-import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.utils.UrlUtils
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 

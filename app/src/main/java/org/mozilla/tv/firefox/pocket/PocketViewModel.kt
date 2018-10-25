@@ -54,11 +54,11 @@ class PocketViewModel(pocketRepo: PocketRepo) : ViewModel() {
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     val noKeyPlaceholders: List<PocketFeedItem> = (1..POCKET_VIDEO_COUNT).map { PocketFeedItem.Video(
-        id = it,
-        title = "Mozilla",
-        url = "https://www.mozilla.org/en-US/",
-        thumbnailURL = "https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png",
-        popularitySortId = it
-    )
+            id = it,
+            title = "Mozilla",
+            url = "https://www.mozilla.org/en-US/",
+            thumbnailURL = "https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png",
+            popularitySortId = it
+        )
     }
 }

@@ -37,26 +37,26 @@ object PocketEndpoint {
 
     /** @return The global video recommendations or null on error; the list will never be empty. */
     @AnyThread // via PocketEndpointRaw.
-    suspend fun getRecommendedVideos(): List<PocketVideo>? {
+    suspend fun getRecommendedVideos(): List<PocketFeedItem.Video>? {
         val videosJSON = PocketEndpointRaw.getGlobalVideoRecommendations() ?: return null
         return convertVideosJSON(videosJSON)
     }
     /** Developer Ergonomics
      * @return A placeholder list of videos when Pocket API key is not provided. */
-    fun getPlaceholderVideos(): List<PocketVideo>? {
-        val placeholderList = mutableListOf<PocketVideo>()
+    fun getPlaceholderVideos(): List<PocketFeedItem.Video>? {
+        val placeholderList = mutableListOf<PocketFeedItem.Video>()
         for (i in 1..4) {
-            placeholderList.add(PocketVideo(i, "mozilla.org", "https://mozilla.org",
+            placeholderList.add(PocketFeedItem.Video(i, "mozilla.org", "https://mozilla.org",
                     "https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png", i))
         }
         return placeholderList
     }
 
     /** @return The videos or null on error; the list will never be empty. */
-    @VisibleForTesting fun convertVideosJSON(jsonStr: String): List<PocketVideo>? = try {
+    @VisibleForTesting fun convertVideosJSON(jsonStr: String): List<PocketFeedItem.Video>? = try {
         val rawJSON = JSONObject(jsonStr)
         val videosJSON = rawJSON.getJSONArray("recommendations")
-        val videos = videosJSON.flatMapObj { PocketVideo.fromJSONObject(it) }
+        val videos = videosJSON.flatMapObj { PocketVideoParser.parse(it) }
         if (videos.isNotEmpty()) videos else null
     } catch (e: JSONException) {
         Log.w(LOGTAG, "convertVideosJSON: invalid JSON from Pocket server")
