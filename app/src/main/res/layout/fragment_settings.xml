@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:id="@+id/telemetryView"
+            android:id="@+id/telemetryButtonContainer"
             android:background="@drawable/settings_item_selector"
             android:focusable="true"
             android:layout_gravity="center_vertical">
@@ -123,7 +123,7 @@
 
         <LinearLayout
             android:id="@+id/deleteButton"
-            android:nextFocusRight="@id/telemetryView"
+            android:nextFocusRight="@id/telemetryButtonContainer"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
