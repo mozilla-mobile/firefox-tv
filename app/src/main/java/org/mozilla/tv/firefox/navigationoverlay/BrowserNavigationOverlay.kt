@@ -35,7 +35,6 @@ import org.mozilla.tv.firefox.ext.forEachChild
 import org.mozilla.tv.firefox.ext.isEffectivelyVisible
 import org.mozilla.tv.firefox.ext.isVisible
 import org.mozilla.tv.firefox.ext.updateLayoutParams
-import org.mozilla.tv.firefox.pinnedtile.HomeTilesManager
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.TurboMode
 import org.mozilla.tv.firefox.utils.UrlUtils
@@ -438,16 +437,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             }
             updateOverlayForCurrentState()
         }
-    }
-
-    fun refreshTilesForInsertion() {
-        tileAdapter.updateAdapterSingleInsertion(HomeTilesManager.getTilesCache(context))
-        updateOverlayForCurrentState()
-    }
-
-    fun removePinnedSiteFromTiles(tileId: String) {
-        tileAdapter.removeTile(tileId) // TODO: PinnedTileViewModel.remove; tileAdapter.setList()
-        updateOverlayForCurrentState()
     }
 
     /**
