@@ -97,54 +97,9 @@ class PinnedTileAdapter(
         iconView.layoutParams = layoutMarginParams
     }
 
-    /**
-     * takes in the home tiles cache and updates the adapter's data source
-     * and UI accordingly, assuming only one new tile is added
-     */
-    fun updateAdapterSingleInsertion(pinnedTiles: MutableList<PinnedTile>) {
-        if (pinnedTiles.size == tiles.size) {
-            // The lists must not be the same size in order
-            // for an insertion to be valid
-            return
-        }
-        for ((index, tile) in tiles.withIndex()) {
-            // Due to insertion, the inserted tile will be
-            // the first tile that will not match the
-            // previous list of tiles
-            if (tile != pinnedTiles[index]) {
-                tiles = pinnedTiles
-                notifyItemInserted(index)
-                return
-            }
-        }
-        tiles = pinnedTiles
-        if (tiles.size > 1) {
-            notifyItemInserted(pinnedTiles.lastIndex)
-        } else {
-            // the entire DataSet needs to be notified when adding to an empty container
-            notifyDataSetChanged()
-        }
-    }
-
     fun setTiles(newTiles: MutableList<PinnedTile>) {
         tiles = newTiles
         notifyDataSetChanged()
-    }
-
-    fun removeTile(tileId: String) {
-        for ((index, tile) in tiles.withIndex()) {
-            if (tile is CustomPinnedTile && tile.id.toString() == tileId || tile is BundledPinnedTile && tile.id == tileId) {
-                removeTile(index)
-                break
-            }
-        }
-    }
-
-    fun removeTile(position: Int) {
-        if (position > -1 && position < itemCount) {
-            tiles.removeAt(position)
-            notifyItemRemoved(position)
-        }
     }
 
     override fun getItemCount() = tiles.size
