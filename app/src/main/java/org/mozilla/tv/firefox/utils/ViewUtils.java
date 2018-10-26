@@ -145,4 +145,10 @@ public class ViewUtils {
         toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, xOffset, yOffset);
         toast.show();
     }
+
+    public static void showCenteredBottomToast(Context context, int resId, int xOffset, int yOffset) {
+        Toast toast = Toast.makeText(context, resId, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, xOffset, yOffset);
+        toast.show();
+    }
 }
