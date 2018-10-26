@@ -86,6 +86,9 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     var sessionFeature: SessionFeature? = null
 
+    private var currentPageURL = ""
+    var turnOffDesktopMode = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSession()
@@ -107,12 +110,28 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             }
             else -> Unit
         }
+        // Turn off desktop site mode if navigating to a new domain
+        if (currentPageURL != "" && session.desktopMode) {
+            val uriHost = url.toUri()?.host
+            val currentPageURLHost = currentPageURL.toUri()?.host
+
+            if (uriHost != currentPageURLHost) {
+                turnOffDesktopMode = true
+            }
+        }
+
+        currentPageURL = url
 
         updateOverlayIfVisible()
     }
 
-    override fun onLoadingStateChanged(session: Session, loading: Boolean) =
+    override fun onLoadingStateChanged(session: Session, loading: Boolean) {
+        if (turnOffDesktopMode && !loading) {
+            session.desktopMode = false
+            turnOffDesktopMode = false
+        }
         updateOverlayIfVisible()
+    }
 
     override fun onNavigationStateChanged(session: Session, canGoBack: Boolean, canGoForward: Boolean) =
         updateOverlayIfVisible()
