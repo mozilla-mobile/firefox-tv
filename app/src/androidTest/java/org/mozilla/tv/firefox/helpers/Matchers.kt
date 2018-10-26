@@ -13,8 +13,7 @@ import org.hamcrest.Matcher
  * The [android.support.test.espresso.matcher.ViewMatchers.isEnabled] function that can also handle
  * disabled state through the boolean argument.
  */
-fun isEnabled(isEnabled: Boolean): Matcher<View> = if (isEnabled) {
-    espressoIsEnabled()
-} else {
-    not(espressoIsEnabled())
+fun isEnabled(isEnabled: Boolean): Matcher<View> = when {
+    isEnabled -> espressoIsEnabled()
+    else -> not(espressoIsEnabled())
 }
