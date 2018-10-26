@@ -9,8 +9,8 @@ import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import org.mozilla.tv.firefox.helpers.isEnabled
 
-fun ViewInteraction.click(): ViewInteraction = this.perform(ViewActions.click())
+fun ViewInteraction.click(): ViewInteraction = this.perform(ViewActions.click())!!
 
 fun ViewInteraction.assertIsEnabled(isEnabled: Boolean): ViewInteraction {
-    return this.check(matches(isEnabled(isEnabled)))
+    return this.check(matches(isEnabled(isEnabled)))!!
 }
