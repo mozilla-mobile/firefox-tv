@@ -44,6 +44,7 @@ import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
+import org.mozilla.tv.firefox.utils.ViewUtils.showCenteredBottomToast
 import org.mozilla.tv.firefox.utils.ViewUtils.showCenteredTopToast
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 
@@ -201,10 +202,12 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                     NavigationEvent.VAL_CHECKED -> {
                         session.desktopMode = true
                         setOverlayVisible(false)
+                        showCenteredBottomToast(context, R.string.notification_request_desktop_site, 0, TOAST_Y_OFFSET)
                     }
                     NavigationEvent.VAL_UNCHECKED -> {
                         session.desktopMode = false
                         setOverlayVisible(false)
+                        showCenteredBottomToast(context, R.string.notification_request_non_desktop_site, 0, TOAST_Y_OFFSET)
                     }
                     else -> throw IllegalArgumentException("Unexpected value for DESKTOP_MODE: " + value)
                 }

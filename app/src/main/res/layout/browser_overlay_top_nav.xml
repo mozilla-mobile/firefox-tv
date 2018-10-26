@@ -42,7 +42,7 @@
         android:id="@+id/desktopModeButton"
         style="@style/NavigationButton"
         android:src="@drawable/mozac_ic_device_desktop"
-        android:contentDescription="@string/"
+        android:contentDescription="@string/request_desktop_site_a11y"
         android:nextFocusRight="@+id/navButtonSettings"/>
 
     <View
