@@ -22,6 +22,7 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.forceExhaustive
+import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.toJavaURI
 import org.mozilla.tv.firefox.ext.withRoundedCorners
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
@@ -154,7 +155,7 @@ class PinnedTileAdapter(
 }
 
 private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledPinnedTile) = with(holder) {
-    val bitmap = BundledTilesManager.getInstance(itemView.context).loadImageFromPath(itemView.context, tile.imagePath)
+    val bitmap = itemView.context.serviceLocator.pinnedTileRepo.loadImageFromPath(tile.imagePath)
     iconView.setImageBitmap(bitmap)
 
     titleView.text = tile.title

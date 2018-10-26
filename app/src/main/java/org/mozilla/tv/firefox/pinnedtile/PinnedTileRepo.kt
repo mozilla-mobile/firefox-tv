@@ -123,7 +123,7 @@ class PinnedTileRepo(private val applicationContext: Application) {
     }
 
     @AnyThread
-    fun loadImageFromPath(applicationContext: Context, path: String) = applicationContext.assets.open(
+    fun loadImageFromPath(path: String) = applicationContext.assets.open(
             "$BUNDLED_HOME_TILES_DIR/$path").use {
         BitmapFactory.decodeStream(it)
     }
