@@ -39,9 +39,10 @@ class SettingsFragment : Fragment() {
             DataUploadPreference.setIsEnabled(context, newTelemetryState)
             telemetryButton.isChecked = newTelemetryState
         }
-        // Due to accessibility hack for #293, either of these views could be unfocusable, so we
-        // need to set the click listener on both.
-        telemetryView.setOnClickListener(dataPreferenceClickListener)
+        // Due to accessibility hack for #293, where we want to focus a different (visible) element
+        // for accessibility, either of these views could be unfocusable, so we need to set the
+        // click listener on both.
+        telemetryButtonContainer.setOnClickListener(dataPreferenceClickListener)
         telemetryButton.setOnClickListener(dataPreferenceClickListener)
 
         deleteButton.setOnClickListener { _ ->
@@ -105,12 +106,13 @@ class SettingsFragment : Fragment() {
         // cleared from this setting and nothing is selected. This is fine: the user can press
         // left-right to focus something else and it's an edge case that I don't think it is worth
         // adding code to fix.
-        val context = context ?: return
-        val shouldFocusButton = context.isVoiceViewEnabled()
-        telemetryView.isFocusable = !shouldFocusButton
-        // Clear focus so that focus passes to child telemetryButton view.
+        val shouldFocusButton = context?.isVoiceViewEnabled() ?: return
         if (shouldFocusButton) {
-            telemetryView.clearFocus()
+            // Clear focus so that focus passes to child telemetryButton view.
+            telemetryButtonContainer.isFocusable = false
+            telemetryButtonContainer.clearFocus()
+        } else {
+            telemetryButtonContainer.isFocusable = true
         }
     }
 
