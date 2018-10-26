@@ -142,5 +142,4 @@ class BasicNavigationTest {
             assertNotEquals(preReloadTitle, getPageTitle())
         }
     }
-    /* ktlint-enable no-blank-line-before-rbrace */
 }

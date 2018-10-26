@@ -74,5 +74,4 @@ class ClearDataTest {
             }
         }
     }
-    /* ktlint-enable no-blank-line-before-rbrace */
 }
