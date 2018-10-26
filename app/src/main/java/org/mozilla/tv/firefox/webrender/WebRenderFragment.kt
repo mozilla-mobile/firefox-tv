@@ -438,7 +438,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         override fun isRefreshEnabled() = !isUrlEqualToHomepage
         override fun getCurrentUrl() = session.url
         override fun isURLPinned() = session.url.toUri()?.let {
-            // TODO: ToolBar VM
             context!!.serviceLocator.pinnedTileRepo.isUrlPinned(it.toString()) } ?: false
         override fun isDesktopModeEnabled() = !isUrlEqualToHomepage
         override fun isDesktopModeOn() = session.desktopMode
