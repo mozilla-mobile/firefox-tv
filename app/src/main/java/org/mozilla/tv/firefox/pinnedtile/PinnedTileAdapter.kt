@@ -8,6 +8,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.graphics.Color
 import android.support.v4.content.ContextCompat
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -43,7 +44,7 @@ class PinnedTileAdapter(
     var onTileFocused: (() -> Unit)?
 ) : RecyclerView.Adapter<TileViewHolder>() {
 
-    private var tiles = mutableListOf<PinnedTile>()
+    private var tiles = listOf<PinnedTile>()
 
     var lastLongClickedTile: PinnedTile? = null
         private set
@@ -97,9 +98,35 @@ class PinnedTileAdapter(
         iconView.layoutParams = layoutMarginParams
     }
 
-    fun setTiles(newTiles: MutableList<PinnedTile>) {
+    fun setTiles(newTiles: List<PinnedTile>) {
+        if (itemCount == 0) {
+            tiles = newTiles
+            notifyDataSetChanged()
+            return
+        }
+
+        // DiffUtil allows diff calculation between two lists and output a list of update
+        // operations that converts the first list into the second one
+        val diff = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize(): Int = tiles.size
+
+            override fun getNewListSize(): Int = newTiles.size
+
+            override fun areItemsTheSame(oldPos: Int, newPos: Int): Boolean {
+                return tiles[oldPos].idToString() == newTiles[newPos].idToString()
+            }
+
+            override fun areContentsTheSame(oldPos: Int, newPos: Int): Boolean {
+                val oldTile = tiles[oldPos]
+                val newTile = newTiles[newPos]
+                return oldTile.idToString() == newTile.idToString() &&
+                        oldTile.url == newTile.url &&
+                        oldTile.title == newTile.title
+            }
+        })
+
         tiles = newTiles
-        notifyDataSetChanged()
+        diff.dispatchUpdatesTo(this)
     }
 
     override fun getItemCount() = tiles.size

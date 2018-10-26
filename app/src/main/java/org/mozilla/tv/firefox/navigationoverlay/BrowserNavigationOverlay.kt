@@ -441,6 +441,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
     /**
      * Focus may be lost if all pinned items are removed via onContextItemSelected()
+     * FIXME: requires OverlayFragment (LifecycleOwner) -> OverlayVM -> FocusRepo
      */
     fun checkIfTilesFocusNeedRefresh() {
         if (tileAdapter.itemCount == 0) {
