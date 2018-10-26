@@ -32,23 +32,11 @@ import org.mozilla.tv.firefox.ext.updateLayoutParams
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.FormattedDomain
 import org.mozilla.tv.firefox.utils.PicassoWrapper
-import org.mozilla.tv.firefox.utils.ServiceLocator
 import java.net.URI
 import java.net.URISyntaxException
 
 /** A feed of Pocket videos. */
 class PocketVideoFragment : Fragment() {
-
-    private lateinit var viewModel: PocketViewModel
-    private lateinit var serviceLocator: ServiceLocator
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        serviceLocator = context!!.serviceLocator
-        val factory = ViewModelFactory(serviceLocator)
-        viewModel = ViewModelProviders.of(this, factory).get(PocketViewModel::class.java)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val layout = inflater.inflate(R.layout.fragment_pocket_video, container, false)
@@ -59,6 +47,9 @@ class PocketVideoFragment : Fragment() {
         // SVGs can have artifacts if we set them in XML so we set it in code.
         PocketDrawable.setImageDrawableAsPocketWordmark(layout.pocketWordmarkView)
         layout.pocketHelpButton.setImageDrawable(context!!.getDrawable(R.drawable.pocket_onboarding_help_button))
+
+        val factory = ViewModelFactory(context!!.serviceLocator)
+        val viewModel = ViewModelProviders.of(this, factory).get(PocketViewModel::class.java)
 
         viewModel.state.observe(viewLifecycleOwner, Observer<PocketViewModelState> { state ->
             state ?: return@Observer
