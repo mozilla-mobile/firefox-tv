@@ -10,7 +10,7 @@ import android.widget.ImageView
 import org.mozilla.tv.firefox.R
 
 /**
- * TODO
+ * Namespace for functions specific to setting Pocket drawables.
  */
 object PocketDrawable {
     // This cannot be a private function because it is used in both the overlay and the Pocket screen

@@ -8,7 +8,9 @@ import org.mozilla.tv.firefox.BuildConfig
 import org.mozilla.tv.firefox.pocket.PocketRepoState
 
 /**
- * TODO
+ * Computes information that must be derived from the [BuildConfig].
+ *
+ * This logic is often simple but noisy, so pulling it out of client code improves readability.
  */
 class BuildConfigDerivables {
     @Suppress("SENSELESS_COMPARISON") // Values of BuildConfig can change but the compiler doesn't know that
