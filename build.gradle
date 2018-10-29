@@ -9,8 +9,8 @@ buildscript {
     ext.kotlin_coroutines_version = '0.22.5'
 
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
 
     dependencies {
@@ -40,8 +40,8 @@ detekt {
 
 allprojects {
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
 }
 
