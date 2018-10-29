@@ -24,7 +24,6 @@ import kotlinx.android.synthetic.main.fragment_pocket_video.view.*
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
-import org.mozilla.tv.firefox.ViewModelFactory
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.resetAfter
 import org.mozilla.tv.firefox.ext.serviceLocator
@@ -48,7 +47,7 @@ class PocketVideoFragment : Fragment() {
         PocketDrawable.setImageDrawableAsPocketWordmark(layout.pocketWordmarkView)
         layout.pocketHelpButton.setImageDrawable(context!!.getDrawable(R.drawable.pocket_onboarding_help_button))
 
-        val factory = ViewModelFactory(context!!.serviceLocator)
+        val factory = context!!.serviceLocator.viewModelFactory
         val viewModel = ViewModelProviders.of(this, factory).get(PocketViewModel::class.java)
 
         viewModel.state.observe(viewLifecycleOwner, Observer<PocketViewModelState> { state ->

@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.utils
 
 import android.app.Application
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
+import org.mozilla.tv.firefox.ViewModelFactory
 import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketRepo
 
@@ -44,7 +45,10 @@ import org.mozilla.tv.firefox.pocket.PocketRepo
 open class ServiceLocator(val app: Application) {
 
     private val pocketEndpoint by lazy { PocketEndpoint }
+    private val buildConfigDerivables by lazy { BuildConfigDerivables() }
+
+    val viewModelFactory by lazy { ViewModelFactory(this) }
 
     open val pinnedTileRepo by lazy { PinnedTileRepo(app) }
-    open val pocketRepo = PocketRepo(pocketEndpoint)
+    open val pocketRepo = PocketRepo.initAndFetch(pocketEndpoint, buildConfigDerivables)
 }

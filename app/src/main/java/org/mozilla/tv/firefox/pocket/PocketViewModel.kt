@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.pocket
 
 import android.arch.lifecycle.ViewModel
 import android.support.annotation.VisibleForTesting
+import org.json.JSONObject
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.map
 import org.mozilla.tv.firefox.pocket.PocketViewModelState.Error
@@ -26,7 +27,11 @@ sealed class PocketFeedItem {
         val url: String,
         val thumbnailURL: String,
         val popularitySortId: Int
-    ) : PocketFeedItem()
+    ) : PocketFeedItem() {
+        companion object {
+            fun fromJSONObject(jsonObject: JSONObject) = PocketVideoParser.parse(jsonObject)
+        }
+    }
 }
 
 /**
@@ -37,7 +42,7 @@ sealed class PocketFeedItem {
  * information required by the view. This should be enough to render (i.e., the
  * view should not have to perform any transformations on this data).
  */
-class PocketViewModel(pocketRepo: PocketRepo) : ViewModel() {
+class PocketViewModel(private val pocketRepo: PocketRepo) : ViewModel() {
 
     val state = pocketRepo.state.map { repoState ->
         when (repoState) {
@@ -53,7 +58,8 @@ class PocketViewModel(pocketRepo: PocketRepo) : ViewModel() {
         List(POCKET_VIDEO_COUNT) { PocketFeedItem.Loading(R.color.photonGrey50) }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    val noKeyPlaceholders: List<PocketFeedItem> = (1..POCKET_VIDEO_COUNT).map { PocketFeedItem.Video(
+    val noKeyPlaceholders: List<PocketFeedItem> = List(POCKET_VIDEO_COUNT) {
+        PocketFeedItem.Video(
             id = it,
             title = "Mozilla",
             url = "https://www.mozilla.org/en-US/",
@@ -61,4 +67,6 @@ class PocketViewModel(pocketRepo: PocketRepo) : ViewModel() {
             popularitySortId = it
         )
     }
+
+    fun update() = pocketRepo.update()
 }

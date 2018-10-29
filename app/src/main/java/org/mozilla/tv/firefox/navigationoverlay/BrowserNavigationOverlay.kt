@@ -30,7 +30,6 @@ import kotlinx.android.synthetic.main.pocket_video_mega_tile.view.*
 import kotlinx.coroutines.experimental.Job
 import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.ViewModelFactory
 import org.mozilla.tv.firefox.components.UrlAutoCompleteFilter
 import org.mozilla.tv.firefox.ext.forEachChild
 import org.mozilla.tv.firefox.ext.isEffectivelyVisible
@@ -139,6 +138,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     private var hasUserChangedURLSinceEditTextFocused = false
 
     private lateinit var tileAdapter: PinnedTileAdapter
+    private lateinit var pocketViewModel: PocketViewModel
 
     lateinit var pinnedTileViewModel: PinnedTileViewModel
     lateinit var lifeCycleOwner: LifecycleOwner
@@ -232,7 +232,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 resources.getString(R.string.pocket_brand_name)) + " " + resources.getString(R.string.pocket_video_feed_reload_button)
 
         megaTileTryAgainButton.setOnClickListener { _ ->
-            context!!.serviceLocator.pocketRepo.update()
+            pocketViewModel.update()
             initMegaTile()
             updateOverlayForCurrentState()
             pocketVideoMegaTileView.requestFocus()
@@ -261,17 +261,17 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         // This function is necessary because BrowserNavigationOverlay is not a LifecycleOwner,
         // and so cannot subscribe to PocketRepo's LiveData. When the overlay is turned into a
         // fragment, this can be moved into the overlay fragment
-        val serviceLocator = fragment.context!!.serviceLocator
-        val factory = ViewModelFactory(serviceLocator)
-        val pocketViewModel = ViewModelProviders.of(fragment, factory).get(PocketViewModel::class.java)
+        val factory = fragment.context!!.serviceLocator.viewModelFactory
+        // TODO initialize pocketViewModel in onCreate when overlay is refactored into a fragment
+        pocketViewModel = ViewModelProviders.of(fragment, factory).get(PocketViewModel::class.java)
 
         pocketViewModel.state.observe(fragment.viewLifecycleOwner, Observer { state ->
-            state ?: return@Observer
             when (state) {
                 is PocketViewModelState.Error -> showMegaTileError()
                 is PocketViewModelState.Feed -> {
                     pocketVideoMegaTileView.setContent(state.feed)
                 }
+                null -> return@Observer
             }
         })
     }
