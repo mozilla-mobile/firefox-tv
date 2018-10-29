@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.pinnedtile
 
 import android.arch.lifecycle.Observer
+import androidx.test.core.app.ApplicationProvider
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -15,7 +16,6 @@ import org.mockito.Mockito.spy
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 
 private const val BUNDLED_TILE_COUNT = 10
 
@@ -30,7 +30,7 @@ class PinnedTileRepoTest {
 
     @Before
     fun setUp() {
-        pinnedTileRepo = PinnedTileRepo(RuntimeEnvironment.application)
+        pinnedTileRepo = PinnedTileRepo(ApplicationProvider.getApplicationContext())
     }
 
     @Test
