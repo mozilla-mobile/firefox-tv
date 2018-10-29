@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.pinnedtile
 
 import android.app.Application
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.content.SharedPreferences
@@ -26,31 +27,41 @@ private const val HOME_TILES_JSON_PATH = "$BUNDLED_HOME_TILES_DIR/bundled_tiles.
  * Some methods require applicationContext in order to access /assets/
  */
 class PinnedTileRepo(private val applicationContext: Application) {
-    private val _pinnedTiles = MutableLiveData<LinkedHashMap<String, PinnedTile>>() // FIXME: URI? String?
-    val tileCount get() = _pinnedTiles.value?.size
+    private val _pinnedTiles = MutableLiveData<LinkedHashMap<String, PinnedTile>>()
+
+    // Persist custom & bundled tiles size for telemetry
+    var customTilesSize = 0
+    var bundledTilesSize = 0
 
     private val _sharedPreferences: SharedPreferences = applicationContext.getSharedPreferences(PREF_HOME_TILES, Context.MODE_PRIVATE)
 
-    fun loadTilesCache(): MutableLiveData<LinkedHashMap<String, PinnedTile>> {
+    init {
+        loadTilesCache()
+    }
+
+    private fun loadTilesCache() {
         val pinnedTiles = linkedMapOf<String, PinnedTile>().apply {
             putAll(loadBundledTilesCache())
             putAll(loadCustomTilesCache())
         }
 
         _pinnedTiles.value = pinnedTiles
+    }
 
+    fun getPinnedTiles(): LiveData<LinkedHashMap<String, PinnedTile>> {
         return _pinnedTiles
     }
 
     fun addPinnedTile(url: String, screenshot: Bitmap?) {
         val newPinnedTile = CustomPinnedTile(url, "custom", UUID.randomUUID()) // TODO: titles
-        _pinnedTiles.value?.put(url, newPinnedTile)
+        if (_pinnedTiles.value?.put(url, newPinnedTile) != null) return
         _pinnedTiles.value = _pinnedTiles.value
-        saveCustomTiles()
+        persistCustomTiles()
 
         if (screenshot != null) {
             PinnedTileScreenshotStore.saveAsync(applicationContext, newPinnedTile.id, screenshot)
         }
+        ++customTilesSize
     }
 
     /**
@@ -67,10 +78,12 @@ class PinnedTileRepo(private val applicationContext: Application) {
                 val blackList = loadBlacklist()
                 blackList.add(tileToRemove.id)
                 saveBlackList(blackList)
+                --bundledTilesSize
             }
             is CustomPinnedTile -> {
-                saveCustomTiles()
+                persistCustomTiles()
                 PinnedTileScreenshotStore.removeAsync(applicationContext, tileToRemove.id)
+                --customTilesSize
             }
         }
 
@@ -88,7 +101,7 @@ class PinnedTileRepo(private val applicationContext: Application) {
         _sharedPreferences.edit().putStringSet(BUNDLED_SITES_ID_BLACKLIST, blackList).apply()
     }
 
-    private fun saveCustomTiles() {
+    private fun persistCustomTiles() {
         val tilesJSONArray = JSONArray()
         for (tile in _pinnedTiles.value!!.values) {
             if (tile is CustomPinnedTile) tilesJSONArray.put(tile.toJSONObject())
@@ -108,6 +121,8 @@ class PinnedTileRepo(private val applicationContext: Application) {
                 lhm.put(tile.url, tile)
             }
         }
+        bundledTilesSize = lhm.size
+
         return lhm
     }
 
@@ -119,6 +134,8 @@ class PinnedTileRepo(private val applicationContext: Application) {
             val tile = CustomPinnedTile.fromJSONObject(tileJSON)
             lhm.put(tile.url, tile)
         }
+        customTilesSize = lhm.size
+
         return lhm
     }
 

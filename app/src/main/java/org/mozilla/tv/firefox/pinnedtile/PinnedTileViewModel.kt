@@ -20,7 +20,7 @@ class PinnedTileViewModel(private val pinnedTileRepo: PinnedTileRepo) : ViewMode
     val isEmpty: LiveData<Boolean> = Transformations.map(_tilesList) { input -> input.isEmpty() }
 
     init {
-        _tilesList.addSource(pinnedTileRepo.loadTilesCache()) { pinnedTileMap ->
+        _tilesList.addSource(pinnedTileRepo.getPinnedTiles()) { pinnedTileMap ->
             val feedTileList: List<PinnedTile>? = pinnedTileMap?.values?.toList()
             if ((feedTileList) != null) {
                 _tilesList.value = feedTileList
