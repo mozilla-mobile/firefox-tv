@@ -49,15 +49,18 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 | Browser: refresh clicked               | action   | click                 | menu       | refresh | |
 | Pocket: tile clicked                   | action   | click                 | menu       | pocket_video_tile | |
 | Turbo mode switch clicked              | action   | change                | turbo_mode | on/off (the new value) | |
-| Pin site switch clicked                | action   | change                | pin_page   | on/off (the new value) | |
+| Pin site switch clicked                | action   | change                | pin_page   | on/off (the new value) | desktop_mode* |
+| Desktop mode switch clicked | action | change | desktop_mode | on/off (the new value) | |
 | Tile clicked                           | action   | click                 | home_tile  | bundled/custom | |
 | Tile removed                           | action   | remove                | home_tile  | bundled/custom | |
-| Unique tiles clicked per session*      | aggregate| click                 | home_tile  | `<int>` | |
-| Menu shown by user              | action   | user_show       | menu         | |
-| Menu hidden by user              | action   | user_hide       | menu         | |
-| No menu action taken              | aggregate   | no_action_taken       | menu         | |
+| Unique tiles clicked per session**     | aggregate| click                 | home_tile  | `<int>` | |
+| Menu shown by user              | action   | user_show       | menu         | ||
+| Menu hidden by user              | action   | user_hide       | menu         | ||
+| No menu action taken              | aggregate   | no_action_taken       | menu         | ||
 
-(*) **This is broken: see [#879](https://github.com/mozilla-mobile/firefox-tv/issues/879).** For overlay hidden, we only capture cases where the user closes the overlay themselves:
+(*)When the pin site switch is clicked, the state (on/off) of the desktop mode switch is also sent.
+
+(**)This is broken: see [#879](https://github.com/mozilla-mobile/firefox-tv/issues/879).** For overlay hidden, we only capture cases where the user closes the overlay themselves:
 - Controller menu button is pressed
 - Controller back button is pressed
 
