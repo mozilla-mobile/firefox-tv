@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 package org.mozilla.tv.firefox.pocket
 
 import android.arch.lifecycle.LiveData
@@ -13,6 +17,7 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.spy
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
+import org.mozilla.tv.firefox.utils.BuildConfigDerivables
 import org.mozilla.tv.firefox.utils.PreventLiveDataMainLooperCrashRule
 
 class PocketViewModelTest {
@@ -32,7 +37,7 @@ class PocketViewModelTest {
     fun setup() {
 
         repoState = MutableLiveData()
-        val repo = object : PocketRepo(mock(PocketEndpoint::class.java)) {
+        val repo = object : PocketRepo(mock(PocketEndpoint::class.java), BuildConfigDerivables()) {
             override val state: LiveData<PocketRepoState>
                 get() = repoState
         }

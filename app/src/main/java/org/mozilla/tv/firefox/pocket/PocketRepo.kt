@@ -14,7 +14,7 @@ import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
-import org.mozilla.tv.firefox.BuildConfig
+import org.mozilla.tv.firefox.utils.BuildConfigDerivables
 import java.util.concurrent.TimeUnit
 
 private val CACHE_UPDATE_FREQUENCY_MILLIS = TimeUnit.MINUTES.toMillis(45)
@@ -30,9 +30,21 @@ sealed class PocketRepoState {
  * Manages backing state for Pocket data, as well as any logic related to
  * retrieving or storing that data.
  */
-open class PocketRepo(private val pocketEndpoint: PocketEndpoint) {
+open class PocketRepo(private val pocketEndpoint: PocketEndpoint, buildConfigDerivables: BuildConfigDerivables) {
 
-    private val mutableState = MutableLiveData<PocketRepoState>()
+    companion object {
+        fun initAndFetch(pocketEndpoint: PocketEndpoint, buildConfigDerivables: BuildConfigDerivables): PocketRepo {
+            return PocketRepo(pocketEndpoint, buildConfigDerivables).apply {
+                update()
+            }
+        }
+    }
+
+    private val mutableState = MutableLiveData<PocketRepoState>().apply {
+        // mutableState.value should always be initialized at the top of init, because we treat
+        // it as non-null
+        value = buildConfigDerivables.initialPocketRepoState
+    }
     open val state: LiveData<PocketRepoState> = mutableState
 
     @Suppress("ANNOTATION_TARGETS_NON_EXISTENT_ACCESSOR") // Private properties generate fields so method annotations can't apply.
@@ -41,19 +53,6 @@ open class PocketRepo(private val pocketEndpoint: PocketEndpoint) {
     private var backgroundUpdates: Job? = null
     @Volatile private var lastUpdateMillis = -1L
     private val nextUpdateMillis get() = lastUpdateMillis + CACHE_UPDATE_FREQUENCY_MILLIS
-
-    init {
-        // mutableState.value should always be initialized at the top of init, because we treat
-        // it as non-null
-        @Suppress("SENSELESS_COMPARISON")
-        // Values of BuildConfig can change but the compiler doesn't know that
-        mutableState.value = when {
-            BuildConfig.POCKET_KEY == null -> PocketRepoState.NoKey
-            else -> PocketRepoState.Loading
-        }
-
-        update()
-    }
 
     fun update() {
         launch {

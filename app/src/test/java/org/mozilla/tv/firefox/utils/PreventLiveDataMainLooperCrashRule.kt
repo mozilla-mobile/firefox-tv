@@ -6,4 +6,7 @@ package org.mozilla.tv.firefox.utils
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 
+/**
+ * TODO
+ */
 typealias PreventLiveDataMainLooperCrashRule = InstantTaskExecutorRule
