@@ -88,7 +88,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     var sessionFeature: SessionFeature? = null
 
     private var currentPageURL = ""
-    var turnOffDesktopMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,7 +116,8 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             val currentPageURLHost = currentPageURL.toUri()?.host
 
             if (uriHost != currentPageURLHost) {
-                turnOffDesktopMode = true
+                session.desktopMode = false
+                requireWebRenderComponents.sessionManager.getEngineSession(session)?.loadUrl(url)
             }
         }
 
@@ -127,10 +127,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     }
 
     override fun onLoadingStateChanged(session: Session, loading: Boolean) {
-        if (turnOffDesktopMode && !loading) {
-            session.desktopMode = false
-            turnOffDesktopMode = false
-        }
         updateOverlayIfVisible()
     }
 
