@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [3.0.2] 2018-10-29
+*Adds Stick Gen 1 to 3.0.x released devices, in addition to Fire TV Cube and Fire TV 4k.*
 
 
 ## [3.0]
