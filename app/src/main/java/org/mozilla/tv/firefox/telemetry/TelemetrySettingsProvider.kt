@@ -5,9 +5,8 @@
 package org.mozilla.tv.firefox.telemetry
 
 import android.content.Context
-import org.mozilla.tv.firefox.pinnedtile.BundledTilesManager
-import org.mozilla.tv.firefox.pinnedtile.CustomTilesManager
 import org.mozilla.telemetry.measurement.SettingsMeasurement
+import org.mozilla.tv.firefox.ext.serviceLocator
 
 /**
  * A SettingsProvider that provides custom value getters when settings values
@@ -22,9 +21,9 @@ class TelemetrySettingsProvider(private val appContext: Context) : SettingsMeasu
     }
 
     override fun getValue(key: String?): Any? = when (key) {
-        PREF_CUSTOM_HOME_TILE_COUNT -> CustomTilesManager.getInstance(appContext).tileCount
-        PREF_TOTAL_HOME_TILE_COUNT -> CustomTilesManager.getInstance(appContext).tileCount +
-                BundledTilesManager.getInstance(appContext).tileCount
+        PREF_CUSTOM_HOME_TILE_COUNT -> appContext.serviceLocator.pinnedTileRepo.customTilesSize
+        PREF_TOTAL_HOME_TILE_COUNT -> appContext.serviceLocator.pinnedTileRepo.customTilesSize +
+                appContext.serviceLocator.pinnedTileRepo.bundledTilesSize
         else -> super.getValue(key)
     }
 
