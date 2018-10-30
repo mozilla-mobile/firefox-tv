@@ -2,7 +2,8 @@ package org.mozilla.tv.firefox.ext
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
-import org.junit.Assert.*
+import junit.framework.TestCase.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -48,5 +49,4 @@ class LiveDataDoOnEachTest {
         liveData.value = 1
         verify(observerSpy, times(1)).onChanged(any())
     }
-
 }
