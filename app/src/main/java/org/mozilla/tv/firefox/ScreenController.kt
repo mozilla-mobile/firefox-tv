@@ -18,7 +18,7 @@ import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.UrlUtils
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 
-object ScreenController {
+class ScreenController {
     /**
      * Loads the given url. If isTextInput is true, there should be no null parameters.
      */

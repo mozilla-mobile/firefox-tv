@@ -36,6 +36,7 @@ import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.focusedDOMElement
+import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
@@ -43,7 +44,11 @@ import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
+<<<<<<< HEAD
 import org.mozilla.tv.firefox.utils.ViewUtils.showCenteredBottomToast
+=======
+import org.mozilla.tv.firefox.utils.ServiceLocator
+>>>>>>> Closes #1344: add ScreenController to ServiceLocator
 import org.mozilla.tv.firefox.utils.ViewUtils.showCenteredTopToast
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 
@@ -83,15 +88,23 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     private var overlayVisibleCached: Int? = null
 
     var sessionFeature: SessionFeature? = null
+<<<<<<< HEAD
     private var currentPageHost = ""
     private lateinit var pinnedTileViewModel: PinnedTileViewModel
+=======
+    private lateinit var serviceLocator: ServiceLocator
+>>>>>>> Closes #1344: add ScreenController to ServiceLocator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSession()
+<<<<<<< HEAD
 
         val factory = ViewModelFactory(context!!.serviceLocator)
         pinnedTileViewModel = ViewModelProviders.of(this, factory).get(PinnedTileViewModel::class.java)
+=======
+        serviceLocator = context!!.serviceLocator
+>>>>>>> Closes #1344: add ScreenController to ServiceLocator
     }
 
     private fun initSession() {
@@ -152,7 +165,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             NavigationEvent.BACK -> exitFullScreenIfPossibleAndBack()
             NavigationEvent.FORWARD -> if (session.canGoForward) requireWebRenderComponents.sessionUseCases.goForward.invoke()
             NavigationEvent.TURBO, NavigationEvent.RELOAD -> requireWebRenderComponents.sessionUseCases.reload.invoke()
-            NavigationEvent.SETTINGS -> ScreenController.showSettingsScreen(fragmentManager!!)
+            NavigationEvent.SETTINGS -> serviceLocator.screenController.showSettingsScreen(fragmentManager!!)
             NavigationEvent.LOAD_URL -> {
                 (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
                 setOverlayVisible(false)
@@ -164,7 +177,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             NavigationEvent.POCKET -> {
                 val (fragmentManager, activity) = Pair(fragmentManager, activity)
                 if (fragmentManager != null && activity != null) {
-                    ScreenController.showPocketScreen(fragmentManager)
+                    serviceLocator.screenController.showPocketScreen(fragmentManager)
                 }
             }
             NavigationEvent.PIN_ACTION -> {
