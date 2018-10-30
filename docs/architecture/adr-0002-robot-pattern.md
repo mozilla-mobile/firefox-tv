@@ -48,7 +48,7 @@ Neutral notes on the Robot pattern:
 ## Decision
 We will architect our UI tests using the Robot pattern: there are no obvious alternatives and the pros significantly outweigh the cons when addressing our specific problems.
 
-Status: Proposed
+Status: Accepted
 
 ## Consequences
 - Tests written with the Robot pattern should be more maintainable but are expected to need more upfront design and brain power
