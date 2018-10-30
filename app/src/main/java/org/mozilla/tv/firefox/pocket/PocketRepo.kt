@@ -9,13 +9,12 @@ import android.arch.lifecycle.MutableLiveData
 import android.os.SystemClock
 import android.support.annotation.UiThread
 import kotlinx.coroutines.experimental.CancellationException
-import kotlinx.coroutines.experimental.DefaultDispatcher
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.withContext
 import org.mozilla.tv.firefox.utils.BuildConfigDerivables
 import java.util.concurrent.TimeUnit
+import kotlin.math.min
 
 private val CACHE_UPDATE_FREQUENCY_MILLIS = TimeUnit.MINUTES.toMillis(45)
 
@@ -30,19 +29,15 @@ sealed class PocketRepoState {
  * Manages backing state for Pocket data, as well as any logic related to
  * retrieving or storing that data.
  */
-open class PocketRepo(private val pocketEndpoint: PocketEndpoint, buildConfigDerivables: BuildConfigDerivables) {
-
-    companion object {
-        fun initAndFetch(pocketEndpoint: PocketEndpoint, buildConfigDerivables: BuildConfigDerivables): PocketRepo {
-            return PocketRepo(pocketEndpoint, buildConfigDerivables).apply {
-                update()
-            }
-        }
-    }
+open class PocketRepo(
+    private val pocketEndpoint: PocketEndpoint,
+    private val pocketRepoStateMachine: PocketRepoStateMachine,
+    buildConfigDerivables: BuildConfigDerivables
+) {
 
     private val mutableState = MutableLiveData<PocketRepoState>().apply {
-        // mutableState.value should always be initialized at the top of init, because we treat
-        // it as non-null
+        // mutableState.value should always be initialized at the top of init,
+        // because we treat it as non-null
         value = buildConfigDerivables.initialPocketRepoState
     }
     open val state: LiveData<PocketRepoState> = mutableState
@@ -51,14 +46,13 @@ open class PocketRepo(private val pocketEndpoint: PocketEndpoint, buildConfigDer
     @get:UiThread
     @set:UiThread
     private var backgroundUpdates: Job? = null
-    @Volatile private var lastUpdateMillis = -1L
-    private val nextUpdateMillis get() = lastUpdateMillis + CACHE_UPDATE_FREQUENCY_MILLIS
+    @Volatile private var lastSuccessfulUpdateMillis = -1L
+    @Volatile private var lastUpdateAttemptMillis = -1L
+    @Volatile private var retryDelayMillis = 1_000L
+    @Volatile private var lastAttemptWasSuccessful = false
 
     fun update() {
-        launch {
-            val fetchedState = requestVideos()
-            updateState(fetchedState)
-        }
+        launch { updateInner() }
     }
 
     @UiThread // update backgroundUpdates.
@@ -73,33 +67,59 @@ open class PocketRepo(private val pocketEndpoint: PocketEndpoint, buildConfigDer
         backgroundUpdates = null
     }
 
+    private suspend fun updateInner() {
+
+        suspend fun requestVideos(): List<PocketFeedItem>? = pocketEndpoint.getRecommendedVideos()
+
+        fun List<PocketFeedItem>?.wasSuccessful() = this?.isNotEmpty() == true
+
+        fun updateRequestTimers(requestSuccessful: Boolean) {
+            lastAttemptWasSuccessful = requestSuccessful
+            val now = SystemClock.elapsedRealtime()
+            lastUpdateAttemptMillis = now
+            when (requestSuccessful) {
+                true -> {
+                    lastSuccessfulUpdateMillis = now
+                    retryDelayMillis = 1_000L
+                }
+                // Exponential backoff on failure
+                false -> {
+                    val doubled = retryDelayMillis * 2
+                    // Do nothing on overflow
+                    if (doubled > retryDelayMillis) retryDelayMillis = doubled
+                }
+            }
+        }
+
+        fun postStateIfNew(newState: PocketRepoState) {
+            if (newState != mutableState.value) {
+                mutableState.postValue(newState)
+            }
+        }
+
+        fun List<PocketFeedItem>?.toRepoState() =
+            pocketRepoStateMachine.fromFetch(this, mutableState.value!!)
+
+        val response = requestVideos()
+        updateRequestTimers(response.wasSuccessful())
+        postStateIfNew(response.toRepoState())
+    }
+
     private fun startBackgroundUpdatesInner() = launch {
         while (true) {
+            val nextScheduledUpdateMillis = lastUpdateAttemptMillis + CACHE_UPDATE_FREQUENCY_MILLIS
+            val nextRetryUpdateMillis = lastUpdateAttemptMillis + retryDelayMillis
+            val nextUpdateMillis = if (lastAttemptWasSuccessful) {
+                nextScheduledUpdateMillis
+            } else {
+                min(nextScheduledUpdateMillis, nextRetryUpdateMillis)
+            }
+
             val delayForMillis = nextUpdateMillis - SystemClock.elapsedRealtime()
             if (delayForMillis > 0) {
                 delay(delayForMillis, TimeUnit.MILLISECONDS)
             }
-
-            val newState = requestVideos()
-            // Delay next request if the previous was successful, otherwise try again immediately
-            if (newState is PocketRepoState.LoadComplete) lastUpdateMillis = SystemClock.elapsedRealtime()
-            updateState(newState)
-        }
-    }
-
-    private suspend fun requestVideos(): PocketRepoState {
-        val videos = withContext(DefaultDispatcher) { pocketEndpoint.getRecommendedVideos() }
-
-        return videos?.let { PocketRepoState.LoadComplete(it) } ?: PocketRepoState.FetchFailed
-    }
-
-    private fun updateState(newState: PocketRepoState) {
-        val oldState = mutableState.value!! // State is initialized at the top of init
-
-        val computedState = PocketRepoStateMachine(newState, oldState).computedState()
-
-        if (oldState != computedState) {
-            mutableState.postValue(computedState)
+            updateInner()
         }
     }
 }
