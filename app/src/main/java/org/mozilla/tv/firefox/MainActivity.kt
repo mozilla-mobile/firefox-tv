@@ -50,7 +50,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     override lateinit var videoVoiceCommandMediaSession: VideoVoiceCommandMediaSession
     private lateinit var webViewCache: WebViewCache
 
-    private val sessionObserver by lazy{
+    private val sessionObserver by lazy {
         object : SessionManager.Observer {
             override fun onSessionSelected(session: Session) {
                 serviceLocator.screenController.showBrowserScreenForCurrentSession(supportFragmentManager, session)
@@ -68,7 +68,12 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
             private fun onNoActiveSession() {
                 // There's no active session. Start a new session with "homepage".
-                serviceLocator.screenController.showBrowserScreenForUrl(this@MainActivity, supportFragmentManager, APP_URL_HOME, Session.Source.NONE)
+                serviceLocator.screenController.showBrowserScreenForUrl(
+                    this@MainActivity,
+                    supportFragmentManager,
+                    APP_URL_HOME,
+                    Session.Source.NONE
+                )
             }
         }
     }
@@ -93,11 +98,17 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         webRenderComponents.sessionManager.register(sessionObserver, owner = this)
 
         if (webRenderComponents.sessionManager.sessions.isEmpty()) {
-            serviceLocator.screenController.showBrowserScreenForUrl(this@MainActivity, supportFragmentManager, APP_URL_HOME, Session.Source.NONE)
+            serviceLocator.screenController.showBrowserScreenForUrl(
+                this@MainActivity,
+                supportFragmentManager,
+                APP_URL_HOME,
+                Session.Source.NONE
+            )
         } else {
             serviceLocator.screenController.showBrowserScreenForCurrentSession(
                 supportFragmentManager,
-                webRenderComponents.sessionManager.selectedSessionOrThrow)
+                webRenderComponents.sessionManager.selectedSessionOrThrow
+            )
         }
 
         if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding()) {

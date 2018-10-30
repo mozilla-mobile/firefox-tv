@@ -31,7 +31,7 @@ sealed class PocketRepoState {
  */
 open class PocketRepo(
     private val pocketEndpoint: PocketEndpoint,
-    private val pocketRepoStateMachine: PocketRepoStateMachine,
+    private val pocketFeedStateMachine: PocketFeedStateMachine,
     buildConfigDerivables: BuildConfigDerivables
 ) {
 
@@ -91,18 +91,21 @@ open class PocketRepo(
             }
         }
 
-        fun postStateIfNew(newState: PocketRepoState) {
-            if (newState != mutableState.value) {
-                mutableState.postValue(newState)
+        fun postState(newState: PocketVideoRepo.FeedState) {
+            val computed = pocketFeedStateMachine.computeNewState(newState, _feedState.value)
+            if (_feedState.value !== computed) {
+                _feedState.postValue(computed)
             }
         }
 
-        fun List<PocketFeedItem>?.toRepoState() =
-            pocketRepoStateMachine.fromFetch(this, mutableState.value!!)
+        fun List<PocketViewModel.FeedItem>?.toRepoState(): FeedState =
+            if (this?.isNotEmpty() == true) FeedState.LoadComplete(this)
+            else FeedState.FetchFailed
 
+        postState(FeedState.Loading)
         val response = requestVideos()
         updateRequestTimers(response.wasSuccessful())
-        postStateIfNew(response.toRepoState())
+        postState(response.toRepoState())
     }
 
     private fun startBackgroundUpdatesInner() = launch {

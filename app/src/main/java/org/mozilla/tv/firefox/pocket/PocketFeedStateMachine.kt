@@ -4,7 +4,6 @@
 
 package org.mozilla.tv.firefox.pocket
 
-
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.LoadComplete
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.Loading
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.NoKey
