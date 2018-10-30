@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_pocket_video.*
 import kotlinx.android.synthetic.main.fragment_pocket_video.view.*
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.resetAfter
 import org.mozilla.tv.firefox.ext.serviceLocator
@@ -113,7 +112,8 @@ private class PocketVideoAdapter(
 
     private fun PocketVideoViewHolder.bindPocketVideo(item: PocketFeedItem.Video) {
         itemView.setOnClickListener {
-            ScreenController.showBrowserScreenForUrl(itemView.context, fragmentManager, item.url, Session.Source.HOME_SCREEN)
+            itemView.context!!.serviceLocator.screenController
+                .showBrowserScreenForUrl(itemView.context, fragmentManager, item.url, Session.Source.HOME_SCREEN)
             TelemetryIntegration.INSTANCE.pocketVideoClickEvent(item.id)
         }
         itemView.setOnFocusChangeListener { _, hasFocus -> updateForFocusState(this, hasFocus) }

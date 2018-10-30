@@ -50,24 +50,26 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     override lateinit var videoVoiceCommandMediaSession: VideoVoiceCommandMediaSession
     private lateinit var webViewCache: WebViewCache
 
-    private val sessionObserver = object : SessionManager.Observer {
-        override fun onSessionSelected(session: Session) {
-            ScreenController.showBrowserScreenForCurrentSession(supportFragmentManager, session)
-        }
+    private val sessionObserver by lazy{
+        object : SessionManager.Observer {
+            override fun onSessionSelected(session: Session) {
+                serviceLocator.screenController.showBrowserScreenForCurrentSession(supportFragmentManager, session)
+            }
 
-        override fun onSessionRemoved(session: Session) {
-            if (webRenderComponents.sessionManager.sessions.isEmpty()) {
+            override fun onSessionRemoved(session: Session) {
+                if (webRenderComponents.sessionManager.sessions.isEmpty()) {
+                    onNoActiveSession()
+                }
+            }
+
+            override fun onAllSessionsRemoved() {
                 onNoActiveSession()
             }
-        }
 
-        override fun onAllSessionsRemoved() {
-            onNoActiveSession()
-        }
-
-        private fun onNoActiveSession() {
-            // There's no active session. Start a new session with "homepage".
-            ScreenController.showBrowserScreenForUrl(this@MainActivity, supportFragmentManager, APP_URL_HOME, Session.Source.NONE)
+            private fun onNoActiveSession() {
+                // There's no active session. Start a new session with "homepage".
+                serviceLocator.screenController.showBrowserScreenForUrl(this@MainActivity, supportFragmentManager, APP_URL_HOME, Session.Source.NONE)
+            }
         }
     }
 
@@ -91,9 +93,9 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         webRenderComponents.sessionManager.register(sessionObserver, owner = this)
 
         if (webRenderComponents.sessionManager.sessions.isEmpty()) {
-            ScreenController.showBrowserScreenForUrl(this@MainActivity, supportFragmentManager, APP_URL_HOME, Session.Source.NONE)
+            serviceLocator.screenController.showBrowserScreenForUrl(this@MainActivity, supportFragmentManager, APP_URL_HOME, Session.Source.NONE)
         } else {
-            ScreenController.showBrowserScreenForCurrentSession(
+            serviceLocator.screenController.showBrowserScreenForCurrentSession(
                 supportFragmentManager,
                 webRenderComponents.sessionManager.selectedSessionOrThrow)
         }
@@ -115,7 +117,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     }
 
     private fun onValidBrowserIntent(url: String, source: Session.Source) {
-        ScreenController.showBrowserScreenForUrl(this, supportFragmentManager, url, source)
+        serviceLocator.screenController.showBrowserScreenForUrl(this, supportFragmentManager, url, source)
     }
 
     override fun applyLocale() {
@@ -199,7 +201,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
     override fun onNonTextInputUrlEntered(urlStr: String) {
         ViewUtils.hideKeyboard(container)
-        ScreenController.onUrlEnteredInner(this, supportFragmentManager, urlStr, false,
+        serviceLocator.screenController.onUrlEnteredInner(this, supportFragmentManager, urlStr, false,
                 null, null)
     }
 
@@ -210,7 +212,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     ) {
         ViewUtils.hideKeyboard(container)
         // It'd be much cleaner/safer to do this with a kotlin callback.
-        ScreenController.onUrlEnteredInner(this, supportFragmentManager, urlStr, true,
+        serviceLocator.screenController.onUrlEnteredInner(this, supportFragmentManager, urlStr, true,
                 autocompleteResult, inputLocation)
     }
 
