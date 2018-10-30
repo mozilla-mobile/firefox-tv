@@ -9,6 +9,7 @@ import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.ViewModelFactory
 import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketRepo
+import org.mozilla.tv.firefox.pocket.PocketRepoStateMachine
 
 /**
  * Implementation of the Service Locator pattern. Use this class to provide dependencies without
@@ -46,9 +47,12 @@ open class ServiceLocator(val app: Application) {
 
     private val pocketEndpoint by lazy { PocketEndpoint }
     private val buildConfigDerivables by lazy { BuildConfigDerivables() }
+    private val pocketRepoStateMachine by lazy { PocketRepoStateMachine() }
 
     val viewModelFactory by lazy { ViewModelFactory(this) }
 
     open val pinnedTileRepo by lazy { PinnedTileRepo(app) }
-    open val pocketRepo = PocketRepo.initAndFetch(pocketEndpoint, buildConfigDerivables)
+    open val pocketRepo = PocketRepo(pocketEndpoint, pocketRepoStateMachine, buildConfigDerivables).apply {
+        update()
+    }
 }
