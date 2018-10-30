@@ -4,12 +4,12 @@
 
 package org.mozilla.tv.firefox.utils
 
-import android.app.Application
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ViewModelFactory
 import org.mozilla.tv.firefox.pocket.PocketEndpoint
-import org.mozilla.tv.firefox.pocket.PocketRepo
+import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
+import org.mozilla.tv.firefox.pocket.PocketRepoCache
 
 /**
  * Implementation of the Service Locator pattern. Use this class to provide dependencies without
@@ -43,17 +43,17 @@ import org.mozilla.tv.firefox.pocket.PocketRepo
  *   open val telemetry: TelemetryInterface by lazy { SentryWrapper() }
  *   ```
  */
-open class ServiceLocator(val app: Application) {
+class ServiceLocator {
+    private val pocketEndpoint get() = PocketEndpoint
+    private val buildConfigDerivables get() = BuildConfigDerivables()
+    private val pocketFeedStateMachine get() = PocketFeedStateMachine()
 
-    private val pocketEndpoint by lazy { PocketEndpoint }
-    private val buildConfigDerivables by lazy { BuildConfigDerivables() }
-    private val pocketRepoStateMachine by lazy { PocketRepoStateMachine() }
-
+    val pocketRepoCache by lazy { PocketRepoCache(pocketRepo).apply { unfreeze() } }
     val viewModelFactory by lazy { ViewModelFactory(this) }
     val screenController by lazy { ScreenController() }
 
     open val pinnedTileRepo by lazy { PinnedTileRepo(app) }
-    open val pocketRepo = PocketRepo(pocketEndpoint, pocketRepoStateMachine, buildConfigDerivables).apply {
+    open val pocketRepo = PocketVideoRepo(pocketEndpoint, pocketFeedStateMachine, buildConfigDerivables).apply {
         update()
     }
 }

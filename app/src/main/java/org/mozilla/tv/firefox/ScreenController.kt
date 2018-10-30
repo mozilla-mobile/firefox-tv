@@ -11,6 +11,7 @@ import android.text.TextUtils
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.ext.webRenderComponents
+import org.mozilla.tv.firefox.pocket.PocketRepoCache
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration

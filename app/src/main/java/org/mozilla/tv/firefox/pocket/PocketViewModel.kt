@@ -42,9 +42,9 @@ sealed class PocketFeedItem {
  * information required by the view. This should be enough to render (i.e., the
  * view should not have to perform any transformations on this data).
  */
-class PocketViewModel(private val pocketRepo: PocketRepo) : ViewModel() {
+class PocketViewModel(private val pocketRepo: PocketRepo, pocketRepoCache: PocketRepoCache) : ViewModel() {
 
-    val state = pocketRepo.state.map { repoState ->
+    val state = pocketRepoCache.state.map { repoState ->
         when (repoState) {
             is PocketRepoState.Loading -> Feed(loadingPlaceholders)
             is PocketRepoState.LoadComplete -> Feed(repoState.videos)

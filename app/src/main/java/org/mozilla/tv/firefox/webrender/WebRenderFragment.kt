@@ -44,11 +44,8 @@ import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
-<<<<<<< HEAD
 import org.mozilla.tv.firefox.utils.ViewUtils.showCenteredBottomToast
-=======
 import org.mozilla.tv.firefox.utils.ServiceLocator
->>>>>>> Closes #1344: add ScreenController to ServiceLocator
 import org.mozilla.tv.firefox.utils.ViewUtils.showCenteredTopToast
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 
@@ -88,23 +85,17 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     private var overlayVisibleCached: Int? = null
 
     var sessionFeature: SessionFeature? = null
-<<<<<<< HEAD
     private var currentPageHost = ""
     private lateinit var pinnedTileViewModel: PinnedTileViewModel
-=======
     private lateinit var serviceLocator: ServiceLocator
->>>>>>> Closes #1344: add ScreenController to ServiceLocator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSession()
-<<<<<<< HEAD
 
         val factory = ViewModelFactory(context!!.serviceLocator)
         pinnedTileViewModel = ViewModelProviders.of(this, factory).get(PinnedTileViewModel::class.java)
-=======
         serviceLocator = context!!.serviceLocator
->>>>>>> Closes #1344: add ScreenController to ServiceLocator
     }
 
     private fun initSession() {
@@ -443,6 +434,9 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         if (toShow) cursor?.onPause() else cursor?.onResume()
         cursor?.setEnabledForCurrentState()
         if (toShow) MenuInteractionMonitor.menuOpened() else MenuInteractionMonitor.menuClosed()
+        // TODO once the overlay is a separate fragment, handle PocketRepoCache changes in ScreenController
+        val pocketRepoCache = serviceLocator.pocketRepoCache
+        if (toShow) pocketRepoCache.freeze() else pocketRepoCache.unfreeze()
     }
 
     private inner class NavigationStateProvider : BrowserNavigationOverlay.BrowserNavigationStateProvider {
