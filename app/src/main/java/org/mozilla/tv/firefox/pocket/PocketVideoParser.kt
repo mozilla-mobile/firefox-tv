@@ -8,12 +8,12 @@ import org.json.JSONException
 import org.json.JSONObject
 
 /**
- * Handles marshalling [PocketFeedItem.Video] objects from JSON.
+ * Handles marshalling [PocketViewModel.FeedItem.Video] objects from JSON.
  */
 object PocketVideoParser {
 
-    fun parse(jsonObj: JSONObject): PocketFeedItem.Video? = try {
-        PocketFeedItem.Video(
+    fun parse(jsonObj: JSONObject): PocketViewModel.FeedItem.Video? = try {
+        PocketViewModel.FeedItem.Video(
             id = jsonObj.getInt("id"),
             title = jsonObj.getString("title"),
             // Note that the 'url' property of our domain object can be retrieved from

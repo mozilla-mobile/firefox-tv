@@ -49,11 +49,11 @@ class PocketVideoFragment : Fragment() {
         val factory = context!!.serviceLocator.viewModelFactory
         val viewModel = ViewModelProviders.of(this, factory).get(PocketViewModel::class.java)
 
-        viewModel.state.observe(viewLifecycleOwner, Observer<PocketViewModelState> { state ->
+        viewModel.state.observe(viewLifecycleOwner, Observer<PocketViewModel.State> { state ->
             state ?: return@Observer
             when (state) {
-                is PocketViewModelState.Error -> { /* TODO: #769: display error screen */ }
-                is PocketViewModelState.Feed -> adapter.setVideos(state.feed)
+                is PocketViewModel.State.Error -> { /* TODO: #769: display error screen */ }
+                is PocketViewModel.State.Feed -> adapter.setVideos(state.feed)
             }.forceExhaustive
         })
         return layout
@@ -71,7 +71,7 @@ private class PocketVideoAdapter(
     private val fragmentManager: FragmentManager
 ) : RecyclerView.Adapter<PocketVideoViewHolder>() {
 
-    private val pocketVideos = mutableListOf<PocketFeedItem>()
+    private val pocketVideos = mutableListOf<PocketViewModel.FeedItem>()
 
     private val photonGrey70 = ContextCompat.getColor(context, R.color.photonGrey70)
     private val photonGrey60 = ContextCompat.getColor(context, R.color.photonGrey60)
@@ -81,7 +81,7 @@ private class PocketVideoAdapter(
     private val videoItemHorizontalMargin = context.resources.getDimensionPixelSize(R.dimen.pocket_video_item_horizontal_margin)
     private val feedHorizontalMargin = context.resources.getDimensionPixelSize(R.dimen.pocket_feed_horizontal_margin)
 
-    fun setVideos(videos: List<PocketFeedItem>) {
+    fun setVideos(videos: List<PocketViewModel.FeedItem>) {
         pocketVideos.clear()
         pocketVideos.addAll(videos)
         notifyDataSetChanged()
@@ -97,8 +97,8 @@ private class PocketVideoAdapter(
         setHorizontalMargins(holder, position)
 
         when (item) {
-            is PocketFeedItem.Loading -> holder.bindPlaceholder()
-            is PocketFeedItem.Video -> holder.bindPocketVideo(item)
+            is PocketViewModel.FeedItem.Loading -> holder.bindPlaceholder()
+            is PocketViewModel.FeedItem.Video -> holder.bindPocketVideo(item)
         }.forceExhaustive
     }
 
@@ -110,7 +110,7 @@ private class PocketVideoAdapter(
         videoThumbnailView.setImageResource(R.color.photonGrey50)
     }
 
-    private fun PocketVideoViewHolder.bindPocketVideo(item: PocketFeedItem.Video) {
+    private fun PocketVideoViewHolder.bindPocketVideo(item: PocketViewModel.FeedItem.Video) {
         itemView.setOnClickListener {
             itemView.context!!.serviceLocator.screenController
                 .showBrowserScreenForUrl(itemView.context, fragmentManager, item.url, Session.Source.HOME_SCREEN)

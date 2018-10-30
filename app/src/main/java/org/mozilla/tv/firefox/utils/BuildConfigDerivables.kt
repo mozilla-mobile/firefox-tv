@@ -5,7 +5,7 @@
 package org.mozilla.tv.firefox.utils
 
 import org.mozilla.tv.firefox.BuildConfig
-import org.mozilla.tv.firefox.pocket.PocketRepoState
+import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 
 /**
  * Computes information that must be derived from the [BuildConfig].
@@ -15,7 +15,7 @@ import org.mozilla.tv.firefox.pocket.PocketRepoState
 class BuildConfigDerivables {
     @Suppress("SENSELESS_COMPARISON") // Values of BuildConfig can change but the compiler doesn't know that
     val initialPocketRepoState = when {
-        BuildConfig.POCKET_KEY == null -> PocketRepoState.NoKey
-        else -> PocketRepoState.Loading
+        BuildConfig.POCKET_KEY == null -> PocketVideoRepo.FeedState.NoKey
+        else -> PocketVideoRepo.FeedState.Loading
     }
 }

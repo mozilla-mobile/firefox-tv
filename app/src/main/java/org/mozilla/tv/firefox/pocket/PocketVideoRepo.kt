@@ -18,29 +18,29 @@ import kotlin.math.min
 
 private val CACHE_UPDATE_FREQUENCY_MILLIS = TimeUnit.MINUTES.toMillis(45)
 
-sealed class PocketRepoState {
-    data class LoadComplete(val videos: List<PocketFeedItem>) : PocketRepoState()
-    object Loading : PocketRepoState()
-    object NoKey : PocketRepoState()
-    object FetchFailed : PocketRepoState()
-}
-
 /**
  * Manages backing state for Pocket data, as well as any logic related to
  * retrieving or storing that data.
  */
-open class PocketRepo(
+open class PocketVideoRepo(
     private val pocketEndpoint: PocketEndpoint,
     private val pocketFeedStateMachine: PocketFeedStateMachine,
     buildConfigDerivables: BuildConfigDerivables
 ) {
 
-    private val mutableState = MutableLiveData<PocketRepoState>().apply {
+    sealed class FeedState {
+        data class LoadComplete(val videos: List<PocketViewModel.FeedItem>) : FeedState()
+        object Loading : FeedState()
+        object NoKey : FeedState()
+        object FetchFailed : FeedState()
+    }
+
+    private val mutableState = MutableLiveData<FeedState>().apply {
         // mutableState.value should always be initialized at the top of init,
         // because we treat it as non-null
         value = buildConfigDerivables.initialPocketRepoState
     }
-    open val state: LiveData<PocketRepoState> = mutableState
+    open val feedState: LiveData<FeedState> = mutableState
 
     @Suppress("ANNOTATION_TARGETS_NON_EXISTENT_ACCESSOR") // Private properties generate fields so method annotations can't apply.
     @get:UiThread
@@ -69,9 +69,9 @@ open class PocketRepo(
 
     private suspend fun updateInner() {
 
-        suspend fun requestVideos(): List<PocketFeedItem>? = pocketEndpoint.getRecommendedVideos()
+        suspend fun requestVideos(): List<PocketViewModel.FeedItem>? = pocketEndpoint.getRecommendedVideos()
 
-        fun List<PocketFeedItem>?.wasSuccessful() = this?.isNotEmpty() == true
+        fun List<PocketViewModel.FeedItem>?.wasSuccessful() = this?.isNotEmpty() == true
 
         fun updateRequestTimers(requestSuccessful: Boolean) {
             lastAttemptWasSuccessful = requestSuccessful
