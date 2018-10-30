@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.helpers
 
 import android.support.test.espresso.matcher.ViewMatchers.isEnabled as espressoIsEnabled
+import android.support.test.espresso.matcher.ViewMatchers.isChecked as espressoIsChecked
 import android.view.View
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
@@ -16,4 +17,13 @@ import org.hamcrest.Matcher
 fun isEnabled(isEnabled: Boolean): Matcher<View> = when {
     isEnabled -> espressoIsEnabled()
     else -> not(espressoIsEnabled())
+}
+
+/**
+ * The [android.support.test.espresso.matcher.ViewMatchers.isChecked] function that can also handle
+ * unchecked state through the boolean argument.
+ */
+fun isChecked(isChecked: Boolean): Matcher<View> = when {
+    isChecked -> espressoIsChecked()
+    else -> not(espressoIsChecked())
 }
