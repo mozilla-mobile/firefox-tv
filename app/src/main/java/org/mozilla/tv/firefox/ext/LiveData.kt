@@ -12,6 +12,13 @@ fun <T, U> LiveData<T>.map(mapper: (T) -> U): LiveData<U> {
     return Transformations.map(this, mapper)
 }
 
+fun <T> LiveData<T>.doOnEach(action: (T?) -> Unit): LiveData<T> {
+    return this.map {
+        action(it)
+        it
+    }
+}
+
 object LiveData {
 
     // If more advanced versions of this are required, we should import RxJava instead of duplicating their effort
