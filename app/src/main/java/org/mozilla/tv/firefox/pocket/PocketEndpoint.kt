@@ -37,16 +37,16 @@ object PocketEndpoint {
 
     /** @return The global video recommendations or null on error; the list will never be empty. */
     @AnyThread // via PocketEndpointRaw.
-    suspend fun getRecommendedVideos(): List<PocketFeedItem.Video>? {
+    suspend fun getRecommendedVideos(): List<PocketViewModel.FeedItem.Video>? {
         val videosJSON = PocketEndpointRaw.getGlobalVideoRecommendations() ?: return null
         return convertVideosJSON(videosJSON)
     }
 
     /** @return The videos or null on error; the list will never be empty. */
-    @VisibleForTesting fun convertVideosJSON(jsonStr: String): List<PocketFeedItem.Video>? = try {
+    @VisibleForTesting fun convertVideosJSON(jsonStr: String): List<PocketViewModel.FeedItem.Video>? = try {
         val rawJSON = JSONObject(jsonStr)
         val videosJSON = rawJSON.getJSONArray("recommendations")
-        val videos = videosJSON.flatMapObj { PocketFeedItem.Video.fromJSONObject(it) }
+        val videos = videosJSON.flatMapObj { PocketViewModel.FeedItem.Video.fromJSONObject(it) }
         if (videos.isNotEmpty()) videos else null
     } catch (e: JSONException) {
         Log.w(LOGTAG, "convertVideosJSON: invalid JSON from Pocket server")

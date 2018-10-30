@@ -48,7 +48,6 @@ import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
-import org.mozilla.tv.firefox.pocket.PocketViewModelState
 import java.lang.ref.WeakReference
 
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
@@ -267,8 +266,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         pocketViewModel.state.observe(fragment.viewLifecycleOwner, Observer { state ->
             when (state) {
-                is PocketViewModelState.Error -> showMegaTileError()
-                is PocketViewModelState.Feed -> {
+                is PocketViewModel.State.Error -> showMegaTileError()
+                is PocketViewModel.State.Feed -> {
                     pocketVideoMegaTileView.setContent(state.feed)
                 }
                 null -> return@Observer

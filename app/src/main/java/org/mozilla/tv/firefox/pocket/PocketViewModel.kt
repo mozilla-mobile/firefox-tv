@@ -9,57 +9,55 @@ import android.support.annotation.VisibleForTesting
 import org.json.JSONObject
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.map
-import org.mozilla.tv.firefox.pocket.PocketViewModelState.Error
-import org.mozilla.tv.firefox.pocket.PocketViewModelState.Feed
 
 const val POCKET_VIDEO_COUNT = 20
-
-sealed class PocketViewModelState {
-    object Error : PocketViewModelState()
-    data class Feed(val feed: List<PocketFeedItem>) : PocketViewModelState()
-}
-
-sealed class PocketFeedItem {
-    data class Loading(val thumbnailResource: Int) : PocketFeedItem()
-    data class Video(
-        val id: Int,
-        val title: String,
-        val url: String,
-        val thumbnailURL: String,
-        val popularitySortId: Int
-    ) : PocketFeedItem() {
-        companion object {
-            fun fromJSONObject(jsonObject: JSONObject) = PocketVideoParser.parse(jsonObject)
-        }
-    }
-}
 
 /**
  * Provides data that maps 1:1 to Pocket view state.
  *
  * This view state is provided by transforming backing state (provided by the
- * [PocketRepo]), stripping information not important to the view, and adding
+ * [PocketVideoRepo]), stripping information not important to the view, and adding
  * information required by the view. This should be enough to render (i.e., the
  * view should not have to perform any transformations on this data).
  */
-class PocketViewModel(private val pocketRepo: PocketRepo, pocketRepoCache: PocketRepoCache) : ViewModel() {
+class PocketViewModel(private val pocketRepo: PocketVideoRepo, pocketRepoCache: PocketRepoCache) : ViewModel() {
+
+    sealed class State {
+        object Error : State()
+        data class Feed(val feed: List<FeedItem>) : State()
+    }
+
+    sealed class FeedItem {
+        data class Loading(val thumbnailResource: Int) : FeedItem()
+        data class Video(
+            val id: Int,
+            val title: String,
+            val url: String,
+            val thumbnailURL: String,
+            val popularitySortId: Int
+        ) : FeedItem() {
+            companion object {
+                fun fromJSONObject(jsonObject: JSONObject) = PocketVideoParser.parse(jsonObject)
+            }
+        }
+    }
 
     val state = pocketRepoCache.state.map { repoState ->
         when (repoState) {
-            is PocketRepoState.Loading -> Feed(loadingPlaceholders)
-            is PocketRepoState.LoadComplete -> Feed(repoState.videos)
-            is PocketRepoState.NoKey -> Feed(noKeyPlaceholders)
-            is PocketRepoState.FetchFailed -> Error
+            is PocketVideoRepo.FeedState.Loading -> State.Feed(loadingPlaceholders)
+            is PocketVideoRepo.FeedState.LoadComplete -> State.Feed(repoState.videos)
+            is PocketVideoRepo.FeedState.NoKey -> State.Feed(noKeyPlaceholders)
+            is PocketVideoRepo.FeedState.FetchFailed -> State.Error
         }
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    val loadingPlaceholders: List<PocketFeedItem> =
-        List(POCKET_VIDEO_COUNT) { PocketFeedItem.Loading(R.color.photonGrey50) }
+    val loadingPlaceholders: List<FeedItem> =
+        List(POCKET_VIDEO_COUNT) { FeedItem.Loading(R.color.photonGrey50) }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    val noKeyPlaceholders: List<PocketFeedItem> = List(POCKET_VIDEO_COUNT) {
-        PocketFeedItem.Video(
+    val noKeyPlaceholders: List<FeedItem> = List(POCKET_VIDEO_COUNT) {
+        FeedItem.Video(
             id = it,
             title = "Mozilla",
             url = "https://www.mozilla.org/en-US/",

@@ -26,20 +26,20 @@ class PocketViewModelTest {
     var rule = PreventLiveDataMainLooperCrashRule()
 
     private lateinit var viewModel: PocketViewModel
-    private lateinit var repoCacheState: MutableLiveData<PocketRepoState>
-    private lateinit var observerSpy: Observer<PocketViewModelState>
+    private lateinit var repoCacheState: MutableLiveData<PocketVideoRepo.FeedState>
+    private lateinit var observerSpy: Observer<PocketViewModel.State>
 
-    private lateinit var loadingPlaceholders: List<PocketFeedItem>
-    private lateinit var noKeyPlaceholders: List<PocketFeedItem>
+    private lateinit var loadingPlaceholders: List<PocketViewModel.FeedItem>
+    private lateinit var noKeyPlaceholders: List<PocketViewModel.FeedItem>
 
     @Before
     fun setup() {
 
         repoCacheState = MutableLiveData()
-        val repo = mock(PocketRepo::class.java)
-        `when`(repo.state).thenReturn(MutableLiveData())
+        val repo = mock(PocketVideoRepo::class.java)
+        `when`(repo.feedState).thenReturn(MutableLiveData())
         val repoCache = object : PocketRepoCache(repo) {
-            override val state: MutableLiveData<PocketRepoState>
+            val feedState: MutableLiveData<PocketVideoRepo.FeedState>
                 get() = repoCacheState
         }
 
@@ -50,18 +50,18 @@ class PocketViewModelTest {
 
     @Test
     fun `WHEN repo cache emits a successful fetch THEN view model should emit a feed with the same videos`() {
-        val videos = listOf<PocketFeedItem>(
-            PocketFeedItem.Video(1, "", "", "", 1)
+        val videos = listOf<PocketViewModel.FeedItem>(
+            PocketViewModel.FeedItem.Video(1, "", "", "", 1)
         )
 
         observerSpy = spy(Observer {
-            assertTrue(it is PocketViewModelState.Feed)
-            assertEquals(videos, (it as PocketViewModelState.Feed).feed)
+            assertTrue(it is PocketViewModel.State.Feed)
+            assertEquals(videos, (it as PocketViewModel.State.Feed).feed)
         })
 
         viewModel.state.observeForever(observerSpy)
 
-        repoCacheState.value = PocketRepoState.LoadComplete(videos)
+        repoCacheState.value = PocketVideoRepo.FeedState.LoadComplete(videos)
 
         verify(observerSpy, times(1)).onChanged(any())
     }
@@ -69,13 +69,13 @@ class PocketViewModelTest {
     @Test
     fun `WHEN repo cache emits loading THEN view model should emit a feed of placeholders`() {
         observerSpy = spy(Observer {
-            assertTrue(it is PocketViewModelState.Feed)
-            assertEquals(loadingPlaceholders, (it as PocketViewModelState.Feed).feed)
+            assertTrue(it is PocketViewModel.State.Feed)
+            assertEquals(loadingPlaceholders, (it as PocketViewModel.State.Feed).feed)
         })
 
         viewModel.state.observeForever(observerSpy)
 
-        repoCacheState.value = PocketRepoState.Loading
+        repoCacheState.value = PocketVideoRepo.FeedState.Loading
 
         verify(observerSpy, times(1)).onChanged(any())
     }
@@ -83,13 +83,13 @@ class PocketViewModelTest {
     @Test
     fun `WHEN repo cache emits no key THEN view model should emit a feed of no key placeholders`() {
         observerSpy = spy(Observer {
-            assertTrue(it is PocketViewModelState.Feed)
-            assertEquals(noKeyPlaceholders, (it as PocketViewModelState.Feed).feed)
+            assertTrue(it is PocketViewModel.State.Feed)
+            assertEquals(noKeyPlaceholders, (it as PocketViewModel.State.Feed).feed)
         })
 
         viewModel.state.observeForever(observerSpy)
 
-        repoCacheState.value = PocketRepoState.NoKey
+        repoCacheState.value = PocketVideoRepo.FeedState.NoKey
 
         verify(observerSpy, times(1)).onChanged(any())
     }
@@ -97,12 +97,12 @@ class PocketViewModelTest {
     @Test
     fun `WHEN repo cache emits failure THEN view model should emit an error state`() {
         observerSpy = spy(Observer {
-            assertTrue(it === PocketViewModelState.Error)
+            assertTrue(it === PocketViewModel.State.Error)
         })
 
         viewModel.state.observeForever(observerSpy)
 
-        repoCacheState.value = PocketRepoState.FetchFailed
+        repoCacheState.value = PocketVideoRepo.FeedState.FetchFailed
 
         verify(observerSpy, times(1)).onChanged(any())
     }

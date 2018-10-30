@@ -32,13 +32,13 @@ class PocketVideoMegaTile(
         PocketDrawable.setImageDrawableAsPocketWordmark(pocketWordmarkView)
     }
 
-    fun setContent(feedItems: List<PocketFeedItem>) {
+    fun setContent(feedItems: List<PocketViewModel.FeedItem>) {
         listOf(thumbnail1View, thumbnail2View, thumbnail3View, thumbnail4View)
             .zip(feedItems)
             .forEach { (view, item) ->
                 when (item) {
-                    is PocketFeedItem.Video -> showFetchedImage(view, item.thumbnailURL)
-                    is PocketFeedItem.Loading -> showLocalDrawable(view, item.thumbnailResource)
+                    is PocketViewModel.FeedItem.Video -> showFetchedImage(view, item.thumbnailURL)
+                    is PocketViewModel.FeedItem.Loading -> showLocalDrawable(view, item.thumbnailResource)
                 }
             }
     }
