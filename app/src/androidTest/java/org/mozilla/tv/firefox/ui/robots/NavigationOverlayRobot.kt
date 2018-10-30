@@ -20,6 +20,7 @@ import android.support.test.espresso.matcher.ViewMatchers.withText
 import android.support.test.uiautomator.UiDevice
 import org.hamcrest.CoreMatchers.containsString
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.helpers.ext.assertIsChecked
 import org.mozilla.tv.firefox.helpers.ext.assertIsEnabled
 import org.mozilla.tv.firefox.helpers.ext.click
 import org.mozilla.tv.firefox.pinnedtile.TileViewHolder
@@ -34,6 +35,7 @@ class NavigationOverlayRobot {
     fun reload() = reloadButton().click()
     fun toggleTurbo() = turboButton().click()
     fun openSettings() = settingsButton().click()
+    fun toggleDesktopMode() = desktopModeButton().click()
 
     fun assertCanGoBack(canGoBack: Boolean) = backButton().assertIsEnabled(canGoBack)
     fun assertCanGoForward(canGoForward: Boolean) = forwardButton().assertIsEnabled(canGoForward)
@@ -50,6 +52,10 @@ class NavigationOverlayRobot {
         assertURLBarText("")
                 .check(matches(withHint(R.string.urlbar_hint)))
     }
+
+    fun assertDesktopModeEnabled(desktopModeEnabled: Boolean) = desktopModeButton().assertIsEnabled(desktopModeEnabled)
+    // canTurnDesktopModeOn -> true = unchecked = desktop mode can be turned on, false = checked = desktop mode can be turned off
+    fun assertCanTurnDesktopModeOn(canTurnDesktopModeOn: Boolean) = desktopModeButton().assertIsChecked(!canTurnDesktopModeOn)
 
     class Transition {
         private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -106,3 +112,4 @@ private fun settingsButton() = onView(withId(R.id.navButtonSettings))
 private fun urlBar() = onView(withId(R.id.navUrlInput))
 private fun homeTiles() = onView(withId(R.id.tileContainer))
 private fun overlay() = onView(withId(R.id.browserOverlay))
+private fun desktopModeButton() = onView(withId(R.id.desktopModeButton))
