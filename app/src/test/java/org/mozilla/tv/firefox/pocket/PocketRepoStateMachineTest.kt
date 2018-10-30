@@ -16,70 +16,75 @@ import org.mozilla.tv.firefox.pocket.PocketRepoState.NoKey
 class PocketRepoStateMachineTest {
 
     private val loadComplete = LoadComplete(listOf())
+    private val goodResponse = listOf(PocketFeedItem.Video(0, "", "", "", 0))
+    private val pocketRepoStateMachine = PocketRepoStateMachine()
 
     @Test
-    fun `WHEN input state is load complete THEN ouput state should be load complete`() {
-        val fromLoading = PocketRepoStateMachine(loadComplete, Loading).computedState()
+    fun `WHEN fromFetch is called with valid videos THEN ouput state should be load complete`() {
+        val fromLoading = pocketRepoStateMachine.fromFetch(goodResponse, Loading)
         assertTrue(fromLoading is LoadComplete)
 
-        val fromFailure = PocketRepoStateMachine(loadComplete, FetchFailed).computedState()
+        val fromFailure = pocketRepoStateMachine.fromFetch(goodResponse, FetchFailed)
         assertTrue(fromFailure is LoadComplete)
 
-        val fromComplete = PocketRepoStateMachine(loadComplete, loadComplete).computedState()
+        val fromComplete = pocketRepoStateMachine.fromFetch(goodResponse, loadComplete)
         assertTrue(fromComplete is LoadComplete)
 
-        val fromNoKey = PocketRepoStateMachine(loadComplete, NoKey).computedState()
+        val fromNoKey = pocketRepoStateMachine.fromFetch(goodResponse, NoKey)
         assertTrue(fromNoKey is LoadComplete)
     }
 
     @Test
-    fun `WHEN input state is no key THEN output state should be no key`() {
-        val fromLoading = PocketRepoStateMachine(NoKey, Loading).computedState()
-        assertEquals(NoKey, fromLoading)
-
-        val fromFailure = PocketRepoStateMachine(NoKey, FetchFailed).computedState()
-        assertEquals(NoKey, fromFailure)
-
-        val fromComplete = PocketRepoStateMachine(NoKey, loadComplete).computedState()
-        assertEquals(NoKey, fromComplete)
-
-        val fromNoKey = PocketRepoStateMachine(NoKey, NoKey).computedState()
-        assertEquals(NoKey, fromNoKey)
-    }
-
-    @Test
     fun `GIVEN input state is loading WHEN cached state is failure THEN output state should be loading`() {
-        val outputState = PocketRepoStateMachine(Loading, FetchFailed).computedState()
+        val outputState = pocketRepoStateMachine.setLoading(FetchFailed)
         assertEquals(Loading, outputState)
     }
 
     @Test
     fun `GIVEN input state is loading WHEN cached state is not failure THEN output state should equal input state`() {
-        val fromLoading = PocketRepoStateMachine(Loading, Loading).computedState()
+        val fromLoading = pocketRepoStateMachine.setLoading(Loading)
         assertEquals(Loading, fromLoading)
 
-        val fromComplete = PocketRepoStateMachine(Loading, loadComplete).computedState()
+        val fromComplete = pocketRepoStateMachine.setLoading(loadComplete)
         assertTrue(fromComplete is LoadComplete)
 
-        val fromNoKey = PocketRepoStateMachine(Loading, NoKey).computedState()
+        val fromNoKey = pocketRepoStateMachine.setLoading(NoKey)
         assertEquals(NoKey, fromNoKey)
     }
 
     @Test
-    fun `GIVEN input state is failure WHEN cached state is loading THEN output state should be failure`() {
-        val outputState = PocketRepoStateMachine(FetchFailed, Loading).computedState()
-        assertEquals(FetchFailed, outputState)
+    fun `GIVEN null response WHEN cached state is loading THEN output state should be failure`() {
+        val fromNull = pocketRepoStateMachine.fromFetch(null, Loading)
+        assertEquals(FetchFailed, fromNull)
     }
 
     @Test
-    fun `GIVEN input state is failure WHEN cached state is not loading THEN output state should equal input state`() {
-        val fromFailure = PocketRepoStateMachine(FetchFailed, FetchFailed).computedState()
+    fun `GIVEN null response WHEN cached state is not loading THEN output state should equal input state`() {
+        val fromFailure = pocketRepoStateMachine.fromFetch(null, FetchFailed)
         assertEquals(FetchFailed, fromFailure)
 
-        val fromComplete = PocketRepoStateMachine(FetchFailed, loadComplete).computedState()
+        val fromComplete = pocketRepoStateMachine.fromFetch(null, loadComplete)
         assertTrue(fromComplete is LoadComplete)
 
-        val fromNoKey = PocketRepoStateMachine(FetchFailed, NoKey).computedState()
+        val fromNoKey = pocketRepoStateMachine.fromFetch(null, NoKey)
+        assertEquals(NoKey, fromNoKey)
+    }
+
+    @Test
+    fun `GIVEN empty response WHEN cached state is loading THEN output state should be failure`() {
+        val fromNull = pocketRepoStateMachine.fromFetch(emptyList(), Loading)
+        assertEquals(FetchFailed, fromNull)
+    }
+
+    @Test
+    fun `GIVEN empty response WHEN cached state is not loading THEN output state should equal input state`() {
+        val fromFailure = pocketRepoStateMachine.fromFetch(emptyList(), FetchFailed)
+        assertEquals(FetchFailed, fromFailure)
+
+        val fromComplete = pocketRepoStateMachine.fromFetch(emptyList(), loadComplete)
+        assertTrue(fromComplete is LoadComplete)
+
+        val fromNoKey = pocketRepoStateMachine.fromFetch(emptyList(), NoKey)
         assertEquals(NoKey, fromNoKey)
     }
 }

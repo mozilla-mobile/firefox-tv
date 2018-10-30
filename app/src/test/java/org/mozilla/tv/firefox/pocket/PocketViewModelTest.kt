@@ -37,7 +37,7 @@ class PocketViewModelTest {
     fun setup() {
 
         repoState = MutableLiveData()
-        val repo = object : PocketRepo(mock(PocketEndpoint::class.java), BuildConfigDerivables()) {
+        val repo = object : PocketRepo(mock(PocketEndpoint::class.java), PocketRepoStateMachine(), BuildConfigDerivables()) {
             override val state: LiveData<PocketRepoState>
                 get() = repoState
         }
