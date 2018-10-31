@@ -244,4 +244,12 @@ be temporary, and you can try again later.</li>
 
     <!-- This title is shown on a dialog that prompts the user if they want to clear their cookies and site data.  -->
     <string name="dialog_clear_cookies_title">Clear Cookies?</string>
+
+    <!--Request desktop site strings-->
+    <!-- Content description for Request desktop version button-->
+    <string name="request_desktop_site_a11y">Request desktop version of this site</string>
+    <!-- Notification displayed when desktop version is requested-->
+    <string name="notification_request_desktop_site">Requested desktop version</string>
+    <!-- Notification displayed when non-desktop version of the site is requested-->
+    <string name="notification_request_non_desktop_site">Returned to non-desktop version</string>
 </resources>
