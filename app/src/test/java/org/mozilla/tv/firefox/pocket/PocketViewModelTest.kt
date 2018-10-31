@@ -39,7 +39,7 @@ class PocketViewModelTest {
         val repo = mock(PocketVideoRepo::class.java)
         `when`(repo.feedState).thenReturn(MutableLiveData())
         val repoCache = object : PocketRepoCache(repo) {
-            val feedState: MutableLiveData<PocketVideoRepo.FeedState>
+            override val feedState: MutableLiveData<PocketVideoRepo.FeedState>
                 get() = repoCacheState
         }
 
@@ -89,7 +89,7 @@ class PocketViewModelTest {
 
         viewModel.state.observeForever(observerSpy)
 
-        repoCacheState.value = PocketVideoRepo.FeedState.NoKey
+        repoCacheState.value = PocketVideoRepo.FeedState.NoAPIKey
 
         verify(observerSpy, times(1)).onChanged(any())
     }

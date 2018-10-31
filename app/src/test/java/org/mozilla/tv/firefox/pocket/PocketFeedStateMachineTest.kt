@@ -11,7 +11,7 @@ import org.junit.Test
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.Loading
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.FetchFailed
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.LoadComplete
-import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.NoKey
+import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.NoAPIKey
 
 class PocketFeedStateMachineTest {
 
@@ -45,7 +45,7 @@ class PocketFeedStateMachineTest {
         val fromComplete = pocketRepoStateMachine.computeNewState(LoadComplete(goodResponse), loadComplete)
         assertTrue(fromComplete is LoadComplete)
 
-        val fromNoKey = pocketRepoStateMachine.computeNewState(LoadComplete(goodResponse), NoKey)
+        val fromNoKey = pocketRepoStateMachine.computeNewState(LoadComplete(goodResponse), NoAPIKey)
         assertTrue(fromNoKey is LoadComplete)
     }
 
@@ -63,8 +63,8 @@ class PocketFeedStateMachineTest {
         val fromComplete = pocketRepoStateMachine.computeNewState(Loading, loadComplete)
         assertTrue(fromComplete is LoadComplete)
 
-        val fromNoKey = pocketRepoStateMachine.computeNewState(Loading, NoKey)
-        assertEquals(NoKey, fromNoKey)
+        val fromNoKey = pocketRepoStateMachine.computeNewState(Loading, NoAPIKey)
+        assertEquals(NoAPIKey, fromNoKey)
     }
 
     @Test
@@ -81,7 +81,7 @@ class PocketFeedStateMachineTest {
         val fromComplete = pocketRepoStateMachine.computeNewState(FetchFailed, loadComplete)
         assertTrue(fromComplete is LoadComplete)
 
-        val fromNoKey = pocketRepoStateMachine.computeNewState(FetchFailed, NoKey)
-        assertEquals(NoKey, fromNoKey)
+        val fromNoKey = pocketRepoStateMachine.computeNewState(FetchFailed, NoAPIKey)
+        assertEquals(NoAPIKey, fromNoKey)
     }
 }

@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.min
 
 private val CACHE_UPDATE_FREQUENCY_MILLIS = TimeUnit.MINUTES.toMillis(45)
+private const val BASE_RETRY_TIME = 1_000L
 
 /**
  * Manages backing state for Pocket data, as well as any logic related to
@@ -31,16 +32,16 @@ open class PocketVideoRepo(
     sealed class FeedState {
         data class LoadComplete(val videos: List<PocketViewModel.FeedItem>) : FeedState()
         object Loading : FeedState()
-        object NoKey : FeedState()
+        object NoAPIKey : FeedState()
         object FetchFailed : FeedState()
     }
 
-    private val mutableState = MutableLiveData<FeedState>().apply {
-        // mutableState.value should always be initialized at the top of init,
+    private val _feedState = MutableLiveData<FeedState>().apply {
+        // _feedState.value should always be initialized at the top of init,
         // because we treat it as non-null
         value = buildConfigDerivables.initialPocketRepoState
     }
-    open val feedState: LiveData<FeedState> = mutableState
+    open val feedState: LiveData<FeedState> = _feedState
 
     @Suppress("ANNOTATION_TARGETS_NON_EXISTENT_ACCESSOR") // Private properties generate fields so method annotations can't apply.
     @get:UiThread
@@ -48,22 +49,24 @@ open class PocketVideoRepo(
     private var backgroundUpdates: Job? = null
     @Volatile private var lastSuccessfulUpdateMillis = -1L
     @Volatile private var lastUpdateAttemptMillis = -1L
-    @Volatile private var retryDelayMillis = 1_000L
+    @Volatile private var retryDelayMillis = BASE_RETRY_TIME
     @Volatile private var lastAttemptWasSuccessful = false
 
     fun update() {
+        retryDelayMillis = BASE_RETRY_TIME
         launch { updateInner() }
     }
 
     @UiThread // update backgroundUpdates.
     fun startBackgroundUpdates() {
-        backgroundUpdates?.cancel(CancellationException("Cancelling unexpectedly active job to ensure only one is running"))
+        backgroundUpdates?.cancel(CancellationException("Cancelling unexpectedly active Pocket update job to ensure only one is running"))
         backgroundUpdates = startBackgroundUpdatesInner()
     }
 
-    @UiThread // update backgroundUpdates.
+    // When we the app is not in use, we don't want to hit the network for no reason, so we cancel updates
+    @UiThread // stop updating backgroundUpdates.
     fun stopBackgroundUpdates() {
-        backgroundUpdates?.cancel(CancellationException("Stopping background updates"))
+        backgroundUpdates?.cancel(CancellationException("App closing: canceling Pocket background updates"))
         backgroundUpdates = null
     }
 
@@ -80,7 +83,7 @@ open class PocketVideoRepo(
             when (requestSuccessful) {
                 true -> {
                     lastSuccessfulUpdateMillis = now
-                    retryDelayMillis = 1_000L
+                    retryDelayMillis = BASE_RETRY_TIME
                 }
                 // Exponential backoff on failure
                 false -> {

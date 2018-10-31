@@ -20,7 +20,7 @@ const val POCKET_VIDEO_COUNT = 20
  * information required by the view. This should be enough to render (i.e., the
  * view should not have to perform any transformations on this data).
  */
-class PocketViewModel(private val pocketRepo: PocketVideoRepo, pocketRepoCache: PocketRepoCache) : ViewModel() {
+class PocketViewModel(private val pocketVideoRepo: PocketVideoRepo, pocketRepoCache: PocketRepoCache) : ViewModel() {
 
     sealed class State {
         object Error : State()
@@ -42,11 +42,11 @@ class PocketViewModel(private val pocketRepo: PocketVideoRepo, pocketRepoCache: 
         }
     }
 
-    val state = pocketRepoCache.state.map { repoState ->
+    val state = pocketRepoCache.feedState.map { repoState ->
         when (repoState) {
             is PocketVideoRepo.FeedState.Loading -> State.Feed(loadingPlaceholders)
             is PocketVideoRepo.FeedState.LoadComplete -> State.Feed(repoState.videos)
-            is PocketVideoRepo.FeedState.NoKey -> State.Feed(noKeyPlaceholders)
+            is PocketVideoRepo.FeedState.NoAPIKey -> State.Feed(noKeyPlaceholders)
             is PocketVideoRepo.FeedState.FetchFailed -> State.Error
         }
     }
@@ -66,5 +66,5 @@ class PocketViewModel(private val pocketRepo: PocketVideoRepo, pocketRepoCache: 
         )
     }
 
-    fun update() = pocketRepo.update()
+    fun update() = pocketVideoRepo.update()
 }
