@@ -252,4 +252,11 @@ be temporary, and you can try again later.</li>
     <string name="notification_request_desktop_site">Requested desktop version</string>
     <!-- Notification displayed when non-desktop version of the site is requested-->
     <string name="notification_request_non_desktop_site">Returned to non-desktop version</string>
+
+    <!-- Notification displayed to introduce a "YouTube casting" feature (similar to "broadcasting")
+         Users who have the YouTube app on their phone or tablet can use it to play YouTube videos directly on their tv.
+
+         %s will be replaced with the icon that matches the button in the YouTube app for this feature.
+         Clicking on that button in the YouTube app will show YouTube's instructions on how to cast. -->
+    <string name="youtube_casting_onboarding_toast">Cast YouTube videos from your phone or tablet. Open YouTube on your device and tap %s to get started.</string>
 </resources>
