@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.utils
 
+import android.app.Application
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ViewModelFactory
@@ -35,8 +36,7 @@ import org.mozilla.tv.firefox.pocket.PocketVideoRepo
  *
  *   #### New value each time:
  *   ```
- *   open val pocket: Pocket
- *     get() = Pocket()
+ *   open val pocket: Pocket get() = Pocket()
  *   ```
  *
  *   #### Concrete value for interface:
@@ -44,7 +44,7 @@ import org.mozilla.tv.firefox.pocket.PocketVideoRepo
  *   open val telemetry: TelemetryInterface by lazy { SentryWrapper() }
  *   ```
  */
-class ServiceLocator {
+open class ServiceLocator(val app: Application) {
     private val pocketEndpoint get() = PocketEndpoint
     private val buildConfigDerivables get() = BuildConfigDerivables()
     private val pocketFeedStateMachine get() = PocketFeedStateMachine()

@@ -64,8 +64,8 @@ class PocketRepoCacheTest {
         verify(observerSpy, times(1)).onChanged(any())
         cacheOutput.removeObserver(observerSpy)
 
-        observerSpy = spy(Observer { assertEquals(PocketVideoRepo.FeedState.NoKey, it) })
-        repoOutput.value = PocketVideoRepo.FeedState.NoKey
+        observerSpy = spy(Observer { assertEquals(PocketVideoRepo.FeedState.NoAPIKey, it) })
+        repoOutput.value = PocketVideoRepo.FeedState.NoAPIKey
         cacheOutput.observeForever(observerSpy)
         verify(observerSpy, times(1)).onChanged(any())
         cacheOutput.removeObserver(observerSpy)
@@ -98,4 +98,3 @@ class PocketRepoCacheTest {
         cacheOutput.removeObserver(observerSpy)
     }
 }
-

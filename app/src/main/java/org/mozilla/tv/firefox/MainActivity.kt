@@ -147,12 +147,14 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
     override fun onStart() {
         super.onStart()
+        // TODO when MainActivity has a VM, route this call through it
         serviceLocator.pocketRepo.startBackgroundUpdates()
     }
 
     override fun onStop() {
         super.onStop()
-        serviceLocator.pocketRepo.stopBackgroundUpdates() // Don't regularly hit the network in the background.
+        // TODO when MainActivity has a VM, route this call through it
+        serviceLocator.pocketRepo.stopBackgroundUpdates()
         TelemetryIntegration.INSTANCE.stopMainActivity()
     }
 

@@ -15,7 +15,7 @@ import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 class BuildConfigDerivables {
     @Suppress("SENSELESS_COMPARISON") // Values of BuildConfig can change but the compiler doesn't know that
     val initialPocketRepoState = when {
-        BuildConfig.POCKET_KEY == null -> PocketVideoRepo.FeedState.NoKey
+        BuildConfig.POCKET_KEY == null -> PocketVideoRepo.FeedState.NoAPIKey
         else -> PocketVideoRepo.FeedState.Loading
     }
 }

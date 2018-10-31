@@ -6,7 +6,7 @@ package org.mozilla.tv.firefox.pocket
 
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.LoadComplete
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.Loading
-import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.NoKey
+import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.NoAPIKey
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.FetchFailed
 
 /**
@@ -26,11 +26,11 @@ import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.FetchFailed
  * [FetchFailed] ---------> [LoadComplete]
  *                            ^
  *                            |
- * [NoKey]   ------------------
+ * [NoAPIKey]   ---------------
  *
  * ### Valid Starting Configurations
  * - [Loading]
- * - [NoKey]
+ * - [NoAPIKey]
  */
 class PocketFeedStateMachine {
     fun computeNewState(
