@@ -140,15 +140,23 @@ public class ViewUtils {
         return ViewCompat.getLayoutDirection(view) == ViewCompat.LAYOUT_DIRECTION_RTL;
     }
 
-    public static void showCenteredTopToast(Context context, int resId, int xOffset, int yOffset) {
-        Toast toast = Toast.makeText(context, resId, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, xOffset, yOffset);
-        toast.show();
+    public static void showCenteredTopToast(Context context, int resId) {
+        showToast(context, resId, "top");
     }
 
-    public static void showCenteredBottomToast(Context context, int resId, int xOffset, int yOffset) {
+    public static void showCenteredBottomToast(Context context, int resId) {
+        showToast(context, resId, "bottom");
+    }
+
+    private static void showToast(Context context, int resId, String toastLocation) {
         Toast toast = Toast.makeText(context, resId, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, xOffset, yOffset);
+
+        if (toastLocation.equals("top")) {
+            toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 200);
+        }
+        if (toastLocation.equals("bottom")) {
+            toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 100);
+        }
         toast.show();
     }
 }

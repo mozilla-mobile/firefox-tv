@@ -50,9 +50,6 @@ import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 
-private const val TOP_TOAST_Y_OFFSET = 200
-private const val BOTTOM_TOAST_Y_OFFSET = 100
-
 /**
  * Fragment for displaying the browser UI.
  */
@@ -88,7 +85,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     var sessionFeature: SessionFeature? = null
 
-    private var currentPageURL = ""
+    private var currentPageHost = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,17 +109,16 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             else -> Unit
         }
         // Turn off desktop site mode if navigating to a new domain
-        if (currentPageURL != "" && session.desktopMode) {
+        if (currentPageHost != "" && session.desktopMode) {
             val uriHost = url.toUri()?.host
-            val currentPageURLHost = currentPageURL.toUri()?.host
 
-            if (uriHost != currentPageURLHost) {
+            if (uriHost != currentPageHost) {
                 session.desktopMode = false
                 requireWebRenderComponents.sessionManager.getEngineSession(session)?.loadUrl(url)
             }
         }
 
-        currentPageURL = url
+        currentPageHost = url.toUri()?.host!!
 
         updateOverlayIfVisible()
     }
@@ -176,7 +172,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                             CustomTilesManager.getInstance(context!!).pinSite(context!!, url,
                                     context!!.webRenderComponents.sessionManager.selectedSession?.thumbnail)
                             browserOverlay.refreshTilesForInsertion()
-                            showCenteredTopToast(context, R.string.notification_pinned_site, 0, TOP_TOAST_Y_OFFSET)
+                            showCenteredTopToast(context, R.string.notification_pinned_site)
                         }
                         NavigationEvent.VAL_UNCHECKED -> {
                             url.toUri()?.let {
@@ -186,7 +182,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                                 // have a reference to the tile/the tile isn't a Bundled or Custom tile
                                 if (tileId != null && !tileId.isEmpty()) {
                                     browserOverlay.removePinnedSiteFromTiles(tileId)
-                                    showCenteredTopToast(context, R.string.notification_unpinned_site, 0, TOP_TOAST_Y_OFFSET)
+                                    showCenteredTopToast(context, R.string.notification_unpinned_site)
                                 }
                             }
                         }
@@ -199,12 +195,12 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                     NavigationEvent.VAL_CHECKED -> {
                         session.desktopMode = true
                         setOverlayVisible(false)
-                        showCenteredBottomToast(context, R.string.notification_request_desktop_site, 0, BOTTOM_TOAST_Y_OFFSET)
+                        showCenteredBottomToast(context, R.string.notification_request_desktop_site)
                     }
                     NavigationEvent.VAL_UNCHECKED -> {
                         session.desktopMode = false
                         setOverlayVisible(false)
-                        showCenteredBottomToast(context, R.string.notification_request_non_desktop_site, 0, BOTTOM_TOAST_Y_OFFSET)
+                        showCenteredBottomToast(context, R.string.notification_request_non_desktop_site)
                     }
                     else -> throw IllegalArgumentException("Unexpected value for DESKTOP_MODE: " + value)
                 }

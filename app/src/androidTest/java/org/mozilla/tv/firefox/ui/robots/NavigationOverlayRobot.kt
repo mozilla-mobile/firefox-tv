@@ -35,7 +35,6 @@ class NavigationOverlayRobot {
     fun reload() = reloadButton().click()
     fun toggleTurbo() = turboButton().click()
     fun openSettings() = settingsButton().click()
-    fun toggleDesktopMode() = desktopModeButton().click()
 
     fun assertCanGoBack(canGoBack: Boolean) = backButton().assertIsEnabled(canGoBack)
     fun assertCanGoForward(canGoForward: Boolean) = forwardButton().assertIsEnabled(canGoForward)
@@ -54,8 +53,6 @@ class NavigationOverlayRobot {
     }
 
     fun assertDesktopModeEnabled(desktopModeEnabled: Boolean) = desktopModeButton().assertIsEnabled(desktopModeEnabled)
-    // canTurnDesktopModeOn -> true = unchecked = desktop mode can be turned on, false = checked = desktop mode can be turned off
-    fun assertCanTurnDesktopModeOn(canTurnDesktopModeOn: Boolean) = desktopModeButton().assertIsChecked(!canTurnDesktopModeOn)
 
     class Transition {
         private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -89,6 +86,24 @@ class NavigationOverlayRobot {
 
             SettingsRobot().interact()
             return SettingsRobot.Transition()
+        }
+
+        private fun assertCanTurnDesktopModeOn(canTurnDesktopModeOn: Boolean) = desktopModeButton().assertIsChecked(!canTurnDesktopModeOn)
+
+        fun turnDesktopModeOn(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
+            assertCanTurnDesktopModeOn(true)
+            desktopModeButton().click()
+
+            BrowserRobot().interact()
+            return BrowserRobot.Transition()
+        }
+
+        fun turnDesktopModeOff(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
+            assertCanTurnDesktopModeOn(false)
+            desktopModeButton().click()
+
+            BrowserRobot().interact()
+            return BrowserRobot.Transition()
         }
     }
 }

@@ -14,16 +14,17 @@ import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.helpers.SessionLoadedIdlingResource
 import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule
-import org.mozilla.tv.firefox.ui.robots.browser
 import org.mozilla.tv.firefox.ui.robots.navigationOverlay
 
 /**
- * A test for basic browser navigation including:
- * - Loads page content
- * - Back/forward loads the appropriate pages
- * - Reload reloads the appropriate page
- * - Back/forward/reload enabled state updates correctly
+ * A test for desktop mode feature including:
+ * - Desktop mode button enabled state updates correctly
+ * - Desktop mode button checked state updates correctly
+ * - Desktop mode turns off when navigating to new domain
  */
+
+/* TODO: Change to using mockWebServer, so the test does not rely on having a network connection */
+
 @RunWith(AndroidJUnit4::class)
 class DesktopModeTest {
     @Rule
@@ -48,37 +49,22 @@ class DesktopModeTest {
     @Test
     fun desktopModeTest() {
 
-        val mozilla_url = "mozilla.org"
-        val google_url = "google.com"
+        val mozillaUrl = "mozilla.org"
+        val googleUrl = "google.com"
 
         navigationOverlay {
             assertDesktopModeEnabled(false)
 
-        }.enterUrlAndEnterToBrowser(mozilla_url.toUri()!!) {
+        }.enterUrlAndEnterToBrowser(mozillaUrl.toUri()!!) {
         }.openOverlay {
-            assertCanTurnDesktopModeOn(true)
-            // Turn desktop mode on
-            toggleDesktopMode()
-        }
-        browser {
+        }.turnDesktopModeOn {
         }.openOverlay {
-            assertCanTurnDesktopModeOn(false)
-            // Turn desktop mode off
-            toggleDesktopMode()
-        }
-        browser {
+        }.turnDesktopModeOff {
         }.openOverlay {
-            assertCanTurnDesktopModeOn(true)
-
-            // Turn desktop mode on
-            toggleDesktopMode()
-        }
-        browser {
+        }.turnDesktopModeOn {
         }.openOverlay {
-        }.enterUrlAndEnterToBrowser(google_url.toUri()!!) {
+        }.enterUrlAndEnterToBrowser(googleUrl.toUri()!!) {
         }.openOverlay {
-            // Ensure desktop mode turns off when navigating to a new domain
-            assertCanTurnDesktopModeOn(true)
-        }
+        }.turnDesktopModeOn { } // Ensure desktop mode turns off when navigating to a new domain
     }
 }
