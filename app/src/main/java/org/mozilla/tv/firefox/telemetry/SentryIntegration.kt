@@ -7,7 +7,6 @@ package org.mozilla.tv.firefox.telemetry
 import android.content.Context
 import io.sentry.Sentry
 import io.sentry.android.AndroidSentryClientFactory
-import io.sentry.event.User
 import org.mozilla.tv.firefox.BuildConfig
 
 /**
@@ -45,21 +44,9 @@ object SentryIntegration {
         // disabling the client: https://github.com/getsentry/sentry-java/issues/574#issuecomment-378406105
         val sentryDsn = if (isEnabled) BuildConfig.SENTRY_DSN else null
         Sentry.init(sentryDsn, AndroidSentryClientFactory(context.applicationContext))
-
-        // By default, Sentry creates UUIDs for users and we don't want to upload them:
-        // they're personally identifiable information.
-        Sentry.getContext().user = SentryUnknownUser()
     }
 
     fun capture(exception: Exception) {
         Sentry.capture(exception)
     }
 }
-
-/**
- * A Sentry user that does not contain identifiable information like UUID.
- *
- * Use this instead of [io.sentry.context.Context.clearUser] because that
- * will just clear any user we set and use a Sentry-generated UUID instead.
- */
-private class SentryUnknownUser : User(null, null, null, null)
