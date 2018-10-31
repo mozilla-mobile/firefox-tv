@@ -10,7 +10,6 @@ import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ViewModelFactory
 import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketRepo
-import org.mozilla.tv.firefox.pocket.PocketRepoStateMachine
 
 /**
  * Implementation of the Service Locator pattern. Use this class to provide dependencies without
