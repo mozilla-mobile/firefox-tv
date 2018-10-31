@@ -3,3 +3,4 @@
 ### Pull Request checklist
 <!-- Before submitting the PR, please address each item -->
 - [ ] This PR includes thorough **tests** or an explanation of why it does not
+- [ ] This PR includes a **CHANGELOG entry** or does not need one
