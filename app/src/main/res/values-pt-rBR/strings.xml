@@ -62,8 +62,12 @@
   <string name="turbo_mode_enabled_toast">Modo Turbo ativado</string>
   <string name="turbo_mode_disabled_toast">Modo Turbo desativado</string>
   <string name="onboarding_turbo_mode_title">O Modo Turbo auxilia você a navegar mais rápido</string>
+  <string name="onboarding_turbo_mode_body2">O modo turbo bloqueia anúncios e rastreadores automaticamente.\nCaso um site não haja da forma que você espera, tente desativa-lo.</string>
+  <string name="button_turbo_mode_keep_enabled2">Manter o modo turbo ativado</string>
+  <string name="button_turbo_mode_turn_off2">Desativar o modo turbo</string>
   <string name="turbo_mode_disable_a11y">Desativar o Modo Turbo</string>
   <string name="turbo_mode_enable_a11y">Ativar o Modo Turbo</string>
+  <string name="turbo_mode_image_a11y">Exemplo de modo turbo ativado</string>
   <string name="homescreen_unpin_tutorial_toast">Pressione e segure o SELECT para desafixar da tela inicial</string>
   <string name="homescreen_tile_remove">Remover</string>
   <string name="homescreen_unpin_a11y">Desafixar</string>
