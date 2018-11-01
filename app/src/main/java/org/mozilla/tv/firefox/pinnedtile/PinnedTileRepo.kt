@@ -23,8 +23,11 @@ private const val BUNDLED_HOME_TILES_DIR = "bundled"
 private const val HOME_TILES_JSON_PATH = "$BUNDLED_HOME_TILES_DIR/bundled_tiles.json"
 
 /**
- * TODO
- * Some methods require applicationContext in order to access /assets/
+ * Pinned Tile Repository.
+ * This class manages and persists pinned tiles data. It should not be aware of View scope.
+ *
+ * @property applicationContext used to access [SharedPreferences] and [assets] for bundled tiles
+ * @constructor loads the initial [_pinnedTiles] (a combination of custom and bundled tiles)
  */
 class PinnedTileRepo(private val applicationContext: Application) {
     private val _pinnedTiles = MutableLiveData<LinkedHashMap<String, PinnedTile>>()

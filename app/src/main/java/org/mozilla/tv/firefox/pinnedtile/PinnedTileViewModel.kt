@@ -10,9 +10,11 @@ import android.arch.lifecycle.Transformations
 import android.arch.lifecycle.ViewModel
 
 /**
- * TODO
+ * Pinned Tile ViewModel.
+ * This class provides pinned tiles data to [NavigationOverlayFragment]
  *
- * AndroidViewModel() is a context aware ViewModel => Used for PinnedTileRepo
+ * @property pinnedTileRepo allows 1:1 mapping to pinned tiles data
+ * @constructor Transformation of the pinned tiles data being emitted by [PinnedTileRepo]
  */
 class PinnedTileViewModel(private val pinnedTileRepo: PinnedTileRepo) : ViewModel() {
 
