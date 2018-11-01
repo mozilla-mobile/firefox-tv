@@ -15,6 +15,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Blank screen when pressing back from a full-screened video
 - Infrequent crash caused by initialization logic (#1159)
 
+## [3.0.2] - 2018-10-30
+Version-bump only, released adding *Stick Gen 1 & 2* in addition to *Fire TV (Gen 1, 2, 3), Cube, Element 4k (pendant)*
+
+## [3.0.1] - RC candidate, did not release
+### Fixed
+Issue that would cause browsing history to be lost when navigating to device home screen
+
 ## [3.0] - 2018-10-16
 *Released to Fire TV Cube and Fire TV 4K.*
 
@@ -44,6 +51,9 @@ play/pause/rewind/fast-forward/restart/next/previous"
 
 ## Note on releases below
 The CHANGELOG entries for the releases listed below this were added retroactively and may be incomplete.
+
+## [2.1.2] 2018-10-30
+Version-bump only for *Fire TV Stick 4k*
 
 ## [2.1] - 2018-?-?
 ### Added
