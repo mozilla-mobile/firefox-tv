@@ -5,7 +5,6 @@
 package org.mozilla.tv.firefox.ui
 
 import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.IdlingRegistry
 import android.support.test.espresso.action.ViewActions.pressImeActionButton
 import android.support.test.espresso.action.ViewActions.typeText
 import android.support.test.espresso.matcher.ViewMatchers.withId
@@ -17,37 +16,23 @@ import android.support.test.espresso.web.webdriver.Locator
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.Matchers.equalTo
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.evalJS
-import org.mozilla.tv.firefox.helpers.SessionLoadedIdlingResource
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 
 /** An integration test to verify [IWebView.executeJS] works correctly. */
 class IWebViewExecuteJavascriptTest {
 
-    @Rule @JvmField
-    val activityTestRule = MainActivityTestRule()
-
-    private lateinit var loadingIdlingResource: SessionLoadedIdlingResource
+    @Rule @JvmField val activityTestRule = MainActivityTestRule()
     private lateinit var mockServer: MockWebServer
 
     @Before
     fun setUp() {
-        loadingIdlingResource = SessionLoadedIdlingResource()
-        IdlingRegistry.getInstance().register(loadingIdlingResource)
-
         mockServer = MockWebServer()
-    }
-
-    @After
-    fun tearDown() {
-        IdlingRegistry.getInstance().unregister(loadingIdlingResource)
-        activityTestRule.getActivity().finishAndRemoveTask()
     }
 
     @Test

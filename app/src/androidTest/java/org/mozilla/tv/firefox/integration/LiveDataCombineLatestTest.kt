@@ -19,8 +19,7 @@ import org.mozilla.tv.firefox.ext.LiveData
 // the linting error for starting a function with an uppercase letter
 class LiveDataCombineLatestTest {
 
-    @Rule @JvmField
-    val activityTestRule = MainActivityTestRule()
+    @Rule @JvmField val activityTestRule = MainActivityTestRule()
 
     private lateinit var source1: MutableLiveData<Int>
     private lateinit var source2: MutableLiveData<String>

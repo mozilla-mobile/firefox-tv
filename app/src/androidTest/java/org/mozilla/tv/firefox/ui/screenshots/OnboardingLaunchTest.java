@@ -20,6 +20,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mozilla.tv.firefox.MainActivity;
 import org.mozilla.tv.firefox.R;
+import org.mozilla.tv.firefox.helpers.MainActivityTestRule;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.locale.LocaleTestRule;
@@ -41,8 +42,7 @@ public class OnboardingLaunchTest extends ScreenshotTest {
     public static final LocaleTestRule localeTestRule = new LocaleTestRule();
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<MainActivity>(MainActivity.class,
-            false, false);
+    public ActivityTestRule<MainActivity> mActivityTestRule = new MainActivityTestRule(false, false, false);
 
     @Before
     public void setUp() {
