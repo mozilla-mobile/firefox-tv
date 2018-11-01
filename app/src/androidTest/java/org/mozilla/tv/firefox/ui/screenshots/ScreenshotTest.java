@@ -1,10 +1,12 @@
 package org.mozilla.tv.firefox.ui.screenshots;
 
+import android.Manifest;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.IdlingRegistry;
+import android.support.test.rule.GrantPermissionRule;
 import android.support.test.uiautomator.UiDevice;
 import android.text.format.DateUtils;
 
@@ -29,6 +31,9 @@ abstract class ScreenshotTest {
     private SessionLoadedIdlingResource loadingIdlingResource;
 
     UiDevice device;
+
+    @Rule
+    public GrantPermissionRule permissionRule = GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
     @Rule
     public TestRule screenshotOnFailureRule = new TestWatcher() {
