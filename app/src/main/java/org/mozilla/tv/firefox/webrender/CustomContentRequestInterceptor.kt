@@ -18,14 +18,14 @@ class CustomContentRequestInterceptor(
 
     private var currentPageURL = ""
 
-    override fun onLoadRequest(session: EngineSession, uri: String): RequestInterceptor.InterceptionResponse? {
+    override fun onLoadRequest(session: EngineSession, uri: String): RequestInterceptor.InterceptionResponse.Content? {
         currentPageURL = uri
 
         return when (uri) {
             WebRenderFragment.APP_URL_HOME, WebRenderFragment.APP_URL_POCKET_ERROR ->
-                RequestInterceptor.InterceptionResponse("<html></html>")
+                RequestInterceptor.InterceptionResponse.Content("<html></html>")
 
-            LocalizedContent.URL_ABOUT -> RequestInterceptor.InterceptionResponse(
+            LocalizedContent.URL_ABOUT -> RequestInterceptor.InterceptionResponse.Content(
                 LocalizedContent.generateAboutPage(context))
 
             else -> null

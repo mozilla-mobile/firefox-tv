@@ -6,8 +6,8 @@ package org.mozilla.tv.firefox.components
 
 import android.content.Context
 import android.util.Log
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import org.mozilla.tv.firefox.components.locale.Locales
@@ -78,8 +78,8 @@ class UrlAutoCompleteFilter : InlineAutocompleteEditText.OnFilterListener {
         settings = Settings.getInstance(context)
 
         if (loadDomainsFromDisk) {
-            launch(UI) {
-                val domains = async(CommonPool) { loadDomains(context) }
+            GlobalScope.launch(Dispatchers.Main) {
+                val domains = async(Dispatchers.Default) { loadDomains(context) }
 
                 onDomainsLoaded(domains.await())
             }

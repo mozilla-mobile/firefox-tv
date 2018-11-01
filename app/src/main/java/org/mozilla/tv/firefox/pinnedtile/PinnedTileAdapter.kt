@@ -17,8 +17,9 @@ import android.view.animation.DecelerateInterpolator
 import kotlinx.android.synthetic.main.home_tile.view.*
 import kotlinx.coroutines.experimental.CompletableDeferred
 import kotlinx.coroutines.experimental.CoroutineStart
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import org.mozilla.tv.firefox.R
@@ -144,7 +145,7 @@ private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledPinnedTil
 }
 
 private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHolder, item: CustomPinnedTile) = with(holder) {
-    launch(uiLifecycleCancelJob + UI, CoroutineStart.UNDISPATCHED) {
+    GlobalScope.launch(uiLifecycleCancelJob + Dispatchers.Main, CoroutineStart.UNDISPATCHED) {
         val validUri = item.url.toJavaURI()
 
         val screenshotDeferred = async {
