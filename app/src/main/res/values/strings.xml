@@ -248,15 +248,17 @@ be temporary, and you can try again later.</li>
     <!--Request desktop site strings-->
     <!-- Content description for Request desktop version button-->
     <string name="request_desktop_site_a11y">Request desktop version of this site</string>
-    <!-- Notification displayed when desktop version is requested-->
+    <!-- Notification displayed when the user has clicked the "request desktop version" button to turn ON desktop mode,
+    notifying the user that Firefox has requested the "desktop version" from the site -->
     <string name="notification_request_desktop_site">Requested desktop version</string>
-    <!-- Notification displayed when non-desktop version of the site is requested-->
+    <!-- Notification displayed when the user has clicked the "request desktop version" button to turn OFF desktop mode,
+    to notify user that Firefox has requested the default "non-desktop version" from the site -->
     <string name="notification_request_non_desktop_site">Returned to non-desktop version</string>
 
     <!-- Notification displayed to introduce a "YouTube casting" feature (similar to "broadcasting")
-         Users who have the YouTube app on their phone or tablet can use it to play YouTube videos directly on their tv.
+    Users who have the YouTube app on their phone or tablet can use it to play YouTube videos directly on their tv.
 
-         %s will be replaced with the icon that matches the button in the YouTube app for this feature.
-         Clicking on that button in the YouTube app will show YouTube's instructions on how to cast. -->
+    %s will be replaced with the icon that matches the button in the YouTube app for this feature.
+    Clicking on that button in the YouTube app will show YouTube's instructions on how to cast. -->
     <string name="youtube_casting_onboarding_toast">Cast YouTube videos from your phone or tablet. Open YouTube on your device and tap %s to get started.</string>
 </resources>
