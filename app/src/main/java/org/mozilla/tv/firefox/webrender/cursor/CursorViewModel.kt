@@ -10,13 +10,14 @@ import android.support.annotation.UiThread
 import android.support.v4.math.MathUtils
 import android.view.MotionEvent
 import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.isActive
 import org.mozilla.tv.firefox.ext.use
 import org.mozilla.tv.firefox.utils.Direction
 import java.util.EnumSet
-import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 
 private const val UPDATE_DELAY_MILLIS = 17L // ~60 FPS.
@@ -134,14 +135,14 @@ class CursorViewModel(
     }
 
     // TODO: stop when new views (e.g. overlay) are opened.
-    private fun asyncStartUpdates() = async(UI) { // Use UI to avoid synchronization.
+    private fun asyncStartUpdates() = GlobalScope.async(Dispatchers.Main) { // Use UI to avoid synchronization.
         var currentFrameMillis = SystemClock.uptimeMillis() // duped in loop.
         var prevFrameMillis: Long
         var deltaMillis = UPDATE_DELAY_MILLIS // Move ~1 frame to start.
         while (isActive) {
             update(deltaMillis)
 
-            delay(UPDATE_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+            delay(UPDATE_DELAY_MILLIS)
 
             prevFrameMillis = currentFrameMillis
             currentFrameMillis = SystemClock.uptimeMillis() // duped in init.

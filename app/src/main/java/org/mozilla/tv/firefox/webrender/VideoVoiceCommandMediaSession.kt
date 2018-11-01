@@ -34,7 +34,8 @@ import android.view.KeyEvent.KEYCODE_MEDIA_PLAY
 import android.view.KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
 import android.view.KeyEvent.KEYCODE_MEDIA_PREVIOUS
 import android.webkit.JavascriptInterface
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
@@ -240,7 +241,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
                 playbackSpeed = 0f
             }
 
-            launch(UI) { // mediaSession and cachedPlaybackState is on UI thread only.
+            GlobalScope.launch(Dispatchers.Main) { // mediaSession and cachedPlaybackState is on UI thread only.
                 val playbackState = cachedPlaybackStateBuilder
                         .setState(playbackStateInt, positionMillis, playbackSpeed)
                         .build()

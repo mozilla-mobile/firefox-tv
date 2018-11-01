@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.utils.publicsuffix
 
 import android.content.Context
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
 
 /** A helper to allow [PublicSuffix] to call Kotlin code: converting the whole file didn't seem right. */
@@ -16,6 +17,6 @@ internal object PublicSuffixKt {
     @JvmStatic
     fun init(context: Context) {
         // We don't care for the result: we just want to call this method so it caches the file from disk.
-        launch { PublicSuffixPatterns.getExactSet(context) }
+        GlobalScope.launch { PublicSuffixPatterns.getExactSet(context) }
     }
 }

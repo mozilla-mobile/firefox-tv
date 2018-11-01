@@ -9,6 +9,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.os.SystemClock
 import android.support.annotation.UiThread
 import kotlinx.coroutines.experimental.CancellationException
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
@@ -54,7 +55,7 @@ open class PocketVideoRepo(
 
     fun update() {
         retryDelayMillis = BASE_RETRY_TIME
-        launch { updateInner() }
+        GlobalScope.launch { updateInner() }
     }
 
     @UiThread // update backgroundUpdates.
@@ -111,7 +112,7 @@ open class PocketVideoRepo(
         postState(response.toRepoState())
     }
 
-    private fun startBackgroundUpdatesInner() = launch {
+    private fun startBackgroundUpdatesInner() = GlobalScope.launch {
         while (true) {
             val nextScheduledUpdateMillis = lastUpdateAttemptMillis + CACHE_UPDATE_FREQUENCY_MILLIS
             val nextRetryUpdateMillis = lastUpdateAttemptMillis + retryDelayMillis
@@ -123,7 +124,7 @@ open class PocketVideoRepo(
 
             val delayForMillis = nextUpdateMillis - SystemClock.elapsedRealtime()
             if (delayForMillis > 0) {
-                delay(delayForMillis, TimeUnit.MILLISECONDS)
+                delay(delayForMillis)
             }
             updateInner()
         }
