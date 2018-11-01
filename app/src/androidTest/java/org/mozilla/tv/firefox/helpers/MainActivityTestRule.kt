@@ -13,10 +13,20 @@ import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity.Companion.POCKET_O
 
 /**
  * A [org.junit.Rule] to handle shared test set up for tests on [MainActivity].
+ *
+ * @param skipOnboarding true to skip the onboarding screen, false otherwise
  */
-class MainActivityTestRule : ActivityTestRule<MainActivity>(MainActivity::class.java) {
+class MainActivityTestRule(
+        private val skipOnboarding: Boolean = true
+) : ActivityTestRule<MainActivity>(MainActivity::class.java) {
+
     override fun beforeActivityLaunched() {
-        super.beforeActivityLaunched()
+        if (skipOnboarding) {
+            skipOnboarding()
+        }
+    }
+
+    private fun skipOnboarding() {
         val appContext = InstrumentationRegistry.getInstrumentation()
                 .targetContext
                 .applicationContext
