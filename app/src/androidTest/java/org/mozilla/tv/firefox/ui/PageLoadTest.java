@@ -10,13 +10,11 @@ import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.espresso.web.webdriver.Locator;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mozilla.tv.firefox.MainActivity;
 import org.mozilla.tv.firefox.R;
 import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule;
@@ -35,7 +33,6 @@ import static android.support.test.espresso.web.webdriver.DriverAtoms.findElemen
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.StringContains.containsString;
 
-@RunWith(AndroidJUnit4.class)
 public class PageLoadTest {
 
     private UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());

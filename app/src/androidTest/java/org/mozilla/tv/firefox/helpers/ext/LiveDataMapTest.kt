@@ -6,16 +6,13 @@ package org.mozilla.tv.firefox.helpers.ext
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
-import android.support.test.runner.AndroidJUnit4
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.ext.map
 import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule
 
-@RunWith(AndroidJUnit4::class)
 @Suppress("TestFunctionName")
 // Espresso test functions can't have spaces in their names, even between backticks. This prevents
 // the linting error for starting a function with an uppercase letter

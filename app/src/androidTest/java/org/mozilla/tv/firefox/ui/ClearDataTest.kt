@@ -7,12 +7,10 @@
 package org.mozilla.tv.firefox.ui
 
 import android.support.test.espresso.IdlingRegistry
-import android.support.test.runner.AndroidJUnit4
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.helpers.MockWebServerHelper
 import org.mozilla.tv.firefox.helpers.SessionLoadedIdlingResource
 import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule
@@ -22,7 +20,6 @@ import org.mozilla.tv.firefox.ui.robots.navigationOverlay
 /**
  * A test to verify that session data is erased when "Clear data" is pressed.
  */
-@RunWith(AndroidJUnit4::class)
 class ClearDataTest {
 
     @Rule @JvmField
