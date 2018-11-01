@@ -18,7 +18,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mozilla.tv.firefox.MainActivity;
 import org.mozilla.tv.firefox.R;
-import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule;
+import org.mozilla.tv.firefox.helpers.MainActivityTestRule;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -41,7 +41,7 @@ public class PinnedTileTests {
     private UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new SkipOnboardingMainActivityTestRule();
+    public ActivityTestRule<MainActivity> mActivityTestRule = new MainActivityTestRule();
 
     @After
     public void tearDown() {

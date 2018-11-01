@@ -13,7 +13,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mozilla.tv.firefox.helpers.MockWebServerHelper
 import org.mozilla.tv.firefox.helpers.SessionLoadedIdlingResource
-import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule
+import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.ui.robots.engineInternals
 import org.mozilla.tv.firefox.ui.robots.navigationOverlay
 
@@ -23,7 +23,7 @@ import org.mozilla.tv.firefox.ui.robots.navigationOverlay
 class ClearDataTest {
 
     @Rule @JvmField
-    val activityTestRule = SkipOnboardingMainActivityTestRule()
+    val activityTestRule = MainActivityTestRule()
 
     private lateinit var loadingIdlingResource: SessionLoadedIdlingResource
 

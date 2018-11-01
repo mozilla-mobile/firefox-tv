@@ -17,7 +17,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mozilla.tv.firefox.MainActivity;
 import org.mozilla.tv.firefox.R;
-import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule;
+import org.mozilla.tv.firefox.helpers.MainActivityTestRule;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -42,7 +42,7 @@ public class PageLoadTest {
     private static final String MOZILLA_PAGE_ELEMENT = ".primary-title";
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new SkipOnboardingMainActivityTestRule();
+    public ActivityTestRule<MainActivity> mActivityTestRule = new MainActivityTestRule();
 
     @After
     public void tearDown() {

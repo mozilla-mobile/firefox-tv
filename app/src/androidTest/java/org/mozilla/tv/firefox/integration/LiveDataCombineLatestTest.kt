@@ -11,7 +11,7 @@ import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule
+import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.ext.LiveData
 
 @Suppress("TestFunctionName")
@@ -20,7 +20,7 @@ import org.mozilla.tv.firefox.ext.LiveData
 class LiveDataCombineLatestTest {
 
     @Rule @JvmField
-    val activityTestRule = SkipOnboardingMainActivityTestRule()
+    val activityTestRule = MainActivityTestRule()
 
     private lateinit var source1: MutableLiveData<Int>
     private lateinit var source2: MutableLiveData<String>
