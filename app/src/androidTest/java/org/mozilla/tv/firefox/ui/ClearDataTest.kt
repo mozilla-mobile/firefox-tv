@@ -6,14 +6,10 @@
 
 package org.mozilla.tv.firefox.ui
 
-import android.support.test.espresso.IdlingRegistry
-import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mozilla.tv.firefox.helpers.MockWebServerHelper
-import org.mozilla.tv.firefox.helpers.SessionLoadedIdlingResource
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
+import org.mozilla.tv.firefox.helpers.MockWebServerHelper
 import org.mozilla.tv.firefox.ui.robots.engineInternals
 import org.mozilla.tv.firefox.ui.robots.navigationOverlay
 
@@ -22,22 +18,7 @@ import org.mozilla.tv.firefox.ui.robots.navigationOverlay
  */
 class ClearDataTest {
 
-    @Rule @JvmField
-    val activityTestRule = MainActivityTestRule()
-
-    private lateinit var loadingIdlingResource: SessionLoadedIdlingResource
-
-    @Before
-    fun setup() {
-        loadingIdlingResource = SessionLoadedIdlingResource()
-        IdlingRegistry.getInstance().register(loadingIdlingResource)
-    }
-
-    @After
-    fun tearDown() {
-        IdlingRegistry.getInstance().unregister(loadingIdlingResource)
-        activityTestRule.activity.finishAndRemoveTask()
-    }
+    @Rule @JvmField val activityTestRule = MainActivityTestRule()
 
     /* ktlint-disable no-blank-line-before-rbrace */ // This imposes unreadable grouping.
     @Test

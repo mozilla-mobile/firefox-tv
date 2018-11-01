@@ -5,12 +5,10 @@ import android.app.Instrumentation;
 import android.content.Context;
 import android.support.annotation.StringRes;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.IdlingRegistry;
 import android.support.test.rule.GrantPermissionRule;
 import android.support.test.uiautomator.UiDevice;
 import android.text.format.DateUtils;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestRule;
@@ -61,17 +59,6 @@ abstract class ScreenshotTest {
         //Screengrab.setDefaultScreenshotStrategy(new HostScreencapScreenshotStrategy(device));
 
         device.waitForIdle();
-    }
-
-    @Before
-    public void setUpIdlingResources() {
-        loadingIdlingResource = new SessionLoadedIdlingResource();
-        IdlingRegistry.getInstance().register(loadingIdlingResource);
-    }
-
-    @After
-    public void tearDownIdlingResources() {
-        IdlingRegistry.getInstance().unregister(loadingIdlingResource);
     }
 
     String getString(@StringRes int resourceId) {
