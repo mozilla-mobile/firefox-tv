@@ -8,19 +8,16 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.support.test.InstrumentationRegistry
-import android.support.test.runner.AndroidJUnit4
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.helpers.assertEqualsWithDelta
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileScreenshotStore
 import java.util.UUID
 
 private const val DIMEN = 140 // should be divisible by 4.
 
-@RunWith(AndroidJUnit4::class)
 class PinnedTileScreenshotStoreIntegrationTest {
 
     private lateinit var andyContext: Context // coroutines shadow `context` name.

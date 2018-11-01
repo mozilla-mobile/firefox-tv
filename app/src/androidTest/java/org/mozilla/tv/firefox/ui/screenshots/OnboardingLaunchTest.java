@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 
 import org.junit.After;
@@ -19,7 +18,6 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mozilla.tv.firefox.MainActivity;
 import org.mozilla.tv.firefox.R;
 
@@ -33,7 +31,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.mozilla.tv.firefox.onboarding.OnboardingActivity.ONBOARD_SHOWN_PREF;
 
 
-@RunWith(AndroidJUnit4.class)
 public class OnboardingLaunchTest extends ScreenshotTest {
 
     private Intent intent;

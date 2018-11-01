@@ -5,14 +5,12 @@
 package org.mozilla.tv.firefox.ui
 
 import android.support.test.espresso.IdlingRegistry
-import android.support.test.runner.AndroidJUnit4
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Assert.assertNotEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.helpers.AndroidAssetDispatcher
 import org.mozilla.tv.firefox.helpers.SessionLoadedIdlingResource
@@ -30,7 +28,6 @@ private val BODY_TEXT = (1..3).map {
  * - Reload reloads the appropriate page
  * - Back/forward/reload enabled state updates correctly
  */
-@RunWith(AndroidJUnit4::class)
 class BasicNavigationTest {
 
     @Rule

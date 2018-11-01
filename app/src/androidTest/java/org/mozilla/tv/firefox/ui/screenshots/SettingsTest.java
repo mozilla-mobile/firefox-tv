@@ -8,14 +8,12 @@ package org.mozilla.tv.firefox.ui.screenshots;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 
 import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mozilla.tv.firefox.MainActivity;
 import org.mozilla.tv.firefox.R;
 import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule;
@@ -33,7 +31,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
 
-@RunWith(AndroidJUnit4.class)
 public class SettingsTest extends ScreenshotTest {
 
     private UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
