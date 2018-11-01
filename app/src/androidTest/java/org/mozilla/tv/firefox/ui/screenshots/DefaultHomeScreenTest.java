@@ -15,7 +15,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mozilla.tv.firefox.MainActivity;
 import org.mozilla.tv.firefox.R;
-import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule;
+import org.mozilla.tv.firefox.helpers.MainActivityTestRule;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.locale.LocaleTestRule;
@@ -35,7 +35,7 @@ public class DefaultHomeScreenTest extends ScreenshotTest {
     public static final LocaleTestRule localeTestRule = new LocaleTestRule();
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new SkipOnboardingMainActivityTestRule();
+    public ActivityTestRule<MainActivity> mActivityTestRule = new MainActivityTestRule();
 
     @After
     public void tearDown() {

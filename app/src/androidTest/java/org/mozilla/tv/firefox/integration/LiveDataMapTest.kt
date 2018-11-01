@@ -11,7 +11,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mozilla.tv.firefox.ext.map
-import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule
+import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 
 @Suppress("TestFunctionName")
 // Espresso test functions can't have spaces in their names, even between backticks. This prevents
@@ -19,7 +19,7 @@ import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule
 class LiveDataMapTest {
 
     @Rule @JvmField
-    val activityTestRule = SkipOnboardingMainActivityTestRule()
+    val activityTestRule = MainActivityTestRule()
     private lateinit var source: MutableLiveData<Int>
 
     @Before

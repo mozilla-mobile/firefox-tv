@@ -11,7 +11,10 @@ import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity.Companion.ONBOARD_SHOWN_PREF
 import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity.Companion.POCKET_ONBOARDING_SHOWN_PREF
 
-class SkipOnboardingMainActivityTestRule : ActivityTestRule<MainActivity>(MainActivity::class.java) {
+/**
+ * A [org.junit.Rule] to handle shared test set up for tests on [MainActivity].
+ */
+class MainActivityTestRule : ActivityTestRule<MainActivity>(MainActivity::class.java) {
     override fun beforeActivityLaunched() {
         super.beforeActivityLaunched()
         val appContext = InstrumentationRegistry.getInstrumentation()

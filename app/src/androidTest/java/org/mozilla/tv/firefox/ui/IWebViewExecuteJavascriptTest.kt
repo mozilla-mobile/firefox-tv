@@ -24,14 +24,14 @@ import org.junit.Test
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.evalJS
 import org.mozilla.tv.firefox.helpers.SessionLoadedIdlingResource
-import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule
+import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 
 /** An integration test to verify [IWebView.executeJS] works correctly. */
 class IWebViewExecuteJavascriptTest {
 
     @Rule @JvmField
-    val activityTestRule = SkipOnboardingMainActivityTestRule()
+    val activityTestRule = MainActivityTestRule()
 
     private lateinit var loadingIdlingResource: SessionLoadedIdlingResource
     private lateinit var mockServer: MockWebServer
