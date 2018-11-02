@@ -54,27 +54,27 @@ class BasicNavigationTest {
         }.openOverlay {
             assertCanGoBackForward(true, false) // TODO: Unexpected. Fix in #1347.
             assertCanReload(true)
-            assertURLBarText(pageUrlStrs[0])
+            assertURLBarTextContains(pageUrlStrs[0])
 
         }.enterUrlAndEnterToBrowser(pageUrls[1]) {
             assertTestContent(BODY_TEXT[1])
         }.openOverlay {
             assertCanGoBackForward(true, false)
             assertCanReload(true)
-            assertURLBarText(pageUrlStrs[1])
+            assertURLBarTextContains(pageUrlStrs[1])
 
         }.enterUrlAndEnterToBrowser(pageUrls[2]) {
             assertTestContent(BODY_TEXT[2])
         }.openOverlay {
             assertCanGoBackForward(true, false)
             assertCanReload(true)
-            assertURLBarText(pageUrlStrs[2])
+            assertURLBarTextContains(pageUrlStrs[2])
 
             // Verify back behavior (to the beginning of the stack).
             goBack()
             assertCanGoBackForward(true, true)
             assertCanReload(true)
-            assertURLBarText(pageUrlStrs[1])
+            assertURLBarTextContains(pageUrlStrs[1])
         }.closeToBrowser {
             assertTestContent(BODY_TEXT[1])
 
@@ -82,7 +82,7 @@ class BasicNavigationTest {
             goBack()
             assertCanGoBackForward(true, true) // TODO: unexpected. Fix in #1347.
             assertCanReload(true)
-            assertURLBarText(pageUrlStrs[0])
+            assertURLBarTextContains(pageUrlStrs[0])
         }.closeToBrowser {
             assertTestContent(BODY_TEXT[0])
 
@@ -91,7 +91,7 @@ class BasicNavigationTest {
             goForward()
             assertCanGoBackForward(true, true)
             assertCanReload(true)
-            assertURLBarText(pageUrlStrs[1])
+            assertURLBarTextContains(pageUrlStrs[1])
         }.closeToBrowser {
             assertTestContent(BODY_TEXT[1])
 
@@ -99,7 +99,7 @@ class BasicNavigationTest {
             goForward()
             assertCanGoBackForward(true, false)
             assertCanReload(true)
-            assertURLBarText(pageUrlStrs[2])
+            assertURLBarTextContains(pageUrlStrs[2])
         }.closeToBrowser {
             assertTestContent(BODY_TEXT[2])
             preReloadTitle = getPageTitle()
@@ -109,7 +109,7 @@ class BasicNavigationTest {
             reload()
             assertCanGoBackForward(true, false)
             assertCanReload(true)
-            assertURLBarText(pageUrlStrs[2])
+            assertURLBarTextContains(pageUrlStrs[2])
         }.closeToBrowser {
             assertTestContent(BODY_TEXT[2]) // different on each reload. Use date? Verify date different?
 
