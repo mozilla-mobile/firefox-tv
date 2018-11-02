@@ -31,6 +31,10 @@ class BrowserRobot {
                 .check(webMatches(getText(), equalTo(expectedText)))
     }
 
+    fun assertDOMElementExists(locator: Locator, value: String) {
+        webView().withElement(findElement(locator, value))
+    }
+
     class Transition {
         private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 

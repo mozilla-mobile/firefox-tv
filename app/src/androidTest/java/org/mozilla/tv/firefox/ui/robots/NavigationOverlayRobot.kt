@@ -45,10 +45,10 @@ class NavigationOverlayRobot {
 
     fun assertCanReload(canReload: Boolean) = reload().assertIsEnabled(canReload)
 
-    fun assertURLBarText(expectedText: String) = urlBar().check(matches(withText(containsString(expectedText))))
+    fun assertURLBarTextContains(expectedText: String) = urlBar().check(matches(withText(containsString(expectedText))))
 
     fun assertURLBarDisplaysHint() {
-        assertURLBarText("")
+        assertURLBarTextContains("")
                 .check(matches(withHint(R.string.urlbar_hint)))
     }
 
