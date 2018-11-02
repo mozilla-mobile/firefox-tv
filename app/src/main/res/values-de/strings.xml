@@ -90,4 +90,8 @@
   <string name="google_search_hint_text">Mit Google suchen oder Adresse eingeben</string>
   <string name="blank_tile_title">Website hinzufügen</string>
   <string name="dialog_clear_cookies_title">Cookies löschen?</string>
+  <string name="request_desktop_site_a11y">Desktop-Version dieser Website anfordern</string>
+  <string name="notification_request_desktop_site">Desktop-Version angefordert</string>
+  <string name="notification_request_non_desktop_site">Zu Nicht-Desktop-Version zurückgekehrt</string>
+  <string name="youtube_casting_onboarding_toast">Spielen Sie YouTube-Videos von Ihrem Handy oder Tablet ab. Öffnen Sie YouTube auf Ihrem Gerät und berühren Sie %s, um zu beginnen.</string>
 </resources>

@@ -62,8 +62,12 @@
   <string name="turbo_mode_enabled_toast">ターボモード有効</string>
   <string name="turbo_mode_disabled_toast">ターボモード無効</string>
   <string name="onboarding_turbo_mode_title">ターボモードはより速くブラウズするのに役立ちます</string>
+  <string name="onboarding_turbo_mode_body2">ターボモードは自動的に広告やトラッカーをブロックします。\nサイトが期待通りの動作をしない場合は、これをオフにしてみてください。</string>
+  <string name="button_turbo_mode_keep_enabled2">ターボモードを有効のままにする</string>
+  <string name="button_turbo_mode_turn_off2">ターボモードをオフにする</string>
   <string name="turbo_mode_disable_a11y">ターボモードを無効にする</string>
   <string name="turbo_mode_enable_a11y">ターボモードを有効にする</string>
+  <string name="turbo_mode_image_a11y">ターボモードが有効な例</string>
   <string name="homescreen_unpin_tutorial_toast">ホーム画面からピン留めを外すには [選択] ボタンを長押ししてください</string>
   <string name="homescreen_tile_remove">削除</string>
   <string name="homescreen_unpin_a11y">ピン留めを外す</string>
@@ -86,4 +90,8 @@
   <string name="google_search_hint_text">Google で検索またはアドレスを入力</string>
   <string name="blank_tile_title">ウェブサイトを追加</string>
   <string name="dialog_clear_cookies_title">Cookie を消去しますか？</string>
+  <string name="request_desktop_site_a11y">このサイトのデスクトップ版を見る</string>
+  <string name="notification_request_desktop_site">デスクトップ版を表示します</string>
+  <string name="notification_request_non_desktop_site">デスクトップ版でない表示に戻しました</string>
+  <string name="youtube_casting_onboarding_toast">YouTube 動画をスマートフォンやタブレットからキャスト配信します。開始するには、端末で YouTube を開き、%s をタップしてください。</string>
 </resources>
