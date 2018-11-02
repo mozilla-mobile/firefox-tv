@@ -120,8 +120,8 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         this.sessionIsLoadingObserver = sessionIsLoadingObserver
     }
 
-    fun onDestroyWebView(webView: EngineView, session: Session) {
-        webView.removeJavascriptInterface(JS_INTERFACE_IDENTIFIER)
+    fun onDestroyWebView(webView: EngineView?, session: Session) {
+        webView?.removeJavascriptInterface(JS_INTERFACE_IDENTIFIER)
         this.webView = null
 
         session.unregister(sessionIsLoadingObserver!!)

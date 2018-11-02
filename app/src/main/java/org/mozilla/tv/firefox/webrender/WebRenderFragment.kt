@@ -276,7 +276,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     }
 
     override fun onDestroyView() {
-        mediaSessionHolder?.videoVoiceCommandMediaSession?.onDestroyWebView(webView!!, session)
+        mediaSessionHolder?.videoVoiceCommandMediaSession?.onDestroyWebView(webView, session)
 
         super.onDestroyView()
 
