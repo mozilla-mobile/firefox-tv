@@ -19,7 +19,7 @@ import org.mozilla.tv.firefox.ui.robots.navigationOverlay
  * This test loads a few pages off the network and verifies their content to ensure they're actually loaded.
  * Verification is minimal to reduce the chance of the test breaking from the web page changing.
  */
-class PageLoadTest {
+class NetworkPageLoadTest {
 
     @Rule @JvmField val activityTestRule = MainActivityTestRule()
 
