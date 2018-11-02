@@ -16,6 +16,16 @@ import org.hamcrest.CoreMatchers.equalTo
 
 class BrowserRobot {
 
+    /**
+     * Executes the given JS string.
+     * @return if the final expression is a return statement, returns the provided String, else null.
+     */
+    fun executeJS(js: String): String? {
+        return webView()
+            .perform(Atoms.script(js))
+            .get().value as? String
+    }
+
     fun getPageTitle(): String {
         return webView()
                 .perform(Atoms.getTitle())
