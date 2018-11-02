@@ -30,6 +30,7 @@ import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.espresso.matcher.ViewMatchers.withText
 import android.support.test.espresso.web.sugar.Web.onWebView
 import android.support.test.espresso.web.webdriver.DriverAtoms.findElement
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.core.StringContains.containsString
@@ -38,8 +39,7 @@ class PageLoadTest {
 
     private val mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
-    @Rule
-    var mActivityTestRule: ActivityTestRule<MainActivity> = MainActivityTestRule()
+    @Rule @JvmField var mActivityTestRule: ActivityTestRule<MainActivity> = MainActivityTestRule()
 
     @After
     fun tearDown() {
@@ -49,7 +49,7 @@ class PageLoadTest {
     @Test
     fun PageLoadTest() {
         onView(ViewMatchers.withId(R.id.tileContainer))
-            .perform(RecyclerViewActions.actionOnItemAtPosition<ViewHolder>(TILE_POSITION, click()))
+            .perform(RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(TILE_POSITION, click()))
 
         onView(ViewMatchers.withId(R.id.webview))
             .check(matches(isDisplayed()))
