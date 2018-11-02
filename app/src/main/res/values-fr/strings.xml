@@ -90,4 +90,8 @@
   <string name="google_search_hint_text">Rechercher avec Google ou saisir une adresse</string>
   <string name="blank_tile_title">Ajouter un site web</string>
   <string name="dialog_clear_cookies_title">Effacer les cookies ?</string>
+  <string name="request_desktop_site_a11y">Afficher la version du site pour ordinateurs</string>
+  <string name="notification_request_desktop_site">Affichage du site pour ordinateurs</string>
+  <string name="notification_request_non_desktop_site">Retour à la version par défaut</string>
+  <string name="youtube_casting_onboarding_toast">Diffusez des vidéos YouTube à partir de votre téléphone ou de votre tablette. Ouvrez YouTube sur votre appareil et appuyez sur %s pour commencer.</string>
 </resources>
