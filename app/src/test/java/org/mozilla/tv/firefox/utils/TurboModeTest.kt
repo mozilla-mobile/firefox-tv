@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.utils
 
 import android.content.Context
 import android.preference.PreferenceManager
+import androidx.test.core.app.ApplicationProvider
 import mozilla.components.browser.session.Session
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -14,13 +15,12 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import mozilla.components.browser.engine.system.SystemEngine
 
 @RunWith(RobolectricTestRunner::class)
 class TurboModeTest {
     private val context: Context
-        get() = RuntimeEnvironment.application
+        get() = ApplicationProvider.getApplicationContext()
 
     private lateinit var session: Session
 

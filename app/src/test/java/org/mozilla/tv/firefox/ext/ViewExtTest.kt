@@ -1,15 +1,16 @@
 package org.mozilla.tv.firefox.ext
 
+import android.app.Application
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.test.core.app.ApplicationProvider
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
 class ViewExtTest {
@@ -34,12 +35,13 @@ class ViewExtTest {
      */
     @Before
     fun setup() {
-        a = FrameLayout(RuntimeEnvironment.application)
-        b = FrameLayout(RuntimeEnvironment.application)
-        c = FrameLayout(RuntimeEnvironment.application)
-        d = FrameLayout(RuntimeEnvironment.application)
-        e = FrameLayout(RuntimeEnvironment.application)
-        f = FrameLayout(RuntimeEnvironment.application)
+        val appContext = ApplicationProvider.getApplicationContext<Application>()
+        a = FrameLayout(appContext)
+        b = FrameLayout(appContext)
+        c = FrameLayout(appContext)
+        d = FrameLayout(appContext)
+        e = FrameLayout(appContext)
+        f = FrameLayout(appContext)
 
         a.addView(b)
         a.addView(c)

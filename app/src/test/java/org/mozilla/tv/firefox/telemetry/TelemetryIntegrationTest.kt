@@ -5,6 +5,8 @@
 
 package org.mozilla.tv.firefox.telemetry
 
+import android.app.Application
+import androidx.test.core.app.ApplicationProvider
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,18 +18,18 @@ import org.mozilla.tv.firefox.utils.anyNonNull
 import org.mozilla.telemetry.Telemetry
 import org.mozilla.telemetry.TelemetryHolder
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
 class TelemetryIntegrationTest {
-
+    private lateinit var appContext: Application
     private lateinit var telemetryIntegration: TelemetryIntegration
     private lateinit var telemetrySpy: Telemetry
     private lateinit var sentrySpy: SentryIntegration
 
     @Before
     fun setup() {
-        val telemetry = TelemetryFactory.createTelemetry(RuntimeEnvironment.application)
+        appContext = ApplicationProvider.getApplicationContext()
+        val telemetry = TelemetryFactory.createTelemetry(appContext)
         telemetrySpy = spy(telemetry)
         TelemetryHolder.set(telemetrySpy)
         sentrySpy = spy(SentryIntegration)
@@ -36,28 +38,28 @@ class TelemetryIntegrationTest {
 
     @Test
     fun `WHEN startSession and stopSession are called on TelemetryWrapper THEN associated Telemetry methods should be called`() {
-        telemetryIntegration.startSession(RuntimeEnvironment.application)
+        telemetryIntegration.startSession(appContext)
         verify(telemetrySpy, times(1)).recordSessionStart()
         verify(telemetrySpy, times(0)).recordSessionEnd(any())
 
-        telemetryIntegration.stopSession(RuntimeEnvironment.application)
+        telemetryIntegration.stopSession(appContext)
         verify(telemetrySpy, times(1)).recordSessionStart()
         verify(telemetrySpy, times(1)).recordSessionEnd(any())
     }
 
     @Test
     fun `WHEN TelemetryWrapper is called out of order THEN sentry should capture callstack`() {
-        telemetryIntegration.stopSession(RuntimeEnvironment.application)
-        telemetryIntegration.startSession(RuntimeEnvironment.application)
+        telemetryIntegration.stopSession(appContext)
+        telemetryIntegration.startSession(appContext)
 
         verify(sentrySpy, times(1)).capture(anyNonNull())
     }
 
     @Test
     fun `GIVEN session is running WHEN stopSession is called twice in a row THEN sentry should capture callstack`() {
-        telemetryIntegration.startSession(RuntimeEnvironment.application)
-        telemetryIntegration.stopSession(RuntimeEnvironment.application)
-        telemetryIntegration.stopSession(RuntimeEnvironment.application)
+        telemetryIntegration.startSession(appContext)
+        telemetryIntegration.stopSession(appContext)
+        telemetryIntegration.stopSession(appContext)
 
         verify(sentrySpy, times(1)).capture(anyNonNull())
     }
