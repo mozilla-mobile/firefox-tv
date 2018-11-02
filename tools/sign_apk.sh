@@ -11,24 +11,29 @@
 #
 
 # Check for signing tools
-which zipalign || { echo "Add zipalign to your path" && exit 1; }
-which apksigner || { echo "Add apksigner to your path" && exit 1; }
+which zipalign || { echo "Add Android SDK build-tools to your path to use zipalign" && exit 1; }
+which apksigner || { echo "Add Android SDK build-tools to your path to use apksigner" && exit 1; }
 
 # Do some argument sanity checks.
 if (( $# != 2 )); then
-  echo "Did you forget to include the keystore and apk as args?"
+  echo "Missing keystore or apk, usage: ./tools/sign_apk.sh <unsigned.apk> <keystore.jks>"
   exit 1
 else
   [[ $1 =~ .*\.apk$ ]] || { echo "Please supply an apk" && exit 1; }
 fi
 
 # Check that keystore file actually exists
-find $2 || { echo "Do you need to create a keystore file?
-To generate a keystore, you can use the following command:
-keytool -genkey -v -keystore my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias my-alias" && exit 1; }
+if [ ! -f $2 ]; then
+  echo "Do you need to create a keystore file?\n
+  To generate a keystore, you can use the keytool command, see https://developer.android.com/studio/publish/app-signing#signing-manually"
+  exit 1
+fi
 
 # Zipalign and sign
-zipalign -v -p 4 $1
-apksigner sign --ks $2 --out $1 $1
+zout=$(dirname $1)/zipaligned.apk
+zipalign -v -p 4 $1 $zout
+output=$(dirname $zout)/app-signed.apk
+apksigner sign --ks $2 --out $output $zout
+rm $zout
 
-echo "Created signed apk $1"
+echo "Created signed apk $output"
