@@ -29,11 +29,21 @@ if [ ! -f $2 ]; then
   exit 1
 fi
 
+# Strip content that won't get signed with v1 JAR signing
+zip --quiet --delete $1 \
+  'META-INF/*kotlin_module' \
+  'META-INF/*version' \
+  'META-INF/proguard/*' \
+  'META-INF/services/*' \
+  'META-INF/web-fragment.xml'
+
 # Zipalign and sign
 zout=$(dirname $1)/zipaligned.apk
 zipalign -v -p 4 $1 $zout
 output=$(dirname $zout)/app-signed.apk
 apksigner sign --ks $2 --out $output $zout
 rm $zout
+
+apksigner verify -Werr $output || { echo "Problem verifying apk" && exit 1; }
 
 echo "Created signed apk $output"
