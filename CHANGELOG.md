@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Hide Pocket video tile on non-EN locales
     - Pocket does not yet provide content for other languages
 - Sentry crash reports include a UUID to distinguish users so we can determine if it's 1 user crashing 100 times or 100 users crashing 1 time each. This identifier is only used for Sentry and can not be correlated with telemetry interaction data. See [fire TV Sentry docs](https://github.com/mozilla-mobile/firefox-tv/wiki/Crash-reporting-with-Sentry) for more details. (#817)
+- Updated robolectric to 4.0.1
 
 ### Fixed
 - Blank screen when pressing back from a full-screened video
