@@ -1,5 +1,6 @@
 package org.mozilla.tv.firefox.utils
 
+import androidx.test.core.app.ApplicationProvider
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -7,7 +8,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
 class UrlUtilsTest {
@@ -122,7 +122,7 @@ class UrlUtilsTest {
     }
 
     private fun assertCreatedUrlContainsBase(searchTerm: String, baseUrl: String) {
-        val searchString = UrlUtils.createSearchUrl(RuntimeEnvironment.application, searchTerm)
+        val searchString = UrlUtils.createSearchUrl(ApplicationProvider.getApplicationContext(), searchTerm)
         assertTrue("\"$searchString\" does not contain \"$baseUrl\"",
                 searchString.contains(baseUrl))
     }

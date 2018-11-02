@@ -4,32 +4,40 @@
 
 package org.mozilla.tv.firefox
 
+import android.app.Application
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
+import androidx.test.core.app.ApplicationProvider
 import mozilla.components.browser.session.Session
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.ext.toSafeIntent
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 
 private const val TEST_URL = "https://github.com/mozilla-mobile/focus-android"
 
 @RunWith(RobolectricTestRunner::class)
 class IntentValidatorTest {
+    private lateinit var appContext: Application
+
+    @Before
+    fun setUp() {
+        appContext = ApplicationProvider.getApplicationContext()
+    }
 
     @Test
     fun testViewIntent() {
         var isCalled = false
         val expectedUrl = TEST_URL
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(expectedUrl)).toSafeIntent()
-        IntentValidator.validate(RuntimeEnvironment.application, intent) { url, source ->
+        IntentValidator.validate(appContext, intent) { url, source ->
             isCalled = true
             assertEquals(expectedUrl, url)
             assertEquals(Session.Source.ACTION_VIEW, source)
@@ -42,7 +50,7 @@ class IntentValidatorTest {
     @Test
     fun testViewIntentWithNullURL() {
         val intent = Intent(Intent.ACTION_VIEW, null).toSafeIntent()
-        IntentValidator.validate(RuntimeEnvironment.application, intent) { _, _ ->
+        IntentValidator.validate(appContext, intent) { _, _ ->
             fail("Null URL should not be vaIntlid")
         }
     }
@@ -59,7 +67,7 @@ class IntentValidatorTest {
                 .toSafeIntent()
 
         var isCalled = false
-        IntentValidator.validate(RuntimeEnvironment.application, intent) { url, source ->
+        IntentValidator.validate(appContext, intent) { url, source ->
             isCalled = true
             assertEquals(expectedUrl, url)
             assertEquals(Session.Source.ACTION_VIEW, source)
@@ -74,7 +82,7 @@ class IntentValidatorTest {
             addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY)
         }.toSafeIntent()
 
-        IntentValidator.validateOnCreate(RuntimeEnvironment.application, intent, null) { _, _ ->
+        IntentValidator.validateOnCreate(appContext, intent, null) { _, _ ->
             fail("Intent from history should not be valid")
         }
     }
@@ -82,7 +90,7 @@ class IntentValidatorTest {
     @Test
     fun testIntentNotValidIfWeAreRestoring() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(TEST_URL)).toSafeIntent()
-        IntentValidator.validateOnCreate(RuntimeEnvironment.application, intent, Bundle()) { _, _ ->
+        IntentValidator.validateOnCreate(appContext, intent, Bundle()) { _, _ ->
             fail("Intent from restore should not be valid")
         }
     }
@@ -95,7 +103,7 @@ class IntentValidatorTest {
         }.toSafeIntent()
 
         var isCalled = false
-        IntentValidator.validate(RuntimeEnvironment.application, intent) { url, source ->
+        IntentValidator.validate(appContext, intent) { url, source ->
             isCalled = true
             assertEquals(Session.Source.ACTION_SEND, source)
             assertEquals(expectedUrl, url)
@@ -112,7 +120,7 @@ class IntentValidatorTest {
         }.toSafeIntent()
 
         var isCalled = false
-        IntentValidator.validate(RuntimeEnvironment.application, intent) { url, source ->
+        IntentValidator.validate(appContext, intent) { url, source ->
             isCalled = true
             assertEquals(Session.Source.ACTION_SEND, source)
             expectedText.split(" ").forEach {
@@ -132,7 +140,7 @@ class IntentValidatorTest {
         }.toSafeIntent()
 
         var isCalled = false
-        IntentValidator.validate(RuntimeEnvironment.application, intent) { url, source ->
+        IntentValidator.validate(appContext, intent) { url, source ->
             isCalled = true
             assertEquals(Session.Source.ACTION_VIEW, source)
             assertEquals(expectedURL, url)
@@ -144,7 +152,7 @@ class IntentValidatorTest {
     fun `WHEN receiving MAIN intent without DIAL extra THEN do not call browser intent`() {
         val intent = Intent(Intent.ACTION_MAIN).toSafeIntent()
 
-        IntentValidator.validateOnCreate(RuntimeEnvironment.application, intent, null) { _, _ ->
+        IntentValidator.validateOnCreate(appContext, intent, null) { _, _ ->
             fail("Intent without DIAL params should not be valid")
         }
     }

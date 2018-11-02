@@ -4,8 +4,10 @@
 
 package org.mozilla.tv.firefox.pinnedtile
 
+import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.Color
+import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -13,7 +15,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import java.util.UUID
 
 /**
@@ -25,19 +26,20 @@ import java.util.UUID
  */
 @RunWith(RobolectricTestRunner::class)
 class PinnedTileScreenshotStoreUnitTest {
-
+    private lateinit var appContext: Application
     private lateinit var uuid: UUID
 
     @Before
     fun setUp() {
-        RuntimeEnvironment.application.filesDir.listFiles().forEach { it.deleteRecursively() }
+        appContext = ApplicationProvider.getApplicationContext()
+        appContext.filesDir.listFiles().forEach { it.deleteRecursively() }
         uuid = UUID.randomUUID()
     }
 
     /** Assumes [PinnedTileScreenshotStore.getFileForUUID] works correctly. */
     @Test
     fun testSaveAsyncDoesNotOverwrite() = runBlocking {
-        val context = RuntimeEnvironment.application
+        val context = appContext
         PinnedTileScreenshotStore.saveAsync(context, uuid, getNonBlankBitmap()).join()
         PinnedTileScreenshotStore.saveAsync(context, UUID.randomUUID(), getNonBlankBitmap()).join()
 
@@ -50,31 +52,30 @@ class PinnedTileScreenshotStoreUnitTest {
         val bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888).apply {
             eraseColor(Color.RED)
         }
-        val context = RuntimeEnvironment.application
-        PinnedTileScreenshotStore.saveAsync(context, uuid, bitmap).join()
 
-        val parentDir = PinnedTileScreenshotStore.getFileForUUID(context, uuid).parentFile
+        PinnedTileScreenshotStore.saveAsync(appContext, uuid, bitmap).join()
+
+        val parentDir = PinnedTileScreenshotStore.getFileForUUID(appContext, uuid).parentFile
         parentDir.mkdirs() // so we can easily assert without crashing if dirs weren't made.
         assertEquals(0, parentDir.list().size)
     }
 
     @Test
     fun testReadFileDoesNotExist() = runBlocking {
-        val actualBitmap = PinnedTileScreenshotStore.read(RuntimeEnvironment.application, uuid)
+        val actualBitmap = PinnedTileScreenshotStore.read(appContext, uuid)
         assertNull(actualBitmap)
     }
 
     /** Assumes [PinnedTileScreenshotStore.getFileForUUID] works correctly. */
     @Test
     fun testRemoveAsyncRemovesFile() = runBlocking {
-        val context = RuntimeEnvironment.application
-        val file = PinnedTileScreenshotStore.getFileForUUID(context, uuid)
+        val file = PinnedTileScreenshotStore.getFileForUUID(appContext, uuid)
         file.parentFile.mkdirs()
         file.createNewFile()
         file.writeText("Some test text")
         assertEquals(1, file.parentFile.list().size)
 
-        PinnedTileScreenshotStore.removeAsync(context, uuid).join()
+        PinnedTileScreenshotStore.removeAsync(appContext, uuid).join()
 
         assertEquals(0, file.parentFile.list().size)
     }
@@ -85,12 +86,11 @@ class PinnedTileScreenshotStoreUnitTest {
      */
     @Test
     fun testRemoveAsyncRemovesFileWrittenBySaveAsync() = runBlocking {
-        val context = RuntimeEnvironment.application
-        val parentFile = PinnedTileScreenshotStore.getFileForUUID(context, uuid).parentFile
-        PinnedTileScreenshotStore.saveAsync(context, uuid, getNonBlankBitmap()).join()
+        val parentFile = PinnedTileScreenshotStore.getFileForUUID(appContext, uuid).parentFile
+        PinnedTileScreenshotStore.saveAsync(appContext, uuid, getNonBlankBitmap()).join()
         assertEquals(1, parentFile.list().size)
 
-        PinnedTileScreenshotStore.removeAsync(context, uuid).join()
+        PinnedTileScreenshotStore.removeAsync(appContext, uuid).join()
 
         assertEquals(0, parentFile.list().size)
     }

@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.engine
 
+import androidx.test.core.app.ApplicationProvider
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.request.RequestInterceptor
 import org.junit.Assert.assertEquals
@@ -16,7 +17,6 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mozilla.tv.firefox.webrender.CustomContentRequestInterceptor
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
 class CustomContentRequestInterceptorTest {
@@ -57,7 +57,7 @@ class CustomContentRequestInterceptorTest {
     }
 
     private fun testInterceptor(url: String): RequestInterceptor.InterceptionResponse? {
-        val interceptor = CustomContentRequestInterceptor(RuntimeEnvironment.application)
+        val interceptor = CustomContentRequestInterceptor(ApplicationProvider.getApplicationContext())
         return interceptor.onLoadRequest(mock(EngineSession::class.java), url)
     }
 }

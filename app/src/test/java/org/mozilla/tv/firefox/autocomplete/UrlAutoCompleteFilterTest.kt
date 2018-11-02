@@ -5,11 +5,14 @@
 
 package org.mozilla.tv.firefox.autocomplete
 
+import android.app.Application
 import android.preference.PreferenceManager
+import androidx.test.core.app.ApplicationProvider
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentCaptor
@@ -20,15 +23,21 @@ import org.mozilla.tv.firefox.components.UrlAutoCompleteFilter
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText.AutocompleteResult
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
 @Config(packageName = "org.mozilla.tv.firefox")
 class UrlAutoCompleteFilterTest {
+    private lateinit var appContext: Application
+
+    @Before
+    fun setUp() {
+        appContext = ApplicationProvider.getApplicationContext()
+    }
+
     @After
     fun tearDown() {
-        PreferenceManager.getDefaultSharedPreferences(RuntimeEnvironment.application)
+        PreferenceManager.getDefaultSharedPreferences(appContext)
                 .edit()
                 .clear()
                 .apply()
@@ -37,7 +46,7 @@ class UrlAutoCompleteFilterTest {
     @Test
     fun testAutocompletion() {
         val filter = UrlAutoCompleteFilter()
-        filter.load(RuntimeEnvironment.application, false)
+        filter.load(appContext, false)
 
         val domains = listOf("mozilla.org", "google.com", "facebook.com")
         filter.onDomainsLoaded(domains)
@@ -57,15 +66,15 @@ class UrlAutoCompleteFilterTest {
 
 //    @Test
     fun testAutocompletionWithCustomDomains() {
-        PreferenceManager.getDefaultSharedPreferences(RuntimeEnvironment.application)
+        PreferenceManager.getDefaultSharedPreferences(appContext)
                 .edit()
-                .putBoolean(RuntimeEnvironment.application.getString(R.string.pref_key_autocomplete_custom), true)
+                .putBoolean(appContext.getString(R.string.pref_key_autocomplete_custom), true)
                 .apply()
 
         val domains = listOf("facebook.com", "google.com", "mozilla.org")
 
         val filter = UrlAutoCompleteFilter()
-        filter.load(RuntimeEnvironment.application, false)
+        filter.load(appContext, false)
         filter.onDomainsLoaded(domains)
 
         assertAutocompletion(filter, "f", "fanfiction.com")

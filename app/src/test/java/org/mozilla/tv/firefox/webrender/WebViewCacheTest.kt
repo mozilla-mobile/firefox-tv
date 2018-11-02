@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.webrender
 
 import android.util.AttributeSet
 import android.widget.FrameLayout
+import androidx.test.core.app.ApplicationProvider
 import mozilla.components.browser.engine.system.SystemEngineView
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -14,7 +15,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
 class WebViewCacheTest {
@@ -40,7 +40,7 @@ class WebViewCacheTest {
         // Setup
         val webView = getWebView()
         assertEquals(null, webView.parent)
-        val parent = FrameLayout(RuntimeEnvironment.application)
+        val parent = FrameLayout(ApplicationProvider.getApplicationContext())
         parent.addView(webView)
         assertEquals(parent, webView.parent)
 
@@ -49,5 +49,5 @@ class WebViewCacheTest {
     }
 
     private fun getWebView(): SystemEngineView =
-            webViewCache.getWebView(RuntimeEnvironment.application, mock(AttributeSet::class.java)) {}
+            webViewCache.getWebView(ApplicationProvider.getApplicationContext(), mock(AttributeSet::class.java)) {}
 }
