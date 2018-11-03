@@ -9,6 +9,7 @@ import android.preference.PreferenceManager
 import android.support.annotation.VisibleForTesting
 import android.webkit.WebSettings
 import org.mozilla.tv.firefox.components.locale.LocaleAwareApplication
+import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.components.search.SearchEngineManager
 import org.mozilla.tv.firefox.webrender.VisibilityLifeCycleCallback
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
@@ -42,7 +43,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
 
         PreferenceManager.setDefaultValues(this, R.xml.settings, false)
 
-        serviceLocator = ServiceLocator(this)
+        initServiceLocator()
 
         enableStrictMode()
 
@@ -53,6 +54,11 @@ open class FirefoxApplication : LocaleAwareApplication() {
         visibilityLifeCycleCallback = VisibilityLifeCycleCallback(this).also {
             registerActivityLifecycleCallbacks(it)
         }
+    }
+
+    private fun initServiceLocator() {
+        val getLanguage = { LocaleManager.getInstance().getCurrentLanguage(this) }
+        serviceLocator = ServiceLocator(this, getLanguage)
     }
 
     private fun enableStrictMode() {

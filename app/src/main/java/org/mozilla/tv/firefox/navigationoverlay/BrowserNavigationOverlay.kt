@@ -32,6 +32,7 @@ import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.components.UrlAutoCompleteFilter
 import org.mozilla.tv.firefox.ext.forEachChild
+import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isEffectivelyVisible
 import org.mozilla.tv.firefox.ext.isVisible
 import org.mozilla.tv.firefox.ext.updateLayoutParams
@@ -43,7 +44,6 @@ import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 import kotlin.properties.Delegates
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
 import org.mozilla.tv.firefox.ext.serviceLocator
-import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
@@ -239,19 +239,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     }
 
     private fun initMegaTile() {
-
-        if (LocaleManager.getInstance().currentLanguageIsEnglish(context)) {
-            pocketVideoMegaTileView.visibility = View.VISIBLE
-        } else {
-            // We only show the Pocket mega tile if the current language is English
-            //
-            // If any other language is set, do not show the mega tile and short this method
-            //
-            // See issue: https://github.com/mozilla-mobile/firefox-tv/issues/1283
-            pocketVideoMegaTileView.visibility = View.GONE
-            return
-        }
-
         pocketVideoMegaTileView.setOnClickListener(this)
     }
 
@@ -266,12 +253,17 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         pocketViewModel.state.observe(fragment.viewLifecycleOwner, Observer { state ->
             when (state) {
-                is PocketViewModel.State.Error -> showMegaTileError()
+                is PocketViewModel.State.Error -> {
+                    pocketVideoMegaTileView.visibility = View.VISIBLE
+                    showMegaTileError()
+                }
                 is PocketViewModel.State.Feed -> {
+                    pocketVideoMegaTileView.visibility = View.VISIBLE
                     pocketVideoMegaTileView.setContent(state.feed)
                 }
+                is PocketViewModel.State.NotDisplayed -> pocketVideoMegaTileView.visibility = View.GONE
                 null -> return@Observer
-            }
+            }.forceExhaustive
         })
     }
 
@@ -372,8 +364,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         }
 
         navUrlInput.nextFocusDownId = when {
-            pocketVideosContainer.isEffectivelyVisible -> R.id.pocketVideoMegaTileView
-            megaTileTryAgainButton.isEffectivelyVisible -> R.id.megaTileTryAgainButton
+            pocketViewModel.state.value is PocketViewModel.State.Feed -> R.id.pocketVideoMegaTileView
+            pocketViewModel.state.value === PocketViewModel.State.Error -> R.id.megaTileTryAgainButton
             tileAdapter.itemCount == 0 -> R.id.navUrlInput
             else -> R.id.tileContainer
         }

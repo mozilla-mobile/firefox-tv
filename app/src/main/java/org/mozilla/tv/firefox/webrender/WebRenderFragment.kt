@@ -27,7 +27,6 @@ import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.MainActivity.Companion.PARENT_FRAGMENT
 import org.mozilla.tv.firefox.MediaSessionHolder
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.ViewModelFactory
 import org.mozilla.tv.firefox.webrender.cursor.CursorController
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.ext.isVisible
@@ -92,7 +91,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         super.onCreate(savedInstanceState)
         initSession()
 
-        val factory = ViewModelFactory(context!!.serviceLocator)
+        val factory = serviceLocator.viewModelFactory
         pinnedTileViewModel = ViewModelProviders.of(this, factory).get(PinnedTileViewModel::class.java)
         serviceLocator = context!!.serviceLocator
     }

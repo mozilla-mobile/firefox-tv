@@ -20,11 +20,16 @@ const val POCKET_VIDEO_COUNT = 20
  * information required by the view. This should be enough to render (i.e., the
  * view should not have to perform any transformations on this data).
  */
-class PocketViewModel(private val pocketVideoRepo: PocketVideoRepo, pocketRepoCache: PocketRepoCache) : ViewModel() {
+class PocketViewModel(
+    private val pocketVideoRepo: PocketVideoRepo,
+    private val getCurrentLanguage: () -> String,
+    pocketRepoCache: PocketRepoCache
+) : ViewModel() {
 
     sealed class State {
         object Error : State()
         data class Feed(val feed: List<FeedItem>) : State()
+        object NotDisplayed : State()
     }
 
     sealed class FeedItem {
@@ -42,14 +47,21 @@ class PocketViewModel(private val pocketVideoRepo: PocketVideoRepo, pocketRepoCa
         }
     }
 
-    val state = pocketRepoCache.feedState.map { repoState ->
-        when (repoState) {
-            is PocketVideoRepo.FeedState.Loading -> State.Feed(loadingPlaceholders)
-            is PocketVideoRepo.FeedState.LoadComplete -> State.Feed(repoState.videos)
-            is PocketVideoRepo.FeedState.NoAPIKey -> State.Feed(noKeyPlaceholders)
-            is PocketVideoRepo.FeedState.FetchFailed -> State.Error
+    val state = pocketRepoCache.feedState
+        .map { repoState ->
+            when (repoState) {
+                is PocketVideoRepo.FeedState.Loading -> State.Feed(loadingPlaceholders)
+                is PocketVideoRepo.FeedState.LoadComplete -> State.Feed(repoState.videos)
+                is PocketVideoRepo.FeedState.NoAPIKey -> State.Feed(noKeyPlaceholders)
+                is PocketVideoRepo.FeedState.FetchFailed -> State.Error
+            }
+        }.map {
+            if (getCurrentLanguage().toLowerCase().startsWith("en")) it
+            // We only show the Pocket mega tile if the current language is English.
+            // Otherwise, overwrite any state with NotDisplayed
+            // See issue: https://github.com/mozilla-mobile/firefox-tv/issues/1283
+            else State.NotDisplayed
         }
-    }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     val loadingPlaceholders: List<FeedItem> =
