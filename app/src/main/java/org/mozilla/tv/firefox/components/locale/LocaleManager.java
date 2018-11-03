@@ -283,14 +283,14 @@ public class LocaleManager {
         return currentLocale = Locales.parseLocaleCode(current);
     }
 
-    public boolean currentLanguageIsEnglish(@NonNull Context context) {
+    @NonNull
+    public String getCurrentLanguage(@NonNull Context context) {
         Locale current = getCurrentLocale(context);
         // If locale hasn't been updated (i.e., 'current' is null), use system default
         if (current == null) {
             current = context.getResources().getConfiguration().locale;
         }
-        String language = Locales.getLanguage(current);
-        return language.toLowerCase(current).contains("en");
+        return Locales.getLanguage(current);
     }
 
     /**

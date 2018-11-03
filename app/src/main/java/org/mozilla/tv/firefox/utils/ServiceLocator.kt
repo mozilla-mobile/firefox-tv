@@ -44,13 +44,13 @@ import org.mozilla.tv.firefox.pocket.PocketVideoRepo
  *   open val telemetry: TelemetryInterface by lazy { SentryWrapper() }
  *   ```
  */
-open class ServiceLocator(val app: Application) {
+open class ServiceLocator(val app: Application, getCurrentLanguage: () -> String) {
     private val pocketEndpoint get() = PocketEndpoint
     private val buildConfigDerivables get() = BuildConfigDerivables()
     private val pocketFeedStateMachine get() = PocketFeedStateMachine()
 
     val pocketRepoCache by lazy { PocketRepoCache(pocketRepo).apply { unfreeze() } }
-    val viewModelFactory by lazy { ViewModelFactory(this) }
+    val viewModelFactory by lazy { ViewModelFactory(this, getCurrentLanguage) }
     val screenController by lazy { ScreenController() }
 
     open val pinnedTileRepo by lazy { PinnedTileRepo(app) }

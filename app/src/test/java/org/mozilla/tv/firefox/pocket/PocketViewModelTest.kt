@@ -17,6 +17,7 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.spy
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
+import org.mozilla.tv.firefox.helpers.ext.assertValues
 import org.mozilla.tv.firefox.utils.PreventLiveDataMainLooperCrashRule
 
 class PocketViewModelTest {
@@ -34,7 +35,10 @@ class PocketViewModelTest {
 
     @Before
     fun setup() {
+        initWithLanguage("en")
+    }
 
+    private fun initWithLanguage(language: String) {
         repoCacheState = MutableLiveData()
         val repo = mock(PocketVideoRepo::class.java)
         `when`(repo.feedState).thenReturn(MutableLiveData())
@@ -43,7 +47,7 @@ class PocketViewModelTest {
                 get() = repoCacheState
         }
 
-        viewModel = PocketViewModel(repo, repoCache)
+        viewModel = PocketViewModel(repo, { language }, repoCache)
         loadingPlaceholders = viewModel.loadingPlaceholders
         noKeyPlaceholders = viewModel.noKeyPlaceholders
     }
@@ -105,5 +109,19 @@ class PocketViewModelTest {
         repoCacheState.value = PocketVideoRepo.FeedState.FetchFailed
 
         verify(observerSpy, times(1)).onChanged(any())
+    }
+
+    @Test
+    fun `WHEN current language is not english THEN view model should always emit not displayed`() {
+        initWithLanguage("de")
+
+        val notDisplayed = PocketViewModel.State.NotDisplayed
+
+        viewModel.state.assertValues(notDisplayed, notDisplayed, notDisplayed, notDisplayed) {
+            repoCacheState.value = PocketVideoRepo.FeedState.FetchFailed
+            repoCacheState.value = PocketVideoRepo.FeedState.Loading
+            repoCacheState.value = PocketVideoRepo.FeedState.NoAPIKey
+            repoCacheState.value = PocketVideoRepo.FeedState.LoadComplete(emptyList())
+        }
     }
 }

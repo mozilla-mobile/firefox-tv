@@ -50,10 +50,11 @@ class PocketVideoFragment : Fragment() {
         val viewModel = ViewModelProviders.of(this, factory).get(PocketViewModel::class.java)
 
         viewModel.state.observe(viewLifecycleOwner, Observer<PocketViewModel.State> { state ->
-            state ?: return@Observer
             when (state) {
                 is PocketViewModel.State.Error -> { /* TODO: #769: display error screen */ }
                 is PocketViewModel.State.Feed -> adapter.setVideos(state.feed)
+                is PocketViewModel.State.NotDisplayed -> { }
+                null -> { }
             }.forceExhaustive
         })
         return layout
