@@ -17,7 +17,7 @@ import org.robolectric.RobolectricTestRunner
 private const val KEY_INNER = "recommendations"
 
 @RunWith(RobolectricTestRunner::class)
-class PocketEndpointTest {
+class PocketEndpointest {
 
     @Test
     fun `convert Videos JSON successfully to internal objects`() {
@@ -42,7 +42,7 @@ class PocketEndpointTest {
         )
 
         val pocketJSON = TestResource.POCKET_VIDEO_RECOMMENDATION.get()
-        val actualVideos = PocketEndpoint.convertVideosJSON(pocketJSON)
+        val actualVideos = PocketEndpoint().convertVideosJSON(pocketJSON)
         if (actualVideos == null) { fail("Expected actualVideos to be non-null"); return }
 
         // We only test a subset of the data for developer sanity. :)
@@ -60,7 +60,7 @@ class PocketEndpointTest {
         assertNotNull(expectedFirstTitle)
 
         val pocketJSONWithNoTitleExceptFirst = removeTitleStartingAtIndex(1, pocketJSON)
-        val actualVideos = PocketEndpoint.convertVideosJSON(pocketJSONWithNoTitleExceptFirst)
+        val actualVideos = PocketEndpoint().convertVideosJSON(pocketJSONWithNoTitleExceptFirst)
         if (actualVideos == null) { fail("Expected videos non-null"); return }
         assertEquals(1, actualVideos.size)
         assertEquals(expectedFirstTitle, actualVideos[0].title)
@@ -70,18 +70,18 @@ class PocketEndpointTest {
     fun `convert Videos JSON for videos with missing fields on all items`() {
         val pocketJSON = TestResource.POCKET_VIDEO_RECOMMENDATION.get()
         val pocketJSONWithNoTitles = removeTitleStartingAtIndex(0, pocketJSON)
-        val actualVideos = PocketEndpoint.convertVideosJSON(pocketJSONWithNoTitles)
+        val actualVideos = PocketEndpoint().convertVideosJSON(pocketJSONWithNoTitles)
         assertNull(actualVideos)
     }
 
     @Test
     fun `convert Videos JSON for empty String`() {
-        assertNull(PocketEndpoint.convertVideosJSON(""))
+        assertNull(PocketEndpoint().convertVideosJSON(""))
     }
 
     @Test
     fun `convert Videos JSON for invalid JSON`() {
-        assertNull(PocketEndpoint.convertVideosJSON("{!!}}"))
+        assertNull(PocketEndpoint().convertVideosJSON("{!!}}"))
     }
 }
 

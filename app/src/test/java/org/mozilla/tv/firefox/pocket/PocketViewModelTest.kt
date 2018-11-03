@@ -48,8 +48,8 @@ class PocketViewModelTest {
         }
 
         viewModel = PocketViewModel(repo, { language.startsWith("en") }, repoCache)
-        loadingPlaceholders = viewModel.loadingPlaceholders
-        noKeyPlaceholders = viewModel.noKeyPlaceholders
+        loadingPlaceholders = PocketViewModel.loadingPlaceholders
+        noKeyPlaceholders = PocketViewModel.noKeyPlaceholders
     }
 
     @Test

@@ -35,14 +35,14 @@ open class FirefoxApplication : LocaleAwareApplication() {
      * application context at the time they get created.
      */
     val components by lazy { WebRenderComponents(this, getSystemUserAgent()) }
-    open lateinit var serviceLocator: ServiceLocator
+    lateinit var serviceLocator: ServiceLocator
 
     override fun onCreate() {
         super.onCreate()
 
         PreferenceManager.setDefaultValues(this, R.xml.settings, false)
 
-        serviceLocator = ServiceLocator(this)
+        serviceLocator = createServiceLocator()
 
         enableStrictMode()
 
@@ -54,6 +54,8 @@ open class FirefoxApplication : LocaleAwareApplication() {
             registerActivityLifecycleCallbacks(it)
         }
     }
+
+    open fun createServiceLocator() = ServiceLocator(this)
 
     private fun enableStrictMode() {
         // Android/WebView sometimes commit strict mode violations, see e.g.

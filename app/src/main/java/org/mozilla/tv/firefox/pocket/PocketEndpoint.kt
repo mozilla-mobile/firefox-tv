@@ -34,11 +34,11 @@ private val GLOBAL_VIDEO_ENDPOINT = Uri.parse("https://getpocket.cdn.mozilla.net
  * The methods of this class call the endpoint directly and does not cache results or rate limit,
  * outside of the network layer (e.g. with OkHttp).
  */
-object PocketEndpoint {
+open class PocketEndpoint {
 
     /** @return The global video recommendations or null on error; the list will never be empty. */
     @AnyThread // via PocketEndpointRaw.
-    suspend fun getRecommendedVideos(): List<PocketViewModel.FeedItem.Video>? {
+    open suspend fun getRecommendedVideos(): List<PocketViewModel.FeedItem.Video>? {
         val videosJSON = PocketEndpointRaw.getGlobalVideoRecommendations() ?: return null
         return convertVideosJSON(videosJSON)
     }

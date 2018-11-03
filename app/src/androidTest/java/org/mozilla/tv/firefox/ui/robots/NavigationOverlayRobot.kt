@@ -75,12 +75,25 @@ class NavigationOverlayRobot {
             return BrowserRobot.Transition()
         }
 
-        fun openTileToBrowser(index: Int) {
-            homeTiles().perform(RecyclerViewActions.actionOnItemAtPosition<TileViewHolder>(index, click()))
+        fun openPocketMegatile(interact: PocketScreenRobot.() -> Unit): PocketScreenRobot.Transition {
+            pocketMegaTile().click()
+
+            PocketScreenRobot().interact()
+            return PocketScreenRobot.Transition()
         }
 
-        fun openTileToBrowser(title: String) {
+        fun openTileToBrowser(index: Int, interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
+            homeTiles().perform(RecyclerViewActions.actionOnItemAtPosition<TileViewHolder>(index, click()))
+
+            BrowserRobot().interact()
+            return BrowserRobot.Transition()
+        }
+
+        fun openTileToBrowser(title: String, interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
             homeTiles().perform(RecyclerViewActions.actionOnItem<TileViewHolder>(hasDescendant(withText(title)), click()))
+
+            BrowserRobot().interact()
+            return BrowserRobot.Transition()
         }
 
         fun openSettings(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
@@ -130,3 +143,4 @@ private fun urlBar() = onView(withId(R.id.navUrlInput))
 private fun homeTiles() = onView(withId(R.id.tileContainer))
 private fun overlay() = onView(withId(R.id.browserOverlay))
 private fun desktopModeButton() = onView(withId(R.id.desktopModeButton))
+private fun pocketMegaTile() = onView(withId(R.id.pocketVideosContainer))
