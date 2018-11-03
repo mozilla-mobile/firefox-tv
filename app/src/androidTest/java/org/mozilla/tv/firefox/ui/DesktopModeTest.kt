@@ -12,8 +12,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.ext.toUri
+import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.helpers.SessionLoadedIdlingResource
-import org.mozilla.tv.firefox.helpers.SkipOnboardingMainActivityTestRule
 import org.mozilla.tv.firefox.ui.robots.navigationOverlay
 
 /**
@@ -27,9 +27,8 @@ import org.mozilla.tv.firefox.ui.robots.navigationOverlay
 
 @RunWith(AndroidJUnit4::class)
 class DesktopModeTest {
-    @Rule
-    @JvmField
-    val activityTestRule = SkipOnboardingMainActivityTestRule()
+
+    @get:Rule val activityTestRule = MainActivityTestRule()
 
     private lateinit var loadingIdlingResource: SessionLoadedIdlingResource
 
