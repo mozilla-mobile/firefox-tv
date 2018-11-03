@@ -18,7 +18,7 @@ import org.mozilla.tv.firefox.ui.robots.navigationOverlay
  */
 class ClearDataTest {
 
-    @Rule @JvmField val activityTestRule = MainActivityTestRule()
+    @get:Rule val activityTestRule = MainActivityTestRule()
 
     /* ktlint-disable no-blank-line-before-rbrace */ // This imposes unreadable grouping.
     @Test

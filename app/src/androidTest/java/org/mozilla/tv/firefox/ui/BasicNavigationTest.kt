@@ -26,7 +26,7 @@ private val BODY_TEXT = (1..3).map {
  */
 class BasicNavigationTest {
 
-    @Rule @JvmField val activityTestRule = MainActivityTestRule()
+    @get:Rule val activityTestRule = MainActivityTestRule()
 
     /* ktlint-disable no-blank-line-before-rbrace */ // This imposes unreadable grouping.
     @Test

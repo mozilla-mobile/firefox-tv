@@ -27,7 +27,7 @@ import org.mozilla.tv.firefox.webrender.WebRenderFragment
 /** An integration test to verify [IWebView.executeJS] works correctly. */
 class IWebViewExecuteJavascriptTest {
 
-    @Rule @JvmField val activityTestRule = MainActivityTestRule()
+    @get:Rule val activityTestRule = MainActivityTestRule()
     private lateinit var mockServer: MockWebServer
 
     @Before

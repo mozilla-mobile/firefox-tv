@@ -18,7 +18,7 @@ import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 // the linting error for starting a function with an uppercase letter
 class LiveDataMapTest {
 
-    @Rule @JvmField val activityTestRule = MainActivityTestRule()
+    @get:Rule val activityTestRule = MainActivityTestRule()
     private lateinit var source: MutableLiveData<Int>
 
     @Before
