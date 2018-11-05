@@ -2,244 +2,384 @@
     "status": 1,
     "recommendations": [
         {
-            "id": 23227,
-            "url": "https://www.youtube.com/watch?v=IzvXi8VkxgI",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=IzvXi8VkxgI",
-            "title": "How Hands Became the Internet’s New Selfie | Internetting Season 2",
-            "excerpt": "In the age of the selfie, we spend a lot of time showing off our faces. But lately a different body part is vying for attention. What are our hands trying to tell us? Watch Internetting every Tuesday @ 7PM ET. Want more? Sign up for our newsletter: https://nyti.ms/2NHvnMZMeet the hands featured in o",
+            "id": 27587,
+            "url": "https://www.youtube.com/watch?v=953Qt4FnAcU",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=953Qt4FnAcU",
+            "title": "How a Master Pastry Chef Uses Architecture to Make Sky High Pastries",
+            "excerpt": "At New York City's International Culinary Center, host Rebecca DeAngelis makes a modern day croquembouche with architect-turned pastry chef Jansen Chan",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FIzvXi8VkxgI%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2F953Qt4FnAcU%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 0,
-            "popularity_sort_id": 1
+            "popularity_sort_id": 20,
+            "authors": {
+                "96612022": {
+                    "author_id": "96612022",
+                    "name": "Eater",
+                    "url": "http://www.youtube.com/channel/UCRzPUBhXUZHclB7B5bURFXw"
+                }
+            }
         },
         {
-            "id": 23222,
-            "url": "https://www.youtube.com/watch?v=Rbt2NFCtBh4",
+            "id": 27581,
+            "url": "https://www.youtube.com/watch?v=GHZ7-kq3GDQ",
             /* no tv_url field to test fallback behavior */
-            "title": "Why The US Airforce Ejected a Bear",
-            "excerpt": "Get 2 months of Skillshare for FREE using this link: https://skl.sh/realengineering14New vlog channel: https://www.youtube.com/channel/UCMet...References:Thank you to AP Archive for access to the fantastic footage[1] http://www.ejectionsite.com/eb58caps.htm [2] http://www.ejectionsite.com/bangwhoos.",
+            "title": "How Does Having Too Much Power Affect Your Brain?",
+            "excerpt": "Power is tied to a hierarchical escalator that we rise up through decisions and actions. But once we have power, how does it affect our brain and behavior? How Our Brains Respond to People Who Aren't Like Us - https://youtu.be/KIwe_O0am4URead More:The age of adolescencehttps://www.thelancet.com/jour",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FRbt2NFCtBh4%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FGHZ7-kq3GDQ%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 1,
-            "popularity_sort_id": 2
+            "popularity_sort_id": 17,
+            "authors": {
+                "96612138": {
+                    "author_id": "96612138",
+                    "name": "Seeker",
+                    "url": "http://www.youtube.com/channel/UCzWQYUVCpZqtN93H8RR44Qw"
+                }
+            }
         },
         {
-            "id": 23209,
-            "url": "https://www.youtube.com/watch?v=SbjciJvacXY",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=SbjciJvacXY",
-            "title": "The fractured politics of a browning America",
-            "excerpt": "The US is getting more diverse. As more Americans realize this new future, it is changing how cultural and political divides take shape.Subscribe to our channel! http://goo.gl/0bsAjOWe live in an America where television programs, commercials, and movies are trying to represent a browner country; wh",
+            "id": 27576,
+            "url": "https://www.youtube.com/watch?v=24P0NzJdBig",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=24P0NzJdBig",
+            "title": "How a Stick Insect Walks | ScienceTake",
+            "excerpt": "The delightfully improbable stick insect uses two pairs of legs to walk and the front pair to check out what lies ahead. Find out more in this 2016 episode of ScienceTake.Read the story here: https://www.nytimes.com/2016/02/15/sc...Every week, ScienceTake answers questions like how monkeys teach man",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FSbjciJvacXY%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2F24P0NzJdBig%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 2,
-            "popularity_sort_id": 8
+            "popularity_sort_id": 16,
+            "authors": {
+                "96611890": {
+                    "author_id": "96611890",
+                    "name": "The New York Times",
+                    "url": "http://www.youtube.com/channel/UCqnbDFdCpuN8CMEg0VuEBqA"
+                }
+            }
         },
         {
-            "id": 23204,
-            "url": "https://www.youtube.com/watch?v=Yl_K2Ata6XY",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=Yl_K2Ata6XY",
-            "title": "Is Our Food Becoming Less Nutritious?",
-            "excerpt": "The nutrient content of food is declining. Is it because of soil depletion, selective breeding, or... something else?Watch my new documentary, VITAMANIA: http://ve42.co/vitaI came across this story as I was making the film Vitamania. When you ask sellers of vitamins why you should take vitamin suppl",
+            "id": 27571,
+            "url": "https://www.youtube.com/watch?v=229ZSavo3UI",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=229ZSavo3UI",
+            "title": "Why This Greek Farm is a Taste of Paradise | Eat. Stay. Love.",
+            "excerpt": "Presented by Bon Appétit with Edward JonesIn this episode of Eat. Stay. Love., our host Jamie McDonald visits Agreco Farms in Crete, Greece to talk with Demetrios Kalaitzidakis about what makes the blessed Greek island a 'taste of paradise on Earth' for its abundance of organic foods and wine.Still",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FYl_K2Ata6XY%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2F229ZSavo3UI%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 3,
-            "popularity_sort_id": 20
+            "popularity_sort_id": 14,
+            "authors": {
+                "96612111": {
+                    "author_id": "96612111",
+                    "name": "Bon Appétit",
+                    "url": "http://www.youtube.com/channel/UCbpMy0Fg74eXXkvxJrtEn3w"
+                }
+            }
         },
         {
-            "id": 23199,
-            "url": "https://www.youtube.com/watch?v=xrqdU4cZaLw",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=xrqdU4cZaLw",
-            "title": "Making Games Better for Gamers with Colourblindness & Low Vision | Designing for Disability",
-            "excerpt": "Video games are for everyone. But disabled people can be left out if developers don’t consider their needs. In this series of videos, I’ll be sharing guidelines and best practices for making games more accessible to a wide range of disabilities. This time, I’m looking at design choices and men",
+            "id": 27566,
+            "url": "https://www.youtube.com/watch?v=un2_TgSWq1c",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=un2_TgSWq1c",
+            "title": "How Marine Iguanas are Surviving Climate Change | BBC Earth",
+            "excerpt": "Marine Iguana of the Galapagos can change in size in order to survive the El Niño hurricane.Subscribe to BBC Earth for more amazing animal videos - http://bit.ly/BBCEarthSub Watch more videos from BBC Earth: Planet Earth http://bit.ly/PlanetEarthPlaylist Blue Planet http://bit.ly/BluePlanetPlaylist",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FxrqdU4cZaLw%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2Fun2_TgSWq1c%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 4,
-            "popularity_sort_id": 5
+            "popularity_sort_id": 12,
+            "authors": {
+                "96611908": {
+                    "author_id": "96611908",
+                    "name": "BBC Earth",
+                    "url": "http://www.youtube.com/channel/UCwmZiChSryoWQCZMIQezgTg"
+                }
+            }
         },
         {
-            "id": 23194,
-            "url": "https://www.youtube.com/watch?v=9POZtEhdmIY",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=9POZtEhdmIY",
-            "title": "How To Lengthen Your Life",
-            "excerpt": "The trick to lengthening your life isn't to eat more kale or jog more: it's to lengthen how long time feels, which can be done chiefly by introducing new experiences and routines, and opening your eyes fully to the multiple wonders of existence.Sign up to our new newsletter and get 10% off your firs",
+            "id": 27561,
+            "url": "https://www.youtube.com/watch?v=vja85po7MTk",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=vja85po7MTk",
+            "title": "How Deep Can A Submarine Go?",
+            "excerpt": "Whatever you need a website for, create yours today with Wix: https://www.wix.com/go/infographics What is the deepest submarines can go? Can submarines reach Mariana Trench? Can submarines go even deeper than that? On January 23, 1960, the Trieste touched down on the sandy soil at the bottom of Chal",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2F9POZtEhdmIY%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2Fvja85po7MTk%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 5,
-            "popularity_sort_id": 4
+            "popularity_sort_id": 9,
+            "authors": {
+                "96615062": {
+                    "author_id": "96615062",
+                    "name": "The Infographics Show",
+                    "url": "http://www.youtube.com/channel/UCfdNM3NAhaBOXCafH7krzrA"
+                }
+            }
         },
         {
-            "id": 23125,
-            "url": "https://www.youtube.com/watch?v=3uiUHvET_jg",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=3uiUHvET_jg",
-            "title": "Yo-Yo Ma: NPR Music Tiny Desk Concert",
-            "excerpt": "Aug. 17, 2018 | Tom Huizenga -- Why did Laurence Olivier return so often to Shakespeare's Othello? Why did Ansel Adams keep photographing the Grand Canyon? Obsessed or awestruck, artists revisit great inspirations because they believe there is yet another story to tell – about life, about themselv",
+            "id": 27556,
+            "url": "https://www.youtube.com/watch?v=zKhm89FWOy8",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=zKhm89FWOy8",
+            "title": "Japan's robot revolution - BBC Click",
+            "excerpt": "Click is in Japan discovering the next-gen technologies that are augmenting humans. There are robot legs, robot backpacks and even cars that can read your brainwaves.Subscribe HERE http://bit.ly/1uNQEWR Find us online at www.bbc.com/click Twitter: @bbcclick Facebook: www.facebook.com/BBCClick",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2F3uiUHvET_jg%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FzKhm89FWOy8%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 6,
-            "popularity_sort_id": 12
+            "popularity_sort_id": 6,
+            "authors": {
+                "97014716": {
+                    "author_id": "97014716",
+                    "name": "BBC Click",
+                    "url": "http://www.youtube.com/channel/UCu0Uc1oNDF36jRY_sskl8bA"
+                }
+            }
         },
         {
-            "id": 23120,
-            "url": "https://www.youtube.com/watch?v=Sbygrr5q2Wg",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=Sbygrr5q2Wg",
-            "title": "The Secretive Book That Names All the Cheaters in Vegas",
-            "excerpt": "Buy your tickets simply from SeatGeek for $20 off by using the code \"HAI\" at https://sg.app.link/HAIGet a Half as Interesting t-shirt: https://standard.tv/collections/half-... Suggest a video and get a free t-shirt if we use it: http://halfasinteresting.com/suggest Follow Half as Interesting on Twit",
+            "id": 27551,
+            "url": "https://www.youtube.com/watch?v=VFofnju3V8I",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=VFofnju3V8I",
+            "title": "The Future of Gaming: Your data, your wallet",
+            "excerpt": "From Fortnite to Candy Crush, video games and mobile games are relying more and more on in-game and in-app purchases to make money. This means gaming companies are finding new ways to keep players playing and spending. Some digital games development uses old-school gambling mechanisms to keep people",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FSbygrr5q2Wg%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FVFofnju3V8I%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 7,
-            "popularity_sort_id": 10
+            "popularity_sort_id": 18,
+            "authors": {
+                "96612013": {
+                    "author_id": "96612013",
+                    "name": "Quartz",
+                    "url": "http://www.youtube.com/channel/UC9f78Z5hgtDt0n8JWyfBk8Q"
+                }
+            }
         },
         {
-            "id": 23115,
-            "url": "https://www.youtube.com/watch?v=khxztJmtJHo",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=khxztJmtJHo",
-            "title": "5 Days Of Becoming A Morning Person | Try Living With Lucie | Refinery29",
-            "excerpt": "On this episode of Try Living With Lucie, our host, Lucie Fink, works on becoming a morning person for 5 days. From going to bed at an earlier time to testing melatonin gummies, Lucie tries a bit of everything for this week's challenge. Watch this episode of Try Living With Lucie to become a morning",
+            "id": 27546,
+            "url": "https://www.youtube.com/watch?v=Itjc14Fm-gs",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=Itjc14Fm-gs",
+            "title": "What happens when nature goes viral?",
+            "excerpt": "How geotagged photos harm nature.Subscribe to our channel! http://goo.gl/0bsAjOHorseshoe Bend used to be a little-known roadside view of the Colorado River in Page, Arizona. But over the past few years, the spot has witnessed a dramatic increase in popularity. The main culprit for that uptick? Insta",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FkhxztJmtJHo%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FItjc14Fm-gs%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 8,
-            "popularity_sort_id": 19
+            "popularity_sort_id": 2,
+            "authors": {
+                "96611812": {
+                    "author_id": "96611812",
+                    "name": "Vox",
+                    "url": "http://www.youtube.com/channel/UCLXo7UDZvByw2ixzpQCufnA"
+                }
+            }
         },
         {
-            "id": 23110,
-            "url": "https://www.youtube.com/watch?v=KxAW3t423rg",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=KxAW3t423rg",
-            "title": "We Went To The Fake Sneaker Capital Of China (HBO)",
-            "excerpt": "After the sun sets in Putian, thousands of bikes carrying fake sneakers hit the streets.The lace-up black market is no secret in Putian, and it's where you can find Chan, a vendor with a knack for getting high-quality pairs off the streets and into the hands of hypebeasts on the other side of the gl",
+            "id": 27541,
+            "url": "https://www.youtube.com/watch?v=m24R16tNZ_k",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=m24R16tNZ_k",
+            "title": "Apple's Emoji Origin Story",
+            "excerpt": "In 2008, Apple design intern Angela Guzman worked with her mentor to design around 500 of the original emoji. Originally intended for a Japanese audience, Guzman had no idea emoji would become so popular worldwide.» Subscribe to CNBC: http://cnb.cx/SubscribeCNBCAbout CNBC: From 'Wall Street' to 'Ma",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FKxAW3t423rg%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2Fm24R16tNZ_k%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 9,
-            "popularity_sort_id": 11
+            "popularity_sort_id": 10,
+            "authors": {
+                "96613851": {
+                    "author_id": "96613851",
+                    "name": "CNBC",
+                    "url": "http://www.youtube.com/channel/UCvJJ_dzjViJCoLf5uKUTwoA"
+                }
+            }
         },
         {
-            "id": 23105,
-            "url": "https://www.youtube.com/watch?v=0R9zjn9BBvA",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=0R9zjn9BBvA",
-            "title": "You are fluent in this language (and don't even know it) | Christoph Niemann",
-            "excerpt": "Without realizing it, we're fluent in the language of pictures, says illustrator Christoph Niemann. In a charming talk packed with witty, whimsical drawings, Niemann takes us on a hilarious visual tour that shows how artists tap into our emotions and minds -- all without words.Check out more TED Tal",
+            "id": 27536,
+            "url": "https://www.youtube.com/watch?v=Rw4HQSS-lB0",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=Rw4HQSS-lB0",
+            "title": "What It’s Like to Live with Zero Waste",
+            "excerpt": "How hard can it be to sustain a zero-waste lifestyle? Host Simone Sullivan visited Stevie Van Horn, a woman who manages to keep down years of her landfill waste inside a mason jar. Broadly followed along as she made her own toothpaste and talked to her friends about the difficulties of being zero wa",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2F0R9zjn9BBvA%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FRw4HQSS-lB0%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 10,
-            "popularity_sort_id": 3
+            "popularity_sort_id": 19,
+            "authors": {
+                "96684554": {
+                    "author_id": "96684554",
+                    "name": "Broadly",
+                    "url": "http://www.youtube.com/channel/UCfQDD-pbllOCXHYwiXxjJxA"
+                }
+            }
         },
         {
-            "id": 23100,
-            "url": "https://www.youtube.com/watch?v=gsDYCS3SQm0",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=gsDYCS3SQm0",
-            "title": "Top 10 Film Scores of All Time",
-            "excerpt": "Our most requested Movie List to date, it's time to take a look at the best original scores ever. From setting the mood, to upping the tension, to telling the entire story, a good score can do a lot. So here are 10 of the best!The Picks10 - Mood - Elevator to the Gallows9 - Tone - The Godfather8 - A",
+            "id": 27531,
+            "url": "https://www.youtube.com/watch?v=IfA_wM9aMJY",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=IfA_wM9aMJY",
+            "title": "How Astronomers Are Circling a Black Hole | Out There",
+            "excerpt": "Astronomers are probing the edge of Sagittarius A*, the supermassive black hole at the center of our galaxy.Subscribe: http://bit.ly/U8Ys7nMore from The New York Times Video:  http://nytimes.com/video----------Whether it's reporting on conflicts abroad and political divisions at home, or covering th",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FgsDYCS3SQm0%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FIfA_wM9aMJY%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 11,
-            "popularity_sort_id": 7
+            "popularity_sort_id": 7,
+            "authors": {
+                "96611890": {
+                    "author_id": "96611890",
+                    "name": "The New York Times",
+                    "url": "http://www.youtube.com/channel/UCqnbDFdCpuN8CMEg0VuEBqA"
+                }
+            }
         },
         {
-            "id": 23091,
-            "url": "https://www.youtube.com/watch?v=wpdcbqmEpqU",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=wpdcbqmEpqU",
-            "title": "The Biggest Mistakes You Make When Cooking Eggs",
-            "excerpt": "If you're new, Subscribe! → http://bit.ly/Subscribe-to-MashedEggs are an amazing food that, lucky for us, are readily available by the dozen. An excellent source of protein and other essential vitamins and minerals, each egg is a self-contained food miracle. But while they seem almost childishly e",
+            "id": 27526,
+            "url": "https://www.youtube.com/watch?v=G-hfzA3yXd4",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=G-hfzA3yXd4",
+            "title": "Where Did Werewolf Myths Come From?",
+            "excerpt": "Werewolves might not be real, but the myths about them could have come from real scientific phenomena, like a misunderstanding of certain illnesses.Hosted by: Michael ArandaHead to https://scishowfinds.com/ for hand selected artifacts of the universe! ----------Support SciShow by becoming a patron o",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FwpdcbqmEpqU%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FG-hfzA3yXd4%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 12,
-            "popularity_sort_id": 13
+            "popularity_sort_id": 5,
+            "authors": {
+                "96611819": {
+                    "author_id": "96611819",
+                    "name": "SciShow",
+                    "url": "http://www.youtube.com/channel/UCZYTClx2T1of7BRZ86-8fow"
+                }
+            }
         },
         {
-            "id": 23062,
-            "url": "https://www.youtube.com/watch?v=FiYh1CTJX-c",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=FiYh1CTJX-c",
-            "title": "Diving Underground to Unearth Clues to Life’s Origins - The Most Unknown | Ep. 1",
-            "excerpt": "In episode one of The Most Unknown, microbiologist Jennifer Macalady, along with a team of divers, spelunk through Italy’s water-rich Frasassi Caves to search for mysterious microbes that could hold clues to the origins of life on Earth.For the past 20 years, Macalady and her team have rappelled t",
+            "id": 27521,
+            "url": "https://www.youtube.com/watch?v=BunU6CTmhFw",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=BunU6CTmhFw",
+            "title": "How rollercoasters affect your body - Brian D. Avery",
+            "excerpt": "Check out our Patreon page: https://www.patreon.com/tededView full lesson: https://ed.ted.com/lessons/how-roller...In 1895, crowds flooded Coney Island to see America’s first-ever looping coaster: the Flip Flap Railway. But its thrilling flip caused cases of severe whiplash, neck injury and even e",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FFiYh1CTJX-c%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FBunU6CTmhFw%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 13,
-            "popularity_sort_id": 15
+            "popularity_sort_id": 4,
+            "authors": {
+                "25769364": {
+                    "author_id": "25769364",
+                    "name": "TED-Ed",
+                    "url": "http://www.youtube.com/channel/UCsooa4yRKGN_zEE8iknghZA"
+                }
+            }
         },
         {
-            "id": 23053,
-            "url": "https://www.youtube.com/watch?v=MxLOoriXkMc",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=MxLOoriXkMc",
-            "title": "Adam Savage's One Day Builds: Overengineered Bottle Opener!",
-            "excerpt": "The amazing Laura Kampf visits Adam's workshop for a new One Day Build collaboration! Their plan: design and build an overengineered bottle opener that can slam the cap off of a standard glass soda bottle. After much trial and error, behold the Kampf bottle opener!Shot and edited by Gunther KirschWa",
+            "id": 27514,
+            "url": "https://www.youtube.com/watch?v=R5pG_Nm-iec",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=R5pG_Nm-iec",
+            "title": "This tiny wasp-inspired drone can pull 40 times its own weight",
+            "excerpt": "The FlyCroTug can also open doors, inspect buildingsRead more - https://scim.ag/2O4tM3xCREDITS-----------------------editor/animator/narratorChris Burnssupervising producerSarah CrespiscriptCourtney MicelicitationM. A. Estrada et al., Science Robotics 2018DOI: 10.1126/scirobotics.aau6903research pho",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FMxLOoriXkMc%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FR5pG_Nm-iec%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 14,
-            "popularity_sort_id": 6
+            "popularity_sort_id": 11,
+            "authors": {
+                "96764315": {
+                    "author_id": "96764315",
+                    "name": "Science Magazine",
+                    "url": "http://www.youtube.com/channel/UCv0aU2eKry3kdSTnFa8QAWA"
+                }
+            }
         },
         {
-            "id": 23045,
-            "url": "https://www.youtube.com/watch?v=4CbHeXnxV_A",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=4CbHeXnxV_A",
-            "title": "How Online Trolls Divide Americans IRL | NYT News",
-            "excerpt": "We know that trolls on social media are trying to sow discord on contentious subjects like race, guns and abortion, but how do they do it? Here is a visual guide to their strategy.Read the related story: https://nyti.ms/2LhjsUBSubscribe: http://bit.ly/U8Ys7nMore from The New York Times Video:  http:",
+            "id": 27508,
+            "url": "https://www.youtube.com/watch?v=aN9tn1E3tDs",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=aN9tn1E3tDs",
+            "title": "What Happens When You Put Antimatter in a Double Slit Experiment?",
+            "excerpt": "Interference patterns with particles have stumped scientists for years, but when they put antimatter through the test, they revealed an even bigger mystery. This Is The Only Place Antimatter Can Survive In The Universe - https://youtu.be/XD8Q3Mb1Q4IRead More: First Observation Of Antimatter Wave Int",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2F4CbHeXnxV_A%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FaN9tn1E3tDs%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 15,
-            "popularity_sort_id": 18
+            "popularity_sort_id": 3,
+            "authors": {
+                "96612138": {
+                    "author_id": "96612138",
+                    "name": "Seeker",
+                    "url": "http://www.youtube.com/channel/UCzWQYUVCpZqtN93H8RR44Qw"
+                }
+            }
         },
         {
-            "id": 23040,
-            "url": "https://www.youtube.com/watch?v=y-R52Cfb0c8",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=y-R52Cfb0c8",
-            "title": "Want To Save Money on San Francisco Rent? Become An Extreme Commuter. | CNBC Make It.",
-            "excerpt": "How this super commuter avoids paying top-dollar rent in the San Francisco Bay Area.» Subscribe to CNBC Make It.: http://cnb.cx/2kxl2rfAbout CNBC Make It.: CNBC Make It. is a new section of CNBC dedicated to making you smarter about managing your business, career, and money.Connect with CNBC Make I",
+            "id": 27503,
+            "url": "https://www.youtube.com/watch?v=BXXdcgchAVw",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=BXXdcgchAVw",
+            "title": "Why Dunkin' Donuts Is Failing in India",
+            "excerpt": "Dunkin' Brands has become synonymous with breakfast pretty much everywhere, with more than 12,600 restaurants in 46 countries. In the United States, Dunkin' has seen a steady revenue growth over the last few years. But in India? The chain is struggling there.Dunkin' granted exclusive franchising rig",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2Fy-R52Cfb0c8%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FBXXdcgchAVw%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 16,
-            "popularity_sort_id": 16
+            "popularity_sort_id": 15,
+            "authors": {
+                "96613851": {
+                    "author_id": "96613851",
+                    "name": "CNBC",
+                    "url": "http://www.youtube.com/channel/UCvJJ_dzjViJCoLf5uKUTwoA"
+                }
+            }
         },
         {
-            "id": 23019,
-            "url": "https://www.youtube.com/watch?v=4AZSoQ-RaKY",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=4AZSoQ-RaKY",
-            "title": "Why do Supermarket Eggs look Perfect? | Earth Lab",
-            "excerpt": "For eggs to reach the supermarket shelves, they first need to pass a strength test.Subscribe: http://bit.ly/SubscribeToEarthLabAll the best Earth Lab videos http://bit.ly/EarthLabOriginals Best of BBC Earth videos http://bit.ly/TheBestOfBBCEarthVideos The Doctors Are In The House http://bit.ly/TheDo",
+            "id": 27498,
+            "url": "https://www.youtube.com/watch?v=371CRxnGkA8",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=371CRxnGkA8",
+            "title": "NAFTA, explained with a toy car",
+            "excerpt": "NAFTA made your car cheaper, USMCA could change that.Subscribe to our channel! http://goo.gl/0bsAjOWhen the North American Free Trade Agreement began in 1994, auto companies in the US, Canada and Mexico could trade parts and cars without paying tariffs. And they could source parts and labor from the",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2F4AZSoQ-RaKY%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2F371CRxnGkA8%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 17,
-            "popularity_sort_id": 17
+            "popularity_sort_id": 1,
+            "authors": {
+                "96611812": {
+                    "author_id": "96611812",
+                    "name": "Vox",
+                    "url": "http://www.youtube.com/channel/UCLXo7UDZvByw2ixzpQCufnA"
+                }
+            }
         },
         {
-            "id": 23014,
-            "url": "https://www.youtube.com/watch?v=zBnLM9ODKOM",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=zBnLM9ODKOM",
-            "title": "Too Much Happiness? Resisting The Self-Help Craze in Denmark | NBC Left Field",
-            "excerpt": "Denmark has been consistently ranked in the World Happiness Report among the top three happiest countries in the world, owing, in part, to the presence of a stable government, access to free high-quality education and health care, and relatively low income inequality. But as the pressure to keep str",
+            "id": 27493,
+            "url": "https://www.youtube.com/watch?v=S6ydo0LHHaE",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=S6ydo0LHHaE",
+            "title": "Denver airport embraces conspiracy theories amid renovation",
+            "excerpt": "Almost anything can become the topic of conspiracy theories and that includes one of America’s major airports. Opened in 1995, Denver International has long been the subject of wild speculation and now, the airport is embracing it. Barry Petersen reports.Subscribe to the \"CBS This Morning\" Channel",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FzBnLM9ODKOM%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FS6ydo0LHHaE%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 18,
-            "popularity_sort_id": 14
+            "popularity_sort_id": 13,
+            "authors": {
+                "24777152": {
+                    "author_id": "24777152",
+                    "name": "CBS This Morning",
+                    "url": "http://www.youtube.com/channel/UC-SJ6nODDmufqBzPBwCvYvQ"
+                }
+            }
         },
         {
-            "id": 23009,
-            "url": "https://www.youtube.com/watch?v=4cfmEgpOOZk",
-            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=4cfmEgpOOZk",
-            "title": "Erykah Badu: NPR Music Tiny Desk Concert",
-            "excerpt": "Aug. 15, 2018 | Felix Contreras -- Some folks around the NPR Music office said they felt an almost spiritual connection to Erykah Badu during her visit to the Tiny Desk. And that was before she and her band even played a single note. It came from the waft of earthly scents that followed in her wake,",
+            "id": 27488,
+            "url": "https://www.youtube.com/watch?v=pl4pqu5FTaI",
+            "tv_url": "https://www.youtube.com/tv#/watch/video/idle?v=pl4pqu5FTaI",
+            "title": "Rare Dumbo Octopus Shows Off for Deep-sea Submersible | National Geographic",
+            "excerpt": "The rarely observed, ghostly white cephalopod delights scientists remotely exploring an underwater volcano.➡ Subscribe: http://bit.ly/NatGeoSubscribeAbout National Geographic:National Geographic is the world's premium destination for science, exploration, and adventure. Through their world-class s",
             "domain": "youtube.com",
-            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2F4cfmEgpOOZk%2Fmaxresdefault.jpg&resize=w450",
+            "image_src": "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2Fpl4pqu5FTaI%2Fmaxresdefault.jpg&resize=w450",
             "published_timestamp": "0",
             "sort_id": 19,
-            "popularity_sort_id": 9
+            "popularity_sort_id": 8,
+            "authors": {
+                "96612063": {
+                    "author_id": "96612063",
+                    "name": "National Geographic",
+                    "url": "http://www.youtube.com/channel/UCpVm7bg6pXKo1Pr6k5kxG9A"
+                }
+            }
         }
     ]
 }
