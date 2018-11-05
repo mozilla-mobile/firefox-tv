@@ -4,9 +4,11 @@
 
 package org.mozilla.tv.firefox
 
+import android.app.Application
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
+import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.utils.ServiceLocator
@@ -20,15 +22,19 @@ import org.mozilla.tv.firefox.utils.ServiceLocator
  * val myViewModel = ViewModelProviders.of(this, factory).get(ExampleViewModel::class.java)
  * ```
  */
-class ViewModelFactory(private val serviceLocator: ServiceLocator, private val getCurrentLanguage: () -> String) :
+class ViewModelFactory(private val serviceLocator: ServiceLocator, private val app: Application) :
     ViewModelProvider.Factory {
+
+    private val getLanguage = { LocaleManager.getInstance().getCurrentLanguage(app) }
+
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        println(app)
         return when (modelClass) {
             PinnedTileViewModel::class.java -> PinnedTileViewModel(serviceLocator.pinnedTileRepo) as T
             PocketViewModel::class.java -> PocketViewModel(
                 serviceLocator.pocketRepo,
-                getCurrentLanguage,
+                getLanguage,
                 serviceLocator.pocketRepoCache
             ) as T
         // This class needs to either return a ViewModel or throw, so we have no good way of silently handling
