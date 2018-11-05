@@ -8,6 +8,7 @@ package org.mozilla.tv.firefox.autocomplete
 import android.app.Application
 import android.preference.PreferenceManager
 import androidx.test.core.app.ApplicationProvider
+import kotlinx.coroutines.experimental.Job
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -45,8 +46,9 @@ class UrlAutoCompleteFilterTest {
 
     @Test
     fun testAutocompletion() {
+        var job = Job()
         val filter = UrlAutoCompleteFilter()
-        filter.load(appContext, false)
+        filter.load(appContext, job, false)
 
         val domains = listOf("mozilla.org", "google.com", "facebook.com")
         filter.onDomainsLoaded(domains)
@@ -62,6 +64,8 @@ class UrlAutoCompleteFilterTest {
 
         assertNoAutocompletion(filter, "wwww")
         assertNoAutocompletion(filter, "yahoo")
+
+        job.cancel()
     }
 
 //    @Test
@@ -73,8 +77,9 @@ class UrlAutoCompleteFilterTest {
 
         val domains = listOf("facebook.com", "google.com", "mozilla.org")
 
+        val job = Job()
         val filter = UrlAutoCompleteFilter()
-        filter.load(appContext, false)
+        filter.load(appContext, job, false)
         filter.onDomainsLoaded(domains)
 
         assertAutocompletion(filter, "f", "fanfiction.com")
@@ -89,6 +94,8 @@ class UrlAutoCompleteFilterTest {
         assertAutocompletion(filter, "mo", "mobile.de")
         assertAutocompletion(filter, "mob", "mobile.de")
         assertAutocompletion(filter, "moz", "mozilla.org")
+
+        job.cancel()
     }
 
     @Test

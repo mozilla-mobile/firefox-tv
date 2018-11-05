@@ -56,7 +56,6 @@ class CustomContentRequestInterceptorTest {
         assertNotEquals(firefoxAbout.data, firefoxHome.data)
     }
 
-
     private fun testInterceptor(url: String): RequestInterceptor.InterceptionResponse.Content? {
         val interceptor = CustomContentRequestInterceptor(ApplicationProvider.getApplicationContext())
         return interceptor.onLoadRequest(mock(EngineSession::class.java), url)

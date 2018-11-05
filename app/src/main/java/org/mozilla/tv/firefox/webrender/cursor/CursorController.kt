@@ -12,6 +12,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.accessibility.AccessibilityManager
 import kotlinx.android.synthetic.main.fragment_browser.*
+import kotlinx.coroutines.experimental.Job
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.ext.getAccessibilityManager
@@ -40,13 +41,14 @@ class CursorController(
     cursorParent: View,
     private val view: CursorView
 ) : AccessibilityManager.TouchExplorationStateChangeListener, LifecycleObserver {
+    private val uiLifecycleCancelJob = Job()
 
     private var isEnabled: Boolean by Delegates.observable(true) { _, _, newValue ->
         keyDispatcher.isEnabled = newValue
         view.visibility = if (newValue) View.VISIBLE else View.GONE
     }
 
-    private val viewModel = CursorViewModel(onUpdate = { x, y, percentMaxScrollVel, framesPassed ->
+    private val viewModel = CursorViewModel(uiLifecycleCancelJob, onUpdate = { x, y, percentMaxScrollVel, framesPassed ->
         view.updatePosition(x, y)
         scrollWebView(percentMaxScrollVel, framesPassed)
     }, simulateTouchEvent = { webRenderFragment.activity?.dispatchTouchEvent(it) })
@@ -91,6 +93,7 @@ class CursorController(
         webRenderFragment.context?.getAccessibilityManager()?.removeTouchExplorationStateChangeListener(this)
 
         webRenderFragment.session.unregister(isLoadingObserver)
+        uiLifecycleCancelJob.cancel()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
