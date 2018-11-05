@@ -57,8 +57,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
     }
 
     private fun initServiceLocator() {
-        val getLanguage = { LocaleManager.getInstance().getCurrentLanguage(this) }
-        serviceLocator = ServiceLocator(this, getLanguage)
+        serviceLocator = ServiceLocator(this)
     }
 
     private fun enableStrictMode() {
