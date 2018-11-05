@@ -7,14 +7,20 @@ package org.mozilla.tv.firefox.helpers.ext
 import android.support.test.espresso.ViewInteraction
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.assertion.ViewAssertions.matches
-import org.mozilla.tv.firefox.helpers.isEnabled
 import org.mozilla.tv.firefox.helpers.isChecked
+import org.mozilla.tv.firefox.helpers.isEnabled
+import org.mozilla.tv.firefox.helpers.isSelected
 
 fun ViewInteraction.click(): ViewInteraction = this.perform(ViewActions.click())!!
 
 fun ViewInteraction.assertIsEnabled(isEnabled: Boolean): ViewInteraction {
     return this.check(matches(isEnabled(isEnabled)))!!
 }
+
 fun ViewInteraction.assertIsChecked(isChecked: Boolean): ViewInteraction {
     return this.check(matches(isChecked(isChecked)))!!
+}
+
+fun ViewInteraction.assertIsSelected(isSelected: Boolean): ViewInteraction {
+    return this.check(matches(isSelected(isSelected)))!!
 }
