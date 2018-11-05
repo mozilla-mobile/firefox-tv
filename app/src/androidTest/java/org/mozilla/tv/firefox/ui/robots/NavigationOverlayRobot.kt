@@ -22,6 +22,7 @@ import org.hamcrest.CoreMatchers.containsString
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.helpers.ext.assertIsChecked
 import org.mozilla.tv.firefox.helpers.ext.assertIsEnabled
+import org.mozilla.tv.firefox.helpers.ext.assertIsSelected
 import org.mozilla.tv.firefox.helpers.ext.click
 import org.mozilla.tv.firefox.pinnedtile.TileViewHolder
 
@@ -44,6 +45,7 @@ class NavigationOverlayRobot {
     }
 
     fun assertCanReload(canReload: Boolean) = reload().assertIsEnabled(canReload)
+    fun assertTurboIsSelected(isEnabled: Boolean) = turboButton().assertIsSelected(isEnabled)
 
     fun assertURLBarTextContains(expectedText: String) = urlBar().check(matches(withText(containsString(expectedText))))
 

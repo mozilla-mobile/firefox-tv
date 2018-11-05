@@ -4,26 +4,29 @@
 
 package org.mozilla.tv.firefox.helpers
 
-import android.support.test.espresso.matcher.ViewMatchers.isEnabled as espressoIsEnabled
-import android.support.test.espresso.matcher.ViewMatchers.isChecked as espressoIsChecked
 import android.view.View
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
+import android.support.test.espresso.matcher.ViewMatchers.isChecked as espressoIsChecked
+import android.support.test.espresso.matcher.ViewMatchers.isEnabled as espressoIsEnabled
+import android.support.test.espresso.matcher.ViewMatchers.isSelected as espressoIsSelected
 
 /**
- * The [android.support.test.espresso.matcher.ViewMatchers.isEnabled] function that can also handle
- * disabled state through the boolean argument.
+ * The [espressoIsEnabled] function that can also handle disabled state through the boolean argument.
  */
-fun isEnabled(isEnabled: Boolean): Matcher<View> = when {
-    isEnabled -> espressoIsEnabled()
-    else -> not(espressoIsEnabled())
-}
+fun isEnabled(isEnabled: Boolean): Matcher<View> = maybeInvertMatcher(espressoIsEnabled(), isEnabled)
 
 /**
- * The [android.support.test.espresso.matcher.ViewMatchers.isChecked] function that can also handle
- * unchecked state through the boolean argument.
+ * The [espressoIsChecked] function that can also handle unchecked state through the boolean argument.
  */
-fun isChecked(isChecked: Boolean): Matcher<View> = when {
-    isChecked -> espressoIsChecked()
-    else -> not(espressoIsChecked())
+fun isChecked(isChecked: Boolean): Matcher<View> = maybeInvertMatcher(espressoIsChecked(), isChecked)
+
+/**
+ * The [espressoIsSelected] function that can also handle not selected state through the boolean argument.
+ */
+fun isSelected(isSelected: Boolean): Matcher<View> = maybeInvertMatcher(espressoIsSelected(), isSelected)
+
+private fun maybeInvertMatcher(matcher: Matcher<View>, useUnmodifiedMatcher: Boolean): Matcher<View> = when {
+    useUnmodifiedMatcher -> matcher
+    else -> not(matcher)
 }
