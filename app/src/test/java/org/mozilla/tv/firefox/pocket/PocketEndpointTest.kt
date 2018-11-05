@@ -23,18 +23,20 @@ class PocketEndpointTest {
     fun `convert Videos JSON successfully to internal objects`() {
         val expectedSubset = listOf(
             PocketViewModel.FeedItem.Video(
-                id = 23227,
-                title = "How Hands Became the Internet’s New Selfie | Internetting Season 2",
-                url = "https://www.youtube.com/tv#/watch/video/idle?v=IzvXi8VkxgI",
-                thumbnailURL = "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FIzvXi8VkxgI%2Fmaxresdefault.jpg&resize=w450",
-                popularitySortId = 1
+                id = 27587,
+                title = "How a Master Pastry Chef Uses Architecture to Make Sky High Pastries",
+                url = "https://www.youtube.com/tv#/watch/video/idle?v=953Qt4FnAcU",
+                thumbnailURL = "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2F953Qt4FnAcU%2Fmaxresdefault.jpg&resize=w450",
+                popularitySortId = 20,
+                authors = JSONObject(mapOf("96612022" to mapOf("author_id" to "96612022", "name" to "Eater", "url" to "http://www.youtube.com/channel/UCRzPUBhXUZHclB7B5bURFXw")))
             ),
             PocketViewModel.FeedItem.Video(
-                id = 23222,
-                title = "Why The US Airforce Ejected a Bear",
-                url = "https://www.youtube.com/watch?v=Rbt2NFCtBh4",
-                thumbnailURL = "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FRbt2NFCtBh4%2Fmaxresdefault.jpg&resize=w450",
-                popularitySortId = 2
+                id = 27581,
+                title = "How Does Having Too Much Power Affect Your Brain?",
+                url = "https://www.youtube.com/watch?v=GHZ7-kq3GDQ",
+                thumbnailURL = "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FGHZ7-kq3GDQ%2Fmaxresdefault.jpg&resize=w450",
+                popularitySortId = 17,
+                authors = JSONObject(mapOf("96612138" to mapOf("author_id" to "96612138", "name" to "Seeker", "url" to "http://www.youtube.com/channel/UCzWQYUVCpZqtN93H8RR44Qw")))
             )
         )
 
