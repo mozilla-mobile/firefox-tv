@@ -15,8 +15,8 @@ import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity.Companion.POCKET_O
 /**
  * A [org.junit.Rule] to handle shared test set up for tests on [MainActivity].
  *
- * @param initialTouchMode true to enable "touch mode", false otherwise
- * @param launchActivity true to automatically launch the activity, false otherwise
+ * @param initialTouchMode See [ActivityTestRule]
+ * @param launchActivity See [ActivityTestRule]
  * @param skipOnboarding true to skip the onboarding screen, false otherwise
  */
 class MainActivityTestRule(
