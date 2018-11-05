@@ -47,7 +47,7 @@ class PocketViewModelTest {
                 get() = repoCacheState
         }
 
-        viewModel = PocketViewModel(repo, { language }, repoCache)
+        viewModel = PocketViewModel(repo, { language.startsWith("en") }, repoCache)
         loadingPlaceholders = viewModel.loadingPlaceholders
         noKeyPlaceholders = viewModel.noKeyPlaceholders
     }

@@ -25,7 +25,7 @@ import org.mozilla.tv.firefox.utils.ServiceLocator
 class ViewModelFactory(private val serviceLocator: ServiceLocator, private val app: Application) :
     ViewModelProvider.Factory {
 
-    private val getLanguage = { LocaleManager.getInstance().getCurrentLanguage(app) }
+    private val getIsEnglishLocale = { LocaleManager.getInstance().currentLanguageIsEnglish(app) }
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -34,7 +34,7 @@ class ViewModelFactory(private val serviceLocator: ServiceLocator, private val a
             PinnedTileViewModel::class.java -> PinnedTileViewModel(serviceLocator.pinnedTileRepo) as T
             PocketViewModel::class.java -> PocketViewModel(
                 serviceLocator.pocketRepo,
-                getLanguage,
+                getIsEnglishLocale,
                 serviceLocator.pocketRepoCache
             ) as T
         // This class needs to either return a ViewModel or throw, so we have no good way of silently handling

@@ -22,7 +22,7 @@ const val POCKET_VIDEO_COUNT = 20
  */
 class PocketViewModel(
     private val pocketVideoRepo: PocketVideoRepo,
-    private val getCurrentLanguage: () -> String,
+    private val localeIsEnglish: () -> Boolean,
     pocketRepoCache: PocketRepoCache
 ) : ViewModel() {
 
@@ -56,7 +56,7 @@ class PocketViewModel(
                 is PocketVideoRepo.FeedState.FetchFailed -> State.Error
             }
         }.map {
-            if (getCurrentLanguage().toLowerCase().startsWith("en")) it
+            if (localeIsEnglish()) it
             // We only show the Pocket mega tile if the current language is English.
             // Otherwise, overwrite any state with NotDisplayed
             // See issue: https://github.com/mozilla-mobile/firefox-tv/issues/1283
