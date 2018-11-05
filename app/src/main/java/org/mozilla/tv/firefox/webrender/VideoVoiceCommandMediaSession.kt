@@ -34,8 +34,9 @@ import android.view.KeyEvent.KEYCODE_MEDIA_PLAY
 import android.view.KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
 import android.view.KeyEvent.KEYCODE_MEDIA_PREVIOUS
 import android.webkit.JavascriptInterface
+import kotlinx.coroutines.experimental.CoroutineScope
 import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
@@ -104,6 +105,9 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
 
     private var isLifecycleResumed = false
     private var isLifecycleStarted = false
+
+    private val uiLifecycleCancelJob = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + uiLifecycleCancelJob)
 
     init {
         mediaSession.setCallback(MediaSessionCallbacks())
@@ -180,6 +184,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
     @OnLifecycleEvent(ON_DESTROY)
     fun onDestroy() {
         mediaSession.release()
+        uiLifecycleCancelJob.cancel()
     }
 
     /**
@@ -241,7 +246,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
                 playbackSpeed = 0f
             }
 
-            GlobalScope.launch(Dispatchers.Main) { // mediaSession and cachedPlaybackState is on UI thread only.
+            uiScope.launch { // mediaSession and cachedPlaybackState is on UI thread only.
                 val playbackState = cachedPlaybackStateBuilder
                         .setState(playbackStateInt, positionMillis, playbackSpeed)
                         .build()

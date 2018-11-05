@@ -6,8 +6,9 @@ package org.mozilla.tv.firefox.components
 
 import android.content.Context
 import android.util.Log
+import kotlinx.coroutines.experimental.CoroutineScope
 import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import org.mozilla.tv.firefox.components.locale.Locales
@@ -29,6 +30,8 @@ class UrlAutoCompleteFilter : InlineAutocompleteEditText.OnFilterListener {
     private var settings: Settings? = null
 
     private var preInstalledDomains: List<String> = emptyList()
+
+    private var uiScope: CoroutineScope? = null
 
     override fun onFilter(rawSearchText: String, view: InlineAutocompleteEditText?) {
         if (view == null) {
@@ -74,11 +77,11 @@ class UrlAutoCompleteFilter : InlineAutocompleteEditText.OnFilterListener {
         this.preInstalledDomains = domains
     }
 
-    fun load(context: Context, loadDomainsFromDisk: Boolean = true) {
+    fun load(context: Context, uiLifecycleCancelJob: Job, loadDomainsFromDisk: Boolean = true) {
         settings = Settings.getInstance(context)
-
+        uiScope = CoroutineScope(Dispatchers.Main + uiLifecycleCancelJob)
         if (loadDomainsFromDisk) {
-            GlobalScope.launch(Dispatchers.Main) {
+            uiScope!!.launch {
                 val domains = async(Dispatchers.Default) { loadDomains(context) }
 
                 onDomainsLoaded(domains.await())

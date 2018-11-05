@@ -9,9 +9,10 @@ import android.os.SystemClock
 import android.support.annotation.UiThread
 import android.support.v4.math.MathUtils
 import android.view.MotionEvent
+import kotlinx.coroutines.experimental.CoroutineScope
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.isActive
@@ -45,6 +46,7 @@ private const val DOWN_TIME_OFFSET_MILLIS = 100
  * @param simulateTouchEvent Takes the given touch event and simulates a touch to the screen.
  */
 class CursorViewModel(
+    uiLifecycleCancelJob: Job,
     private val onUpdate: (x: Float, y: Float, percentMaxScrollVel: PointF, framesPassed: Float) -> Unit,
     private val simulateTouchEvent: (MotionEvent) -> Unit
 ) {
@@ -73,6 +75,8 @@ class CursorViewModel(
     private val pressedDirections = EnumSet.noneOf(Direction::class.java)
 
     private var updateLoop: Deferred<Unit>? = null
+
+    private val uiScope = CoroutineScope(Dispatchers.Main + uiLifecycleCancelJob)
 
     private fun update(deltaMillis: Long) {
         /**
@@ -135,7 +139,7 @@ class CursorViewModel(
     }
 
     // TODO: stop when new views (e.g. overlay) are opened.
-    private fun asyncStartUpdates() = GlobalScope.async(Dispatchers.Main) { // Use UI to avoid synchronization.
+    private fun asyncStartUpdates() = uiScope.async { // Use UI to avoid synchronization.
         var currentFrameMillis = SystemClock.uptimeMillis() // duped in loop.
         var prevFrameMillis: Long
         var deltaMillis = UPDATE_DELAY_MILLIS // Move ~1 frame to start.

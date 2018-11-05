@@ -16,9 +16,9 @@ import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import kotlinx.android.synthetic.main.home_tile.view.*
 import kotlinx.coroutines.experimental.CompletableDeferred
+import kotlinx.coroutines.experimental.CoroutineScope
 import kotlinx.coroutines.experimental.CoroutineStart
 import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
@@ -50,6 +50,8 @@ class PinnedTileAdapter(
     var lastLongClickedTile: PinnedTile? = null
         private set
 
+    private val uiScope = CoroutineScope(Dispatchers.Main + uiLifecycleCancelJob)
+
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with(holder) {
         val item = tiles[position]
         when (item) {
@@ -58,7 +60,7 @@ class PinnedTileAdapter(
                 setIconLayoutMarginParams(iconView, R.dimen.bundled_home_tile_margin_value)
             }
             is CustomPinnedTile -> {
-                onBindCustomHomeTile(uiLifecycleCancelJob, holder, item)
+                onBindCustomHomeTile(uiLifecycleCancelJob, uiScope, holder, item)
                 setIconLayoutMarginParams(iconView, R.dimen.custom_home_tile_margin_value)
             }
         }.forceExhaustive
@@ -144,8 +146,13 @@ private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledPinnedTil
     titleView.text = tile.title
 }
 
-private fun onBindCustomHomeTile(uiLifecycleCancelJob: Job, holder: TileViewHolder, item: CustomPinnedTile) = with(holder) {
-    GlobalScope.launch(uiLifecycleCancelJob + Dispatchers.Main, CoroutineStart.UNDISPATCHED) {
+private fun onBindCustomHomeTile(
+    uiLifecycleCancelJob: Job,
+    uiScope: CoroutineScope,
+    holder: TileViewHolder,
+    item: CustomPinnedTile
+) = with(holder) {
+    uiScope.launch(uiLifecycleCancelJob + Dispatchers.Main, CoroutineStart.UNDISPATCHED) {
         val validUri = item.url.toJavaURI()
 
         val screenshotDeferred = async {
