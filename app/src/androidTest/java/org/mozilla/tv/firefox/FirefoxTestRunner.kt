@@ -7,7 +7,6 @@ package org.mozilla.tv.firefox
 import android.app.Application
 import android.content.Context
 import android.support.test.runner.AndroidJUnitRunner
-import org.mozilla.FirefoxTestApplication
 
 class FirefoxTestRunner : AndroidJUnitRunner() {
 

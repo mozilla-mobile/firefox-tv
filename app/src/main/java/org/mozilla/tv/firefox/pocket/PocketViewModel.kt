@@ -66,11 +66,11 @@ class PocketViewModel(
 
     companion object {
         @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-        val loadingPlaceholders: List<FeedItem> =
+        val loadingPlaceholders: List<FeedItem.Loading> =
             List(POCKET_VIDEO_COUNT) { FeedItem.Loading(R.color.photonGrey50) }
 
         @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-        val noKeyPlaceholders: List<FeedItem> = List(POCKET_VIDEO_COUNT) {
+        val noKeyPlaceholders: List<FeedItem.Video> = List(POCKET_VIDEO_COUNT) {
             FeedItem.Video(
                 id = it,
                 title = "Mozilla",

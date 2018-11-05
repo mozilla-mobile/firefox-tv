@@ -8,7 +8,7 @@ import okhttp3.mockwebserver.MockWebServer
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mozilla.FirefoxTestApplication
+import org.mozilla.tv.firefox.FirefoxTestApplication
 import org.mozilla.tv.firefox.helpers.AndroidAssetDispatcher
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.helpers.TestAssetHelper
@@ -16,7 +16,7 @@ import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.ui.robots.navigationOverlay
 
-class PocketSmokeTest {
+class PocketBasicUserFLowTest {
 
     @get:Rule val activityTestRule = MainActivityTestRule()
 
@@ -38,7 +38,7 @@ class PocketSmokeTest {
             PocketViewModel.FeedItem.Video(
                 id = 0,
                 title = "Title",
-                url = page.urlStr,
+                url = page.url.toString(),
                 thumbnailURL = "https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png",
                 popularitySortId = 0
             )
@@ -47,11 +47,12 @@ class PocketSmokeTest {
         app.pushPocketRepoState(mockedState)
     }
 
+    /* ktlint-disable no-blank-line-before-rbrace */ // This imposes unreadable grouping.
     @Test
     fun verify_that_pocket_happy_path_loads_expected_url() {
-        navigationOverlay {}
-        .openPocketMegatile {}
-        .openTileToBrowser(0) {
+        navigationOverlay {
+        }.openPocketMegatile {
+        }.openTileToBrowser(0) {
             assertTestContent(page.content)
         }
     }
