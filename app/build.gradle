@@ -26,8 +26,6 @@ android {
         versionCode 11 // This versionCode is "frozen" for local builds. For "release" builds we
         // override this with a generated versionCode at build time.
         versionName "3.0"
-        // NOTE: if your Espresso tests don't work with this test runner, try deleting your existing
-        // test configurations and rerunning
         testInstrumentationRunner "org.mozilla.tv.firefox.FirefoxTestRunner"
 
         multiDexEnabled true
