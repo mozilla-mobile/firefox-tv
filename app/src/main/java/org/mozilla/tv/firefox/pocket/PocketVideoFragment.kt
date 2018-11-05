@@ -9,7 +9,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.StrictMode
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
@@ -22,16 +21,13 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_pocket_video.*
 import kotlinx.android.synthetic.main.fragment_pocket_video.view.*
 import mozilla.components.browser.session.Session
+import org.json.JSONObject
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.forceExhaustive
-import org.mozilla.tv.firefox.ext.resetAfter
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.updateLayoutParams
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
-import org.mozilla.tv.firefox.utils.FormattedDomain
 import org.mozilla.tv.firefox.utils.PicassoWrapper
-import java.net.URI
-import java.net.URISyntaxException
 
 /** A feed of Pocket videos. */
 class PocketVideoFragment : Fragment() {
@@ -125,23 +121,9 @@ private class PocketVideoAdapter(
         titleView.text = item.title
         PicassoWrapper.client.load(item.thumbnailURL).into(videoThumbnailView)
 
-        @Suppress("TooGenericExceptionCaught") // See below.
-        val itemURI = try {
-            URI(item.url)
-        } catch (e: Exception) { // Apparently Kotlin doesn't have multi-catch.
-            when (e) {
-                is URISyntaxException, is NullPointerException -> null
-                else -> throw e
-            }
-        }
-        domainView.text = if (itemURI == null) {
-            item.url
-        } else {
-            // The first time this method is called ever, it may block until the file is cached on disk.
-            // We pre-cache on startup so I'm hoping this isn't an issue.
-            StrictMode.allowThreadDiskReads().resetAfter {
-                FormattedDomain.format(itemView.context, itemURI, false, 0)
-            }
+        for (x in item.authors.keys()) {
+            val authorObject = JSONObject(item.authors[x].toString())
+            domainView.text = authorObject.get("name").toString()
         }
     }
 

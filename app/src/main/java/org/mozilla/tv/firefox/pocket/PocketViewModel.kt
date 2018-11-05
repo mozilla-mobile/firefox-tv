@@ -39,7 +39,8 @@ class PocketViewModel(
             val title: String,
             val url: String,
             val thumbnailURL: String,
-            val popularitySortId: Int
+            val popularitySortId: Int,
+            val authors: JSONObject
         ) : FeedItem() {
             companion object {
                 fun fromJSONObject(jsonObject: JSONObject) = PocketVideoParser.parse(jsonObject)
@@ -74,7 +75,8 @@ class PocketViewModel(
             title = "Mozilla",
             url = "https://www.mozilla.org/en-US/",
             thumbnailURL = "https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png",
-            popularitySortId = it
+            popularitySortId = it,
+            authors = JSONObject(mapOf("0" to mapOf("name" to "Mozilla")))
         )
     }
 

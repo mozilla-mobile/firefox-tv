@@ -25,6 +25,7 @@ private val GLOBAL_VIDEO_ENDPOINT = Uri.parse("https://getpocket.cdn.mozilla.net
         .buildUpon()
         .appendQueryParameter(PARAM_API_KEY, BuildConfig.POCKET_KEY)
         .appendQueryParameter("version", "2")
+        .appendQueryParameter("authors", "1")
         .build()
 
 /**
