@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.ui
 
 import android.support.test.espresso.web.webdriver.Locator
+import android.support.test.filters.FlakyTest
 
 import org.junit.Rule
 import org.junit.Test
@@ -19,6 +20,7 @@ import org.mozilla.tv.firefox.ui.robots.navigationOverlay
  * This test loads a few pages off the network and verifies their content to ensure they're actually loaded.
  * Verification is minimal to reduce the chance of the test breaking from the web page changing.
  */
+@FlakyTest(detail = "Requires network access")
 class NetworkPageLoadTest {
 
     @Rule @JvmField val activityTestRule = MainActivityTestRule()
