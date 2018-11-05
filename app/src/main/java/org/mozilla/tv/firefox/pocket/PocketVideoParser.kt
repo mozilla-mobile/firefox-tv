@@ -20,7 +20,8 @@ object PocketVideoParser {
             // either of two JSON fields, and we make no distinction internally
             url = jsonObj.optString("tv_url", null) ?: jsonObj.getString("url"),
             thumbnailURL = jsonObj.getString("image_src"),
-            popularitySortId = jsonObj.getInt("popularity_sort_id")
+            popularitySortId = jsonObj.getInt("popularity_sort_id"),
+            authors = jsonObj.getJSONObject("authors")
         )
     } catch (e: JSONException) {
         null
