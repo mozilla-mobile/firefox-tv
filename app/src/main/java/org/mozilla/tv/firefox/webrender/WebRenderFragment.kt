@@ -42,6 +42,7 @@ import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
+import org.mozilla.tv.firefox.utils.AppConstants
 import org.mozilla.tv.firefox.utils.ViewUtils.showCenteredBottomToast
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.utils.ViewUtils.showCenteredTopToast
@@ -56,9 +57,6 @@ private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     companion object {
         const val FRAGMENT_TAG = "browser"
-        const val APP_URL_PREFIX = "firefox:"
-        const val APP_URL_HOME = "${APP_URL_PREFIX}home"
-        const val APP_URL_POCKET_ERROR = "${APP_URL_PREFIX}error:pocketconnection"
 
         @JvmStatic
         fun createForSession(session: Session) = WebRenderFragment().apply {
@@ -70,7 +68,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     private val mediaSessionHolder get() = activity as MediaSessionHolder? // null when not attached.
 
-    val isUrlEqualToHomepage: Boolean get() = session.url == APP_URL_HOME
+    val isUrlEqualToHomepage: Boolean get() = session.url == AppConstants.APP_URL_HOME
 
     /**
      * Encapsulates the cursor's components. If this value is null, the Cursor is not attached
@@ -106,8 +104,8 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     override fun onUrlChanged(session: Session, url: String) {
         when (url) {
-            APP_URL_HOME -> browserOverlay?.visibility = View.VISIBLE
-            APP_URL_POCKET_ERROR -> {
+            AppConstants.APP_URL_HOME -> browserOverlay?.visibility = View.VISIBLE
+            AppConstants.APP_URL_POCKET_ERROR -> {
                 browserOverlay?.showMegaTileError()
                 browserOverlay?.visibility = View.VISIBLE
             }
@@ -277,7 +275,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             requireWebRenderComponents.sessionUseCases,
             webView)
 
-        if (session.url == APP_URL_HOME) {
+        if (session.url == AppConstants.APP_URL_HOME) {
             browserOverlay?.visibility = View.VISIBLE
         }
     }

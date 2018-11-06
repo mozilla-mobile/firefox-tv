@@ -44,10 +44,10 @@ import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 import kotlin.properties.Delegates
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
 import org.mozilla.tv.firefox.ext.serviceLocator
-import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
+import org.mozilla.tv.firefox.utils.AppConstants
 import java.lang.ref.WeakReference
 
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
@@ -270,7 +270,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     private fun setupUrlInput() = with(navUrlInput) {
         setOnCommitListener {
             val userInput = text.toString()
-            if (userInput == WebRenderFragment.APP_URL_HOME) {
+            if (userInput == AppConstants.APP_URL_HOME) {
                 // If the input points to home, we short circuit and hide the keyboard, returning
                 // the user to the home screen
                 this.hideKeyboard()

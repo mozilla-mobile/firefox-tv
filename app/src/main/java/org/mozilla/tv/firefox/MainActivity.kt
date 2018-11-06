@@ -17,7 +17,6 @@ import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
-import org.mozilla.tv.firefox.webrender.WebRenderFragment.Companion.APP_URL_HOME
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.webrender.VideoVoiceCommandMediaSession
 import org.mozilla.tv.firefox.ext.webRenderComponents
@@ -32,6 +31,7 @@ import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
+import org.mozilla.tv.firefox.utils.AppConstants
 import org.mozilla.tv.firefox.utils.OnUrlEnteredListener
 import org.mozilla.tv.firefox.utils.SafeIntent
 import org.mozilla.tv.firefox.utils.Settings
@@ -71,7 +71,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
                 serviceLocator.screenController.showBrowserScreenForUrl(
                     this@MainActivity,
                     supportFragmentManager,
-                    APP_URL_HOME,
+                    AppConstants.APP_URL_HOME,
                     Session.Source.NONE
                 )
             }
@@ -101,7 +101,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             serviceLocator.screenController.showBrowserScreenForUrl(
                 this@MainActivity,
                 supportFragmentManager,
-                APP_URL_HOME,
+                AppConstants.APP_URL_HOME,
                 Session.Source.NONE
             )
         } else {

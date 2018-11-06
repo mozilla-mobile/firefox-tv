@@ -10,6 +10,9 @@ import org.mozilla.tv.firefox.BuildConfig
 object AppConstants {
     private const val BUILD_TYPE_DEBUG = "debug"
     private const val BUILD_TYPE_RELEASE = "release"
+    private const val APP_URL_PREFIX = "firefox:"
+    const val APP_URL_HOME = "${APP_URL_PREFIX}home"
+    const val APP_URL_POCKET_ERROR = "${APP_URL_PREFIX}error:pocketconnection"
 
     val isDevBuild: Boolean
         get() = BUILD_TYPE_DEBUG == BuildConfig.BUILD_TYPE
