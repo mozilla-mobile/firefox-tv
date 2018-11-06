@@ -29,7 +29,7 @@ fun EngineView.setupForApp() {
     // TODO #33: TEXT_AUTOSIZING does not exist in AmazonWebSettings
     // webView.settings.setLayoutAlgorithm(AmazonWebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
 
-    if (AppConstants.isDevBuild()) {
+    if (AppConstants.isDevBuild) {
         WebView.setWebContentsDebuggingEnabled(true)
     }
 
