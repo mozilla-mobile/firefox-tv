@@ -12,7 +12,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
-import org.mozilla.tv.firefox.ext.LiveData
+import org.mozilla.tv.firefox.ext.LiveDataHelper
 
 @Suppress("TestFunctionName")
 // Espresso test functions can't have spaces in their names, even between backticks. This prevents
@@ -30,7 +30,7 @@ class LiveDataCombineLatestTest {
         source1 = MutableLiveData()
         source2 = MutableLiveData()
 
-        result = LiveData.combineLatest(source1, source2) { v1, v2 -> Pair(v1, v2) } as MutableLiveData<Pair<Int, String>>
+        result = LiveDataHelper.combineLatest(source1, source2) { v1, v2 -> Pair(v1, v2) } as MutableLiveData<Pair<Int, String>>
     }
 
     @Test
