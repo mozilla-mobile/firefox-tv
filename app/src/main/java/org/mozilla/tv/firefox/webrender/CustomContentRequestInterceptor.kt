@@ -8,6 +8,7 @@ import android.content.Context
 import mozilla.components.browser.errorpages.ErrorType
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.request.RequestInterceptor
+import org.mozilla.tv.firefox.utils.AppConstants
 
 /**
  * [RequestInterceptor] implementation to inject custom content for firefox:* pages.
@@ -22,7 +23,7 @@ class CustomContentRequestInterceptor(
         currentPageURL = uri
 
         return when (uri) {
-            WebRenderFragment.APP_URL_HOME ->
+            AppConstants.APP_URL_HOME, AppConstants.APP_URL_POCKET_ERROR ->
                 RequestInterceptor.InterceptionResponse.Content("<html></html>")
 
             LocalizedContent.URL_ABOUT -> RequestInterceptor.InterceptionResponse.Content(
