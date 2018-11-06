@@ -25,7 +25,7 @@ fun <T> MutableLiveData<T>.postIfNew(new: T) {
     if (new != old) this.postValue(new)
 }
 
-object LiveData {
+object LiveDataHelper {
 
     // If more advanced versions of this are required, we should import RxJava instead of duplicating their effort
     fun <T, U, R> combineLatest(
