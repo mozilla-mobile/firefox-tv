@@ -64,7 +64,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
     private fun enableStrictMode() {
         // Android/WebView sometimes commit strict mode violations, see e.g.
         // https://github.com/mozilla-mobile/focus-android/issues/660
-        if (AppConstants.isReleaseBuild()) {
+        if (AppConstants.isReleaseBuild) {
             return
         }
 
