@@ -91,9 +91,10 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         super.onCreate(savedInstanceState)
         initSession()
 
+        serviceLocator = context!!.serviceLocator
+
         val factory = serviceLocator.viewModelFactory
         pinnedTileViewModel = ViewModelProviders.of(this, factory).get(PinnedTileViewModel::class.java)
-        serviceLocator = context!!.serviceLocator
     }
 
     private fun initSession() {
