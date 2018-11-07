@@ -196,7 +196,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         pinnedTileViewModel.getTileList().observe(lifeCycleOwner, Observer {
             if (it != null) {
                 tileAdapter.setTiles(it)
-                updateFocusAndURL()
+                updateFocusableViews()
             }
         })
 
@@ -234,7 +234,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         megaTileTryAgainButton.setOnClickListener { _ ->
             pocketViewModel.update()
             initMegaTile()
-            updateFocusAndURL()
+            updateFocusableViews()
             pocketVideoMegaTileView.requestFocus()
         }
         updateFocusAndURL()
@@ -297,7 +297,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             updateOverlayButtonState(it.refreshEnabled, navButtonReload)
             updateOverlayButtonState(it.desktopModeEnabled, desktopModeButton)
 
-            updateFocusAndURL()
+            updateFocusableViews()
 
             pinButton.isChecked = it.pinChecked
             desktopModeButton.isChecked = it.desktopModeChecked
@@ -346,7 +346,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 hasUserChangedURLSinceEditTextFocused = false
-                updateFocusAndURL() // Update URL to overwrite user input, ensuring the url's accuracy.
+//                updateFocusableViews() // TODO update URL contents according to response in #1392
             }
         }
     }
@@ -379,7 +379,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     }
 
     @SuppressWarnings("LongMethod")
-    fun updateFocusAndURL() { // TODO this will be replaced when focus is moved to MVVM
+    fun updateFocusableViews() { // TODO this will be replaced when FocusRepo is introduced
         val toolbarState = toolbarViewModel.state.value
 
         val focusedView = findFocus()
@@ -421,26 +421,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         if (isFocusLost) {
             navUrlInput.requestFocus()
         }
-
-        toolbarState?.let { maybeUpdateOverlayURL(it.urlBarText) } // TODO figure out how to get rid of this
-    }
-
-    private fun maybeUpdateOverlayURL(displayUrl: String) { // TODO remove. handle this stuff in the VM
-        // The url can get updated in the background, e.g. if a loading page is redirected. We
-        // don't want a url update to interrupt the user typing so we don't update the url from
-        // the background if the user has already updated the url themselves.
-        //
-        // We revert this state when the view is unfocused: it ensures the URL is usually accurate
-        // (for security reasons) and it's simple compared to other options which keep more state.
-        //
-        // One problem this solution has is that if the URL is updated in the background rapidly,
-        // sometimes key events will be dropped, but I don't think there's much we can do about this:
-        // we can't determine if the keyboard is up or not and focus isn't a good indicator because
-        // we can focus the EditText without opening the soft keyboard and the user won't even know
-        // these are inaccurate!
-        if (!hasUserChangedURLSinceEditTextFocused) {
-            navUrlInput.setText(displayUrl)
-        }
     }
 
     override fun setVisibility(visibility: Int) {
@@ -460,7 +440,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                     navUrlInput.requestFocus()
                 }
             }
-            updateFocusAndURL()
+            updateFocusableViews()
         }
     }
 
@@ -481,7 +461,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 megaTileTryAgainButton.requestFocus()
             }
         }
-        updateFocusAndURL()
+        updateFocusableViews()
     }
 
     inner class HomeTileManager(

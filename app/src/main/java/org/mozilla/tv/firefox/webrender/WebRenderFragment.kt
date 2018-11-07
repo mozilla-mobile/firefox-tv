@@ -143,7 +143,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     private fun updateOverlayIfVisible() {
         if (browserOverlay?.isVisible == true) {
-            browserOverlay.updateFocusAndURL()
+            browserOverlay.updateFocusableViews()
         }
     }
 
