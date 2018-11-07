@@ -238,7 +238,8 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             // FIXME: Need [WebRenderFragment] as lifeCycle owner until NavOverlayFragment breakout
             pinnedTileViewModel = this@WebRenderFragment.pinnedTileViewModel
             lifeCycleOwner = this@WebRenderFragment.viewLifecycleOwner
-            initTiles()
+            initPinnedTiles()
+            observeForMegaTile(this@WebRenderFragment)
 
             onNavigationEvent = this@WebRenderFragment.onNavigationEvent
             navigationStateProvider = NavigationStateProvider()
@@ -256,8 +257,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             }
 
             registerForContextMenu(browserOverlay.tileContainer)
-
-            observeForMegaTile(this@WebRenderFragment)
         }
 
         layout.progressBar.initialize(this)
