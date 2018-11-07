@@ -6,7 +6,6 @@ package org.mozilla.tv.firefox.pocket
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
-import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -52,7 +51,7 @@ class PocketViewModelTest {
     @Test
     fun `WHEN repo cache emits a successful fetch THEN view model should emit a feed with the same videos`() {
         val videos = listOf<PocketViewModel.FeedItem>(
-            PocketViewModel.FeedItem.Video(1, "", "", "", 1, JSONObject(mapOf("" to mapOf("" to ""))))
+            PocketViewModel.FeedItem.Video(1, "", "", "", 1, "")
         )
 
         observerSpy = spy(Observer {

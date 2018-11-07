@@ -117,9 +117,9 @@ private class PocketVideoAdapter(
 
         titleView.text = item.title
         PicassoWrapper.client.load(item.thumbnailURL).into(videoThumbnailView)
-
-        for (x in item.authors.keys()) {
-            val authorObject = JSONObject(item.authors[x].toString())
+        val authorsJSON = JSONObject(item.authors)
+        for (x in authorsJSON.keys()) {
+            val authorObject = JSONObject(authorsJSON[x].toString())
             domainView.text = authorObject.get("name").toString()
         }
     }

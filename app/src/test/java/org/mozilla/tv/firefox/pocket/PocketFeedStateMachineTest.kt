@@ -4,7 +4,6 @@
 
 package org.mozilla.tv.firefox.pocket
 
-import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -17,7 +16,7 @@ import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.NoAPIKey
 class PocketFeedStateMachineTest {
 
     private val loadComplete = LoadComplete(listOf())
-    private val goodResponse = listOf(PocketViewModel.FeedItem.Video(0, "", "", "", 0, JSONObject(mapOf("" to mapOf("" to "")))))
+    private val goodResponse = listOf(PocketViewModel.FeedItem.Video(0, "", "", "", 0, ""))
     private val pocketRepoStateMachine = PocketFeedStateMachine()
 
     @Test

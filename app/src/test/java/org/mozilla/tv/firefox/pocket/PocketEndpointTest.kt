@@ -28,7 +28,7 @@ class PocketEndpointTest {
                 url = "https://www.youtube.com/tv#/watch/video/idle?v=953Qt4FnAcU",
                 thumbnailURL = "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2F953Qt4FnAcU%2Fmaxresdefault.jpg&resize=w450",
                 popularitySortId = 20,
-                authors = JSONObject(mapOf("96612022" to mapOf("author_id" to "96612022", "name" to "Eater", "url" to "http://www.youtube.com/channel/UCRzPUBhXUZHclB7B5bURFXw")))
+                authors = JSONObject(mapOf("96612022" to mapOf("author_id" to "96612022", "name" to "Eater", "url" to "http://www.youtube.com/channel/UCRzPUBhXUZHclB7B5bURFXw"))).toString()
             ),
             PocketViewModel.FeedItem.Video(
                 id = 27581,
@@ -36,7 +36,7 @@ class PocketEndpointTest {
                 url = "https://www.youtube.com/watch?v=GHZ7-kq3GDQ",
                 thumbnailURL = "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FGHZ7-kq3GDQ%2Fmaxresdefault.jpg&resize=w450",
                 popularitySortId = 17,
-                authors = JSONObject(mapOf("96612138" to mapOf("author_id" to "96612138", "name" to "Seeker", "url" to "http://www.youtube.com/channel/UCzWQYUVCpZqtN93H8RR44Qw")))
+                authors = JSONObject(mapOf("96612138" to mapOf("author_id" to "96612138", "name" to "Seeker", "url" to "http://www.youtube.com/channel/UCzWQYUVCpZqtN93H8RR44Qw"))).toString()
             )
         )
 
