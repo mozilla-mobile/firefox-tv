@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Blank screen when pressing back from a full-screened video
 - Infrequent crash caused by initialization logic (#1159)
 - On a fresh install, focus would once skip past the Pocket megatile
+- A crash that could occur when backing out of the Pocket screen
 
 ## [3.0.2] - 2018-10-30
 *Version-bump only: Released v3.0+ for the first time to Stick Gen 1 & 2 in addition to Fire TV (Gen 1, 2, 3), Cube, Element 4k (pendant), which already had v3.0+.*

@@ -163,7 +163,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     }
 
     // FIXME: Called from [WebRenderFragment] until NavigationOverlayFragment breakout
-    fun initTiles() = with(tileContainer) {
+    fun initPinnedTiles() = with(tileContainer) {
         canShowUpinToast = true
 
         // TODO: pass in VM live data instead of "homeTiles"
