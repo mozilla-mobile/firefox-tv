@@ -25,6 +25,10 @@ class SessionRepo(private val sessionManager: SessionManager) {
     private val _state = MutableLiveData<State>()
     val state: LiveData<State> = _state
 
+    fun observeSession() {
+        SessionObservationManager.attach(this, sessionManager)
+    }
+
     @AnyThread
     fun update() {
         sessionManager.selectedSession?.let {
