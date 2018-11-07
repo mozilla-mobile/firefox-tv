@@ -8,11 +8,13 @@ import android.app.Application
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ViewModelFactory
+import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
 import org.mozilla.tv.firefox.pocket.PocketRepoCache
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.webrender.WebViewCache
+import org.mozilla.tv.firefox.session.SessionRepo
 
 /**
  * Implementation of the Service Locator pattern. Use this class to provide dependencies without
@@ -53,12 +55,14 @@ open class ServiceLocator(val app: Application) {
 
     val turboMode: TurboMode by lazy { ProdTurboMode(app) } // TODO make private before merging
     val pocketRepoCache by lazy { PocketRepoCache(pocketRepo).apply { unfreeze() } }
-    val viewModelFactory by lazy { ViewModelFactory(this, app) }
+    val viewModelFactory by lazy { ViewModelFactory(this, app, turboMode) }
     val screenController by lazy { ScreenController() }
     val webViewCache by lazy { WebViewCache() }
+    val sessionManager get() = app.webRenderComponents.sessionManager
 
     open val pinnedTileRepo by lazy { PinnedTileRepo(app) }
     open val pocketRepo = PocketVideoRepo(pocketEndpoint, pocketFeedStateMachine, buildConfigDerivables).apply {
         update()
     }
+    open val sessionRepo by lazy { SessionRepo(sessionManager) }
 }
