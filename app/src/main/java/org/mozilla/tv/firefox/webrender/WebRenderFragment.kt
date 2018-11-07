@@ -143,7 +143,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     private fun updateOverlayIfVisible() {
         if (browserOverlay?.isVisible == true) {
-            browserOverlay.updateOverlayForCurrentState()
+            browserOverlay.updateFocusAndURL()
         }
     }
 
@@ -240,6 +240,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             lifeCycleOwner = this@WebRenderFragment.viewLifecycleOwner
             initPinnedTiles()
             observeForMegaTile(this@WebRenderFragment)
+            observeForToolbar(this@WebRenderFragment)
 
             onNavigationEvent = this@WebRenderFragment.onNavigationEvent
             navigationStateProvider = NavigationStateProvider()
