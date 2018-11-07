@@ -64,5 +64,5 @@ open class ServiceLocator(val app: Application) {
     open val pocketRepo = PocketVideoRepo(pocketEndpoint, pocketFeedStateMachine, buildConfigDerivables).apply {
         update()
     }
-    open val sessionRepo by lazy { SessionRepo(sessionManager) }
+    open val sessionRepo by lazy { SessionRepo(sessionManager).apply { observeSession() } }
 }

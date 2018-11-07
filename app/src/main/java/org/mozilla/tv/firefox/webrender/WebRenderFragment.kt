@@ -107,13 +107,13 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         when (url) {
             AppConstants.APP_URL_HOME -> browserOverlay?.visibility = View.VISIBLE
             AppConstants.APP_URL_POCKET_ERROR -> {
-                browserOverlay?.showMegaTileError()
+                browserOverlay?.showMegaTileError() // TODO remove and verify that the Pocket refactor handles this
                 browserOverlay?.visibility = View.VISIBLE
             }
             else -> Unit
         }
         // Turn off desktop site mode if navigating to a new domain
-        if (currentPageUrl != "" && session.desktopMode) {
+        if (currentPageUrl != "" && session.desktopMode) { // TODO move this logic into ToolbarViewModel
             val uriHost = url.toUri()?.host
             var currentPageHost = currentPageUrl.toUri()?.host
 
