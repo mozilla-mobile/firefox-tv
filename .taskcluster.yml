@@ -120,6 +120,7 @@ tasks:
           git fetch origin --tags
           && git config advice.detachedHead false
           && git checkout {{ event.version }}
+          && sh tools/taskcluster/accept-licenses.sh
           && python tools/taskcluster/get-sentry-token.py
           && python tools/taskcluster/get-pocket-token.py
           && ./gradlew --no-daemon clean test assembleRelease
