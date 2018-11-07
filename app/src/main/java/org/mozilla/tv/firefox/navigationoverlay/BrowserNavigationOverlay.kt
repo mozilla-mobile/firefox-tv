@@ -37,7 +37,6 @@ import org.mozilla.tv.firefox.ext.isEffectivelyVisible
 import org.mozilla.tv.firefox.ext.isVisible
 import org.mozilla.tv.firefox.ext.updateLayoutParams
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
-import org.mozilla.tv.firefox.utils.TurboMode
 import org.mozilla.tv.firefox.utils.UrlUtils
 import org.mozilla.tv.firefox.widget.IgnoreFocusMovementMethod
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
@@ -316,7 +315,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         when (event) {
             NavigationEvent.TURBO -> {
-                TurboMode.setEnabled(context, isTurboButtonChecked)
+                context.serviceLocator.turboMode.setEnabled(isTurboButtonChecked)
             }
             NavigationEvent.PIN_ACTION -> {
                 value = if (isPinButtonChecked) NavigationEvent.VAL_CHECKED
@@ -443,7 +442,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
     // TODO: OverlayVM should handle this instead after BrowserNavigationOverlay refactor
     fun updateTurboButton() {
-        turboButton.isChecked = TurboMode.isEnabled(context)
+        turboButton.isChecked = context.serviceLocator.turboMode.isEnabled()
     }
 
     /**

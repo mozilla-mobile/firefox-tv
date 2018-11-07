@@ -4,7 +4,7 @@
 
 package org.mozilla.tv.firefox.utils
 
-import android.content.Context
+import android.app.Application
 import org.mozilla.tv.firefox.ext.webRenderComponents
 
 /**
@@ -12,22 +12,29 @@ import org.mozilla.tv.firefox.ext.webRenderComponents
  *
  * We are trying to keep our setting and the state of the engine synchronized.
  */
-object TurboMode {
+interface TurboMode {
     /**
      * Is Turbo Mode enabled?
      */
-    fun isEnabled(context: Context) = Settings.getInstance(context).isBlockingEnabled
+    fun isEnabled(): Boolean
 
     /**
      * Toggle turbo mode on or off. This will update the setting and the engine at the same time.
      */
-    fun setEnabled(context: Context, enabled: Boolean) {
-        val settings = Settings.getInstance(context)
+    fun setEnabled(enabled: Boolean)
+}
+
+class ProdTurboMode(private val app: Application) : TurboMode {
+
+    override fun isEnabled() = Settings.getInstance(app).isBlockingEnabled
+
+    override fun setEnabled(enabled: Boolean) {
+        val settings = Settings.getInstance(app)
         settings.isBlockingEnabled = enabled
 
         // Update TrackingProtectionPolicy for both current session and EngineSettings
-        val engineSettings = context.webRenderComponents.engine.settings
-        val engineSession = context.webRenderComponents.sessionManager.getOrCreateEngineSession()
+        val engineSettings = app.webRenderComponents.engine.settings
+        val engineSession = app.webRenderComponents.sessionManager.getOrCreateEngineSession()
         if (enabled) {
             engineSettings.trackingProtectionPolicy = settings.trackingProtectionPolicy
             engineSession.enableTrackingProtection(settings.trackingProtectionPolicy)

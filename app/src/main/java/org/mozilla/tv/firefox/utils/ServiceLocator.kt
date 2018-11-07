@@ -51,6 +51,7 @@ open class ServiceLocator(val app: Application) {
     private val buildConfigDerivables get() = BuildConfigDerivables()
     private val pocketFeedStateMachine get() = PocketFeedStateMachine()
 
+    val turboMode: TurboMode by lazy { ProdTurboMode(app) } // TODO make private before merging
     val pocketRepoCache by lazy { PocketRepoCache(pocketRepo).apply { unfreeze() } }
     val viewModelFactory by lazy { ViewModelFactory(this, app) }
     val screenController by lazy { ScreenController() }
