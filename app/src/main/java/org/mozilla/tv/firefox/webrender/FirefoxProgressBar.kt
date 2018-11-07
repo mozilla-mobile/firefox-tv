@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit
 
 private const val HIDE_MESSAGE_ID = 0
 private const val HIDE_ANIMATION_DURATION_MILLIS = 250L
-private val HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3)
+private val HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(1)
 
 class FirefoxProgressBar @JvmOverloads constructor(
     context: Context,
