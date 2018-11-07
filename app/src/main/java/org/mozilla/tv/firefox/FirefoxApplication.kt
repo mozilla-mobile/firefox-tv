@@ -55,6 +55,10 @@ open class FirefoxApplication : LocaleAwareApplication() {
         }
     }
 
+    // ServiceLocator needs to be created in onCreate in order to accept Application
+    // as an argument. Because of this, if we override `val serviceLocator` but
+    // accidentally called `super.onCreate`, it would overwrite our test
+    // ServiceLocator. To prevent this land mine, we override this method instead
     open fun createServiceLocator() = ServiceLocator(this)
 
     private fun enableStrictMode() {
