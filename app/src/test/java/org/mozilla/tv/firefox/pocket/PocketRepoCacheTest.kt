@@ -8,7 +8,6 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import junit.framework.TestCase.assertEquals
-import org.json.JSONObject
 import org.junit.Assert.assertNotEquals
 import org.junit.Before
 import org.junit.Rule
@@ -74,9 +73,8 @@ class PocketRepoCacheTest {
 
     @Test
     fun `GIVEN cache has received a value AND cache is not accepting updates WHEN future values are emitted from the repo THEN new values should not be emitted by the cache `() {
-        val emptyAuthor = JSONObject(mapOf("" to mapOf("" to "")))
-        val firstVideos = listOf(PocketViewModel.FeedItem.Video(1, "", "", "", 1, emptyAuthor))
-        val secondVideos = listOf(PocketViewModel.FeedItem.Video(2, "", "", "", 2, emptyAuthor))
+        val firstVideos = listOf(PocketViewModel.FeedItem.Video(1, "", "", "", 1, ""))
+        val secondVideos = listOf(PocketViewModel.FeedItem.Video(2, "", "", "", 2, ""))
         assertNotEquals(firstVideos, secondVideos)
 
         observerSpy = spy(Observer { assertEquals(PocketVideoRepo.FeedState.LoadComplete(firstVideos), it) })

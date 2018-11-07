@@ -21,7 +21,7 @@ object PocketVideoParser {
             url = jsonObj.optString("tv_url", null) ?: jsonObj.getString("url"),
             thumbnailURL = jsonObj.getString("image_src"),
             popularitySortId = jsonObj.getInt("popularity_sort_id"),
-            authors = jsonObj.getJSONObject("authors")
+            authors = jsonObj.getString("authors")
         )
     } catch (e: JSONException) {
         null
