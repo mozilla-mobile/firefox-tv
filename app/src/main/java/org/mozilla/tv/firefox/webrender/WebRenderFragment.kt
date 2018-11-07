@@ -83,7 +83,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     private var overlayVisibleCached: Int? = null
 
     var sessionFeature: SessionFeature? = null
-    private var currentPageHost = ""
+    private var currentPageUrl = ""
     private lateinit var pinnedTileViewModel: PinnedTileViewModel
     private lateinit var serviceLocator: ServiceLocator
 
@@ -114,8 +114,9 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             else -> Unit
         }
         // Turn off desktop site mode if navigating to a new domain
-        if (currentPageHost != "" && session.desktopMode) {
+        if (currentPageUrl != "" && session.desktopMode) {
             val uriHost = url.toUri()?.host
+            var currentPageHost = currentPageUrl.toUri()?.host
 
             if (uriHost != currentPageHost) {
                 session.desktopMode = false
@@ -123,7 +124,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             }
         }
 
-        currentPageHost = url.toUri()?.host!!
+        currentPageUrl = url
 
         updateOverlayIfVisible()
     }
