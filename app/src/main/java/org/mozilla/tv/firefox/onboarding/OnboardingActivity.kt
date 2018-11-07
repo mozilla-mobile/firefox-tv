@@ -11,7 +11,7 @@ import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.content_onboarding.*
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.utils.TurboMode
+import org.mozilla.tv.firefox.ext.serviceLocator
 
 class OnboardingActivity : AppCompatActivity() {
 
@@ -34,7 +34,7 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun setTurboMode(turboModeEnabled: Boolean) {
-        TurboMode.setEnabled(this, turboModeEnabled)
+        serviceLocator.turboMode.setEnabled(turboModeEnabled)
     }
 
     private fun setOnboardShown() {
