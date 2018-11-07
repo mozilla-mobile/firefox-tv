@@ -94,7 +94,7 @@ class PinnedTileRepo(private val applicationContext: Application) {
     }
 
     @UiThread
-    fun isUrlPinned(url: String): Boolean? = _pinnedTiles.value?.containsKey(url)
+    fun isUrlPinned(url: String): Boolean? = _pinnedTiles.value?.containsKey(url) // TODO remove
 
     private fun loadBlacklist(): MutableSet<String> {
         return _sharedPreferences.getStringSet(BUNDLED_SITES_ID_BLACKLIST, mutableSetOf())!!
