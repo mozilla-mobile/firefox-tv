@@ -55,10 +55,11 @@ open class ServiceLocator(val app: Application) {
 
     val turboMode: TurboMode by lazy { ProdTurboMode(app) } // TODO make private before merging
     val pocketRepoCache by lazy { PocketRepoCache(pocketRepo).apply { unfreeze() } }
-    val viewModelFactory by lazy { ViewModelFactory(this, app, turboMode) }
+    val viewModelFactory by lazy { ViewModelFactory(this, app, turboMode, sessionUseCases) }
     val screenController by lazy { ScreenController() }
     val webViewCache by lazy { WebViewCache() }
     val sessionManager get() = app.webRenderComponents.sessionManager
+    val sessionUseCases get() = app.webRenderComponents.sessionUseCases
 
     open val pinnedTileRepo by lazy { PinnedTileRepo(app) }
     open val pocketRepo = PocketVideoRepo(pocketEndpoint, pocketFeedStateMachine, buildConfigDerivables).apply {
