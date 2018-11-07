@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.toolbar
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
+import mozilla.components.feature.session.SessionUseCases
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.ext.LiveDataHelper
@@ -14,9 +15,10 @@ import org.mozilla.tv.firefox.utils.TurboMode
 import org.mozilla.tv.firefox.utils.UrlUtils
 
 open class ToolbarViewModel(
+    private val turboMode: TurboMode,
+    private val sessionUseCases: SessionUseCases,
     sessionRepo: SessionRepo,
-    pinnedTileRepo: PinnedTileRepo,
-    turboMode: TurboMode
+    pinnedTileRepo: PinnedTileRepo
 ) : ViewModel() {
 
     data class State(
@@ -49,4 +51,9 @@ open class ToolbarViewModel(
                 urlBarText = UrlUtils.toUrlBarDisplay(sessionState.currentUrl)
             )
         }
+
+    fun turboButtonClicked() {
+        turboMode.setEnabled(!turboMode.isEnabled())
+        sessionUseCases.reload.invoke()
+    }
 }

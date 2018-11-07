@@ -347,14 +347,11 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 ?: return
         var value: String? = null
 
-        val isTurboButtonChecked = turboButton.isChecked
         val isPinButtonChecked = pinButton.isChecked // TODO: ToolbarVM + PinnedTileRepo
         val isDesktopButtonChecked = desktopModeButton.isChecked
 
         when (event) {
-            NavigationEvent.TURBO -> {
-                context.serviceLocator.turboMode.setEnabled(isTurboButtonChecked)
-            }
+            NavigationEvent.TURBO -> toolbarViewModel.turboButtonClicked()
             NavigationEvent.PIN_ACTION -> {
                 value = if (isPinButtonChecked) NavigationEvent.VAL_CHECKED
                 else NavigationEvent.VAL_UNCHECKED
@@ -366,7 +363,11 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             else -> Unit // Nothing to do.
         }
         onNavigationEvent?.invoke(event, value, null)
-        TelemetryIntegration.INSTANCE.overlayClickEvent(event, isTurboButtonChecked, isPinButtonChecked, isDesktopButtonChecked)
+
+        val toolbarState = toolbarViewModel.state.value
+        toolbarState?.let {
+            TelemetryIntegration.INSTANCE.overlayClickEvent(event, it.turboChecked, isPinButtonChecked, isDesktopButtonChecked) // TODO verify this works
+        }
     }
 
     @SuppressWarnings("LongMethod")

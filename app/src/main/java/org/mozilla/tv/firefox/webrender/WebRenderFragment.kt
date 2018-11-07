@@ -34,6 +34,7 @@ import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.focusedDOMElement
+import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
@@ -153,7 +154,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         when (event) {
             NavigationEvent.BACK -> exitFullScreenIfPossibleAndBack()
             NavigationEvent.FORWARD -> if (session.canGoForward) requireWebRenderComponents.sessionUseCases.goForward.invoke()
-            NavigationEvent.TURBO, NavigationEvent.RELOAD -> requireWebRenderComponents.sessionUseCases.reload.invoke()
+            NavigationEvent.RELOAD -> requireWebRenderComponents.sessionUseCases.reload.invoke()
             NavigationEvent.SETTINGS -> serviceLocator.screenController.showSettingsScreen(fragmentManager!!)
             NavigationEvent.LOAD_URL -> {
                 (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
@@ -202,6 +203,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                     else -> throw IllegalArgumentException("Unexpected value for DESKTOP_MODE: " + value)
                 }
             }
+            NavigationEvent.TURBO -> { /* not handled by this object */ }
         }
         Unit
     }
