@@ -21,9 +21,24 @@ object PocketVideoParser {
             url = jsonObj.optString("tv_url", null) ?: jsonObj.getString("url"),
             thumbnailURL = jsonObj.getString("image_src"),
             popularitySortId = jsonObj.getInt("popularity_sort_id"),
-            authors = jsonObj.getString("authors")
+            authors = getAuthorName(jsonObj)
         )
     } catch (e: JSONException) {
         null
+    }
+
+    private fun getAuthorName(jsonObj: JSONObject): String {
+        var authorName = ""
+        try {
+            val authorsJSON = JSONObject(jsonObj.getString("authors"))
+
+            for (x in authorsJSON.keys()) {
+                val authorObject = JSONObject(authorsJSON[x].toString())
+                authorName = authorObject.get("name").toString()
+            }
+        } catch (e: JSONException) {
+            authorName = ""
+        }
+        return authorName
     }
 }

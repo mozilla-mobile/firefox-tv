@@ -21,7 +21,6 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_pocket_video.*
 import kotlinx.android.synthetic.main.fragment_pocket_video.view.*
 import mozilla.components.browser.session.Session
-import org.json.JSONObject
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.serviceLocator
@@ -117,11 +116,8 @@ private class PocketVideoAdapter(
 
         titleView.text = item.title
         PicassoWrapper.client.load(item.thumbnailURL).into(videoThumbnailView)
-        val authorsJSON = JSONObject(item.authors)
-        for (x in authorsJSON.keys()) {
-            val authorObject = JSONObject(authorsJSON[x].toString())
-            domainView.text = authorObject.get("name").toString()
-        }
+
+        domainView.text = item.authors
     }
 
     private fun updateForFocusState(holder: PocketVideoViewHolder, isFocused: Boolean) {
