@@ -90,6 +90,8 @@ open class ToolbarViewModel(
 
     fun backButtonClicked() = sessionRepo.exitFullScreenIfPossibleAndBack()
 
+    fun forwardButtonClicked() = sessionRepo.goForward()
+
     private fun sendOverlayClickTelemetry(
         event: NavigationEvent,
         turboChecked: Boolean? = null,

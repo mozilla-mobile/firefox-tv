@@ -148,7 +148,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
                                       autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
         when (event) {
-            NavigationEvent.FORWARD -> if (session.canGoForward) requireWebRenderComponents.sessionUseCases.goForward.invoke()
             NavigationEvent.RELOAD -> requireWebRenderComponents.sessionUseCases.reload.invoke()
             NavigationEvent.SETTINGS -> serviceLocator.screenController.showSettingsScreen(fragmentManager!!)
             NavigationEvent.LOAD_URL -> {
@@ -165,7 +164,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                     serviceLocator.screenController.showPocketScreen(fragmentManager)
                 }
             }
-            NavigationEvent.TURBO, NavigationEvent.PIN_ACTION, NavigationEvent.DESKTOP_MODE, NavigationEvent.BACK -> { /* not handled by this object */ }
+            NavigationEvent.TURBO, NavigationEvent.PIN_ACTION, NavigationEvent.DESKTOP_MODE, NavigationEvent.BACK, NavigationEvent.FORWARD -> { /* not handled by this object */ }
         }
         Unit
     }
