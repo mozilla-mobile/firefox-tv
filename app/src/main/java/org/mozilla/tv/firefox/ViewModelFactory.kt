@@ -11,6 +11,7 @@ import android.arch.lifecycle.ViewModelProviders
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.toolbar.ToolbarViewModel
+import org.mozilla.tv.firefox.settings.SettingsViewModel
 import org.mozilla.tv.firefox.utils.ServiceLocator
 
 /**
@@ -40,6 +41,7 @@ class ViewModelFactory(
                 sessionRepo = serviceLocator.sessionRepo,
                 pinnedTileRepo = serviceLocator.pinnedTileRepo
             ) as T
+            SettingsViewModel::class.java -> SettingsViewModel(serviceLocator.settingsRepo) as T
         // This class needs to either return a ViewModel or throw, so we have no good way of silently handling
         // failures in production. However a failure could only occur if code requests a VM that we have not added
         // to this factory, so any problems should be caught in dev.
