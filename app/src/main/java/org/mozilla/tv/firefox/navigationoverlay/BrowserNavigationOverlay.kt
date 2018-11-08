@@ -362,7 +362,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             NavigationEvent.BACK -> toolbarViewModel.backButtonClicked()
             NavigationEvent.FORWARD -> toolbarViewModel.forwardButtonClicked()
             NavigationEvent.RELOAD -> toolbarViewModel.reloadButtonClicked()
-            NavigationEvent.TURBO -> toolbarViewModel.turboButtonClicked()
             NavigationEvent.PIN_ACTION -> {
                 val siteIsPinnedChecked = toolbarViewModel.pinButtonClicked()
                 when (siteIsPinnedChecked) {
@@ -371,6 +370,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                     null -> { }
                 }
             }
+            NavigationEvent.TURBO -> toolbarViewModel.turboButtonClicked()
             NavigationEvent.DESKTOP_MODE -> {
                 val desktopModeChecked = toolbarViewModel.desktopModeButtonClicked()
                 setOverlayVisible?.invoke(false)

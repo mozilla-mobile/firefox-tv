@@ -6,7 +6,6 @@ package org.mozilla.tv.firefox.toolbar
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
-import mozilla.components.feature.session.SessionUseCases
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.ext.LiveDataHelper
@@ -54,12 +53,11 @@ open class ToolbarViewModel(
             )
         }
 
-    fun turboButtonClicked() {
-        turboMode.setEnabled(!turboMode.isEnabled())
-        sessionRepo.reload()
+    fun backButtonClicked() = sessionRepo.exitFullScreenIfPossibleAndBack()
 
-        sendOverlayClickTelemetry(NavigationEvent.TURBO, turboChecked = turboMode.isEnabled())
-    }
+    fun forwardButtonClicked() = sessionRepo.goForward()
+
+    fun reloadButtonClicked() = sessionRepo.reload()
 
     /**
      * Returns true if the pin button will now be checked
@@ -76,6 +74,13 @@ open class ToolbarViewModel(
         return !pinChecked
     }
 
+    fun turboButtonClicked() {
+        turboMode.setEnabled(!turboMode.isEnabled())
+        sessionRepo.reload()
+
+        sendOverlayClickTelemetry(NavigationEvent.TURBO, turboChecked = turboMode.isEnabled())
+    }
+
     /**
      * Returns true if the desktop mode button will now be checked
      */
@@ -87,12 +92,6 @@ open class ToolbarViewModel(
         sessionRepo.setDesktopMode(!previouslyChecked)
         return !previouslyChecked
     }
-
-    fun backButtonClicked() = sessionRepo.exitFullScreenIfPossibleAndBack()
-
-    fun forwardButtonClicked() = sessionRepo.goForward()
-
-    fun reloadButtonClicked() = sessionRepo.reload()
 
     private fun sendOverlayClickTelemetry(
         event: NavigationEvent,

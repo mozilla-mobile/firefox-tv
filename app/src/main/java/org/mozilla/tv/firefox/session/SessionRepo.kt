@@ -47,10 +47,6 @@ class SessionRepo(private val sessionManager: SessionManager, private val sessio
 
     fun currentURLScreenshot(): Bitmap? = session?.thumbnail
 
-    fun setDesktopMode(active: Boolean) = session?.let { it.desktopMode = active }
-
-    fun reload() = sessionUseCases.reload.invoke()
-
     fun exitFullScreenIfPossibleAndBack() {
         // Backing while full-screened can lead to unstable behavior (see #1224),
         // so we always attempt to exit full-screen before backing
@@ -59,6 +55,10 @@ class SessionRepo(private val sessionManager: SessionManager, private val sessio
     }
 
     fun goForward() = if (session?.canGoForward == true) sessionUseCases.goForward.invoke() else { }
+
+    fun reload() = sessionUseCases.reload.invoke()
+
+    fun setDesktopMode(active: Boolean) = session?.let { it.desktopMode = active }
 
     private val session: Session? get() = sessionManager.selectedSession
 }
