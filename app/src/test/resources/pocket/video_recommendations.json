@@ -31,13 +31,8 @@
             "published_timestamp": "0",
             "sort_id": 1,
             "popularity_sort_id": 17,
-            "authors": {
-                "96612138": {
-                    "author_id": "96612138",
-                    "name": "Seeker",
-                    "url": "http://www.youtube.com/channel/UCzWQYUVCpZqtN93H8RR44Qw"
-                }
-            }
+            /* empty author field to test fallback behavior */
+            "authors": []
         },
         {
             "id": 27576,
