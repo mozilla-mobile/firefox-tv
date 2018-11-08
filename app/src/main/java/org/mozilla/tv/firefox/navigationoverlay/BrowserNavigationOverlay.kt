@@ -132,6 +132,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
     var onPreSetVisibilityListener: ((isVisible: Boolean) -> Unit)? = null
 
+    var setOverlayVisible: ((Boolean) -> Unit)? = null // TODO once overlay is a fragment, remove this and handle with a transaction
+
     var parentFrag = ParentFragment.DEFAULT
 
     private var hasUserChangedURLSinceEditTextFocused = false
@@ -346,9 +348,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     override fun onClick(view: View?) {
         val event = NavigationEvent.fromViewClick(view?.id)
                 ?: return
-        var value: String? = null
-
-        val isDesktopButtonChecked = desktopModeButton.isChecked
 
         when (event) {
             NavigationEvent.TURBO -> toolbarViewModel.turboButtonClicked()
@@ -361,16 +360,21 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 }
             }
             NavigationEvent.DESKTOP_MODE -> {
-                value = if (isDesktopButtonChecked) NavigationEvent.VAL_CHECKED
-                else NavigationEvent.VAL_UNCHECKED
+                val desktopModeChecked = toolbarViewModel.desktopModeButtonClicked()
+                setOverlayVisible?.invoke(false)
+                when (desktopModeChecked) {
+                    true -> ViewUtils.showCenteredBottomToast(context, R.string.notification_request_desktop_site)
+                    false -> ViewUtils.showCenteredBottomToast(context, R.string.notification_request_non_desktop_site)
+                    null -> { }
+                }
             }
             else -> Unit // Nothing to do.
         }
-        onNavigationEvent?.invoke(event, value, null)
+        onNavigationEvent?.invoke(event, null, null)
 
         val toolbarState = toolbarViewModel.state.value
         toolbarState?.let {
-            TelemetryIntegration.INSTANCE.overlayClickEvent(event, it.turboChecked, it.pinChecked, isDesktopButtonChecked)// TODO verify this works
+            TelemetryIntegration.INSTANCE.overlayClickEvent(event, it.turboChecked, it.pinChecked, it.desktopModeChecked) // TODO verify this works
         }
     }
 

@@ -26,7 +26,7 @@ open class ToolbarViewModel(
         val forwardEnabled: Boolean,
         val refreshEnabled: Boolean,
         val pinEnabled: Boolean,
-        val pinChecked: Boolean, // TODO update these to CheckedState
+        val pinChecked: Boolean,
         val turboChecked: Boolean,
         val desktopModeEnabled: Boolean,
         val desktopModeChecked: Boolean,
@@ -71,5 +71,15 @@ open class ToolbarViewModel(
             pinnedTileRepo.addPinnedTile(url, sessionRepo.currentURLScreenshot())
             true
         }
+    }
+
+    /**
+     * Returns true if the desktop mode button will now be checked
+     */
+    fun desktopModeButtonClicked(): Boolean? {
+        val previouslyChecked = state.value?.desktopModeChecked ?: return null
+
+        sessionRepo.setDesktopMode(!previouslyChecked)
+        return !previouslyChecked
     }
 }
