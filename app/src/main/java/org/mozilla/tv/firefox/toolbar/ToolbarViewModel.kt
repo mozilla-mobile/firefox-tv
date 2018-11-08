@@ -10,6 +10,8 @@ import mozilla.components.feature.session.SessionUseCases
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.ext.LiveDataHelper
+import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
+import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.AppConstants
 import org.mozilla.tv.firefox.utils.TurboMode
 import org.mozilla.tv.firefox.utils.UrlUtils
@@ -18,7 +20,8 @@ open class ToolbarViewModel(
     private val turboMode: TurboMode,
     private val sessionUseCases: SessionUseCases,
     private val sessionRepo: SessionRepo,
-    private val pinnedTileRepo: PinnedTileRepo
+    private val pinnedTileRepo: PinnedTileRepo,
+    private val telemetryIntegration: TelemetryIntegration = TelemetryIntegration.INSTANCE
 ) : ViewModel() {
 
     data class State(
@@ -55,22 +58,23 @@ open class ToolbarViewModel(
     fun turboButtonClicked() {
         turboMode.setEnabled(!turboMode.isEnabled())
         sessionUseCases.reload.invoke()
+
+        sendOverlayClickTelemetry(NavigationEvent.TURBO, turboChecked = turboMode.isEnabled())
     }
 
     /**
      * Returns true if the pin button will now be checked
      */
     fun pinButtonClicked(): Boolean? {
-        val vmState = state.value ?: return null
+        val pinChecked = state.value?.pinChecked ?: return null
         val url = sessionRepo.state.value?.currentUrl ?: return null
 
-        return if (vmState.pinChecked) {
-            pinnedTileRepo.removePinnedTile(url)
-            false
-        } else {
-            pinnedTileRepo.addPinnedTile(url, sessionRepo.currentURLScreenshot())
-            true
-        }
+        sendOverlayClickTelemetry(NavigationEvent.PIN_ACTION, pinChecked = !pinChecked)
+
+        if (pinChecked) pinnedTileRepo.removePinnedTile(url)
+        else pinnedTileRepo.addPinnedTile(url, sessionRepo.currentURLScreenshot())
+
+        return !pinChecked
     }
 
     /**
@@ -79,7 +83,25 @@ open class ToolbarViewModel(
     fun desktopModeButtonClicked(): Boolean? {
         val previouslyChecked = state.value?.desktopModeChecked ?: return null
 
+        sendOverlayClickTelemetry(NavigationEvent.DESKTOP_MODE, desktopModeChecked = !previouslyChecked)
+
         sessionRepo.setDesktopMode(!previouslyChecked)
         return !previouslyChecked
+    }
+
+    private fun sendOverlayClickTelemetry(
+        event: NavigationEvent,
+        turboChecked: Boolean? = null,
+        pinChecked: Boolean? = null,
+        desktopModeChecked: Boolean? = null
+    ) {
+        state.value?.let {
+            telemetryIntegration.overlayClickEvent(
+                event,
+                turboChecked ?: it.turboChecked,
+                pinChecked ?: it.pinChecked,
+                desktopModeChecked ?: it.desktopModeChecked
+            )
+        }
     }
 }
