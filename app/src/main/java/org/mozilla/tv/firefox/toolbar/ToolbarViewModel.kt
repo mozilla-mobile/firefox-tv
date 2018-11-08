@@ -92,6 +92,8 @@ open class ToolbarViewModel(
 
     fun forwardButtonClicked() = sessionRepo.goForward()
 
+    fun reloadButtonClicked() = sessionRepo.reload()
+
     private fun sendOverlayClickTelemetry(
         event: NavigationEvent,
         turboChecked: Boolean? = null,
