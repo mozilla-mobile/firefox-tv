@@ -60,7 +60,7 @@ class PinnedTileAdapter(
                 setIconLayoutMarginParams(iconView, R.dimen.bundled_home_tile_margin_value)
             }
             is CustomPinnedTile -> {
-                onBindCustomHomeTile(uiLifecycleCancelJob, uiScope, holder, item)
+                onBindCustomHomeTile(uiScope, holder, item)
                 setIconLayoutMarginParams(iconView, R.dimen.custom_home_tile_margin_value)
             }
         }.forceExhaustive
@@ -147,12 +147,11 @@ private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledPinnedTil
 }
 
 private fun onBindCustomHomeTile(
-    uiLifecycleCancelJob: Job,
     uiScope: CoroutineScope,
     holder: TileViewHolder,
     item: CustomPinnedTile
 ) = with(holder) {
-    uiScope.launch(uiLifecycleCancelJob + Dispatchers.Main, CoroutineStart.UNDISPATCHED) {
+    uiScope.launch(start = CoroutineStart.UNDISPATCHED) {
         val validUri = item.url.toJavaURI()
 
         val screenshotDeferred = async {

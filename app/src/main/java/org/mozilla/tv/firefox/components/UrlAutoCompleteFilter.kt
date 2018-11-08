@@ -31,8 +31,6 @@ class UrlAutoCompleteFilter : InlineAutocompleteEditText.OnFilterListener {
 
     private var preInstalledDomains: List<String> = emptyList()
 
-    private var uiScope: CoroutineScope? = null
-
     override fun onFilter(rawSearchText: String, view: InlineAutocompleteEditText?) {
         if (view == null) {
             return
@@ -78,11 +76,11 @@ class UrlAutoCompleteFilter : InlineAutocompleteEditText.OnFilterListener {
     }
 
     fun load(context: Context, uiLifecycleCancelJob: Job, loadDomainsFromDisk: Boolean = true) {
+        val uiScope = CoroutineScope(Dispatchers.Main + uiLifecycleCancelJob)
         settings = Settings.getInstance(context)
-        uiScope = CoroutineScope(Dispatchers.Main + uiLifecycleCancelJob)
         if (loadDomainsFromDisk) {
-            uiScope!!.launch {
-                val domains = async(Dispatchers.Default) { loadDomains(context) }
+            uiScope.launch {
+                val domains = async { loadDomains(context) }
 
                 onDomainsLoaded(domains.await())
             }
