@@ -44,7 +44,6 @@ import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.AppConstants
-import org.mozilla.tv.firefox.utils.ViewUtils.showCenteredBottomToast
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 
@@ -149,7 +148,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
                                       autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
         when (event) {
-            NavigationEvent.BACK -> exitFullScreenIfPossibleAndBack()
             NavigationEvent.FORWARD -> if (session.canGoForward) requireWebRenderComponents.sessionUseCases.goForward.invoke()
             NavigationEvent.RELOAD -> requireWebRenderComponents.sessionUseCases.reload.invoke()
             NavigationEvent.SETTINGS -> serviceLocator.screenController.showSettingsScreen(fragmentManager!!)
@@ -167,7 +165,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                     serviceLocator.screenController.showPocketScreen(fragmentManager)
                 }
             }
-            NavigationEvent.TURBO, NavigationEvent.PIN_ACTION, NavigationEvent.DESKTOP_MODE -> { /* not handled by this object */ }
+            NavigationEvent.TURBO, NavigationEvent.PIN_ACTION, NavigationEvent.DESKTOP_MODE, NavigationEvent.BACK -> { /* not handled by this object */ }
         }
         Unit
     }
@@ -301,13 +299,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         activity?.menuInflater?.inflate(R.menu.menu_context_hometile, menu)
     }
 
-    private fun exitFullScreenIfPossibleAndBack() {
-        // Backing while full-screened can lead to unstable behavior (see #1224),
-        // so we always attempt to exit full-screen before backing
-        requireWebRenderComponents.sessionManager.getEngineSession()?.exitFullScreenMode()
-        if (session.canGoBack) requireWebRenderComponents.sessionUseCases.goBack.invoke()
-    }
-
     fun onBackPressed(): Boolean {
         when {
             browserOverlay.isVisible && !isUrlEqualToHomepage -> {
@@ -315,7 +306,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 TelemetryIntegration.INSTANCE.userShowsHidesDrawerEvent(false)
             }
             session.canGoBack -> {
-                exitFullScreenIfPossibleAndBack()
+                serviceLocator.sessionRepo.exitFullScreenIfPossibleAndBack() // TODO do this through WebRenderViewModel when it exists
                 TelemetryIntegration.INSTANCE.browserBackControllerEvent()
             }
             else -> {
