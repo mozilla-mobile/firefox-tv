@@ -149,7 +149,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
                                       autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
         when (event) {
-            NavigationEvent.RELOAD -> requireWebRenderComponents.sessionUseCases.reload.invoke()
             NavigationEvent.SETTINGS -> serviceLocator.screenController.showSettingsScreen(fragmentManager!!)
             NavigationEvent.LOAD_URL -> {
                 (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
@@ -165,7 +164,8 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                     serviceLocator.screenController.showPocketScreen(fragmentManager)
                 }
             }
-            NavigationEvent.TURBO, NavigationEvent.PIN_ACTION, NavigationEvent.DESKTOP_MODE, NavigationEvent.BACK, NavigationEvent.FORWARD -> { /* not handled by this object */ }
+            NavigationEvent.TURBO, NavigationEvent.PIN_ACTION, NavigationEvent.DESKTOP_MODE, NavigationEvent.BACK,
+            NavigationEvent.FORWARD, NavigationEvent.RELOAD -> { /* not handled by this object */ }
         }
         Unit
     }
