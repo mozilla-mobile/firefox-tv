@@ -17,7 +17,7 @@ import org.robolectric.RobolectricTestRunner
 private const val KEY_INNER = "recommendations"
 
 @RunWith(RobolectricTestRunner::class)
-class PocketEndpointest {
+class PocketEndpointTest {
 
     @Test
     fun `convert Videos JSON successfully to internal objects`() {

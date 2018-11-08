@@ -11,7 +11,7 @@ import android.support.test.espresso.matcher.ViewMatchers.withId
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.pinnedtile.TileViewHolder
 
-class PocketScreenRobot {
+class PocketRecommendedVideosRobot {
 
     class Transition {
 

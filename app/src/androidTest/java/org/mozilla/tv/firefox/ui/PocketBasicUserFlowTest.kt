@@ -16,7 +16,14 @@ import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.ui.robots.navigationOverlay
 
-class PocketBasicUserFLowTest {
+/**
+ * Tests the Pocket happy path.
+ * - Open Pocket recommended videos from home
+ * - Back from Pocket recommended videos screen to home
+ * - Reopen Pocket recommended videos
+ * - Click on a video
+ */
+class PocketBasicUserFlowTest {
 
     @get:Rule val activityTestRule = MainActivityTestRule()
 
@@ -49,7 +56,7 @@ class PocketBasicUserFLowTest {
 
     /* ktlint-disable no-blank-line-before-rbrace */ // This imposes unreadable grouping.
     @Test
-    fun verify_that_pocket_happy_path_loads_expected_url() {
+    fun pocketBasicUserFlowTest() {
         navigationOverlay {
         }.openPocketMegatile {
         }.openTileToBrowser(0) {

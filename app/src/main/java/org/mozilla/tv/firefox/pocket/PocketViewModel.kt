@@ -70,15 +70,17 @@ class PocketViewModel(
             List(POCKET_VIDEO_COUNT) { FeedItem.Loading(R.color.photonGrey50) }
 
         @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-        val noKeyPlaceholders: List<FeedItem.Video> = List(POCKET_VIDEO_COUNT) {
-            FeedItem.Video(
-                id = it,
-                title = "Mozilla",
-                url = "https://www.mozilla.org/en-US/",
-                thumbnailURL = "https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png",
-                popularitySortId = it,
-                authors = "0:{'name':'Mozilla'}"
-            )
+        val noKeyPlaceholders: List<FeedItem.Video> by lazy {
+            List(POCKET_VIDEO_COUNT) {
+                FeedItem.Video(
+                    id = it,
+                    title = "Mozilla",
+                    url = "https://www.mozilla.org/en-US/",
+                    thumbnailURL = "https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png",
+                    popularitySortId = it,
+                    authors = "0:{'name':'Mozilla'}"
+                )
+            }
         }
     }
 
