@@ -18,7 +18,6 @@ import org.mozilla.tv.firefox.utils.UrlUtils
 
 open class ToolbarViewModel(
     private val turboMode: TurboMode,
-    private val sessionUseCases: SessionUseCases,
     private val sessionRepo: SessionRepo,
     private val pinnedTileRepo: PinnedTileRepo,
     private val telemetryIntegration: TelemetryIntegration = TelemetryIntegration.INSTANCE
@@ -57,7 +56,7 @@ open class ToolbarViewModel(
 
     fun turboButtonClicked() {
         turboMode.setEnabled(!turboMode.isEnabled())
-        sessionUseCases.reload.invoke()
+        sessionRepo.reload()
 
         sendOverlayClickTelemetry(NavigationEvent.TURBO, turboChecked = turboMode.isEnabled())
     }
