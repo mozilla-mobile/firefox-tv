@@ -5,6 +5,8 @@
 package org.mozilla.tv.firefox.settings
 
 import android.app.AlertDialog
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -18,7 +20,6 @@ import org.mozilla.tv.firefox.ext.getAccessibilityManager
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.serviceLocator
-import org.mozilla.tv.firefox.telemetry.DataUploadPreference
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
 /** The settings for the app. */
@@ -34,11 +35,15 @@ class SettingsFragment : Fragment() {
         val context = view.context
 
         ic_lock.setImageResource(R.drawable.mozac_ic_lock)
-        telemetryButton.isChecked = DataUploadPreference.isEnabled(context)
+        val factory = context.serviceLocator.viewModelFactory
+        val settingsViewModel = ViewModelProviders.of(this, factory).get(SettingsViewModel::class.java)
+        settingsViewModel.dataCollectionEnabled.observe(viewLifecycleOwner, Observer<Boolean> { state ->
+            if (state != null) {
+                telemetryButton.isChecked = state
+            }
+        })
         val dataPreferenceClickListener = { _: View ->
-            val newTelemetryState = !DataUploadPreference.isEnabled(context)
-            DataUploadPreference.setIsEnabled(context, newTelemetryState)
-            telemetryButton.isChecked = newTelemetryState
+            settingsViewModel.setDataCollectionEnabled(telemetryButton.isChecked)
         }
         // Due to accessibility hack for #293, where we want to focus a different (visible) element
         // for accessibility, either of these views could be unfocusable, so we need to set the

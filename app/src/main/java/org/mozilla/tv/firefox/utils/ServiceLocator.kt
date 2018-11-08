@@ -17,6 +17,7 @@ import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
 import org.mozilla.tv.firefox.pocket.PocketRepoCache
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
+import org.mozilla.tv.firefox.settings.SettingsRepo
 import org.mozilla.tv.firefox.webrender.WebViewCache
 import org.mozilla.tv.firefox.session.SessionRepo
 
@@ -72,4 +73,5 @@ open class ServiceLocator(val app: Application) {
         update()
     }
     open val sessionRepo by lazy { SessionRepo(sessionManager, sessionUseCases, turboMode).apply { observeSources() } }
+    open val settingsRepo by lazy { SettingsRepo(app) }
 }
