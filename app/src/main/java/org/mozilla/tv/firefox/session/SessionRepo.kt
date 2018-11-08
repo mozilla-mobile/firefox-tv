@@ -11,6 +11,7 @@ import android.support.annotation.AnyThread
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.feature.session.SessionUseCases
 import org.mozilla.tv.firefox.ext.postIfNew
+import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 
 /**
  * TODO
@@ -49,4 +50,11 @@ class SessionRepo(private val sessionManager: SessionManager, private val sessio
     fun setDesktopMode(active: Boolean) = sessionManager.selectedSession?.let { it.desktopMode = active }
 
     fun reload() = sessionUseCases.reload.invoke()
+
+    fun exitFullScreenIfPossibleAndBack() {
+        // Backing while full-screened can lead to unstable behavior (see #1224),
+        // so we always attempt to exit full-screen before backing
+        sessionManager.getEngineSession()?.exitFullScreenMode()
+        if (sessionManager.selectedSession?.canGoBack == true) sessionUseCases.goBack.invoke()
+    }
 }
