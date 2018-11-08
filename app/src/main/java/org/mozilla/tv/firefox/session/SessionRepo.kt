@@ -44,4 +44,6 @@ class SessionRepo(private val sessionManager: SessionManager) {
     }
 
     fun currentURLScreenshot(): Bitmap? = sessionManager.selectedSession?.thumbnail
+
+    fun setDesktopMode(active: Boolean) = sessionManager.selectedSession?.let { it.desktopMode = active }
 }

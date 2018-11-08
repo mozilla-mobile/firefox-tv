@@ -167,22 +167,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                     serviceLocator.screenController.showPocketScreen(fragmentManager)
                 }
             }
-            NavigationEvent.DESKTOP_MODE -> {
-                when (value) {
-                    NavigationEvent.VAL_CHECKED -> {
-                        session.desktopMode = true
-                        setOverlayVisible(false)
-                        showCenteredBottomToast(context, R.string.notification_request_desktop_site)
-                    }
-                    NavigationEvent.VAL_UNCHECKED -> {
-                        session.desktopMode = false
-                        setOverlayVisible(false)
-                        showCenteredBottomToast(context, R.string.notification_request_non_desktop_site)
-                    }
-                    else -> throw IllegalArgumentException("Unexpected value for DESKTOP_MODE: " + value)
-                }
-            }
-            NavigationEvent.TURBO, NavigationEvent.PIN_ACTION -> { /* not handled by this object */ }
+            NavigationEvent.TURBO, NavigationEvent.PIN_ACTION, NavigationEvent.DESKTOP_MODE -> { /* not handled by this object */ }
         }
         Unit
     }
@@ -225,6 +210,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             observeForToolbar(this@WebRenderFragment)
 
             onNavigationEvent = this@WebRenderFragment.onNavigationEvent
+            setOverlayVisible = { visible ->  setOverlayVisible(visible) }
             navigationStateProvider = NavigationStateProvider()
             visibility = overlayVisibleCached ?: View.GONE
 
