@@ -36,7 +36,8 @@ class PocketEndpointTest {
                 url = "https://www.youtube.com/watch?v=GHZ7-kq3GDQ",
                 thumbnailURL = "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2FGHZ7-kq3GDQ%2Fmaxresdefault.jpg&resize=w450",
                 popularitySortId = 17,
-                authors = "youtube"
+                // TODO: Update this to be the platform, once the behaviour is fixed (issue #1484)
+                authors = ""
             )
         )
 
