@@ -8,10 +8,10 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.graphics.Bitmap
 import android.support.annotation.AnyThread
+import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.feature.session.SessionUseCases
 import org.mozilla.tv.firefox.ext.postIfNew
-import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 
 /**
  * TODO
@@ -34,7 +34,7 @@ class SessionRepo(private val sessionManager: SessionManager, private val sessio
 
     @AnyThread
     fun update() {
-        sessionManager.selectedSession?.let {
+        session?.let {
             val newState = State(
                 backEnabled = it.canGoBack,
                 forwardEnabled = it.canGoForward,
@@ -45,9 +45,9 @@ class SessionRepo(private val sessionManager: SessionManager, private val sessio
         }
     }
 
-    fun currentURLScreenshot(): Bitmap? = sessionManager.selectedSession?.thumbnail
+    fun currentURLScreenshot(): Bitmap? = session?.thumbnail
 
-    fun setDesktopMode(active: Boolean) = sessionManager.selectedSession?.let { it.desktopMode = active }
+    fun setDesktopMode(active: Boolean) = session?.let { it.desktopMode = active }
 
     fun reload() = sessionUseCases.reload.invoke()
 
@@ -55,6 +55,8 @@ class SessionRepo(private val sessionManager: SessionManager, private val sessio
         // Backing while full-screened can lead to unstable behavior (see #1224),
         // so we always attempt to exit full-screen before backing
         sessionManager.getEngineSession()?.exitFullScreenMode()
-        if (sessionManager.selectedSession?.canGoBack == true) sessionUseCases.goBack.invoke()
+        if (session?.canGoBack == true) sessionUseCases.goBack.invoke()
     }
+
+    private val session: Session? get() = sessionManager.selectedSession
 }
