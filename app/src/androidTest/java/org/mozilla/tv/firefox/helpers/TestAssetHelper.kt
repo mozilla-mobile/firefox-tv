@@ -15,15 +15,20 @@ object TestAssetHelper {
 
     data class TestAsset(val url: Uri, val content: String)
 
-    // Hosts 3 simple websites, found at androidTest/assets/pages/generic[1|2|3].html
-    // Returns a list of TestAsset, which can be used to navigate to each and
-    // assert that the correct information is being displayed.
+    /**
+     * Hosts 3 simple websites, found at androidTest/assets/pages/generic[1|2|3].html
+     * Returns a list of TestAsset, which can be used to navigate to each and
+     * assert that the correct information is being displayed.
+     *
+     * Content for these pages all follow the same pattern. See [generic1.html] for
+     * content implementation details.
+     */
     fun getGenericAssets(server: MockWebServer): List<TestAsset> {
-        val urls = (1..3).map { server.url("pages/generic$it.html").toString().toUri()!! }
-        val contentList = (1..3).map { "Page content: $it" }
-
-        return urls.zip(contentList) { url, content ->
-            TestAsset(url, content)
+        return (1..3).map {
+            TestAsset(
+                server.url("pages/generic$it.html").toString().toUri()!!,
+                "Page content: $it"
+            )
         }
     }
 

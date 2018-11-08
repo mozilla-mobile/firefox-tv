@@ -75,11 +75,11 @@ class NavigationOverlayRobot {
             return BrowserRobot.Transition()
         }
 
-        fun openPocketMegatile(interact: PocketScreenRobot.() -> Unit): PocketScreenRobot.Transition {
+        fun openPocketMegatile(interact: PocketRecommendedVideosRobot.() -> Unit): PocketRecommendedVideosRobot.Transition {
             pocketMegaTile().click()
 
-            PocketScreenRobot().interact()
-            return PocketScreenRobot.Transition()
+            PocketRecommendedVideosRobot().interact()
+            return PocketRecommendedVideosRobot.Transition()
         }
 
         fun openTileToBrowser(index: Int, interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
