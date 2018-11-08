@@ -17,8 +17,8 @@ import org.mozilla.tv.firefox.utils.UrlUtils
 open class ToolbarViewModel(
     private val turboMode: TurboMode,
     private val sessionUseCases: SessionUseCases,
-    sessionRepo: SessionRepo,
-    pinnedTileRepo: PinnedTileRepo
+    private val sessionRepo: SessionRepo,
+    private val pinnedTileRepo: PinnedTileRepo
 ) : ViewModel() {
 
     data class State(
@@ -26,7 +26,7 @@ open class ToolbarViewModel(
         val forwardEnabled: Boolean,
         val refreshEnabled: Boolean,
         val pinEnabled: Boolean,
-        val pinChecked: Boolean,
+        val pinChecked: Boolean, // TODO update these to CheckedState
         val turboChecked: Boolean,
         val desktopModeEnabled: Boolean,
         val desktopModeChecked: Boolean,
@@ -55,5 +55,21 @@ open class ToolbarViewModel(
     fun turboButtonClicked() {
         turboMode.setEnabled(!turboMode.isEnabled())
         sessionUseCases.reload.invoke()
+    }
+
+    /**
+     * Returns true if the pin button will now be checked
+     */
+    fun pinButtonClicked(): Boolean? {
+        val vmState = state.value ?: return null
+        val url = sessionRepo.state.value?.currentUrl ?: return null
+
+        return if (vmState.pinChecked) {
+            pinnedTileRepo.removePinnedTile(url)
+            false
+        } else {
+            pinnedTileRepo.addPinnedTile(url, sessionRepo.currentURLScreenshot())
+            true
+        }
     }
 }
