@@ -31,13 +31,13 @@ object PocketVideoParser {
         var authorName = ""
         try {
             val authorsJSON = JSONObject(jsonObj.getString("authors"))
-
+            // This assumes there is only one author per video
             for (x in authorsJSON.keys()) {
                 val authorObject = JSONObject(authorsJSON[x].toString())
-                authorName = authorObject.get("name").toString()
+                authorName = authorObject.getString("name")
             }
         } catch (e: JSONException) {
-            authorName = ""
+            authorName = jsonObj.getString("domain").substringBefore('.')
         }
         return authorName
     }
