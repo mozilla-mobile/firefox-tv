@@ -28,17 +28,17 @@ object PocketVideoParser {
     }
 
     private fun getAuthorName(jsonObj: JSONObject): String {
-        var authorName = ""
-        try {
+        return try {
+            var authors = mutableListOf<String?>()
             val authorsJSON = JSONObject(jsonObj.getString("authors"))
-            // This assumes there is only one author per video
+            // TODO: verify if multiple authors are possible and what the format of authors object is
             for (x in authorsJSON.keys()) {
                 val authorObject = JSONObject(authorsJSON[x].toString())
-                authorName = authorObject.getString("name")
+                authors.add(authorObject.getString("name"))
             }
+            authors.joinToString(",")
         } catch (e: JSONException) {
-            authorName = jsonObj.getString("domain").substringBefore('.')
+            ""
         }
-        return authorName
     }
 }
