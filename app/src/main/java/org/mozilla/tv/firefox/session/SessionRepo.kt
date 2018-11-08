@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.session
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.graphics.Bitmap
 import android.support.annotation.AnyThread
 import mozilla.components.browser.session.SessionManager
 import org.mozilla.tv.firefox.ext.postIfNew
@@ -41,4 +42,6 @@ class SessionRepo(private val sessionManager: SessionManager) {
             _state.postIfNew(newState)
         }
     }
+
+    fun currentURLScreenshot(): Bitmap? = sessionManager.selectedSession?.thumbnail
 }

@@ -47,6 +47,7 @@ import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.toolbar.ToolbarViewModel
 import org.mozilla.tv.firefox.utils.AppConstants
+import org.mozilla.tv.firefox.utils.ViewUtils
 import java.lang.ref.WeakReference
 
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
@@ -356,14 +357,17 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 ?: return
         var value: String? = null
 
-        val isPinButtonChecked = pinButton.isChecked // TODO: ToolbarVM + PinnedTileRepo
         val isDesktopButtonChecked = desktopModeButton.isChecked
 
         when (event) {
             NavigationEvent.TURBO -> toolbarViewModel.turboButtonClicked()
             NavigationEvent.PIN_ACTION -> {
-                value = if (isPinButtonChecked) NavigationEvent.VAL_CHECKED
-                else NavigationEvent.VAL_UNCHECKED
+                val siteIsPinnedChecked = toolbarViewModel.pinButtonClicked()
+                when (siteIsPinnedChecked) {
+                    true -> ViewUtils.showCenteredTopToast(context, R.string.notification_pinned_site)
+                    false-> ViewUtils.showCenteredTopToast(context, R.string.notification_unpinned_site)
+                    null -> { }
+                }
             }
             NavigationEvent.DESKTOP_MODE -> {
                 value = if (isDesktopButtonChecked) NavigationEvent.VAL_CHECKED
@@ -375,7 +379,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         val toolbarState = toolbarViewModel.state.value
         toolbarState?.let {
-            TelemetryIntegration.INSTANCE.overlayClickEvent(event, it.turboChecked, isPinButtonChecked, isDesktopButtonChecked) // TODO verify this works
+            TelemetryIntegration.INSTANCE.overlayClickEvent(event, it.turboChecked, it.pinChecked, isDesktopButtonChecked)// TODO verify this works
         }
     }
 
