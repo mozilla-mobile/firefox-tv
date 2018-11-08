@@ -371,11 +371,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             else -> Unit // Nothing to do.
         }
         onNavigationEvent?.invoke(event, null, null)
-
-        val toolbarState = toolbarViewModel.state.value
-        toolbarState?.let {
-            TelemetryIntegration.INSTANCE.overlayClickEvent(event, it.turboChecked, it.pinChecked, it.desktopModeChecked) // TODO verify this works
-        }
     }
 
     @SuppressWarnings("LongMethod")
