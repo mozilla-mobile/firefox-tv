@@ -9,12 +9,13 @@ import android.arch.lifecycle.MutableLiveData
 import android.graphics.Bitmap
 import android.support.annotation.AnyThread
 import mozilla.components.browser.session.SessionManager
+import mozilla.components.feature.session.SessionUseCases
 import org.mozilla.tv.firefox.ext.postIfNew
 
 /**
  * TODO
  */
-class SessionRepo(private val sessionManager: SessionManager) {
+class SessionRepo(private val sessionManager: SessionManager, private val sessionUseCases: SessionUseCases) {
 
     data class State(
         val backEnabled: Boolean,
@@ -46,4 +47,6 @@ class SessionRepo(private val sessionManager: SessionManager) {
     fun currentURLScreenshot(): Bitmap? = sessionManager.selectedSession?.thumbnail
 
     fun setDesktopMode(active: Boolean) = sessionManager.selectedSession?.let { it.desktopMode = active }
+
+    fun reload() = sessionUseCases.reload.invoke()
 }

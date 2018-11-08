@@ -8,7 +8,6 @@ import android.app.Application
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
-import mozilla.components.feature.session.SessionUseCases
 import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
@@ -28,8 +27,7 @@ import org.mozilla.tv.firefox.utils.TurboMode
 class ViewModelFactory(
     private val serviceLocator: ServiceLocator,
     private val app: Application,
-    private val turboMode: TurboMode,
-    private val sessionUseCases: SessionUseCases
+    private val turboMode: TurboMode
 ) : ViewModelProvider.Factory {
 
     private val getIsEnglishLocale = { LocaleManager.getInstance().currentLanguageIsEnglish(app) }
@@ -47,8 +45,7 @@ class ViewModelFactory(
             ToolbarViewModel::class.java -> ToolbarViewModel(
                 sessionRepo = serviceLocator.sessionRepo,
                 pinnedTileRepo = serviceLocator.pinnedTileRepo,
-                turboMode = turboMode,
-                sessionUseCases = sessionUseCases
+                turboMode = turboMode
             ) as T
         // This class needs to either return a ViewModel or throw, so we have no good way of silently handling
         // failures in production. However a failure could only occur if code requests a VM that we have not added
