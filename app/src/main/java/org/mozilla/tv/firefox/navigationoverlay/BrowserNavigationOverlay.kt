@@ -350,6 +350,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 ?: return
 
         when (event) {
+            NavigationEvent.BACK -> toolbarViewModel.backButtonClicked()
             NavigationEvent.TURBO -> toolbarViewModel.turboButtonClicked()
             NavigationEvent.PIN_ACTION -> {
                 val siteIsPinnedChecked = toolbarViewModel.pinButtonClicked()

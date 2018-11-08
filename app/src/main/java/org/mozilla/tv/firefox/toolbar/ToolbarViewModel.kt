@@ -88,6 +88,8 @@ open class ToolbarViewModel(
         return !previouslyChecked
     }
 
+    fun backButtonClicked() = sessionRepo.exitFullScreenIfPossibleAndBack()
+
     private fun sendOverlayClickTelemetry(
         event: NavigationEvent,
         turboChecked: Boolean? = null,
