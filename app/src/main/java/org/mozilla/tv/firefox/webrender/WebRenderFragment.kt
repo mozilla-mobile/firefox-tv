@@ -35,7 +35,6 @@ import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.focusedDOMElement
-import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
@@ -47,7 +46,6 @@ import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.AppConstants
 import org.mozilla.tv.firefox.utils.ViewUtils.showCenteredBottomToast
 import org.mozilla.tv.firefox.utils.ServiceLocator
-import org.mozilla.tv.firefox.utils.ViewUtils.showCenteredTopToast
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
@@ -169,24 +167,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                     serviceLocator.screenController.showPocketScreen(fragmentManager)
                 }
             }
-            NavigationEvent.PIN_ACTION -> {
-                this@WebRenderFragment.session.url.let { url ->
-                    when (value) {
-                        NavigationEvent.VAL_CHECKED -> {
-                            // FIXME: OverlayVM -> ToolbarVM -> PinnedTileRepo
-                            context!!.serviceLocator.pinnedTileRepo.addPinnedTile(url,
-                                    context!!.webRenderComponents.sessionManager.selectedSession?.thumbnail)
-                            showCenteredTopToast(context, R.string.notification_pinned_site)
-                        }
-                        NavigationEvent.VAL_UNCHECKED -> {
-                            // FIXME: OverlayVM -> ToolbarVM -> PinnedTileRepo
-                            pinnedTileViewModel.unpin(url)
-                            showCenteredTopToast(context, R.string.notification_unpinned_site)
-                        }
-                        else -> throw IllegalArgumentException("Unexpected value for PIN_ACTION: " + value)
-                    }
-                }
-            }
             NavigationEvent.DESKTOP_MODE -> {
                 when (value) {
                     NavigationEvent.VAL_CHECKED -> {
@@ -202,7 +182,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                     else -> throw IllegalArgumentException("Unexpected value for DESKTOP_MODE: " + value)
                 }
             }
-            NavigationEvent.TURBO -> { /* not handled by this object */ }
+            NavigationEvent.TURBO, NavigationEvent.PIN_ACTION -> { /* not handled by this object */ }
         }
         Unit
     }
