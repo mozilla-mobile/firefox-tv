@@ -47,7 +47,8 @@ class PocketBasicUserFlowTest {
                 title = "Title",
                 url = page.url.toString(),
                 thumbnailURL = "https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png",
-                popularitySortId = 0
+                popularitySortId = 0,
+                authors = "youtube, bbc"
             )
         ))
 
@@ -58,6 +59,9 @@ class PocketBasicUserFlowTest {
     @Test
     fun pocketBasicUserFlowTest() {
         navigationOverlay {
+        }.openPocketMegatile {
+        }.returnToOverlay {
+            // This is to test that backing from Pocket screen to home works
         }.openPocketMegatile {
         }.openTileToBrowser(0) {
             assertTestContent(page.content)
