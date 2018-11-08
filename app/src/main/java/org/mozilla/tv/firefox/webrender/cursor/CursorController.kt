@@ -93,7 +93,6 @@ class CursorController(
         webRenderFragment.context?.getAccessibilityManager()?.removeTouchExplorationStateChangeListener(this)
 
         webRenderFragment.session.unregister(isLoadingObserver)
-        uiLifecycleCancelJob.cancel()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
@@ -105,6 +104,11 @@ class CursorController(
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
         view.startUpdates()
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    fun onDestroy() {
+        uiLifecycleCancelJob.cancel()
     }
 
     override fun onTouchExplorationStateChanged(isEnabled: Boolean) {

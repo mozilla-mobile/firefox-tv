@@ -27,8 +27,6 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.browser_overlay.view.*
 import kotlinx.android.synthetic.main.browser_overlay_top_nav.view.*
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.view.*
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.Job
 import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.tv.firefox.R
@@ -112,8 +110,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
      */
     var uiLifecycleCancelJob: Job
 
-    private val uiScope: CoroutineScope
-
     // We need this in order to show the unpin toast, at max, once per
     // instantiation of the BrowserNavigationOverlay
     var canShowUpinToast: Boolean = false
@@ -156,7 +152,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         }
 
         uiLifecycleCancelJob = Job()
-        uiScope = CoroutineScope(Dispatchers.Main + uiLifecycleCancelJob)
 
         initMegaTile()
         setupUrlInput()
