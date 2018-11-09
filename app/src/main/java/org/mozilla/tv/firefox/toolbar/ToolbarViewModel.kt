@@ -9,6 +9,8 @@ import android.arch.lifecycle.ViewModel
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.ext.LiveDataHelper
+import org.mozilla.tv.firefox.ext.doOnEach
+import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.AppConstants
@@ -34,6 +36,8 @@ open class ToolbarViewModel(
         val urlBarText: String
     )
 
+    private var previousURLHost: String? = null
+
     val state: LiveData<ToolbarViewModel.State> =
         LiveDataHelper.combineLatest(sessionRepo.state, pinnedTileRepo.getPinnedTiles()) { sessionState, pinnedTiles ->
 
@@ -52,6 +56,10 @@ open class ToolbarViewModel(
                 urlBarText = UrlUtils.toUrlBarDisplay(sessionState.currentUrl)
             )
         }
+
+    init {
+        disableDesktopModeWhenHostChanges()
+    }
 
     fun backButtonClicked() = sessionRepo.exitFullScreenIfPossibleAndBack()
 
@@ -109,6 +117,25 @@ open class ToolbarViewModel(
                 pinChecked ?: it.pinChecked,
                 desktopModeChecked ?: it.desktopModeChecked
             )
+        }
+    }
+
+    private fun disableDesktopModeWhenHostChanges() {
+        sessionRepo.state.observeForever {
+            it ?: return@observeForever
+
+            fun isURLHostChanging(): Boolean {
+                val currentURLHost = it.currentUrl.toUri()?.host ?: return true
+
+                return (previousURLHost != currentURLHost).also {
+                    previousURLHost = currentURLHost
+                }
+            }
+
+            if (isURLHostChanging() && it.desktopModeActive) {
+                sessionRepo.setDesktopMode(false)
+                it.currentUrl.toUri()?.let { sessionRepo.loadURL(it) }
+            }
         }
     }
 }
