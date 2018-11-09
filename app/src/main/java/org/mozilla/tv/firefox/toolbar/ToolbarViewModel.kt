@@ -57,7 +57,10 @@ open class ToolbarViewModel(
 
     fun forwardButtonClicked() = sessionRepo.goForward()
 
-    fun reloadButtonClicked() = sessionRepo.reload()
+    fun reloadButtonClicked() {
+        sessionRepo.reload()
+        sessionRepo.pushCurrentValue()
+    }
 
     /**
      * Returns true if the pin button will now be checked
