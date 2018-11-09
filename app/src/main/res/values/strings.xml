@@ -261,4 +261,9 @@ be temporary, and you can try again later.</li>
     %s will be replaced with the icon that matches the button in the YouTube app for this feature.
     Clicking on that button in the YouTube app will show YouTube's instructions on how to cast. -->
     <string name="youtube_casting_onboarding_toast">Cast YouTube videos from your phone or tablet. Open YouTube on your device and tap %s to get started.</string>
+
+    <!-- Text displayed in a toast when entering fullscreen mode: "pinch" refers
+         to the two-finger zoom out pinch gesture. This string will *only* be used on
+         Firefox for Echo Show where there is a touchscreen. -->
+    <string name="fullscreen_toast_pinch_to_exit">Pinch to exit fullscreen mode</string>
 </resources>
