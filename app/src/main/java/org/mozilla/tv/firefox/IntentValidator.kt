@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.support.annotation.VisibleForTesting
 import android.text.TextUtils
 import mozilla.components.browser.session.Session
+import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.SafeIntent
 import org.mozilla.tv.firefox.utils.UrlUtils
 
@@ -53,6 +54,7 @@ object IntentValidator {
                 if (dialParams.isNotEmpty()) {
                     onValidBrowserIntent("https://www.youtube.com/tv?$dialParams",
                             Session.Source.ACTION_VIEW)
+                    TelemetryIntegration.INSTANCE.youtubeCastEvent()
                 }
             }
             Intent.ACTION_VIEW -> {
