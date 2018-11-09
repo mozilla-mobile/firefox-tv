@@ -73,6 +73,7 @@ e.g. we don't log an event when the overlay is closed automatically after "Home"
 | URL start loading (via url bar)        | action   | type_url              | search_bar |        | `url`*     |
 | Search query start loading (via url bar)| action  | type_query            | search_bar |        | `query`*   |
 | Remote: back pressed **                | action   | page                  | browser    | back   | `back`*    |
+| Video opened from YouTube Casting | action | youtube_cast | browser |  |  |
 
 (*) `query` is a JSON map containing the url bar location:
 ```js
