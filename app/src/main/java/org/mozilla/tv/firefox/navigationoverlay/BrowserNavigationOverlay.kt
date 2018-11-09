@@ -36,7 +36,6 @@ import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isEffectivelyVisible
 import org.mozilla.tv.firefox.ext.isVisible
 import org.mozilla.tv.firefox.ext.updateLayoutParams
-import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.widget.IgnoreFocusMovementMethod
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 import kotlin.properties.Delegates
@@ -358,7 +357,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             NavigationEvent.TURBO -> toolbarViewModel.turboButtonClicked()
             NavigationEvent.DESKTOP_MODE -> {
                 val desktopModeChecked = toolbarViewModel.desktopModeButtonClicked()
-                setOverlayVisible?.invoke(false)
                 when (desktopModeChecked) {
                     true -> ViewUtils.showCenteredBottomToast(context, R.string.notification_request_desktop_site)
                     false -> ViewUtils.showCenteredBottomToast(context, R.string.notification_request_non_desktop_site)
@@ -367,6 +365,14 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             }
             else -> Unit // Nothing to do.
         }
+
+        when (event) {
+            // Close overlay if a toolbar button was clicked
+            NavigationEvent.BACK, NavigationEvent.FORWARD, NavigationEvent.RELOAD, NavigationEvent.PIN_ACTION,
+            NavigationEvent.TURBO, NavigationEvent.DESKTOP_MODE -> setOverlayVisible?.invoke(false)
+            else -> Unit
+        }
+
         onNavigationEvent?.invoke(event, null, null)
     }
 
