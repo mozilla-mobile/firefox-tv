@@ -34,7 +34,7 @@ zip --quiet --delete $1 \
   'META-INF/*kotlin_module' \
   'META-INF/*version' \
   'META-INF/proguard/*' \
-  'META-INF/services/*' \
+#  'META-INF/services/*' \
   'META-INF/web-fragment.xml'
 
 # Zipalign and sign
@@ -44,6 +44,7 @@ output=$(dirname $zout)/app-signed.apk
 apksigner sign --ks $2 --out $output $zout
 rm $zout
 
-apksigner verify -Werr $output || { echo "Problem verifying apk" && exit 1; }
+# Issue #1486 - Skip verifying because kotlin coroutines needs unsigned META-INF/services/*
+# apksigner verify -Werr $output || { echo "Problem verifying apk" && exit 1; }
 
 echo "Created signed apk $output"
