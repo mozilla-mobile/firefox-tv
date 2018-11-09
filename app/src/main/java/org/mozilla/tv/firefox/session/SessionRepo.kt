@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox.session
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.graphics.Bitmap
+import android.net.Uri
 import android.support.annotation.AnyThread
 import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.SessionManager
@@ -65,6 +66,8 @@ class SessionRepo(private val sessionManager: SessionManager, private val sessio
      * to reset UI that has been adjusted by the user (e.g., EditText text)
      */
     fun pushCurrentValue() = _state.postValue(_state.value)
+
+    fun loadURL(url: Uri) = session?.let { sessionManager.getEngineSession(it)?.loadUrl(url.toString()) }
 
     private val session: Session? get() = sessionManager.selectedSession
 }
