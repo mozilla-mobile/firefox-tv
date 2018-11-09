@@ -206,7 +206,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
             onNavigationEvent = this@WebRenderFragment.onNavigationEvent
             setOverlayVisible = { visible ->  setOverlayVisible(visible) }
-            navigationStateProvider = NavigationStateProvider()
             visibility = overlayVisibleCached ?: View.GONE
 
             // This is needed for YouTube to properly gain focus after a refresh (refer to issue #1149)
@@ -398,17 +397,5 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         // TODO once the overlay is a separate fragment, handle PocketRepoCache changes in ScreenController
         val pocketRepoCache = serviceLocator.pocketRepoCache
         if (toShow) pocketRepoCache.freeze() else pocketRepoCache.unfreeze()
-    }
-
-    private inner class NavigationStateProvider : BrowserNavigationOverlay.BrowserNavigationStateProvider {
-        override fun isBackEnabled() = session.canGoBack
-        override fun isForwardEnabled() = session.canGoForward
-        override fun isPinEnabled() = !isUrlEqualToHomepage
-        override fun isRefreshEnabled() = !isUrlEqualToHomepage
-        override fun getCurrentUrl() = session.url
-        override fun isURLPinned() = session.url.toUri()?.let {
-            context!!.serviceLocator.pinnedTileRepo.isUrlPinned(it.toString()) } ?: false
-        override fun isDesktopModeEnabled() = !isUrlEqualToHomepage
-        override fun isDesktopModeOn() = session.desktopMode
     }
 }

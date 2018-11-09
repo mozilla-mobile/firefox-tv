@@ -73,9 +73,6 @@ enum class NavigationEvent {
             R.id.desktopModeButton -> DESKTOP_MODE
             else -> null
         }
-
-        const val VAL_CHECKED = "checked"
-        const val VAL_UNCHECKED = "unchecked"
     }
 }
 
@@ -85,17 +82,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyle: Int = 0
 ) : LinearLayout(context, attrs, defStyle), View.OnClickListener {
-
-    interface BrowserNavigationStateProvider {
-        fun isBackEnabled(): Boolean
-        fun isForwardEnabled(): Boolean
-        fun getCurrentUrl(): String?
-        fun isURLPinned(): Boolean // TODO: ToolbarVM + PinnedTileRepo
-        fun isPinEnabled(): Boolean // TODO: ToolbarVM + PinnedTileRepo
-        fun isRefreshEnabled(): Boolean
-        fun isDesktopModeEnabled(): Boolean
-        fun isDesktopModeOn(): Boolean
-    }
 
     enum class ParentFragment {
         SETTINGS,
@@ -127,7 +113,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         value: String?,
         autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?
     ) -> Unit)? = null
-    var navigationStateProvider: BrowserNavigationStateProvider? = null
 
     var onPreSetVisibilityListener: ((isVisible: Boolean) -> Unit)? = null
 
@@ -380,7 +365,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     fun updateFocusableViews() { // TODO this will be replaced when FocusRepo is introduced
         val toolbarState = toolbarViewModel.state.value
 
-        val focusedView = findFocus()
+        val focusedView = findFocus() //TODO move this earlier to fix focus bug
         
         // Prevent the focus from looping to the bottom row when reaching the last
         // focusable element in the top row
