@@ -60,6 +60,10 @@ class SessionRepo(private val sessionManager: SessionManager, private val sessio
 
     fun setDesktopMode(active: Boolean) = session?.let { it.desktopMode = active }
 
+    /**
+     * Causes [state] to emit its most recently pushed value. This can be used
+     * to reset UI that has been adjusted by the user (e.g., EditText text)
+     */
     fun pushCurrentValue() = _state.postValue(_state.value)
 
     private val session: Session? get() = sessionManager.selectedSession
