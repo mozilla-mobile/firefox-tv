@@ -60,5 +60,7 @@ class SessionRepo(private val sessionManager: SessionManager, private val sessio
 
     fun setDesktopMode(active: Boolean) = session?.let { it.desktopMode = active }
 
+    fun pushCurrentValue() = _state.postValue(_state.value)
+
     private val session: Session? get() = sessionManager.selectedSession
 }

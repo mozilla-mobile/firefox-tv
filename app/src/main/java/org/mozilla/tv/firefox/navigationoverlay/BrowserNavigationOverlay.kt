@@ -345,12 +345,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         setOnFilterListener { searchText, view -> autocompleteFilter.onFilter(searchText, view) }
 
         setOnUserInputListener { hasUserChangedURLSinceEditTextFocused = true }
-        setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                hasUserChangedURLSinceEditTextFocused = false
-//                updateFocusableViews() // TODO update URL contents according to response in #1392
-            }
-        }
+        setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) hasUserChangedURLSinceEditTextFocused = false }
     }
 
     override fun onClick(view: View?) {
