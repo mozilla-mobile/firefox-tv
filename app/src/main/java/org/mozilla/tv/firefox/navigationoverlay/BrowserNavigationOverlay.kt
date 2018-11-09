@@ -277,13 +277,14 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         toolbarViewModel.state.observe(lifeCycleOwner, Observer {
             if (it == null) return@Observer
+            val focusedView = findFocus()
             updateOverlayButtonState(it.backEnabled, navButtonBack)
             updateOverlayButtonState(it.forwardEnabled, navButtonForward)
             updateOverlayButtonState(it.pinEnabled, pinButton)
             updateOverlayButtonState(it.refreshEnabled, navButtonReload)
             updateOverlayButtonState(it.desktopModeEnabled, desktopModeButton)
 
-            updateFocusableViews()
+            updateFocusableViews(focusedView)
 
             pinButton.isChecked = it.pinChecked
             desktopModeButton.isChecked = it.desktopModeChecked
@@ -371,10 +372,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     }
 
     @SuppressWarnings("LongMethod")
-    fun updateFocusableViews() { // TODO this will be replaced when FocusRepo is introduced
+    fun updateFocusableViews(focusedView: View? = findFocus()) { // TODO this will be replaced when FocusRepo is introduced
         val toolbarState = toolbarViewModel.state.value
-
-        val focusedView = findFocus() //TODO move this earlier to fix focus bug
 
         // Prevent the focus from looping to the bottom row when reaching the last
         // focusable element in the top row
@@ -409,6 +408,8 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         }
 
         // We may have lost focus when disabling the focused view above.
+        // This looks more complex than is necessary, but the simpler implementation
+        // led to problems. See the commit message for 45940fa
         val isFocusLost = focusedView != null && findFocus() == null
         if (isFocusLost) {
             navUrlInput.requestFocus()
