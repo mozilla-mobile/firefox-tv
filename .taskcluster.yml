@@ -111,7 +111,7 @@ tasks:
     payload:
       maxRunTime: 3600
       deadline: "{{ '2 hours' | $fromNow }}"
-      image: 'mozillamobile/firefox-tv'
+      image: 'mozillamobile/firefox-tv:2.0'
       command:
         - /bin/bash
         - '--login'
