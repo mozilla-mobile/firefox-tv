@@ -51,6 +51,7 @@ object PocketEndpoint {
         if (videos.isNotEmpty()) videos else null
     } catch (e: JSONException) {
         Log.w(LOGTAG, "convertVideosJSON: invalid JSON from Pocket server")
+        Log.w(LOGTAG, e)
         null
     }
 }
@@ -69,6 +70,7 @@ private object PocketEndpointRaw {
             OkHttpWrapper.client.newCall(req).executeAndAwait()
         } catch (e: IOException) {
             Log.w(LOGTAG, "getGlobalVideoRecommendations: network error")
+            Log.w(LOGTAG, e)
             return null
         }
 
