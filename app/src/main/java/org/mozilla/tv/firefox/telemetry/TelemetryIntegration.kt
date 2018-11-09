@@ -61,6 +61,7 @@ open class TelemetryIntegration protected constructor(
         val RESOURCE = "resource"
         val REMOVE = "remove"
         val NO_ACTION_TAKEN = "no_action_taken"
+        val YOUTUBE_CAST = "youtube_cast"
     }
 
     private object Object {
@@ -316,6 +317,8 @@ open class TelemetryIntegration protected constructor(
         is BundledPinnedTile -> Value.TILE_BUNDLED
         is CustomPinnedTile -> Value.TILE_CUSTOM
     }
+
+    fun youtubeCastEvent() = TelemetryEvent.create(Category.ACTION, Method.YOUTUBE_CAST, Object.BROWSER).queue()
 }
 
 enum class MediaSessionEventType(internal val value: String) {
