@@ -221,6 +221,10 @@ be temporary, and you can try again later.</li>
          Pocket video recommendations feed.
     %1$s will be replaced with the Pocket brand name. -->
     <string name="pocket_home_a11y_tile_focused">Video recommendation by %1$s</string>
+    <!-- Spoken by screen reader when they focus the "?" button on the Pocket Video feed screen,
+    which will shows the Pocket tutorial again -->
+    <string name="pocket_info_a11y">About Pocket</string>
+
 
     <string name="pocket_video_feed_recommended_videos_title">Recommended videos</string>
     <!-- Text displayed when the Pocket video recommendations feed failed to load.
