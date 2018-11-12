@@ -5,8 +5,10 @@
 <whisperplay>
     <dial>
         <application>
+            <!-- Turn off temporarily #1504
             <dialid>YouTube</dialid>
             <startAction>android.intent.action.MAIN</startAction>
+            -->
         </application>
     </dial>
 </whisperplay>

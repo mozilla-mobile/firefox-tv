@@ -116,9 +116,11 @@
             android:name="android.webkit.WebView.MetricsOptOut"
             android:value="true" />
 
+        <!-- Turn of temporarily #1504
         <meta-data
             android:name="whisperplay"
             android:resource="@xml/whisperplay"/>
+            -->
 
     </application>
 
