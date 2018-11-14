@@ -23,11 +23,14 @@ class SessionRepo(private val sessionManager: SessionManager, private val sessio
         val backEnabled: Boolean,
         val forwardEnabled: Boolean,
         val desktopModeActive: Boolean,
-        val currentUrl: String
+        val currentUrl: String,
+        val currentBackForwardIndex: Int
     )
 
     private val _state = MutableLiveData<State>()
     val state: LiveData<State> = _state
+
+    var backForwardIndexProvider: (() -> Int)? = null
 
     fun observeSession() {
         SessionObservationManager.attach(this, sessionManager)
@@ -40,7 +43,8 @@ class SessionRepo(private val sessionManager: SessionManager, private val sessio
                 backEnabled = it.canGoBack,
                 forwardEnabled = it.canGoForward,
                 desktopModeActive = it.desktopMode,
-                currentUrl = it.url
+                currentUrl = it.url,
+                currentBackForwardIndex = backForwardIndexProvider?.invoke() ?: -1
             )
             _state.postIfNew(newState)
         }
