@@ -41,11 +41,13 @@ open class ToolbarViewModel(
     val state: LiveData<ToolbarViewModel.State> =
         LiveDataHelper.combineLatest(sessionRepo.state, pinnedTileRepo.getPinnedTiles()) { sessionState, pinnedTiles ->
 
+            // The menu back button should not be enabled if the previous screen was our initial url (home)
+            fun isBackEnabled() = sessionState.backEnabled && sessionState.currentBackForwardIndex > 1
             fun isUrlEqualToHomepage() = sessionState.currentUrl == AppConstants.APP_URL_HOME
             fun currentUrlIsPinned() = pinnedTiles.containsKey(sessionState.currentUrl)
 
             ToolbarViewModel.State(
-                backEnabled = sessionState.backEnabled,
+                backEnabled = isBackEnabled(),
                 forwardEnabled = sessionState.forwardEnabled,
                 refreshEnabled = !isUrlEqualToHomepage(),
                 pinEnabled = !isUrlEqualToHomepage(),
