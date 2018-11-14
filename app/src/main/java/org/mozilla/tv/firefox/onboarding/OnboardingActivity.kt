@@ -11,7 +11,7 @@ import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.content_onboarding.*
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.utils.Settings
+import org.mozilla.tv.firefox.utils.TurboMode
 
 class OnboardingActivity : AppCompatActivity() {
 
@@ -34,10 +34,7 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun setTurboMode(turboModeEnabled: Boolean) {
-        PreferenceManager.getDefaultSharedPreferences(this)
-                .edit()
-                .putBoolean(Settings.TRACKING_PROTECTION_ENABLED_PREF, turboModeEnabled)
-                .apply()
+        TurboMode.toggle(this, turboModeEnabled)
     }
 
     private fun setOnboardShown() {
