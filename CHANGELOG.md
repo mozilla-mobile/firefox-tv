@@ -13,7 +13,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Hide Pocket video tile on non-EN locales
     - Pocket does not yet provide content for other languages
 - Sentry crash reports include a UUID to distinguish users so we can determine if it's 1 user crashing 100 times or 100 users crashing 1 time each. This identifier is only used for Sentry and can not be correlated with telemetry interaction data. See [fire TV Sentry docs](https://github.com/mozilla-mobile/firefox-tv/wiki/Crash-reporting-with-Sentry) for more details. (#817)
-- Updated robolectric to 4.0.1
 - Pocket videos now display the author of the video instead of the platform
 
 ### Fixed
@@ -21,7 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Infrequent crash caused by initialization logic (#1159)
 - On a fresh install, focus would once skip past the Pocket megatile
 - A crash that could occur when backing out of the Pocket screen
-- DRM videos not playing
+- DRM content not playing: this is now supported for some DRM videos
 
 ## [3.0.2] - 2018-10-30
 *Version-bump only: Released v3.0+ for the first time to Stick Gen 1 & 2 in addition to Fire TV (Gen 1, 2, 3), Cube, Element 4k (pendant), which already had v3.0+.*
@@ -109,7 +108,9 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 ## [1.0] - 2017-12-20
 *Initial release! A browser including home tile shortcuts.*
 
-[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.0...HEAD
+[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.0.2..HEAD
+[3.0.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.0.1...v3.0.2
+[3.0.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.0...v3.0.1
 [3.0]: https://github.com/mozilla-mobile/firefox-tv/compare/v2.2...v3.0
 [2.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v2.1...v2.2
 [2.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v2.0.1...v2.1
