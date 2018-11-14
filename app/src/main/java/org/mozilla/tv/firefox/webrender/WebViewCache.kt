@@ -14,8 +14,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import mozilla.components.browser.engine.system.SystemEngineView
+import org.mozilla.tv.firefox.ext.currentBackForwardIndex
 import org.mozilla.tv.firefox.ext.restoreState
 import org.mozilla.tv.firefox.ext.saveState
+import org.mozilla.tv.firefox.session.SessionRepo
 
 /**
  * Caches a [SystemEngineView], which internally maintains a [WebView].
@@ -23,7 +25,7 @@ import org.mozilla.tv.firefox.ext.saveState
  * This allows us to maintain [WebView] state when the view would otherwise
  * be destroyed
  */
-class WebViewCache : LifecycleObserver {
+class WebViewCache(private val sessionRepo: SessionRepo) : LifecycleObserver {
 
     companion object {
         // According to Android docs, WebView.saveState and WebView.restoreState do "not restore
@@ -68,6 +70,7 @@ class WebViewCache : LifecycleObserver {
         }
 
         cachedView?.removeFromParentIfAble()
+        sessionRepo.backForwardIndexProvider = { cachedView?.currentBackForwardIndex() ?: -1 }
         return cachedView ?: createAndCacheEngineView()
     }
 
@@ -82,6 +85,7 @@ class WebViewCache : LifecycleObserver {
             true -> cachedView?.saveState()
             false -> null
         }
+        sessionRepo.backForwardIndexProvider = null
         cachedView?.onDestroy()
         cachedView = null
     }
