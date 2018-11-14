@@ -5,6 +5,7 @@
 
 package org.mozilla.tv.firefox
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -49,6 +50,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     // We crash if we init MediaSession at init time, hence lateinit.
     override lateinit var videoVoiceCommandMediaSession: VideoVoiceCommandMediaSession
     private lateinit var webViewCache: WebViewCache
+    private val ONBOARDING_REQ_CODE = 1
 
     private val sessionObserver by lazy {
         object : SessionManager.Observer {
@@ -111,15 +113,26 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             )
         }
 
-        if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding()) {
-            val onboardingIntents =
-                    Intent(this@MainActivity, PocketOnboardingActivity::class.java)
-            startActivity(onboardingIntents)
-        }
-
         if (Settings.getInstance(this@MainActivity).shouldShowTurboModeOnboarding()) {
             val onboardingIntent = Intent(this@MainActivity, OnboardingActivity::class.java)
-            startActivity(onboardingIntent)
+            startActivityForResult(onboardingIntent, ONBOARDING_REQ_CODE)
+        }
+    }
+
+    // TODO: this is hot fix until NavigationOverlayFragment refactoring is done; we should use LiveData instead
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ONBOARDING_REQ_CODE && resultCode == Activity.RESULT_OK) {
+            val fragmentManager = supportFragmentManager
+            val webRenderFragment = fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as WebRenderFragment?
+
+            webRenderFragment?.updateOverlayTurboMode()
+
+            if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding()) {
+                val onboardingIntents =
+                        Intent(this@MainActivity, PocketOnboardingActivity::class.java)
+                startActivity(onboardingIntents)
+            }
         }
     }
 

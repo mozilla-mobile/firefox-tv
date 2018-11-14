@@ -155,7 +155,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         initMegaTile()
         setupUrlInput()
-        turboButton.isChecked = TurboMode.isEnabled(context)
+        updateTurboButton()
         navButtonSettings.setImageResource(R.drawable.ic_settings) // Must be set in code for SVG to work correctly.
 
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context, R.color.photonGrey10_a60p)) }
@@ -431,6 +431,11 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             }
             updateOverlayForCurrentState()
         }
+    }
+
+    // TODO: OverlayVM should handle this instead after BrowserNavigationOverlay refactor
+    fun updateTurboButton() {
+        turboButton.isChecked = TurboMode.isEnabled(context)
     }
 
     /**
