@@ -359,14 +359,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             NavigationEvent.RELOAD -> toolbarViewModel.reloadButtonClicked()
             NavigationEvent.PIN_ACTION -> toolbarViewModel.pinButtonClicked()
             NavigationEvent.TURBO -> toolbarViewModel.turboButtonClicked()
-            NavigationEvent.DESKTOP_MODE -> {
-                val desktopModeChecked = toolbarViewModel.desktopModeButtonClicked()
-                when (desktopModeChecked) {
-                    true -> ViewUtils.showCenteredBottomToast(context, R.string.notification_request_desktop_site)
-                    false -> ViewUtils.showCenteredBottomToast(context, R.string.notification_request_non_desktop_site)
-                    null -> { }
-                }
-            }
+            NavigationEvent.DESKTOP_MODE -> toolbarViewModel.desktopModeButtonClicked()
             else -> Unit // Nothing to do.
         }
 
