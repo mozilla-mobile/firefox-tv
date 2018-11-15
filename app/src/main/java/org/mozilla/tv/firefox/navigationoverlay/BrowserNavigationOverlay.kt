@@ -367,7 +367,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         onNavigationEvent?.invoke(event, null, null)
     }
 
-    @SuppressWarnings("LongMethod")
     fun updateFocusableViews(focusedView: View? = findFocus()) { // TODO this will be replaced when FocusRepo is introduced
         val toolbarState = toolbarViewModel.state.value
 

@@ -59,7 +59,9 @@ class SessionRepo(private val sessionManager: SessionManager, private val sessio
         if (session?.canGoBack == true) sessionUseCases.goBack.invoke()
     }
 
-    fun goForward() = if (session?.canGoForward == true) sessionUseCases.goForward.invoke() else { }
+    fun goForward() {
+        if (session?.canGoForward == true) sessionUseCases.goForward.invoke()
+    }
 
     fun reload() = sessionUseCases.reload.invoke()
 
