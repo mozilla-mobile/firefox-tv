@@ -93,6 +93,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     sealed class Action {
         data class ShowTopToast(@StringRes val textId: Int) : Action()
         data class ShowBottomToast(@StringRes val textId: Int) : Action()
+        data class SetOverlayVisible(val visible: Boolean) : Action()
     }
 
     /**
@@ -309,6 +310,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 when (it) {
                     is BrowserNavigationOverlay.Action.ShowTopToast -> ViewUtils.showCenteredTopToast(context, it.textId)
                     is BrowserNavigationOverlay.Action.ShowBottomToast -> ViewUtils.showCenteredBottomToast(context, it.textId)
+                    is BrowserNavigationOverlay.Action.SetOverlayVisible -> setOverlayVisible?.invoke(it.visible)
                 }.forceExhaustive
                 true
             }
@@ -353,14 +355,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             NavigationEvent.DESKTOP_MODE -> toolbarViewModel.desktopModeButtonClicked()
             else -> Unit // Nothing to do.
         }
-
-        when (event) {
-            // Close overlay if a toolbar button was clicked
-            NavigationEvent.BACK, NavigationEvent.FORWARD, NavigationEvent.RELOAD, NavigationEvent.PIN_ACTION,
-            NavigationEvent.TURBO, NavigationEvent.DESKTOP_MODE -> setOverlayVisible?.invoke(false)
-            else -> Unit
-        }
-
         onNavigationEvent?.invoke(event, null, null)
     }
 
