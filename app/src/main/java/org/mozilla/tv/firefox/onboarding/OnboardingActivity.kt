@@ -34,7 +34,7 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun setTurboMode(turboModeEnabled: Boolean) {
-        TurboMode.toggle(this, turboModeEnabled)
+        TurboMode.setEnabled(this, turboModeEnabled)
     }
 
     private fun setOnboardShown() {

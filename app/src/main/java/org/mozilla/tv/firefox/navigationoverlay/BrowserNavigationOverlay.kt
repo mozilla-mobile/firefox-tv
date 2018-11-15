@@ -308,7 +308,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         when (event) {
             NavigationEvent.TURBO -> {
-                TurboMode.toggle(context, isTurboButtonChecked)
+                TurboMode.setEnabled(context, isTurboButtonChecked)
             }
             NavigationEvent.PIN_ACTION -> {
                 value = if (isPinButtonChecked) NavigationEvent.VAL_CHECKED
