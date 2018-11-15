@@ -13,7 +13,6 @@ import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.ext.LiveDataHelper
-import org.mozilla.tv.firefox.ext.doOnEach
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
@@ -70,25 +69,26 @@ open class ToolbarViewModel(
 
     init {
         disableDesktopModeWhenHostChanges()
+        showOverlayWhenUrlIsHome()
     }
 
     @UiThread
     fun backButtonClicked() {
         sessionRepo.exitFullScreenIfPossibleAndBack()
-        closeOverlay()
+        setOverlayVisible(false)
     }
 
     @UiThread
     fun forwardButtonClicked() {
         sessionRepo.goForward()
-        closeOverlay()
+        setOverlayVisible(false)
     }
 
     @UiThread
     fun reloadButtonClicked() {
         sessionRepo.reload()
         sessionRepo.pushCurrentValue()
-        closeOverlay()
+        setOverlayVisible(false)
     }
 
 
@@ -107,7 +107,7 @@ open class ToolbarViewModel(
             pinnedTileRepo.addPinnedTile(url, sessionRepo.currentURLScreenshot())
             _events.value = Consumable.from(BrowserNavigationOverlay.Action.ShowTopToast(R.string.notification_pinned_site))
         }
-        closeOverlay()
+        setOverlayVisible(false)
     }
 
     @UiThread
@@ -116,7 +116,7 @@ open class ToolbarViewModel(
         sessionRepo.reload()
 
         sendOverlayClickTelemetry(NavigationEvent.TURBO, turboChecked = turboMode.isEnabled())
-        sessionRepo.state.value?.currentUrl?.let { if (!it.isEqualToHomepage()) closeOverlay() }
+        sessionRepo.state.value?.currentUrl?.let { if (!it.isEqualToHomepage()) setOverlayVisible(false) }
     }
 
     @UiThread
@@ -132,7 +132,7 @@ open class ToolbarViewModel(
         }
 
         _events.value = Consumable.from(BrowserNavigationOverlay.Action.ShowBottomToast(textId))
-        closeOverlay()
+        setOverlayVisible(false)
     }
 
     private fun sendOverlayClickTelemetry(
@@ -151,8 +151,8 @@ open class ToolbarViewModel(
         }
     }
 
-    private fun closeOverlay() {
-        _events.value = Consumable.from(BrowserNavigationOverlay.Action.SetOverlayVisible(false))
+    private fun setOverlayVisible(visible: Boolean) {
+        _events.value = Consumable.from(BrowserNavigationOverlay.Action.SetOverlayVisible(visible))
     }
 
     private fun String.isEqualToHomepage() = this == AppConstants.APP_URL_HOME
@@ -173,6 +173,13 @@ open class ToolbarViewModel(
                 sessionRepo.setDesktopMode(false)
                 it.currentUrl.toUri()?.let { sessionRepo.loadURL(it) }
             }
+        }
+    }
+
+    private fun showOverlayWhenUrlIsHome() {
+        sessionRepo.state.observeForever {
+            it ?: return@observeForever
+            if (it.currentUrl.isEqualToHomepage()) setOverlayVisible(true)
         }
     }
 }
