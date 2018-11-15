@@ -68,7 +68,7 @@ class PinnedTileRepoTest {
 
         pinnedTileRepo.getPinnedTiles().observeForever(observerSpy)
         assertEquals(10, pinnedTileRepo.bundledTilesSize)
-        pinnedTileRepo.removePinnedTile("https://pinterest.com/")
+        pinnedTileRepo.removePinnedTile("https://www.pinterest.com/")
         assertEquals(9, pinnedTileRepo.bundledTilesSize)
 
         verify(observerSpy, times(2)).onChanged(any())
