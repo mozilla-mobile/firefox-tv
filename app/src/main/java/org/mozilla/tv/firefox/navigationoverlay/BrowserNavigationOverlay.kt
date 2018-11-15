@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
 import android.preference.PreferenceManager
+import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
@@ -87,6 +88,11 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         SETTINGS,
         POCKET,
         DEFAULT
+    }
+
+    sealed class Action {
+        data class ShowTopToast(@StringRes val textId: Int) : Action()
+        data class ShowBottomToast(@StringRes val textId: Int) : Action()
     }
 
     /**
@@ -297,6 +303,16 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 navUrlInput.setText(it.urlBarText)
             }
         })
+
+        toolbarViewModel.events.observe(lifeCycleOwner, Observer {
+            it?.consume {
+                when (it) {
+                    is BrowserNavigationOverlay.Action.ShowTopToast -> ViewUtils.showCenteredTopToast(context, it.textId)
+                    is BrowserNavigationOverlay.Action.ShowBottomToast -> ViewUtils.showCenteredBottomToast(context, it.textId)
+                }.forceExhaustive
+                true
+            }
+        })
     }
 
     private fun setupUrlInput() = with(navUrlInput) {
@@ -332,14 +348,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             NavigationEvent.BACK -> toolbarViewModel.backButtonClicked()
             NavigationEvent.FORWARD -> toolbarViewModel.forwardButtonClicked()
             NavigationEvent.RELOAD -> toolbarViewModel.reloadButtonClicked()
-            NavigationEvent.PIN_ACTION -> {
-                val siteIsPinnedChecked = toolbarViewModel.pinButtonClicked()
-                when (siteIsPinnedChecked) {
-                    true -> ViewUtils.showCenteredTopToast(context, R.string.notification_pinned_site)
-                    false-> ViewUtils.showCenteredTopToast(context, R.string.notification_unpinned_site)
-                    null -> { }
-                }
-            }
+            NavigationEvent.PIN_ACTION -> toolbarViewModel.pinButtonClicked()
             NavigationEvent.TURBO -> toolbarViewModel.turboButtonClicked()
             NavigationEvent.DESKTOP_MODE -> {
                 val desktopModeChecked = toolbarViewModel.desktopModeButtonClicked()
