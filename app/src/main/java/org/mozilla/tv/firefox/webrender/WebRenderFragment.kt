@@ -31,7 +31,6 @@ import org.mozilla.tv.firefox.webrender.cursor.CursorController
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.ext.isVisible
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
-import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.serviceLocator
@@ -66,7 +65,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     private val mediaSessionHolder get() = activity as MediaSessionHolder? // null when not attached.
 
-    val isUrlEqualToHomepage: Boolean get() = session.url == AppConstants.APP_URL_HOME
+    private val isUrlEqualToHomepage: Boolean get() = session.url == AppConstants.APP_URL_HOME
 
     /**
      * Encapsulates the cursor's components. If this value is null, the Cursor is not attached
@@ -188,7 +187,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             observeForToolbar(this@WebRenderFragment)
 
             onNavigationEvent = this@WebRenderFragment.onNavigationEvent
-            setOverlayVisible = { visible ->  setOverlayVisible(visible) }
+            setOverlayVisible = { visible -> setOverlayVisible(visible) }
             visibility = overlayVisibleCached ?: View.GONE
 
             // This is needed for YouTube to properly gain focus after a refresh (refer to issue #1149)

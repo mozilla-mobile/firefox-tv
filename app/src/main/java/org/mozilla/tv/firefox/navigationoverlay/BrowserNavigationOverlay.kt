@@ -358,10 +358,9 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         onNavigationEvent?.invoke(event, null, null)
     }
 
-    @SuppressWarnings("LongMethod")
     fun updateFocusableViews(focusedView: View? = findFocus()) { // TODO this will be replaced when FocusRepo is introduced
         val toolbarState = toolbarViewModel.state.value
-        
+
         // Prevent the focus from looping to the bottom row when reaching the last
         // focusable element in the top row
         navButtonReload.nextFocusLeftId = when {

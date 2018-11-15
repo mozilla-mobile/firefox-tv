@@ -91,7 +91,6 @@ open class ToolbarViewModel(
         setOverlayVisible(false)
     }
 
-
     @UiThread
     fun pinButtonClicked() {
         val pinChecked = state.value?.pinChecked ?: return
@@ -102,8 +101,7 @@ open class ToolbarViewModel(
         if (pinChecked) {
             pinnedTileRepo.removePinnedTile(url)
             _events.value = Consumable.from(BrowserNavigationOverlay.Action.ShowTopToast(R.string.notification_unpinned_site))
-        }
-        else {
+        } else {
             pinnedTileRepo.addPinnedTile(url, sessionRepo.currentURLScreenshot())
             _events.value = Consumable.from(BrowserNavigationOverlay.Action.ShowTopToast(R.string.notification_pinned_site))
         }
