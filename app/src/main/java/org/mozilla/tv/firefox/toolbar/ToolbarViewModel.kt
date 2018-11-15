@@ -102,16 +102,18 @@ open class ToolbarViewModel(
         sendOverlayClickTelemetry(NavigationEvent.TURBO, turboChecked = turboMode.isEnabled())
     }
 
-    /**
-     * Returns true if the desktop mode button will now be checked
-     */
-    fun desktopModeButtonClicked(): Boolean? {
-        val previouslyChecked = state.value?.desktopModeChecked ?: return null
+    fun desktopModeButtonClicked() {
+        val previouslyChecked = state.value?.desktopModeChecked ?: return
 
         sendOverlayClickTelemetry(NavigationEvent.DESKTOP_MODE, desktopModeChecked = !previouslyChecked)
 
         sessionRepo.setDesktopMode(!previouslyChecked)
-        return !previouslyChecked
+        val textId = when {
+            previouslyChecked -> R.string.notification_request_non_desktop_site
+            else -> R.string.notification_request_desktop_site
+        }
+
+        _events.postValue(Consumable.from(Action.ShowBottomToast(textId)))
     }
 
     private fun sendOverlayClickTelemetry(
