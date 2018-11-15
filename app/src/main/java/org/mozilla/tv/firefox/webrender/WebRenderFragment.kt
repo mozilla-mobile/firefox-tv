@@ -101,13 +101,9 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     }
 
     override fun onUrlChanged(session: Session, url: String) {
-        when (url) {
-            AppConstants.APP_URL_HOME -> browserOverlay?.visibility = View.VISIBLE
-            AppConstants.APP_URL_POCKET_ERROR -> {
-                browserOverlay?.showMegaTileError() // TODO remove and verify that the Pocket refactor handles this
-                browserOverlay?.visibility = View.VISIBLE
-            }
-            else -> Unit
+        if (url == AppConstants.APP_URL_POCKET_ERROR) {
+            browserOverlay?.showMegaTileError() // TODO remove and verify that the Pocket refactor handles this
+            browserOverlay?.visibility = View.VISIBLE
         }
 
         updateOverlayIfVisible()
