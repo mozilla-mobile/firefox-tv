@@ -5,12 +5,16 @@
 package org.mozilla.tv.firefox.toolbar
 
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import mozilla.components.support.base.observer.Consumable
+import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.ext.LiveDataHelper
 import org.mozilla.tv.firefox.ext.doOnEach
 import org.mozilla.tv.firefox.ext.toUri
+import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.AppConstants
@@ -37,6 +41,9 @@ open class ToolbarViewModel(
     )
 
     private var previousURLHost: String? = null
+
+    private var _events = MutableLiveData<Consumable<BrowserNavigationOverlay.Action>>()
+    val events: LiveData<Consumable<BrowserNavigationOverlay.Action>> = _events
 
     val state: LiveData<ToolbarViewModel.State> =
         LiveDataHelper.combineLatest(sessionRepo.state, pinnedTileRepo.getPinnedTiles()) { sessionState, pinnedTiles ->
@@ -72,19 +79,20 @@ open class ToolbarViewModel(
         sessionRepo.pushCurrentValue()
     }
 
-    /**
-     * Returns true if the pin button will now be checked
-     */
-    fun pinButtonClicked(): Boolean? {
-        val pinChecked = state.value?.pinChecked ?: return null
-        val url = sessionRepo.state.value?.currentUrl ?: return null
+    fun pinButtonClicked() {
+        val pinChecked = state.value?.pinChecked ?: return
+        val url = sessionRepo.state.value?.currentUrl ?: return
 
         sendOverlayClickTelemetry(NavigationEvent.PIN_ACTION, pinChecked = !pinChecked)
 
-        if (pinChecked) pinnedTileRepo.removePinnedTile(url)
-        else pinnedTileRepo.addPinnedTile(url, sessionRepo.currentURLScreenshot())
-
-        return !pinChecked
+        if (pinChecked) {
+            pinnedTileRepo.removePinnedTile(url)
+            _events.value = Consumable.from(BrowserNavigationOverlay.Action.ShowTopToast(R.string.notification_unpinned_site))
+        }
+        else {
+            pinnedTileRepo.addPinnedTile(url, sessionRepo.currentURLScreenshot())
+            _events.value = Consumable.from(BrowserNavigationOverlay.Action.ShowTopToast(R.string.notification_pinned_site))
+        }
     }
 
     fun turboButtonClicked() {
