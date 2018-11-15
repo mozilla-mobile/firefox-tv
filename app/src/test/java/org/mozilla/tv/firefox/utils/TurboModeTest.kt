@@ -52,7 +52,7 @@ class TurboModeTest {
 
     @Test
     fun `Turbo Mode should be disabled after toggling`() {
-        TurboMode.toggle(context, false)
+        TurboMode.setEnabled(context, false)
 
         assertFalse(TurboMode.isEnabled(context))
 
@@ -62,8 +62,8 @@ class TurboModeTest {
 
     @Test
     fun `Turbo Mode should be enabled after toggling again`() {
-        TurboMode.toggle(context, false)
-        TurboMode.toggle(context, true)
+        TurboMode.setEnabled(context, false)
+        TurboMode.setEnabled(context, true)
 
         assertTrue(TurboMode.isEnabled(context))
 
