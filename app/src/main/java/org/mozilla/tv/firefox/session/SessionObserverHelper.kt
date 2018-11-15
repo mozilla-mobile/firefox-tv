@@ -8,21 +8,23 @@ import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.SessionManager
 
 /**
- * TODO
- * when sessions are added or removed, add/remove session observers
- * when sessions change, update repo
+ * A facade to simplify the process of observing [Session]s and sending their information to a [SessionRepo].
+ *
+ * Whenever [Session]s are added or removed, this adds/removes a session observer.
+ *
+ * Whenever [Session]s change, this prompts the [SessionRepo] to update.
  */
-class SessionObservationManager private constructor(sessionRepo: SessionRepo) { // TODO rename this
+class SessionObserverHelper private constructor(sessionRepo: SessionRepo) {
 
     companion object {
         fun attach(sessionRepo: SessionRepo, sessionManager: SessionManager) {
-            val updater = SessionObservationManager(sessionRepo)
+            val updater = SessionObserverHelper(sessionRepo)
             sessionManager.selectedSession?.register(updater.sessionObserver)
             sessionManager.register(updater.sessionManagerObserver)
         }
     }
 
-    // Updates the repo whenever the observed session changes
+    // Any time the observed session changes, force the repo to update
     private val sessionObserver = object : Session.Observer {
         override fun onUrlChanged(session: Session, url: String) {
             sessionRepo.update()
@@ -41,8 +43,8 @@ class SessionObservationManager private constructor(sessionRepo: SessionRepo) { 
         }
     }
 
-    // Attaches and removes the session observer whenever sessions are added
-    // and removed
+    // Any time a new session is created, add a sessionObserver to it.
+    // When a session is removed, remove the sessionObserver.
     val sessionManagerObserver = object : SessionManager.Observer {
         override fun onSessionSelected(session: Session) {
             session.register(sessionObserver)

@@ -15,7 +15,7 @@ import mozilla.components.feature.session.SessionUseCases
 import org.mozilla.tv.firefox.ext.postIfNew
 
 /**
- * TODO
+ * Repository that is responsible for storing state related to the browser.
  */
 class SessionRepo(private val sessionManager: SessionManager, private val sessionUseCases: SessionUseCases) {
 
@@ -33,7 +33,7 @@ class SessionRepo(private val sessionManager: SessionManager, private val sessio
     var backForwardIndexProvider: (() -> Int)? = null
 
     fun observeSession() {
-        SessionObservationManager.attach(this, sessionManager)
+        SessionObserverHelper.attach(this, sessionManager)
     }
 
     @AnyThread

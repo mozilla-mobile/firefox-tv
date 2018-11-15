@@ -24,6 +24,10 @@ interface TurboMode {
     fun setEnabled(enabled: Boolean)
 }
 
+/**
+ * Implementation of [TurboMode] that sets and queries for Turbo state using an
+ * [Application] instance.
+ */
 class ProdTurboMode(private val app: Application) : TurboMode {
 
     override fun isEnabled() = Settings.getInstance(app).isBlockingEnabled
