@@ -45,7 +45,8 @@ import org.mozilla.tv.firefox.pocket.PocketVideoRepo
  *   ```
  */
 open class ServiceLocator(val app: Application) {
-    private val pocketEndpoint get() = PocketEndpoint()
+    private val appVersion = app.packageManager.getPackageInfo(app.packageName, 0).versionName
+    private val pocketEndpoint get() = PocketEndpoint(appVersion)
     private val buildConfigDerivables get() = BuildConfigDerivables()
     private val pocketFeedStateMachine get() = PocketFeedStateMachine()
 
