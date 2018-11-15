@@ -14,6 +14,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
+import org.mozilla.tv.firefox.session.SessionRepo
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -23,7 +24,7 @@ class WebViewCacheTest {
 
     @Before
     fun setup() {
-        webViewCache = WebViewCache()
+        webViewCache = WebViewCache(mock(SessionRepo::class.java))
     }
 
     @Test
