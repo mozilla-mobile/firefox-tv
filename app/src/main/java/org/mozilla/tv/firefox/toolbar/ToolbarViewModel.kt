@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox.toolbar
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.support.annotation.UiThread
 import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
@@ -42,6 +43,8 @@ open class ToolbarViewModel(
 
     private var previousURLHost: String? = null
 
+    // Values should be pushed to _events using setValue. Two values are set in
+    // rapid succession using postValue, only the latest will be received
     private var _events = MutableLiveData<Consumable<BrowserNavigationOverlay.Action>>()
     val events: LiveData<Consumable<BrowserNavigationOverlay.Action>> = _events
 
@@ -50,17 +53,16 @@ open class ToolbarViewModel(
 
             // The menu back button should not be enabled if the previous screen was our initial url (home)
             fun isBackEnabled() = sessionState.backEnabled && sessionState.currentBackForwardIndex > 1
-            fun isUrlEqualToHomepage() = sessionState.currentUrl == AppConstants.APP_URL_HOME
             fun currentUrlIsPinned() = pinnedTiles.containsKey(sessionState.currentUrl)
 
             ToolbarViewModel.State(
                 backEnabled = isBackEnabled(),
                 forwardEnabled = sessionState.forwardEnabled,
-                refreshEnabled = !isUrlEqualToHomepage(),
-                pinEnabled = !isUrlEqualToHomepage(),
+                refreshEnabled = !sessionState.currentUrl.isEqualToHomepage(),
+                pinEnabled = !sessionState.currentUrl.isEqualToHomepage(),
                 pinChecked = currentUrlIsPinned(),
                 turboChecked = turboMode.isEnabled(),
-                desktopModeEnabled = !isUrlEqualToHomepage(),
+                desktopModeEnabled = !sessionState.currentUrl.isEqualToHomepage(),
                 desktopModeChecked = sessionState.desktopModeActive,
                 urlBarText = UrlUtils.toUrlBarDisplay(sessionState.currentUrl)
             )
@@ -70,15 +72,27 @@ open class ToolbarViewModel(
         disableDesktopModeWhenHostChanges()
     }
 
-    fun backButtonClicked() = sessionRepo.exitFullScreenIfPossibleAndBack()
+    @UiThread
+    fun backButtonClicked() {
+        sessionRepo.exitFullScreenIfPossibleAndBack()
+        closeOverlay()
+    }
 
-    fun forwardButtonClicked() = sessionRepo.goForward()
+    @UiThread
+    fun forwardButtonClicked() {
+        sessionRepo.goForward()
+        closeOverlay()
+    }
 
+    @UiThread
     fun reloadButtonClicked() {
         sessionRepo.reload()
         sessionRepo.pushCurrentValue()
+        closeOverlay()
     }
 
+
+    @UiThread
     fun pinButtonClicked() {
         val pinChecked = state.value?.pinChecked ?: return
         val url = sessionRepo.state.value?.currentUrl ?: return
@@ -93,15 +107,19 @@ open class ToolbarViewModel(
             pinnedTileRepo.addPinnedTile(url, sessionRepo.currentURLScreenshot())
             _events.value = Consumable.from(BrowserNavigationOverlay.Action.ShowTopToast(R.string.notification_pinned_site))
         }
+        closeOverlay()
     }
 
+    @UiThread
     fun turboButtonClicked() {
         turboMode.setEnabled(!turboMode.isEnabled())
         sessionRepo.reload()
 
         sendOverlayClickTelemetry(NavigationEvent.TURBO, turboChecked = turboMode.isEnabled())
+        sessionRepo.state.value?.currentUrl?.let { if (!it.isEqualToHomepage()) closeOverlay() }
     }
 
+    @UiThread
     fun desktopModeButtonClicked() {
         val previouslyChecked = state.value?.desktopModeChecked ?: return
 
@@ -113,7 +131,8 @@ open class ToolbarViewModel(
             else -> R.string.notification_request_desktop_site
         }
 
-        _events.postValue(Consumable.from(Action.ShowBottomToast(textId)))
+        _events.value = Consumable.from(BrowserNavigationOverlay.Action.ShowBottomToast(textId))
+        closeOverlay()
     }
 
     private fun sendOverlayClickTelemetry(
@@ -131,6 +150,12 @@ open class ToolbarViewModel(
             )
         }
     }
+
+    private fun closeOverlay() {
+        _events.value = Consumable.from(BrowserNavigationOverlay.Action.SetOverlayVisible(false))
+    }
+
+    private fun String.isEqualToHomepage() = this == AppConstants.APP_URL_HOME
 
     private fun disableDesktopModeWhenHostChanges() {
         sessionRepo.state.observeForever {
