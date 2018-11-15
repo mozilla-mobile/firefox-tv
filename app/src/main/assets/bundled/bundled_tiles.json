@@ -14,7 +14,7 @@
     },
     {
         "id": "imdb",
-        "url": "https://imdb.com/",
+        "url": "https://m.imdb.com/",
         "title": "IMDB",
         "img": "tile_imdb.png"
     },
@@ -26,37 +26,37 @@
     },
     {
         "id": "metacritic",
-        "url": "http://metacritic.com/",
+        "url": "https://www.metacritic.com/",
         "title": "metacritic",
         "img": "tile_metacritic.png"
     },
     {
         "id": "fandango",
-        "url": "https://www.fandango.com/",
+        "url": "https://www.mobile.fandango.com/",
         "title": "Fandango",
         "img": "tile_fandango.png"
     },
     {
         "id": "hollywoodReporter",
-        "url": "https://hollywoodreporter.com/",
+        "url": "https://www.hollywoodreporter.com/",
         "title": "Hollywood Reporter",
         "img": "tile_hollywood_reporter.png"
     },
     {
         "id": "flickr",
-        "url": "https://flickr.com/",
+        "url": "https://www.flickr.com/",
         "title": "Flickr",
         "img": "tile_flickr.png"
     },
     {
         "id": "instagram",
-        "url": "https://instagram.com/",
+        "url": "https://www.instagram.com/",
         "title": "Instagram",
         "img": "tile_instagram.png"
     },
     {
         "id": "pinterest",
-        "url": "https://pinterest.com/",
+        "url": "https://www.pinterest.com/",
         "title": "Pinterest",
         "img": "tile_pinterest.png"
     }

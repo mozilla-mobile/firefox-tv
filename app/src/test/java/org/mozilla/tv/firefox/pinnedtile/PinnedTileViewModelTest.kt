@@ -62,7 +62,7 @@ class PinnedTileViewModelTest {
         })
 
         pinnedTileViewModel.getTileList().observeForever(observerSpy)
-        pinnedTileViewModel.unpin("https://instagram.com/")
+        pinnedTileViewModel.unpin("https://www.instagram.com/")
 
         Mockito.verify(observerSpy, Mockito.times(2)).onChanged(ArgumentMatchers.any())
     }
