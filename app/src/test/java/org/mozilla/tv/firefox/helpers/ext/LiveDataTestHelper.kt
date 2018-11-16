@@ -13,20 +13,24 @@ import org.mockito.Mockito.spy
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 
+fun <T> LiveData<T>.assertThat(vararg predicates: (T) -> Boolean, pushValues: () -> Unit) {
+    val (actualValues, observer) = collectEmissions(this, pushValues)
+
+    if (actualValues.size > predicates.size) fail("LiveData emitted more values than expected\nExpected: ${predicates.size}\nActual  : $actualValues")
+    if (actualValues.size < predicates.size) fail("LiveData emitted fewer values than expected\nExpected: ${predicates.size}\nActual  : $actualValues")
+
+    predicates.zip(actualValues).forEachIndexed { i, (predicate, actual) ->
+        if (!predicate.invoke(actual)) fail("Value emitted at index $i does satisfy predicate.\nExpected: true\nActual: false")
+    }
+
+    verify(observer, times(predicates.size)).onChanged(any())
+}
+
 fun <T> LiveData<T>.assertValues(vararg expectedRaw: T, pushValues: () -> Unit) {
     // Arrays do not print prettily, so convert them to a list
     val expectedValues = List(expectedRaw.size) { expectedRaw[it] }
 
-    val actualValues = mutableListOf<T>()
-
-    val observer = spy(Observer<T> {
-        it ?: return@Observer
-        actualValues += it
-    })
-
-    this.observeForever(observer)
-
-    pushValues()
+    val (actualValues, observer) = collectEmissions(this, pushValues)
 
     if (actualValues.size > expectedValues.size) fail("LiveData emitted more values than expected\nExpected: $expectedValues\nActual  : $actualValues")
     if (actualValues.size < expectedValues.size) fail("LiveData emitted fewer values than expected\nExpected: $expectedValues\nActual  : $actualValues")
@@ -36,6 +40,19 @@ fun <T> LiveData<T>.assertValues(vararg expectedRaw: T, pushValues: () -> Unit) 
     }
 
     verify(observer, times(expectedValues.size)).onChanged(any())
+}
+
+private fun <T> collectEmissions(liveData: LiveData<T>, pushValues: () -> Unit): Pair<List<T>, Observer<T>> {
+    val actualValues = mutableListOf<T>()
+
+    val observer = spy(Observer<T> {
+        it ?: return@Observer
+        actualValues += it
+    })
+
+    liveData.observeForever(observer)
+    pushValues.invoke()
+    return actualValues to observer
 }
 
 fun <T> MutableLiveData<T>.assertValuesWithReceiver(vararg expectedRaw: T, pushValues: MutableLiveData<T>.() -> Unit) {
