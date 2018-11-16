@@ -46,6 +46,7 @@ class WebViewCache : LifecycleObserver {
     }
 
     private var cachedView: SystemEngineView? = null
+    private var shouldPersist = true
 
     fun getWebView(
         context: Context,
@@ -70,10 +71,22 @@ class WebViewCache : LifecycleObserver {
         return cachedView ?: createAndCacheEngineView()
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    private fun onCreate() {
+        shouldPersist = true
+    }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     private fun onDestroy() {
-        state = cachedView?.saveState()
+        state = when (shouldPersist) {
+            true -> cachedView?.saveState()
+            false -> null
+        }
         cachedView?.onDestroy()
         cachedView = null
+    }
+
+    fun doNotPersist() {
+        shouldPersist = false
     }
 }

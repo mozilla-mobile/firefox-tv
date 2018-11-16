@@ -17,6 +17,7 @@ import org.mozilla.tv.firefox.ext.deleteData
 import org.mozilla.tv.firefox.ext.getAccessibilityManager
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
+import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.telemetry.DataUploadPreference
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
@@ -61,6 +62,7 @@ class SettingsFragment : Fragment() {
                     // navigation history) and Activity. This implementation will need to change
                     // if/when we add session restoration logic.
                     // See https://github.com/mozilla-mobile/firefox-tv/issues/1192
+                    serviceLocator.webViewCache.doNotPersist()
                     activity?.recreate()
                     TelemetryIntegration.INSTANCE.clearDataEvent()
                 }

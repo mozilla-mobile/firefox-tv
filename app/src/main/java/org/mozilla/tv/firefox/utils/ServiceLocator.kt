@@ -12,6 +12,7 @@ import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
 import org.mozilla.tv.firefox.pocket.PocketRepoCache
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
+import org.mozilla.tv.firefox.webrender.WebViewCache
 
 /**
  * Implementation of the Service Locator pattern. Use this class to provide dependencies without
@@ -53,6 +54,7 @@ open class ServiceLocator(val app: Application) {
     val pocketRepoCache by lazy { PocketRepoCache(pocketRepo).apply { unfreeze() } }
     val viewModelFactory by lazy { ViewModelFactory(this, app) }
     val screenController by lazy { ScreenController() }
+    val webViewCache by lazy { WebViewCache() }
 
     open val pinnedTileRepo by lazy { PinnedTileRepo(app) }
     open val pocketRepo = PocketVideoRepo(pocketEndpoint, pocketFeedStateMachine, buildConfigDerivables).apply {
