@@ -64,7 +64,7 @@ private object PocketEndpointRaw {
     suspend fun getGlobalVideoRecommendations(version: String): String? {
         val req = Request.Builder()
                 .url(GLOBAL_VIDEO_ENDPOINT.toString())
-                .header("User-Agent", "FirefoxTV-$version")
+                .header("User-Agent", "FirefoxTV-$version-${BuildConfig.BUILD_TYPE}")
                 .build()
 
         val res = try {
