@@ -19,7 +19,6 @@ import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.webrender.WebRenderFragment.Companion.APP_URL_HOME
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
-import org.mozilla.tv.firefox.webrender.WebViewCache
 import org.mozilla.tv.firefox.webrender.VideoVoiceCommandMediaSession
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.ext.serviceLocator
@@ -49,7 +48,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     // There should be at most one MediaSession per process, hence it's in MainActivity.
     // We crash if we init MediaSession at init time, hence lateinit.
     override lateinit var videoVoiceCommandMediaSession: VideoVoiceCommandMediaSession
-    private lateinit var webViewCache: WebViewCache
     private val ONBOARDING_REQ_CODE = 1
 
     private val sessionObserver by lazy {
@@ -87,7 +85,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         SentryIntegration.init(this)
         PublicSuffix.init(this) // Used by Pocket Video feed & custom home tiles.
         initMediaSession()
-        initWebViewCache()
+        lifecycle.addObserver(serviceLocator.webViewCache)
 
         val intent = SafeIntent(intent)
 
@@ -173,7 +171,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
         return if (name == EngineView::class.java.name) {
-            webViewCache.getWebView(context, attrs) {
+            context.serviceLocator.webViewCache.getWebView(context, attrs) {
                 setupForApp()
             }
         } else super.onCreateView(name, context, attrs)
@@ -218,11 +216,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     private fun initMediaSession() {
         videoVoiceCommandMediaSession = VideoVoiceCommandMediaSession(this)
         lifecycle.addObserver(videoVoiceCommandMediaSession)
-    }
-
-    private fun initWebViewCache() {
-        webViewCache = WebViewCache()
-        lifecycle.addObserver(webViewCache)
     }
 
     override fun onNonTextInputUrlEntered(urlStr: String) {
