@@ -13,7 +13,7 @@ import org.mozilla.tv.firefox.utils.TurboMode
 class TestTurboMode(private var isEnabled: Boolean) : TurboMode {
     override fun isEnabled(): Boolean = isEnabled
 
-    override fun toggle() {
-        isEnabled = !isEnabled
+    override fun setEnabled(enabled: Boolean) {
+        isEnabled = enabled
     }
 }
