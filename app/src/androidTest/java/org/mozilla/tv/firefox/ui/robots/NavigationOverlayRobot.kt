@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.ui.robots
 
 import android.net.Uri
+import android.support.annotation.StringRes
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.clearText
@@ -13,13 +14,19 @@ import android.support.test.espresso.action.ViewActions.pressImeActionButton
 import android.support.test.espresso.action.ViewActions.typeText
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.contrib.RecyclerViewActions
+import android.support.test.espresso.matcher.RootMatchers.withDecorView
 import android.support.test.espresso.matcher.ViewMatchers.hasDescendant
+import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.withHint
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.espresso.matcher.ViewMatchers.withText
+import android.support.test.rule.ActivityTestRule
 import android.support.test.uiautomator.UiDevice
+import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.containsString
+import org.hamcrest.CoreMatchers.not
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.helpers.atPosition
 import org.mozilla.tv.firefox.helpers.ext.assertIsChecked
 import org.mozilla.tv.firefox.helpers.ext.assertIsEnabled
 import org.mozilla.tv.firefox.helpers.ext.assertIsSelected
@@ -41,6 +48,8 @@ class NavigationOverlayRobot {
     fun assertCanReload(canReload: Boolean) = reloadButton().assertIsEnabled(canReload)
     fun assertTurboIsSelected(isEnabled: Boolean) = turboButton().assertIsSelected(isEnabled)
 
+    fun assertPinButtonChecked(checked: Boolean) = innerAssertPinButtonChecked(checked)
+
     fun assertURLBarTextContains(expectedText: String) = urlBar().check(matches(withText(containsString(expectedText))))
 
     fun assertURLBarDisplaysHint() {
@@ -49,6 +58,13 @@ class NavigationOverlayRobot {
     }
 
     fun assertDesktopModeEnabled(desktopModeEnabled: Boolean) = desktopModeButton().assertIsEnabled(desktopModeEnabled)
+
+    fun assertToast(@StringRes textId: Int, activityTestRule: ActivityTestRule<*>) = onView(withText(textId))
+        .inRoot(withDecorView(not(`is`(activityTestRule.activity.window.decorView))))
+        .check(matches(isDisplayed()))
+
+    fun assertPinnedTileExists(inPosition: Int, withText: String) = homeTiles()
+        .check(matches(atPosition(inPosition, hasDescendant(withText(withText)))))
 
     class Transition {
         private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -142,6 +158,22 @@ class NavigationOverlayRobot {
             BrowserRobot().interact()
             return BrowserRobot.Transition()
         }
+
+        fun pinSite(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
+            innerAssertPinButtonChecked(false)
+            pinButton().click()
+
+            BrowserRobot().interact()
+            return BrowserRobot.Transition()
+        }
+
+        fun unpinSite(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
+            innerAssertPinButtonChecked(true)
+            pinButton().click()
+
+            BrowserRobot().interact()
+            return BrowserRobot.Transition()
+        }
     }
 }
 
@@ -154,6 +186,8 @@ fun navigationOverlay(interact: NavigationOverlayRobot.() -> Unit): NavigationOv
     NavigationOverlayRobot().interact()
     return NavigationOverlayRobot.Transition()
 }
+
+private fun innerAssertPinButtonChecked(checked: Boolean) = pinButton().assertIsChecked(checked)
 
 private fun backButton() = onView(withId(R.id.navButtonBack))
 private fun forwardButton() = onView(withId(R.id.navButtonForward))
