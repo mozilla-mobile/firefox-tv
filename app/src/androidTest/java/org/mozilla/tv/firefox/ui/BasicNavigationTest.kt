@@ -46,7 +46,7 @@ class BasicNavigationTest {
         }.enterUrlAndEnterToBrowser(pages[0].url) {
             assertTestContent(pages[0].content)
         }.openOverlay {
-            assertCanGoBackForward(true, false) // TODO: Unexpected. Fix in #1347.
+            assertCanGoBackForward(false, false)
             assertCanReload(true)
             assertURLBarTextContains(pages[0].url.toString())
 
@@ -65,7 +65,8 @@ class BasicNavigationTest {
             assertURLBarTextContains(pages[2].url.toString())
 
             // Verify back behavior (to the beginning of the stack).
-            goBack()
+        }.goBack {
+        }.openOverlay {
             assertCanGoBackForward(true, true)
             assertCanReload(true)
             assertURLBarTextContains(pages[1].url.toString())
@@ -73,8 +74,9 @@ class BasicNavigationTest {
             assertTestContent(pages[1].content)
 
         }.openOverlay {
-            goBack()
-            assertCanGoBackForward(true, true) // TODO: unexpected. Fix in #1347.
+        }.goBack {
+        }.openOverlay {
+            assertCanGoBackForward(false, true)
             assertCanReload(true)
             assertURLBarTextContains(pages[0].url.toString())
         }.closeToBrowser {
@@ -82,7 +84,8 @@ class BasicNavigationTest {
 
         }.openOverlay {
             // Verify forward behavior (to the end of the stack).
-            goForward()
+        }.goForward {
+        }.openOverlay {
             assertCanGoBackForward(true, true)
             assertCanReload(true)
             assertURLBarTextContains(pages[1].url.toString())
@@ -90,7 +93,8 @@ class BasicNavigationTest {
             assertTestContent(pages[1].content)
 
         }.openOverlay {
-            goForward()
+        }.goForward {
+        }.openOverlay {
             assertCanGoBackForward(true, false)
             assertCanReload(true)
             assertURLBarTextContains(pages[2].url.toString())
@@ -100,7 +104,8 @@ class BasicNavigationTest {
 
         }.openOverlay {
             // Verify reload behavior.
-            reload()
+        }.reload {
+        }.openOverlay {
             assertCanGoBackForward(true, false)
             assertCanReload(true)
             assertURLBarTextContains(pages[2].url.toString())

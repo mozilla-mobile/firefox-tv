@@ -24,18 +24,23 @@ class ClearDataTest {
     @Test
     fun WHEN_data_is_cleared_THEN_back_and_forward_should_be_unavailable() {
         val endpoints = MockWebServerHelper
-                .initMockWebServerAndReturnEndpoints("This is Google", "This is YouTube")
+                .initMockWebServerAndReturnEndpoints("This is Mozilla", "This is Google", "This is YouTube")
 
         navigationOverlay {
             assertCanGoBackForward(false, false)
 
         }.enterUrlAndEnterToBrowser(endpoints[0]) {
         }.openOverlay {
-            assertCanGoBackForward(true, false)
+            assertCanGoBackForward(false, false)
 
         }.enterUrlAndEnterToBrowser(endpoints[1]) {
         }.openOverlay {
-            goBack()
+            assertCanGoBackForward(true, false)
+
+        }.enterUrlAndEnterToBrowser(endpoints[2]) {
+        }.openOverlay {
+        }.goBack {
+        }.openOverlay {
             assertCanGoBackForward(true, true)
 
             engineInternals {
