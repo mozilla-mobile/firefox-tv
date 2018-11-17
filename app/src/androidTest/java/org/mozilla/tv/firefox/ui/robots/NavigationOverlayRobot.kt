@@ -31,12 +31,6 @@ import org.mozilla.tv.firefox.pinnedtile.TileViewHolder
  */
 class NavigationOverlayRobot {
 
-    fun goBack() = backButton().click()
-    fun goForward() = forwardButton().click()
-    fun reload() = reloadButton().click()
-    fun toggleTurbo() = turboButton().click()
-    fun openSettings() = settingsButton().click()
-
     fun assertCanGoBack(canGoBack: Boolean) = backButton().assertIsEnabled(canGoBack)
     fun assertCanGoForward(canGoForward: Boolean) = forwardButton().assertIsEnabled(canGoForward)
     fun assertCanGoBackForward(canGoBack: Boolean, canGoForward: Boolean) {
@@ -44,7 +38,7 @@ class NavigationOverlayRobot {
         assertCanGoForward(canGoForward)
     }
 
-    fun assertCanReload(canReload: Boolean) = reload().assertIsEnabled(canReload)
+    fun assertCanReload(canReload: Boolean) = reloadButton().assertIsEnabled(canReload)
     fun assertTurboIsSelected(isEnabled: Boolean) = turboButton().assertIsSelected(isEnabled)
 
     fun assertURLBarTextContains(expectedText: String) = urlBar().check(matches(withText(containsString(expectedText))))
@@ -116,6 +110,34 @@ class NavigationOverlayRobot {
         fun turnDesktopModeOff(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
             assertCanTurnDesktopModeOn(false)
             desktopModeButton().click()
+
+            BrowserRobot().interact()
+            return BrowserRobot.Transition()
+        }
+
+        fun goBack(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
+            backButton().click()
+
+            BrowserRobot().interact()
+            return BrowserRobot.Transition()
+        }
+
+        fun goForward(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
+            forwardButton().click()
+
+            BrowserRobot().interact()
+            return BrowserRobot.Transition()
+        }
+
+        fun reload(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
+            reloadButton().click()
+
+            BrowserRobot().interact()
+            return BrowserRobot.Transition()
+        }
+
+        fun toggleTurbo(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
+            turboButton().click()
 
             BrowserRobot().interact()
             return BrowserRobot.Transition()
