@@ -94,4 +94,5 @@
   <string name="notification_request_desktop_site">Versão desktop solicitada</string>
   <string name="notification_request_non_desktop_site">Retornou para a versão padrão</string>
   <string name="youtube_casting_onboarding_toast">Transmita vídeos do YouTube a partir do seu celular ou tablet. Abra o YouTube no seu dispositivo e toque em %s para começar.</string>
+  <string name="fullscreen_toast_pinch_to_exit">Reduza com os dedos para sair do modo de tela cheia</string>
 </resources>

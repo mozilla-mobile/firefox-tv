@@ -94,4 +94,5 @@
   <string name="notification_request_desktop_site">已发出桌面版请求</string>
   <string name="notification_request_non_desktop_site">返回非桌面版</string>
   <string name="youtube_casting_onboarding_toast">用您的手机或平板电脑投屏 YouTube 视频。在您的设备上打开 YouTube，然后点按 %s 即可开始使用。</string>
+  <string name="fullscreen_toast_pinch_to_exit">双指捏合即可退出全屏模式</string>
 </resources>

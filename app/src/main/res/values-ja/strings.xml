@@ -94,4 +94,5 @@
   <string name="notification_request_desktop_site">デスクトップ版を表示します</string>
   <string name="notification_request_non_desktop_site">デスクトップ版でない表示に戻しました</string>
   <string name="youtube_casting_onboarding_toast">YouTube 動画をスマートフォンやタブレットからキャスト配信します。開始するには、端末で YouTube を開き、%s をタップしてください。</string>
+  <string name="fullscreen_toast_pinch_to_exit">ピンチ操作で全画面表示モードを終了します</string>
 </resources>
