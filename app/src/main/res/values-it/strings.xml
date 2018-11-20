@@ -94,4 +94,5 @@
   <string name="notification_request_desktop_site">Versione desktop richiesta</string>
   <string name="notification_request_non_desktop_site">Versione desktop disattivata</string>
   <string name="youtube_casting_onboarding_toast">Guarda i video YouTube dal cellulare o dal tablet. Apri YouTube nel dispositivo e tocca %s per iniziare.</string>
+  <string name="fullscreen_toast_pinch_to_exit">Avvicina due dita per uscire dalla modalità Schermo intero</string>
 </resources>
