@@ -94,4 +94,5 @@
   <string name="notification_request_desktop_site">Desktop-Version angefordert</string>
   <string name="notification_request_non_desktop_site">Zu Nicht-Desktop-Version zurückgekehrt</string>
   <string name="youtube_casting_onboarding_toast">Spielen Sie YouTube-Videos von Ihrem Handy oder Tablet ab. Öffnen Sie YouTube auf Ihrem Gerät und berühren Sie %s, um zu beginnen.</string>
+  <string name="fullscreen_toast_pinch_to_exit">Zusammenziehen, um Vollbildmodus zu beenden</string>
 </resources>

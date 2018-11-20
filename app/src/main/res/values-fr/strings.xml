@@ -94,4 +94,5 @@
   <string name="notification_request_desktop_site">Affichage du site pour ordinateurs</string>
   <string name="notification_request_non_desktop_site">Retour à la version par défaut</string>
   <string name="youtube_casting_onboarding_toast">Diffusez des vidéos YouTube à partir de votre téléphone ou de votre tablette. Ouvrez YouTube sur votre appareil et appuyez sur %s pour commencer.</string>
+  <string name="fullscreen_toast_pinch_to_exit">Pincer pour quitter le mode plein écran</string>
 </resources>
