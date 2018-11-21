@@ -8,11 +8,10 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.os.SystemClock
 import android.support.annotation.UiThread
-import kotlinx.coroutines.experimental.CancellationException
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.mozilla.tv.firefox.utils.BuildConfigDerivables
 import java.util.concurrent.TimeUnit
 import kotlin.math.min
@@ -60,14 +59,14 @@ open class PocketVideoRepo(
 
     @UiThread // update backgroundUpdates.
     fun startBackgroundUpdates() {
-        backgroundUpdates?.cancel(CancellationException("Cancelling unexpectedly active Pocket update job to ensure only one is running"))
+        backgroundUpdates?.cancel()
         backgroundUpdates = startBackgroundUpdatesInner()
     }
 
     // When we the app is not in use, we don't want to hit the network for no reason, so we cancel updates
     @UiThread // stop updating backgroundUpdates.
     fun stopBackgroundUpdates() {
-        backgroundUpdates?.cancel(CancellationException("App closing: canceling Pocket background updates"))
+        backgroundUpdates?.cancel()
         backgroundUpdates = null
     }
 

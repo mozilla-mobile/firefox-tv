@@ -19,9 +19,10 @@ import kotlinx.android.synthetic.main.browser_overlay.*
 import kotlinx.android.synthetic.main.browser_overlay.view.*
 import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.android.synthetic.main.fragment_browser.view.*
-import kotlinx.coroutines.experimental.CancellationException
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
+import mozilla.components.concept.engine.permission.Permission
+import mozilla.components.concept.engine.permission.PermissionRequest
 import mozilla.components.feature.session.SessionFeature
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.MainActivity.Companion.PARENT_FRAGMENT
@@ -323,7 +324,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         // Since we start the async jobs in View.init and Android is inflating the view for us,
         // there's no good way to pass in the uiLifecycleJob. We could consider other solutions
         // but it'll add complexity that I don't think is probably worth it.
-        browserOverlay.uiLifecycleCancelJob.cancel(CancellationException("Parent lifecycle has ended"))
+        browserOverlay.uiLifecycleCancelJob.cancel()
 
         sessionFeature = null
     }
