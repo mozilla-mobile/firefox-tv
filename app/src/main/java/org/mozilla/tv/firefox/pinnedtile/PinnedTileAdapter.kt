@@ -15,13 +15,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import kotlinx.android.synthetic.main.home_tile.view.*
-import kotlinx.coroutines.experimental.CompletableDeferred
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.CoroutineStart
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.serviceLocator
@@ -52,6 +53,7 @@ class PinnedTileAdapter(
 
     private val uiScope = CoroutineScope(Dispatchers.Main + uiLifecycleCancelJob)
 
+    @ExperimentalCoroutinesApi
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with(holder) {
         val item = tiles[position]
         when (item) {
@@ -146,6 +148,7 @@ private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledPinnedTil
     titleView.text = tile.title
 }
 
+@ExperimentalCoroutinesApi
 private fun onBindCustomHomeTile(
     uiScope: CoroutineScope,
     holder: TileViewHolder,

@@ -4,6 +4,6 @@
 
 package org.mozilla.tv.firefox.ext
 
-import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.Job
 
 fun Job.isNotCompleted() = !this.isCompleted

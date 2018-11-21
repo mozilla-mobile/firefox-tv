@@ -5,8 +5,8 @@
 package org.mozilla.tv.firefox.utils.publicsuffix
 
 import android.content.Context
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /** A helper to allow [PublicSuffix] to call Kotlin code: converting the whole file didn't seem right. */
 internal object PublicSuffixKt {
