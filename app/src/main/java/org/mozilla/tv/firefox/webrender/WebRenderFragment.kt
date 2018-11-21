@@ -213,6 +213,10 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         requireWebRenderComponents.sessionUseCases.requestDesktopSite.invoke(enabled, session)
     }
 
+    override fun onContentPermissionRequested(session: Session, permissionRequest: PermissionRequest): Boolean =
+        permissionRequest.grantIf { it is Permission.ContentProtectedMediaId}
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val layout = inflater.inflate(R.layout.fragment_browser, container, false)
 
