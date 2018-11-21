@@ -55,6 +55,15 @@ class ClearDataTest {
             engineInternals {
                 assertCookieDoesNotExist()
             }
+        }.enterUrlAndEnterToBrowser(endpoints[1]) {
+        }.openOverlay {
+            assertCanGoBackForward(true, false)
+
+        }.enterUrlAndEnterToBrowser(endpoints[2]) {
+        }.openOverlay {
+        }.goBack {
+        }.openOverlay {
+            assertCanGoBackForward(true, true)
         }
     }
 }
