@@ -8,7 +8,7 @@ package org.mozilla.tv.firefox.autocomplete
 import android.app.Application
 import android.preference.PreferenceManager
 import androidx.test.core.app.ApplicationProvider
-import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.Job
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
