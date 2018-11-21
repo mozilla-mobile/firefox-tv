@@ -81,6 +81,7 @@
   <string name="pocket_home_tutorial_description">网络上最有趣的视频。由 Mozilla 旗下 %1$s 为您推荐。</string>
   <string name="pocket_home_tutorial_dismiss_button">我明白了</string>
   <string name="pocket_home_a11y_tile_focused">由“%1$s”推荐的视频</string>
+  <string name="pocket_info_a11y">关于 Pocket</string>
   <string name="pocket_video_feed_recommended_videos_title">推荐视频</string>
   <string name="pocket_video_feed_failed_to_load">呃，我们在显示由“%1$s”推荐的视频时遇到一些问题。</string>
   <string name="pocket_video_feed_reload_button">重试</string>
