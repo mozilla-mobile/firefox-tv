@@ -26,8 +26,6 @@ private const val TELEMETRY_APP_NAME_FOCUS_TV = "FirefoxForFireTV"
 object TelemetryFactory {
 
     fun createTelemetry(context: Context): Telemetry {
-        val telemetryEnabled = DataUploadPreference.isEnabled(context)
-
         val configuration = TelemetryConfiguration(context)
                 .setServerEndpoint("https://incoming.telemetry.mozilla.org")
                 .setAppName(TELEMETRY_APP_NAME_FOCUS_TV)
@@ -40,8 +38,12 @@ object TelemetryFactory {
                         TelemetrySettingsProvider.APP_ID
                 )
                 .setSettingsProvider(TelemetrySettingsProvider(context))
-                .setCollectionEnabled(telemetryEnabled)
-                .setUploadEnabled(telemetryEnabled)
+
+        context.serviceLocator.settingsRepo.dataCollectionEnabled.observeForever { collectionEnabled ->
+            if (collectionEnabled != null) {
+                configuration.setUploadEnabled(collectionEnabled).isCollectionEnabled = collectionEnabled
+            }
+        }
 
         val serializer = JSONPingSerializer()
         val storage = FileTelemetryStorage(configuration, serializer)
