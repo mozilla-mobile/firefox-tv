@@ -59,7 +59,7 @@ open class PocketVideoRepo(
 
     @UiThread // update backgroundUpdates.
     fun startBackgroundUpdates() {
-        backgroundUpdates?.cancel()
+        backgroundUpdates?.cancel() // Cancelling unexpectedly active Pocket update job to ensure only one is running
         backgroundUpdates = startBackgroundUpdatesInner()
     }
 
