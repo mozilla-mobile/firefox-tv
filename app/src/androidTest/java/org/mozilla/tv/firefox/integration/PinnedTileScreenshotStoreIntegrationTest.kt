@@ -8,7 +8,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.support.test.InstrumentationRegistry
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
