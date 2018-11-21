@@ -115,8 +115,8 @@ Certain services require an API key, so you'll need to build with the key to use
 1. To build with the API key (for services such as Sentry), add a `<project-dir>/.<service>_debug`
 file with your key, for example, `<project-dir>/.sentry_dsn_debug`
 
-    1. To enable Sentry on Debug builds, additionally replace the `DataUploadPreference.isEnabled`
-value with true (upload is disabled by default in dev builds).
+    1. To enable Sentry on Debug builds, additionally replace the `isEnabled` value check in
+    `SentryIntegration` value with true (upload is disabled by default in dev builds).
 
 2. Verify the key add was successful. The gradle output is the only way to verify this (although
 it won't indicate if the key is valid). You will see a message in the gradle output
