@@ -6,11 +6,11 @@ package org.mozilla.tv.firefox.components
 
 import android.content.Context
 import android.util.Log
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import org.mozilla.tv.firefox.components.locale.Locales
 import org.mozilla.tv.firefox.utils.Settings
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText

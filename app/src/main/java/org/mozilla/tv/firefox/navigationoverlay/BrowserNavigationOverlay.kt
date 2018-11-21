@@ -27,7 +27,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.browser_overlay.view.*
 import kotlinx.android.synthetic.main.browser_overlay_top_nav.view.*
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.view.*
-import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.Job
 import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.components.UrlAutoCompleteFilter
