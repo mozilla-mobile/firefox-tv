@@ -225,17 +225,24 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     fun showMegaTileError() {
         pocketVideosContainer.visibility = View.GONE
         pocketErrorContainer.visibility = View.VISIBLE
+
         pocketMegaTileLoadError.text = resources.getString(R.string.pocket_video_feed_failed_to_load,
                 resources.getString(R.string.pocket_brand_name))
         megaTileTryAgainButton.contentDescription = resources.getString(R.string.pocket_video_feed_failed_to_load,
                 resources.getString(R.string.pocket_brand_name)) + " " + resources.getString(R.string.pocket_video_feed_reload_button)
 
         megaTileTryAgainButton.setOnClickListener { _ ->
+            hideMegaTileError()
             pocketViewModel.update()
             initMegaTile()
             updateOverlayForCurrentState()
-            pocketVideoMegaTileView.requestFocus()
         }
+    }
+
+    private fun hideMegaTileError() {
+        pocketVideosContainer.visibility = View.VISIBLE
+        pocketErrorContainer.visibility = View.GONE
+        pocketVideoMegaTileView.requestFocus()
     }
 
     private fun initMegaTile() {
