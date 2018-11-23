@@ -110,7 +110,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             APP_URL_HOME -> browserOverlay?.visibility = View.VISIBLE
             APP_URL_POCKET_ERROR -> {
                 browserOverlay?.showMegaTileError()
-                browserOverlay?.visibility = View.VISIBLE
+                setOverlayVisible(true)
             }
             else -> Unit
         }
