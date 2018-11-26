@@ -108,10 +108,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     override fun onUrlChanged(session: Session, url: String) {
         when (url) {
             APP_URL_HOME -> browserOverlay?.visibility = View.VISIBLE
-            APP_URL_POCKET_ERROR -> {
-                browserOverlay?.showMegaTileError()
-                setOverlayVisible(true)
-            }
             else -> Unit
         }
         // Turn off desktop site mode if navigating to a new domain
@@ -131,6 +127,11 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     }
 
     override fun onLoadingStateChanged(session: Session, loading: Boolean) {
+        if (!loading && session.url == APP_URL_POCKET_ERROR) {
+            browserOverlay?.showMegaTileError()
+            setOverlayVisible(true)
+        }
+
         updateOverlayIfVisible()
     }
 
