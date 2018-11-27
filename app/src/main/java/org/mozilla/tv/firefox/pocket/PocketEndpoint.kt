@@ -14,19 +14,11 @@ import org.json.JSONObject
 import org.mozilla.tv.firefox.BuildConfig
 import org.mozilla.tv.firefox.ext.executeAndAwait
 import org.mozilla.tv.firefox.ext.flatMapObj
+import org.mozilla.tv.firefox.utils.BuildConfigDerivables
 import org.mozilla.tv.firefox.utils.OkHttpWrapper
 import java.io.IOException
 
 private const val LOGTAG = "PocketEndpoint"
-
-private const val PARAM_API_KEY = "consumer_key"
-
-private val GLOBAL_VIDEO_ENDPOINT = Uri.parse("https://getpocket.cdn.mozilla.net/v3/firefox/global-video-recs")
-        .buildUpon()
-        .appendQueryParameter(PARAM_API_KEY, BuildConfig.POCKET_KEY)
-        .appendQueryParameter("version", "2")
-        .appendQueryParameter("authors", "1")
-        .build()
 
 /**
  * Make requests to the Pocket endpoint and returns internal objects.
@@ -34,13 +26,14 @@ private val GLOBAL_VIDEO_ENDPOINT = Uri.parse("https://getpocket.cdn.mozilla.net
  * The methods of this class call the endpoint directly and does not cache results or rate limit,
  * outside of the network layer (e.g. with OkHttp).
  */
-open class PocketEndpoint(private val appVersion: String) {
+open class PocketEndpoint(private val appVersion: String, private val buildConfigDerivables: BuildConfigDerivables) {
 
     /** @return The global video recommendations or null on error; the list will never be empty. */
     @AnyThread // via PocketEndpointRaw.
     open suspend fun getRecommendedVideos(): List<PocketViewModel.FeedItem.Video>? {
-        val videosJSON = PocketEndpointRaw.getGlobalVideoRecommendations(appVersion) ?: return null
-        return convertVideosJSON(videosJSON)
+        return buildConfigDerivables.globalPocketVideoEndpoint
+            ?.let { endpoint -> PocketEndpointRaw.getGlobalVideoRecommendations(appVersion, endpoint) }
+            ?.let { json -> convertVideosJSON(json) }
     }
 
     /** @return The videos or null on error; the list will never be empty. */
@@ -61,9 +54,9 @@ private object PocketEndpointRaw {
 
     /** @return The global video recommendations as a raw JSON str or null on error. */
     @AnyThread // executeAndAwait hands off the request to the OkHttp dispatcher.
-    suspend fun getGlobalVideoRecommendations(version: String): String? {
+    suspend fun getGlobalVideoRecommendations(version: String, endpoint: Uri): String? {
         val req = Request.Builder()
-                .url(GLOBAL_VIDEO_ENDPOINT.toString())
+                .url(endpoint.toString())
                 .header("User-Agent", "FirefoxTV-$version-${BuildConfig.BUILD_TYPE}")
                 .build()
 

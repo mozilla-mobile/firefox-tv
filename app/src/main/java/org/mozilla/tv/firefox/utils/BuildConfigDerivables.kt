@@ -4,8 +4,11 @@
 
 package org.mozilla.tv.firefox.utils
 
+import android.net.Uri
 import org.mozilla.tv.firefox.BuildConfig
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
+
+private const val POCKET_PARAM_API_KEY = "consumer_key"
 
 /**
  * Computes information that must be derived from the [BuildConfig].
@@ -17,5 +20,19 @@ class BuildConfigDerivables {
     val initialPocketRepoState = when {
         BuildConfig.POCKET_KEY == null -> PocketVideoRepo.FeedState.NoAPIKey
         else -> PocketVideoRepo.FeedState.Loading
+    }
+
+    // Pocket key can be null if it was not included in the build.  In this case we
+    // know that any calls to Pocket will fail, and so we do not provide the
+    // endpoint at all to prevent unnecessary requests.
+    @Suppress("UselessCallOnNotNull")
+    val globalPocketVideoEndpoint: Uri? = when {
+        BuildConfig.POCKET_KEY.isNullOrEmpty() -> null
+        else -> Uri.parse("https://getpocket.cdn.mozilla.net/v3/firefox/global-video-recs")
+            .buildUpon()
+            .appendQueryParameter(POCKET_PARAM_API_KEY, BuildConfig.POCKET_KEY)
+            .appendQueryParameter("version", "2")
+            .appendQueryParameter("authors", "1")
+            .build()
     }
 }
