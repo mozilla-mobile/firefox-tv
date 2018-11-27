@@ -16,9 +16,9 @@ private const val POCKET_PARAM_API_KEY = "consumer_key"
  * This logic is often simple but noisy, so pulling it out of client code improves readability.
  */
 class BuildConfigDerivables {
-    @Suppress("SENSELESS_COMPARISON") // Values of BuildConfig can change but the compiler doesn't know that
+    @Suppress("UselessCallOnNotNull") // Values of BuildConfig can change but the compiler doesn't know that
     val initialPocketRepoState = when {
-        BuildConfig.POCKET_KEY == null -> PocketVideoRepo.FeedState.NoAPIKey
+        BuildConfig.POCKET_KEY.isNullOrEmpty() -> PocketVideoRepo.FeedState.NoAPIKey
         else -> PocketVideoRepo.FeedState.Loading
     }
 
