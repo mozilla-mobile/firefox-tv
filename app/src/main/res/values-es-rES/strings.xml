@@ -81,6 +81,7 @@
   <string name="pocket_home_tutorial_description">Los videos más interesantes de la web. Recomendado por %1$s, y ahora también parte de Mozilla.</string>
   <string name="pocket_home_tutorial_dismiss_button">Vale, entendido</string>
   <string name="pocket_home_a11y_tile_focused">Video recomendado por %1$s</string>
+  <string name="pocket_info_a11y">Acerca de Pocket</string>
   <string name="pocket_video_feed_recommended_videos_title">Videos recomendados</string>
   <string name="pocket_video_feed_failed_to_load">Umm. Estamos teniendo problemas para visualizar los videos recomendados por %1$s.</string>
   <string name="pocket_video_feed_reload_button">Volver a intentarlo</string>
@@ -94,4 +95,5 @@
   <string name="notification_request_desktop_site">Se ha pedido la versión de escritorio</string>
   <string name="notification_request_non_desktop_site">Se vuelve a la versión predeterminada</string>
   <string name="youtube_casting_onboarding_toast">Transmite vídeos de YouTube desde tu móvil o tableta. Abre YouTube en tu dispositivo y pulsa %s para comenzar.</string>
+  <string name="fullscreen_toast_pinch_to_exit">Reduce con dos dedos para salir de pantalla completa</string>
 </resources>

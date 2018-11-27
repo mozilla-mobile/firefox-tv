@@ -81,6 +81,7 @@
   <string name="pocket_home_tutorial_description">ウェブ上で一番興味深い動画。Mozilla の一員となった %1$s がおすすめします。</string>
   <string name="pocket_home_tutorial_dismiss_button">了解しました</string>
   <string name="pocket_home_a11y_tile_focused">%1$s のおすすめ動画</string>
+  <string name="pocket_info_a11y">Pocket について</string>
   <string name="pocket_video_feed_recommended_videos_title">おすすめ動画</string>
   <string name="pocket_video_feed_failed_to_load">申し訳ありませんが、%1$s のおすすめ動画を表示中に何か問題が発生しました。</string>
   <string name="pocket_video_feed_reload_button">再読み込み</string>

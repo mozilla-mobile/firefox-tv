@@ -81,6 +81,7 @@
   <string name="pocket_home_tutorial_description">Les vidéos les plus intéressantes du Web. Elles sont recommandées par %1$s, qui fait désormais partie de Mozilla.</string>
   <string name="pocket_home_tutorial_dismiss_button">J’ai compris</string>
   <string name="pocket_home_a11y_tile_focused">Recommandations de vidéos par %1$s</string>
+  <string name="pocket_info_a11y">À propos de Pocket</string>
   <string name="pocket_video_feed_recommended_videos_title">Vidéos recommandées</string>
   <string name="pocket_video_feed_failed_to_load">Hum, nous ne parvenons pas à afficher les recommandations de vidéos par %1$s.</string>
   <string name="pocket_video_feed_reload_button">Réessayer</string>
