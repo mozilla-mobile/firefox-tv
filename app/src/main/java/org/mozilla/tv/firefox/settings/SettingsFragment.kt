@@ -55,14 +55,20 @@ class SettingsFragment : Fragment() {
             builder1.setPositiveButton(
                 getString(R.string.action_ok)
             ) { dialog, _ -> with(requireContext()) {
-                    requireWebRenderComponents.engine.deleteData(this)
-                    requireWebRenderComponents.sessionManager.removeAll()
+                    val components = requireWebRenderComponents
+                    components.engine.deleteData(this)
+                    components.sessionManager.removeAll()
                     dialog.cancel()
+                    serviceLocator.webViewCache.doNotPersist(doAfterRecreate = {
+                        // Sessions must be removed prior to MainActivity being recreated, in order for initialization
+                        // logic to be called. However, the URL is set before the new WebView is created, causing it to
+                        // be out of sync with the Session. Removing all sessions puts them back into sync
+                        components.sessionManager.removeAll()
+                    })
                     // The call to recreate destroys state being maintained in the WebView (including
                     // navigation history) and Activity. This implementation will need to change
                     // if/when we add session restoration logic.
                     // See https://github.com/mozilla-mobile/firefox-tv/issues/1192
-                    serviceLocator.webViewCache.doNotPersist()
                     activity?.recreate()
                     TelemetryIntegration.INSTANCE.clearDataEvent()
                 }
