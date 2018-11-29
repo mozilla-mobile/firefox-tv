@@ -4,6 +4,8 @@
 
 package org.mozilla.tv.firefox.helpers
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import org.mozilla.tv.firefox.utils.TurboMode
 
 /**
@@ -15,5 +17,8 @@ class TestTurboMode(private var isEnabled: Boolean) : TurboMode {
 
     override fun setEnabled(enabled: Boolean) {
         isEnabled = enabled
+        (observable as MutableLiveData).postValue(isEnabled)
     }
+
+    override val observable: LiveData<Boolean> = MutableLiveData<Boolean>()
 }
