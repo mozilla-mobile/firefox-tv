@@ -59,7 +59,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         const val FRAGMENT_TAG = "browser"
         const val APP_URL_PREFIX = "firefox:"
         const val APP_URL_HOME = "${APP_URL_PREFIX}home"
-        const val APP_URL_POCKET_ERROR = "${APP_URL_PREFIX}error:pocketconnection"
 
         @JvmStatic
         fun createForSession(session: Session) = WebRenderFragment().apply {
@@ -126,14 +125,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         updateOverlayIfVisible()
     }
 
-    override fun onLoadingStateChanged(session: Session, loading: Boolean) {
-        if (!loading && session.url == APP_URL_POCKET_ERROR) {
-            browserOverlay?.showMegaTileError()
-            setOverlayVisible(true)
-        }
-
-        updateOverlayIfVisible()
-    }
+    override fun onLoadingStateChanged(session: Session, loading: Boolean) = updateOverlayIfVisible()
 
     override fun onNavigationStateChanged(session: Session, canGoBack: Boolean, canGoForward: Boolean) =
         updateOverlayIfVisible()

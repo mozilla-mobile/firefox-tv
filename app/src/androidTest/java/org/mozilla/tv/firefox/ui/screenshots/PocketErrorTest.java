@@ -15,18 +15,17 @@ import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mozilla.tv.firefox.FirefoxTestApplication;
 import org.mozilla.tv.firefox.MainActivity;
 import org.mozilla.tv.firefox.R;
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule;
+import org.mozilla.tv.firefox.pocket.PocketVideoRepo;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.locale.LocaleTestRule;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
-import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.matcher.ViewMatchers.hasFocus;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
@@ -35,6 +34,7 @@ import static org.hamcrest.Matchers.allOf;
 public class PocketErrorTest extends ScreenshotTest {
 
     private UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+    private FirefoxTestApplication app;
 
     @ClassRule
     public static final LocaleTestRule localeTestRule = new LocaleTestRule();
@@ -49,9 +49,9 @@ public class PocketErrorTest extends ScreenshotTest {
 
     @Test
     public void showPocketTileError() {
-        onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()))
-                .perform(replaceText("firefox:error:pocketconnection"))
-                .perform(pressImeActionButton());
+        app = (FirefoxTestApplication) mActivityTestRule.getActivity().getApplication();
+
+        app.pushPocketRepoState(PocketVideoRepo.FeedState.FetchFailed.INSTANCE);
 
         UiObject errorMsg = mDevice.findObject(new UiSelector()
                 .resourceId("org.mozilla.tv.firefox.debug:id/pocketMegaTileLoadError")
