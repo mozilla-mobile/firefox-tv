@@ -25,8 +25,8 @@ interface TurboMode {
 }
 
 /**
- * Implementation of [TurboMode] that sets and queries for Turbo state using an
- * [Application] instance.
+ * Implementation of [TurboMode] meant for use in production (as opposed to TestTurboMode) that
+ * sets and queries for Turbo state using an [Application] instance.
  */
 class ProdTurboMode(private val app: Application) : TurboMode {
 
