@@ -176,8 +176,9 @@ class ToolbarViewModelTest {
 
     @Test
     fun `WHEN new session state url is home page THEN make overlay visible event should be emitted`() {
-        pinnedTiles.value = linkedMapOf()
         toolbarVm.events.assertThat({ it.consume { it == BrowserNavigationOverlay.Action.SetOverlayVisible(true) } }) {
+            toolbarVm.state.observeForever { /* start subscription */ }
+            pinnedTiles.value = linkedMapOf()
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
@@ -190,9 +191,10 @@ class ToolbarViewModelTest {
 
     @Test
     fun `WHEN new session state url is not home THEN no overlay visibility event should be emitted`() {
-        pinnedTiles.value = linkedMapOf()
         @Suppress("RemoveEmptyParenthesesFromLambdaCall")
         toolbarVm.events.assertValues(/* No values */) {
+            toolbarVm.state.observeForever { /* start subscription */ }
+            pinnedTiles.value = linkedMapOf()
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
