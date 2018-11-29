@@ -47,6 +47,7 @@ class WebViewCache : LifecycleObserver {
 
     private var cachedView: SystemEngineView? = null
     private var shouldPersist = true
+    private var doAfterRecreate: (() -> Unit)? = null
 
     fun getWebView(
         context: Context,
@@ -64,7 +65,11 @@ class WebViewCache : LifecycleObserver {
             return SystemEngineView(context, attrs).apply {
                 state?.let { this.restoreState(it) }
                 initialize()
-            }.also { cachedView = it }
+            }.also {
+                cachedView = it
+                doAfterRecreate?.invoke()
+                doAfterRecreate = null
+            }
         }
 
         cachedView?.removeFromParentIfAble()
@@ -86,7 +91,8 @@ class WebViewCache : LifecycleObserver {
         cachedView = null
     }
 
-    fun doNotPersist() {
+    fun doNotPersist(doAfterRecreate: () -> Unit) {
         shouldPersist = false
+        this.doAfterRecreate = doAfterRecreate
     }
 }
