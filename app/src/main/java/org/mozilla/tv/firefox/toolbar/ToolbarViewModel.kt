@@ -21,7 +21,7 @@ import org.mozilla.tv.firefox.utils.AppConstants
 import org.mozilla.tv.firefox.utils.TurboMode
 import org.mozilla.tv.firefox.utils.UrlUtils
 
-open class ToolbarViewModel(
+class ToolbarViewModel(
     private val turboMode: TurboMode,
     private val sessionRepo: SessionRepo,
     private val pinnedTileRepo: PinnedTileRepo,
@@ -119,13 +119,13 @@ open class ToolbarViewModel(
 
     @UiThread
     fun desktopModeButtonClicked() {
-        val previouslyChecked = state.value?.desktopModeChecked ?: return
+        val desktopModeChecked = state.value?.desktopModeChecked ?: return
 
-        sendOverlayClickTelemetry(NavigationEvent.DESKTOP_MODE, desktopModeChecked = !previouslyChecked)
+        sendOverlayClickTelemetry(NavigationEvent.DESKTOP_MODE, desktopModeChecked = !desktopModeChecked)
 
-        sessionRepo.setDesktopMode(!previouslyChecked)
+        sessionRepo.setDesktopMode(!desktopModeChecked)
         val textId = when {
-            previouslyChecked -> R.string.notification_request_non_desktop_site
+            desktopModeChecked -> R.string.notification_request_non_desktop_site
             else -> R.string.notification_request_desktop_site
         }
 
@@ -149,6 +149,7 @@ open class ToolbarViewModel(
         }
     }
 
+    // TODO move this to the OverlayViewModel once it exists
     private fun setOverlayVisible(visible: Boolean) {
         _events.value = Consumable.from(BrowserNavigationOverlay.Action.SetOverlayVisible(visible))
     }
