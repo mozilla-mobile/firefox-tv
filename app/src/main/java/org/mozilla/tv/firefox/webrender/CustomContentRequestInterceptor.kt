@@ -22,7 +22,7 @@ class CustomContentRequestInterceptor(
         currentPageURL = uri
 
         return when (uri) {
-            WebRenderFragment.APP_URL_HOME, WebRenderFragment.APP_URL_POCKET_ERROR ->
+            WebRenderFragment.APP_URL_HOME ->
                 RequestInterceptor.InterceptionResponse.Content("<html></html>")
 
             LocalizedContent.URL_ABOUT -> RequestInterceptor.InterceptionResponse.Content(
