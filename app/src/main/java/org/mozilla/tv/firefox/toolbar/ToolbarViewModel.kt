@@ -18,11 +18,9 @@ import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.AppConstants
-import org.mozilla.tv.firefox.utils.TurboMode
 import org.mozilla.tv.firefox.utils.UrlUtils
 
 class ToolbarViewModel(
-    private val turboMode: TurboMode,
     private val sessionRepo: SessionRepo,
     private val pinnedTileRepo: PinnedTileRepo,
     private val telemetryIntegration: TelemetryIntegration = TelemetryIntegration.INSTANCE
@@ -78,7 +76,7 @@ class ToolbarViewModel(
                 refreshEnabled = !sessionState.currentUrl.isEqualToHomepage(),
                 pinEnabled = !sessionState.currentUrl.isEqualToHomepage(),
                 pinChecked = currentUrlIsPinned(),
-                turboChecked = turboMode.isEnabled(),
+                turboChecked = sessionState.turboModeActive,
                 desktopModeEnabled = !sessionState.currentUrl.isEqualToHomepage(),
                 desktopModeChecked = sessionState.desktopModeActive,
                 urlBarText = UrlUtils.toUrlBarDisplay(sessionState.currentUrl)
@@ -123,11 +121,14 @@ class ToolbarViewModel(
 
     @UiThread
     fun turboButtonClicked() {
-        turboMode.setEnabled(!turboMode.isEnabled())
+        val currentUrl = sessionRepo.state.value?.currentUrl
+        val turboModeActive = sessionRepo.state.value?.turboModeActive ?: true
+
+        sessionRepo.setTurboModeEnabled(!turboModeActive)
         sessionRepo.reload()
 
-        sendOverlayClickTelemetry(NavigationEvent.TURBO, turboChecked = turboMode.isEnabled())
-        sessionRepo.state.value?.currentUrl?.let { if (!it.isEqualToHomepage()) setOverlayVisible(false) }
+        sendOverlayClickTelemetry(NavigationEvent.TURBO, turboChecked = !turboModeActive)
+        currentUrl?.let { if (!it.isEqualToHomepage()) setOverlayVisible(false) }
     }
 
     @UiThread

@@ -13,16 +13,22 @@ import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.feature.session.SessionUseCases
 import org.mozilla.tv.firefox.ext.postIfNew
+import org.mozilla.tv.firefox.utils.TurboMode
 
 /**
  * Repository that is responsible for storing state related to the browser.
  */
-class SessionRepo(private val sessionManager: SessionManager, private val sessionUseCases: SessionUseCases) {
+class SessionRepo(
+    private val sessionManager: SessionManager,
+    private val sessionUseCases: SessionUseCases,
+    private val turboMode: TurboMode
+) {
 
     data class State(
         val backEnabled: Boolean,
         val forwardEnabled: Boolean,
         val desktopModeActive: Boolean,
+        val turboModeActive: Boolean,
         val currentUrl: String,
         val currentBackForwardIndex: Int
     )
@@ -32,8 +38,9 @@ class SessionRepo(private val sessionManager: SessionManager, private val sessio
 
     var backForwardIndexProvider: (() -> Int)? = null
 
-    fun observeSession() {
+    fun observeSources() {
         SessionObserverHelper.attach(this, sessionManager)
+        turboMode.observable.observeForever { update() }
     }
 
     @AnyThread
@@ -43,6 +50,7 @@ class SessionRepo(private val sessionManager: SessionManager, private val sessio
                 backEnabled = it.canGoBack,
                 forwardEnabled = it.canGoForward,
                 desktopModeActive = it.desktopMode,
+                turboModeActive = turboMode.isEnabled(),
                 currentUrl = it.url,
                 currentBackForwardIndex = backForwardIndexProvider?.invoke() ?: -1
             )
@@ -74,6 +82,8 @@ class SessionRepo(private val sessionManager: SessionManager, private val sessio
     fun pushCurrentValue() = _state.postValue(_state.value)
 
     fun loadURL(url: Uri) = session?.let { sessionManager.getEngineSession(it)?.loadUrl(url.toString()) }
+
+    fun setTurboModeEnabled(enabled: Boolean) = turboMode.setEnabled(enabled)
 
     private val session: Session? get() = sessionManager.selectedSession
 }

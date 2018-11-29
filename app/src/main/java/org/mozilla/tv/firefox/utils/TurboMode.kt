@@ -5,6 +5,8 @@
 package org.mozilla.tv.firefox.utils
 
 import android.app.Application
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import org.mozilla.tv.firefox.ext.webRenderComponents
 
 /**
@@ -22,6 +24,8 @@ interface TurboMode {
      * Toggle turbo mode on or off. This will update the setting and the engine at the same time.
      */
     fun setEnabled(enabled: Boolean)
+
+    val observable: LiveData<Boolean>
 }
 
 /**
@@ -46,5 +50,9 @@ class ProdTurboMode(private val app: Application) : TurboMode {
             engineSettings.trackingProtectionPolicy = null
             engineSession.disableTrackingProtection()
         }
+        _observable.postValue(enabled)
     }
+
+    private val _observable = MutableLiveData<Boolean>()
+    override val observable: LiveData<Boolean> = _observable
 }
