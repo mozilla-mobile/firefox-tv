@@ -98,7 +98,7 @@ class ScreenController {
 
     fun showPocketScreen(fragmentManager: FragmentManager) {
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PocketVideoFragment())
+                .replace(R.id.container, PocketVideoFragment(), PocketVideoFragment.FRAGMENT_TAG)
                 .addToBackStack(null)
                 .commit()
     }
