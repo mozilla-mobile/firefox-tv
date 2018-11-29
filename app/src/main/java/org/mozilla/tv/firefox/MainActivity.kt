@@ -180,6 +180,12 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     override fun onBackPressed() {
         val fragmentManager = supportFragmentManager
         val browserFragment = fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as WebRenderFragment?
+        val settingsFragment = (fragmentManager.findFragmentByTag(SettingsFragment.FRAGMENT_TAG) as SettingsFragment?)?.let {
+            if (it.isVisible) it else null
+        }
+        val pocketFragment = (fragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG) as PocketVideoFragment?)?.let {
+            if (it.isVisible) it else null
+        }
 
         if (browserFragment != null) {
             if (browserFragment.isVisible &&
@@ -189,11 +195,12 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
                 return
             }
 
-            val currFragment = fragmentManager.findFragmentByTag(SettingsFragment.FRAGMENT_TAG)
-
-            if (browserFragment.arguments == null) {
-                browserFragment.arguments = Bundle()
-            }
+            val currFragment =
+                    when {
+                        settingsFragment != null -> fragmentManager.findFragmentByTag(SettingsFragment.FRAGMENT_TAG)
+                        pocketFragment != null -> fragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG)
+                        else -> null
+                    }
 
             // Set ParentFragment flag to the BrowserFragment based on currFragment and let
             // fragment lifecycle handle the rest
@@ -240,8 +247,11 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         val maybeBrowserFragment = (fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as WebRenderFragment?)?.let {
             if (it.isVisible) it else null
         }
-
+        val maybePocketFragment = (fragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG) as PocketVideoFragment?)?.let {
+            if (it.isVisible) it else null
+        }
         return videoVoiceCommandMediaSession.dispatchKeyEvent(event) ||
+                (maybePocketFragment?.dispatchKeyEvent(event) ?: false) ||
                 (maybeBrowserFragment?.dispatchKeyEvent(event) ?: false) ||
                 super.dispatchKeyEvent(event)
     }

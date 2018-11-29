@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.fragment_pocket_video.*
 import kotlinx.android.synthetic.main.fragment_pocket_video.view.*
 import mozilla.components.browser.session.Session
+import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.resetAfter
@@ -35,6 +37,9 @@ import java.net.URISyntaxException
 
 /** A feed of Pocket videos. */
 class PocketVideoFragment : Fragment() {
+    companion object {
+        const val FRAGMENT_TAG = "pocket"
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val layout = inflater.inflate(R.layout.fragment_pocket_video, container, false)
@@ -65,6 +70,17 @@ class PocketVideoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         pocketHelpButton.setOnClickListener { _ ->
             startActivity(Intent(context, PocketOnboardingActivity::class.java))
+        }
+    }
+
+    // When menu is pressed from the Pocket feed, go back to overlay
+    fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        return when (event.keyCode) {
+            KeyEvent.KEYCODE_MENU -> {
+                (activity as MainActivity).dispatchKeyEvent(KeyEvent(event.action, KeyEvent.KEYCODE_BACK))
+                true
+            }
+            else -> false
         }
     }
 }
