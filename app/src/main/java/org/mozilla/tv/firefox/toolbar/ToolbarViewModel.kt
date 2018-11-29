@@ -45,6 +45,7 @@ class ToolbarViewModel(
     // Values should be pushed to _events using setValue. Two values are set in
     // rapid succession using postValue, only the latest will be received
     private var _events = MutableLiveData<Consumable<BrowserNavigationOverlay.Action>>()
+    // Note that events will only emit values if state is observed
     val events: LiveData<Consumable<BrowserNavigationOverlay.Action>> = _events
 
     val state: LiveData<ToolbarViewModel.State> =
@@ -66,6 +67,7 @@ class ToolbarViewModel(
             }
             fun causeSideEffects() {
                 if (hostChanged() && sessionState.desktopModeActive) disableDesktopMode()
+                if (sessionState.currentUrl.isEqualToHomepage()) setOverlayVisible(true)
             }
 
             causeSideEffects()
@@ -82,10 +84,6 @@ class ToolbarViewModel(
                 urlBarText = UrlUtils.toUrlBarDisplay(sessionState.currentUrl)
             )
         }
-
-    init {
-        showOverlayWhenUrlIsHome()
-    }
 
     @UiThread
     fun backButtonClicked() {
@@ -164,17 +162,10 @@ class ToolbarViewModel(
         }
     }
 
+    private fun String.isEqualToHomepage() = this == AppConstants.APP_URL_HOME
+
     // TODO move this to the OverlayViewModel once it exists
     private fun setOverlayVisible(visible: Boolean) {
         _events.value = Consumable.from(BrowserNavigationOverlay.Action.SetOverlayVisible(visible))
-    }
-
-    private fun String.isEqualToHomepage() = this == AppConstants.APP_URL_HOME
-
-    private fun showOverlayWhenUrlIsHome() {
-        sessionRepo.state.observeForever {
-            it ?: return@observeForever
-            if (it.currentUrl.isEqualToHomepage()) setOverlayVisible(true)
-        }
     }
 }
