@@ -232,7 +232,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 resources.getString(R.string.pocket_brand_name)) + " " + resources.getString(R.string.pocket_video_feed_reload_button)
 
         megaTileTryAgainButton.setOnClickListener { _ ->
-            hideMegaTileError()
             pocketViewModel.update()
             initMegaTile()
             updateOverlayForCurrentState()
@@ -267,6 +266,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 is PocketViewModel.State.Feed -> {
                     pocketVideoMegaTileView.visibility = View.VISIBLE
                     pocketVideoMegaTileView.setContent(state.feed)
+                    hideMegaTileError()
                 }
                 is PocketViewModel.State.NotDisplayed -> pocketVideoMegaTileView.visibility = View.GONE
                 null -> return@Observer
