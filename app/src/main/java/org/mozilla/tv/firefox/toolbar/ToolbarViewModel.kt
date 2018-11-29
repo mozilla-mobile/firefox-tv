@@ -53,6 +53,22 @@ class ToolbarViewModel(
             // The menu back button should not be enabled if the previous screen was our initial url (home)
             fun isBackEnabled() = sessionState.backEnabled && sessionState.currentBackForwardIndex > 1
             fun currentUrlIsPinned() = pinnedTiles.containsKey(sessionState.currentUrl)
+            fun hostChanged(): Boolean {
+                val currentURLHost = sessionState.currentUrl.toUri()?.host ?: return true
+
+                return (previousURLHost != currentURLHost).also {
+                    previousURLHost = currentURLHost
+                }
+            }
+            fun disableDesktopMode() {
+                sessionRepo.setDesktopMode(false)
+                sessionState.currentUrl.toUri()?.let { sessionRepo.loadURL(it) }
+            }
+            fun causeSideEffects() {
+                if (hostChanged() && sessionState.desktopModeActive) disableDesktopMode()
+            }
+
+            causeSideEffects()
 
             ToolbarViewModel.State(
                 backEnabled = isBackEnabled(),
@@ -68,7 +84,6 @@ class ToolbarViewModel(
         }
 
     init {
-        disableDesktopModeWhenHostChanges()
         showOverlayWhenUrlIsHome()
     }
 
@@ -155,25 +170,6 @@ class ToolbarViewModel(
     }
 
     private fun String.isEqualToHomepage() = this == AppConstants.APP_URL_HOME
-
-    private fun disableDesktopModeWhenHostChanges() {
-        sessionRepo.state.observeForever {
-            it ?: return@observeForever
-
-            fun isURLHostChanging(): Boolean {
-                val currentURLHost = it.currentUrl.toUri()?.host ?: return true
-
-                return (previousURLHost != currentURLHost).also {
-                    previousURLHost = currentURLHost
-                }
-            }
-
-            if (isURLHostChanging() && it.desktopModeActive) {
-                sessionRepo.setDesktopMode(false)
-                it.currentUrl.toUri()?.let { sessionRepo.loadURL(it) }
-            }
-        }
-    }
 
     private fun showOverlayWhenUrlIsHome() {
         sessionRepo.state.observeForever {
