@@ -25,8 +25,11 @@ class PocketRecommendedVideosRobot {
             return BrowserRobot.Transition()
         }
 
-        fun returnToOverlay(interact: NavigationOverlayRobot.() -> Unit): NavigationOverlayRobot.Transition {
-            device.pressBack()
+        fun returnToOverlay(button: String, interact: NavigationOverlayRobot.() -> Unit): NavigationOverlayRobot.Transition {
+            when (button) {
+                "back" -> device.pressBack()
+                "menu" -> device.pressMenu()
+            }
 
             NavigationOverlayRobot().interact()
             return NavigationOverlayRobot.Transition()
