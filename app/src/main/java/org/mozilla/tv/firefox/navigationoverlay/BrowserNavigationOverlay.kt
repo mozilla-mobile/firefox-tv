@@ -202,7 +202,16 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         adapter = tileAdapter
 
-        layoutManager = HomeTileManager(context, COL_COUNT)
+        val manager = HomeTileManager(context, COL_COUNT)
+        manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return when (position) {
+                    0 -> 2
+                    else -> 1
+                }
+            }
+        }
+        layoutManager = manager
 
         setHasFixedSize(true)
 
@@ -464,7 +473,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             }
 
             // if position is less than spanCount, implies first row
-            if (position < spanCount) {
+            if (position < spanCount - 1) {
                 focused?.nextFocusUpId = when {
                     pocketVideosContainer.isEffectivelyVisible -> R.id.pocketVideoMegaTileView
                     megaTileTryAgainButton.isEffectivelyVisible -> R.id.megaTileTryAgainButton

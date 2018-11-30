@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!-- We add negative margins on the parent view to undo the effects of `marginBottom`: see the
+     code for details. -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/event_tile"
+              android:orientation="vertical"
+              android:layout_width="324dp"
+              android:layout_height="100dp"
+              android:background="@drawable/home_tile_background"
+              android:focusable="true"
+              android:clickable="true"
+              android:clipChildren="false"
+              android:layout_marginStart="12dp"
+              android:layout_marginEnd="12dp"
+              android:layout_marginBottom="@dimen/home_tile_margin_bottom">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- margins are defined in HomeTileRecyclerView.setLayoutMarginParams -->
+        <ImageView
+            android:id="@+id/tile_icon"
+            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:scaleType="fitXY"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/tile_youtube" />
+
+    </LinearLayout>
+
+    <!--
+        #596: Moves the interaction effects out of android:foreground.
+        This needed to be above the tile_icon to be able provide a tint
+        to the whole tile. But below the menu_icon.
+    -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/event_tile_background"
+        android:duplicateParentState="true" />
+</FrameLayout>

@@ -1,5 +1,11 @@
 [
     {
+        "id": "event",
+        "url": "http://www.mozilla.org/firefox/concerts?utm_source=firetv&utm_campaign=livenation-promotion&utm_medium=referral&utm_content=firetv_tile",
+        "title": "Event",
+        "img": "event_tile.png"
+    },
+    {
         "id": "youtube",
         /* Use this URL to ensure users see the best formatted website. */
         "url": "https://ftv.cdn.mozilla.net/ytht",
