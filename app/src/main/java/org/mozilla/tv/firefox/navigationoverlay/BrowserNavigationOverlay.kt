@@ -234,14 +234,15 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         megaTileTryAgainButton.setOnClickListener { _ ->
             pocketViewModel.update()
             initMegaTile()
-            updateOverlayForCurrentState()
+            pocketVideoMegaTileView.requestFocus() // TODO remove after Toolbar refactor
         }
+        updateOverlayForCurrentState()
     }
 
     private fun hideMegaTileError() {
         pocketVideosContainer.visibility = View.VISIBLE
         pocketErrorContainer.visibility = View.GONE
-        pocketVideoMegaTileView.requestFocus()
+        updateOverlayForCurrentState()
     }
 
     private fun initMegaTile() {
