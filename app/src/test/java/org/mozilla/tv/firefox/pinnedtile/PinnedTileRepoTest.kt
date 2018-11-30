@@ -17,7 +17,7 @@ import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import org.robolectric.RobolectricTestRunner
 
-private const val BUNDLED_TILE_COUNT = 10
+private const val BUNDLED_TILE_COUNT = 11
 
 /**
  * Unit tests for the [PinnedTileRepo].
@@ -67,9 +67,9 @@ class PinnedTileRepoTest {
         })
 
         pinnedTileRepo.getPinnedTiles().observeForever(observerSpy)
-        assertEquals(10, pinnedTileRepo.bundledTilesSize)
+        assertEquals(11, pinnedTileRepo.bundledTilesSize)
         pinnedTileRepo.removePinnedTile("https://www.pinterest.com/")
-        assertEquals(9, pinnedTileRepo.bundledTilesSize)
+        assertEquals(10, pinnedTileRepo.bundledTilesSize)
 
         verify(observerSpy, times(2)).onChanged(any())
     }
@@ -82,9 +82,9 @@ class PinnedTileRepoTest {
         })
 
         pinnedTileRepo.getPinnedTiles().observeForever(observerSpy)
-        assertEquals(10, pinnedTileRepo.bundledTilesSize)
+        assertEquals(11, pinnedTileRepo.bundledTilesSize)
         pinnedTileRepo.removePinnedTile("https://example.com/")
-        assertEquals(10, pinnedTileRepo.bundledTilesSize)
+        assertEquals(11, pinnedTileRepo.bundledTilesSize)
 
         verify(observerSpy, times(1)).onChanged(any())
     }

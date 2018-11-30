@@ -33,7 +33,7 @@ class PinnedTileViewModelTest {
     fun `WHEN repo emits a successful load THEN view model should emit a list of same number of tiles`() {
         val observerSpy = Mockito.spy(Observer<List<PinnedTile>> {
             Assert.assertTrue(it is List<PinnedTile>)
-            Assert.assertEquals(10, it!!.size)
+            Assert.assertEquals(11, it!!.size)
         })
 
         pinnedTileViewModel.getTileList().observeForever(observerSpy)
@@ -45,7 +45,7 @@ class PinnedTileViewModelTest {
     fun `WHEN repo emits an updated list after add THEN view model should emit an updated list`() {
         val observerSpy = Mockito.spy(Observer<List<PinnedTile>> {
             Assert.assertTrue(it is List<PinnedTile>)
-            assert(it!!.size == 10 || it.size == 11)
+            assert(it!!.size == 11 || it.size == 12)
         })
 
         pinnedTileViewModel.getTileList().observeForever(observerSpy)
@@ -58,7 +58,7 @@ class PinnedTileViewModelTest {
     fun `WHEN repo emits an updated list after remove THEN view model should emit an updated list`() {
         val observerSpy = Mockito.spy(Observer<List<PinnedTile>> {
             Assert.assertTrue(it is List<PinnedTile>)
-            assert(it!!.size == 10 || it.size == 9)
+            assert(it!!.size == 11 || it.size == 10)
         })
 
         pinnedTileViewModel.getTileList().observeForever(observerSpy)
@@ -72,7 +72,7 @@ class PinnedTileViewModelTest {
         val observerSpy = Mockito.spy(Observer<List<PinnedTile>> {
             Assert.assertTrue(it is List<PinnedTile>)
             // it.size == 10 is the original load emission
-            assert(it!!.size == 10)
+            assert(it!!.size == 11)
         })
 
         pinnedTileViewModel.getTileList().observeForever(observerSpy)
