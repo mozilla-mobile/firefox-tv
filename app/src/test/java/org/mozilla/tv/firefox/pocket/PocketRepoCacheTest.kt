@@ -38,6 +38,7 @@ class PocketRepoCacheTest {
             PocketVideoRepo(
                 mock(PocketEndpoint::class.java),
                 PocketFeedStateMachine(),
+                { true },
                 mock(BuildConfigDerivables::class.java)
             ) {
             override val feedState: LiveData<FeedState>

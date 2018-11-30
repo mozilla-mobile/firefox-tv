@@ -26,6 +26,7 @@ private const val BASE_RETRY_TIME = 1_000L
 open class PocketVideoRepo(
     private val pocketEndpoint: PocketEndpoint,
     private val pocketFeedStateMachine: PocketFeedStateMachine,
+    private val localeIsEnglish: () -> Boolean,
     buildConfigDerivables: BuildConfigDerivables
 ) {
 
@@ -34,6 +35,7 @@ open class PocketVideoRepo(
         object Loading : FeedState()
         object NoAPIKey : FeedState()
         object FetchFailed : FeedState()
+        object Inactive : FeedState()
     }
 
     private val _feedState = MutableLiveData<FeedState>().apply {
@@ -105,6 +107,14 @@ open class PocketVideoRepo(
             if (this?.isNotEmpty() == true) FeedState.LoadComplete(this)
             else FeedState.FetchFailed
 
+        fun shortIfNonEnglish() {
+            if (!localeIsEnglish.invoke()) {
+                postState(FeedState.Inactive)
+                return
+            }
+        }
+
+        shortIfNonEnglish()
         postState(FeedState.Loading)
         val response = requestVideos()
         updateRequestTimers(response.wasSuccessful())

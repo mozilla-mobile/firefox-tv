@@ -24,7 +24,14 @@ class FirefoxTestApplication : FirefoxApplication() {
 
     private val pocketVideoRepoState = MutableLiveData<PocketVideoRepo.FeedState>()
 
-    private val pocketVideoRepo = object : PocketVideoRepo(pocketEndpoint, PocketFeedStateMachine(), BuildConfigDerivables()) {
+    val localeIsEnglish: () -> Boolean = { true }
+
+    private val pocketVideoRepo = object : PocketVideoRepo(
+        pocketEndpoint,
+        PocketFeedStateMachine(),
+        localeIsEnglish,
+        BuildConfigDerivables(localeIsEnglish)
+    ) {
         override val feedState: LiveData<FeedState>
             get() = pocketVideoRepoState
     }
