@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.pocket
 
+import android.net.Uri
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -12,8 +13,8 @@ import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.mock
 import org.mozilla.tv.firefox.TestResource
-import org.mozilla.tv.firefox.utils.BuildConfigDerivables
 import org.robolectric.RobolectricTestRunner
 
 private const val KEY_INNER = "recommendations"
@@ -26,7 +27,7 @@ class PocketEndpointTest {
 
     @Before
     fun setup() {
-        pocketEndpoint = PocketEndpoint(VERSION, BuildConfigDerivables())
+        pocketEndpoint = PocketEndpoint(VERSION, mock(Uri::class.java))
     }
 
     @Test

@@ -49,7 +49,7 @@ import org.mozilla.tv.firefox.session.SessionRepo
  */
 open class ServiceLocator(val app: Application) {
     private val appVersion = app.packageManager.getPackageInfo(app.packageName, 0).versionName
-    private val pocketEndpoint get() = PocketEndpoint(appVersion, buildConfigDerivables)
+    private val pocketEndpoint get() = PocketEndpoint(appVersion, buildConfigDerivables.globalPocketVideoEndpoint)
     private val buildConfigDerivables get() = BuildConfigDerivables()
     private val pocketFeedStateMachine get() = PocketFeedStateMachine()
 

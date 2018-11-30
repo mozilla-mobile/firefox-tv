@@ -14,7 +14,6 @@ import org.json.JSONObject
 import org.mozilla.tv.firefox.BuildConfig
 import org.mozilla.tv.firefox.ext.executeAndAwait
 import org.mozilla.tv.firefox.ext.flatMapObj
-import org.mozilla.tv.firefox.utils.BuildConfigDerivables
 import org.mozilla.tv.firefox.utils.OkHttpWrapper
 import java.io.IOException
 
@@ -26,12 +25,12 @@ private const val LOGTAG = "PocketEndpoint"
  * The methods of this class call the endpoint directly and does not cache results or rate limit,
  * outside of the network layer (e.g. with OkHttp).
  */
-open class PocketEndpoint(private val appVersion: String, private val buildConfigDerivables: BuildConfigDerivables) {
+open class PocketEndpoint(private val appVersion: String, private val pocketEndpoint: Uri?) {
 
     /** @return The global video recommendations or null on error; the list will never be empty. */
     @AnyThread // via PocketEndpointRaw.
     open suspend fun getRecommendedVideos(): List<PocketViewModel.FeedItem.Video>? {
-        return buildConfigDerivables.globalPocketVideoEndpoint
+        return pocketEndpoint
             ?.let { endpoint -> PocketEndpointRaw.getGlobalVideoRecommendations(appVersion, endpoint) }
             ?.let { json -> convertVideosJSON(json) }
     }
@@ -54,9 +53,9 @@ private object PocketEndpointRaw {
 
     /** @return The global video recommendations as a raw JSON str or null on error. */
     @AnyThread // executeAndAwait hands off the request to the OkHttp dispatcher.
-    suspend fun getGlobalVideoRecommendations(version: String, endpoint: Uri): String? {
+    suspend fun getGlobalVideoRecommendations(version: String, pocketEndpoint: Uri): String? {
         val req = Request.Builder()
-                .url(endpoint.toString())
+                .url(pocketEndpoint.toString())
                 .header("User-Agent", "FirefoxTV-$version-${BuildConfig.BUILD_TYPE}")
                 .build()
 
