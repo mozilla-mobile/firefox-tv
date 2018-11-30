@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
+- Clicking remote menu button from Pocket feed now returns to overlay
 
 ### Changed
 
