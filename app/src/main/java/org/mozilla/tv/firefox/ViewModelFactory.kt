@@ -13,7 +13,6 @@ import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.toolbar.ToolbarViewModel
 import org.mozilla.tv.firefox.utils.ServiceLocator
-import org.mozilla.tv.firefox.utils.TurboMode
 
 /**
  * Used by [ViewModelProviders] to instantiate [ViewModel]s with constructor arguments.

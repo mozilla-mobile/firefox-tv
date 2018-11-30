@@ -57,13 +57,20 @@ class ClearDataTest {
             }
         }.enterUrlAndEnterToBrowser(endpoints[1]) {
         }.openOverlay {
-            assertCanGoBackForward(true, false)
+            assertCanGoBackForward(false, false)
 
         }.enterUrlAndEnterToBrowser(endpoints[2]) {
         }.openOverlay {
+            assertCanGoBackForward(true, false)
+
+        }.enterUrlAndEnterToBrowser(endpoints[0]) {
+        }.openOverlay {
+            assertCanGoBackForward(true, false)
+
         }.goBack {
         }.openOverlay {
             assertCanGoBackForward(true, true)
+
         }
     }
 }
