@@ -9,9 +9,11 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.fail
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.TestResource
+import org.mozilla.tv.firefox.utils.BuildConfigDerivables
 import org.robolectric.RobolectricTestRunner
 
 private const val KEY_INNER = "recommendations"
@@ -19,6 +21,13 @@ private const val VERSION = "VERSION"
 
 @RunWith(RobolectricTestRunner::class)
 class PocketEndpointTest {
+
+    private lateinit var pocketEndpoint: PocketEndpoint
+
+    @Before
+    fun setup() {
+        pocketEndpoint = PocketEndpoint(VERSION, BuildConfigDerivables())
+    }
 
     @Test
     fun `convert Videos JSON successfully to internal objects`() {
@@ -43,7 +52,7 @@ class PocketEndpointTest {
         )
 
         val pocketJSON = TestResource.POCKET_VIDEO_RECOMMENDATION.get()
-        val actualVideos = PocketEndpoint(VERSION).convertVideosJSON(pocketJSON)
+        val actualVideos = pocketEndpoint.convertVideosJSON(pocketJSON)
         if (actualVideos == null) { fail("Expected actualVideos to be non-null"); return }
 
         // We only test a subset of the data for developer sanity. :)
@@ -61,7 +70,7 @@ class PocketEndpointTest {
         assertNotNull(expectedFirstTitle)
 
         val pocketJSONWithNoTitleExceptFirst = removeTitleStartingAtIndex(1, pocketJSON)
-        val actualVideos = PocketEndpoint(VERSION).convertVideosJSON(pocketJSONWithNoTitleExceptFirst)
+        val actualVideos = pocketEndpoint.convertVideosJSON(pocketJSONWithNoTitleExceptFirst)
         if (actualVideos == null) { fail("Expected videos non-null"); return }
         assertEquals(1, actualVideos.size)
         assertEquals(expectedFirstTitle, actualVideos[0].title)
@@ -71,18 +80,18 @@ class PocketEndpointTest {
     fun `convert Videos JSON for videos with missing fields on all items`() {
         val pocketJSON = TestResource.POCKET_VIDEO_RECOMMENDATION.get()
         val pocketJSONWithNoTitles = removeTitleStartingAtIndex(0, pocketJSON)
-        val actualVideos = PocketEndpoint(VERSION).convertVideosJSON(pocketJSONWithNoTitles)
+        val actualVideos = pocketEndpoint.convertVideosJSON(pocketJSONWithNoTitles)
         assertNull(actualVideos)
     }
 
     @Test
     fun `convert Videos JSON for empty String`() {
-        assertNull(PocketEndpoint(VERSION).convertVideosJSON(""))
+        assertNull(pocketEndpoint.convertVideosJSON(""))
     }
 
     @Test
     fun `convert Videos JSON for invalid JSON`() {
-        assertNull(PocketEndpoint(VERSION).convertVideosJSON("{!!}}"))
+        assertNull(pocketEndpoint.convertVideosJSON("{!!}}"))
     }
 }
 
