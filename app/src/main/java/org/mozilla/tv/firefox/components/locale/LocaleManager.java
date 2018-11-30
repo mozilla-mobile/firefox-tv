@@ -294,6 +294,17 @@ public class LocaleManager {
         return language.toLowerCase(current).startsWith("en");
     }
 
+    @NonNull
+    public Boolean isLocaleENUS(@NonNull Context context) {
+        Locale current = getCurrentLocale(context);
+        // If locale hasn't been updated (i.e., 'current' is null), use system default
+        if (current == null) {
+            current = context.getResources().getConfiguration().locale;
+        }
+        String language = Locales.getLanguageTag(current);
+        return language.toLowerCase(current).matches("en-us");
+    }
+
     /**
      * Updates the Java locale and the Android configuration.
      *
