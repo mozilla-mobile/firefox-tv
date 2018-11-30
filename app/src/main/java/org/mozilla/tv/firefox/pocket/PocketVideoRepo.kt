@@ -8,6 +8,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.os.SystemClock
 import android.support.annotation.UiThread
+import android.support.annotation.VisibleForTesting
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -72,7 +73,8 @@ open class PocketVideoRepo(
         backgroundUpdates = null
     }
 
-    private suspend fun updateInner() {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    suspend fun updateInner() {
 
         suspend fun requestVideos(): List<PocketViewModel.FeedItem>? = pocketEndpoint.getRecommendedVideos()
 
