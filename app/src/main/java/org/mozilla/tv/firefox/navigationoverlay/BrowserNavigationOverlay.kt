@@ -354,7 +354,9 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
                 "http://www.mozilla.org/firefox/concerts?utm_source=firetv" +
                 "&utm_campaign=livenation-promotion&utm_medium=referral&utm_content=firetv_tile"
         updateOverlayButtonState(isPinEnabled, pinButton)
-        pinButton.isChecked = navigationStateProvider?.isURLPinned() ?: false // TODO: ToolbarVM + PinnedTileRepo
+        pinButton.isChecked = navigationStateProvider?.isURLPinned() == true && navigationStateProvider?.getCurrentUrl() !=
+                "http://www.mozilla.org/firefox/concerts?utm_source=firetv" +
+                "&utm_campaign=livenation-promotion&utm_medium=referral&utm_content=firetv_tile" // TODO: ToolbarVM + PinnedTileRepo
 
         val isRefreshEnabled = navigationStateProvider?.isRefreshEnabled() ?: false
         updateOverlayButtonState(isRefreshEnabled, navButtonReload)
