@@ -8,6 +8,7 @@ import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.LoadComplete
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.Loading
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.NoAPIKey
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.FetchFailed
+import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.Inactive
 
 /**
  * Manages all logic for updating cached [PocketVideoRepo.FeedState] in a testable way.
@@ -21,9 +22,9 @@ import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.FetchFailed
  *
  * ### Diagram
  * [Loading] ------------------
- *    |  ^                    |     ---
- *    V  |                    V     | V
- * [FetchFailed] ---------> [LoadComplete]
+ *    |  ^                    |           ---
+ *    V  |                    V           | V
+ * [FetchFailed] ---------> [LoadComplete] / [Inactive]
  *                            ^
  *                            |
  * [NoAPIKey]   ---------------
@@ -38,6 +39,7 @@ class PocketFeedStateMachine {
         cacheState: PocketVideoRepo.FeedState?
     ): PocketVideoRepo.FeedState {
         return when {
+            repoState is Inactive -> repoState
             repoState is LoadComplete -> return repoState
             repoState === Loading && cacheState === FetchFailed -> return repoState
             repoState === FetchFailed && cacheState === Loading -> return repoState
