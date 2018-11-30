@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
@@ -15,7 +16,7 @@ import org.mozilla.tv.firefox.utils.ServiceLocator
 
 class FirefoxTestApplication : FirefoxApplication() {
 
-    private val pocketEndpoint = object : PocketEndpoint("VERSION", BuildConfigDerivables()) {
+    private val pocketEndpoint = object : PocketEndpoint("VERSION", "www.mock.com".toUri()) {
         override suspend fun getRecommendedVideos(): List<PocketViewModel.FeedItem.Video>? {
             return PocketViewModel.noKeyPlaceholders
         }
