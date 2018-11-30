@@ -237,7 +237,7 @@ private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledPinnedTil
 private fun onBindEventTile(holder: EventViewHolder, tile: BundledPinnedTile) = with(holder) {
     val homeTileCornerRadius = itemView.resources.getDimension(R.dimen.home_tile_corner_radius)
     val bitmap = itemView.context.serviceLocator.pinnedTileRepo.loadImageFromPath(tile.imagePath).withRoundedCorners(homeTileCornerRadius)
-
+    titleView.text = ""
     iconView.setImageBitmap(bitmap)
 }
 
@@ -301,4 +301,5 @@ class EventViewHolder(
     itemView: View
 ) : RecyclerView.ViewHolder(itemView) {
     val iconView = itemView.tile_icon
+    val titleView = itemView.tile_title
 }
