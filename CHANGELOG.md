@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Some web fonts were blocked which caused icons to be missing
 
+## [3.1.1] 
+### Added
+- Added limited-time event tile to homescreen
+
 ## [3.1] - 2018-11-16
 ### Added
 - Ability to request desktop version of the current site
@@ -117,6 +121,7 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 *Initial release! A browser including home tile shortcuts.*
 
 [Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1..HEAD
+[3.1.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1..v3.1.1
 [3.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.0.2..v3.1
 [3.0.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.0.1...v3.0.2
 [3.0.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.0...v3.0.1
