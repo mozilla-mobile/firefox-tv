@@ -77,6 +77,7 @@ class PinnedTileAdapter(
 
                     itemView.setOnClickListener {
                         loadUrl(item.url)
+                        TelemetryIntegration.INSTANCE.homeTileClickEvent(it.context, item)
                     }
                 }
             }

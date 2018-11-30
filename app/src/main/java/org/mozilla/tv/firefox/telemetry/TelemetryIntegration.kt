@@ -212,6 +212,9 @@ open class TelemetryIntegration protected constructor(
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE,
                 getTileTypeAsStringValue(tile)).queue()
         TelemetryHomeTileUniqueClickPerSessionCounter.countTile(context, tile)
+        if (tile.idToString() == "event")
+            TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE,
+                    tile.idToString()).queue()
     }
 
     internal fun homeTileUniqueClickCountPerSessionEvent(uniqueClickCountPerSession: Int) {
