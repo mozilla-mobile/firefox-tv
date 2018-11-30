@@ -15,7 +15,7 @@ import org.mozilla.tv.firefox.utils.ServiceLocator
 
 class FirefoxTestApplication : FirefoxApplication() {
 
-    private val pocketEndpoint = object : PocketEndpoint("VERSION") {
+    private val pocketEndpoint = object : PocketEndpoint("VERSION", BuildConfigDerivables()) {
         override suspend fun getRecommendedVideos(): List<PocketViewModel.FeedItem.Video>? {
             return PocketViewModel.noKeyPlaceholders
         }
