@@ -34,6 +34,16 @@
             tools:ignore="ContentDescription"
             tools:src="@drawable/tile_youtube" />
 
+        <TextView
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:id="@+id/tile_title"
+            android:ellipsize="start"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/black"
+            tools:text="YouTube" />
+
     </LinearLayout>
 
     <!--
