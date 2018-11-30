@@ -60,8 +60,11 @@ class PocketBasicUserFlowTest {
     fun pocketBasicUserFlowTest() {
         navigationOverlay {
         }.openPocketMegatile {
-        }.returnToOverlay {
-            // This is to test that backing from Pocket screen to home works
+        }.returnToOverlay("back") {
+            // This is to test that pressing back from Pocket screen goes to overlay
+        }.openPocketMegatile {
+        }.returnToOverlay("menu") {
+            // This is to test that pressing menu from Pocket screen goes to overlay
         }.openPocketMegatile {
         }.openTileToBrowser(0) {
             assertTestContent(page.content)
