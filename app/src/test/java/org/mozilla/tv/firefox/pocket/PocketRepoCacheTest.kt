@@ -33,8 +33,13 @@ class PocketRepoCacheTest {
     @Before
     fun setup() {
         repoOutput = MutableLiveData()
+
         val repo = object :
-            PocketVideoRepo(mock(PocketEndpoint::class.java), PocketFeedStateMachine(), BuildConfigDerivables()) {
+            PocketVideoRepo(
+                mock(PocketEndpoint::class.java),
+                PocketFeedStateMachine(),
+                mock(BuildConfigDerivables::class.java)
+            ) {
             override val feedState: LiveData<FeedState>
                 get() = repoOutput
         }
