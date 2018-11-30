@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Some web fonts were blocked which caused icons to be missing
+- Pocket requests are no longer made if a valid key is not found
 
 ## [3.1] - 2018-11-16
 ### Added
