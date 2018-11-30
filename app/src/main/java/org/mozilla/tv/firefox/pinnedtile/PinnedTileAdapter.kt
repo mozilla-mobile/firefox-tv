@@ -44,7 +44,7 @@ class PinnedTileAdapter(
     private val loadUrl: (String) -> Unit,
     var onTileLongClick: (() -> Unit)?,
     var onTileFocused: (() -> Unit)?
-) : RecyclerView.Adapter<TileViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var tiles = listOf<PinnedTile>()
 
@@ -53,52 +53,83 @@ class PinnedTileAdapter(
 
     private val uiScope = CoroutineScope(Dispatchers.Main + uiLifecycleCancelJob)
 
+    override fun getItemViewType(position: Int): Int {
+        return when (position) {
+            0 -> 0
+            else -> 1
+        }
+    }
+
     @ExperimentalCoroutinesApi
-    override fun onBindViewHolder(holder: TileViewHolder, position: Int) = with(holder) {
-        val item = tiles[position]
-        when (item) {
-            is BundledPinnedTile -> {
-                onBindBundledHomeTile(holder, item)
-                setIconLayoutMarginParams(iconView, R.dimen.bundled_home_tile_margin_value)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (position) {
+            0 -> {
+                val eventHolder = holder as EventViewHolder
+                with(eventHolder) {
+                    val item = tiles[position]
+
+                    when (item) {
+                        is BundledPinnedTile -> {
+                            onBindEventTile(eventHolder, item)
+                            setIconLayoutMarginParams(iconView, 0)
+                        }
+                    }
+
+                    itemView.setOnClickListener {
+                        loadUrl(item.url)
+                    }
+                }
             }
-            is CustomPinnedTile -> {
-                onBindCustomHomeTile(uiScope, holder, item)
-                setIconLayoutMarginParams(iconView, R.dimen.custom_home_tile_margin_value)
+            else -> {
+                val tileHolder = holder as TileViewHolder
+                with(tileHolder) {
+                    val item = tiles[position]
+                    when (item) {
+                        is BundledPinnedTile -> {
+                            onBindBundledHomeTile(tileHolder, item)
+                            setIconLayoutMarginParams(iconView, R.dimen.bundled_home_tile_margin_value)
+                        }
+                        is CustomPinnedTile -> {
+                            onBindCustomHomeTile(uiScope, tileHolder, item)
+                            setIconLayoutMarginParams(iconView, R.dimen.custom_home_tile_margin_value)
+                        }
+                    }.forceExhaustive
+
+                    itemView.setOnClickListener {
+                        loadUrl(item.url)
+                        TelemetryIntegration.INSTANCE.homeTileClickEvent(it.context, item)
+                    }
+
+                    itemView.setOnLongClickListener {
+                        onTileLongClick?.invoke()
+                        lastLongClickedTile = item
+
+                        true
+                    }
+
+                    val tvWhiteColor = ContextCompat.getColor(tileHolder.itemView.context, R.color.tv_white)
+                    itemView.setOnFocusChangeListener { _, hasFocus ->
+                        val backgroundResource: Int
+                        val textColor: Int
+                        if (hasFocus) {
+                            backgroundResource = R.drawable.home_tile_title_focused_background
+                            textColor = tvWhiteColor
+                            onTileFocused?.invoke()
+                        } else {
+                            backgroundResource = 0
+                            textColor = Color.BLACK
+                        }
+                        titleView.setBackgroundResource(backgroundResource)
+                        titleView.setTextColor(textColor)
+                    }
+                }
             }
-        }.forceExhaustive
-
-        itemView.setOnClickListener {
-            loadUrl(item.url)
-            TelemetryIntegration.INSTANCE.homeTileClickEvent(it.context, item)
-        }
-
-        itemView.setOnLongClickListener {
-            onTileLongClick?.invoke()
-            lastLongClickedTile = item
-
-            true
-        }
-
-        val tvWhiteColor = ContextCompat.getColor(holder.itemView.context, R.color.tv_white)
-        itemView.setOnFocusChangeListener { _, hasFocus ->
-            val backgroundResource: Int
-            val textColor: Int
-            if (hasFocus) {
-                backgroundResource = R.drawable.home_tile_title_focused_background
-                textColor = tvWhiteColor
-                onTileFocused?.invoke()
-            } else {
-                backgroundResource = 0
-                textColor = Color.BLACK
-            }
-            titleView.setBackgroundResource(backgroundResource)
-            titleView.setTextColor(textColor)
         }
     }
 
     private fun setIconLayoutMarginParams(iconView: View, tileMarginValue: Int) {
         val layoutMarginParams = iconView.layoutParams as ViewGroup.MarginLayoutParams
-        val marginValue = iconView.resources.getDimensionPixelSize(tileMarginValue)
+        val marginValue = if (tileMarginValue != 0) iconView.resources.getDimensionPixelSize(tileMarginValue) else 0
         layoutMarginParams.setMargins(marginValue, marginValue, marginValue, marginValue)
         iconView.layoutParams = layoutMarginParams
     }
@@ -136,9 +167,16 @@ class PinnedTileAdapter(
 
     override fun getItemCount() = tiles.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = TileViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.home_tile, parent, false)
-    )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType){
+            0 -> EventViewHolder(
+                    LayoutInflater.from(parent.context).inflate(R.layout.event_tile, parent, false)
+            )
+            else -> TileViewHolder(
+                    LayoutInflater.from(parent.context).inflate(R.layout.home_tile, parent, false)
+            )
+        }
+    }
 }
 
 private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledPinnedTile) = with(holder) {
@@ -146,6 +184,13 @@ private fun onBindBundledHomeTile(holder: TileViewHolder, tile: BundledPinnedTil
     iconView.setImageBitmap(bitmap)
 
     titleView.text = tile.title
+}
+
+private fun onBindEventTile(holder: EventViewHolder, tile: BundledPinnedTile) = with(holder) {
+    val homeTileCornerRadius = itemView.resources.getDimension(R.dimen.home_tile_corner_radius)
+    val bitmap = itemView.context.serviceLocator.pinnedTileRepo.loadImageFromPath(tile.imagePath).withRoundedCorners(homeTileCornerRadius)
+
+    iconView.setImageBitmap(bitmap)
 }
 
 @ExperimentalCoroutinesApi
@@ -202,4 +247,10 @@ class TileViewHolder(
 ) : RecyclerView.ViewHolder(itemView) {
     val iconView = itemView.tile_icon
     val titleView = itemView.tile_title
+}
+
+class EventViewHolder(
+    itemView: View
+) : RecyclerView.ViewHolder(itemView) {
+    val iconView = itemView.tile_icon
 }
