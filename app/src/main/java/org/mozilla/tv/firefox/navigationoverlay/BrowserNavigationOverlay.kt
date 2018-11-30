@@ -349,7 +349,10 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         val canGoForward = navigationStateProvider?.isForwardEnabled() ?: false
         updateOverlayButtonState(canGoForward, navButtonForward)
 
-        val isPinEnabled = navigationStateProvider?.isPinEnabled() ?: false
+        val isPinEnabled = navigationStateProvider?.isPinEnabled() == true &&
+                navigationStateProvider?.getCurrentUrl() !=
+                "http://www.mozilla.org/firefox/concerts?utm_source=firetv" +
+                "&utm_campaign=livenation-promotion&utm_medium=referral&utm_content=firetv_tile"
         updateOverlayButtonState(isPinEnabled, pinButton)
         pinButton.isChecked = navigationStateProvider?.isURLPinned() ?: false // TODO: ToolbarVM + PinnedTileRepo
 

@@ -169,7 +169,7 @@ class PinnedTileAdapter(
     override fun getItemCount() = tiles.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType){
+        return when (viewType) {
             0 -> EventViewHolder(
                     LayoutInflater.from(parent.context).inflate(R.layout.event_tile, parent, false)
             )
