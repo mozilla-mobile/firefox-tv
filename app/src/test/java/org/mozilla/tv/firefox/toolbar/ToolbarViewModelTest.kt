@@ -9,7 +9,6 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.spy
 import org.mozilla.tv.firefox.ext.map
-import org.mozilla.tv.firefox.helpers.TestTurboMode
 import org.mozilla.tv.firefox.helpers.ext.assertThat
 import org.mozilla.tv.firefox.helpers.ext.assertValues
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
@@ -19,7 +18,6 @@ import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.AppConstants
 import org.mozilla.tv.firefox.utils.PreventLiveDataMainLooperCrashRule
-import org.mozilla.tv.firefox.utils.TurboMode
 import org.robolectric.RobolectricTestRunner
 
 private const val mozilla = "https://www.mozilla.org/en-US/"
@@ -33,7 +31,6 @@ class ToolbarViewModelTest {
     @get:Rule val rule = PreventLiveDataMainLooperCrashRule()
 
     private lateinit var toolbarVm: ToolbarViewModel
-    private lateinit var turboMode: TurboMode
     private lateinit var sessionRepo: SessionRepo
     private lateinit var pinnedTileRepo: PinnedTileRepo
     private lateinit var telemetryIntegration: TelemetryIntegration
@@ -43,7 +40,6 @@ class ToolbarViewModelTest {
 
     @Before
     fun setup() {
-        turboMode = TestTurboMode(false)
         sessionRepo = spy(mock(SessionRepo::class.java))
         sessionState = MutableLiveData()
         `when`(sessionRepo.state).thenReturn(sessionState)
@@ -51,7 +47,7 @@ class ToolbarViewModelTest {
         pinnedTiles = MutableLiveData()
         `when`(pinnedTileRepo.getPinnedTiles()).thenReturn(pinnedTiles)
         telemetryIntegration = spy(mock(TelemetryIntegration::class.java))
-        toolbarVm = ToolbarViewModel(turboMode, sessionRepo, pinnedTileRepo, telemetryIntegration)
+        toolbarVm = ToolbarViewModel(sessionRepo, pinnedTileRepo, telemetryIntegration)
     }
 
     @Test
@@ -61,6 +57,7 @@ class ToolbarViewModelTest {
             sessionState.value = SessionRepo.State(
                 backEnabled = false,
                 forwardEnabled = false,
+                turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = "www.google.com",
                 currentBackForwardIndex = -1
@@ -68,6 +65,7 @@ class ToolbarViewModelTest {
             sessionState.value = SessionRepo.State(
                 backEnabled = false,
                 forwardEnabled = true,
+                turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = "firefox:home",
                 currentBackForwardIndex = 0
@@ -75,6 +73,7 @@ class ToolbarViewModelTest {
             sessionState.value = SessionRepo.State(
                 backEnabled = false,
                 forwardEnabled = false,
+                turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = "https://www.wikipedia.org",
                 currentBackForwardIndex = -1
@@ -82,6 +81,7 @@ class ToolbarViewModelTest {
             sessionState.value = SessionRepo.State(
                 backEnabled = false,
                 forwardEnabled = false,
+                turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = "www.google.com",
                 currentBackForwardIndex = 5
@@ -96,6 +96,7 @@ class ToolbarViewModelTest {
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
+                turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = "www.google.com",
                 currentBackForwardIndex = -1
@@ -103,6 +104,7 @@ class ToolbarViewModelTest {
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = true,
+                turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = "firefox:home",
                 currentBackForwardIndex = 0
@@ -110,6 +112,7 @@ class ToolbarViewModelTest {
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
+                turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = "https://www.wikipedia.org",
                 currentBackForwardIndex = -1
@@ -124,6 +127,7 @@ class ToolbarViewModelTest {
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
+                turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = "www.google.com",
                 currentBackForwardIndex = 2
@@ -131,6 +135,7 @@ class ToolbarViewModelTest {
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = true,
+                turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = "firefox:home",
                 currentBackForwardIndex = 5
@@ -138,6 +143,7 @@ class ToolbarViewModelTest {
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
+                turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = "https://www.wikipedia.org",
                 currentBackForwardIndex = 6_000
@@ -153,6 +159,7 @@ class ToolbarViewModelTest {
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
+                turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = google,
                 currentBackForwardIndex = 2
@@ -160,6 +167,7 @@ class ToolbarViewModelTest {
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = true,
+                turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = facebook,
                 currentBackForwardIndex = 5
@@ -167,6 +175,7 @@ class ToolbarViewModelTest {
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
+                turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = wikipedia,
                 currentBackForwardIndex = 6_000
@@ -182,6 +191,7 @@ class ToolbarViewModelTest {
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
+                turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = AppConstants.APP_URL_HOME,
                 currentBackForwardIndex = 1
@@ -198,6 +208,7 @@ class ToolbarViewModelTest {
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
+                turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = mozilla,
                 currentBackForwardIndex = 1
