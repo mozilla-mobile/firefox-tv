@@ -24,6 +24,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.toJavaURI
@@ -59,70 +60,116 @@ class PinnedTileAdapter(
             else -> 1
         }
     }
-
+    @SuppressWarnings("NestedBlockDepth")
     @ExperimentalCoroutinesApi
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (position) {
-            0 -> {
-                val eventHolder = holder as EventViewHolder
-                with(eventHolder) {
-                    val item = tiles[position]
+        if (LocaleManager.getInstance().isLocaleENUS(holder.itemView.context)) {
+            when (position) {
+                0 -> {
+                    val eventHolder = holder as EventViewHolder
+                    with(eventHolder) {
+                        val item = tiles[position]
 
-                    when (item) {
-                        is BundledPinnedTile -> {
-                            onBindEventTile(eventHolder, item)
-                            setIconLayoutMarginParams(iconView, 0)
+                        when (item) {
+                            is BundledPinnedTile -> {
+                                onBindEventTile(eventHolder, item)
+                                setIconLayoutMarginParams(iconView, 0)
+                            }
+                        }
+
+                        itemView.setOnClickListener {
+                            loadUrl(item.url)
+                            TelemetryIntegration.INSTANCE.homeTileClickEvent(it.context, item)
                         }
                     }
+                }
+                else -> {
+                    val tileHolder = holder as TileViewHolder
+                    with(tileHolder) {
+                        val item = tiles[position]
+                        when (item) {
+                            is BundledPinnedTile -> {
+                                onBindBundledHomeTile(tileHolder, item)
+                                setIconLayoutMarginParams(iconView, R.dimen.bundled_home_tile_margin_value)
+                            }
+                            is CustomPinnedTile -> {
+                                onBindCustomHomeTile(uiScope, tileHolder, item)
+                                setIconLayoutMarginParams(iconView, R.dimen.custom_home_tile_margin_value)
+                            }
+                        }.forceExhaustive
 
-                    itemView.setOnClickListener {
-                        loadUrl(item.url)
-                        TelemetryIntegration.INSTANCE.homeTileClickEvent(it.context, item)
+                        itemView.setOnClickListener {
+                            loadUrl(item.url)
+                            TelemetryIntegration.INSTANCE.homeTileClickEvent(it.context, item)
+                        }
+
+                        itemView.setOnLongClickListener {
+                            onTileLongClick?.invoke()
+                            lastLongClickedTile = item
+
+                            true
+                        }
+
+                        val tvWhiteColor = ContextCompat.getColor(tileHolder.itemView.context, R.color.tv_white)
+                        itemView.setOnFocusChangeListener { _, hasFocus ->
+                            val backgroundResource: Int
+                            val textColor: Int
+                            if (hasFocus) {
+                                backgroundResource = R.drawable.home_tile_title_focused_background
+                                textColor = tvWhiteColor
+                                onTileFocused?.invoke()
+                            } else {
+                                backgroundResource = 0
+                                textColor = Color.BLACK
+                            }
+                            titleView.setBackgroundResource(backgroundResource)
+                            titleView.setTextColor(textColor)
+                        }
                     }
                 }
             }
-            else -> {
-                val tileHolder = holder as TileViewHolder
-                with(tileHolder) {
-                    val item = tiles[position]
-                    when (item) {
-                        is BundledPinnedTile -> {
-                            onBindBundledHomeTile(tileHolder, item)
-                            setIconLayoutMarginParams(iconView, R.dimen.bundled_home_tile_margin_value)
-                        }
-                        is CustomPinnedTile -> {
-                            onBindCustomHomeTile(uiScope, tileHolder, item)
-                            setIconLayoutMarginParams(iconView, R.dimen.custom_home_tile_margin_value)
-                        }
-                    }.forceExhaustive
+        } else {
+            val tileHolder = holder as TileViewHolder
 
-                    itemView.setOnClickListener {
-                        loadUrl(item.url)
-                        TelemetryIntegration.INSTANCE.homeTileClickEvent(it.context, item)
+            with(tileHolder) {
+                val item = tiles[position]
+                when (item) {
+                    is BundledPinnedTile -> {
+                        onBindBundledHomeTile(tileHolder, item)
+                        setIconLayoutMarginParams(iconView, R.dimen.bundled_home_tile_margin_value)
                     }
-
-                    itemView.setOnLongClickListener {
-                        onTileLongClick?.invoke()
-                        lastLongClickedTile = item
-
-                        true
+                    is CustomPinnedTile -> {
+                        onBindCustomHomeTile(uiScope, tileHolder, item)
+                        setIconLayoutMarginParams(iconView, R.dimen.custom_home_tile_margin_value)
                     }
+                }.forceExhaustive
 
-                    val tvWhiteColor = ContextCompat.getColor(tileHolder.itemView.context, R.color.tv_white)
-                    itemView.setOnFocusChangeListener { _, hasFocus ->
-                        val backgroundResource: Int
-                        val textColor: Int
-                        if (hasFocus) {
-                            backgroundResource = R.drawable.home_tile_title_focused_background
-                            textColor = tvWhiteColor
-                            onTileFocused?.invoke()
-                        } else {
-                            backgroundResource = 0
-                            textColor = Color.BLACK
-                        }
-                        titleView.setBackgroundResource(backgroundResource)
-                        titleView.setTextColor(textColor)
+                itemView.setOnClickListener {
+                    loadUrl(item.url)
+                    TelemetryIntegration.INSTANCE.homeTileClickEvent(it.context, item)
+                }
+
+                itemView.setOnLongClickListener {
+                    onTileLongClick?.invoke()
+                    lastLongClickedTile = item
+
+                    true
+                }
+
+                val tvWhiteColor = ContextCompat.getColor(tileHolder.itemView.context, R.color.tv_white)
+                itemView.setOnFocusChangeListener { _, hasFocus ->
+                    val backgroundResource: Int
+                    val textColor: Int
+                    if (hasFocus) {
+                        backgroundResource = R.drawable.home_tile_title_focused_background
+                        textColor = tvWhiteColor
+                        onTileFocused?.invoke()
+                    } else {
+                        backgroundResource = 0
+                        textColor = Color.BLACK
                     }
+                    titleView.setBackgroundResource(backgroundResource)
+                    titleView.setTextColor(textColor)
                 }
             }
         }
