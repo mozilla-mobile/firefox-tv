@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.pinnedtile
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.support.v7.util.DiffUtil
@@ -32,6 +33,9 @@ import org.mozilla.tv.firefox.ext.withRoundedCorners
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.FormattedDomain
 
+const val EVENT_TILE = 0
+const val NORMAL_TILE = 1
+
 /**
  * Duration of animation to show custom tile. If the duration is too short, the tile will just
  * pop-in. I speculate this happens because the amount of time it takes to downsample the bitmap
@@ -55,24 +59,22 @@ class PinnedTileAdapter(
     private val uiScope = CoroutineScope(Dispatchers.Main + uiLifecycleCancelJob)
 
     override fun getItemViewType(position: Int): Int {
-        return when (position) {
-            0 -> 0
-            else -> 1
+        return when {
+            tiles[position].isEventTile() -> EVENT_TILE
+            else -> NORMAL_TILE
         }
     }
     @SuppressWarnings("NestedBlockDepth")
     @ExperimentalCoroutinesApi
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (LocaleManager.getInstance().isLocaleENUS(holder.itemView.context)) {
-            when (position) {
-                0 -> {
-                    val eventHolder = holder as EventViewHolder
-                    with(eventHolder) {
+            when (holder) {
+                is EventViewHolder -> {
+                    with(holder) {
                         val item = tiles[position]
 
                         when (item) {
                             is BundledPinnedTile -> {
-                                onBindEventTile(eventHolder, item)
+                                onBindEventTile(holder, item)
                                 setIconLayoutMarginParams(iconView, 0)
                             }
                         }
@@ -83,17 +85,16 @@ class PinnedTileAdapter(
                         }
                     }
                 }
-                else -> {
-                    val tileHolder = holder as TileViewHolder
-                    with(tileHolder) {
+                is TileViewHolder -> {
+                    with(holder) {
                         val item = tiles[position]
                         when (item) {
                             is BundledPinnedTile -> {
-                                onBindBundledHomeTile(tileHolder, item)
+                                onBindBundledHomeTile(holder, item)
                                 setIconLayoutMarginParams(iconView, R.dimen.bundled_home_tile_margin_value)
                             }
                             is CustomPinnedTile -> {
-                                onBindCustomHomeTile(uiScope, tileHolder, item)
+                                onBindCustomHomeTile(uiScope, holder, item)
                                 setIconLayoutMarginParams(iconView, R.dimen.custom_home_tile_margin_value)
                             }
                         }.forceExhaustive
@@ -110,7 +111,7 @@ class PinnedTileAdapter(
                             true
                         }
 
-                        val tvWhiteColor = ContextCompat.getColor(tileHolder.itemView.context, R.color.tv_white)
+                        val tvWhiteColor = ContextCompat.getColor(holder.itemView.context, R.color.tv_white)
                         itemView.setOnFocusChangeListener { _, hasFocus ->
                             val backgroundResource: Int
                             val textColor: Int
@@ -128,51 +129,6 @@ class PinnedTileAdapter(
                     }
                 }
             }
-        } else {
-            val tileHolder = holder as TileViewHolder
-
-            with(tileHolder) {
-                val item = tiles[position]
-                when (item) {
-                    is BundledPinnedTile -> {
-                        onBindBundledHomeTile(tileHolder, item)
-                        setIconLayoutMarginParams(iconView, R.dimen.bundled_home_tile_margin_value)
-                    }
-                    is CustomPinnedTile -> {
-                        onBindCustomHomeTile(uiScope, tileHolder, item)
-                        setIconLayoutMarginParams(iconView, R.dimen.custom_home_tile_margin_value)
-                    }
-                }.forceExhaustive
-
-                itemView.setOnClickListener {
-                    loadUrl(item.url)
-                    TelemetryIntegration.INSTANCE.homeTileClickEvent(it.context, item)
-                }
-
-                itemView.setOnLongClickListener {
-                    onTileLongClick?.invoke()
-                    lastLongClickedTile = item
-
-                    true
-                }
-
-                val tvWhiteColor = ContextCompat.getColor(tileHolder.itemView.context, R.color.tv_white)
-                itemView.setOnFocusChangeListener { _, hasFocus ->
-                    val backgroundResource: Int
-                    val textColor: Int
-                    if (hasFocus) {
-                        backgroundResource = R.drawable.home_tile_title_focused_background
-                        textColor = tvWhiteColor
-                        onTileFocused?.invoke()
-                    } else {
-                        backgroundResource = 0
-                        textColor = Color.BLACK
-                    }
-                    titleView.setBackgroundResource(backgroundResource)
-                    titleView.setTextColor(textColor)
-                }
-            }
-        }
     }
 
     private fun setIconLayoutMarginParams(iconView: View, tileMarginValue: Int) {
@@ -182,7 +138,14 @@ class PinnedTileAdapter(
         iconView.layoutParams = layoutMarginParams
     }
 
-    fun setTiles(newTiles: List<PinnedTile>) {
+    fun setTiles(tileList: List<PinnedTile>, context: Context) {
+        fun localeIsEnUs() = LocaleManager.getInstance().isLocaleENUS(context)
+
+        val newTiles = when {
+            localeIsEnUs() -> tileList
+            else -> tileList.filter { !it.isEventTile() }
+        }
+
         if (itemCount == 0) {
             tiles = newTiles
             notifyDataSetChanged()
@@ -217,7 +180,7 @@ class PinnedTileAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            0 -> EventViewHolder(
+            EVENT_TILE -> EventViewHolder(
                     LayoutInflater.from(parent.context).inflate(R.layout.event_tile, parent, false)
             )
             else -> TileViewHolder(
