@@ -31,6 +31,7 @@ import kotlinx.coroutines.Job
 import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.components.UrlAutoCompleteFilter
+import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.ext.forEachChild
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isEffectivelyVisible
@@ -195,7 +196,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         pinnedTileViewModel.getTileList().observe(lifeCycleOwner, Observer {
             if (it != null) {
-                tileAdapter.setTiles(it)
+                tileAdapter.setTiles(it, context)
                 updateOverlayForCurrentState()
             }
         })
@@ -204,9 +205,12 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
 
         val manager = HomeTileManager(context, COL_COUNT)
         manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+
+            val localeIsEnUs = LocaleManager.getInstance().isLocaleENUS(context)
+
             override fun getSpanSize(position: Int): Int {
-                return when (position) {
-                    0 -> 2
+                return when {
+                    position == 0 && localeIsEnUs -> 2
                     else -> 1
                 }
             }

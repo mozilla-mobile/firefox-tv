@@ -67,3 +67,7 @@ class CustomPinnedTile(
         )
     }
 }
+
+fun PinnedTile.isEventTile(): Boolean =
+    this.url == "http://www.mozilla.org/firefox/concerts?utm_source=firetv&utm_campaign" +
+        "=livenation-promotion&utm_medium=referral&utm_content=firetv_tile"
