@@ -12,6 +12,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Some web fonts were blocked which caused icons to be missing
 
+## [3.1.2] - 2018-12-10
+### Added
+- Removed limited-time event from homescreen, post-event.
+
+
+## [3.1.1] - 2018-12-07
+### Added
+- Added limited-time event tile to homescreen
+
 ## [3.1] - 2018-11-16
 ### Added
 - Ability to request desktop version of the current site
