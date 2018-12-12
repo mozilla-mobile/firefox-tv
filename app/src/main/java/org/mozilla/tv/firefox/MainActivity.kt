@@ -202,6 +202,10 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
                         else -> null
                     }
 
+            if (browserFragment.arguments == null) {
+                browserFragment.arguments = Bundle()
+            }
+
             // Set ParentFragment flag to the BrowserFragment based on currFragment and let
             // fragment lifecycle handle the rest
             when (currFragment) {
