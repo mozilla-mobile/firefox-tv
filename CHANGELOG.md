@@ -4,7 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## Unreleased
+### Fixed
+- Some web fonts were blocked which caused icons to be missing
+- Pocket requests are no longer made if a valid key is not found
+- Pocket requests are no longer made when the locale is not set to English
+
+## [3.1.3] - 2018-12-17
 ### Added
 - Clicking remote menu button from Pocket feed now returns to overlay
 
@@ -14,6 +20,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Some web fonts were blocked which caused icons to be missing
 - Pocket requests are no longer made if a valid key is not found
 - Pocket requests are no longer made when the locale is not set to English
+
+## [3.1.2] - 2018-12-11
+### Changed
+- Removed limited-time event tile from homescreen
+
+## [3.1.1] - 2018-12-07
+### Added
+- Added limited-time event tile to homescreen
 
 ## [3.1] - 2018-11-16
 ### Added
@@ -32,6 +46,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - A crash that could occur when backing out of the Pocket screen
 - DRM content not playing: this is now supported for some DRM videos
 - Fixed bug where clearing data would not clear state from the current session
+- Some web fonts were blocked which caused icons to be missing
 
 ## [3.0.2] - 2018-10-30
 *Version-bump only: Released v3.0+ for the first time to Stick Gen 1 & 2 in addition to Fire TV (Gen 1, 2, 3), Cube, Element 4k (pendant), which already had v3.0+.*
@@ -120,6 +135,9 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 *Initial release! A browser including home tile shortcuts.*
 
 [Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1..HEAD
+[3.1.3]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.2...v3.1.3
+[3.1.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.1...v3.1.2
+[3.1.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1...v3.1.1
 [3.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.0.2..v3.1
 [3.0.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.0.1...v3.0.2
 [3.0.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.0...v3.0.1
