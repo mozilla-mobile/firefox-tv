@@ -27,6 +27,8 @@ import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.not
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.helpers.atPosition
+import org.junit.Assert.assertTrue
+import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.helpers.ext.assertIsChecked
 import org.mozilla.tv.firefox.helpers.ext.assertIsEnabled
 import org.mozilla.tv.firefox.helpers.ext.assertIsSelected
@@ -37,6 +39,14 @@ import org.mozilla.tv.firefox.pinnedtile.TileViewHolder
  * Implementation of Robot Pattern for the navigation overlay menu.
  */
 class NavigationOverlayRobot {
+    private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+    fun goBack() = backButton().click()
+    fun remoteBack() = device.pressBack()
+    fun goForward() = forwardButton().click()
+    fun reload() = reloadButton().click()
+    fun toggleTurbo() = turboButton().click()
+    fun openSettings() = settingsButton().click()
 
     fun assertCanGoBack(canGoBack: Boolean) = backButton().assertIsEnabled(canGoBack)
     fun assertCanGoForward(canGoForward: Boolean) = forwardButton().assertIsEnabled(canGoForward)
@@ -65,6 +75,7 @@ class NavigationOverlayRobot {
 
     fun assertPinnedTileExists(inPosition: Int, withText: String) = homeTiles()
         .check(matches(atPosition(inPosition, hasDescendant(withText(withText)))))
+    fun assertActivityFinishing(activity: MainActivityTestRule) = assertTrue(activity.activity.isFinishing)
 
     class Transition {
         private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
