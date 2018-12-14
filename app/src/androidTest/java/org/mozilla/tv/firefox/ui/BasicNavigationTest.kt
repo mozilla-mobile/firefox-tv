@@ -113,4 +113,11 @@ class BasicNavigationTest {
             assertNotEquals(preReloadTitle, getPageTitle())
         }
     }
+    @Test
+    fun exitAppByBackButtonTest() {
+        navigationOverlay {
+            remoteBack()
+            assertActivityFinishing(activityTestRule)
+        }
+    }
 }

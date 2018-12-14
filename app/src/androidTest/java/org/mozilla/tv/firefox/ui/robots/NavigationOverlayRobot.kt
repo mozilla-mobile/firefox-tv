@@ -19,7 +19,9 @@ import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.espresso.matcher.ViewMatchers.withText
 import android.support.test.uiautomator.UiDevice
 import org.hamcrest.CoreMatchers.containsString
+import org.junit.Assert.assertTrue
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.helpers.ext.assertIsChecked
 import org.mozilla.tv.firefox.helpers.ext.assertIsEnabled
 import org.mozilla.tv.firefox.helpers.ext.assertIsSelected
@@ -30,8 +32,10 @@ import org.mozilla.tv.firefox.pinnedtile.TileViewHolder
  * Implementation of Robot Pattern for the navigation overlay menu.
  */
 class NavigationOverlayRobot {
+    private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
     fun goBack() = backButton().click()
+    fun remoteBack() = device.pressBack()
     fun goForward() = forwardButton().click()
     fun reload() = reloadButton().click()
     fun toggleTurbo() = turboButton().click()
@@ -55,6 +59,8 @@ class NavigationOverlayRobot {
     }
 
     fun assertDesktopModeEnabled(desktopModeEnabled: Boolean) = desktopModeButton().assertIsEnabled(desktopModeEnabled)
+
+    fun assertActivityFinishing(activity: MainActivityTestRule) = assertTrue(activity.activity.isFinishing)
 
     class Transition {
         private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
