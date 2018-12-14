@@ -6,20 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## Unreleased
 ### Fixed
-- Some web fonts were blocked which caused icons to be missing
 - Pocket requests are no longer made if a valid key is not found
 - Pocket requests are no longer made when the locale is not set to English
 
 ## [3.1.3] - 2018-12-17
 ### Added
 - Clicking remote menu button from Pocket feed now returns to overlay
-
-### Changed
-
-### Fixed
-- Some web fonts were blocked which caused icons to be missing
-- Pocket requests are no longer made if a valid key is not found
-- Pocket requests are no longer made when the locale is not set to English
+- Ability to exit Firefox with remote back button
 
 ## [3.1.2] - 2018-12-11
 ### Changed
