@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 ### Fixed
+- Issue where users were unable to exit YouTube with remote back button (#1542)
 
 ## [3.1.2] - 2018-12-11
 ### Changed
