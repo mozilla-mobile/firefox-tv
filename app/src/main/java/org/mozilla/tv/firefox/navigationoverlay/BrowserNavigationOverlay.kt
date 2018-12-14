@@ -230,13 +230,13 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             updateFocusableViews()
             pocketVideoMegaTileView.requestFocus()
         }
-        updateFocusAndURL()
+        updateFocusableViews()
     }
 
     private fun hideMegaTileError() {
         pocketVideosContainer.visibility = View.VISIBLE
         pocketErrorContainer.visibility = View.GONE
-        updateFocusAndURL()
+        updateFocusableViews()
     }
 
     private fun initMegaTile() {
