@@ -325,11 +325,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         }
     }
 
-    // TODO: NavigationOverlayFragment refactor; OverlayVM + LiveData should handle this
-    fun updateOverlayTurboMode() {
-        browserOverlay.updateTurboButton()
-    }
-
     fun dispatchKeyEvent(event: KeyEvent): Boolean {
         /**
          * Key handling order:

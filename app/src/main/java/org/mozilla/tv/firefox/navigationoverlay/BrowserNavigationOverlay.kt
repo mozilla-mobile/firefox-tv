@@ -432,11 +432,6 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         }
     }
 
-    // TODO: OverlayVM should handle this instead after BrowserNavigationOverlay refactor
-    fun updateTurboButton() {
-        turboButton.isChecked = context.serviceLocator.turboMode.isEnabled()
-    }
-
     /**
      * Focus may be lost if all pinned items are removed via onContextItemSelected()
      * FIXME: requires OverlayFragment (LifecycleOwner) -> OverlayVM -> FocusRepo
