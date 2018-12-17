@@ -48,16 +48,16 @@ else
 fi
 
 # build debug app
-./gradlew clean app:assembleAmazonWebViewDebug
+./gradlew clean app:assembleDebug
 
 # build test app
-./gradlew app:assemblAndroidTest
+./gradlew app:assembleAndroidTest
 
 # uninstall existing apps
-./gradlew uninstallAmazonWebviewDebug uninstallAmazonWebviewDebugAndroidTest
+./gradlew uninstallDebug uninstallDebugAndroidTest
 
 # install apps
-./gradlew installAmazonWebviewDebug installAmazonWebviewDebugAndroidTest
+./gradlew installDebug installDebugAndroidTest
 
 # inject target device into Screengrabfile
 echo "specific_device '$ANDROID_SERIAL'" >> $CONFIG
