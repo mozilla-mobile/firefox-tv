@@ -15,10 +15,10 @@ private const val POCKET_PARAM_API_KEY = "consumer_key"
  *
  * This logic is often simple but noisy, so pulling it out of client code improves readability.
  */
-class BuildConfigDerivables(localeIsEnglish: () -> Boolean) {
+class BuildConfigDerivables(localeIsEnglish: () -> Boolean, pocketKey: String? = BuildConfig.POCKET_KEY) {
     @Suppress("UselessCallOnNotNull") // Values of BuildConfig can change but the compiler doesn't know that
     val initialPocketRepoState = when {
-        BuildConfig.POCKET_KEY.isNullOrEmpty() -> PocketVideoRepo.FeedState.NoAPIKey
+        pocketKey.isNullOrEmpty() -> PocketVideoRepo.FeedState.NoAPIKey
         !localeIsEnglish.invoke() -> PocketVideoRepo.FeedState.Inactive
         else -> PocketVideoRepo.FeedState.Loading
     }

@@ -41,7 +41,7 @@ class PocketVideoRepoTest {
             pocketEndpoint = pocketEndpointSpy,
             localeIsEnglish = isEnglish,
             pocketFeedStateMachine = PocketFeedStateMachine(),
-            buildConfigDerivables = BuildConfigDerivables(isEnglish)
+            buildConfigDerivables = BuildConfigDerivables(isEnglish, "MOCK-POCKET-KEY")
         ))
     }
 
