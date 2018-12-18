@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.telemetry
 
 import android.content.Context
 import org.mozilla.telemetry.measurement.SettingsMeasurement
+import org.mozilla.tv.firefox.BuildConfig
 import org.mozilla.tv.firefox.ext.serviceLocator
 
 /**
@@ -16,14 +17,16 @@ class TelemetrySettingsProvider(private val appContext: Context) : SettingsMeasu
 
     override fun containsKey(key: String?): Boolean {
         return key == PREF_CUSTOM_HOME_TILE_COUNT ||
-                key == PREF_TOTAL_HOME_TILE_COUNT ||
-                super.containsKey(key)
+            key == PREF_TOTAL_HOME_TILE_COUNT ||
+            key == APP_ID ||
+            super.containsKey(key)
     }
 
     override fun getValue(key: String?): Any? = when (key) {
         PREF_CUSTOM_HOME_TILE_COUNT -> appContext.serviceLocator.pinnedTileRepo.customTilesSize
         PREF_TOTAL_HOME_TILE_COUNT -> appContext.serviceLocator.pinnedTileRepo.customTilesSize +
                 appContext.serviceLocator.pinnedTileRepo.bundledTilesSize
+        APP_ID -> BuildConfig.APPLICATION_ID
         else -> super.getValue(key)
     }
 
@@ -32,5 +35,6 @@ class TelemetrySettingsProvider(private val appContext: Context) : SettingsMeasu
         // in the event ping's aggregate region than they are as UI events.
         const val PREF_CUSTOM_HOME_TILE_COUNT = "custom_home_tile_count"
         const val PREF_TOTAL_HOME_TILE_COUNT = "total_home_tile_count"
+        const val APP_ID = "app_id"
     }
 }
