@@ -314,6 +314,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
             }
         })
 
+        // TODO most (if not all) of this should be moved to the overlay once it is its own fragment
         toolbarViewModel.events.observe(lifeCycleOwner, Observer {
             it?.consume {
                 when (it) {
