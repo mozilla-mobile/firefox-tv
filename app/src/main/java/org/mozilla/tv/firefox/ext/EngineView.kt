@@ -8,6 +8,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.webkit.ValueCallback
 import android.webkit.WebView
 import android.widget.FrameLayout
 import mozilla.components.concept.engine.EngineView
@@ -55,8 +56,8 @@ fun EngineView.setupForApp() {
  * offer a matching API (WebExtensions are likely going to be the preferred way). We may move the functionality that
  * requires JS injection to browser-engine-system.
  */
-fun EngineView.evalJS(javascript: String) {
-    webView.evaluateJavascript(javascript, null)
+fun EngineView.evalJS(javascript: String, callback: ValueCallback<String>? = null) {
+    webView.evaluateJavascript(javascript, callback)
 }
 
 /**

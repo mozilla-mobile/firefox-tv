@@ -15,6 +15,9 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.webkit.ValueCallback
+import android.webkit.WebBackForwardList
+import android.webkit.WebView
 import kotlinx.android.synthetic.main.browser_overlay.*
 import kotlinx.android.synthetic.main.browser_overlay.view.*
 import kotlinx.android.synthetic.main.fragment_browser.*
@@ -28,6 +31,7 @@ import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.MainActivity.Companion.PARENT_FRAGMENT
 import org.mozilla.tv.firefox.MediaSessionHolder
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.ext.evalJS
 import org.mozilla.tv.firefox.webrender.cursor.CursorController
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.ext.isVisible
@@ -291,7 +295,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             }
             else -> {
                 context!!.webRenderComponents.sessionManager.remove()
-                context!!.serviceLocator.webViewCache.doNotPersist()
                 return false
             }
         }
@@ -340,9 +343,26 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         }
 
         if (!browserOverlay.isVisible && session.isYoutubeTV &&
-                event.keyCode == KeyEvent.KEYCODE_BACK) {
-            val escKeyEvent = KeyEvent(event.action, KeyEvent.KEYCODE_ESCAPE)
-            (activity as MainActivity).dispatchKeyEvent(escKeyEvent)
+                event.keyCode == KeyEvent.KEYCODE_BACK &&
+                event.action == KeyEvent.ACTION_DOWN) {
+            webView?.evalJS("""
+                (function () {
+                    return document.activeElement.parentElement.parentElement.id === 'guide-list';
+                })();
+                """,
+                    ValueCallback {
+                        val keyCode = if (it == "true") {
+                            val wv = (webView as ViewGroup).getChildAt(0) as WebView
+                            val backForward = wv.copyBackForwardList().toList()
+                            val youtubeIndex = backForward.lastIndexOf("https://ftv.cdn.mozilla.net/ytht")
+                            val goBackSteps = backForward.size - youtubeIndex
+                            wv.goBackOrForward(-goBackSteps)
+                            KeyEvent.KEYCODE_BACK
+                        } else KeyEvent.KEYCODE_ESCAPE
+
+                        val newKeyEvent = KeyEvent(KeyEvent.ACTION_UP, keyCode)
+                        (activity as MainActivity).dispatchKeyEvent(newKeyEvent)
+                    })
             return true
         }
         return false
@@ -364,5 +384,11 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         // TODO once the overlay is a separate fragment, handle PocketRepoCache changes in ScreenController
         val pocketRepoCache = serviceLocator.pocketRepoCache
         if (toShow) pocketRepoCache.freeze() else pocketRepoCache.unfreeze()
+    }
+
+    private fun WebBackForwardList.toList(): List<String> {
+        return List(size) {
+            getItemAtIndex(it).originalUrl
+        }
     }
 }
