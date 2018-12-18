@@ -40,10 +40,10 @@ class PocketFeedStateMachine {
         cacheState: PocketVideoRepo.FeedState?
     ): PocketVideoRepo.FeedState {
         return when {
-            repoState is Inactive -> repoState
-            repoState is LoadComplete -> return repoState
-            repoState === Loading && cacheState === FetchFailed -> return repoState
-            repoState === FetchFailed && cacheState === Loading -> return repoState
+            repoState === Inactive || cacheState === Inactive -> Inactive
+            repoState is LoadComplete -> repoState
+            repoState === Loading && cacheState === FetchFailed -> repoState
+            repoState === FetchFailed && cacheState === Loading -> repoState
             cacheState == null -> repoState
             else -> cacheState
         }
