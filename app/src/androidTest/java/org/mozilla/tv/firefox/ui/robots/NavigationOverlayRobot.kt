@@ -5,7 +5,6 @@
 package org.mozilla.tv.firefox.ui.robots
 
 import android.net.Uri
-import android.support.annotation.StringRes
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.clearText
@@ -14,21 +13,16 @@ import android.support.test.espresso.action.ViewActions.pressImeActionButton
 import android.support.test.espresso.action.ViewActions.typeText
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.contrib.RecyclerViewActions
-import android.support.test.espresso.matcher.RootMatchers.withDecorView
 import android.support.test.espresso.matcher.ViewMatchers.hasDescendant
-import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.withHint
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.espresso.matcher.ViewMatchers.withText
-import android.support.test.rule.ActivityTestRule
 import android.support.test.uiautomator.UiDevice
-import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.containsString
-import org.hamcrest.CoreMatchers.not
-import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.helpers.atPosition
 import org.junit.Assert.assertTrue
+import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
+import org.mozilla.tv.firefox.helpers.RecyclerViewHelpers
 import org.mozilla.tv.firefox.helpers.ext.assertIsChecked
 import org.mozilla.tv.firefox.helpers.ext.assertIsEnabled
 import org.mozilla.tv.firefox.helpers.ext.assertIsSelected
@@ -69,12 +63,9 @@ class NavigationOverlayRobot {
 
     fun assertDesktopModeEnabled(desktopModeEnabled: Boolean) = desktopModeButton().assertIsEnabled(desktopModeEnabled)
 
-    fun assertToast(@StringRes textId: Int, activityTestRule: ActivityTestRule<*>) = onView(withText(textId))
-        .inRoot(withDecorView(not(`is`(activityTestRule.activity.window.decorView))))
-        .check(matches(isDisplayed()))
-
     fun assertPinnedTileExists(inPosition: Int, withText: String) = homeTiles()
-        .check(matches(atPosition(inPosition, hasDescendant(withText(withText)))))
+        .check(matches(RecyclerViewHelpers.atPosition(inPosition, hasDescendant(withText(withText)))))
+
     fun assertActivityFinishing(activity: MainActivityTestRule) = assertTrue(activity.activity.isFinishing)
 
     class Transition {

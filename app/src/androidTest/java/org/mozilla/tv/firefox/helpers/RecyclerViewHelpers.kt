@@ -10,19 +10,21 @@ import android.view.View
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 
-// Taken from https://stackoverflow.com/a/34795431
-fun atPosition(position: Int, itemMatcher: Matcher<View>): Matcher<View> {
-    checkNotNull(itemMatcher)
-    return object : BoundedMatcher<View, RecyclerView>(RecyclerView::class.java) {
-        override fun describeTo(description: Description) {
-            description.appendText("has item at position $position: ")
-            itemMatcher.describeTo(description)
-        }
+object RecyclerViewHelpers {
+    // Taken from https://stackoverflow.com/a/34795431
+    fun atPosition(position: Int, itemMatcher: Matcher<View>): Matcher<View> {
+        checkNotNull(itemMatcher)
+        return object : BoundedMatcher<View, RecyclerView>(RecyclerView::class.java) {
+            override fun describeTo(description: Description) {
+                description.appendText("has item at position $position: ")
+                itemMatcher.describeTo(description)
+            }
 
-        override fun matchesSafely(view: RecyclerView): Boolean {
-            val viewHolder = view.findViewHolderForAdapterPosition(position)
-                ?: return false // has no item on such position
-            return itemMatcher.matches(viewHolder.itemView)
+            override fun matchesSafely(view: RecyclerView): Boolean {
+                val viewHolder = view.findViewHolderForAdapterPosition(position)
+                    ?: return false // has no item on such position
+                return itemMatcher.matches(viewHolder.itemView)
+            }
         }
     }
 }

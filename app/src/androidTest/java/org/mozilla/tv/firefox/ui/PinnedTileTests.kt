@@ -9,6 +9,7 @@ import org.junit.Test
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.helpers.MockWebServerHelper
+import org.mozilla.tv.firefox.helpers.ToastHelper.assertToast
 import org.mozilla.tv.firefox.ui.robots.navigationOverlay
 
 class PinnedTileTests {

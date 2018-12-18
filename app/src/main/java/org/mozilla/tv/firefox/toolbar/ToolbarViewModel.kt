@@ -51,8 +51,8 @@ class ToolbarViewModel(
 
             // The menu back button should not be enabled if the previous screen was our initial url (home)
             fun isBackEnabled() = sessionState.backEnabled && sessionState.currentBackForwardIndex > 1
-            fun currentUrlIsPinned() = pinnedTiles.containsKey(sessionState.currentUrl)
-            fun hostChanged(): Boolean {
+            fun isCurrentURLPinned() = pinnedTiles.containsKey(sessionState.currentUrl)
+            fun isHostDifferentFromPrevious(): Boolean {
                 val currentURLHost = sessionState.currentUrl.toUri()?.host ?: return true
 
                 return (previousURLHost != currentURLHost).also {
@@ -64,7 +64,7 @@ class ToolbarViewModel(
                 sessionState.currentUrl.toUri()?.let { sessionRepo.loadURL(it) }
             }
             fun causeSideEffects() {
-                if (hostChanged() && sessionState.desktopModeActive) disableDesktopMode()
+                if (isHostDifferentFromPrevious() && sessionState.desktopModeActive) disableDesktopMode()
                 if (sessionState.currentUrl.isEqualToHomepage()) setOverlayVisible(true)
             }
 
@@ -75,7 +75,7 @@ class ToolbarViewModel(
                 forwardEnabled = sessionState.forwardEnabled,
                 refreshEnabled = !sessionState.currentUrl.isEqualToHomepage(),
                 pinEnabled = !sessionState.currentUrl.isEqualToHomepage(),
-                pinChecked = currentUrlIsPinned(),
+                pinChecked = isCurrentURLPinned(),
                 turboChecked = sessionState.turboModeActive,
                 desktopModeEnabled = !sessionState.currentUrl.isEqualToHomepage(),
                 desktopModeChecked = sessionState.desktopModeActive,

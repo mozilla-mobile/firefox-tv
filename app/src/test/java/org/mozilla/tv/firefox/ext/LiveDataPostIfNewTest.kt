@@ -55,7 +55,7 @@ class LiveDataPostIfNewTest {
 
     @Test
     fun `GIVEN previous state was null WHEN new state is pushed THEN new state should be emitted`() {
-        source.postIfNew(null)
+        source.value = null
         source.postIfNew(1)
         observerSpy = spy(Observer { assertEquals(1, it) })
 
