@@ -32,6 +32,7 @@ import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState.Inactive
  * ### Valid Starting Configurations
  * - [Loading]
  * - [NoAPIKey]
+ * - [Inactive]
  */
 class PocketFeedStateMachine {
     fun computeNewState(
