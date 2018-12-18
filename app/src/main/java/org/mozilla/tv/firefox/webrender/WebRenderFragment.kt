@@ -16,7 +16,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.webkit.ValueCallback
-import android.webkit.WebBackForwardList
 import android.webkit.WebView
 import kotlinx.android.synthetic.main.browser_overlay.*
 import kotlinx.android.synthetic.main.browser_overlay.view.*
@@ -39,6 +38,7 @@ import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.serviceLocator
+import org.mozilla.tv.firefox.ext.toStringList
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
@@ -353,7 +353,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                     ValueCallback {
                         val keyCode = if (it == "true") {
                             val wv = (webView as ViewGroup).getChildAt(0) as WebView
-                            val backForward = wv.copyBackForwardList().toList()
+                            val backForward = wv.copyBackForwardList().toStringList()
                             val youtubeIndex = backForward.lastIndexOf("https://ftv.cdn.mozilla.net/ytht")
                             val goBackSteps = backForward.size - youtubeIndex
                             wv.goBackOrForward(-goBackSteps)
@@ -384,11 +384,5 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         // TODO once the overlay is a separate fragment, handle PocketRepoCache changes in ScreenController
         val pocketRepoCache = serviceLocator.pocketRepoCache
         if (toShow) pocketRepoCache.freeze() else pocketRepoCache.unfreeze()
-    }
-
-    private fun WebBackForwardList.toList(): List<String> {
-        return List(size) {
-            getItemAtIndex(it).originalUrl
-        }
     }
 }
