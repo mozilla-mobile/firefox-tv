@@ -14,8 +14,8 @@ import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.ext.LiveDataHelper
 import org.mozilla.tv.firefox.ext.toUri
-import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
+import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.AppConstants
 import org.mozilla.tv.firefox.utils.UrlUtils
@@ -42,9 +42,9 @@ class ToolbarViewModel(
 
     // Values should be pushed to _events using setValue. Two values are set in
     // rapid succession using postValue, only the latest will be received
-    private var _events = MutableLiveData<Consumable<BrowserNavigationOverlay.Action>>()
+    private var _events = MutableLiveData<Consumable<NavigationOverlayFragment.Action>>()
     // Note that events will only emit values if state is observed
-    val events: LiveData<Consumable<BrowserNavigationOverlay.Action>> = _events
+    val events: LiveData<Consumable<NavigationOverlayFragment.Action>> = _events
 
     val state: LiveData<ToolbarViewModel.State> =
         LiveDataHelper.combineLatest(sessionRepo.state, pinnedTileRepo.getPinnedTiles()) { sessionState, pinnedTiles ->
@@ -111,10 +111,10 @@ class ToolbarViewModel(
 
         if (pinChecked) {
             pinnedTileRepo.removePinnedTile(url)
-            _events.value = Consumable.from(BrowserNavigationOverlay.Action.ShowTopToast(R.string.notification_unpinned_site))
+            _events.value = Consumable.from(NavigationOverlayFragment.Action.ShowTopToast(R.string.notification_unpinned_site))
         } else {
             pinnedTileRepo.addPinnedTile(url, sessionRepo.currentURLScreenshot())
-            _events.value = Consumable.from(BrowserNavigationOverlay.Action.ShowTopToast(R.string.notification_pinned_site))
+            _events.value = Consumable.from(NavigationOverlayFragment.Action.ShowTopToast(R.string.notification_pinned_site))
         }
         setOverlayVisible(false)
     }
@@ -143,7 +143,7 @@ class ToolbarViewModel(
             else -> R.string.notification_request_desktop_site
         }
 
-        _events.value = Consumable.from(BrowserNavigationOverlay.Action.ShowBottomToast(textId))
+        _events.value = Consumable.from(NavigationOverlayFragment.Action.ShowBottomToast(textId))
         setOverlayVisible(false)
     }
 
@@ -167,6 +167,6 @@ class ToolbarViewModel(
 
     // TODO move this to the OverlayViewModel once it exists
     private fun setOverlayVisible(visible: Boolean) {
-        _events.value = Consumable.from(BrowserNavigationOverlay.Action.SetOverlayVisible(visible))
+        _events.value = Consumable.from(NavigationOverlayFragment.Action.SetOverlayVisible(visible))
     }
 }
