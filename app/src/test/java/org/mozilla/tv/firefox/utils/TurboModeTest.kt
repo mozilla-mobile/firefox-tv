@@ -19,7 +19,7 @@ import mozilla.components.browser.engine.system.SystemEngine
 import org.mozilla.tv.firefox.ext.application
 
 @RunWith(RobolectricTestRunner::class)
-class ProdTurboModeTest {
+class TurboModeTest {
     private val context: Context
         get() = ApplicationProvider.getApplicationContext()
 
@@ -43,7 +43,7 @@ class ProdTurboModeTest {
         // Add a session so that we can verify the state of it
         session = Session("about:blank")
         context.webRenderComponents.sessionManager.add(session)
-        turboMode = ProdTurboMode(context.application)
+        turboMode = TurboMode(context.application)
     }
 
     @Test
