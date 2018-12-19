@@ -13,14 +13,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-<<<<<<< HEAD
 import android.webkit.ValueCallback
 import android.webkit.WebView
-import kotlinx.android.synthetic.main.browser_overlay.*
-import kotlinx.android.synthetic.main.browser_overlay.view.*
-import kotlinx.android.synthetic.main.fragment_browser.*
-=======
->>>>>>> Issue #1394: Unplug BrowserNavigationOverlay from WebRenderFrag
 import kotlinx.android.synthetic.main.fragment_browser.view.*
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
@@ -35,24 +29,9 @@ import org.mozilla.tv.firefox.webrender.cursor.CursorController
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.isYoutubeTV
-<<<<<<< HEAD
-import org.mozilla.tv.firefox.ext.focusedDOMElement
-import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.toList
-import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
-import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
-import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
-import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
-import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
-import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
-import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.utils.URLs
-import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
-=======
-import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
-import org.mozilla.tv.firefox.utils.AppConstants
->>>>>>> Issue #1394: Unplug BrowserNavigationOverlay from WebRenderFrag
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 
@@ -100,21 +79,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         session.register(observer = this, owner = this)
     }
 
-<<<<<<< HEAD
-    override fun onUrlChanged(session: Session, url: String) {
-        if (url == URLs.APP_URL_POCKET_ERROR) {
-            browserOverlay?.showMegaTileError() // TODO remove and verify that the Pocket refactor handles this
-            browserOverlay?.visibility = View.VISIBLE
-        }
-
-        updateOverlayIfVisible()
-    }
-
-    override fun onLoadingStateChanged(session: Session, loading: Boolean) = updateOverlayIfVisible()
-
-    override fun onNavigationStateChanged(session: Session, canGoBack: Boolean, canGoForward: Boolean) =
-        updateOverlayIfVisible()
-=======
     // TODO: need to find a workaround for NavigationOverlayFragment
 //    override fun onUrlChanged(session: Session, url: String) {
 //        if (url == AppConstants.APP_URL_POCKET_ERROR) {
@@ -129,7 +93,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 //
 //    override fun onNavigationStateChanged(session: Session, canGoBack: Boolean, canGoForward: Boolean) =
 //        updateOverlayIfVisible()
->>>>>>> Issue #1394: Unplug BrowserNavigationOverlay from WebRenderFrag
 
     override fun onFullScreenChanged(session: Session, enabled: Boolean) {
         val window = (context as? Activity)?.window ?: return
@@ -186,39 +149,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
          * instance elsewhere in the fragment lifecycle (refer to Issue #1107) and the timing from
          * which browserOverlay.setVisibility is called.
          */
-<<<<<<< HEAD
-        val bundle: Bundle? = arguments
-
-        with(layout.browserOverlay) {
-            if (bundle?.getSerializable(PARENT_FRAGMENT) != null) {
-                parentFrag = bundle.getSerializable(PARENT_FRAGMENT) as BrowserNavigationOverlay.ParentFragment
-            }
-
-            // FIXME: Need [WebRenderFragment] as lifeCycle owner until NavOverlayFragment breakout
-            pinnedTileViewModel = this@WebRenderFragment.pinnedTileViewModel
-            lifeCycleOwner = this@WebRenderFragment.viewLifecycleOwner
-            initPinnedTiles()
-            observeForMegaTile(this@WebRenderFragment)
-            observeForToolbar(this@WebRenderFragment, this.context)
-
-            onNavigationEvent = this@WebRenderFragment.onNavigationEvent
-            setOverlayVisible = { visible -> setOverlayVisible(visible) }
-            visibility = overlayVisibleCached ?: View.GONE
-
-            // This is needed for YouTube to properly gain focus after a refresh (refer to issue #1149)
-            onPreSetVisibilityListener = { isVisible ->
-                // The overlay can clear the DOM and a previous focused element cache (e.g. reload)
-                // so we need to do our own caching: see FocusedDOMElementCacheInterface for details.
-                if (!isVisible) { webView?.focusedDOMElement?.cache() }
-            }
-
-            openHomeTileContextMenu = {
-                activity?.openContextMenu(browserOverlay.tileContainer)
-            }
-
-            registerForContextMenu(browserOverlay.tileContainer)
-        }
-=======
 //        val bundle: Bundle? = arguments
 //
 //        with(layout.browserOverlay) {
@@ -250,7 +180,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 //
 //            registerForContextMenu(browserOverlay.tileContainer)
 //        }
->>>>>>> Issue #1394: Unplug BrowserNavigationOverlay from WebRenderFrag
 
         layout.progressBar.initialize(this)
 
@@ -270,15 +199,10 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             requireWebRenderComponents.sessionUseCases,
             webView)
 
-<<<<<<< HEAD
-        if (session.url == URLs.APP_URL_HOME) {
-            browserOverlay?.visibility = View.VISIBLE
-        }
-=======
+
 //        if (session.url == AppConstants.APP_URL_HOME) { //TODO: need a workaround for NavOverlayFrag
 //            browserOverlay?.visibility = View.VISIBLE
 //        }
->>>>>>> Issue #1394: Unplug BrowserNavigationOverlay from WebRenderFrag
     }
 
     override fun onStart() {
@@ -310,22 +234,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     // TODO: need new onBackPressed logic with OverlayFragment
     fun onBackPressed(): Boolean {
-<<<<<<< HEAD
-        when {
-            browserOverlay.isVisible && !isUrlEqualToHomepage -> {
-                setOverlayVisible(false)
-                TelemetryIntegration.INSTANCE.userShowsHidesDrawerEvent(false)
-            }
-            session.canGoBack -> {
-                serviceLocator.sessionRepo.exitFullScreenIfPossibleAndBack() // TODO do this through WebRenderViewModel when it exists
-                TelemetryIntegration.INSTANCE.browserBackControllerEvent()
-            }
-            else -> {
-                context!!.webRenderComponents.sessionManager.remove()
-                return false
-            }
-        }
-=======
 //        when {
 //            browserOverlay.isVisible && !isUrlEqualToHomepage -> {
 //                setOverlayVisible(false)
@@ -337,23 +245,9 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 //            }
 //            else -> {
 //                context!!.webRenderComponents.sessionManager.remove()
-//
-//                // We can get into this state in two situations:
-//                // - (1) The user is on the "home page" and the overlay is visible. In this situation we just want to
-//                //       let the activity handle the back press (and leave the app).
-//                // - (2) The overlay is not visible and we are on a website and can't go back further. In this case
-//                //       "back" should show the overlay (the next back press closes the app). In this situation we
-//                //       cannot look at the URL. We just removed the session and the new session may not be loaded yet.
-//                if (!browserOverlay.isVisible) {
-//                    // If the browser overlay is not visible then we show it now immediately. Depending on the loading
-//                    // state of the page we m
-//                    setOverlayVisible(true)
-//                } else {
-//                    return false
-//                }
+//                return false
 //            }
 //        }
->>>>>>> Issue #1394: Unplug BrowserNavigationOverlay from WebRenderFrag
         return true
     }
 
@@ -428,7 +322,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         return false
     }
 
-<<<<<<< HEAD
     private fun goBackBeforeYouTube() {
         val webView = (webView as ViewGroup).getChildAt(0) as WebView
         val backForwardUrlList = webView.copyBackForwardList().toList().map { it.originalUrl }
@@ -437,24 +330,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         webView.goBackOrForward(-goBackSteps)
     }
 
-    /**
-     * Changes the overlay visibility: this should be called instead of changing
-     * [BrowserNavigationOverlay.isVisible] directly.
-     */
-    private fun setOverlayVisible(toShow: Boolean) {
-        if (browserOverlay.parentFrag != BrowserNavigationOverlay.ParentFragment.DEFAULT) {
-            browserOverlay.parentFrag = BrowserNavigationOverlay.ParentFragment.DEFAULT
-        }
-
-        browserOverlay.visibility = if (toShow) View.VISIBLE else View.GONE
-        if (toShow) cursor?.onPause() else cursor?.onResume()
-        cursor?.setEnabledForCurrentState()
-        if (toShow) MenuInteractionMonitor.menuOpened() else MenuInteractionMonitor.menuClosed()
-        // TODO once the overlay is a separate fragment, handle PocketRepoCache changes in ScreenController
-        val pocketRepoCache = serviceLocator.pocketRepoCache
-        if (toShow) pocketRepoCache.freeze() else pocketRepoCache.unfreeze()
-    }
-=======
 //    /**
 //     * Changes the overlay visibility: this should be called instead of changing
 //     * [BrowserNavigationOverlay.isVisible] directly.
@@ -472,5 +347,4 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 //        val pocketRepoCache = serviceLocator.pocketRepoCache
 //        if (toShow) pocketRepoCache.freeze() else pocketRepoCache.unfreeze()
 //    }
->>>>>>> Issue #1394: Unplug BrowserNavigationOverlay from WebRenderFrag
 }
