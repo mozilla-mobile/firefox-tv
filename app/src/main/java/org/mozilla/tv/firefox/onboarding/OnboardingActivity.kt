@@ -34,7 +34,7 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun setTurboMode(turboModeEnabled: Boolean) {
-        serviceLocator.turboMode.setEnabled(turboModeEnabled)
+        serviceLocator.turboMode.isEnabled = turboModeEnabled
     }
 
     private fun setOnboardShown() {
