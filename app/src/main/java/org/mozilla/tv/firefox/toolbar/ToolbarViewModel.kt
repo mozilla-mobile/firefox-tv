@@ -12,7 +12,7 @@ import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
-import org.mozilla.tv.firefox.ext.LiveDataHelper
+import org.mozilla.tv.firefox.ext.LiveDataCombiners
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
@@ -47,7 +47,7 @@ class ToolbarViewModel(
     val events: LiveData<Consumable<BrowserNavigationOverlay.Action>> = _events
 
     val state: LiveData<ToolbarViewModel.State> =
-        LiveDataHelper.combineLatest(sessionRepo.state, pinnedTileRepo.getPinnedTiles()) { sessionState, pinnedTiles ->
+        LiveDataCombiners.combineLatest(sessionRepo.state, pinnedTileRepo.getPinnedTiles()) { sessionState, pinnedTiles ->
 
             // The menu back button should not be enabled if the previous screen was our initial url (home)
             fun isBackEnabled() = sessionState.backEnabled && sessionState.currentBackForwardIndex > 1
