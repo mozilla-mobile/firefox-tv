@@ -16,7 +16,6 @@ import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
-import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.webrender.VideoVoiceCommandMediaSession
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.ext.serviceLocator
@@ -26,7 +25,6 @@ import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.components.locale.LocaleAwareAppCompatActivity
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
-import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
@@ -96,6 +94,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         webRenderComponents.sessionManager.register(sessionObserver, owner = this)
 
         if (webRenderComponents.sessionManager.sessions.isEmpty()) {
+//            serviceLocator.screenController.showNavigationOverlay(supportFragmentManager) TODO
             serviceLocator.screenController.showBrowserScreenForUrl(
                 this@MainActivity,
                 supportFragmentManager,
@@ -165,48 +164,49 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     }
 
     override fun onBackPressed() {
-        val fragmentManager = supportFragmentManager
-        val browserFragment = fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as WebRenderFragment?
-        val settingsFragment = (fragmentManager.findFragmentByTag(SettingsFragment.FRAGMENT_TAG) as SettingsFragment?)?.let {
-            if (it.isVisible) it else null
-        }
-        val pocketFragment = (fragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG) as PocketVideoFragment?)?.let {
-            if (it.isVisible) it else null
-        }
-
-        if (browserFragment != null) {
-            if (browserFragment.isVisible &&
-                    browserFragment.onBackPressed()) {
-                // The Browser fragment handles back presses on its own because it might just go back
-                // in the browsing history.
-                return
-            }
-
-            val currFragment =
-                    when {
-                        settingsFragment != null -> fragmentManager.findFragmentByTag(SettingsFragment.FRAGMENT_TAG)
-                        pocketFragment != null -> fragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG)
-                        else -> null
-                    }
-
-            if (browserFragment.arguments == null) {
-                browserFragment.arguments = Bundle()
-            }
-
-            // Set ParentFragment flag to the BrowserFragment based on currFragment and let
-            // fragment lifecycle handle the rest
-            when (currFragment) {
-                is SettingsFragment -> {
-                    browserFragment.arguments!!.putSerializable(PARENT_FRAGMENT, BrowserNavigationOverlay.ParentFragment.SETTINGS)
-                }
-                is PocketVideoFragment -> {
-                    browserFragment.arguments!!.putSerializable(PARENT_FRAGMENT, BrowserNavigationOverlay.ParentFragment.POCKET)
-                }
-                else -> {
-                    browserFragment.arguments!!.putSerializable(PARENT_FRAGMENT, BrowserNavigationOverlay.ParentFragment.DEFAULT)
-                }
-            }
-        }
+        // TODO: need new backstack implementation
+//        val fragmentManager = supportFragmentManager
+//        val browserFragment = fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as WebRenderFragment?
+//        val settingsFragment = (fragmentManager.findFragmentByTag(SettingsFragment.FRAGMENT_TAG) as SettingsFragment?)?.let {
+//            if (it.isVisible) it else null
+//        }
+//        val pocketFragment = (fragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG) as PocketVideoFragment?)?.let {
+//            if (it.isVisible) it else null
+//        }
+//
+//        if (browserFragment != null) {
+//            if (browserFragment.isVisible &&
+//                    browserFragment.onBackPressed()) {
+//                // The Browser fragment handles back presses on its own because it might just go back
+//                // in the browsing history.
+//                return
+//            }
+//
+//            val currFragment =
+//                    when {
+//                        settingsFragment != null -> fragmentManager.findFragmentByTag(SettingsFragment.FRAGMENT_TAG)
+//                        pocketFragment != null -> fragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG)
+//                        else -> null
+//                    }
+//
+//            if (browserFragment.arguments == null) {
+//                browserFragment.arguments = Bundle()
+//            }
+//
+//            // Set ParentFragment flag to the BrowserFragment based on currFragment and let
+//            // fragment lifecycle handle the rest
+//            when (currFragment) {
+//                is SettingsFragment -> {
+//                    browserFragment.arguments!!.putSerializable(PARENT_FRAGMENT, BrowserNavigationOverlay.ParentFragment.SETTINGS)
+//                }
+//                is PocketVideoFragment -> {
+//                    browserFragment.arguments!!.putSerializable(PARENT_FRAGMENT, BrowserNavigationOverlay.ParentFragment.POCKET)
+//                }
+//                else -> {
+//                    browserFragment.arguments!!.putSerializable(PARENT_FRAGMENT, BrowserNavigationOverlay.ParentFragment.DEFAULT)
+//                }
+//            }
+//        }
 
         super.onBackPressed()
     }

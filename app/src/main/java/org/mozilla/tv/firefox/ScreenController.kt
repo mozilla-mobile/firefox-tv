@@ -11,6 +11,7 @@ import android.text.TextUtils
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.ext.webRenderComponents
+import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
@@ -72,6 +73,13 @@ class ScreenController {
                 .beginTransaction()
                 .replace(R.id.container,
                         WebRenderFragment.createForSession(session), WebRenderFragment.FRAGMENT_TAG)
+                .commit()
+    }
+
+    fun showNavigationOverlay(fragmentManager: FragmentManager) {
+        fragmentManager
+                .beginTransaction()
+                .add(R.id.container, NavigationOverlayFragment(), WebRenderFragment.FRAGMENT_TAG)
                 .commit()
     }
 
