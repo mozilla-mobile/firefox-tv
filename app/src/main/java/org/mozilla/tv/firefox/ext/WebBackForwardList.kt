@@ -5,12 +5,13 @@
 package org.mozilla.tv.firefox.ext
 
 import android.webkit.WebBackForwardList
+import android.webkit.WebHistoryItem
 
 /**
- * Convert WebBackForwardList to List<String> so it is easier to use.
+ * Convert WebBackForwardList to List<WebHistoryItem> so it is easier to use.
  */
-fun WebBackForwardList.toStringList(): List<String> {
+fun WebBackForwardList.toList(): List<WebHistoryItem> {
     return List(size) {
-        getItemAtIndex(it).originalUrl
+        getItemAtIndex(it)
     }
 }

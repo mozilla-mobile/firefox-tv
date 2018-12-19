@@ -38,7 +38,7 @@ import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.serviceLocator
-import org.mozilla.tv.firefox.ext.toStringList
+import org.mozilla.tv.firefox.ext.toList
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
@@ -343,29 +343,40 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         }
 
         if (!browserOverlay.isVisible && session.isYoutubeTV &&
-                event.keyCode == KeyEvent.KEYCODE_BACK &&
-                event.action == KeyEvent.ACTION_DOWN) {
+                event.keyCode == KeyEvent.KEYCODE_BACK) {
+            val escKeyEvent = KeyEvent(event.action, KeyEvent.KEYCODE_ESCAPE)
+
+            /**
+             * If YouTube guide-list element is focused:
+             * - Suppress the DOWN,BACK key event
+             * - Change the UP,BACK key event to go back in history before YouTube
+             * Else:
+             * - Dispatch ESC key event
+             */
+            val jsCallback = ValueCallback<String> {
+                if (it == "true") {
+                    if (event.action == KeyEvent.ACTION_DOWN) Unit
+                    else goBackBeforeYouTube()
+                } else (activity as MainActivity).dispatchKeyEvent(escKeyEvent)
+            }
+            // This will return true if the currently focused YouTube element is a button in the left sidebar, false otherwise
             webView?.evalJS("""
                 (function () {
                     return document.activeElement.parentElement.parentElement.id === 'guide-list';
                 })();
                 """,
-                    ValueCallback {
-                        val keyCode = if (it == "true") {
-                            val wv = (webView as ViewGroup).getChildAt(0) as WebView
-                            val backForward = wv.copyBackForwardList().toStringList()
-                            val youtubeIndex = backForward.lastIndexOf("https://ftv.cdn.mozilla.net/ytht")
-                            val goBackSteps = backForward.size - youtubeIndex
-                            wv.goBackOrForward(-goBackSteps)
-                            KeyEvent.KEYCODE_BACK
-                        } else KeyEvent.KEYCODE_ESCAPE
-
-                        val newKeyEvent = KeyEvent(KeyEvent.ACTION_UP, keyCode)
-                        (activity as MainActivity).dispatchKeyEvent(newKeyEvent)
-                    })
+                    jsCallback)
             return true
         }
         return false
+    }
+
+    private fun goBackBeforeYouTube() {
+        val webView = (webView as ViewGroup).getChildAt(0) as WebView
+        val backForwardUrlList = webView.copyBackForwardList().toList().map { it.originalUrl }
+        val youtubeIndex = backForwardUrlList.lastIndexOf(AppConstants.YOUTUBE_TILE_URL)
+        val goBackSteps = backForwardUrlList.size - youtubeIndex
+        webView.goBackOrForward(-goBackSteps)
     }
 
     /**
