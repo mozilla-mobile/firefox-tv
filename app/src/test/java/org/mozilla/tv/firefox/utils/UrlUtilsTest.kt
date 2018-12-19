@@ -208,6 +208,6 @@ class UrlUtilsTest {
 
     @Test
     fun `GIVEN input is 'home' WHEN input is transformed THEN it should return blank`() {
-        assertEquals("", UrlUtils.toUrlBarDisplay(AppConstants.APP_URL_HOME))
+        assertEquals("", UrlUtils.toUrlBarDisplay(URLs.APP_URL_HOME))
     }
 }

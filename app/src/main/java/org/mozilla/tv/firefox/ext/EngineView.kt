@@ -13,7 +13,7 @@ import android.webkit.WebView
 import android.widget.FrameLayout
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.webrender.FocusedDOMElementCache
-import org.mozilla.tv.firefox.utils.AppConstants
+import org.mozilla.tv.firefox.utils.BuildConstants
 import java.util.WeakHashMap
 
 // Extension methods on the EngineView class. This is used for additional features that are not part
@@ -30,7 +30,7 @@ fun EngineView.setupForApp() {
     // TODO #33: TEXT_AUTOSIZING does not exist in AmazonWebSettings
     // webView.settings.setLayoutAlgorithm(AmazonWebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
 
-    if (AppConstants.isDevBuild) {
+    if (BuildConstants.isDevBuild) {
         WebView.setWebContentsDebuggingEnabled(true)
     }
 

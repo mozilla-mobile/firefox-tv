@@ -17,7 +17,7 @@ import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
-import org.mozilla.tv.firefox.utils.AppConstants
+import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.utils.UrlUtils
 
 class ToolbarViewModel(
@@ -163,7 +163,7 @@ class ToolbarViewModel(
         }
     }
 
-    private fun String.isEqualToHomepage() = this == AppConstants.APP_URL_HOME
+    private fun String.isEqualToHomepage() = this == URLs.APP_URL_HOME
 
     // TODO move this to the OverlayViewModel once it exists
     private fun setOverlayVisible(visible: Boolean) {
