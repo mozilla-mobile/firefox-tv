@@ -360,7 +360,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             }
             else -> {
                 context!!.webRenderComponents.sessionManager.remove()
-                context!!.serviceLocator.webViewCache.doNotPersist()
                 return false
             }
         }
