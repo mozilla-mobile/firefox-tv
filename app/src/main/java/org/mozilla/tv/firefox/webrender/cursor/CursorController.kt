@@ -11,12 +11,10 @@ import android.graphics.PointF
 import android.view.KeyEvent
 import android.view.View
 import android.view.accessibility.AccessibilityManager
-import kotlinx.android.synthetic.main.fragment_browser.*
 import kotlinx.coroutines.Job
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.ext.getAccessibilityManager
-import org.mozilla.tv.firefox.ext.isVisible
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.scrollByClamped
@@ -76,8 +74,7 @@ class CursorController(
     fun setEnabledForCurrentState() {
         // These sources have their own navigation controls.
 
-        isEnabled = !webRenderFragment.session.isYoutubeTV && !(webRenderFragment.context?.isVoiceViewEnabled() ?: false) &&
-                !webRenderFragment.browserOverlay.isVisible
+        isEnabled = !webRenderFragment.session.isYoutubeTV && !(webRenderFragment.context?.isVoiceViewEnabled() ?: false)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
