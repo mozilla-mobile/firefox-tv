@@ -48,16 +48,16 @@ class TurboModeTest {
 
     @Test
     fun `Turbo Mode should be enabled by default`() {
-        assertTrue(turboMode.isEnabled())
+        assertTrue(turboMode.isEnabled)
 
         assertTrue(Settings.getInstance(context).isBlockingEnabled)
     }
 
     @Test
     fun `Turbo Mode should be disabled after toggling`() {
-        turboMode.setEnabled(false)
+        turboMode.isEnabled = false
 
-        assertFalse(turboMode.isEnabled())
+        assertFalse(turboMode.isEnabled)
 
         assertFalse(Settings.getInstance(context).isBlockingEnabled)
         assertFalse(session.trackerBlockingEnabled)
@@ -65,10 +65,10 @@ class TurboModeTest {
 
     @Test
     fun `Turbo Mode should be enabled after toggling again`() {
-        turboMode.setEnabled(false)
-        turboMode.setEnabled(true)
+        turboMode.isEnabled = false
+        turboMode.isEnabled = true
 
-        assertTrue(turboMode.isEnabled())
+        assertTrue(turboMode.isEnabled)
 
         assertTrue(Settings.getInstance(context).isBlockingEnabled)
         assertTrue(session.trackerBlockingEnabled)

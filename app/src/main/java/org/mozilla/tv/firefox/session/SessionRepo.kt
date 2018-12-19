@@ -50,7 +50,7 @@ class SessionRepo(
                 backEnabled = it.canGoBack,
                 forwardEnabled = it.canGoForward,
                 desktopModeActive = it.desktopMode,
-                turboModeActive = turboMode.isEnabled(),
+                turboModeActive = turboMode.isEnabled,
                 currentUrl = it.url,
                 currentBackForwardIndex = backForwardIndexProvider?.invoke() ?: -1
             )
@@ -83,7 +83,9 @@ class SessionRepo(
 
     fun loadURL(url: Uri) = session?.let { sessionManager.getEngineSession(it)?.loadUrl(url.toString()) }
 
-    fun setTurboModeEnabled(enabled: Boolean) = turboMode.setEnabled(enabled)
+    fun setTurboModeEnabled(enabled: Boolean) {
+        turboMode.isEnabled = enabled
+    }
 
     private val session: Session? get() = sessionManager.selectedSession
 }

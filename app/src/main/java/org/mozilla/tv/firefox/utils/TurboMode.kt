@@ -16,24 +16,24 @@ import org.mozilla.tv.firefox.ext.webRenderComponents
  */
 class TurboMode(private val app: Application) {
 
-    fun isEnabled() = Settings.getInstance(app).isBlockingEnabled
+    var isEnabled: Boolean
+        get() = Settings.getInstance(app).isBlockingEnabled
+        set(enabled: Boolean) {
+            val settings = Settings.getInstance(app)
+            settings.isBlockingEnabled = enabled
 
-    fun setEnabled(enabled: Boolean) {
-        val settings = Settings.getInstance(app)
-        settings.isBlockingEnabled = enabled
-
-        // Update TrackingProtectionPolicy for both current session and EngineSettings
-        val engineSettings = app.webRenderComponents.engine.settings
-        val engineSession = app.webRenderComponents.sessionManager.getOrCreateEngineSession()
-        if (enabled) {
-            engineSettings.trackingProtectionPolicy = settings.trackingProtectionPolicy
-            engineSession.enableTrackingProtection(settings.trackingProtectionPolicy)
-        } else {
-            engineSettings.trackingProtectionPolicy = null
-            engineSession.disableTrackingProtection()
+            // Update TrackingProtectionPolicy for both current session and EngineSettings
+            val engineSettings = app.webRenderComponents.engine.settings
+            val engineSession = app.webRenderComponents.sessionManager.getOrCreateEngineSession()
+            if (enabled) {
+                engineSettings.trackingProtectionPolicy = settings.trackingProtectionPolicy
+                engineSession.enableTrackingProtection(settings.trackingProtectionPolicy)
+            } else {
+                engineSettings.trackingProtectionPolicy = null
+                engineSession.disableTrackingProtection()
+            }
+            _observable.postValue(enabled)
         }
-        _observable.postValue(enabled)
-    }
 
     private val _observable = MutableLiveData<Boolean>()
     val observable: LiveData<Boolean> = _observable
