@@ -47,7 +47,6 @@ import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.toolbar.ToolbarViewModel
 import org.mozilla.tv.firefox.utils.URLs
-import org.mozilla.tv.firefox.utils.ViewUtils
 import java.lang.ref.WeakReference
 
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
@@ -315,16 +314,16 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         })
 
         // TODO most (if not all) of this should be moved to the overlay once it is its own fragment
-        toolbarViewModel.events.observe(lifeCycleOwner, Observer {
-            it?.consume {
-                when (it) {
-                    is BrowserNavigationOverlay.Action.ShowTopToast -> ViewUtils.showCenteredTopToast(context, it.textId)
-                    is BrowserNavigationOverlay.Action.ShowBottomToast -> ViewUtils.showCenteredBottomToast(context, it.textId)
-                    is BrowserNavigationOverlay.Action.SetOverlayVisible -> setOverlayVisible?.invoke(it.visible)
-                }.forceExhaustive
-                true
-            }
-        })
+//        toolbarViewModel.events.observe(lifeCycleOwner, Observer {
+//            it?.consume {
+//                when (it) {
+//                    is BrowserNavigationOverlay.Action.ShowTopToast -> ViewUtils.showCenteredTopToast(context, it.textId)
+//                    is BrowserNavigationOverlay.Action.ShowBottomToast -> ViewUtils.showCenteredBottomToast(context, it.textId)
+//                    is BrowserNavigationOverlay.Action.SetOverlayVisible -> setOverlayVisible?.invoke(it.visible)
+//                }.forceExhaustive
+//                true
+//            }
+//        })
     }
 
     private fun setupUrlInput() = with(navUrlInput) {
