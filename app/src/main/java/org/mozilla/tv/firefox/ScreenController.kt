@@ -79,7 +79,7 @@ class ScreenController {
     fun showNavigationOverlay(fragmentManager: FragmentManager) {
         fragmentManager
                 .beginTransaction()
-                .replace(R.id.container, NavigationOverlayFragment(), WebRenderFragment.FRAGMENT_TAG)
+                .add(R.id.container, NavigationOverlayFragment(), WebRenderFragment.FRAGMENT_TAG)
                 .commit()
     }
 

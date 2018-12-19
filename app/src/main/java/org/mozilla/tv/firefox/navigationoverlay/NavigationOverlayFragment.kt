@@ -12,10 +12,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.annotation.StringRes
+import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -29,17 +31,18 @@ import org.mozilla.tv.firefox.components.UrlAutoCompleteFilter
 import org.mozilla.tv.firefox.ext.forEachChild
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isEffectivelyVisible
+import org.mozilla.tv.firefox.ext.isVisible
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.updateLayoutParams
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
+import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.toolbar.ToolbarViewModel
 import org.mozilla.tv.firefox.utils.AppConstants
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.utils.ViewUtils
-import org.mozilla.tv.firefox.webrender.EngineViewLifecycleFragment
 import org.mozilla.tv.firefox.widget.IgnoreFocusMovementMethod
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 import kotlin.properties.Delegates
@@ -54,7 +57,7 @@ private const val COL_COUNT = 5
 private val uiHandler = Handler(Looper.getMainLooper())
 
 @Suppress("LargeClass") // TODO remove this. See https://github.com/mozilla-mobile/firefox-tv/issues/1187
-class NavigationOverlayFragment : EngineViewLifecycleFragment(), View.OnClickListener {
+class NavigationOverlayFragment : Fragment(), View.OnClickListener {
     sealed class Action {
         data class ShowTopToast(@StringRes val textId: Int) : Action()
         data class ShowBottomToast(@StringRes val textId: Int) : Action()
@@ -104,13 +107,16 @@ class NavigationOverlayFragment : EngineViewLifecycleFragment(), View.OnClickLis
         serviceLocator = context!!.serviceLocator
 
         val factory = serviceLocator.viewModelFactory
+        toolbarViewModel = ViewModelProviders.of(this, factory).get(ToolbarViewModel::class.java)
         pinnedTileViewModel = ViewModelProviders.of(this, factory).get(PinnedTileViewModel::class.java)
         pocketViewModel = ViewModelProviders.of(this, factory).get(PocketViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val layout = inflater.inflate(R.layout.browser_overlay, container, false)
+        return inflater.inflate(R.layout.browser_overlay, container, false)
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         topNavContainer.forEachChild {
             it.nextFocusDownId = navUrlInput.id
             if (it.isFocusable) it.setOnClickListener(this)
@@ -127,8 +133,6 @@ class NavigationOverlayFragment : EngineViewLifecycleFragment(), View.OnClickLis
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
 
         updateFocusableViews()
-
-        return layout
     }
 
     private fun setupUrlInput() = with(navUrlInput) {
@@ -327,6 +331,24 @@ class NavigationOverlayFragment : EngineViewLifecycleFragment(), View.OnClickLis
         onNavigationEvent?.invoke(event, null, null)
     }
 
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.remove -> {
+                val homeTileAdapter = tileContainer.adapter as PinnedTileAdapter
+                val tileToRemove = homeTileAdapter.lastLongClickedTile ?: return false
+
+                // This assumes that since we're deleting from a Home Tile object that we created
+                // that the Uri is valid, so we do not do error handling here.
+                // TODO: NavigationOverlayFragment->ViewModel->Repo
+                pinnedTileViewModel.unpin(tileToRemove.url)
+                checkIfTilesFocusNeedRefresh()
+                TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileToRemove)
+                return true
+            }
+            else -> return false
+        }
+    }
+
     fun updateFocusableViews(focusedView: View? = currFocus) { // TODO this will be replaced when FocusRepo is introduced
         val toolbarState = toolbarViewModel.state.value
 
@@ -369,6 +391,30 @@ class NavigationOverlayFragment : EngineViewLifecycleFragment(), View.OnClickLis
         if (isFocusLost) {
             navUrlInput.requestFocus()
         }
+    }
+
+    /**
+     * Focus may be lost if all pinned items are removed via onContextItemSelected()
+     * FIXME: requires OverlayFragment (LifecycleOwner) -> OverlayVM -> FocusRepo
+     */
+    private fun checkIfTilesFocusNeedRefresh() {
+        if (tileAdapter.itemCount == 0) {
+            if (pocketVideosContainer.isVisible) {
+                pocketVideoMegaTileView.requestFocus()
+            } else {
+                megaTileTryAgainButton.requestFocus()
+            }
+        }
+        updateFocusableViews()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        // Since we start the async jobs in View.init and Android is inflating the view for us,
+        // there's no good way to pass in the uiLifecycleJob. We could consider other solutions
+        // but it'll add complexity that I don't think is probably worth it.
+        uiLifecycleCancelJob.cancel()
     }
 
     inner class HomeTileManager(
