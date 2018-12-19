@@ -46,7 +46,7 @@ import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.toolbar.ToolbarViewModel
-import org.mozilla.tv.firefox.utils.AppConstants
+import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.utils.ViewUtils
 import java.lang.ref.WeakReference
 
@@ -330,7 +330,7 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
     private fun setupUrlInput() = with(navUrlInput) {
         setOnCommitListener {
             val userInput = text.toString()
-            if (userInput == AppConstants.APP_URL_HOME) {
+            if (userInput == URLs.APP_URL_HOME) {
                 // If the input points to home, we short circuit and hide the keyboard, returning
                 // the user to the home screen
                 this.hideKeyboard()

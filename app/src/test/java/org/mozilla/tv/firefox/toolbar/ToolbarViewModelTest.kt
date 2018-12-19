@@ -16,8 +16,8 @@ import org.mozilla.tv.firefox.pinnedtile.PinnedTile
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
-import org.mozilla.tv.firefox.utils.AppConstants
 import org.mozilla.tv.firefox.utils.PreventLiveDataMainLooperCrashRule
+import org.mozilla.tv.firefox.utils.URLs
 import org.robolectric.RobolectricTestRunner
 
 private const val mozilla = "https://www.mozilla.org/en-US/"
@@ -193,7 +193,7 @@ class ToolbarViewModelTest {
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = AppConstants.APP_URL_HOME,
+                currentUrl = URLs.APP_URL_HOME,
                 currentBackForwardIndex = 1
             )
         }

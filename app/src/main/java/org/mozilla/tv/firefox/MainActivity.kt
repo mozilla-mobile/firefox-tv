@@ -30,10 +30,10 @@ import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
-import org.mozilla.tv.firefox.utils.AppConstants
 import org.mozilla.tv.firefox.utils.OnUrlEnteredListener
 import org.mozilla.tv.firefox.utils.SafeIntent
 import org.mozilla.tv.firefox.utils.Settings
+import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.utils.ViewUtils
 import org.mozilla.tv.firefox.utils.publicsuffix.PublicSuffix
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
@@ -69,7 +69,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
                 serviceLocator.screenController.showBrowserScreenForUrl(
                     this@MainActivity,
                     supportFragmentManager,
-                    AppConstants.APP_URL_HOME,
+                    URLs.APP_URL_HOME,
                     Session.Source.NONE
                 )
             }
@@ -99,7 +99,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             serviceLocator.screenController.showBrowserScreenForUrl(
                 this@MainActivity,
                 supportFragmentManager,
-                AppConstants.APP_URL_HOME,
+                URLs.APP_URL_HOME,
                 Session.Source.NONE
             )
         } else {

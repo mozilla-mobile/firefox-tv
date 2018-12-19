@@ -46,8 +46,8 @@ import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
-import org.mozilla.tv.firefox.utils.AppConstants
 import org.mozilla.tv.firefox.utils.ServiceLocator
+import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
@@ -70,7 +70,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     private val mediaSessionHolder get() = activity as MediaSessionHolder? // null when not attached.
 
-    private val isUrlEqualToHomepage: Boolean get() = session.url == AppConstants.APP_URL_HOME
+    private val isUrlEqualToHomepage: Boolean get() = session.url == URLs.APP_URL_HOME
 
     /**
      * Encapsulates the cursor's components. If this value is null, the Cursor is not attached
@@ -104,7 +104,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     }
 
     override fun onUrlChanged(session: Session, url: String) {
-        if (url == AppConstants.APP_URL_POCKET_ERROR) {
+        if (url == URLs.APP_URL_POCKET_ERROR) {
             browserOverlay?.showMegaTileError() // TODO remove and verify that the Pocket refactor handles this
             browserOverlay?.visibility = View.VISIBLE
         }
@@ -228,7 +228,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             requireWebRenderComponents.sessionUseCases,
             webView)
 
-        if (session.url == AppConstants.APP_URL_HOME) {
+        if (session.url == URLs.APP_URL_HOME) {
             browserOverlay?.visibility = View.VISIBLE
         }
     }
@@ -374,7 +374,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     private fun goBackBeforeYouTube() {
         val webView = (webView as ViewGroup).getChildAt(0) as WebView
         val backForwardUrlList = webView.copyBackForwardList().toList().map { it.originalUrl }
-        val youtubeIndex = backForwardUrlList.lastIndexOf(AppConstants.YOUTUBE_TILE_URL)
+        val youtubeIndex = backForwardUrlList.lastIndexOf(URLs.YOUTUBE_TILE_URL)
         val goBackSteps = backForwardUrlList.size - youtubeIndex
         webView.goBackOrForward(-goBackSteps)
     }

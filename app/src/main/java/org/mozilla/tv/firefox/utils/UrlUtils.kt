@@ -159,7 +159,7 @@ object UrlUtils {
     @JvmStatic
     fun toUrlBarDisplay(url: String): String {
         return when (url) {
-            AppConstants.APP_URL_HOME -> "" // Empty string forces the EditText to show hint text
+            URLs.APP_URL_HOME -> "" // Empty string forces the EditText to show hint text
             else -> url
         }
     }

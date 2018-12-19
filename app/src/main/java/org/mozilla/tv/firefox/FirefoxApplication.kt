@@ -12,7 +12,7 @@ import org.mozilla.tv.firefox.components.locale.LocaleAwareApplication
 import org.mozilla.tv.firefox.components.search.SearchEngineManager
 import org.mozilla.tv.firefox.webrender.VisibilityLifeCycleCallback
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
-import org.mozilla.tv.firefox.utils.AppConstants
+import org.mozilla.tv.firefox.utils.BuildConstants
 import org.mozilla.tv.firefox.utils.OkHttpWrapper
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.webrender.WebRenderComponents
@@ -64,7 +64,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
     private fun enableStrictMode() {
         // Android/WebView sometimes commit strict mode violations, see e.g.
         // https://github.com/mozilla-mobile/focus-android/issues/660
-        if (AppConstants.isReleaseBuild) {
+        if (BuildConstants.isReleaseBuild) {
             return
         }
 
