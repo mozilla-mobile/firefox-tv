@@ -14,29 +14,11 @@ import org.mozilla.tv.firefox.ext.webRenderComponents
  *
  * We are trying to keep our setting and the state of the engine synchronized.
  */
-interface TurboMode {
-    /**
-     * Is Turbo Mode enabled?
-     */
-    fun isEnabled(): Boolean
+class TurboMode(private val app: Application) {
 
-    /**
-     * Toggle turbo mode on or off. This will update the setting and the engine at the same time.
-     */
-    fun setEnabled(enabled: Boolean)
+    fun isEnabled() = Settings.getInstance(app).isBlockingEnabled
 
-    val observable: LiveData<Boolean>
-}
-
-/**
- * Implementation of [TurboMode] meant for use in production (as opposed to TestTurboMode) that
- * sets and queries for Turbo state using an [Application] instance.
- */
-class ProdTurboMode(private val app: Application) : TurboMode {
-
-    override fun isEnabled() = Settings.getInstance(app).isBlockingEnabled
-
-    override fun setEnabled(enabled: Boolean) {
+    fun setEnabled(enabled: Boolean) {
         val settings = Settings.getInstance(app)
         settings.isBlockingEnabled = enabled
 
@@ -54,5 +36,5 @@ class ProdTurboMode(private val app: Application) : TurboMode {
     }
 
     private val _observable = MutableLiveData<Boolean>()
-    override val observable: LiveData<Boolean> = _observable
+    val observable: LiveData<Boolean> = _observable
 }
