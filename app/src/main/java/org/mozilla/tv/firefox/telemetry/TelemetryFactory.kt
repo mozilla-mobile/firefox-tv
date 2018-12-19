@@ -35,7 +35,8 @@ object TelemetryFactory {
                 .setPreferencesImportantForTelemetry(
                         Settings.TRACKING_PROTECTION_ENABLED_PREF,
                         TelemetrySettingsProvider.PREF_CUSTOM_HOME_TILE_COUNT,
-                        TelemetrySettingsProvider.PREF_TOTAL_HOME_TILE_COUNT
+                        TelemetrySettingsProvider.PREF_TOTAL_HOME_TILE_COUNT,
+                        TelemetrySettingsProvider.APP_ID
                 )
                 .setSettingsProvider(TelemetrySettingsProvider(context))
                 .setCollectionEnabled(telemetryEnabled)
