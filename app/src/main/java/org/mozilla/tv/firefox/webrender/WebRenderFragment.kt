@@ -359,8 +359,14 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 TelemetryIntegration.INSTANCE.browserBackControllerEvent()
             }
             else -> {
+                val components = requireWebRenderComponents
                 context!!.webRenderComponents.sessionManager.remove()
-                context!!.serviceLocator.webViewCache.doNotPersist()
+                context!!.serviceLocator.webViewCache.doNotPersist(doAfterRecreate = {
+                    // Sessions must be removed prior to MainActivity being recreated, in order for initialization
+                    // logic to be called. However, the URL is set before the new WebView is created, causing it to
+                    // be out of sync with the Session. Removing all sessions puts them back into sync
+                    components.sessionManager.removeAll()
+                })
                 return false
             }
         }
