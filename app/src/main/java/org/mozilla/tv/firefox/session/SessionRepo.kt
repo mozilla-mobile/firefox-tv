@@ -13,6 +13,7 @@ import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.feature.session.SessionUseCases
 import org.mozilla.tv.firefox.ext.postIfNew
+import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.utils.TurboMode
 
 /**
@@ -37,6 +38,7 @@ class SessionRepo(
     val state: LiveData<State> = _state
 
     var backForwardIndexProvider: (() -> Int)? = null
+    private var previousURLHost: String? = null
 
     fun observeSources() {
         SessionObserverHelper.attach(this, sessionManager)
@@ -45,13 +47,32 @@ class SessionRepo(
 
     @AnyThread
     fun update() {
-        session?.let {
+        session?.let { session ->
+            fun isHostDifferentFromPrevious(): Boolean {
+                val currentURLHost = session.url.toUri()?.host ?: return true
+
+                return (previousURLHost != currentURLHost).also {
+                    previousURLHost = currentURLHost
+                }
+            }
+            fun disableDesktopMode() {
+                setDesktopMode(false)
+                session.url.toUri()?.let { loadURL(it) }
+            }
+            fun causeSideEffects() {
+                if (isHostDifferentFromPrevious() && session.desktopMode) {
+                    disableDesktopMode()
+                }
+            }
+
+            causeSideEffects()
+
             val newState = State(
-                backEnabled = it.canGoBack,
-                forwardEnabled = it.canGoForward,
-                desktopModeActive = it.desktopMode,
+                backEnabled = session.canGoBack,
+                forwardEnabled = session.canGoForward,
+                desktopModeActive = session.desktopMode,
                 turboModeActive = turboMode.isEnabled,
-                currentUrl = it.url,
+                currentUrl = session.url,
                 currentBackForwardIndex = backForwardIndexProvider?.invoke() ?: -1
             )
             _state.postIfNew(newState)
