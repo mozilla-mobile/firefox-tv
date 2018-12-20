@@ -59,63 +59,28 @@ class ToolbarViewModelTest {
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = "www.google.com",
-                currentBackForwardIndex = -1
+                currentUrl = "www.google.com"
             )
             sessionState.value = SessionRepo.State(
                 backEnabled = false,
                 forwardEnabled = true,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = "firefox:home",
-                currentBackForwardIndex = 0
+                currentUrl = "firefox:home"
             )
             sessionState.value = SessionRepo.State(
                 backEnabled = false,
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = "https://www.wikipedia.org",
-                currentBackForwardIndex = -1
+                currentUrl = "https://www.wikipedia.org"
             )
             sessionState.value = SessionRepo.State(
                 backEnabled = false,
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = "www.google.com",
-                currentBackForwardIndex = 5
-            )
-        }
-    }
-
-    @Test
-    fun `GIVEN session back enabled is true WHEN back forward index is 1 or less THEN vm back enabled should be false`() {
-        toolbarVm.state.map { it.backEnabled }.assertValues(false, false, false) {
-            pinnedTiles.value = linkedMapOf()
-            sessionState.value = SessionRepo.State(
-                backEnabled = true,
-                forwardEnabled = false,
-                turboModeActive = true,
-                desktopModeActive = false,
-                currentUrl = "www.google.com",
-                currentBackForwardIndex = -1
-            )
-            sessionState.value = SessionRepo.State(
-                backEnabled = true,
-                forwardEnabled = true,
-                turboModeActive = true,
-                desktopModeActive = false,
-                currentUrl = "firefox:home",
-                currentBackForwardIndex = 0
-            )
-            sessionState.value = SessionRepo.State(
-                backEnabled = true,
-                forwardEnabled = false,
-                turboModeActive = true,
-                desktopModeActive = false,
-                currentUrl = "https://www.wikipedia.org",
-                currentBackForwardIndex = -1
+                currentUrl = "www.google.com"
             )
         }
     }
@@ -129,24 +94,21 @@ class ToolbarViewModelTest {
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = "www.google.com",
-                currentBackForwardIndex = 2
+                currentUrl = "www.google.com"
             )
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = true,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = "firefox:home",
-                currentBackForwardIndex = 5
+                currentUrl = "firefox:home"
             )
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = "https://www.wikipedia.org",
-                currentBackForwardIndex = 6_000
+                currentUrl = "https://www.wikipedia.org"
             )
         }
     }
@@ -161,24 +123,21 @@ class ToolbarViewModelTest {
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = google,
-                currentBackForwardIndex = 2
+                currentUrl = google
             )
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = true,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = facebook,
-                currentBackForwardIndex = 5
+                currentUrl = facebook
             )
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = wikipedia,
-                currentBackForwardIndex = 6_000
+                currentUrl = wikipedia
             )
         }
     }
@@ -193,8 +152,7 @@ class ToolbarViewModelTest {
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = URLs.APP_URL_HOME,
-                currentBackForwardIndex = 1
+                currentUrl = URLs.APP_URL_HOME
             )
         }
     }
@@ -210,8 +168,7 @@ class ToolbarViewModelTest {
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = mozilla,
-                currentBackForwardIndex = 1
+                currentUrl = mozilla
             )
         }
     }

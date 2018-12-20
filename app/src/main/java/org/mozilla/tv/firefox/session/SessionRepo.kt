@@ -30,14 +30,13 @@ class SessionRepo(
         val forwardEnabled: Boolean,
         val desktopModeActive: Boolean,
         val turboModeActive: Boolean,
-        val currentUrl: String,
-        val currentBackForwardIndex: Int
+        val currentUrl: String
     )
 
     private val _state = MutableLiveData<State>()
     val state: LiveData<State> = _state
 
-    var backForwardIndexProvider: (() -> Int)? = null
+    var canGoBackTwice: (() -> Boolean?)? = null
     private var previousURLHost: String? = null
 
     fun observeSources() {
@@ -68,12 +67,12 @@ class SessionRepo(
             causeSideEffects()
 
             val newState = State(
-                backEnabled = session.canGoBack,
+                // The menu back button should not be enabled if the previous screen was our initial url (home)
+                backEnabled = canGoBackTwice?.invoke() ?: false,
                 forwardEnabled = session.canGoForward,
                 desktopModeActive = session.desktopMode,
                 turboModeActive = turboMode.isEnabled,
-                currentUrl = session.url,
-                currentBackForwardIndex = backForwardIndexProvider?.invoke() ?: -1
+                currentUrl = session.url
             )
             _state.postIfNew(newState)
         }
