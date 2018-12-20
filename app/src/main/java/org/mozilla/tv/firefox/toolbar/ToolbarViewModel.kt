@@ -5,7 +5,6 @@
 package org.mozilla.tv.firefox.toolbar
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.support.annotation.UiThread
 import mozilla.components.support.base.observer.Consumable
@@ -17,6 +16,7 @@ import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
+import org.mozilla.tv.firefox.utils.SetOnlyLiveData
 import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.utils.UrlUtils
 
@@ -40,9 +40,7 @@ class ToolbarViewModel(
 
     private var previousURLHost: String? = null
 
-    // Values should be pushed to _events using setValue. Two values are set in
-    // rapid succession using postValue, only the latest will be received
-    private var _events = MutableLiveData<Consumable<BrowserNavigationOverlay.Action>>()
+    private var _events = SetOnlyLiveData<Consumable<BrowserNavigationOverlay.Action>>()
     // Note that events will only emit values if state is observed
     val events: LiveData<Consumable<BrowserNavigationOverlay.Action>> = _events
 
