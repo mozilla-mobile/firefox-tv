@@ -269,10 +269,10 @@ class BrowserNavigationOverlay @JvmOverloads constructor(
         })
     }
 
-    fun observeForToolbar(fragment: Fragment) {
+    fun observeForToolbar(fragment: Fragment, context: Context) {
         // TODO remove this
         // See comment in fun observeForMegaTile
-        val factory = fragment.context!!.serviceLocator.viewModelFactory
+        val factory = context.serviceLocator.viewModelFactory
         toolbarViewModel = ViewModelProviders.of(fragment, factory).get(ToolbarViewModel::class.java)
 
         fun updateOverlayButtonState(isEnabled: Boolean, overlayButton: ImageButton) {

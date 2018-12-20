@@ -190,7 +190,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             lifeCycleOwner = this@WebRenderFragment.viewLifecycleOwner
             initPinnedTiles()
             observeForMegaTile(this@WebRenderFragment)
-            observeForToolbar(this@WebRenderFragment)
+            observeForToolbar(this@WebRenderFragment, this.context)
 
             onNavigationEvent = this@WebRenderFragment.onNavigationEvent
             setOverlayVisible = { visible -> setOverlayVisible(visible) }
