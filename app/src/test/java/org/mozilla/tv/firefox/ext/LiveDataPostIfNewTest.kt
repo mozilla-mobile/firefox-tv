@@ -14,6 +14,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.spy
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
+import org.mozilla.tv.firefox.helpers.ext.assertValuesWithReceiver
 import org.mozilla.tv.firefox.utils.PreventLiveDataMainLooperCrashRule
 
 @Suppress("TestFunctionName")
@@ -33,24 +34,27 @@ class LiveDataPostIfNewTest {
 
     @Test
     fun `GIVEN old value was posted WHEN the same value is posted again THEN only one should be emitted`() {
-        source.postIfNew(1)
-        source.postIfNew(1)
-        verify(observerSpy, times(1)).onChanged(any())
+        source.assertValuesWithReceiver(1) {
+            postIfNew(1)
+            postIfNew(1)
+        }
     }
 
     @Test
     fun `GIVEN old value is posted WHEN a different value is posted THEN both should be emitted`() {
-        source.postIfNew(1)
-        source.postIfNew(2)
-        verify(observerSpy, times(2)).onChanged(any())
+        source.assertValuesWithReceiver(1, 2) {
+            postIfNew(1)
+            postIfNew(2)
+        }
     }
 
     @Test
     fun `GIVEN old value was posted AND a different value was posted WHEN the original value is posted again THEN three total values should have been emitted`() {
-        source.postIfNew(1)
-        source.postIfNew(2)
-        source.postIfNew(1)
-        verify(observerSpy, times(3)).onChanged(any())
+        source.assertValuesWithReceiver(1, 2, 1) {
+            postIfNew(1)
+            postIfNew(2)
+            postIfNew(1)
+        }
     }
 
     @Test
