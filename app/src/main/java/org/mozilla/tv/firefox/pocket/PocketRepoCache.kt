@@ -6,7 +6,6 @@ package org.mozilla.tv.firefox.pocket
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
 
 /**
  * Wraps a [PocketVideoRepo] instance and selectively forwards its emissions.
@@ -28,13 +27,17 @@ open class PocketRepoCache(private val repo: PocketVideoRepo) {
     private val _feedState = MutableLiveData<PocketVideoRepo.FeedState>() // Mutable backer for feedState
     open val feedState: LiveData<PocketVideoRepo.FeedState> = _feedState
 
-    private val observer = Observer<PocketVideoRepo.FeedState> {
-        _feedState.postValue(it)
-    }
-
-    // This should only be called when Pocket videos are not visible to the user.
+    // This should only be unfrozen when Pocket videos are not visible to the user.
     // See class kdoc
-    fun unfreeze() = repo.feedState.observeForever(observer)
+    var frozen = false
 
-    fun freeze() = repo.feedState.removeObserver(observer)
+    fun setup() {
+        repo.feedState.observeForever {
+            val cachedValueIsBad = _feedState.value !is PocketVideoRepo.FeedState.LoadComplete
+
+            if (!frozen || cachedValueIsBad) {
+                _feedState.postValue(it)
+            }
+        }
+    }
 }

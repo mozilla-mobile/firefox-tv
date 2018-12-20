@@ -394,6 +394,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         if (toShow) MenuInteractionMonitor.menuOpened() else MenuInteractionMonitor.menuClosed()
         // TODO once the overlay is a separate fragment, handle PocketRepoCache changes in ScreenController
         val pocketRepoCache = serviceLocator.pocketRepoCache
-        if (toShow) pocketRepoCache.freeze() else pocketRepoCache.unfreeze()
+        pocketRepoCache.frozen = toShow
     }
 }
