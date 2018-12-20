@@ -46,7 +46,7 @@ class PocketRepoCacheTest {
         }
         repoCache = PocketRepoCache(repo)
         cacheOutput = repoCache.feedState
-        repoCache.unfreeze()
+        repoCache.frozen = false
     }
 
     @Test
@@ -89,7 +89,7 @@ class PocketRepoCacheTest {
         verify(observerSpy, times(1)).onChanged(any())
         cacheOutput.removeObserver(observerSpy)
 
-        repoCache.freeze()
+        repoCache.frozen = true
 
         observerSpy = spy(Observer { assertEquals(PocketVideoRepo.FeedState.LoadComplete(firstVideos), it) })
         repoOutput.value = PocketVideoRepo.FeedState.Loading

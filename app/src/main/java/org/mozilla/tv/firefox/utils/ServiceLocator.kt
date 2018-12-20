@@ -59,7 +59,7 @@ open class ServiceLocator(val app: Application) {
     private val getIsEnglishLocale = { LocaleManager.getInstance().currentLanguageIsEnglish(app) }
 
     val turboMode: TurboMode by lazy { TurboMode(app) }
-    val pocketRepoCache by lazy { PocketRepoCache(pocketRepo).apply { unfreeze() } }
+    val pocketRepoCache by lazy { PocketRepoCache(pocketRepo).apply { setup() } }
     val viewModelFactory by lazy { ViewModelFactory(this, app) }
     val screenController by lazy { ScreenController() }
     val webViewCache by lazy { WebViewCache(sessionRepo) }
