@@ -44,8 +44,6 @@ class ToolbarViewModel(
     val state: LiveData<ToolbarViewModel.State> =
         LiveDataCombiners.combineLatest(sessionRepo.state, pinnedTileRepo.getPinnedTiles()) { sessionState, pinnedTiles ->
 
-            // The menu back button should not be enabled if the previous screen was our initial url (home)
-            fun isBackEnabled() = sessionState.backEnabled && sessionState.currentBackForwardIndex > 1
             fun isCurrentURLPinned() = pinnedTiles.containsKey(sessionState.currentUrl)
             fun causeSideEffects() {
                 if (sessionState.currentUrl.isEqualToHomepage()) setOverlayVisible(true)
@@ -54,7 +52,7 @@ class ToolbarViewModel(
             causeSideEffects()
 
             ToolbarViewModel.State(
-                backEnabled = isBackEnabled(),
+                backEnabled = sessionState.backEnabled,
                 forwardEnabled = sessionState.forwardEnabled,
                 refreshEnabled = !sessionState.currentUrl.isEqualToHomepage(),
                 pinEnabled = !sessionState.currentUrl.isEqualToHomepage(),

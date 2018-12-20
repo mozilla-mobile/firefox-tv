@@ -14,7 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import mozilla.components.browser.engine.system.SystemEngineView
-import org.mozilla.tv.firefox.ext.currentBackForwardIndex
+import org.mozilla.tv.firefox.ext.canGoBackTwice
 import org.mozilla.tv.firefox.ext.restoreState
 import org.mozilla.tv.firefox.ext.saveState
 import org.mozilla.tv.firefox.session.SessionRepo
@@ -75,7 +75,7 @@ class WebViewCache(private val sessionRepo: SessionRepo) : LifecycleObserver {
         }
 
         cachedView?.removeFromParentIfAble()
-        sessionRepo.backForwardIndexProvider = { cachedView?.currentBackForwardIndex() ?: -1 }
+        sessionRepo.canGoBackTwice = { cachedView?.canGoBackTwice() }
         return cachedView ?: createAndCacheEngineView()
     }
 
@@ -90,7 +90,7 @@ class WebViewCache(private val sessionRepo: SessionRepo) : LifecycleObserver {
             true -> cachedView?.saveState()
             false -> null
         }
-        sessionRepo.backForwardIndexProvider = null
+        sessionRepo.canGoBackTwice = null
         cachedView?.onDestroy()
         cachedView = null
     }

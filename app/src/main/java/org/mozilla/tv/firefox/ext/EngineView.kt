@@ -105,8 +105,9 @@ fun EngineView.restoreState(state: Bundle) {
     getOrPutExtension(this).webView.restoreState(state)
 }
 
-// TODO replace this with A-C functionality. See #1558
-fun EngineView.currentBackForwardIndex() = this.webView.copyBackForwardList().currentIndex
+fun EngineView.canGoBackTwice(): Boolean {
+    return getOrPutExtension(this).webView.canGoBackOrForward(-2)
+}
 
 // This method is only for adding extension methods here (as a workaround). Do not expose WebView to the app.
 private val EngineView.webView: WebView
