@@ -109,14 +109,11 @@ open class PocketVideoRepo(
             if (this?.isNotEmpty() == true) FeedState.LoadComplete(this)
             else FeedState.FetchFailed
 
-        fun shortIfNonEnglish() {
-            if (!localeIsEnglish.invoke()) {
-                postState(FeedState.Inactive)
-                return
-            }
+        if (!localeIsEnglish.invoke()) {
+            postState(FeedState.Inactive)
+            return
         }
 
-        shortIfNonEnglish()
         postState(FeedState.Loading)
         val response = requestVideos()
         updateRequestTimers(response.wasSuccessful())
