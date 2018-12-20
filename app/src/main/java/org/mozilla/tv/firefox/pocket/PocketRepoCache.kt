@@ -33,6 +33,9 @@ open class PocketRepoCache(private val repo: PocketVideoRepo) {
 
     fun setup() {
         repo.feedState.observeForever {
+            // Freezing the cache should prevent new videos from overwriting old ones, but we don't want to (for
+            // example) prevent new videos from overwriting a loading state. cachedValueIsBad means that the cached
+            // value is not a successful load
             val cachedValueIsBad = _feedState.value !is PocketVideoRepo.FeedState.LoadComplete
 
             if (!frozen || cachedValueIsBad) {
