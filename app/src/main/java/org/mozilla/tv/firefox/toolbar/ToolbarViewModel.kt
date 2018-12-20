@@ -12,7 +12,6 @@ import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.ext.LiveDataCombiners
-import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
@@ -38,8 +37,6 @@ class ToolbarViewModel(
         val urlBarText: String
     )
 
-    private var previousURLHost: String? = null
-
     private var _events = SetOnlyLiveData<Consumable<BrowserNavigationOverlay.Action>>()
     // Note that events will only emit values if state is observed
     val events: LiveData<Consumable<BrowserNavigationOverlay.Action>> = _events
@@ -50,19 +47,7 @@ class ToolbarViewModel(
             // The menu back button should not be enabled if the previous screen was our initial url (home)
             fun isBackEnabled() = sessionState.backEnabled && sessionState.currentBackForwardIndex > 1
             fun isCurrentURLPinned() = pinnedTiles.containsKey(sessionState.currentUrl)
-            fun isHostDifferentFromPrevious(): Boolean {
-                val currentURLHost = sessionState.currentUrl.toUri()?.host ?: return true
-
-                return (previousURLHost != currentURLHost).also {
-                    previousURLHost = currentURLHost
-                }
-            }
-            fun disableDesktopMode() {
-                sessionRepo.setDesktopMode(false)
-                sessionState.currentUrl.toUri()?.let { sessionRepo.loadURL(it) }
-            }
             fun causeSideEffects() {
-                if (isHostDifferentFromPrevious() && sessionState.desktopModeActive) disableDesktopMode()
                 if (sessionState.currentUrl.isEqualToHomepage()) setOverlayVisible(true)
             }
 
