@@ -58,6 +58,10 @@ private val uiHandler = Handler(Looper.getMainLooper())
 
 @Suppress("LargeClass") // TODO remove this. See https://github.com/mozilla-mobile/firefox-tv/issues/1187
 class NavigationOverlayFragment : Fragment(), View.OnClickListener {
+    companion object {
+        const val FRAGMENT_TAG = "overlay"
+    }
+
     sealed class Action {
         data class ShowTopToast(@StringRes val textId: Int) : Action()
         data class ShowBottomToast(@StringRes val textId: Int) : Action()
@@ -214,7 +218,7 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
                 when (it) {
                     is Action.ShowTopToast -> ViewUtils.showCenteredTopToast(context, it.textId)
                     is Action.ShowBottomToast -> ViewUtils.showCenteredBottomToast(context, it.textId)
-                    is Action.SetOverlayVisible -> activity?.onBackPressed() // FIXME
+                    is Action.SetOverlayVisible -> Unit
                 }.forceExhaustive
                 true
             }
