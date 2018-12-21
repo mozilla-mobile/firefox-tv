@@ -22,11 +22,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import kotlinx.android.synthetic.main.browser_overlay.*
+import kotlinx.android.synthetic.main.browser_overlay.view.*
 import kotlinx.android.synthetic.main.browser_overlay_top_nav.*
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.*
 import kotlinx.coroutines.Job
 import mozilla.components.browser.domains.DomainAutoCompleteProvider
 import mozilla.components.support.ktx.android.view.hideKeyboard
+import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.forEachChild
 import org.mozilla.tv.firefox.ext.forceExhaustive
@@ -39,6 +41,7 @@ import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
+import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.toolbar.ToolbarViewModel
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.utils.URLs
@@ -87,11 +90,29 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    var onNavigationEvent: ((
-        event: NavigationEvent,
-        value: String?,
-        autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?
-    ) -> Unit)? = null
+    private val onNavigationEvent = { event: NavigationEvent, value: String?,
+                                      autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
+        when (event) {
+            NavigationEvent.SETTINGS -> serviceLocator.screenController.showSettingsScreen(fragmentManager!!)
+            NavigationEvent.LOAD_URL -> {
+                (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
+                (activity as MainActivity).showOrHideOverlay()
+            }
+            NavigationEvent.LOAD_TILE -> {
+                (activity as MainActivity).onNonTextInputUrlEntered(value!!)
+                (activity as MainActivity).showOrHideOverlay()
+            }
+            NavigationEvent.POCKET -> {
+                val (fragmentManager, activity) = Pair(fragmentManager, activity)
+                if (fragmentManager != null && activity != null) {
+                    serviceLocator.screenController.showPocketScreen(fragmentManager)
+                }
+            }
+            NavigationEvent.TURBO, NavigationEvent.PIN_ACTION, NavigationEvent.DESKTOP_MODE, NavigationEvent.BACK,
+            NavigationEvent.FORWARD, NavigationEvent.RELOAD -> { /* not handled by this object */ }
+        }
+        Unit
+    }
 
     private var currFocus: View? = null
         get() = activity?.currentFocus
@@ -136,6 +157,9 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context!!, R.color.photonGrey10_a60p)) }
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
 
+        overlayScrollView.scrollTo(0, 0)
+        navUrlInput.requestFocus()
+
         updateFocusableViews()
     }
 
@@ -152,7 +176,7 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
             if (userInput.isNotEmpty()) {
                 val cachedAutocompleteResult = lastAutocompleteResult // setText clears the reference so we cache it here.
                 setText(cachedAutocompleteResult.text)
-                onNavigationEvent?.invoke(NavigationEvent.LOAD_URL, userInput, cachedAutocompleteResult)
+                onNavigationEvent.invoke(NavigationEvent.LOAD_URL, userInput, cachedAutocompleteResult)
             }
         }
         this.movementMethod = IgnoreFocusMovementMethod()
@@ -228,7 +252,7 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
     /**
      * Used to show an error screen on the Pocket megatile when Pocket does not return any videos.
      */
-    fun showMegaTileError() {
+    private fun showMegaTileError() {
         pocketVideosContainer.visibility = View.GONE
         pocketErrorContainer.visibility = View.VISIBLE
 
@@ -278,7 +302,7 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
         // TODO: pass in VM live data instead of "homeTiles"
         tileAdapter = org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter(uiLifecycleCancelJob, loadUrl = { urlStr ->
             if (urlStr.isNotEmpty()) {
-                onNavigationEvent?.invoke(org.mozilla.tv.firefox.navigationoverlay.NavigationEvent.LOAD_TILE, urlStr, null)
+                onNavigationEvent.invoke(org.mozilla.tv.firefox.navigationoverlay.NavigationEvent.LOAD_TILE, urlStr, null)
             }
         }, onTileLongClick = openHomeTileContextMenu, onTileFocused = {
             val prefInt = android.preference.PreferenceManager.getDefaultSharedPreferences(context).getInt(
@@ -328,7 +352,7 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    override fun onClick(v: View?) {
+    override fun onClick(view: View?) {
         val event = NavigationEvent.fromViewClick(view?.id)
                 ?: return
 
@@ -341,7 +365,7 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
             NavigationEvent.DESKTOP_MODE -> toolbarViewModel.desktopModeButtonClicked()
             else -> Unit // Nothing to do.
         }
-        onNavigationEvent?.invoke(event, null, null)
+        onNavigationEvent.invoke(event, null, null)
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
