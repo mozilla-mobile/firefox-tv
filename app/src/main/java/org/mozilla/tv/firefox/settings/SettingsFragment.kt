@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityManager
 import kotlinx.android.synthetic.main.fragment_settings.*
+import kotlinx.android.synthetic.main.fragment_settings.view.*
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.getAccessibilityManager
@@ -31,18 +32,28 @@ class SettingsFragment : Fragment() {
         updateForAccessibility()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            inflater.inflate(R.layout.fragment_settings, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val view = inflater.inflate(R.layout.fragment_settings, container, false)
+        view.ic_lock.setImageResource(R.drawable.mozac_ic_lock)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val context = view.context
+        view.aboutButton.setOnClickListener {
+            startActivity(InfoActivity.getAboutIntent(view.context))
+        }
+        view.privacyNoticeButton.setOnClickListener {
+            startActivity(InfoActivity.getPrivacyNoticeIntent(view.context))
+        }
 
-        ic_lock.setImageResource(R.drawable.mozac_ic_lock)
-        val factory = context.serviceLocator.viewModelFactory
-        val settingsViewModel = ViewModelProviders.of(this, factory).get(SettingsViewModel::class.java)
+        val factory = view.context.serviceLocator.viewModelFactory
+        ViewModelProviders.of(this@SettingsFragment, factory).get(SettingsViewModel::class.java).also { settingsVM ->
+            setupSettingsViewModel(view, settingsVM)
+        }
+        return view
+    }
+
+    private fun setupSettingsViewModel(parentView: View, settingsViewModel: SettingsViewModel) {
         settingsViewModel.dataCollectionEnabled.observe(viewLifecycleOwner, Observer<Boolean> { state ->
             if (state != null) {
-                telemetryButton.isChecked = state
+                parentView.telemetryButton.isChecked = state
             }
         })
         settingsViewModel.events.observe(viewLifecycleOwner, Observer {
@@ -67,16 +78,17 @@ class SettingsFragment : Fragment() {
                     true
             }
         })
+
         val dataPreferenceClickListener = { _: View ->
             settingsViewModel.setDataCollectionEnabled(telemetryButton.isChecked)
         }
         // Due to accessibility hack for #293, where we want to focus a different (visible) element
         // for accessibility, either of these views could be unfocusable, so we need to set the
         // click listener on both.
-        telemetryButtonContainer.setOnClickListener(dataPreferenceClickListener)
-        telemetryButton.setOnClickListener(dataPreferenceClickListener)
+        parentView.telemetryButtonContainer.setOnClickListener(dataPreferenceClickListener)
+        parentView.telemetryButton.setOnClickListener(dataPreferenceClickListener)
 
-        deleteButton.setOnClickListener { _ ->
+        parentView.deleteButton.setOnClickListener { _ ->
             val builder1 = AlertDialog.Builder(activity)
             builder1.setTitle(R.string.settings_cookies_dialog_title)
             builder1.setMessage(R.string.settings_cookies_dialog_content2)
@@ -95,14 +107,6 @@ class SettingsFragment : Fragment() {
 
             val alert11 = builder1.create()
             alert11.show()
-        }
-
-        aboutButton.setOnClickListener {
-            startActivity(InfoActivity.getAboutIntent(context))
-        }
-
-        privacyNoticeButton.setOnClickListener {
-            startActivity(InfoActivity.getPrivacyNoticeIntent(context))
         }
     }
 
