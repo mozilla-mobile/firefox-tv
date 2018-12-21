@@ -5,7 +5,6 @@
 package org.mozilla.tv.firefox.webrender
 
 import android.view.View
-import org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlay
 
 /**
  * When using spatial navigation (i.e. no Cursor) and the WebView loses and regains focus,

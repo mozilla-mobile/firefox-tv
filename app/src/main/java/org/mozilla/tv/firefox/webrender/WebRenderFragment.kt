@@ -40,7 +40,6 @@ private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 /**
  * Fragment for displaying the browser UI.
  */
-@Suppress("LargeClass") // TODO this will be removed as part of the upcoming architecture refactor
 class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     companion object {
         const val FRAGMENT_TAG = "browser"
@@ -54,8 +53,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     lateinit var session: Session
 
     private val mediaSessionHolder get() = activity as MediaSessionHolder? // null when not attached.
-
-    private val isUrlEqualToHomepage: Boolean get() = session.url == URLs.APP_URL_HOME
 
     /**
      * Encapsulates the cursor's components. If this value is null, the Cursor is not attached
@@ -81,21 +78,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         session.register(observer = this, owner = this)
     }
 
-    // TODO: need to find a workaround for NavigationOverlayFragment
-//    override fun onUrlChanged(session: Session, url: String) {
-//        if (url == AppConstants.APP_URL_POCKET_ERROR) {
-//            browserOverlay?.showMegaTileError() // TODO remove and verify that the Pocket refactor handles this
-//            browserOverlay?.visibility = View.VISIBLE
-//        }
-//
-//        updateOverlayIfVisible()
-//    }
-
-//    override fun onLoadingStateChanged(session: Session, loading: Boolean) = updateOverlayIfVisible()
-//
-//    override fun onNavigationStateChanged(session: Session, canGoBack: Boolean, canGoForward: Boolean) =
-//        updateOverlayIfVisible()
-
     override fun onFullScreenChanged(session: Session, enabled: Boolean) {
         val window = (context as? Activity)?.window ?: return
         val dontSleep = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
@@ -118,47 +100,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 view = layout.cursorView)
         lifecycle.addObserver(cursor!!)
 
-        /**
-         * TODO: #1085
-         * When navigating through fragment backstack from MainActivity.onBackPressed(),
-         * FragmentManager.transaction recreates BrowserFragment which results in
-         * browserOverlay.setVisibility to be called. For now, we must update browserOverlay's
-         * parent state in onCreateView due to inconsistency in the existence of the browserOverlay
-         * instance elsewhere in the fragment lifecycle (refer to Issue #1107) and the timing from
-         * which browserOverlay.setVisibility is called.
-         */
-//        val bundle: Bundle? = arguments
-//
-//        with(layout.browserOverlay) {
-//            if (bundle?.getSerializable(PARENT_FRAGMENT) != null) {
-//                parentFrag = bundle.getSerializable(PARENT_FRAGMENT) as BrowserNavigationOverlay.ParentFragment
-//            }
-//
-//            // FIXME: Need [WebRenderFragment] as lifeCycle owner until NavOverlayFragment breakout
-//            pinnedTileViewModel = this@WebRenderFragment.pinnedTileViewModel
-//            lifeCycleOwner = this@WebRenderFragment.viewLifecycleOwner
-//            initPinnedTiles()
-//            observeForMegaTile(this@WebRenderFragment)
-//            observeForToolbar(this@WebRenderFragment)
-//
-//            onNavigationEvent = this@WebRenderFragment.onNavigationEvent
-//            setOverlayVisible = { visible -> setOverlayVisible(visible) }
-//            visibility = overlayVisibleCached ?: View.GONE
-//
-//            // This is needed for YouTube to properly gain focus after a refresh (refer to issue #1149)
-//            onPreSetVisibilityListener = { isVisible ->
-//                // The overlay can clear the DOM and a previous focused element cache (e.g. reload)
-//                // so we need to do our own caching: see FocusedDOMElementCacheInterface for details.
-//                if (!isVisible) { webView?.focusedDOMElement?.cache() }
-//            }
-//
-//            openHomeTileContextMenu = {
-//                activity?.openContextMenu(browserOverlay.tileContainer)
-//            }
-//
-//            registerForContextMenu(browserOverlay.tileContainer)
-//        }
-
         layout.progressBar.initialize(this)
 
         // We break encapsulation here: we should use the super.webView reference but it's not init until
@@ -176,11 +117,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             requireWebRenderComponents.sessionManager,
             requireWebRenderComponents.sessionUseCases,
             webView)
-
-
-//        if (session.url == AppConstants.APP_URL_HOME) { //TODO: need a workaround for NavOverlayFrag
-//            browserOverlay?.visibility = View.VISIBLE
-//        }
     }
 
     override fun onStart() {
@@ -235,7 +171,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 // There's no session (anymore). Let's create a new one.
                 requireWebRenderComponents.sessionManager.add(Session(url), selected = true)
             }
-//            setOverlayVisible(false) TODO: show overlayFragment (backpress?)
         }
     }
 
@@ -255,18 +190,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         val actionIsDown = event.action == KeyEvent.ACTION_DOWN
 
         if (event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER && actionIsDown) MenuInteractionMonitor.selectPressed()
-
-        if (event.keyCode == KeyEvent.KEYCODE_MENU) {
-            if (actionIsDown) {
-                // TODO: show overlayFragment
-//                val toShow = !browserOverlay.isVisible
-//                setOverlayVisible(toShow)
-//                TelemetryIntegration.INSTANCE.userShowsHidesDrawerEvent(toShow)
-
-                serviceLocator!!.screenController.showNavigationOverlay(fragmentManager!!)
-            }
-            return true
-        }
 
         if (session.isYoutubeTV &&
                 event.keyCode == KeyEvent.KEYCODE_BACK) {
@@ -304,22 +227,4 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         val goBackSteps = backForwardUrlList.size - youtubeIndex
         webView.goBackOrForward(-goBackSteps)
     }
-
-//    /**
-//     * Changes the overlay visibility: this should be called instead of changing
-//     * [BrowserNavigationOverlay.isVisible] directly.
-//     */
-//    private fun setOverlayVisible(toShow: Boolean) {
-//        if (browserOverlay.parentFrag != BrowserNavigationOverlay.ParentFragment.DEFAULT) {
-//            browserOverlay.parentFrag = BrowserNavigationOverlay.ParentFragment.DEFAULT
-//        }
-//
-//        browserOverlay.visibility = if (toShow) View.VISIBLE else View.GONE
-//        if (toShow) cursor?.onPause() else cursor?.onResume()
-//        cursor?.setEnabledForCurrentState()
-//        if (toShow) MenuInteractionMonitor.menuOpened() else MenuInteractionMonitor.menuClosed()
-//        // TODO once the overlay is a separate fragment, handle PocketRepoCache changes in ScreenController
-//        val pocketRepoCache = serviceLocator.pocketRepoCache
-//        if (toShow) pocketRepoCache.freeze() else pocketRepoCache.unfreeze()
-//    }
 }
