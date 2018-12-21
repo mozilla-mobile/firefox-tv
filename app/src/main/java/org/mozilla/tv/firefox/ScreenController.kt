@@ -61,9 +61,9 @@ class ScreenController {
                 .commit()
     }
 
-    fun showBrowserScreenForCurrentSession(fragmentManager: FragmentManager, session: Session) {
+    fun showBrowserScreenForCurrentSession(fragmentManager: FragmentManager, session: Session, menu: Boolean) {
         val fragment = fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as WebRenderFragment?
-        if (fragment != null && fragment.session == session) {
+        if (fragment != null && fragment.session == session && !menu) {
             // There's already a BrowserFragment displaying this session.
             return
         }
@@ -77,9 +77,9 @@ class ScreenController {
     }
 
     fun showNavigationOverlay(fragmentManager: FragmentManager) {
-        fragmentManager
-                .beginTransaction()
-                .add(R.id.container, NavigationOverlayFragment(), WebRenderFragment.FRAGMENT_TAG)
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
+                .addToBackStack(null)
                 .commit()
     }
 

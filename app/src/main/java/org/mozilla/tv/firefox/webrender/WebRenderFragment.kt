@@ -30,6 +30,7 @@ import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.toList
+import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.utils.URLs
 
@@ -283,12 +284,14 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         if (event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER && actionIsDown) MenuInteractionMonitor.selectPressed()
 
-        if (event.keyCode == KeyEvent.KEYCODE_MENU && !isUrlEqualToHomepage) {
+        if (event.keyCode == KeyEvent.KEYCODE_MENU) {
             if (actionIsDown) {
                 // TODO: show overlayFragment
 //                val toShow = !browserOverlay.isVisible
 //                setOverlayVisible(toShow)
 //                TelemetryIntegration.INSTANCE.userShowsHidesDrawerEvent(toShow)
+
+                serviceLocator!!.screenController.showNavigationOverlay(fragmentManager!!)
             }
             return true
         }
