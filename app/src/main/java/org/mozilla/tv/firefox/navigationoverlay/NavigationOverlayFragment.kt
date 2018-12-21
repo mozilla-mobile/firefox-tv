@@ -39,7 +39,9 @@ import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.updateLayoutParams
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
+import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.pocket.PocketViewModel
+import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.toolbar.ToolbarViewModel
@@ -126,6 +128,9 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
 
     private lateinit var tileAdapter: PinnedTileAdapter
 
+    // TODO: remove this when FocusRepo is in place #1395
+    var defaultFocusTag = NavigationOverlayFragment.FRAGMENT_TAG
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -158,7 +163,19 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
 
         overlayScrollView.scrollTo(0, 0)
-        navUrlInput.requestFocus()
+
+        // TODO: remove this when FocusRepo is in place #1395
+        when (defaultFocusTag) {
+            SettingsFragment.FRAGMENT_TAG -> {
+                navButtonSettings.requestFocus()
+                defaultFocusTag = NavigationOverlayFragment.FRAGMENT_TAG
+            }
+            PocketVideoFragment.FRAGMENT_TAG -> {
+                pocketVideoMegaTileView.requestFocus()
+                defaultFocusTag = NavigationOverlayFragment.FRAGMENT_TAG
+            }
+            NavigationOverlayFragment.FRAGMENT_TAG -> navUrlInput.requestFocus()
+        }
 
         updateFocusableViews()
     }
