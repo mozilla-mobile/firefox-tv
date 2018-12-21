@@ -28,6 +28,7 @@ import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
+import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.AppConstants
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
@@ -230,34 +231,13 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     // TODO: need new onBackPressed logic with OverlayFragment
     fun onBackPressed(): Boolean {
-//        when {
-//            browserOverlay.isVisible && !isUrlEqualToHomepage -> {
-//                setOverlayVisible(false)
-//                TelemetryIntegration.INSTANCE.userShowsHidesDrawerEvent(false)
-//            }
-//            session.canGoBack -> {
-//                serviceLocator.sessionRepo.exitFullScreenIfPossibleAndBack() // TODO do this through WebRenderViewModel when it exists
-//                TelemetryIntegration.INSTANCE.browserBackControllerEvent()
-//            }
-//            else -> {
-//                context!!.webRenderComponents.sessionManager.remove()
-//
-//                // We can get into this state in two situations:
-//                // - (1) The user is on the "home page" and the overlay is visible. In this situation we just want to
-//                //       let the activity handle the back press (and leave the app).
-//                // - (2) The overlay is not visible and we are on a website and can't go back further. In this case
-//                //       "back" should show the overlay (the next back press closes the app). In this situation we
-//                //       cannot look at the URL. We just removed the session and the new session may not be loaded yet.
-//                if (!browserOverlay.isVisible) {
-//                    // If the browser overlay is not visible then we show it now immediately. Depending on the loading
-//                    // state of the page we m
-//                    setOverlayVisible(true)
-//                } else {
-//                    return false
-//                }
-//            }
-//        }
-        return true
+        if (session.canGoBack) {
+            serviceLocator!!.sessionRepo.exitFullScreenIfPossibleAndBack() // TODO do this through WebRenderViewModel when it exists
+            TelemetryIntegration.INSTANCE.browserBackControllerEvent()
+            return true
+        }
+
+        return false
     }
 
     fun loadUrl(url: String) {
