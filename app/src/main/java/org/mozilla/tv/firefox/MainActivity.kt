@@ -26,6 +26,7 @@ import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.components.locale.LocaleAwareAppCompatActivity
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
+import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
@@ -179,6 +180,26 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         }
 
         if (fragmentManager.backStackEntryCount > 0) {
+            // TODO: remove this when FocusRepo is in place #1395
+            val maybePocketFragment = (supportFragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG)
+                    as PocketVideoFragment?)?.let {
+                if (it.isVisible) it else null
+            }
+
+            val maybeSettingsFragment = (supportFragmentManager.findFragmentByTag(SettingsFragment.FRAGMENT_TAG)
+                    as SettingsFragment?)?.let {
+                if (it.isVisible) it else null
+            }
+
+            val overlayFragment = (supportFragmentManager.findFragmentByTag(NavigationOverlayFragment.FRAGMENT_TAG)
+                    as NavigationOverlayFragment)
+
+            if (maybePocketFragment != null) {
+                overlayFragment.defaultFocusTag = PocketVideoFragment.FRAGMENT_TAG
+            } else if (maybeSettingsFragment != null) {
+                overlayFragment.defaultFocusTag = SettingsFragment.FRAGMENT_TAG
+            }
+
             fragmentManager.popBackStack()
             return
         }
