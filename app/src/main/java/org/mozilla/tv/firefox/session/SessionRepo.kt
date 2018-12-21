@@ -6,15 +6,18 @@ package org.mozilla.tv.firefox.session
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.support.annotation.AnyThread
 import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.feature.session.SessionUseCases
+import org.mozilla.tv.firefox.ext.deleteData
 import org.mozilla.tv.firefox.ext.postIfNew
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.utils.TurboMode
+import org.mozilla.tv.firefox.webrender.WebViewCache
 
 /**
  * Repository that is responsible for storing state related to the browser.
@@ -108,4 +111,15 @@ class SessionRepo(
     }
 
     private val session: Session? get() = sessionManager.selectedSession
+
+    fun clearBrowsingData(context: Context, webViewCache: WebViewCache) {
+        sessionManager.engine.deleteData(context)
+        sessionManager.removeAll()
+        webViewCache.doNotPersist(doAfterRecreate = {
+            // Sessions must be removed prior to MainActivity being recreated, in order for initialization
+            // logic to be called. However, the URL is set before the new WebView is created, causing it to
+            // be out of sync with the Session. Removing all sessions puts them back into sync
+            sessionManager.removeAll()
+        })
+    }
 }

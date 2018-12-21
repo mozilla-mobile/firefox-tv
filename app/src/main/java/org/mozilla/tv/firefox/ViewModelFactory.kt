@@ -41,7 +41,9 @@ class ViewModelFactory(
                 sessionRepo = serviceLocator.sessionRepo,
                 pinnedTileRepo = serviceLocator.pinnedTileRepo
             ) as T
-            SettingsViewModel::class.java -> SettingsViewModel(serviceLocator.settingsRepo) as T
+            SettingsViewModel::class.java -> SettingsViewModel(
+                    serviceLocator.settingsRepo,
+                    serviceLocator.sessionRepo) as T
         // This class needs to either return a ViewModel or throw, so we have no good way of silently handling
         // failures in production. However a failure could only occur if code requests a VM that we have not added
         // to this factory, so any problems should be caught in dev.

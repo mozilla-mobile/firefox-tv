@@ -15,15 +15,18 @@ import android.view.ViewGroup
 import android.view.accessibility.AccessibilityManager
 import kotlinx.android.synthetic.main.fragment_settings.*
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.ext.deleteData
+import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.getAccessibilityManager
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
-import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
 /** The settings for the app. */
 class SettingsFragment : Fragment() {
+    enum class Action {
+        SESSION_CLEARED
+    }
+
     private val voiceViewStateChangeListener = AccessibilityManager.TouchExplorationStateChangeListener {
         updateForAccessibility()
     }
@@ -40,6 +43,28 @@ class SettingsFragment : Fragment() {
         settingsViewModel.dataCollectionEnabled.observe(viewLifecycleOwner, Observer<Boolean> { state ->
             if (state != null) {
                 telemetryButton.isChecked = state
+            }
+        })
+        settingsViewModel.events.observe(viewLifecycleOwner, Observer {
+            it?.consume { event ->
+                when (event) {
+                    Action.SESSION_CLEARED -> {
+                        // This is necessary because of several complex interactions
+                        // - For initialization logic to be started, all sessions must already be removed
+                        // - URL is set to app home by default when a new session is created
+                        // - Activity#recreate is posted to the event loop, and executed concurrently
+                        //
+                        // The end result is that, in a naive solution, sessions are removed, URL is set to home, the
+                        // WebView is (eventually) destroyed, and then the new WebView instance has no BackForwardHistory.
+                        // This causes the back button to be disabled until two sites have been visited. After many
+                        // attempted solutions, clearing the session both before and after recreate was the most workable.
+                        //
+                        // This is Bad Code. If you find a way to remove it, please do so.
+                        activity?.recreate()
+                        TelemetryIntegration.INSTANCE.clearDataEvent()
+                    }
+                }.forceExhaustive
+                    true
             }
         })
         val dataPreferenceClickListener = { _: View ->
@@ -60,36 +85,13 @@ class SettingsFragment : Fragment() {
             builder1.setPositiveButton(
                 getString(R.string.action_ok)
             ) { dialog, _ -> with(requireContext()) {
-                    val components = requireWebRenderComponents
-                    components.engine.deleteData(this)
-                    components.sessionManager.removeAll()
+                    settingsViewModel.clearBrowsingData(this, serviceLocator.webViewCache)
                     dialog.cancel()
-                    serviceLocator.webViewCache.doNotPersist(doAfterRecreate = {
-                        // This is necessary because of several complex interactions
-                        // - For initialization logic to be started, all sessions must already be removed
-                        // - URL is set to app home by default when a new session is created
-                        // - Activity#recreate is posted to the event loop, and executed concurrently
-                        //
-                        // The end result is that, in a naive solution, sessions are removed, URL is set to home, the
-                        // WebView is (eventually) destroyed, and then the new WebView instance has no BackForwardHistory.
-                        // This causes the back button to be disabled until two sites have been visited. After many
-                        // attempted solutions, clearing the session both before and after recreate was the most workable.
-                        //
-                        // This is Bad Code. If you find a way to remove it, please do so.
-                        components.sessionManager.removeAll()
-                    })
-                    // The call to recreate destroys state being maintained in the WebView (including
-                    // navigation history) and Activity. This implementation will need to change
-                    // if/when we add session restoration logic.
-                    // See https://github.com/mozilla-mobile/firefox-tv/issues/1192
-                    activity?.recreate()
-                    TelemetryIntegration.INSTANCE.clearDataEvent()
                 }
             }
 
             builder1.setNegativeButton(
-                    getString(R.string.action_cancel),
-                    { dialog, _ -> dialog.cancel() })
+                    getString(R.string.action_cancel)) { dialog2, _ -> dialog2.cancel() }
 
             val alert11 = builder1.create()
             alert11.show()
