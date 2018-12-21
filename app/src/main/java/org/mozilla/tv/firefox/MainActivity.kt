@@ -107,7 +107,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
                 webRenderComponents.sessionManager.selectedSessionOrThrow, false
             )
         }
-//        serviceLocator.screenController.showNavigationOverlay(supportFragmentManager) // TODO
+        serviceLocator.screenController.showNavigationOverlay(supportFragmentManager)
 
         if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding()) {
             val onboardingIntents =
