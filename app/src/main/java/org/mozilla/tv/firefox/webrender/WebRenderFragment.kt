@@ -104,30 +104,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         else window.clearFlags(dontSleep)
     }
 
-//    private val onNavigationEvent = { event: NavigationEvent, value: String?,
-//                                      autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
-//        when (event) {
-//            NavigationEvent.SETTINGS -> serviceLocator.screenController.showSettingsScreen(fragmentManager!!)
-//            NavigationEvent.LOAD_URL -> {
-//                (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
-//                setOverlayVisible(false)
-//            }
-//            NavigationEvent.LOAD_TILE -> {
-//                (activity as MainActivity).onNonTextInputUrlEntered(value!!)
-//                setOverlayVisible(false)
-//            }
-//            NavigationEvent.POCKET -> {
-//                val (fragmentManager, activity) = Pair(fragmentManager, activity)
-//                if (fragmentManager != null && activity != null) {
-//                    serviceLocator.screenController.showPocketScreen(fragmentManager)
-//                }
-//            }
-//            NavigationEvent.TURBO, NavigationEvent.PIN_ACTION, NavigationEvent.DESKTOP_MODE, NavigationEvent.BACK,
-//            NavigationEvent.FORWARD, NavigationEvent.RELOAD -> { /* not handled by this object */ }
-//        }
-//        Unit
-//    }
-
     override fun onDesktopModeChanged(session: Session, enabled: Boolean) {
         requireWebRenderComponents.sessionUseCases.requestDesktopSite.invoke(enabled, session)
     }

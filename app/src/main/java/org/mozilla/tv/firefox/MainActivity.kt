@@ -218,24 +218,10 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
                 as WebRenderFragment?)?.let {
             if (it.isVisible) it else null
         }
-        val maybePocketFragment = (fragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG)
-                as PocketVideoFragment?)?.let {
-            if (it.isVisible) it else null
-        }
-        val overlayFragment = (fragmentManager.findFragmentByTag(NavigationOverlayFragment.FRAGMENT_TAG)
-                as NavigationOverlayFragment?)?.let {
-            if (it.isVisible) it else null
-        }
 
         if (event.keyCode == KeyEvent.KEYCODE_MENU) {
             if (event.action == KeyEvent.ACTION_DOWN) {
-                // Overlay is visible
-                if (overlayFragment != null) {
-                    serviceLocator.screenController.showBrowserScreenForCurrentSession(supportFragmentManager,
-                            webRenderComponents.sessionManager.selectedSessionOrThrow, true)
-                } else if (maybeBrowserFragment != null || maybePocketFragment != null) {
-                    serviceLocator.screenController.showNavigationOverlay(supportFragmentManager)
-                }
+                showOrHideOverlay()
             }
             return true
         }
@@ -243,5 +229,30 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         return videoVoiceCommandMediaSession.dispatchKeyEvent(event) ||
                 (maybeBrowserFragment?.dispatchKeyEvent(event) ?: false) ||
                 super.dispatchKeyEvent(event)
+    }
+
+    /**
+     * If overlay is shown, webRenderFragment will be shown
+     */
+    fun showOrHideOverlay() {
+        val maybeBrowserFragment = (supportFragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG)
+                as WebRenderFragment?)?.let {
+            if (it.isVisible) it else null
+        }
+        val maybePocketFragment = (supportFragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG)
+                as PocketVideoFragment?)?.let {
+            if (it.isVisible) it else null
+        }
+        val overlayFragment = (supportFragmentManager.findFragmentByTag(NavigationOverlayFragment.FRAGMENT_TAG)
+                as NavigationOverlayFragment?)?.let {
+            if (it.isVisible) it else null
+        }
+
+        if (overlayFragment != null) {
+            serviceLocator.screenController.showBrowserScreenForCurrentSession(supportFragmentManager,
+                    webRenderComponents.sessionManager.selectedSessionOrThrow, true)
+        } else if (maybeBrowserFragment != null || maybePocketFragment != null) {
+            serviceLocator.screenController.showNavigationOverlay(supportFragmentManager)
+        }
     }
 }
