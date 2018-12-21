@@ -89,24 +89,19 @@ class SettingsFragment : Fragment() {
         parentView.telemetryButton.setOnClickListener(dataPreferenceClickListener)
 
         parentView.deleteButton.setOnClickListener { _ ->
-            val builder1 = AlertDialog.Builder(activity)
-            builder1.setTitle(R.string.settings_cookies_dialog_title)
-            builder1.setMessage(R.string.settings_cookies_dialog_content2)
-            builder1.setCancelable(true)
-
-            builder1.setPositiveButton(
-                getString(R.string.action_ok)
-            ) { dialog, _ -> with(requireContext()) {
-                    settingsViewModel.clearBrowsingData(this, serviceLocator.webViewCache)
-                    dialog.cancel()
-                }
-            }
-
-            builder1.setNegativeButton(
-                    getString(R.string.action_cancel)) { dialog2, _ -> dialog2.cancel() }
-
-            val alert11 = builder1.create()
-            alert11.show()
+            AlertDialog.Builder(activity)
+                    .setTitle(R.string.settings_cookies_dialog_title)
+                    .setMessage(R.string.settings_cookies_dialog_content2)
+                    .setCancelable(true)
+                    .setPositiveButton(getString(R.string.action_ok)) { dialog, _ ->
+                        with(requireContext()) {
+                            settingsViewModel.clearBrowsingData(this, serviceLocator.webViewCache)
+                            dialog.cancel()
+                        }
+                    }
+                    .setNegativeButton(
+                            getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel() }
+                    .create().show()
         }
     }
 
