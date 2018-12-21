@@ -24,6 +24,7 @@ import org.mozilla.tv.firefox.ext.toSafeIntent
 import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.components.locale.LocaleAwareAppCompatActivity
+import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
@@ -49,7 +50,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     private val sessionObserver by lazy {
         object : SessionManager.Observer {
             override fun onSessionSelected(session: Session) {
-                serviceLocator.screenController.showBrowserScreenForCurrentSession(supportFragmentManager, session)
+                serviceLocator.screenController.showBrowserScreenForCurrentSession(supportFragmentManager, session, false)
             }
 
             override fun onSessionRemoved(session: Session) {
@@ -94,7 +95,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         webRenderComponents.sessionManager.register(sessionObserver, owner = this)
 
         if (webRenderComponents.sessionManager.sessions.isEmpty()) {
-//            serviceLocator.screenController.showNavigationOverlay(supportFragmentManager) TODO
             serviceLocator.screenController.showBrowserScreenForUrl(
                 this@MainActivity,
                 supportFragmentManager,
@@ -104,9 +104,10 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         } else {
             serviceLocator.screenController.showBrowserScreenForCurrentSession(
                 supportFragmentManager,
-                webRenderComponents.sessionManager.selectedSessionOrThrow
+                webRenderComponents.sessionManager.selectedSessionOrThrow, false
             )
         }
+//        serviceLocator.screenController.showNavigationOverlay(supportFragmentManager) // TODO
 
         if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding()) {
             val onboardingIntents =
@@ -164,6 +165,12 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     }
 
     override fun onBackPressed() {
+        val fragmentManager = supportFragmentManager
+        if (fragmentManager.backStackEntryCount > 0) {
+            fragmentManager.popBackStack()
+            return
+        }
+
         // TODO: need new backstack implementation
 //        val fragmentManager = supportFragmentManager
 //        val browserFragment = fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as WebRenderFragment?
@@ -235,19 +242,35 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         val fragmentManager = supportFragmentManager
-        val maybeBrowserFragment = (fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as WebRenderFragment?)?.let {
+
+        val maybeBrowserFragment = (fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG)
+                as WebRenderFragment?)?.let {
             if (it.isVisible) it else null
         }
-        val maybePocketFragment = (fragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG) as PocketVideoFragment?)?.let {
+        val maybePocketFragment = (fragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG)
+                as PocketVideoFragment?)?.let {
             if (it.isVisible) it else null
         }
+        val overlayFragment = (fragmentManager.findFragmentByTag(NavigationOverlayFragment.FRAGMENT_TAG)
+                as NavigationOverlayFragment?)?.let {
+            if (it.isVisible) it else null
+        }
+
+        if (event.keyCode == KeyEvent.KEYCODE_MENU) {
+            if (event.action == KeyEvent.ACTION_DOWN) {
+                // Overlay is visible
+                if (overlayFragment != null) {
+                    serviceLocator.screenController.showBrowserScreenForCurrentSession(supportFragmentManager,
+                            webRenderComponents.sessionManager.selectedSessionOrThrow, true)
+                } else if (maybeBrowserFragment != null || maybePocketFragment != null) {
+                    serviceLocator.screenController.showNavigationOverlay(supportFragmentManager)
+                }
+            }
+            return true
+        }
+
         return videoVoiceCommandMediaSession.dispatchKeyEvent(event) ||
-                (maybePocketFragment?.dispatchKeyEvent(event) ?: false) ||
                 (maybeBrowserFragment?.dispatchKeyEvent(event) ?: false) ||
                 super.dispatchKeyEvent(event)
-    }
-
-    companion object {
-        const val PARENT_FRAGMENT = "PARENT_FRAGMENT"
     }
 }
