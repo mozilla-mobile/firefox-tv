@@ -57,7 +57,7 @@ If using an emulator, we recommend the Android TV device image: either 720p or
 1080p is fine. API 22 (Stick) and 25 (4K) are best. You can press `cmd+m` to
 simulate a menu button press.
 
-### Testing
+### Unit Testing
 To run a reasonable subset of the unit tests, we recommend:
 ```sh
 ./gradlew testDebug
@@ -69,6 +69,16 @@ To generate code coverage reports, run:
 ```
 
 Reports can be found at `app/build/jacoco/jacoco<buildVariant>TestReport/html/index.html`
+
+### UI Testing
+To run all UI tests, follow these steps
+
+1. Connect to one device
+  - Either use `adb connect` for a real device, or start an emulator instance using AVD
+  - Prefer a real device (emulators will fail some tests)
+  - The next step will fail if you are connected to more than one device
+2. Run `./gradlew connectedAndroidTest` from the command line
+  - Aliasing this command is recommended
 
 ### Pre-push hooks
 To reduce review turn-around time, we'd like all pushes to run tests locally. We'd
