@@ -166,54 +166,25 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
     override fun onBackPressed() {
         val fragmentManager = supportFragmentManager
+
+        val maybeBrowserFragment = (fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG)
+                as WebRenderFragment?)?.let {
+            if (it.isVisible) it else null
+        }
+
+        if (maybeBrowserFragment != null && maybeBrowserFragment.onBackPressed()) {
+            // The Browser fragment handles back presses on its own because it might just go back
+            // in the browsing history.
+            return
+        }
+
         if (fragmentManager.backStackEntryCount > 0) {
             fragmentManager.popBackStack()
             return
         }
 
-        // TODO: need new backstack implementation
-//        val fragmentManager = supportFragmentManager
-//        val browserFragment = fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as WebRenderFragment?
-//        val settingsFragment = (fragmentManager.findFragmentByTag(SettingsFragment.FRAGMENT_TAG) as SettingsFragment?)?.let {
-//            if (it.isVisible) it else null
-//        }
-//        val pocketFragment = (fragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG) as PocketVideoFragment?)?.let {
-//            if (it.isVisible) it else null
-//        }
-//
-//        if (browserFragment != null) {
-//            if (browserFragment.isVisible &&
-//                    browserFragment.onBackPressed()) {
-//                // The Browser fragment handles back presses on its own because it might just go back
-//                // in the browsing history.
-//                return
-//            }
-//
-//            val currFragment =
-//                    when {
-//                        settingsFragment != null -> fragmentManager.findFragmentByTag(SettingsFragment.FRAGMENT_TAG)
-//                        pocketFragment != null -> fragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG)
-//                        else -> null
-//                    }
-//
-//            if (browserFragment.arguments == null) {
-//                browserFragment.arguments = Bundle()
-//            }
-//
-//            // Set ParentFragment flag to the BrowserFragment based on currFragment and let
-//            // fragment lifecycle handle the rest
-//            when (currFragment) {
-//                is SettingsFragment -> {
-//                    browserFragment.arguments!!.putSerializable(PARENT_FRAGMENT, BrowserNavigationOverlay.ParentFragment.SETTINGS)
-//                }
-//                is PocketVideoFragment -> {
-//                    browserFragment.arguments!!.putSerializable(PARENT_FRAGMENT, BrowserNavigationOverlay.ParentFragment.POCKET)
-//                }
-//                else -> {
-//                    browserFragment.arguments!!.putSerializable(PARENT_FRAGMENT, BrowserNavigationOverlay.ParentFragment.DEFAULT)
-//                }
-//            }
-//        }
+        // If you're here that means there's nothing else in the fragment backstack; therefore, clear session
+        webRenderComponents.sessionManager.remove()
 
         super.onBackPressed()
     }

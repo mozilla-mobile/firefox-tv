@@ -218,7 +218,7 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
                 when (it) {
                     is Action.ShowTopToast -> ViewUtils.showCenteredTopToast(context, it.textId)
                     is Action.ShowBottomToast -> ViewUtils.showCenteredBottomToast(context, it.textId)
-                    is Action.SetOverlayVisible -> Unit
+                    is Action.SetOverlayVisible -> Unit // FIXME: do we need this anymore?
                 }.forceExhaustive
                 true
             }

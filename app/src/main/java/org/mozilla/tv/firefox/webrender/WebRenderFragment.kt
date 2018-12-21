@@ -33,6 +33,7 @@ import org.mozilla.tv.firefox.ext.toList
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.utils.URLs
+import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 
@@ -235,21 +236,16 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     // TODO: need new onBackPressed logic with OverlayFragment
     fun onBackPressed(): Boolean {
-//        when {
-//            browserOverlay.isVisible && !isUrlEqualToHomepage -> {
-//                setOverlayVisible(false)
-//                TelemetryIntegration.INSTANCE.userShowsHidesDrawerEvent(false)
-//            }
-//            session.canGoBack -> {
-//                serviceLocator.sessionRepo.exitFullScreenIfPossibleAndBack() // TODO do this through WebRenderViewModel when it exists
-//                TelemetryIntegration.INSTANCE.browserBackControllerEvent()
-//            }
-//            else -> {
+        if (session.canGoBack) {
+            serviceLocator!!.sessionRepo.exitFullScreenIfPossibleAndBack() // TODO do this through WebRenderViewModel when it exists
+            TelemetryIntegration.INSTANCE.browserBackControllerEvent()
+            return true
+        }
+//        else -> {
 //                context!!.webRenderComponents.sessionManager.remove()
 //                return false
 //            }
-//        }
-        return true
+        return false
     }
 
     fun loadUrl(url: String) {
