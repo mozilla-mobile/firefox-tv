@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox.navigationoverlay
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
@@ -16,11 +17,13 @@ import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ScrollView
 import kotlinx.android.synthetic.main.browser_overlay.*
 import kotlinx.android.synthetic.main.browser_overlay.view.*
 import kotlinx.android.synthetic.main.browser_overlay_top_nav.*
@@ -60,6 +63,24 @@ private const val MAX_UNPIN_TOAST_COUNT = 3
 
 private const val COL_COUNT = 5
 private val uiHandler = Handler(Looper.getMainLooper())
+
+enum class NavigationEvent {
+    SETTINGS, BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION, POCKET, DESKTOP_MODE;
+
+    companion object {
+        fun fromViewClick(viewId: Int?) = when (viewId) {
+            R.id.navButtonBack -> BACK
+            R.id.navButtonForward -> FORWARD
+            R.id.navButtonReload -> RELOAD
+            R.id.navButtonSettings -> SETTINGS
+            R.id.turboButton -> TURBO
+            R.id.pinButton -> PIN_ACTION
+            R.id.pocketVideoMegaTileView -> POCKET
+            R.id.desktopModeButton -> DESKTOP_MODE
+            else -> null
+        }
+    }
+}
 
 @Suppress("LargeClass") // TODO remove this. See https://github.com/mozilla-mobile/firefox-tv/issues/1187
 class NavigationOverlayFragment : Fragment(), View.OnClickListener {
@@ -491,5 +512,30 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
             }
             return super.onRequestChildFocus(parent, state, child, focused)
         }
+    }
+}
+
+/**
+ * A [ScrollView] with functionality overridden for the specific requirements of the overlay.
+ *
+ * One crappy thing with the current implementation is that when a scroll is interrupted (e.g. user
+ * clicks up twice quickly), it will skip and not scroll smoothly. Since we don't scroll often,
+ * this seems fine.
+ */
+class BrowserNavigationOverlayScrollView(
+    context: Context,
+    attrs: AttributeSet
+) : ScrollView(context, attrs) {
+
+    private val deltaScrollPadding = resources.getDimensionPixelSize(R.dimen.browser_overlay_delta_scroll_padding)
+
+    override fun computeScrollDeltaToGetChildRectOnScreen(rect: Rect?): Int {
+        // We modify the scroll offset to ensure:
+        // 1) Scrolling through the tiles will show enough of the next tile to indicate scrollability.
+        // 2) When focusing the last vertical view in the layout, the default implementation will
+        //    leave some empty space at the edge of the view such that an additional dpad click will
+        //    scroll the screen but nothing new is focused: we don't want that.
+        val deltaScrollForOnScreen = super.computeScrollDeltaToGetChildRectOnScreen(rect)
+        return deltaScrollForOnScreen + deltaScrollPadding * Integer.signum(deltaScrollForOnScreen)
     }
 }
