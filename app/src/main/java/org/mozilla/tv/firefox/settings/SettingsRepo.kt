@@ -9,6 +9,7 @@ import android.preference.PreferenceManager
 import org.mozilla.tv.firefox.R
 
 private const val PREF_KEY_TELEMETRY = R.string.pref_key_telemetry
+const val IS_TELEMETRY_ENABLED_DEFAULT = true
 
 class SettingsRepo(private val applicationContext: Application) {
     private val _sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
@@ -26,7 +27,8 @@ class SettingsRepo(private val applicationContext: Application) {
         val threadPolicy = StrictMode.allowThreadDiskReads()
         try {
             val resources = applicationContext.resources
-            _dataCollectionEnabled.value = _sharedPreferences.getBoolean(resources.getString(PREF_KEY_TELEMETRY), true)
+            _dataCollectionEnabled.value = _sharedPreferences
+                    .getBoolean(resources.getString(PREF_KEY_TELEMETRY), IS_TELEMETRY_ENABLED_DEFAULT)
         } finally {
             StrictMode.setThreadPolicy(threadPolicy)
         }

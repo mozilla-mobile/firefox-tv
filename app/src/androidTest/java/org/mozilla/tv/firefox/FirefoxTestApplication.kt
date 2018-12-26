@@ -11,6 +11,7 @@ import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.pocket.PocketViewModel
+import org.mozilla.tv.firefox.settings.SettingsRepo
 import org.mozilla.tv.firefox.utils.BuildConfigDerivables
 import org.mozilla.tv.firefox.utils.ServiceLocator
 
@@ -25,6 +26,7 @@ class FirefoxTestApplication : FirefoxApplication() {
     private val pocketVideoRepoState = MutableLiveData<PocketVideoRepo.FeedState>()
 
     val localeIsEnglish: () -> Boolean = { true }
+    val settingsRepo: SettingsRepo by lazy { serviceLocator.settingsRepo }
 
     private val pocketVideoRepo = object : PocketVideoRepo(
         pocketEndpoint,
