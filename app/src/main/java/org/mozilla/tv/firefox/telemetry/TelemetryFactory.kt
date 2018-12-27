@@ -6,7 +6,6 @@ package org.mozilla.tv.firefox.telemetry
 
 import android.content.Context
 import org.mozilla.tv.firefox.BuildConfig
-import org.mozilla.tv.firefox.components.search.SearchEngineManager
 import org.mozilla.tv.firefox.utils.Settings
 import org.mozilla.telemetry.Telemetry
 import org.mozilla.telemetry.config.TelemetryConfiguration
@@ -17,6 +16,7 @@ import org.mozilla.telemetry.ping.TelemetryMobileEventPingBuilder
 import org.mozilla.telemetry.schedule.jobscheduler.JobSchedulerTelemetryScheduler
 import org.mozilla.telemetry.serialize.JSONPingSerializer
 import org.mozilla.telemetry.storage.FileTelemetryStorage
+import org.mozilla.tv.firefox.ext.serviceLocator
 
 private const val TELEMETRY_APP_NAME_FOCUS_TV = "FirefoxForFireTV"
 
@@ -55,7 +55,7 @@ object TelemetryFactory {
 
     private fun createDefaultSearchProvider(context: Context): DefaultSearchMeasurement.DefaultSearchEngineProvider {
         return DefaultSearchMeasurement.DefaultSearchEngineProvider {
-            SearchEngineManager.getInstance()
+            context.serviceLocator.searchEngineManager
                     .getDefaultSearchEngine(context)
                     .identifier
         }
