@@ -15,7 +15,6 @@ import org.mozilla.tv.firefox.ext.resetAfter
 import org.mozilla.tv.firefox.pinnedtile.BundledPinnedTile
 import org.mozilla.tv.firefox.pinnedtile.CustomPinnedTile
 import org.mozilla.tv.firefox.pinnedtile.PinnedTile
-import org.mozilla.tv.firefox.components.search.SearchEngineManager
 import org.mozilla.tv.firefox.utils.Assert
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText.AutocompleteResult
 import org.mozilla.telemetry.TelemetryHolder
@@ -23,6 +22,7 @@ import org.mozilla.telemetry.event.TelemetryEvent
 import org.mozilla.telemetry.measurement.SearchesMeasurement
 import org.mozilla.telemetry.ping.TelemetryCorePingBuilder
 import org.mozilla.telemetry.ping.TelemetryMobileEventPingBuilder
+import org.mozilla.tv.firefox.ext.serviceLocator
 import java.util.Collections
 
 private const val SHARED_PREFS_KEY = "telemetryLib" // Don't call it TelemetryWrapper to avoid accidental IDE rename.
@@ -185,8 +185,8 @@ open class TelemetryIntegration protected constructor(
                 .extra(Extra.SOURCE, inputLocation.extra)
                 .queue()
 
-        val searchEngine = SearchEngineManager.getInstance().getDefaultSearchEngine(
-                telemetry.configuration.context)
+        val context = telemetry.configuration.context
+        val searchEngine = context.serviceLocator.searchEngineManager.getDefaultSearchEngine(context)
 
         telemetry.recordSearch(SearchesMeasurement.LOCATION_ACTIONBAR, searchEngine.identifier)
     }
