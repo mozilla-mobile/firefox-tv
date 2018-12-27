@@ -13,7 +13,6 @@ import mozilla.components.concept.engine.EngineSession
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity
-import org.mozilla.tv.firefox.components.search.SearchEngine
 
 /**
  * A simple wrapper for SharedPreferences that makes reading preference a little bit easier.
@@ -50,12 +49,6 @@ class Settings private constructor(context: Context) {
 
     fun shouldShowPocketOnboarding(): Boolean =
             !preferences.getBoolean(PocketOnboardingActivity.POCKET_ONBOARDING_SHOWN_PREF, false)
-
-    fun setDefaultSearchEngine(searchEngine: SearchEngine) {
-        preferences.edit()
-                .putString(getPreferenceKey(R.string.pref_key_search_engine), searchEngine.name)
-                .apply()
-    }
 
     fun shouldAutocompleteFromShippedDomainList() = true
 
