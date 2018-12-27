@@ -106,6 +106,7 @@ dependencies {
     }
 
     implementation "org.mozilla.components:browser-session:$moz_components_version"
+    implementation "org.mozilla.components:browser-domains:$moz_components_version"
     implementation "org.mozilla.components:concept-engine:$moz_components_version"
     implementation "org.mozilla.components:browser-engine-system:$moz_components_version"
     implementation "org.mozilla.components:service-telemetry:$moz_components_version"
