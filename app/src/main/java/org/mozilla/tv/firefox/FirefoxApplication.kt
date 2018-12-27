@@ -9,7 +9,6 @@ import android.preference.PreferenceManager
 import android.support.annotation.VisibleForTesting
 import android.webkit.WebSettings
 import org.mozilla.tv.firefox.components.locale.LocaleAwareApplication
-import org.mozilla.tv.firefox.components.search.SearchEngineManager
 import org.mozilla.tv.firefox.webrender.VisibilityLifeCycleCallback
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.BuildConstants
@@ -45,8 +44,6 @@ open class FirefoxApplication : LocaleAwareApplication() {
         serviceLocator = createServiceLocator()
 
         enableStrictMode()
-
-        SearchEngineManager.getInstance().init(this)
 
         TelemetryIntegration.INSTANCE.init(this)
 
