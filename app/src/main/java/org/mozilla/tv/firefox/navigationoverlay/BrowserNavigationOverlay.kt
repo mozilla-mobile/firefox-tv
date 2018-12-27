@@ -31,7 +31,6 @@ import kotlinx.android.synthetic.main.pocket_video_mega_tile.view.*
 import kotlinx.coroutines.Job
 import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.components.UrlAutoCompleteFilter
 import org.mozilla.tv.firefox.ext.forEachChild
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isEffectivelyVisible
