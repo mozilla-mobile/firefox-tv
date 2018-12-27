@@ -9,7 +9,7 @@ import android.content.Context
 import android.net.Uri
 import android.webkit.URLUtil
 
-import org.mozilla.tv.firefox.components.search.SearchEngineManager
+import org.mozilla.tv.firefox.ext.serviceLocator
 
 import java.net.URI
 import java.net.URISyntaxException
@@ -70,8 +70,8 @@ object UrlUtils {
 
     @JvmStatic
     fun createSearchUrl(context: Context, searchTerm: String): String {
-        val searchEngine = SearchEngineManager.getInstance()
-                .getDefaultSearchEngine(context)
+        val searchEngine = context.serviceLocator.searchEngineManager
+            .getDefaultSearchEngine(context)
 
         return searchEngine.buildSearchUrl(searchTerm)
     }
