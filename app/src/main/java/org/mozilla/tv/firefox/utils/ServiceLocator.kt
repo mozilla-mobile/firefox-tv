@@ -5,6 +5,9 @@
 package org.mozilla.tv.firefox.utils
 
 import android.app.Application
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import mozilla.components.browser.search.SearchEngineManager
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ViewModelFactory
@@ -62,6 +65,7 @@ open class ServiceLocator(val app: Application) {
     val webViewCache by lazy { WebViewCache(sessionRepo) }
     val sessionManager get() = app.webRenderComponents.sessionManager
     val sessionUseCases get() = app.webRenderComponents.sessionUseCases
+    val searchEngineManager = SearchEngineManager().apply { GlobalScope.launch { load(app) } }
 
     open val pinnedTileRepo by lazy { PinnedTileRepo(app) }
     open val pocketRepo = PocketVideoRepo(pocketEndpoint, pocketFeedStateMachine, getIsEnglishLocale, buildConfigDerivables).apply {
