@@ -12,8 +12,8 @@ import android.support.annotation.AnyThread
 import android.support.annotation.UiThread
 import android.view.InputDevice
 import android.view.KeyEvent
+import mozilla.components.support.ktx.android.os.resetAfter
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
-import org.mozilla.tv.firefox.ext.resetAfter
 import org.mozilla.tv.firefox.pinnedtile.BundledPinnedTile
 import org.mozilla.tv.firefox.pinnedtile.CustomPinnedTile
 import org.mozilla.tv.firefox.pinnedtile.PinnedTile
