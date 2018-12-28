@@ -41,7 +41,8 @@ object TelemetryFactory {
 
         context.serviceLocator.settingsRepo.dataCollectionEnabled.observeForever { collectionEnabled ->
             if (collectionEnabled != null) {
-                configuration.setUploadEnabled(collectionEnabled).isCollectionEnabled = collectionEnabled
+                configuration.isUploadEnabled = collectionEnabled
+                configuration.isCollectionEnabled = collectionEnabled
             }
         }
 

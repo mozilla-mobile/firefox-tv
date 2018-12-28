@@ -52,25 +52,12 @@ class SettingsFragment : Fragment() {
 
     private fun setupSettingsViewModel(parentView: View, settingsViewModel: SettingsViewModel) {
         settingsViewModel.dataCollectionEnabled.observe(viewLifecycleOwner, Observer<Boolean> { state ->
-            if (state != null) {
-                parentView.telemetryButton.isChecked = state
-            }
+            parentView.telemetryButton.isChecked = state ?: return@Observer
         })
         settingsViewModel.events.observe(viewLifecycleOwner, Observer {
             it?.consume { event ->
                 when (event) {
                     Action.SESSION_CLEARED -> {
-                        // This is necessary because of several complex interactions
-                        // - For initialization logic to be started, all sessions must already be removed
-                        // - URL is set to app home by default when a new session is created
-                        // - Activity#recreate is posted to the event loop, and executed concurrently
-                        //
-                        // The end result is that, in a naive solution, sessions are removed, URL is set to home, the
-                        // WebView is (eventually) destroyed, and then the new WebView instance has no BackForwardHistory.
-                        // This causes the back button to be disabled until two sites have been visited. After many
-                        // attempted solutions, clearing the session both before and after recreate was the most workable.
-                        //
-                        // This is Bad Code. If you find a way to remove it, please do so.
                         activity?.recreate()
                         TelemetryIntegration.INSTANCE.clearDataEvent()
                     }
@@ -90,18 +77,18 @@ class SettingsFragment : Fragment() {
 
         parentView.deleteButton.setOnClickListener { _ ->
             AlertDialog.Builder(activity)
-                    .setTitle(R.string.settings_cookies_dialog_title)
-                    .setMessage(R.string.settings_cookies_dialog_content2)
-                    .setCancelable(true)
-                    .setPositiveButton(getString(R.string.action_ok)) { dialog, _ ->
-                        with(requireContext()) {
-                            settingsViewModel.clearBrowsingData(this, serviceLocator.webViewCache)
-                            dialog.cancel()
-                        }
+                .setTitle(R.string.settings_cookies_dialog_title)
+                .setMessage(R.string.settings_cookies_dialog_content2)
+                .setCancelable(true)
+                .setPositiveButton(getString(R.string.action_ok)) { dialog, _ ->
+                    with(requireContext()) {
+                        settingsViewModel.clearBrowsingData(this, serviceLocator.webViewCache)
+                        dialog.cancel()
                     }
-                    .setNegativeButton(
-                            getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel() }
-                    .create().show()
+                }
+                .setNegativeButton(
+                        getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel() }
+                .create().show()
         }
     }
 
