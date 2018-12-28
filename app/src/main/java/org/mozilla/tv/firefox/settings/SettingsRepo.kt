@@ -6,6 +6,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.content.SharedPreferences
 import android.os.StrictMode
 import android.preference.PreferenceManager
+import mozilla.components.support.ktx.android.os.resetAfter
 import org.mozilla.tv.firefox.R
 
 private const val PREF_KEY_TELEMETRY = R.string.pref_key_telemetry
@@ -24,13 +25,10 @@ class SettingsRepo(private val applicationContext: Application) {
 
     private fun loadSettingsFromPreferences() {
         // The first access to shared preferences will require a disk read.
-        val threadPolicy = StrictMode.allowThreadDiskReads()
-        try {
+        StrictMode.allowThreadDiskReads().resetAfter {
             val resources = applicationContext.resources
             _dataCollectionEnabled.value = _sharedPreferences
                     .getBoolean(resources.getString(PREF_KEY_TELEMETRY), IS_TELEMETRY_ENABLED_DEFAULT)
-        } finally {
-            StrictMode.setThreadPolicy(threadPolicy)
         }
     }
 
