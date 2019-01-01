@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager
 import android.text.TextUtils
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
-import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.settings.SettingsFragment
@@ -29,10 +28,10 @@ class ScreenController {
     fun setUpFragmentsForNewSession(fragmentManager: FragmentManager, session: Session) {
         fragmentManager
             .beginTransaction()
+            .add(R.id.container, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
             .add(R.id.container,
                 WebRenderFragment.createForSession(session), WebRenderFragment.FRAGMENT_TAG)
-            .add(R.id.container, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
-            .commit()
+            .commitNow()
     }
 
     /**
@@ -53,7 +52,7 @@ class ScreenController {
         val isUrl = UrlUtils.isUrl(urlStr)
         val updatedUrlStr = if (isUrl) UrlUtils.normalize(urlStr) else UrlUtils.createSearchUrl(context, urlStr)
 
-        showBrowserScreenForUrl(context, fragmentManager, updatedUrlStr, Session.Source.USER_ENTERED)
+        showBrowserScreenForUrl(fragmentManager, updatedUrlStr)
 
         if (isTextInput) {
             // Non-text input events are handled at the source, e.g. home tile click events.
@@ -84,11 +83,11 @@ class ScreenController {
         }
 
         // BrowserFragment is the base fragment, so don't add a backstack transaction.
-        fragmentManager
-                .beginTransaction()
-                .replace(R.id.container,
-                        WebRenderFragment.createForSession(session), WebRenderFragment.FRAGMENT_TAG)
-                .commit()
+//        fragmentManager TODO figure this out
+//                .beginTransaction()
+//                .replace(R.id.container,
+//                        WebRenderFragment.createForSession(session), WebRenderFragment.FRAGMENT_TAG)
+//                .commit()
     }
 
     fun showNavigationOverlay(fragmentManager: FragmentManager) {
@@ -98,25 +97,10 @@ class ScreenController {
                 .commit()
     }
 
-    fun showBrowserScreenForUrl(context: Context, fragmentManager: FragmentManager, url: String, source: Session.Source) {
-        // This code is not correct:
-        // - We only support one session but it creates a new session when there's no BrowserFragment
-        // such as each time we open a URL from the home screen.
-        // - It doesn't handle the case where the BrowserFragment is non-null but not
-        // visible: this can happen when a BrowserFragment is in the back stack, e.g. if this
-        // method is called from Settings.
-        //
-        // However, from a user perspective, the behavior is correct (e.g. back stack functions
-        // correctly with multiple sessions).
+    fun showBrowserScreenForUrl(fragmentManager: FragmentManager, url: String) {
+        // TODO comment explaining that browserfragment will always be available
         val browserFragment = fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as? WebRenderFragment
-        if (browserFragment != null && browserFragment.isVisible) {
-            // We can't call loadUrl on the Fragment until the view hierarchy is inflated so we check
-            // for visibility in addition to existence.
-            browserFragment.loadUrl(url)
-        } else {
-            val session = Session(url, source = source)
-            context.webRenderComponents.sessionManager.add(session, selected = true)
-        }
+        browserFragment!!.loadUrl(url)
     }
 
     fun showPocketScreen(fragmentManager: FragmentManager) {
