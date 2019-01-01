@@ -65,16 +65,13 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         IntentValidator.validateOnCreate(this, intent, savedInstanceState, ::onValidBrowserIntent)
 
         if (webRenderComponents.sessionManager.sessions.isEmpty()) {
-            serviceLocator.screenController.showBrowserScreenForUrl(
-                this@MainActivity,
-                supportFragmentManager,
-                URLs.APP_URL_HOME,
-                Session.Source.NONE
-            )
+            val session = Session(URLs.APP_URL_HOME, source = Session.Source.NONE)
+            webRenderComponents.sessionManager.add(session, selected = true)
+            serviceLocator.screenController.setUpFragmentsForNewSession(supportFragmentManager, session)
         } else {
             serviceLocator.screenController.showBrowserScreenForCurrentSession(
                 supportFragmentManager,
-                webRenderComponents.sessionManager.selectedSessionOrThrow, false
+                webRenderComponents.sessionManager.selectedSessionOrThrow
             )
         }
         serviceLocator.screenController.showNavigationOverlay(supportFragmentManager)
@@ -240,7 +237,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         if (overlayFragment != null) {
             serviceLocator.screenController.showBrowserScreenForCurrentSession(supportFragmentManager,
-                    webRenderComponents.sessionManager.selectedSessionOrThrow, true)
+                    webRenderComponents.sessionManager.selectedSessionOrThrow)
         } else if (maybeBrowserFragment != null || maybePocketFragment != null) {
             serviceLocator.screenController.showNavigationOverlay(supportFragmentManager)
         }
