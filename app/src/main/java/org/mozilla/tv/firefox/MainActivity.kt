@@ -56,25 +56,23 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         initMediaSession()
         lifecycle.addObserver(serviceLocator.webViewCache)
 
-        val intent = SafeIntent(intent)
-
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
         setContentView(R.layout.activity_main)
 
-        IntentValidator.validateOnCreate(this, intent, savedInstanceState, ::onValidBrowserIntent)
+        val intent = SafeIntent(intent)
+        val intentData = IntentValidator.validateOnCreate(this, intent, savedInstanceState)
 
-        if (webRenderComponents.sessionManager.sessions.isEmpty()) {
-            val session = Session(URLs.APP_URL_HOME, source = Session.Source.NONE)
-            webRenderComponents.sessionManager.add(session, selected = true)
-            serviceLocator.screenController.setUpFragmentsForNewSession(supportFragmentManager, session)
+        val session = getOrCreateSession(intentData)
+
+        val screenController = serviceLocator.screenController
+        screenController.setUpFragmentsForNewSession(supportFragmentManager, session)
+
+        if (intentData != null) {
+            screenController.showBrowserScreenForUrl(supportFragmentManager, intentData.url)
         } else {
-            serviceLocator.screenController.showBrowserScreenForCurrentSession(
-                supportFragmentManager,
-                webRenderComponents.sessionManager.selectedSessionOrThrow
-            )
+            screenController.showBrowserScreenForCurrentSession(supportFragmentManager, session)
         }
-        serviceLocator.screenController.showNavigationOverlay(supportFragmentManager)
 
         if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding()) {
             val onboardingIntents =
@@ -88,12 +86,23 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         }
     }
 
-    override fun onNewIntent(unsafeIntent: Intent) {
-        IntentValidator.validate(this, unsafeIntent.toSafeIntent(), ::onValidBrowserIntent)
+    /**
+     * If a new [Session] is created, this also adds it to the SessionManager and selects it
+     */
+    private fun getOrCreateSession(intentData: ValidatedIntentData?): Session {
+        return webRenderComponents.sessionManager.selectedSession
+            ?: Session(
+                initialUrl = intentData?.url ?: URLs.APP_URL_HOME,
+                source = intentData?.source ?: Session.Source.NONE
+            ).also { webRenderComponents.sessionManager.add(it, selected = true) }
     }
 
-    private fun onValidBrowserIntent(url: String, source: Session.Source) {
-        serviceLocator.screenController.showBrowserScreenForUrl(this, supportFragmentManager, url, source)
+    override fun onNewIntent(unsafeIntent: Intent) {
+        // If no session is selected, onCreate has not yet been hit. Short and let onCreate take care of intent validation
+        serviceLocator.sessionManager.selectedSession ?: return
+        // We can't do anything if the intent does not contain valid data, so short
+        val intentData = IntentValidator.validate(this, unsafeIntent.toSafeIntent()) ?: return
+        serviceLocator.screenController.showBrowserScreenForUrl(supportFragmentManager, intentData.url)
     }
 
     override fun applyLocale() {
