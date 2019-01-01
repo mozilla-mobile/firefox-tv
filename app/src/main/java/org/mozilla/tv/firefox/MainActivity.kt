@@ -13,7 +13,6 @@ import android.view.KeyEvent
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import mozilla.components.browser.session.Session
-import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.webrender.VideoVoiceCommandMediaSession
@@ -48,34 +47,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     // We crash if we init MediaSession at init time, hence lateinit.
     override lateinit var videoVoiceCommandMediaSession: VideoVoiceCommandMediaSession
 
-    private val sessionObserver by lazy {
-        object : SessionManager.Observer {
-            override fun onSessionSelected(session: Session) {
-                serviceLocator.screenController.showBrowserScreenForCurrentSession(supportFragmentManager, session, false)
-            }
-
-            override fun onSessionRemoved(session: Session) {
-                if (webRenderComponents.sessionManager.sessions.isEmpty()) {
-                    onNoActiveSession()
-                }
-            }
-
-            override fun onAllSessionsRemoved() {
-                onNoActiveSession()
-            }
-
-            private fun onNoActiveSession() {
-                // There's no active session. Start a new session with "homepage".
-                serviceLocator.screenController.showBrowserScreenForUrl(
-                    this@MainActivity,
-                    supportFragmentManager,
-                    URLs.APP_URL_HOME,
-                    Session.Source.NONE
-                )
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -92,8 +63,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         setContentView(R.layout.activity_main)
 
         IntentValidator.validateOnCreate(this, intent, savedInstanceState, ::onValidBrowserIntent)
-
-        webRenderComponents.sessionManager.register(sessionObserver, owner = this)
 
         if (webRenderComponents.sessionManager.sessions.isEmpty()) {
             serviceLocator.screenController.showBrowserScreenForUrl(
