@@ -20,6 +20,21 @@ import org.mozilla.tv.firefox.utils.UrlUtils
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 
 class ScreenController {
+
+    /**
+     * TODO
+     *
+     * not adding to backstack is intentional
+     */
+    fun setUpFragmentsForNewSession(fragmentManager: FragmentManager, session: Session) {
+        fragmentManager
+            .beginTransaction()
+            .add(R.id.container,
+                WebRenderFragment.createForSession(session), WebRenderFragment.FRAGMENT_TAG)
+            .add(R.id.container, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
+            .commit()
+    }
+
     /**
      * Loads the given url. If isTextInput is true, there should be no null parameters.
      */
@@ -61,9 +76,9 @@ class ScreenController {
                 .commit()
     }
 
-    fun showBrowserScreenForCurrentSession(fragmentManager: FragmentManager, session: Session, menu: Boolean) {
+    fun showBrowserScreenForCurrentSession(fragmentManager: FragmentManager, session: Session) {
         val fragment = fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as WebRenderFragment?
-        if (fragment != null && fragment.session == session && !menu) {
+        if (fragment != null && fragment.session == session) {
             // There's already a BrowserFragment displaying this session.
             return
         }
