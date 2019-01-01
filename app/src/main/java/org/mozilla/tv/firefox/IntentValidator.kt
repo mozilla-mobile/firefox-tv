@@ -14,7 +14,7 @@ import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.SafeIntent
 import org.mozilla.tv.firefox.utils.UrlUtils
 
-typealias OnValidBrowserIntent = (url: String, source: Session.Source) -> Unit
+data class ValidatedIntentData(val url: String, val source: Session.Source)
 
 /**
  * A container for functions that parse Intents and notify the application of their validity.
@@ -28,53 +28,57 @@ typealias OnValidBrowserIntent = (url: String, source: Session.Source) -> Unit
 object IntentValidator {
     @VisibleForTesting const val DIAL_PARAMS_KEY = "com.amazon.extra.DIAL_PARAM"
 
-    fun validateOnCreate(context: Context, intent: SafeIntent, savedInstanceState: Bundle?, onValidBrowserIntent: OnValidBrowserIntent) {
+    /**
+     * TODO
+     * returns null if any unexpected values are encountered
+     */
+    fun validateOnCreate(context: Context, intent: SafeIntent, savedInstanceState: Bundle?): ValidatedIntentData? {
         if ((intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0) {
             // This Intent was launched from history (recent apps). Android will redeliver the
             // original Intent (which might be a VIEW intent). However if there's no active browsing
             // session then we do not want to re-process the Intent and potentially re-open a website
             // from a session that the user already "erased".
-            return
+            return null
         }
 
         if (savedInstanceState != null) {
             // We are restoring a previous session - No need to handle this Intent.
-            return
+            return null
         }
 
-        validate(context, intent, onValidBrowserIntent)
+        return validate(context, intent)
     }
 
-    fun validate(context: Context, intent: SafeIntent, onValidBrowserIntent: OnValidBrowserIntent) {
+    fun validate(context: Context, intent: SafeIntent): ValidatedIntentData? {
         val action = intent.action
 
         when (action) {
             Intent.ACTION_MAIN -> {
-                val dialParams = intent.extras?.getString(DIAL_PARAMS_KEY) ?: return
+                val dialParams = intent.extras?.getString(DIAL_PARAMS_KEY) ?: return null
                 if (dialParams.isNotEmpty()) {
-                    onValidBrowserIntent("https://www.youtube.com/tv?$dialParams",
-                            Session.Source.ACTION_VIEW)
                     TelemetryIntegration.INSTANCE.youtubeCastEvent()
+                    return ValidatedIntentData(url = "https://www.youtube.com/tv?$dialParams", source = Session.Source.ACTION_VIEW)
                 }
             }
             Intent.ACTION_VIEW -> {
                 val dataString = intent.dataString
                 if (TextUtils.isEmpty(dataString)) {
-                    return // If there's no URL in the Intent then we can't create a session.
+                    return null // If there's no URL in the Intent then we can't create a session.
                 }
 
-                onValidBrowserIntent(dataString, Session.Source.ACTION_VIEW)
+                return ValidatedIntentData(dataString, Session.Source.ACTION_VIEW)
             }
             Intent.ACTION_SEND -> {
                 val dataString = intent.getStringExtra(Intent.EXTRA_TEXT)
                 if (TextUtils.isEmpty(dataString)) {
-                    return
+                    return null
                 }
 
                 val isSearch = !UrlUtils.isUrl(dataString)
                 val url = if (isSearch) UrlUtils.createSearchUrl(context, dataString) else dataString
-                onValidBrowserIntent(url, Session.Source.ACTION_SEND)
+                return ValidatedIntentData(url, Session.Source.ACTION_SEND)
             }
         }
+        return null
     }
 }
