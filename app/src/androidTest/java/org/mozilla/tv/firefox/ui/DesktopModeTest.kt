@@ -4,10 +4,8 @@
 
 package org.mozilla.tv.firefox.ui
 
-import android.support.test.runner.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.ui.robots.navigationOverlay
@@ -21,7 +19,6 @@ import org.mozilla.tv.firefox.ui.robots.navigationOverlay
 
 /* TODO: Change to using mockWebServer, so the test does not rely on having a network connection */
 
-@RunWith(AndroidJUnit4::class)
 class DesktopModeTest {
 
     @get:Rule val activityTestRule = MainActivityTestRule()
