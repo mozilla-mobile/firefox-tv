@@ -4,16 +4,12 @@
 
 package org.mozilla.tv.firefox.ui
 
-import android.support.test.espresso.IdlingRegistry
 import android.support.test.runner.AndroidJUnit4
-import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
-import org.mozilla.tv.firefox.helpers.SessionLoadedIdlingResource
 import org.mozilla.tv.firefox.ui.robots.navigationOverlay
 
 /**
@@ -29,20 +25,6 @@ import org.mozilla.tv.firefox.ui.robots.navigationOverlay
 class DesktopModeTest {
 
     @get:Rule val activityTestRule = MainActivityTestRule()
-
-    private lateinit var loadingIdlingResource: SessionLoadedIdlingResource
-
-    @Before
-    fun setup() {
-        loadingIdlingResource = SessionLoadedIdlingResource()
-        IdlingRegistry.getInstance().register(loadingIdlingResource)
-    }
-
-    @After
-    fun tearDown() {
-        IdlingRegistry.getInstance().unregister(loadingIdlingResource)
-        activityTestRule.activity.finishAndRemoveTask()
-    }
 
     /* ktlint-disable no-blank-line-before-rbrace */ // This imposes unreadable grouping.
     @Test
