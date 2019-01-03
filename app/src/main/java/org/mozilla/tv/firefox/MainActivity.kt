@@ -14,18 +14,13 @@ import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
-import org.mozilla.tv.firefox.webrender.WebRenderFragment
-import org.mozilla.tv.firefox.webrender.VideoVoiceCommandMediaSession
-import org.mozilla.tv.firefox.ext.webRenderComponents
+import org.mozilla.tv.firefox.components.locale.LocaleAwareAppCompatActivity
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.setupForApp
 import org.mozilla.tv.firefox.ext.toSafeIntent
-import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity
-import org.mozilla.tv.firefox.pocket.PocketVideoFragment
-import org.mozilla.tv.firefox.components.locale.LocaleAwareAppCompatActivity
-import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
+import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
-import org.mozilla.tv.firefox.settings.SettingsFragment
+import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
@@ -35,6 +30,8 @@ import org.mozilla.tv.firefox.utils.Settings
 import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.utils.ViewUtils
 import org.mozilla.tv.firefox.utils.publicsuffix.PublicSuffix
+import org.mozilla.tv.firefox.webrender.VideoVoiceCommandMediaSession
+import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 
 interface MediaSessionHolder {
@@ -141,43 +138,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     }
 
     override fun onBackPressed() {
-        val fragmentManager = supportFragmentManager
-
-        val maybeBrowserFragment = (fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG)
-                as WebRenderFragment?)?.let {
-            if (it.isVisible) it else null
-        }
-
-        if (maybeBrowserFragment != null && maybeBrowserFragment.onBackPressed()) {
-            // The Browser fragment handles back presses on its own because it might just go back
-            // in the browsing history.
-            return
-        }
-
-        if (fragmentManager.backStackEntryCount > 0) {
-            // TODO: remove this when FocusRepo is in place #1395
-            val maybePocketFragment = (supportFragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG)
-                    as PocketVideoFragment?)?.let {
-                if (it.isVisible) it else null
-            }
-
-            val maybeSettingsFragment = (supportFragmentManager.findFragmentByTag(SettingsFragment.FRAGMENT_TAG)
-                    as SettingsFragment?)?.let {
-                if (it.isVisible) it else null
-            }
-
-            val overlayFragment = (supportFragmentManager.findFragmentByTag(NavigationOverlayFragment.FRAGMENT_TAG)
-                    as NavigationOverlayFragment)
-
-            if (maybePocketFragment != null) {
-                overlayFragment.defaultFocusTag = PocketVideoFragment.FRAGMENT_TAG
-            } else if (maybeSettingsFragment != null) {
-                overlayFragment.defaultFocusTag = SettingsFragment.FRAGMENT_TAG
-            }
-
-            fragmentManager.popBackStack()
-            return
-        }
+        if (serviceLocator.screenController.handleBack(supportFragmentManager)) return
 
         // If you're here that means there's nothing else in the fragment backstack; therefore, clear session
         webRenderComponents.sessionManager.remove()
