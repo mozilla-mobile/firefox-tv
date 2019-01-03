@@ -69,6 +69,10 @@ class ScreenControllerStateMachine(private val currentUrlIsHome: () -> Boolean) 
         currentActiveScreen = ActiveScreen.WEB_RENDER
     }
 
+    fun overlayOpened() {
+        currentActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
+    }
+
     fun pocketOpened() {
         currentActiveScreen = ActiveScreen.POCKET
     }

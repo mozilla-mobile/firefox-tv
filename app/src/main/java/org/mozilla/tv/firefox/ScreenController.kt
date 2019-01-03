@@ -104,6 +104,21 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
         browserFragment!!.loadUrl(url)
     }
 
+    // TODO: handle about:home and close overlay by button press separately
+    fun showNavigationOverlay(fragmentManager: FragmentManager?, toShow: Boolean) {
+        fragmentManager ?: return
+        var transaction = fragmentManager.beginTransaction()
+        if (toShow) {
+            stateMachine.overlayOpened()
+            transaction = transaction.add(R.id.container, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
+        } else {
+            stateMachine.overlayClosed()
+            val overlayFragment = fragmentManager.findFragmentByTag(NavigationOverlayFragment.FRAGMENT_TAG)
+            transaction = transaction.remove(overlayFragment!!)
+        }
+        transaction.commit()
+    }
+
     fun showPocketScreen(fragmentManager: FragmentManager) {
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PocketVideoFragment(), PocketVideoFragment.FRAGMENT_TAG)

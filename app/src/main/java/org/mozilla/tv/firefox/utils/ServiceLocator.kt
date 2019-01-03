@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import mozilla.components.browser.search.SearchEngineManager
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.ScreenController
+import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.ViewModelFactory
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.components.locale.LocaleManager
@@ -61,7 +62,9 @@ open class ServiceLocator(val app: Application) {
     val turboMode: TurboMode by lazy { TurboMode(app) }
     val pocketRepoCache by lazy { PocketRepoCache(pocketRepo).apply { unfreeze() } }
     val viewModelFactory by lazy { ViewModelFactory(this, app) }
-    val screenController by lazy { ScreenController() }
+    val screenController by lazy { ScreenController(ScreenControllerStateMachine {
+        sessionRepo.state.value?.currentUrl == URLs.APP_URL_HOME})
+    }
     val webViewCache by lazy { WebViewCache(sessionRepo) }
     val sessionManager get() = app.webRenderComponents.sessionManager
     val sessionUseCases get() = app.webRenderComponents.sessionUseCases
