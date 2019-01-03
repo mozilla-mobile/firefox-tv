@@ -15,29 +15,69 @@ class ScreenControllerStateMachine(private val currentUrlIsHome: () -> Boolean) 
     }
 
     enum class Transition {
-        PUSH_OVERLAY, PUSH_POCKET, PUSH_SETTINGS, EXIT_APP, NO_OP, POP_BACK_STACK
+        ADD_OVERLAY, REMOVE_OVERLAY, ADD_POCKET, REMOVE_POCKET, ADD_SETTINGS, REMOVE_SETTINGS, EXIT_APP, NO_OP
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    var currentState: ActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
+    var currentActiveScreen: ActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
 
     fun menuPress(): Transition {
-        return Transition.PUSH_OVERLAY
+        return when(currentActiveScreen) {
+            ActiveScreen.NAVIGATION_OVERLAY -> {
+                return if (currentUrlIsHome()) {
+                    Transition.NO_OP
+                } else {
+                    currentActiveScreen = ActiveScreen.WEB_RENDER
+                    Transition.REMOVE_OVERLAY
+                }
+            }
+            ActiveScreen.WEB_RENDER -> {
+                currentActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
+                Transition.ADD_OVERLAY
+            }
+            ActiveScreen.POCKET -> Transition.NO_OP
+            ActiveScreen.SETTINGS -> Transition.NO_OP
+        }
     }
 
     fun backPress(): Transition {
-        return Transition.PUSH_OVERLAY
+        return when(currentActiveScreen) {
+            ActiveScreen.NAVIGATION_OVERLAY -> {
+                return if (currentUrlIsHome()) {
+                    Transition.EXIT_APP
+                } else {
+                    currentActiveScreen = ActiveScreen.WEB_RENDER
+                    Transition.REMOVE_OVERLAY
+                }
+            }
+            ActiveScreen.WEB_RENDER -> {
+                currentActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
+                Transition.ADD_OVERLAY
+            }
+            ActiveScreen.POCKET -> {
+                currentActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
+                Transition.REMOVE_POCKET
+            }
+            ActiveScreen.SETTINGS -> {
+                currentActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
+                Transition.REMOVE_SETTINGS
+            }
+        }
     }
 
     fun overlayClosed() {
-
+        currentActiveScreen = ActiveScreen.WEB_RENDER
     }
 
     fun pocketOpened() {
+        currentActiveScreen = ActiveScreen.POCKET
+    }
 
+    fun webRenderLoaded() {
+        currentActiveScreen = ActiveScreen.WEB_RENDER
     }
 
     fun settingsOpened() {
-
+        currentActiveScreen = ActiveScreen.SETTINGS
     }
 }
