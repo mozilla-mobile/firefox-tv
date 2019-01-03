@@ -102,6 +102,8 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
 
     fun showBrowserScreenForUrl(fragmentManager: FragmentManager, url: String) {
         // TODO comment explaining that browserfragment will always be available
+        exposeWebRenderFragment(fragmentManager)
+        stateMachine.webRenderLoaded()
         val browserFragment = fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as? WebRenderFragment
         browserFragment!!.loadUrl(url)
     }
