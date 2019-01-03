@@ -18,8 +18,9 @@ class ScreenControllerStateMachine(private val currentUrlIsHome: () -> Boolean) 
         ADD_OVERLAY, REMOVE_OVERLAY, ADD_POCKET, REMOVE_POCKET, ADD_SETTINGS, REMOVE_SETTINGS, EXIT_APP, NO_OP
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     var currentActiveScreen: ActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
+        @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+        set
 
     fun menuPress(): Transition {
         return when(currentActiveScreen) {

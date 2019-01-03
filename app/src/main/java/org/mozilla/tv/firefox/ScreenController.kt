@@ -29,11 +29,13 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
      * not adding to backstack is intentional
      */
     fun setUpFragmentsForNewSession(fragmentManager: FragmentManager, session: Session) {
+        val renderFragment = WebRenderFragment.createForSession(session)
         fragmentManager
             .beginTransaction()
             .add(R.id.container_top, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
             .add(R.id.container_bottom,
-                WebRenderFragment.createForSession(session), WebRenderFragment.FRAGMENT_TAG)
+                renderFragment, WebRenderFragment.FRAGMENT_TAG)
+            .hide(renderFragment) // TODO note that this will need to be changed in order to display WebRenderFragment under a split overlay
             .commitNow()
     }
 
@@ -94,7 +96,7 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
         var transaction = fragmentManager.beginTransaction()
 
         topFragments.filterNotNull().forEach {
-            transaction = transaction.remove(it)
+            transaction = transaction.hide(it)
         }
         transaction.commit()
         stateMachine.webRenderLoaded()
@@ -112,13 +114,16 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
     fun showNavigationOverlay(fragmentManager: FragmentManager?, toShow: Boolean) {
         fragmentManager ?: return
         var transaction = fragmentManager.beginTransaction()
+        val overlayFragment = fragmentManager.findFragmentByTag(NavigationOverlayFragment.FRAGMENT_TAG)!!
+        val renderFragment = fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG)!!
         if (toShow) {
             stateMachine.overlayOpened()
-            transaction = transaction.add(R.id.container_top, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
+            transaction = transaction.show(overlayFragment)
+                .hide(renderFragment) // TODO note that this will need to be changed in order to display WebRenderFragment under a split overlay
         } else {
             stateMachine.overlayClosed()
-            val overlayFragment = fragmentManager.findFragmentByTag(NavigationOverlayFragment.FRAGMENT_TAG)
-            transaction = transaction.remove(overlayFragment!!)
+            transaction = transaction.hide(overlayFragment)
+                .show(renderFragment)
         }
         transaction.commit()
     }
