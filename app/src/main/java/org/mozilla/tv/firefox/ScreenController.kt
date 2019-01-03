@@ -95,18 +95,13 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
     }
 
     private fun exposeWebRenderFragment(fragmentManager: FragmentManager) {
-        val topFragments = listOf(
-            fragmentManager.navigationOverlayFragment(),
-            fragmentManager.pocketFragment(),
-            fragmentManager.settingsFragment()
-        )
+        fragmentManager.beginTransaction()
+            .show(fragmentManager.webRenderFragment())
+            .hide(fragmentManager.navigationOverlayFragment())
+            .hide(fragmentManager.pocketFragment())
+            .hide(fragmentManager.settingsFragment())
+            .commit()
 
-        var transaction = fragmentManager.beginTransaction()
-
-        topFragments.forEach {
-            transaction = transaction.hide(it)
-        }
-        transaction.commit()
         stateMachine.webRenderLoaded()
     }
 
