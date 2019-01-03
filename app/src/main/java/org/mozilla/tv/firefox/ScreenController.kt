@@ -21,6 +21,8 @@ import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 
 class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
 
+    // TODO cache overlay fragment so that custom pinned sites don't fade in every time the menu is opened
+
     /**
      * TODO
      *
@@ -29,8 +31,8 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
     fun setUpFragmentsForNewSession(fragmentManager: FragmentManager, session: Session) {
         fragmentManager
             .beginTransaction()
-            .add(R.id.container, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
-            .add(R.id.container,
+            .add(R.id.container_top, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
+            .add(R.id.container_bottom,
                 WebRenderFragment.createForSession(session), WebRenderFragment.FRAGMENT_TAG)
             .commitNow()
     }
@@ -71,7 +73,7 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
     fun showSettingsScreen(fragmentManager: FragmentManager) {
         val settingsFragment = SettingsFragment.create()
         fragmentManager.beginTransaction()
-                .replace(R.id.container, settingsFragment, SettingsFragment.FRAGMENT_TAG)
+                .replace(R.id.container_top, settingsFragment, SettingsFragment.FRAGMENT_TAG)
                 .addToBackStack(null)
                 .commit()
     }
@@ -110,7 +112,7 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
         var transaction = fragmentManager.beginTransaction()
         if (toShow) {
             stateMachine.overlayOpened()
-            transaction = transaction.add(R.id.container, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
+            transaction = transaction.add(R.id.container_top, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
         } else {
             stateMachine.overlayClosed()
             val overlayFragment = fragmentManager.findFragmentByTag(NavigationOverlayFragment.FRAGMENT_TAG)
@@ -121,7 +123,7 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
 
     fun showPocketScreen(fragmentManager: FragmentManager) {
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PocketVideoFragment(), PocketVideoFragment.FRAGMENT_TAG)
+                .replace(R.id.container_top, PocketVideoFragment(), PocketVideoFragment.FRAGMENT_TAG)
                 .addToBackStack(null)
                 .commit()
     }
