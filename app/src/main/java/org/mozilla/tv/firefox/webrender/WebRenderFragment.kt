@@ -86,6 +86,10 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         else window.clearFlags(dontSleep)
     }
 
+    override fun onUrlChanged(session: Session, url: String) {
+        if (url == URLs.APP_URL_HOME) serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, true)
+    }
+
     override fun onDesktopModeChanged(session: Session, enabled: Boolean) {
         requireWebRenderComponents.sessionUseCases.requestDesktopSite.invoke(enabled, session)
     }
