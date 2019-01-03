@@ -109,4 +109,8 @@ class ScreenController {
                 .addToBackStack(null)
                 .commit()
     }
+
+    fun handleBack(): Boolean {
+        return false
+    }
 }
