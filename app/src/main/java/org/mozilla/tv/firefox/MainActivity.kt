@@ -217,7 +217,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         if (event.keyCode == KeyEvent.KEYCODE_MENU) {
             if (event.action == KeyEvent.ACTION_DOWN) {
-                showOrHideOverlay()
+                serviceLocator.screenController.handleMenu(supportFragmentManager)
             }
             return true
         }
