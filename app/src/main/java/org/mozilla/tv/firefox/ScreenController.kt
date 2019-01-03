@@ -79,22 +79,13 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
     }
 
     fun showSettingsScreen(fragmentManager: FragmentManager) {
-        val settingsFragment = fragmentManager.settingsFragment()
-        val overlayFragment = fragmentManager.navigationOverlayFragment()
-        fragmentManager.beginTransaction()
-            .show(settingsFragment)
-            .hide(overlayFragment)
-            .commit()
+        handleTransition(fragmentManager, ScreenControllerStateMachine.Transition.ADD_SETTINGS)
+        stateMachine.settingsOpened()
     }
 
     fun showPocketScreen(fragmentManager: FragmentManager) {
-        val pocketFragment = fragmentManager.pocketFragment()
-        val overlayFragment = fragmentManager.navigationOverlayFragment()
-
-        fragmentManager.beginTransaction()
-            .show(pocketFragment)
-            .hide(overlayFragment)
-            .commit()
+        handleTransition(fragmentManager, ScreenControllerStateMachine.Transition.ADD_POCKET)
+        stateMachine.pocketOpened()
     }
 
     fun showBrowserScreenForCurrentSession(fragmentManager: FragmentManager, session: Session) {
@@ -146,25 +137,49 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
     }
 
     fun handleBack(fragmentManager: FragmentManager): Boolean {
-        println(fragmentManager)
-        return false
+        if (stateMachine.currentActiveScreen == ScreenControllerStateMachine.ActiveScreen.WEB_RENDER) {
+            val webRenderFragment = fragmentManager.webRenderFragment()
+            if (webRenderFragment.onBackPressed()) return true
+        }
+        return handleTransition(fragmentManager, stateMachine.backPress())
     }
 
     fun handleMenu(fragmentManager: FragmentManager) {
         handleTransition(fragmentManager, stateMachine.menuPress())
     }
 
-    private fun handleTransition(fragmentManager: FragmentManager, transition: ScreenControllerStateMachine.Transition) {
+    private fun handleTransition(fragmentManager: FragmentManager, transition: ScreenControllerStateMachine.Transition): Boolean {
         when (transition) {
             ScreenControllerStateMachine.Transition.ADD_OVERLAY -> showNavigationOverlay(fragmentManager, true)
             ScreenControllerStateMachine.Transition.REMOVE_OVERLAY -> showNavigationOverlay(fragmentManager, false)
-            ScreenControllerStateMachine.Transition.ADD_POCKET -> { /* TODO */ }
-            ScreenControllerStateMachine.Transition.REMOVE_POCKET -> { /* TODO */}
-            ScreenControllerStateMachine.Transition.ADD_SETTINGS -> { /* TODO */ }
-            ScreenControllerStateMachine.Transition.REMOVE_SETTINGS -> { /* TODO */}
-            ScreenControllerStateMachine.Transition.EXIT_APP -> { /* TODO */ }
-            ScreenControllerStateMachine.Transition.NO_OP -> { }
+            ScreenControllerStateMachine.Transition.ADD_POCKET -> {
+                fragmentManager.beginTransaction()
+                    .hide(fragmentManager.navigationOverlayFragment())
+                    .show(fragmentManager.pocketFragment())
+                    .commit()
+            }
+            ScreenControllerStateMachine.Transition.REMOVE_POCKET -> {
+                fragmentManager.beginTransaction()
+                    .hide(fragmentManager.pocketFragment())
+                    .show(fragmentManager.navigationOverlayFragment())
+                    .commit()
+            }
+            ScreenControllerStateMachine.Transition.ADD_SETTINGS -> {
+                fragmentManager.beginTransaction()
+                    .hide(fragmentManager.navigationOverlayFragment())
+                    .show(fragmentManager.settingsFragment())
+                    .commit()
+            }
+            ScreenControllerStateMachine.Transition.REMOVE_SETTINGS -> {
+                fragmentManager.beginTransaction()
+                    .hide(fragmentManager.settingsFragment())
+                    .show(fragmentManager.navigationOverlayFragment())
+                    .commit()
+            }
+            ScreenControllerStateMachine.Transition.EXIT_APP -> { return false }
+            ScreenControllerStateMachine.Transition.NO_OP -> { return true }
         }
+        return true
     }
 }
 
