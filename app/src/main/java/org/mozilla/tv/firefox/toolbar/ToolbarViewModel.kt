@@ -47,11 +47,6 @@ class ToolbarViewModel(
         LiveDataCombiners.combineLatest(sessionRepo.state, pinnedTileRepo.getPinnedTiles()) { sessionState, pinnedTiles ->
 
             fun isCurrentURLPinned() = pinnedTiles.containsKey(sessionState.currentUrl)
-            fun causeSideEffects() {
-                if (sessionState.currentUrl.isEqualToHomepage()) setOverlayVisible(true)
-            }
-
-            causeSideEffects()
 
             ToolbarViewModel.State(
                 backEnabled = sessionState.backEnabled,
@@ -69,20 +64,20 @@ class ToolbarViewModel(
     @UiThread
     fun backButtonClicked() {
         sessionRepo.exitFullScreenIfPossibleAndBack()
-        setOverlayVisible(false)
+        hideOverlay()
     }
 
     @UiThread
     fun forwardButtonClicked() {
         sessionRepo.goForward()
-        setOverlayVisible(false)
+        hideOverlay()
     }
 
     @UiThread
     fun reloadButtonClicked() {
         sessionRepo.reload()
         sessionRepo.pushCurrentValue()
-        setOverlayVisible(false)
+        hideOverlay()
     }
 
     @UiThread
@@ -99,7 +94,7 @@ class ToolbarViewModel(
             pinnedTileRepo.addPinnedTile(url, sessionRepo.currentURLScreenshot())
             _events.value = Consumable.from(NavigationOverlayFragment.Action.ShowTopToast(R.string.notification_pinned_site))
         }
-        setOverlayVisible(false)
+        hideOverlay()
     }
 
     @UiThread
@@ -111,7 +106,7 @@ class ToolbarViewModel(
         sessionRepo.reload()
 
         sendOverlayClickTelemetry(NavigationEvent.TURBO, turboChecked = !turboModeActive)
-        currentUrl?.let { if (!it.isEqualToHomepage()) setOverlayVisible(false) }
+        currentUrl?.let { if (!it.isEqualToHomepage()) hideOverlay() }
     }
 
     @UiThread
@@ -127,7 +122,7 @@ class ToolbarViewModel(
         }
 
         _events.value = Consumable.from(NavigationOverlayFragment.Action.ShowBottomToast(textId))
-        setOverlayVisible(false)
+        hideOverlay()
     }
 
     private fun sendOverlayClickTelemetry(
@@ -148,8 +143,7 @@ class ToolbarViewModel(
 
     private fun String.isEqualToHomepage() = this == URLs.APP_URL_HOME
 
-    // TODO move this to the OverlayViewModel once it exists
-    private fun setOverlayVisible(visible: Boolean) {
-        _events.value = Consumable.from(NavigationOverlayFragment.Action.SetOverlayVisible(visible))
+    private fun hideOverlay() {
+        _events.value = Consumable.from(NavigationOverlayFragment.Action.SetOverlayVisible(false))
     }
 }
