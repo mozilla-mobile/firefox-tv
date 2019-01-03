@@ -13,6 +13,7 @@ import android.view.View
 import android.view.accessibility.AccessibilityManager
 import kotlinx.coroutines.Job
 import mozilla.components.browser.session.Session
+import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.ext.getAccessibilityManager
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
@@ -37,7 +38,8 @@ class CursorController(
     // Our lifecycle is shorter than BrowserFragment, so we can hold a reference.
     private val webRenderFragment: WebRenderFragment,
     cursorParent: View,
-    private val view: CursorView
+    private val view: CursorView,
+    private val screenControllerStateMachine: ScreenControllerStateMachine
 ) : AccessibilityManager.TouchExplorationStateChangeListener, LifecycleObserver {
     private val uiLifecycleCancelJob = Job()
 
@@ -75,6 +77,7 @@ class CursorController(
         // These sources have their own navigation controls.
 
         isEnabled = !webRenderFragment.session.isYoutubeTV && !(webRenderFragment.context?.isVoiceViewEnabled() ?: false)
+            && screenControllerStateMachine.currentActiveScreen == ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
