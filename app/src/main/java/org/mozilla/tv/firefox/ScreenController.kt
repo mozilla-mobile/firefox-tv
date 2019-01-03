@@ -30,12 +30,18 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
      */
     fun setUpFragmentsForNewSession(fragmentManager: FragmentManager, session: Session) {
         val renderFragment = WebRenderFragment.createForSession(session)
+        val pocketFragment = PocketVideoFragment()
+        val settingsFragment = SettingsFragment()
         fragmentManager
             .beginTransaction()
-            .add(R.id.container_top, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
-            .add(R.id.container_bottom,
+            .add(R.id.container_settings, settingsFragment, SettingsFragment.FRAGMENT_TAG)
+            .add(R.id.container_pocket, pocketFragment, PocketVideoFragment.FRAGMENT_TAG)
+            .add(R.id.container_navigation_overlay, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
+            .add(R.id.container_web_render,
                 renderFragment, WebRenderFragment.FRAGMENT_TAG)
             .hide(renderFragment) // TODO note that this will need to be changed in order to display WebRenderFragment under a split overlay
+            .hide(pocketFragment)
+            .hide(settingsFragment)
             .commitNow()
     }
 
@@ -73,11 +79,22 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
     }
 
     fun showSettingsScreen(fragmentManager: FragmentManager) {
-        val settingsFragment = SettingsFragment.create()
+        val settingsFragment = fragmentManager.settingsFragment()
+        val overlayFragment = fragmentManager.navigationOverlayFragment()
         fragmentManager.beginTransaction()
-                .replace(R.id.container_top, settingsFragment, SettingsFragment.FRAGMENT_TAG)
-                .addToBackStack(null)
-                .commit()
+            .show(settingsFragment)
+            .hide(overlayFragment)
+            .commit()
+    }
+
+    fun showPocketScreen(fragmentManager: FragmentManager) {
+        val pocketFragment = fragmentManager.pocketFragment()
+        val overlayFragment = fragmentManager.navigationOverlayFragment()
+
+        fragmentManager.beginTransaction()
+            .show(pocketFragment)
+            .hide(overlayFragment)
+            .commit()
     }
 
     fun showBrowserScreenForCurrentSession(fragmentManager: FragmentManager, session: Session) {
@@ -88,14 +105,14 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
 
     private fun exposeWebRenderFragment(fragmentManager: FragmentManager) {
         val topFragments = listOf(
-            fragmentManager.findFragmentByTag(NavigationOverlayFragment.FRAGMENT_TAG),
-            fragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG),
-            fragmentManager.findFragmentByTag(SettingsFragment.FRAGMENT_TAG)
+            fragmentManager.navigationOverlayFragment(),
+            fragmentManager.pocketFragment(),
+            fragmentManager.settingsFragment()
         )
 
         var transaction = fragmentManager.beginTransaction()
 
-        topFragments.filterNotNull().forEach {
+        topFragments.forEach {
             transaction = transaction.hide(it)
         }
         transaction.commit()
@@ -106,16 +123,16 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
         // TODO comment explaining that browserfragment will always be available
         exposeWebRenderFragment(fragmentManager)
         stateMachine.webRenderLoaded()
-        val browserFragment = fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as? WebRenderFragment
-        browserFragment!!.loadUrl(url)
+        val browserFragment = fragmentManager.webRenderFragment()
+        browserFragment.loadUrl(url)
     }
 
     // TODO: handle about:home and close overlay by button press separately
     fun showNavigationOverlay(fragmentManager: FragmentManager?, toShow: Boolean) {
         fragmentManager ?: return
         var transaction = fragmentManager.beginTransaction()
-        val overlayFragment = fragmentManager.findFragmentByTag(NavigationOverlayFragment.FRAGMENT_TAG)!!
-        val renderFragment = fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG)!!
+        val overlayFragment = fragmentManager.navigationOverlayFragment()
+        val renderFragment = fragmentManager.webRenderFragment()
         if (toShow) {
             stateMachine.overlayOpened()
             transaction = transaction.show(overlayFragment)
@@ -126,13 +143,6 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
                 .show(renderFragment)
         }
         transaction.commit()
-    }
-
-    fun showPocketScreen(fragmentManager: FragmentManager) {
-        fragmentManager.beginTransaction()
-                .replace(R.id.container_top, PocketVideoFragment(), PocketVideoFragment.FRAGMENT_TAG)
-                .addToBackStack(null)
-                .commit()
     }
 
     fun handleBack(fragmentManager: FragmentManager): Boolean {
@@ -157,3 +167,15 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
         }
     }
 }
+
+private fun FragmentManager.webRenderFragment(): WebRenderFragment =
+    this.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as WebRenderFragment
+
+private fun FragmentManager.navigationOverlayFragment(): NavigationOverlayFragment =
+    this.findFragmentByTag(NavigationOverlayFragment.FRAGMENT_TAG) as NavigationOverlayFragment
+
+private fun FragmentManager.pocketFragment(): PocketVideoFragment =
+    this.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG) as PocketVideoFragment
+
+private fun FragmentManager.settingsFragment(): SettingsFragment =
+    this.findFragmentByTag(SettingsFragment.FRAGMENT_TAG) as SettingsFragment
