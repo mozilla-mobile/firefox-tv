@@ -226,30 +226,4 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
                 (maybeBrowserFragment?.dispatchKeyEvent(event) ?: false) ||
                 super.dispatchKeyEvent(event)
     }
-
-    /**
-     * If overlay is shown, webRenderFragment will be shown
-     */
-    fun showOrHideOverlay() {
-//        val maybeBrowserFragment = (supportFragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG)
-//                as WebRenderFragment?)?.let {
-//            if (it.isVisible) it else null
-//        }
-//        val maybePocketFragment = (supportFragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG)
-//                as PocketVideoFragment?)?.let {
-//            if (it.isVisible) it else null
-//        }
-//        val overlayFragment = (supportFragmentManager.findFragmentByTag(NavigationOverlayFragment.FRAGMENT_TAG)
-//                as NavigationOverlayFragment?)?.let {
-//            if (it.isVisible) it else null
-//        }
-//
-//        if (overlayFragment != null) {
-//            serviceLocator.screenController.showBrowserScreenForCurrentSession(supportFragmentManager,
-//                    webRenderComponents.sessionManager.selectedSessionOrThrow)
-//        } else if (maybeBrowserFragment != null || maybePocketFragment != null) {
-//            serviceLocator.screenController.showNavigationOverlay(supportFragmentManager)
-//        }
-
-    }
 }
