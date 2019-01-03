@@ -33,6 +33,7 @@ import mozilla.components.browser.domains.DomainAutoCompleteProvider
 import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ext.forEachChild
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isEffectivelyVisible
@@ -280,7 +281,7 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
                 when (it) {
                     is Action.ShowTopToast -> ViewUtils.showCenteredTopToast(context, it.textId)
                     is Action.ShowBottomToast -> ViewUtils.showCenteredBottomToast(context, it.textId)
-                    is Action.SetOverlayVisible -> Unit // FIXME: do we need this anymore?
+                    is Action.SetOverlayVisible -> serviceLocator.screenController.showNavigationOverlay(fragmentManager, it.visible)
                 }.forceExhaustive
                 true
             }
