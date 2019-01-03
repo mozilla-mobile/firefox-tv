@@ -126,7 +126,25 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
                 .commit()
     }
 
-    fun handleBack(): Boolean {
+    fun handleBack(fragmentManager: FragmentManager): Boolean {
+        println(fragmentManager)
         return false
+    }
+
+    fun handleMenu(fragmentManager: FragmentManager) {
+        handleTransition(fragmentManager, stateMachine.menuPress())
+    }
+
+    private fun handleTransition(fragmentManager: FragmentManager, transition: ScreenControllerStateMachine.Transition) {
+        when (transition) {
+            ScreenControllerStateMachine.Transition.ADD_OVERLAY -> showNavigationOverlay(fragmentManager, true)
+            ScreenControllerStateMachine.Transition.REMOVE_OVERLAY -> showNavigationOverlay(fragmentManager, false)
+            ScreenControllerStateMachine.Transition.ADD_POCKET -> { /* TODO */ }
+            ScreenControllerStateMachine.Transition.REMOVE_POCKET -> { /* TODO */}
+            ScreenControllerStateMachine.Transition.ADD_SETTINGS -> { /* TODO */ }
+            ScreenControllerStateMachine.Transition.REMOVE_SETTINGS -> { /* TODO */}
+            ScreenControllerStateMachine.Transition.EXIT_APP -> { /* TODO */ }
+            ScreenControllerStateMachine.Transition.NO_OP -> { }
+        }
     }
 }
