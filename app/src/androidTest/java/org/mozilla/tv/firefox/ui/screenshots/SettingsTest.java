@@ -55,7 +55,7 @@ public class SettingsTest extends ScreenshotTest {
                 .perform(click());
 
         // current settings list view
-        onView(allOf(withId(R.id.container_bottom), isDisplayed()));
+        onView(allOf(withId(R.id.container_web_render), isDisplayed()));
 
         ViewInteraction clearButton = onView(
                 allOf(withId(R.id.deleteButton), isDisplayed()));

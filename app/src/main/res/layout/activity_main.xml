@@ -10,14 +10,25 @@
 
     <FrameLayout
             android:orientation="vertical"
-            android:id="@+id/container_bottom"
+            android:id="@+id/container_web_render"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
     <FrameLayout
             android:orientation="vertical"
-            android:id="@+id/container_top"
+            android:id="@+id/container_navigation_overlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+    <FrameLayout
+            android:orientation="vertical"
+            android:id="@+id/container_pocket"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    <FrameLayout
+            android:orientation="vertical"
+            android:id="@+id/container_settings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 </FrameLayout>
