@@ -120,11 +120,11 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
             NavigationEvent.SETTINGS -> serviceLocator.screenController.showSettingsScreen(fragmentManager!!)
             NavigationEvent.LOAD_URL -> {
                 (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
-                (activity as MainActivity).showOrHideOverlay()
+                context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
             }
             NavigationEvent.LOAD_TILE -> {
                 (activity as MainActivity).onNonTextInputUrlEntered(value!!)
-                (activity as MainActivity).showOrHideOverlay()
+                context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
             }
             NavigationEvent.POCKET -> {
                 val (fragmentManager, activity) = Pair(fragmentManager, activity)
