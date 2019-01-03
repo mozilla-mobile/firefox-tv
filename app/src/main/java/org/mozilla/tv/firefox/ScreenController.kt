@@ -15,10 +15,11 @@ import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
+import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.utils.UrlUtils
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 
-class ScreenController {
+class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
 
     /**
      * TODO
@@ -76,25 +77,25 @@ class ScreenController {
     }
 
     fun showBrowserScreenForCurrentSession(fragmentManager: FragmentManager, session: Session) {
-        val fragment = fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as WebRenderFragment?
-        if (fragment != null && fragment.session == session) {
-            // There's already a BrowserFragment displaying this session.
-            return
+        if (session.url != URLs.APP_URL_HOME) {
+            exposeWebRenderFragment(fragmentManager)
         }
-
-        // BrowserFragment is the base fragment, so don't add a backstack transaction.
-//        fragmentManager TODO figure this out
-//                .beginTransaction()
-//                .replace(R.id.container,
-//                        WebRenderFragment.createForSession(session), WebRenderFragment.FRAGMENT_TAG)
-//                .commit()
     }
 
-    fun showNavigationOverlay(fragmentManager: FragmentManager) {
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
-                .addToBackStack(null)
-                .commit()
+    private fun exposeWebRenderFragment(fragmentManager: FragmentManager) {
+        val topFragments = listOf(
+            fragmentManager.findFragmentByTag(NavigationOverlayFragment.FRAGMENT_TAG),
+            fragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG),
+            fragmentManager.findFragmentByTag(SettingsFragment.FRAGMENT_TAG)
+        )
+
+        var transaction = fragmentManager.beginTransaction()
+
+        topFragments.filterNotNull().forEach {
+            transaction = transaction.remove(it)
+        }
+        transaction.commit()
+        stateMachine.webRenderLoaded()
     }
 
     fun showBrowserScreenForUrl(fragmentManager: FragmentManager, url: String) {
