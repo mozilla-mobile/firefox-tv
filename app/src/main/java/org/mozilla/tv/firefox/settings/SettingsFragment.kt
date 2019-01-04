@@ -59,20 +59,7 @@ class SettingsFragment : Fragment() {
                     components.engine.deleteData(this)
                     components.sessionManager.removeAll()
                     dialog.cancel()
-                    serviceLocator.webViewCache.doNotPersist(doAfterRecreate = {
-                        // This is necessary because of several complex interactions
-                        // - For initialization logic to be started, all sessions must already be removed
-                        // - URL is set to app home by default when a new session is created
-                        // - Activity#recreate is posted to the event loop, and executed concurrently
-                        //
-                        // The end result is that, in a naive solution, sessions are removed, URL is set to home, the
-                        // WebView is (eventually) destroyed, and then the new WebView instance has no BackForwardHistory.
-                        // This causes the back button to be disabled until two sites have been visited. After many
-                        // attempted solutions, clearing the session both before and after recreate was the most workable.
-                        //
-                        // This is Bad Code. If you find a way to remove it, please do so.
-                        components.sessionManager.removeAll()
-                    })
+                    serviceLocator.webViewCache.doNotPersist()
                     // The call to recreate destroys state being maintained in the WebView (including
                     // navigation history) and Activity. This implementation will need to change
                     // if/when we add session restoration logic.
