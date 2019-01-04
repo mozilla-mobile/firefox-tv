@@ -149,26 +149,26 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
             ScreenControllerStateMachine.Transition.REMOVE_OVERLAY -> showNavigationOverlay(fragmentManager, false)
             ScreenControllerStateMachine.Transition.ADD_POCKET -> {
                 fragmentManager.beginTransaction()
-                    .hide(fragmentManager.navigationOverlayFragment())
                     .show(fragmentManager.pocketFragment())
+                    .hide(fragmentManager.navigationOverlayFragment())
                     .commit()
             }
             ScreenControllerStateMachine.Transition.REMOVE_POCKET -> {
                 fragmentManager.beginTransaction()
-                    .hide(fragmentManager.pocketFragment())
                     .show(fragmentManager.navigationOverlayFragment())
+                    .hide(fragmentManager.pocketFragment())
                     .commit()
             }
             ScreenControllerStateMachine.Transition.ADD_SETTINGS -> {
                 fragmentManager.beginTransaction()
-                    .hide(fragmentManager.navigationOverlayFragment())
                     .show(fragmentManager.settingsFragment())
+                    .hide(fragmentManager.navigationOverlayFragment())
                     .commit()
             }
             ScreenControllerStateMachine.Transition.REMOVE_SETTINGS -> {
                 fragmentManager.beginTransaction()
-                    .hide(fragmentManager.settingsFragment())
                     .show(fragmentManager.navigationOverlayFragment())
+                    .hide(fragmentManager.settingsFragment())
                     .commit()
             }
             ScreenControllerStateMachine.Transition.EXIT_APP -> { return false }
