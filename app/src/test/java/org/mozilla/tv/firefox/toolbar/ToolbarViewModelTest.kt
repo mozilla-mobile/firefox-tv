@@ -9,15 +9,12 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.spy
 import org.mozilla.tv.firefox.ext.map
-import org.mozilla.tv.firefox.helpers.ext.assertThat
 import org.mozilla.tv.firefox.helpers.ext.assertValues
-import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
 import org.mozilla.tv.firefox.pinnedtile.PinnedTile
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.PreventLiveDataMainLooperCrashRule
-import org.mozilla.tv.firefox.utils.URLs
 import org.robolectric.RobolectricTestRunner
 
 private const val mozilla = "https://www.mozilla.org/en-US/"
@@ -138,21 +135,6 @@ class ToolbarViewModelTest {
                 turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = wikipedia
-            )
-        }
-    }
-
-    @Test
-    fun `WHEN new session state url is home page THEN make overlay visible event should be emitted`() {
-        toolbarVm.events.assertThat({ it.consume { it == NavigationOverlayFragment.Action.SetOverlayVisible(true) } }) {
-            toolbarVm.state.observeForever { /* start subscription */ }
-            pinnedTiles.value = linkedMapOf()
-            sessionState.value = SessionRepo.State(
-                backEnabled = true,
-                forwardEnabled = false,
-                turboModeActive = true,
-                desktopModeActive = false,
-                currentUrl = URLs.APP_URL_HOME
             )
         }
     }
