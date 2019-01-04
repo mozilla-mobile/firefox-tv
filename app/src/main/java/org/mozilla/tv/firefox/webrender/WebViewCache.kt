@@ -49,7 +49,6 @@ class WebViewCache(private val sessionRepo: SessionRepo) : LifecycleObserver {
 
     private var cachedView: SystemEngineView? = null
     private var shouldPersist = true
-    private var doAfterRecreate: (() -> Unit)? = null
 
     fun getWebView(
         context: Context,
@@ -69,8 +68,6 @@ class WebViewCache(private val sessionRepo: SessionRepo) : LifecycleObserver {
                 initialize()
             }.also {
                 cachedView = it
-                doAfterRecreate?.invoke()
-                doAfterRecreate = null
             }
         }
 
@@ -95,8 +92,7 @@ class WebViewCache(private val sessionRepo: SessionRepo) : LifecycleObserver {
         cachedView = null
     }
 
-    fun doNotPersist(doAfterRecreate: () -> Unit) {
+    fun doNotPersist() {
         shouldPersist = false
-        this.doAfterRecreate = doAfterRecreate
     }
 }
