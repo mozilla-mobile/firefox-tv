@@ -25,7 +25,6 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ScrollView
 import kotlinx.android.synthetic.main.browser_overlay.*
-import kotlinx.android.synthetic.main.browser_overlay.view.*
 import kotlinx.android.synthetic.main.browser_overlay_top_nav.*
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.*
 import kotlinx.coroutines.Job
@@ -33,7 +32,6 @@ import mozilla.components.browser.domains.DomainAutoCompleteProvider
 import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ext.forEachChild
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isEffectivelyVisible

@@ -122,7 +122,8 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
         if (toShow) {
             stateMachine.overlayOpened()
             transaction = transaction.show(overlayFragment)
-                .hide(renderFragment) // TODO note that this will need to be changed in order to display WebRenderFragment under a split overlay
+                // TODO note that hiding WebRenderFragment will not be possible under a split overlay
+                .hide(renderFragment)
         } else {
             stateMachine.overlayClosed()
             transaction = transaction.hide(overlayFragment)
