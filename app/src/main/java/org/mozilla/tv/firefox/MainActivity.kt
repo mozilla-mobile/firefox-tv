@@ -5,6 +5,7 @@
 
 package org.mozilla.tv.firefox
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -81,6 +82,15 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             val onboardingIntent = Intent(this@MainActivity, OnboardingActivity::class.java)
             startActivity(onboardingIntent)
         }
+    }
+
+    @SuppressLint("MissingSuperCall")
+    override fun onSaveInstanceState(outState: Bundle?) {
+        // Do not save instance state.
+        //
+        // onSaveInstanceState attempts to save view state, including fragments that we sometimes want destroyed. In
+        // particular, this causes SettingsFragment to remain visible when it calls MainActivity#recreate in an attempt
+        // to clear data.
     }
 
     /**
