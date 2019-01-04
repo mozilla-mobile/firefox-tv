@@ -7,7 +7,6 @@ package org.mozilla.tv.firefox.webrender
 import android.app.Activity
 import android.os.Bundle
 import android.support.annotation.UiThread
-import android.view.ContextMenu
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -144,10 +143,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         cursor = null
 
         sessionFeature = null
-    }
-
-    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
-        activity?.menuInflater?.inflate(R.menu.menu_context_hometile, menu)
     }
 
     // TODO: need new onBackPressed logic with OverlayFragment

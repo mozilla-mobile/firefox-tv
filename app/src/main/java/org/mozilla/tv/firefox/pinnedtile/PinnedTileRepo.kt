@@ -15,6 +15,7 @@ import android.support.annotation.AnyThread
 import android.support.annotation.UiThread
 import org.json.JSONArray
 import java.util.UUID
+import java.util.Collections
 
 private const val BUNDLED_SITES_ID_BLACKLIST = "blacklist"
 private const val CUSTOM_SITES_LIST = "customSitesList"
@@ -78,9 +79,9 @@ class PinnedTileRepo(private val applicationContext: Application) {
 
         when (tileToRemove) {
             is BundledPinnedTile -> {
-                val blackList = loadBlacklist()
+                val blackList = loadBlacklist().toMutableList()
                 blackList.add(tileToRemove.id)
-                saveBlackList(blackList)
+                saveBlackList(blackList.toSet())
                 --bundledTilesSize
             }
             is CustomPinnedTile -> {
@@ -93,11 +94,11 @@ class PinnedTileRepo(private val applicationContext: Application) {
         return tileToRemove.idToString()
     }
 
-    private fun loadBlacklist(): MutableSet<String> {
-        return _sharedPreferences.getStringSet(BUNDLED_SITES_ID_BLACKLIST, mutableSetOf())!!
+    private fun loadBlacklist(): Set<String> {
+        return _sharedPreferences.getStringSet(BUNDLED_SITES_ID_BLACKLIST, Collections.emptySet())!!
     }
 
-    private fun saveBlackList(blackList: MutableSet<String>) {
+    private fun saveBlackList(blackList: Set<String>) {
         _sharedPreferences.edit().putStringSet(BUNDLED_SITES_ID_BLACKLIST, blackList).apply()
     }
 
