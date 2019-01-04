@@ -36,9 +36,9 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
             .beginTransaction()
             .add(R.id.container_settings, settingsFragment, SettingsFragment.FRAGMENT_TAG)
             .add(R.id.container_pocket, pocketFragment, PocketVideoFragment.FRAGMENT_TAG)
+            .add(R.id.container_web_render, renderFragment, WebRenderFragment.FRAGMENT_TAG)
+            // We add NavigationOverlayFragment last so that it takes focus
             .add(R.id.container_navigation_overlay, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
-            .add(R.id.container_web_render,
-                renderFragment, WebRenderFragment.FRAGMENT_TAG)
             .hide(renderFragment) // TODO note that this will need to be changed in order to display WebRenderFragment under a split overlay
             .hide(pocketFragment)
             .hide(settingsFragment)
