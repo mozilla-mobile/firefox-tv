@@ -23,7 +23,7 @@ class ScreenControllerStateMachine(private val currentUrlIsHome: () -> Boolean) 
         set
 
     fun menuPress(): Transition {
-        return when(currentActiveScreen) {
+        return when (currentActiveScreen) {
             ActiveScreen.NAVIGATION_OVERLAY -> {
                 return if (currentUrlIsHome()) {
                     Transition.NO_OP
@@ -42,7 +42,7 @@ class ScreenControllerStateMachine(private val currentUrlIsHome: () -> Boolean) 
     }
 
     fun backPress(): Transition {
-        return when(currentActiveScreen) {
+        return when (currentActiveScreen) {
             ActiveScreen.NAVIGATION_OVERLAY -> {
                 return if (currentUrlIsHome()) {
                     Transition.EXIT_APP

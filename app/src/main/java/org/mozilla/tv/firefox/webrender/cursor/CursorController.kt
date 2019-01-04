@@ -76,8 +76,8 @@ class CursorController(
     fun setEnabledForCurrentState() {
         // These sources have their own navigation controls.
 
-        isEnabled = !webRenderFragment.session.isYoutubeTV && !(webRenderFragment.context?.isVoiceViewEnabled() ?: false)
-            && screenControllerStateMachine.currentActiveScreen == ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
+        isEnabled = !webRenderFragment.session.isYoutubeTV && !(webRenderFragment.context?.isVoiceViewEnabled() ?: false) &&
+            screenControllerStateMachine.currentActiveScreen == ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
