@@ -13,8 +13,9 @@ import android.support.customtabs.CustomTabsIntent
 import androidx.test.core.app.ApplicationProvider
 import mozilla.components.browser.session.Session
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
-import org.junit.Assert.fail
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,25 +35,21 @@ class IntentValidatorTest {
 
     @Test
     fun testViewIntent() {
-        var isCalled = false
         val expectedUrl = TEST_URL
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(expectedUrl)).toSafeIntent()
-        IntentValidator.validate(appContext, intent) { url, source ->
-            isCalled = true
-            assertEquals(expectedUrl, url)
-            assertEquals(Session.Source.ACTION_VIEW, source)
-        }
+        val validated = IntentValidator.validate(appContext, intent)
 
-        assertTrue("Expected intent to be valid", isCalled)
+        assertNotNull("Expected intent to be valid", validated)
+        assertEquals(expectedUrl, validated!!.url)
+        assertEquals(Session.Source.ACTION_VIEW, validated.source)
     }
 
     /** In production we see apps send VIEW intents without an URL. (Focus #1373) */
     @Test
     fun testViewIntentWithNullURL() {
         val intent = Intent(Intent.ACTION_VIEW, null).toSafeIntent()
-        IntentValidator.validate(appContext, intent) { _, _ ->
-            fail("Null URL should not be vaIntlid")
-        }
+        val validated = IntentValidator.validate(appContext, intent)
+        assertNull("Null URL should not be valid", validated)
     }
 
     @Test
@@ -66,14 +63,11 @@ class IntentValidatorTest {
                 .setData(Uri.parse(expectedUrl))
                 .toSafeIntent()
 
-        var isCalled = false
-        IntentValidator.validate(appContext, intent) { url, source ->
-            isCalled = true
-            assertEquals(expectedUrl, url)
-            assertEquals(Session.Source.ACTION_VIEW, source)
-        }
+        val validated = IntentValidator.validate(appContext, intent)
 
-        assertTrue("Expected intent to be valid", isCalled)
+        assertNotNull("Expected intent to be valid", validated)
+        assertEquals(expectedUrl, validated!!.url)
+        assertEquals(Session.Source.ACTION_VIEW, validated.source)
     }
 
     @Test
@@ -82,17 +76,17 @@ class IntentValidatorTest {
             addFlags(Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY)
         }.toSafeIntent()
 
-        IntentValidator.validateOnCreate(appContext, intent, null) { _, _ ->
-            fail("Intent from history should not be valid")
-        }
+        val validated = IntentValidator.validateOnCreate(appContext, intent, null)
+
+        assertNull("Intent from history should not be valid", validated)
     }
 
     @Test
     fun testIntentNotValidIfWeAreRestoring() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(TEST_URL)).toSafeIntent()
-        IntentValidator.validateOnCreate(appContext, intent, Bundle()) { _, _ ->
-            fail("Intent from restore should not be valid")
-        }
+        val validated = IntentValidator.validateOnCreate(appContext, intent, Bundle())
+
+        assertNull("Intent from restore should not be valid", validated)
     }
 
     @Test
@@ -102,14 +96,11 @@ class IntentValidatorTest {
             putExtra(Intent.EXTRA_TEXT, expectedUrl)
         }.toSafeIntent()
 
-        var isCalled = false
-        IntentValidator.validate(appContext, intent) { url, source ->
-            isCalled = true
-            assertEquals(Session.Source.ACTION_SEND, source)
-            assertEquals(expectedUrl, url)
-        }
+        val validated = IntentValidator.validate(appContext, intent)
 
-        assertTrue("Expected share intent to be valid", isCalled)
+        assertNotNull("Expected share intent to be valid", validated)
+        assertEquals(Session.Source.ACTION_SEND, validated!!.source)
+        assertEquals(expectedUrl, validated.url)
     }
 
     @Test
@@ -119,16 +110,13 @@ class IntentValidatorTest {
             putExtra(Intent.EXTRA_TEXT, expectedText)
         }.toSafeIntent()
 
-        var isCalled = false
-        IntentValidator.validate(appContext, intent) { url, source ->
-            isCalled = true
-            assertEquals(Session.Source.ACTION_SEND, source)
-            expectedText.split(" ").forEach {
-                assertTrue("Expected search url to contain $it", url.contains(it))
-            }
-        }
+        val validated = IntentValidator.validate(appContext, intent)
 
-        assertTrue("Expected share intent to be valid", isCalled)
+        assertNotNull("Expected intent to be valid", validated)
+        assertEquals(Session.Source.ACTION_SEND, validated!!.source)
+        expectedText.split(" ").forEach {
+            assertTrue("Expected search url to contain $it", validated.url.contains(it))
+        }
     }
 
     @Test
@@ -139,21 +127,19 @@ class IntentValidatorTest {
             putExtra(IntentValidator.DIAL_PARAMS_KEY, param)
         }.toSafeIntent()
 
-        var isCalled = false
-        IntentValidator.validate(appContext, intent) { url, source ->
-            isCalled = true
-            assertEquals(Session.Source.ACTION_VIEW, source)
-            assertEquals(expectedURL, url)
-        }
-        assertTrue("Expected MAIN intent to be valid", isCalled)
+        val validated = IntentValidator.validate(appContext, intent)
+
+        assertNotNull("Expected MAIN intent to be valid", validated)
+        assertEquals(Session.Source.ACTION_VIEW, validated!!.source)
+        assertEquals(expectedURL, validated.url)
     }
 
     @Test
     fun `WHEN receiving MAIN intent without DIAL extra THEN do not call browser intent`() {
         val intent = Intent(Intent.ACTION_MAIN).toSafeIntent()
 
-        IntentValidator.validateOnCreate(appContext, intent, null) { _, _ ->
-            fail("Intent without DIAL params should not be valid")
-        }
+        val validated = IntentValidator.validateOnCreate(appContext, intent, null)
+
+        assertNull("Intent without DIAL params should not be valid", validated)
     }
 }
