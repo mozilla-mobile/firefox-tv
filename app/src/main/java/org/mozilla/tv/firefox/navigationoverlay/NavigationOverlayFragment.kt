@@ -97,11 +97,11 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
      * Used to cancel background->UI threads: we attach them as children to this job
      * and cancel this job at the end of the UI lifecycle, cancelling the children.
      */
-    var uiLifecycleCancelJob: Job = Job()
+    private val uiLifecycleCancelJob: Job = Job()
 
     // We need this in order to show the unpin toast, at max, once per
     // instantiation of the BrowserNavigationOverlay
-    var canShowUpinToast: Boolean = false
+    private var canShowUnpinToast: Boolean = false
 
     private val openHomeTileContextMenu: (() -> Unit) = { activity?.openContextMenu(tileContainer) }
 
@@ -329,7 +329,7 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
     }
 
     private fun initPinnedTiles() = with(tileContainer) {
-        canShowUpinToast = true
+        canShowUnpinToast = true
 
         // TODO: pass in VM live data instead of "homeTiles"
         tileAdapter = org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter(uiLifecycleCancelJob, loadUrl = { urlStr ->
@@ -339,7 +339,7 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
         }, onTileLongClick = openHomeTileContextMenu, onTileFocused = {
             val prefInt = android.preference.PreferenceManager.getDefaultSharedPreferences(context).getInt(
                     org.mozilla.tv.firefox.navigationoverlay.SHOW_UNPIN_TOAST_COUNTER_PREF, 0)
-            if (prefInt < org.mozilla.tv.firefox.navigationoverlay.MAX_UNPIN_TOAST_COUNT && canShowUpinToast) {
+            if (prefInt < org.mozilla.tv.firefox.navigationoverlay.MAX_UNPIN_TOAST_COUNT && canShowUnpinToast) {
                 android.preference.PreferenceManager.getDefaultSharedPreferences(context)
                         .edit()
                         .putInt(org.mozilla.tv.firefox.navigationoverlay.SHOW_UNPIN_TOAST_COUNTER_PREF, prefInt + 1)
@@ -354,7 +354,7 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
                 if (context.isVoiceViewEnabled()) org.mozilla.tv.firefox.navigationoverlay.uiHandler.postDelayed(showToast, 1500)
                 else showToast.invoke()
 
-                canShowUpinToast = false
+                canShowUnpinToast = false
             }
         })
 
