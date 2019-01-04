@@ -1,10 +1,14 @@
 package org.mozilla.tv.firefox
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.*
-import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition.*
+import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY
+import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
+import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition.ADD_OVERLAY
+import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition.EXIT_APP
+import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition.NO_OP
+import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition.REMOVE_OVERLAY
 
 class ScreenControllerStateMachineTest {
 
