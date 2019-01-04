@@ -18,6 +18,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
+import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -52,7 +53,6 @@ import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.utils.ViewUtils
 import org.mozilla.tv.firefox.widget.IgnoreFocusMovementMethod
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
-import kotlin.properties.Delegates
 
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
 private const val NAVIGATION_BUTTON_DISABLED_ALPHA = 0.3f
@@ -103,14 +103,7 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
     // instantiation of the BrowserNavigationOverlay
     var canShowUpinToast: Boolean = false
 
-    // Setting the onTileLongClick function in the HomeTileAdapter is fragile
-    // since we init the tiles in View.init and Android is inflating the view for us,
-    // thus we need to use Delegates.observable to update onTileLongClick.
-    var openHomeTileContextMenu: (() -> Unit) by Delegates.observable({}) { _, _, newValue ->
-        with(tileContainer) {
-            (adapter as PinnedTileAdapter).onTileLongClick = newValue
-        }
-    }
+    private val openHomeTileContextMenu: (() -> Unit) = { activity?.openContextMenu(tileContainer) }
 
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
                                       autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
@@ -196,6 +189,8 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
             }
             NavigationOverlayFragment.FRAGMENT_TAG -> navUrlInput.requestFocus()
         }
+
+        registerForContextMenu(tileContainer)
 
         updateFocusableViews()
     }
@@ -403,6 +398,10 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
             else -> Unit // Nothing to do.
         }
         onNavigationEvent.invoke(event, null, null)
+    }
+
+    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
+        activity?.menuInflater?.inflate(R.menu.menu_context_hometile, menu)
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
