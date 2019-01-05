@@ -17,7 +17,9 @@ import android.support.test.espresso.matcher.ViewMatchers.hasDescendant
 import android.support.test.espresso.matcher.ViewMatchers.withHint
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.espresso.matcher.ViewMatchers.withText
+import android.support.test.uiautomator.By
 import android.support.test.uiautomator.UiDevice
+import android.support.test.uiautomator.Until
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert.assertTrue
 import org.mozilla.tv.firefox.R
@@ -63,8 +65,11 @@ class NavigationOverlayRobot {
 
     fun assertDesktopModeEnabled(desktopModeEnabled: Boolean) = desktopModeButton().assertIsEnabled(desktopModeEnabled)
 
-    fun assertPinnedTileExists(inPosition: Int, withText: String) = homeTiles()
+    fun assertPinnedTileExists(inPosition: Int, withText: String) = {
+        device.wait(Until.findObject(By.textContains(withText)), 200)
+        homeTiles()
         .check(matches(RecyclerViewHelpers.atPosition(inPosition, hasDescendant(withText(withText)))))
+    }
 
     fun assertActivityFinishing(activity: MainActivityTestRule) = assertTrue(activity.activity.isFinishing)
 
