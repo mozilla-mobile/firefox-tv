@@ -58,6 +58,3 @@ Screengrabfile
 # Secrets
 .sentry_dsn_*
 .pocket_key_*
-
-# robotranslations file
-tools/l10n/robotranslations/locales.yaml
