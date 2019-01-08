@@ -1,12 +1,14 @@
-
-// TODO add this stuff
+/* -*- Mode: Java; c-basic-offset: 4; tab-width: 4; indent-tabs-mode: nil; -*-
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 package org.mozilla.tv.firefox
 
 import android.support.annotation.VisibleForTesting
 
 /**
- * TODO
+ * State machine for which Fragment is currently visible in the app.
  */
 class ScreenControllerStateMachine(private val currentUrlIsHome: () -> Boolean) {
 
@@ -18,7 +20,7 @@ class ScreenControllerStateMachine(private val currentUrlIsHome: () -> Boolean) 
         ADD_OVERLAY, REMOVE_OVERLAY, ADD_POCKET, REMOVE_POCKET, ADD_SETTINGS, REMOVE_SETTINGS, EXIT_APP, NO_OP
     }
 
-    var currentActiveScreen: ActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
+    var currentActiveScreen: ActiveScreen = ActiveScreen.POCKET
         @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
         set
 
