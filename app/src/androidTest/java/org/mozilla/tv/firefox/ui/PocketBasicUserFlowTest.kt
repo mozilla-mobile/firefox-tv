@@ -14,6 +14,7 @@ import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.helpers.TestAssetHelper
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.pocket.PocketViewModel
+import org.mozilla.tv.firefox.ui.robots.DeviceButton
 import org.mozilla.tv.firefox.ui.robots.navigationOverlay
 
 /**
@@ -60,10 +61,10 @@ class PocketBasicUserFlowTest {
     fun pocketBasicUserFlowTest() {
         navigationOverlay {
         }.openPocketMegatile {
-        }.returnToOverlay("back") {
+        }.returnToOverlay(DeviceButton.BACK) {
             // This is to test that pressing back from Pocket screen goes to overlay
         }.openPocketMegatile {
-        }.returnToOverlay("menu") {
+        }.returnToOverlay(DeviceButton.MENU) {
             // This is to test that pressing menu from Pocket screen goes to overlay
         }.openPocketMegatile {
         }.openTileToBrowser(0) {
