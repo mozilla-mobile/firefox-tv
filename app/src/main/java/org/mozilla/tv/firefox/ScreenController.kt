@@ -14,6 +14,7 @@ import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.settings.SettingsFragment
+import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.URLs
@@ -136,10 +137,12 @@ class ScreenController(private val stateMachine: ScreenControllerStateMachine) {
             transaction = transaction.show(overlayFragment)
                 // TODO note that hiding WebRenderFragment will not be possible under a split overlay
                 .hide(renderFragment)
+            MenuInteractionMonitor.menuOpened()
         } else {
             stateMachine.overlayClosed()
             transaction = transaction.hide(overlayFragment)
                 .show(renderFragment)
+            MenuInteractionMonitor.menuClosed()
         }
         transaction.commit()
     }
