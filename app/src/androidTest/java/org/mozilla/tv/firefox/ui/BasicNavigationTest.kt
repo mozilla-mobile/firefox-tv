@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.ui
 
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Assert.assertNotEquals
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.mozilla.tv.firefox.helpers.AndroidAssetDispatcher
@@ -26,6 +27,14 @@ class BasicNavigationTest {
 
     /* ktlint-disable no-blank-line-before-rbrace */ // This imposes unreadable grouping.
     @Test
+    @Ignore
+    // This test verifies (among other things) that the URL bar is filled with the page title after opening a URL.
+    //
+    // On emulators, the URL bar shows various assets instead of page titles (#1444) whenever Turbo mode is enabled.
+    //
+    // I attempted to turn off Turbo mode early in the test to mitigate this, which works in NetworkPageLoadTest, but
+    // here it led to strange process crashes.
+    // See #1649
     fun basicNavigationTest() {
         val server = MockWebServer().apply {
             setDispatcher(AndroidAssetDispatcher())
