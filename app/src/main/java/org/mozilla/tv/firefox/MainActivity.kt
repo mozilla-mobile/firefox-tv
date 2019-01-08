@@ -46,6 +46,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     override lateinit var videoVoiceCommandMediaSession: VideoVoiceCommandMediaSession
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // We override onSaveInstanceState to not save state (for handling Clear Data), so startup flow
+        // goes through onCreate.
         super.onCreate(savedInstanceState)
 
         // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.

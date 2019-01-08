@@ -100,7 +100,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         val layout = inflater.inflate(R.layout.fragment_browser, container, false)
 
         cursor = CursorController(this, cursorParent = layout.browserFragmentRoot,
-                view = layout.cursorView, screenControllerStateMachine = serviceLocator!!.screenControllerStateMachine)
+                view = layout.cursorView, screenControllerStateMachine = layout.context.serviceLocator.screenControllerStateMachine)
         lifecycle.addObserver(cursor!!)
 
         layout.progressBar.initialize(this)

@@ -29,8 +29,8 @@ object IntentValidator {
     @VisibleForTesting const val DIAL_PARAMS_KEY = "com.amazon.extra.DIAL_PARAM"
 
     /**
-     * TODO
-     * returns null if any unexpected values are encountered
+     * Validate that [Intent] contains all expected parameters.
+     * Returns null if any unexpected values are encountered
      */
     fun validateOnCreate(context: Context, intent: SafeIntent, savedInstanceState: Bundle?): ValidatedIntentData? {
         if ((intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0) {
@@ -42,7 +42,7 @@ object IntentValidator {
         }
 
         if (savedInstanceState != null) {
-            // We are restoring a previous session - No need to handle this Intent.
+            // onNewIntent will handle restoring any state.
             return null
         }
 
@@ -63,7 +63,7 @@ object IntentValidator {
             Intent.ACTION_VIEW -> {
                 val dataString = intent.dataString
                 if (TextUtils.isEmpty(dataString)) {
-                    return null // If there's no URL in the Intent then we can't create a session.
+                    return null // We can't create a session from an Intent without a URL.
                 }
 
                 return ValidatedIntentData(dataString, Session.Source.ACTION_VIEW)
