@@ -5,12 +5,13 @@
 package org.mozilla.tv.firefox.telemetry
 
 import android.content.Context
+import mozilla.components.lib.fetch.httpurlconnection.HttpURLConnectionClient
 import org.mozilla.tv.firefox.BuildConfig
 import org.mozilla.tv.firefox.utils.Settings
 import org.mozilla.telemetry.Telemetry
 import org.mozilla.telemetry.config.TelemetryConfiguration
 import org.mozilla.telemetry.measurement.DefaultSearchMeasurement
-import org.mozilla.telemetry.net.HttpURLConnectionTelemetryClient
+import org.mozilla.telemetry.net.TelemetryClient
 import org.mozilla.telemetry.ping.TelemetryCorePingBuilder
 import org.mozilla.telemetry.ping.TelemetryMobileEventPingBuilder
 import org.mozilla.telemetry.schedule.jobscheduler.JobSchedulerTelemetryScheduler
@@ -48,7 +49,7 @@ object TelemetryFactory {
 
         val serializer = JSONPingSerializer()
         val storage = FileTelemetryStorage(configuration, serializer)
-        val client = HttpURLConnectionTelemetryClient()
+        val client = TelemetryClient(HttpURLConnectionClient())
         val scheduler = JobSchedulerTelemetryScheduler()
 
         return Telemetry(configuration, storage, client, scheduler)
