@@ -11,6 +11,7 @@ import android.support.test.espresso.contrib.RecyclerViewActions
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.uiautomator.UiDevice
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.pinnedtile.TileViewHolder
 
 class PocketRecommendedVideosRobot {
@@ -25,11 +26,11 @@ class PocketRecommendedVideosRobot {
             return BrowserRobot.Transition()
         }
 
-        fun returnToOverlay(button: String, interact: NavigationOverlayRobot.() -> Unit): NavigationOverlayRobot.Transition {
-            when (button) {
-                "back" -> device.pressBack()
-                "menu" -> device.pressMenu()
-            }
+        fun returnToOverlay(buttonPressed: DeviceButton, interact: NavigationOverlayRobot.() -> Unit): NavigationOverlayRobot.Transition {
+            when (buttonPressed) {
+                DeviceButton.BACK -> device.pressBack()
+                DeviceButton.MENU -> device.pressMenu()
+            }.forceExhaustive
 
             NavigationOverlayRobot().interact()
             return NavigationOverlayRobot.Transition()
