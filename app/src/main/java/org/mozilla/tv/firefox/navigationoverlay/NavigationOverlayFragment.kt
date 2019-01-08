@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.browser_overlay.*
 import kotlinx.android.synthetic.main.browser_overlay_top_nav.*
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.*
 import kotlinx.coroutines.Job
-import mozilla.components.browser.domains.DomainAutoCompleteProvider
+import mozilla.components.browser.domains.autocomplete.ShippedDomainsProvider
 import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
@@ -208,17 +208,15 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
             }
         }
         this.movementMethod = IgnoreFocusMovementMethod()
-        val autocompleteProvider = DomainAutoCompleteProvider().apply {
+        val autocompleteProvider = ShippedDomainsProvider().apply {
             initialize(
-                context = context,
-                useShippedDomains = true,
-                useCustomDomains = false,
-                loadDomainsFromDisk = true
+                    context = context
             )
         }
         setOnFilterListener { searchText, view ->
-            val result = autocompleteProvider.autocomplete(searchText)
-            view?.onAutocomplete(InlineAutocompleteEditText.AutocompleteResult(result.text, result.source, result.size))
+            val result = autocompleteProvider.getAutocompleteSuggestion(searchText)
+            if (result != null)
+                view?.onAutocomplete(InlineAutocompleteEditText.AutocompleteResult(result.text, result.source, result.totalItems))
         }
 
         setOnUserInputListener { hasUserChangedURLSinceEditTextFocused = true }
