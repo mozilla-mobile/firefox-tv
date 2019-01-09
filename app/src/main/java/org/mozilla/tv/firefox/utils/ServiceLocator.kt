@@ -10,7 +10,6 @@ import kotlinx.coroutines.launch
 import mozilla.components.browser.search.SearchEngineManager
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.ScreenController
-import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.ViewModelFactory
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.components.locale.LocaleManager
