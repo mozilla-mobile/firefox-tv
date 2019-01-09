@@ -40,9 +40,7 @@ open class PocketVideoRepo(
     }
 
     private val _feedState = MutableLiveData<FeedState>().apply {
-        // _feedState.value should always be initialized at the top of init,
-        // because we treat it as non-null
-        value = buildConfigDerivables.initialPocketRepoState
+        postValue(buildConfigDerivables.initialPocketRepoState)
     }
     open val feedState: LiveData<FeedState> = _feedState
 
