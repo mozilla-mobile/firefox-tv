@@ -64,7 +64,7 @@ class SettingsFragment : Fragment() {
                         TelemetryIntegration.INSTANCE.clearDataEvent()
                     }
                 }.forceExhaustive
-                    true
+                true
             }
         })
 
@@ -79,18 +79,18 @@ class SettingsFragment : Fragment() {
 
         parentView.deleteButton.setOnClickListener { _ ->
             AlertDialog.Builder(activity)
-                .setTitle(R.string.settings_cookies_dialog_title)
-                .setMessage(R.string.settings_cookies_dialog_content2)
-                .setCancelable(true)
-                .setPositiveButton(getString(R.string.action_ok)) { dialog, _ ->
-                    with(requireContext()) {
-                        settingsViewModel.clearBrowsingData(this, serviceLocator.webViewCache)
-                        dialog.cancel()
+                    .setTitle(R.string.settings_cookies_dialog_title)
+                    .setMessage(R.string.settings_cookies_dialog_content2)
+                    .setCancelable(true)
+                    .setPositiveButton(getString(R.string.action_ok)) { dialog, _ ->
+                        with(requireContext()) {
+                            settingsViewModel.clearBrowsingData(this, serviceLocator.webViewCache)
+                            dialog.cancel()
+                        }
                     }
-                }
-                .setNegativeButton(
-                        getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel() }
-                .create().show()
+                    .setNegativeButton(
+                            getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel() }
+                    .create().show()
         }
     }
 

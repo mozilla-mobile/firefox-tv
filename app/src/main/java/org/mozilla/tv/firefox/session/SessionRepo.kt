@@ -116,5 +116,6 @@ class SessionRepo(
         sessionManager.engine.deleteData(context)
         sessionManager.removeAll()
         webViewCache.doNotPersist()
+        webViewCache.clear()
     }
 }
