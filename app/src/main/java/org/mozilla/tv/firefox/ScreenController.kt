@@ -10,7 +10,8 @@ import android.support.v4.app.FragmentManager
 import android.text.TextUtils
 import io.sentry.Sentry
 import mozilla.components.browser.session.Session
-import org.mozilla.tv.firefox.webrender.WebRenderFragment
+import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
+import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.settings.SettingsFragment
@@ -19,11 +20,11 @@ import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.utils.UrlUtils
+import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
-import java.lang.IllegalStateException
 
 class ScreenController {
-    var currentActiveScreen = ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY
+    var currentActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
         get
 
     // TODO cache overlay fragment so that custom pinned sites don't fade in every time the menu is opened
@@ -51,10 +52,10 @@ class ScreenController {
             .hide(settingsFragment)
             .commitNow()
 
-        if (currentActiveScreen != ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY) {
+        if (currentActiveScreen != ActiveScreen.NAVIGATION_OVERLAY) {
             Sentry.capture(
                     IllegalStateException("Inconsistent state, expected " +
-                            "${ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY.name}," +
+                            "${ActiveScreen.NAVIGATION_OVERLAY.name}," +
                             " got ${currentActiveScreen.name}"))
         }
     }
@@ -93,23 +94,23 @@ class ScreenController {
     }
 
     fun showSettingsScreen(fragmentManager: FragmentManager) {
-        handleTransitionAndUpdateActiveScreen(fragmentManager, ScreenControllerStateMachine.Transition.ADD_SETTINGS)
+        handleTransitionAndUpdateActiveScreen(fragmentManager, Transition.ADD_SETTINGS)
     }
 
     fun showPocketScreen(fragmentManager: FragmentManager) {
-        handleTransitionAndUpdateActiveScreen(fragmentManager, ScreenControllerStateMachine.Transition.ADD_POCKET)
+        handleTransitionAndUpdateActiveScreen(fragmentManager, Transition.ADD_POCKET)
     }
 
     fun showBrowserScreenForCurrentSession(fragmentManager: FragmentManager, session: Session) {
         if (session.url != URLs.APP_URL_HOME) {
-            handleTransitionAndUpdateActiveScreen(fragmentManager, ScreenControllerStateMachine.Transition.SHOW_BROWSER)
+            handleTransitionAndUpdateActiveScreen(fragmentManager, Transition.SHOW_BROWSER)
         }
     }
 
     fun showBrowserScreenForUrl(fragmentManager: FragmentManager, url: String) {
         // The browser Fragment will always be available because we create it when creating a session,
         // and use the FragmentManager to hide it when it's not used.
-        handleTransitionAndUpdateActiveScreen(fragmentManager, ScreenControllerStateMachine.Transition.SHOW_BROWSER)
+        handleTransitionAndUpdateActiveScreen(fragmentManager, Transition.SHOW_BROWSER)
         val webRenderFragment = fragmentManager.webRenderFragment()
         webRenderFragment.loadUrl(url)
     }
@@ -118,8 +119,8 @@ class ScreenController {
     fun showNavigationOverlay(fragmentManager: FragmentManager?, toShow: Boolean) {
         fragmentManager ?: return
         fragmentManagerShowNavigationOverlay(fragmentManager, toShow)
-        currentActiveScreen = if (toShow) ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY
-                else ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
+        currentActiveScreen = if (toShow) ActiveScreen.NAVIGATION_OVERLAY
+                else ActiveScreen.WEB_RENDER
     }
 
     private fun fragmentManagerShowNavigationOverlay(fragmentManager: FragmentManager, toShow: Boolean) {
@@ -142,7 +143,7 @@ class ScreenController {
 
     fun handleBack(fragmentManager: FragmentManager): Boolean {
         val webRenderFragment = fragmentManager.webRenderFragment()
-        if (currentActiveScreen == ScreenControllerStateMachine.ActiveScreen.WEB_RENDER) {
+        if (currentActiveScreen == ActiveScreen.WEB_RENDER) {
             if (webRenderFragment.onBackPressed()) return true
         }
         val transition = ScreenControllerStateMachine.getNewStateBackPress(currentActiveScreen, isOnHomeUrl(fragmentManager))
@@ -159,56 +160,56 @@ class ScreenController {
         return webRenderFragment.session.url == URLs.APP_URL_HOME
     }
 
-    private fun handleTransitionAndUpdateActiveScreen(fragmentManager: FragmentManager, transition: ScreenControllerStateMachine.Transition): Boolean {
+    private fun handleTransitionAndUpdateActiveScreen(fragmentManager: FragmentManager, transition: Transition): Boolean {
         // Call show() before hide() so that focus moves correctly to the shown fragment once others are hidden
         when (transition) {
-            ScreenControllerStateMachine.Transition.ADD_OVERLAY -> {
+            Transition.ADD_OVERLAY -> {
                 fragmentManagerShowNavigationOverlay(fragmentManager, true)
-                currentActiveScreen = ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY
+                currentActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
             }
-            ScreenControllerStateMachine.Transition.REMOVE_OVERLAY -> {
+            Transition.REMOVE_OVERLAY -> {
                 showNavigationOverlay(fragmentManager, false)
-                currentActiveScreen = ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
+                currentActiveScreen = ActiveScreen.WEB_RENDER
             }
-            ScreenControllerStateMachine.Transition.ADD_POCKET -> {
+            Transition.ADD_POCKET -> {
                 fragmentManager.beginTransaction()
                     .show(fragmentManager.pocketFragment())
                     .hide(fragmentManager.navigationOverlayFragment())
                     .commit()
-                currentActiveScreen = ScreenControllerStateMachine.ActiveScreen.POCKET
+                currentActiveScreen = ActiveScreen.POCKET
             }
-            ScreenControllerStateMachine.Transition.REMOVE_POCKET -> {
+            Transition.REMOVE_POCKET -> {
                 fragmentManager.beginTransaction()
                     .show(fragmentManager.navigationOverlayFragment())
                     .hide(fragmentManager.pocketFragment())
                     .commit()
-                currentActiveScreen = ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY
+                currentActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
             }
-            ScreenControllerStateMachine.Transition.ADD_SETTINGS -> {
+            Transition.ADD_SETTINGS -> {
                 fragmentManager.beginTransaction()
                     .show(fragmentManager.settingsFragment())
                     .hide(fragmentManager.navigationOverlayFragment())
                     .commit()
-                currentActiveScreen = ScreenControllerStateMachine.ActiveScreen.SETTINGS
+                currentActiveScreen = ActiveScreen.SETTINGS
             }
-            ScreenControllerStateMachine.Transition.REMOVE_SETTINGS -> {
+            Transition.REMOVE_SETTINGS -> {
                 fragmentManager.beginTransaction()
                     .show(fragmentManager.navigationOverlayFragment())
                     .hide(fragmentManager.settingsFragment())
                     .commit()
-                currentActiveScreen = ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY
+                currentActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
             }
-            ScreenControllerStateMachine.Transition.SHOW_BROWSER -> {
+            Transition.SHOW_BROWSER -> {
                 fragmentManager.beginTransaction()
                     .show(fragmentManager.webRenderFragment())
                     .hide(fragmentManager.navigationOverlayFragment())
                     .hide(fragmentManager.pocketFragment())
                     .hide(fragmentManager.settingsFragment())
                     .commit()
-                currentActiveScreen = ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
+                currentActiveScreen = ActiveScreen.WEB_RENDER
             }
-            ScreenControllerStateMachine.Transition.EXIT_APP -> { return false }
-            ScreenControllerStateMachine.Transition.NO_OP -> { return true }
+            Transition.EXIT_APP -> { return false }
+            Transition.NO_OP -> { return true }
         }
         return true
     }
