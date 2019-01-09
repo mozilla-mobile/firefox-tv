@@ -4,46 +4,16 @@
 
 package org.mozilla.tv.firefox
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.os.StrictMode
-import org.mozilla.tv.firefox.ext.toUri
-import org.mozilla.tv.firefox.pocket.PocketEndpoint
-import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
+import org.mozilla.tv.firefox.helpers.PocketRepoFaker
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
-import org.mozilla.tv.firefox.pocket.PocketViewModel
-import org.mozilla.tv.firefox.settings.SettingsRepo
-import org.mozilla.tv.firefox.utils.BuildConfigDerivables
 import org.mozilla.tv.firefox.utils.ServiceLocator
 
 class FirefoxTestApplication : FirefoxApplication() {
 
-    private val pocketEndpoint = object : PocketEndpoint("VERSION", "www.mock.com".toUri()) {
-        override suspend fun getRecommendedVideos(): List<PocketViewModel.FeedItem.Video>? {
-            return PocketViewModel.noKeyPlaceholders
-        }
-    }
-
-    private val pocketVideoRepoState = MutableLiveData<PocketVideoRepo.FeedState>()
-
-    val localeIsEnglish: () -> Boolean = { true }
-    val settingsRepo: SettingsRepo by lazy { serviceLocator.settingsRepo }
-
-    private val pocketVideoRepo = object : PocketVideoRepo(
-        pocketEndpoint,
-        PocketFeedStateMachine(),
-        localeIsEnglish,
-        BuildConfigDerivables(localeIsEnglish)
-    ) {
-        override val feedState: LiveData<FeedState>
-            get() = pocketVideoRepoState
-    }
-
     override fun createServiceLocator() = object : ServiceLocator(this) {
-        override val pocketRepo = pocketVideoRepo
+        override val pocketRepo = PocketRepoFaker.fakedPocketRepo
     }
-
-    fun pushPocketRepoState(state: PocketVideoRepo.FeedState) = pocketVideoRepoState.postValue(state)
 
     override fun enableStrictMode() {
         // This method duplicates some code, but due to 1) the quantity of code
@@ -62,4 +32,6 @@ class FirefoxTestApplication : FirefoxApplication() {
         StrictMode.setThreadPolicy(threadPolicyBuilder.build())
         StrictMode.setVmPolicy(vmPolicyBuilder.build())
     }
+
+    fun pushPocketRepoState(state: PocketVideoRepo.FeedState) = PocketRepoFaker.fakedPocketRepoState.postValue(state)
 }
