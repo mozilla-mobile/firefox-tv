@@ -10,6 +10,7 @@ import android.net.http.SslError
 import android.os.StrictMode
 import android.support.annotation.AnyThread
 import android.support.annotation.UiThread
+import android.view.InputDevice
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
 import org.mozilla.tv.firefox.ext.resetAfter
 import org.mozilla.tv.firefox.pinnedtile.BundledPinnedTile
@@ -27,6 +28,7 @@ import java.util.Collections
 
 private const val SHARED_PREFS_KEY = "telemetryLib" // Don't call it TelemetryWrapper to avoid accidental IDE rename.
 private const val KEY_CLICKED_HOME_TILE_IDS_PER_SESSION = "clickedHomeTileIDsPerSession"
+private const val KEY_CONTROLLER_NAME = "remoteControlName"
 private const val YOUTUBE_TILE_ID = "youtube"
 
 @Suppress(
@@ -149,6 +151,7 @@ open class TelemetryIntegration protected constructor(
 
     private fun resetSessionMeasurements(context: Context) {
         TelemetryHomeTileUniqueClickPerSessionCounter.resetSessionData(context)
+        TelemetryRemoteControlTracker.resetSessionData(context)
         pocketUniqueClickedVideoIDs.clear()
     }
 
@@ -325,6 +328,10 @@ open class TelemetryIntegration protected constructor(
     }
 
     fun youtubeCastEvent() = TelemetryEvent.create(Category.ACTION, Method.YOUTUBE_CAST, Object.BROWSER).queue()
+
+    @UiThread
+    fun saveControllerInformation(context: Context, deviceId: Int) =
+            TelemetryRemoteControlTracker.saveControllerInformation(context, deviceId)
 }
 
 enum class MediaSessionEventType(internal val value: String) {
@@ -373,6 +380,34 @@ private object TelemetryHomeTileUniqueClickPerSessionCounter {
         Assert.isUiThread()
         getSharedPrefs(context).edit()
                 .remove(KEY_CLICKED_HOME_TILE_IDS_PER_SESSION)
+                .apply()
+    }
+}
+
+/** Tracks the name of the remote control used. Only the first remote used per session is reported. */
+@UiThread // We get-and-set over SharedPreferences so we need resource protection.
+private object TelemetryRemoteControlTracker {
+
+    fun saveControllerInformation(context: Context, deviceId: Int) {
+        Assert.isUiThread()
+        if (!TelemetryHolder.get().configuration.isCollectionEnabled) { return }
+
+        val remoteName = InputDevice.getDevice(deviceId).name
+
+        val sharedPrefs = getSharedPrefs(context)
+        val remoteSharedPref = sharedPrefs.getString(KEY_CONTROLLER_NAME, null)
+
+        if (remoteSharedPref == null) {
+            sharedPrefs.edit()
+                    .putString(KEY_CONTROLLER_NAME, remoteName)
+                    .apply()
+        }
+    }
+
+    fun resetSessionData(context: Context) {
+        Assert.isUiThread()
+        getSharedPrefs(context).edit()
+                .remove(KEY_CONTROLLER_NAME)
                 .apply()
     }
 }
