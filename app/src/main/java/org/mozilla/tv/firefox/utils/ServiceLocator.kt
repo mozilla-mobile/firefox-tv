@@ -63,10 +63,7 @@ open class ServiceLocator(val app: Application) {
     val turboMode: TurboMode by lazy { TurboMode(app) }
     val pocketRepoCache by lazy { PocketRepoCache(pocketRepo).apply { setup() } }
     val viewModelFactory by lazy { ViewModelFactory(this, app) }
-    val screenControllerStateMachine by lazy {
-        ScreenControllerStateMachine { sessionRepo.state.value?.currentUrl == URLs.APP_URL_HOME }
-    }
-    val screenController by lazy { ScreenController(screenControllerStateMachine) }
+    val screenController by lazy { ScreenController() }
     val webViewCache by lazy { WebViewCache(sessionRepo) }
     val sessionManager get() = app.webRenderComponents.sessionManager
     val sessionUseCases get() = app.webRenderComponents.sessionUseCases
