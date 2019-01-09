@@ -12,7 +12,7 @@ import org.mozilla.tv.firefox.utils.ServiceLocator
 class FirefoxTestApplication : FirefoxApplication() {
 
     override fun createServiceLocator() = object : ServiceLocator(this) {
-        override val pocketRepo = PocketRepoFaker.fakedPocketRepo
+        override val pocketRepo by lazy { TestProvider.pocketVideoRepo ?: super.pocketRepo }
     }
 
     override fun enableStrictMode() {
@@ -34,4 +34,19 @@ class FirefoxTestApplication : FirefoxApplication() {
     }
 
     fun pushPocketRepoState(state: PocketVideoRepo.FeedState) = PocketRepoFaker.fakedPocketRepoState.postValue(state)
+}
+
+/**
+ * Used to provide fake dependencies to the Application at startup.
+ *
+ * [FirefoxTestApplication.createServiceLocator] should check here for any
+ * dependencies that must vary between tests, then return super if they are found
+ * to be null. This allows individual tests to set these properties, thus
+ * substituting their own fakes into tests.
+ *
+ * Note that Application#onCreate is called by Espresso before @Before blocks,
+ * so to use this class dependencies must be fulfilled from an init block in a test
+ */
+object TestProvider {
+    var pocketVideoRepo : PocketVideoRepo? = null
 }
