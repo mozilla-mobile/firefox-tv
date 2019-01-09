@@ -12,53 +12,51 @@ import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition.REMOVE_OVE
 
 class ScreenControllerStateMachineTest {
 
-    var currentUrlIsHome = false
-    lateinit var stateMachine: ScreenControllerStateMachine
+    private var currentUrlIsHome = false
 
     @Before
     fun setup() {
         currentUrlIsHome = false
-        stateMachine = ScreenControllerStateMachine { currentUrlIsHome }
     }
 
     @Test
     fun `GIVEN overlay is active and url is home WHEN back is pressed THEN emit exit_app`() {
-        stateMachine.currentActiveScreen = NAVIGATION_OVERLAY
+        val currentActiveScreen = NAVIGATION_OVERLAY
         currentUrlIsHome = true
-        assertEquals(EXIT_APP, stateMachine.backPress())
+        assertEquals(EXIT_APP, ScreenControllerStateMachine.getNewStateBackPress(currentActiveScreen, currentUrlIsHome))
     }
 
     @Test
     fun `GIVEN overlay is active and url is not home WHEN back is pressed THEN emit remove_overlay`() {
-        stateMachine.currentActiveScreen = NAVIGATION_OVERLAY
+        val currentActiveScreen = NAVIGATION_OVERLAY
         currentUrlIsHome = false
-        assertEquals(REMOVE_OVERLAY, stateMachine.backPress())
+        assertEquals(REMOVE_OVERLAY, ScreenControllerStateMachine.getNewStateBackPress(currentActiveScreen, currentUrlIsHome))
     }
 
     @Test
     fun `GIVEN overlay is active and url is home WHEN menu is pressed THEN emit no_op`() {
-        stateMachine.currentActiveScreen = NAVIGATION_OVERLAY
+        val currentActiveScreen = NAVIGATION_OVERLAY
         currentUrlIsHome = true
-        assertEquals(NO_OP, stateMachine.menuPress())
+        assertEquals(NO_OP, ScreenControllerStateMachine.getNewStateMenuPress(currentActiveScreen, currentUrlIsHome))
     }
 
     @Test
     fun `GIVEN overlay is active and url is not home WHEN menu is pressed THEN emit remove_overlay`() {
-        stateMachine.currentActiveScreen = NAVIGATION_OVERLAY
+        val currentActiveScreen = NAVIGATION_OVERLAY
         currentUrlIsHome = false
-        assertEquals(REMOVE_OVERLAY, stateMachine.menuPress())
+        assertEquals(REMOVE_OVERLAY, ScreenControllerStateMachine.getNewStateMenuPress(currentActiveScreen, currentUrlIsHome))
     }
 
     @Test
     fun `GIVEN web render is active WHEN back is pressed THEN emit add_overlay`() {
-        stateMachine.currentActiveScreen = WEB_RENDER
-        assertEquals(ADD_OVERLAY, stateMachine.backPress())
+        val currentActiveScreen = WEB_RENDER
+        assertEquals(ADD_OVERLAY, ScreenControllerStateMachine.getNewStateBackPress(currentActiveScreen, false))
     }
 
     @Test
     fun `GIVEN web render is active WHEN menu is pressed THEN emit add_overlay`() {
-        stateMachine.currentActiveScreen = WEB_RENDER
-        assertEquals(ADD_OVERLAY, stateMachine.menuPress())
+        val currentActiveScreen = WEB_RENDER
+        assertEquals(ADD_OVERLAY, ScreenControllerStateMachine.getNewStateMenuPress(currentActiveScreen, false))
     }
 
     // Pocket and Settings fragments will be turned into channels, so they do not have tests
