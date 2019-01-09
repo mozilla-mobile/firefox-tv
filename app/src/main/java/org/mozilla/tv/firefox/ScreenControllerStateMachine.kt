@@ -32,8 +32,8 @@ class ScreenControllerStateMachine {
                 ActiveScreen.WEB_RENDER -> {
                     Transition.ADD_OVERLAY
                 }
-                ActiveScreen.POCKET -> Transition.NO_OP
-                ActiveScreen.SETTINGS -> Transition.NO_OP
+                ActiveScreen.POCKET -> Transition.REMOVE_POCKET
+                ActiveScreen.SETTINGS -> Transition.REMOVE_SETTINGS
             }
         }
 
