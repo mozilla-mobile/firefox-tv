@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.View
+import io.sentry.Sentry
 import kotlinx.android.synthetic.main.activity_main.*
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
@@ -34,6 +35,7 @@ import org.mozilla.tv.firefox.utils.publicsuffix.PublicSuffix
 import org.mozilla.tv.firefox.webrender.VideoVoiceCommandMediaSession
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
+import java.lang.IllegalStateException
 
 interface MediaSessionHolder {
     val videoVoiceCommandMediaSession: VideoVoiceCommandMediaSession
@@ -107,8 +109,10 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     }
 
     override fun onNewIntent(unsafeIntent: Intent) {
-        // If no session is selected, onCreate has not yet been hit. Short and let onCreate take care of intent validation
-        serviceLocator.sessionManager.selectedSession ?: return
+        if (serviceLocator.sessionManager.selectedSession == null) {
+            Sentry.capture(IllegalStateException("onNewIntent is called with null selectedSession"))
+            return
+        }
         // We can't do anything if the intent does not contain valid data, so short
         val intentData = IntentValidator.validate(this, unsafeIntent.toSafeIntent()) ?: return
         serviceLocator.screenController.showBrowserScreenForUrl(supportFragmentManager, intentData.url)

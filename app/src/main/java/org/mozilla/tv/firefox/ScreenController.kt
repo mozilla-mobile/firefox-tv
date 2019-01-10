@@ -124,17 +124,17 @@ class ScreenController {
     }
 
     private fun fragmentManagerShowNavigationOverlay(fragmentManager: FragmentManager, toShow: Boolean) {
-        var transaction = fragmentManager.beginTransaction()
+        val transaction = fragmentManager.beginTransaction()
         val overlayFragment = fragmentManager.navigationOverlayFragment()
         val renderFragment = fragmentManager.webRenderFragment()
 
         if (toShow) {
-            transaction = transaction.show(overlayFragment)
+            transaction.show(overlayFragment)
                 // TODO note that hiding WebRenderFragment will not be possible under a split overlay
                 .hide(renderFragment)
             MenuInteractionMonitor.menuOpened()
         } else {
-            transaction = transaction.hide(overlayFragment)
+            transaction.hide(overlayFragment)
                 .show(renderFragment)
             MenuInteractionMonitor.menuClosed()
         }

@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.toolbar
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
+import android.support.annotation.StringRes
 import android.support.annotation.UiThread
 import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.R
@@ -13,7 +14,6 @@ import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.ext.LiveDataCombiners
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
-import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.SetOnlyLiveData
 import org.mozilla.tv.firefox.utils.URLs
@@ -37,11 +37,17 @@ class ToolbarViewModel(
         val urlBarText: String
     )
 
+    sealed class Action {
+        data class ShowTopToast(@StringRes val textId: Int) : Action()
+        data class ShowBottomToast(@StringRes val textId: Int) : Action()
+        data class SetOverlayVisible(val visible: Boolean) : Action()
+    }
     // Values should be pushed to _events using setValue. Two values are set in
     // rapid succession using postValue, only the latest will be received
-    private var _events = SetOnlyLiveData<Consumable<NavigationOverlayFragment.Action>>()
+    private var _events = SetOnlyLiveData<Consumable<Action>>()
     // Note that events will only emit values if state is observed
-    val events: LiveData<Consumable<NavigationOverlayFragment.Action>> = _events
+    // We use events in order to decouple the ViewModel from holding a reference to a context
+    val events: LiveData<Consumable<Action>> = _events
 
     val state: LiveData<ToolbarViewModel.State> =
         LiveDataCombiners.combineLatest(sessionRepo.state, pinnedTileRepo.getPinnedTiles()) { sessionState, pinnedTiles ->
@@ -89,10 +95,10 @@ class ToolbarViewModel(
 
         if (pinChecked) {
             pinnedTileRepo.removePinnedTile(url)
-            _events.value = Consumable.from(NavigationOverlayFragment.Action.ShowTopToast(R.string.notification_unpinned_site))
+            _events.value = Consumable.from(Action.ShowTopToast(R.string.notification_unpinned_site))
         } else {
             pinnedTileRepo.addPinnedTile(url, sessionRepo.currentURLScreenshot())
-            _events.value = Consumable.from(NavigationOverlayFragment.Action.ShowTopToast(R.string.notification_pinned_site))
+            _events.value = Consumable.from(Action.ShowTopToast(R.string.notification_pinned_site))
         }
         hideOverlay()
     }
@@ -121,7 +127,7 @@ class ToolbarViewModel(
             else -> R.string.notification_request_desktop_site
         }
 
-        _events.value = Consumable.from(NavigationOverlayFragment.Action.ShowBottomToast(textId))
+        _events.value = Consumable.from(Action.ShowBottomToast(textId))
         hideOverlay()
     }
 
@@ -144,6 +150,6 @@ class ToolbarViewModel(
     private fun String.isEqualToHomepage() = this == URLs.APP_URL_HOME
 
     private fun hideOverlay() {
-        _events.value = Consumable.from(NavigationOverlayFragment.Action.SetOverlayVisible(false))
+        _events.value = Consumable.from(Action.SetOverlayVisible(false))
     }
 }
