@@ -18,7 +18,7 @@ import org.mozilla.tv.firefox.utils.BuildConfigDerivables
  *
  * Any values pushed to [fakedPocketRepoState] will be immediately emitted.
  */
-object PocketRepoFaker {
+object FakePocketVideoRepoProvider {
 
     private val pocketEndpoint = object : PocketEndpoint("VERSION", "www.mock.com".toUri()) {
         override suspend fun getRecommendedVideos(): List<PocketViewModel.FeedItem.Video>? {
