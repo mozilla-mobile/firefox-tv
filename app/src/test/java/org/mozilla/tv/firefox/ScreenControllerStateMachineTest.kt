@@ -1,7 +1,6 @@
 package org.mozilla.tv.firefox
 
 import org.junit.Assert.assertEquals
-import org.junit.Before
 import org.junit.Test
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
@@ -12,38 +11,31 @@ import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition.REMOVE_OVE
 
 class ScreenControllerStateMachineTest {
 
-    private var currentUrlIsHome = false
-
-    @Before
-    fun setup() {
-        currentUrlIsHome = false
-    }
-
     @Test
     fun `GIVEN overlay is active and url is home WHEN back is pressed THEN emit exit_app`() {
         val currentActiveScreen = NAVIGATION_OVERLAY
-        currentUrlIsHome = true
+        val currentUrlIsHome = true
         assertEquals(EXIT_APP, ScreenControllerStateMachine.getNewStateBackPress(currentActiveScreen, currentUrlIsHome))
     }
 
     @Test
     fun `GIVEN overlay is active and url is not home WHEN back is pressed THEN emit remove_overlay`() {
         val currentActiveScreen = NAVIGATION_OVERLAY
-        currentUrlIsHome = false
+        val currentUrlIsHome = false
         assertEquals(REMOVE_OVERLAY, ScreenControllerStateMachine.getNewStateBackPress(currentActiveScreen, currentUrlIsHome))
     }
 
     @Test
     fun `GIVEN overlay is active and url is home WHEN menu is pressed THEN emit no_op`() {
         val currentActiveScreen = NAVIGATION_OVERLAY
-        currentUrlIsHome = true
+        val currentUrlIsHome = true
         assertEquals(NO_OP, ScreenControllerStateMachine.getNewStateMenuPress(currentActiveScreen, currentUrlIsHome))
     }
 
     @Test
     fun `GIVEN overlay is active and url is not home WHEN menu is pressed THEN emit remove_overlay`() {
         val currentActiveScreen = NAVIGATION_OVERLAY
-        currentUrlIsHome = false
+        val currentUrlIsHome = false
         assertEquals(REMOVE_OVERLAY, ScreenControllerStateMachine.getNewStateMenuPress(currentActiveScreen, currentUrlIsHome))
     }
 
