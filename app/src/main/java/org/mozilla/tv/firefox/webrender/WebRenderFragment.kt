@@ -145,17 +145,12 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         sessionFeature = null
     }
 
-    // TODO: need new onBackPressed logic with OverlayFragment
     fun onBackPressed(): Boolean {
         if (session.canGoBack) {
             serviceLocator!!.sessionRepo.exitFullScreenIfPossibleAndBack() // TODO do this through WebRenderViewModel when it exists
             TelemetryIntegration.INSTANCE.browserBackControllerEvent()
             return true
         }
-//        else -> {
-//                context!!.webRenderComponents.sessionManager.remove()
-//                return false
-//            }
         return false
     }
 
