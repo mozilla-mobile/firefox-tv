@@ -6,6 +6,7 @@
 
 package org.mozilla.tv.firefox.ui
 
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -32,11 +33,11 @@ class ToggleDataCollectionTest {
             assertDataCollectionButtonState(IS_TELEMETRY_ENABLED_DEFAULT)
 
             toggleDataCollectionButton()
-            assert(settingsRepo.dataCollectionEnabled.value != null)
+            assertNotNull(settingsRepo.dataCollectionEnabled.value)
             assertDataCollectionButtonState(settingsRepo.dataCollectionEnabled.value ?: false)
 
             toggleDataCollectionButton()
-            assert(settingsRepo.dataCollectionEnabled.value != null)
+            assertNotNull(settingsRepo.dataCollectionEnabled.value)
             assertDataCollectionButtonState(settingsRepo.dataCollectionEnabled.value ?: false)
         }
     }
