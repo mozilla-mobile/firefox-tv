@@ -19,7 +19,7 @@ class TelemetrySettingsProvider(private val appContext: Context) : SettingsMeasu
         return key == PREF_CUSTOM_HOME_TILE_COUNT ||
             key == PREF_TOTAL_HOME_TILE_COUNT ||
             key == APP_ID ||
-            key == PREF_CONTROLLER_NAME ||
+            key == PREF_REMOTE_CONTROL_NAME ||
             super.containsKey(key)
     }
 
@@ -28,7 +28,7 @@ class TelemetrySettingsProvider(private val appContext: Context) : SettingsMeasu
         PREF_TOTAL_HOME_TILE_COUNT -> appContext.serviceLocator.pinnedTileRepo.customTilesSize +
                 appContext.serviceLocator.pinnedTileRepo.bundledTilesSize
         APP_ID -> BuildConfig.APPLICATION_ID
-        PREF_CONTROLLER_NAME -> appContext.getSharedPreferences(SHARED_PREFS_KEY, 0).getStringSet(KEY_CONTROLLER_NAME, null)
+        PREF_REMOTE_CONTROL_NAME -> appContext.getSharedPreferences(SHARED_PREFS_KEY, 0).getStringSet(KEY_REMOTE_CONTROL_NAME, null)
         else -> super.getValue(key)
     }
 
@@ -38,9 +38,9 @@ class TelemetrySettingsProvider(private val appContext: Context) : SettingsMeasu
         const val PREF_CUSTOM_HOME_TILE_COUNT = "custom_home_tile_count"
         const val PREF_TOTAL_HOME_TILE_COUNT = "total_home_tile_count"
         const val APP_ID = "app_id"
-        const val PREF_CONTROLLER_NAME = "controller_name"
+        const val PREF_REMOTE_CONTROL_NAME = "remote_control_name"
 
         const val SHARED_PREFS_KEY = "telemetryLib"
-        const val KEY_CONTROLLER_NAME = "remoteControlName"
+        const val KEY_REMOTE_CONTROL_NAME = "remoteControlName"
     }
 }

@@ -241,7 +241,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         val maybePocketFragment = (fragmentManager.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG) as PocketVideoFragment?)?.let {
             if (it.isVisible) it else null
         }
-        TelemetryIntegration.INSTANCE.saveControllerInformation(applicationContext, event.deviceId)
+        TelemetryIntegration.INSTANCE.saveRemoteControlInformation(applicationContext, event)
 
         return videoVoiceCommandMediaSession.dispatchKeyEvent(event) ||
                 (maybePocketFragment?.dispatchKeyEvent(event) ?: false) ||
