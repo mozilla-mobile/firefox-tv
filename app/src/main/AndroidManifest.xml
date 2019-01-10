@@ -82,9 +82,6 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".settings.InfoActivity"
-                  android:theme="@style/InfoTheme"/>
-
         <activity android:name=".onboarding.OnboardingActivity"
                   android:theme="@style/AppTheme"/>
 
