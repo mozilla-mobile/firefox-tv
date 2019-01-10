@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
@@ -24,6 +25,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ScrollView
+import android.widget.Toast
 import kotlinx.android.synthetic.main.browser_overlay.*
 import kotlinx.android.synthetic.main.browser_overlay_top_nav.*
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.*
@@ -52,6 +54,7 @@ import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.utils.ViewUtils
 import org.mozilla.tv.firefox.widget.IgnoreFocusMovementMethod
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
+import java.lang.ref.WeakReference
 
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
 private const val NAVIGATION_BUTTON_DISABLED_ALPHA = 0.3f
@@ -96,7 +99,7 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
     // instantiation of the BrowserNavigationOverlay
     private var canShowUnpinToast: Boolean = false
 
-    private val openHomeTileContextMenu: (() -> Unit) = { activity?.openContextMenu(tileContainer) }
+    private val openHomeTileContextMenu: () -> Unit = { activity?.openContextMenu(tileContainer) }
 
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
                                       autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
@@ -326,26 +329,26 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
         canShowUnpinToast = true
 
         // TODO: pass in VM live data instead of "homeTiles"
-        tileAdapter = org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter(uiLifecycleCancelJob, loadUrl = { urlStr ->
+        tileAdapter = PinnedTileAdapter(uiLifecycleCancelJob, loadUrl = { urlStr ->
             if (urlStr.isNotEmpty()) {
-                onNavigationEvent.invoke(org.mozilla.tv.firefox.navigationoverlay.NavigationEvent.LOAD_TILE, urlStr, null)
+                onNavigationEvent.invoke(NavigationEvent.LOAD_TILE, urlStr, null)
             }
         }, onTileLongClick = openHomeTileContextMenu, onTileFocused = {
             val prefInt = android.preference.PreferenceManager.getDefaultSharedPreferences(context).getInt(
-                    org.mozilla.tv.firefox.navigationoverlay.SHOW_UNPIN_TOAST_COUNTER_PREF, 0)
-            if (prefInt < org.mozilla.tv.firefox.navigationoverlay.MAX_UNPIN_TOAST_COUNT && canShowUnpinToast) {
-                android.preference.PreferenceManager.getDefaultSharedPreferences(context)
+                    SHOW_UNPIN_TOAST_COUNTER_PREF, 0)
+            if (prefInt < MAX_UNPIN_TOAST_COUNT && canShowUnpinToast) {
+                PreferenceManager.getDefaultSharedPreferences(context)
                         .edit()
-                        .putInt(org.mozilla.tv.firefox.navigationoverlay.SHOW_UNPIN_TOAST_COUNTER_PREF, prefInt + 1)
+                        .putInt(SHOW_UNPIN_TOAST_COUNTER_PREF, prefInt + 1)
                         .apply()
 
-                val contextReference = java.lang.ref.WeakReference(context)
+                val contextReference = WeakReference(context)
                 val showToast = showToast@{
                     val context = contextReference.get() ?: return@showToast
-                    android.widget.Toast.makeText(context, org.mozilla.tv.firefox.R.string.homescreen_unpin_tutorial_toast,
+                    Toast.makeText(context, R.string.homescreen_unpin_tutorial_toast,
                             android.widget.Toast.LENGTH_LONG).show()
                 }
-                if (context.isVoiceViewEnabled()) org.mozilla.tv.firefox.navigationoverlay.uiHandler.postDelayed(showToast, 1500)
+                if (context.isVoiceViewEnabled()) uiHandler.postDelayed(showToast, 1500)
                 else showToast.invoke()
 
                 canShowUnpinToast = false
@@ -370,8 +373,8 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
         // even though it doesn't need to be. To undo this, we add negative margins on the tile container.
         // I tried other solutions (ItemDecoration, dynamically changing margins) but this is more
         // complex because we need to relayout more than the changed view when adding/removing a row.
-        val tileBottomMargin = resources.getDimensionPixelSize(org.mozilla.tv.firefox.R.dimen.home_tile_margin_bottom) -
-                resources.getDimensionPixelSize(org.mozilla.tv.firefox.R.dimen.home_tile_container_margin_bottom)
+        val tileBottomMargin = resources.getDimensionPixelSize(R.dimen.home_tile_margin_bottom) -
+                resources.getDimensionPixelSize(R.dimen.home_tile_container_margin_bottom)
         updateLayoutParams {
             val marginLayoutParams = it as ViewGroup.MarginLayoutParams
             marginLayoutParams.bottomMargin = -tileBottomMargin

@@ -40,10 +40,10 @@ private const val CUSTOM_TILE_TO_SHOW_MILLIS = 200L
 private val CUSTOM_TILE_ICON_INTERPOLATOR = DecelerateInterpolator()
 
 class PinnedTileAdapter(
-    private val uiLifecycleCancelJob: Job,
+    uiLifecycleCancelJob: Job,
     private val loadUrl: (String) -> Unit,
-    var onTileLongClick: (() -> Unit)?,
-    var onTileFocused: (() -> Unit)?
+    val onTileLongClick: (() -> Unit)?,
+    val onTileFocused: (() -> Unit)?
 ) : RecyclerView.Adapter<TileViewHolder>() {
 
     private var tiles = listOf<PinnedTile>()
