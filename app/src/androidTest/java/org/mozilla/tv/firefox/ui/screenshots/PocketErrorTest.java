@@ -18,7 +18,9 @@ import org.junit.Test;
 import org.mozilla.tv.firefox.FirefoxTestApplication;
 import org.mozilla.tv.firefox.MainActivity;
 import org.mozilla.tv.firefox.R;
+import org.mozilla.tv.firefox.TestProvider;
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule;
+import org.mozilla.tv.firefox.helpers.PocketRepoFaker;
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo;
 
 import tools.fastlane.screengrab.Screengrab;
@@ -33,8 +35,11 @@ import static org.hamcrest.Matchers.allOf;
 
 public class PocketErrorTest extends ScreenshotTest {
 
+    public PocketErrorTest() {
+        TestProvider.INSTANCE.setPocketVideoRepo(PocketRepoFaker.INSTANCE.getFakedPocketRepo());
+    }
+
     private UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-    private FirefoxTestApplication app;
 
     @ClassRule
     public static final LocaleTestRule localeTestRule = new LocaleTestRule();
@@ -49,9 +54,7 @@ public class PocketErrorTest extends ScreenshotTest {
 
     @Test
     public void showPocketTileError() {
-        app = (FirefoxTestApplication) mActivityTestRule.getActivity().getApplication();
-
-        app.pushPocketRepoState(PocketVideoRepo.FeedState.FetchFailed.INSTANCE);
+        PocketRepoFaker.INSTANCE.getFakedPocketRepoState().postValue(PocketVideoRepo.FeedState.FetchFailed.INSTANCE);
 
         UiObject errorMsg = mDevice.findObject(new UiSelector()
                 .resourceId("org.mozilla.tv.firefox.debug:id/pocketMegaTileLoadError")
