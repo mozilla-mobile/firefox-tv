@@ -15,12 +15,11 @@ import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mozilla.tv.firefox.FirefoxTestApplication;
 import org.mozilla.tv.firefox.MainActivity;
 import org.mozilla.tv.firefox.R;
-import org.mozilla.tv.firefox.TestProvider;
+import org.mozilla.tv.firefox.TestDependencyProvider;
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule;
-import org.mozilla.tv.firefox.helpers.PocketRepoFaker;
+import org.mozilla.tv.firefox.helpers.FakePocketVideoRepoProvider;
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo;
 
 import tools.fastlane.screengrab.Screengrab;
@@ -36,7 +35,7 @@ import static org.hamcrest.Matchers.allOf;
 public class PocketErrorTest extends ScreenshotTest {
 
     public PocketErrorTest() {
-        TestProvider.INSTANCE.setPocketVideoRepo(PocketRepoFaker.INSTANCE.getFakedPocketRepo());
+        TestDependencyProvider.INSTANCE.setPocketVideoRepo(FakePocketVideoRepoProvider.INSTANCE.getFakedPocketRepo());
     }
 
     private UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -54,7 +53,7 @@ public class PocketErrorTest extends ScreenshotTest {
 
     @Test
     public void showPocketTileError() {
-        PocketRepoFaker.INSTANCE.getFakedPocketRepoState().postValue(PocketVideoRepo.FeedState.FetchFailed.INSTANCE);
+        FakePocketVideoRepoProvider.INSTANCE.getFakedPocketRepoState().postValue(PocketVideoRepo.FeedState.FetchFailed.INSTANCE);
 
         UiObject errorMsg = mDevice.findObject(new UiSelector()
                 .resourceId("org.mozilla.tv.firefox.debug:id/pocketMegaTileLoadError")

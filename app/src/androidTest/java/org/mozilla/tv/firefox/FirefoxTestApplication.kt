@@ -11,7 +11,7 @@ import org.mozilla.tv.firefox.utils.ServiceLocator
 class FirefoxTestApplication : FirefoxApplication() {
 
     override fun createServiceLocator() = object : ServiceLocator(this) {
-        override val pocketRepo by lazy { TestProvider.pocketVideoRepo ?: super.pocketRepo }
+        override val pocketRepo by lazy { TestDependencyProvider.pocketVideoRepo ?: super.pocketRepo }
     }
 
     override fun enableStrictMode() {
@@ -44,6 +44,6 @@ class FirefoxTestApplication : FirefoxApplication() {
  * Note that Application#onCreate is called by Espresso before @Before blocks,
  * so to use this class dependencies must be fulfilled from an init block in a test
  */
-object TestProvider {
-    var pocketVideoRepo : PocketVideoRepo? = null
+object TestDependencyProvider {
+    var pocketVideoRepo: PocketVideoRepo? = null
 }

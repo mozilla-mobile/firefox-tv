@@ -8,11 +8,10 @@ import okhttp3.mockwebserver.MockWebServer
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mozilla.tv.firefox.FirefoxTestApplication
-import org.mozilla.tv.firefox.TestProvider
+import org.mozilla.tv.firefox.TestDependencyProvider
 import org.mozilla.tv.firefox.helpers.AndroidAssetDispatcher
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
-import org.mozilla.tv.firefox.helpers.PocketRepoFaker
+import org.mozilla.tv.firefox.helpers.FakePocketVideoRepoProvider
 import org.mozilla.tv.firefox.helpers.TestAssetHelper
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.pocket.PocketViewModel
@@ -29,7 +28,7 @@ import org.mozilla.tv.firefox.ui.robots.navigationOverlay
 class PocketBasicUserFlowTest {
 
     init {
-        TestProvider.pocketVideoRepo = PocketRepoFaker.fakedPocketRepo
+        TestDependencyProvider.pocketVideoRepo = FakePocketVideoRepoProvider.fakedPocketRepo
     }
 
     @get:Rule val activityTestRule = MainActivityTestRule()
@@ -57,7 +56,7 @@ class PocketBasicUserFlowTest {
             )
         ))
 
-        PocketRepoFaker.fakedPocketRepoState.postValue(mockedState)
+        FakePocketVideoRepoProvider.fakedPocketRepoState.postValue(mockedState)
     }
 
     /* ktlint-disable no-blank-line-before-rbrace */ // This imposes unreadable grouping.
