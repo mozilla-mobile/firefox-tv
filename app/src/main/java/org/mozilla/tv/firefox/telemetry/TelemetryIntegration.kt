@@ -331,8 +331,8 @@ open class TelemetryIntegration protected constructor(
     fun youtubeCastEvent() = TelemetryEvent.create(Category.ACTION, Method.YOUTUBE_CAST, Object.BROWSER).queue()
 
     @UiThread
-    fun saveRemoteControlInformation(context: Context, event: KeyEvent) =
-            TelemetryRemoteControlTracker.saveRemoteControlInformation(context, event)
+    fun saveRemoteControlInformation(context: Context, keyEvent: KeyEvent) =
+            TelemetryRemoteControlTracker.saveRemoteControlInformation(context, keyEvent)
 }
 
 enum class MediaSessionEventType(internal val value: String) {
@@ -389,11 +389,11 @@ private object TelemetryHomeTileUniqueClickPerSessionCounter {
 @UiThread // We get-and-set over SharedPreferences so we need resource protection.
 private object TelemetryRemoteControlTracker {
 
-    fun saveRemoteControlInformation(context: Context, event: KeyEvent) {
+    fun saveRemoteControlInformation(context: Context, keyEvent: KeyEvent) {
         Assert.isUiThread()
         if (!TelemetryHolder.get().configuration.isCollectionEnabled) { return }
 
-        val remoteName = InputDevice.getDevice(event.deviceId).name
+        val remoteName = InputDevice.getDevice(keyEvent.deviceId).name
         val sharedPrefs = getSharedPrefs(context)
 
         if (!sharedPrefs.contains(KEY_REMOTE_CONTROL_NAME)) {
