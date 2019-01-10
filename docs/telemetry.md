@@ -18,7 +18,7 @@ As part of the event ping the most recent state of the user's setting is sent (d
 | Turbo mode currently enabled?      | tracking_protection_enabled     | **true**/false
 | Total home tile count    | total_home_tile_count           | `<int>`
 | Custom home tile count   | custom_home_tile_count          | `<int>`
-| Remote control name      | controller_name                 | `<string>`
+| Remote control name      | remote_control_name                 | `<string>`
 | App ID                   | app_id                          | `<string>`*
 
 (*) This is the public, published app ID, and does not contain any user information

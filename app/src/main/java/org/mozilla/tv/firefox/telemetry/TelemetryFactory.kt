@@ -36,7 +36,7 @@ object TelemetryFactory {
                         Settings.TRACKING_PROTECTION_ENABLED_PREF,
                         TelemetrySettingsProvider.PREF_CUSTOM_HOME_TILE_COUNT,
                         TelemetrySettingsProvider.PREF_TOTAL_HOME_TILE_COUNT,
-                        TelemetrySettingsProvider.PREF_CONTROLLER_NAME,
+                        TelemetrySettingsProvider.PREF_REMOTE_CONTROL_NAME,
                         TelemetrySettingsProvider.APP_ID
                 )
                 .setSettingsProvider(TelemetrySettingsProvider(context))
