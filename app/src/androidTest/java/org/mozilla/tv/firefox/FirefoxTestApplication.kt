@@ -5,7 +5,6 @@
 package org.mozilla.tv.firefox
 
 import android.os.StrictMode
-import org.mozilla.tv.firefox.helpers.PocketRepoFaker
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.utils.ServiceLocator
 
@@ -32,8 +31,6 @@ class FirefoxTestApplication : FirefoxApplication() {
         StrictMode.setThreadPolicy(threadPolicyBuilder.build())
         StrictMode.setVmPolicy(vmPolicyBuilder.build())
     }
-
-    fun pushPocketRepoState(state: PocketVideoRepo.FeedState) = PocketRepoFaker.fakedPocketRepoState.postValue(state)
 }
 
 /**
