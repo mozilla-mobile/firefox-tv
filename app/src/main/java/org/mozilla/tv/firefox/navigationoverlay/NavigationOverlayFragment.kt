@@ -12,7 +12,6 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.GridLayoutManager
@@ -85,12 +84,6 @@ enum class NavigationEvent {
 class NavigationOverlayFragment : Fragment(), View.OnClickListener {
     companion object {
         const val FRAGMENT_TAG = "overlay"
-    }
-
-    sealed class Action {
-        data class ShowTopToast(@StringRes val textId: Int) : Action()
-        data class ShowBottomToast(@StringRes val textId: Int) : Action()
-        data class SetOverlayVisible(val visible: Boolean) : Action()
     }
 
     /**
@@ -237,7 +230,7 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
                     if (isEnabled) NAVIGATION_BUTTON_ENABLED_ALPHA else NAVIGATION_BUTTON_DISABLED_ALPHA
         }
 
-        toolbarViewModel.state.observe(this, Observer {
+        toolbarViewModel.state.observe(viewLifecycleOwner, Observer {
             if (it == null) return@Observer
             val focusedView = currFocus
             updateOverlayButtonState(it.backEnabled, navButtonBack)
@@ -269,12 +262,13 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
             }
         })
 
-        toolbarViewModel.events.observe(this, Observer {
+        toolbarViewModel.events.observe(viewLifecycleOwner, Observer {
             it?.consume {
                 when (it) {
-                    is Action.ShowTopToast -> ViewUtils.showCenteredTopToast(context, it.textId)
-                    is Action.ShowBottomToast -> ViewUtils.showCenteredBottomToast(context, it.textId)
-                    is Action.SetOverlayVisible -> serviceLocator.screenController.showNavigationOverlay(fragmentManager, it.visible)
+                    is ToolbarViewModel.Action.ShowTopToast -> ViewUtils.showCenteredTopToast(context, it.textId)
+                    is ToolbarViewModel.Action.ShowBottomToast -> ViewUtils.showCenteredBottomToast(context, it.textId)
+                    is ToolbarViewModel.Action.SetOverlayVisible -> serviceLocator.screenController
+                            .showNavigationOverlay(fragmentManager, it.visible)
                 }.forceExhaustive
                 true
             }
@@ -358,7 +352,7 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
             }
         })
 
-        pinnedTileViewModel.getTileList().observe(this@NavigationOverlayFragment, Observer {
+        pinnedTileViewModel.getTileList().observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 tileAdapter.setTiles(it)
                 updateFocusableViews()
