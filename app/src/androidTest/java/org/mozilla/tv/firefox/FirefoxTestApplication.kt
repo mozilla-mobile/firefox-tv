@@ -42,7 +42,11 @@ class FirefoxTestApplication : FirefoxApplication() {
  * substituting their own fakes into tests.
  *
  * Note that Application#onCreate is called by Espresso before @Before blocks,
- * so to use this class dependencies must be fulfilled from an init block in a test
+ * so to use this class dependencies must be fulfilled from an init block in a test.
+ *
+ * *IMPORTANT NOTE:* this means that multiple tests declared within the same class
+ * will share dependencies. *Do not declare multiple tests in the same class* when
+ * using [TestDependencyProvider].
  */
 object TestDependencyProvider {
     var pocketVideoRepo: PocketVideoRepo? = null
