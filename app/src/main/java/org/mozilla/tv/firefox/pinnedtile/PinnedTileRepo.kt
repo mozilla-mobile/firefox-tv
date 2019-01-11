@@ -79,9 +79,9 @@ class PinnedTileRepo(private val applicationContext: Application) {
 
         when (tileToRemove) {
             is BundledPinnedTile -> {
-                val blackList = loadBlacklist().toMutableList()
+                val blackList = loadBlacklist().toMutableSet()
                 blackList.add(tileToRemove.id)
-                saveBlackList(blackList.toSet())
+                saveBlackList(blackList)
                 --bundledTilesSize
             }
             is CustomPinnedTile -> {

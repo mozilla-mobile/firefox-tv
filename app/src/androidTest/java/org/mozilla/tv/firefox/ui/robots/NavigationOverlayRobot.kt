@@ -65,10 +65,13 @@ class NavigationOverlayRobot {
 
     fun assertDesktopModeEnabled(desktopModeEnabled: Boolean) = desktopModeButton().assertIsEnabled(desktopModeEnabled)
 
-    fun assertPinnedTileExists(inPosition: Int, withText: String) = {
-        device.wait(Until.findObject(By.textContains(withText)), 200)
-        homeTiles()
-        .check(matches(RecyclerViewHelpers.atPosition(inPosition, hasDescendant(withText(withText)))))
+    fun assertPinnedTileExists(inPosition: Int, withText: String) {
+        // Tile takes a short amount of time to pop up because we have a coroutine that loads all parts of
+        // the tile at the same time. Checking Idling doesn't work (and it just waits up to 10s for idle
+        // anyway.
+        device.wait(Until.findObject(By.textContains(withText)), 2000)
+        homeTiles().check(matches(RecyclerViewHelpers
+                .atPosition(inPosition, hasDescendant(withText(withText)))))
     }
 
     fun assertActivityFinishing(activity: MainActivityTestRule) = assertTrue(activity.activity.isFinishing)
