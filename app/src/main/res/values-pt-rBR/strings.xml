@@ -17,7 +17,7 @@
   <string name="preference_privacy_block_social">Bloquear rastreadores sociais</string>
   <string name="preference_privacy_block_social_summary">Incorporados nos sites para rastrear suas visitas e exibir funcionalidades como botões de compartilhamento</string>
   <string name="preference_privacy_block_content">Bloquear outros rastreadores</string>
-  <string name="preference_privacy_block_content_summary2">Habilitar pode causar comportamento inesperado em algumas páginas</string>
+  <string name="preference_privacy_block_content_summary2">Ativar pode causar comportamento inesperado em algumas páginas</string>
   <string name="preference_category_performance">Desempenho</string>
   <string name="preference_performance_block_webfonts">Bloquear fontes Web</string>
   <string name="preference_performance_block_webfonts_summary">Pode resultar em falta de ícones ou imagens</string>
