@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [3.2] - 2019-01-11
 ### Added
 - Clicking remote menu button from Pocket feed now returns to overlay
 
@@ -132,7 +132,8 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 ## [1.0] - 2017-12-20
 *Initial release! A browser including home tile shortcuts.*
 
-[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.3..HEAD
+[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2..HEAD
+[3.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.3...v3.2
 [3.1.3]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.2...v3.1.3
 [3.1.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.1...v3.1.2
 [3.1.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1...v3.1.1
