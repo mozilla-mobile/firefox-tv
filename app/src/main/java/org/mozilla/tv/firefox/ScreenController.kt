@@ -25,13 +25,10 @@ import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 
 class ScreenController {
     var currentActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
-        get
-
-    // TODO cache overlay fragment so that custom pinned sites don't fade in every time the menu is opened
 
     /**
-     * We add all the fragments at start instead of creating them when needed in order to make the assumption
-     * that all Fragments exist.
+     * To keep things simple, we add all the fragments at start instead of creating them when needed
+     * in order to make the assumption that all Fragments exist.
      * To show the correct Fragment, we use Fragment hide/show to make sure the correct Fragment is visible.
      * We DO NOT use the Fragment backstack so that all transitions are controlled in the same manner, and we
      * don't end up mixing backstack actions with show/hide.
@@ -108,14 +105,11 @@ class ScreenController {
     }
 
     fun showBrowserScreenForUrl(fragmentManager: FragmentManager, url: String) {
-        // The browser Fragment will always be available because we create it when creating a session,
-        // and use the FragmentManager to hide it when it's not used.
         handleTransitionAndUpdateActiveScreen(fragmentManager, Transition.SHOW_BROWSER)
         val webRenderFragment = fragmentManager.webRenderFragment()
         webRenderFragment.loadUrl(url)
     }
 
-    // TODO: handle about:home and close overlay by button press separately
     fun showNavigationOverlay(fragmentManager: FragmentManager?, toShow: Boolean) {
         fragmentManager ?: return
         fragmentManagerShowNavigationOverlay(fragmentManager, toShow)
@@ -156,6 +150,7 @@ class ScreenController {
     }
 
     private fun isOnHomeUrl(fragmentManager: FragmentManager): Boolean {
+        // TODO: Would be more correct to get this from the model rather than the Fragment.
         val webRenderFragment = fragmentManager.webRenderFragment()
         return webRenderFragment.session.url == URLs.APP_URL_HOME
     }

@@ -113,6 +113,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             Sentry.capture(IllegalStateException("onNewIntent is called with null selectedSession"))
             return
         }
+
         // We can't do anything if the intent does not contain valid data, so short
         val intentData = IntentValidator.validate(this, unsafeIntent.toSafeIntent()) ?: return
         serviceLocator.screenController.showBrowserScreenForUrl(supportFragmentManager, intentData.url)

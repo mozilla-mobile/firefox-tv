@@ -29,7 +29,7 @@ object IntentValidator {
     @VisibleForTesting const val DIAL_PARAMS_KEY = "com.amazon.extra.DIAL_PARAM"
 
     /**
-     * Validate that [Intent] contains all expected parameters.
+     * Validate that [intent] contains all expected parameters.
      * Returns null if any unexpected values are encountered
      */
     fun validateOnCreate(context: Context, intent: SafeIntent, savedInstanceState: Bundle?): ValidatedIntentData? {
@@ -42,7 +42,7 @@ object IntentValidator {
         }
 
         if (savedInstanceState != null) {
-            // onNewIntent will handle restoring any state.
+            // We don't restore saved state.
             return null
         }
 

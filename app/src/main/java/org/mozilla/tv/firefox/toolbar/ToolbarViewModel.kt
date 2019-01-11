@@ -42,6 +42,7 @@ class ToolbarViewModel(
         data class ShowBottomToast(@StringRes val textId: Int) : Action()
         data class SetOverlayVisible(val visible: Boolean) : Action()
     }
+
     // Values should be pushed to _events using setValue. Two values are set in
     // rapid succession using postValue, only the latest will be received
     private var _events = SetOnlyLiveData<Consumable<Action>>()
