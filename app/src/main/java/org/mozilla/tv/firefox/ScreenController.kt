@@ -205,7 +205,7 @@ class ScreenController {
                     .hide(fragmentManager.navigationOverlayFragment())
                     .hide(fragmentManager.pocketFragment())
                     .hide(fragmentManager.settingsFragment())
-                    .commit()
+                    .commitNow()
                 currentActiveScreen = ActiveScreen.WEB_RENDER
             }
             Transition.EXIT_APP -> { return false }
