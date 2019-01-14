@@ -13,13 +13,13 @@ In addition to the core ping an event ping for UI telemetry is generated and sen
 
 As part of the event ping the most recent state of the user's setting is sent (default values in **bold**):
 
-| Setting                  | Key                             | Value
-|--------------------------|---------------------------------|----------------------
-| Turbo mode currently enabled?      | tracking_protection_enabled     | **true**/false
-| Total home tile count    | total_home_tile_count           | `<int>`
-| Custom home tile count   | custom_home_tile_count          | `<int>`
-| Remote control name      | remote_control_name                 | `<string>`
-| App ID                   | app_id                          | `<string>`*
+| Setting                         | Key                             | Value
+|---------------------------------|---------------------------------|----------------------
+| Turbo mode currently enabled?   | tracking_protection_enabled     | **true**/false
+| Total home tile count           | total_home_tile_count           | `<int>`
+| Custom home tile count          | custom_home_tile_count          | `<int>`
+| Remote control name             | remote_control_name             | `<string>`
+| App ID                          | app_id                          | `<string>`*
 
 (*) This is the public, published app ID, and does not contain any user information
 
@@ -37,30 +37,30 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 
 ### General
 
-| Event                                  | category | method                | object     | value  | extras.    |
-|----------------------------------------|----------|-----------------------|------------|--------|------------|
-| Settings: confirms clear data dialog   | action   | change                | setting    | clear_data | |
-| Pocket video feed: unique videos clicked per session|aggregate|click      | pocket_video | `<int>` | |
+| Event                                  | category   | method                | object       | value      | extras.    |
+|----------------------------------------|------------|-----------------------|--------------|------------|------------|
+| Settings: confirms clear data dialog   | action     | change                | setting      | clear_data |            |
+| Pocket video feed: unique videos clicked per session|aggregate|click        | pocket_video | `<int>`    |            |
 
 (*) This event is sent at the end of every session.
 
 ### Browser Overlay
-| Event                                  | category | method                | object     | value  | extras.    |
-|----------------------------------------|----------|-----------------------|------------|--------|------------|
-| Settings clicked                       | action   | click                 | menu       | settings | |
-| Browser: back clicked                  | action   | click                 | menu       | back   | |
-| Browser: forward clicked               | action   | click                 | menu       | forward | |
-| Browser: refresh clicked               | action   | click                 | menu       | refresh | |
-| Pocket: tile clicked                   | action   | click                 | menu       | pocket_video_tile | |
-| Turbo mode switch clicked              | action   | change                | turbo_mode | on/off (the new value) | |
-| Pin site switch clicked                | action   | change                | pin_page   | on/off (the new value) | desktop_mode* |
-| Desktop mode switch clicked | action | change | desktop_mode | on/off (the new value) | |
-| Tile clicked                           | action   | click                 | home_tile  | bundled/custom/youtube** | |
-| Tile removed                           | action   | remove                | home_tile  | bundled/custom | |
-| Unique tiles clicked per session     | aggregate| click                 | home_tile  | `<int>` | |
-| Menu shown by user              | action   | user_show       | menu         | ||
-| Menu hidden by user              | action   | user_hide       | menu         | ||
-| No menu action taken              | aggregate   | no_action_taken       | menu         | ||
+| Event                                  | category | method                | object       | value                    | extras.       |
+|----------------------------------------|----------|-----------------------|--------------|--------------------------|---------------|
+| Settings clicked                       | action   | click                 | menu         | settings                 |               |
+| Browser: back clicked                  | action   | click                 | menu         | back                     |               |
+| Browser: forward clicked               | action   | click                 | menu         | forward                  |               |
+| Browser: refresh clicked               | action   | click                 | menu         | refresh                  |               |
+| Pocket: tile clicked                   | action   | click                 | menu         | pocket_video_tile        |               |
+| Turbo mode switch clicked              | action   | change                | turbo_mode   | on/off (the new value)   |               |
+| Pin site switch clicked                | action   | change                | pin_page     | on/off (the new value)   | desktop_mode* |
+| Desktop mode switch clicked            | action   | change                | desktop_mode | on/off (the new value)   |               |
+| Tile clicked                           | action   | click                 | home_tile    | bundled/custom/youtube** |               |
+| Tile removed                           | action   | remove                | home_tile    | bundled/custom           |               |
+| Unique tiles clicked per session       | aggregate| click                 | home_tile    | `<int>`                  |               |
+| Menu shown by user                     | action   | user_show             | menu         |                          |               |
+| Menu hidden by user                    | action   | user_hide             | menu         |                          |               |
+| No menu action taken                   | aggregate| no_action_taken       | menu         |                          |               |
 
 (*)When the pin site switch is clicked, the state (on/off) of the desktop mode switch is also sent.
 
@@ -68,12 +68,12 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 
 ### Browsing
 
-| Event                                  | category | method                | object     | value  | extras.    |
-|----------------------------------------|----------|-----------------------|------------|--------|------------|
-| URL start loading (via url bar)        | action   | type_url              | search_bar |        | `url`*     |
-| Search query start loading (via url bar)| action  | type_query            | search_bar |        | `query`*   |
-| Remote: back pressed **                | action   | page                  | browser    | back   | `back`*    |
-| Video opened from YouTube Casting | action | youtube_cast | browser |  |  |
+| Event                                   | category | method                | object     | value  | extras.    |
+|-----------------------------------------|----------|-----------------------|------------|--------|------------|
+| URL start loading (via url bar)         | action   | type_url              | search_bar |        | `url`*     |
+| Search query start loading (via url bar)| action   | type_query            | search_bar |        | `query`*   |
+| Remote: back pressed **                 | action   | page                  | browser    | back   | `back`*    |
+| Video opened from YouTube Casting       | action   | youtube_cast          | browser    |        |            |
 
 (*) `query` is a JSON map containing the url bar location:
 ```js
@@ -105,13 +105,13 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 ```
 
 #### Media playback
-| Event                                      | category | method         | object        | value   |
-|--------------------------------------------|----------|----------------|---------------|---------|
-| MediaSession: play                         | action   | click_or_voice | media_session | play |
-| MediaSession: pause                        | action   | click_or_voice | media_session | pause |
-| MediaSession: next item                    | action   | click_or_voice | media_session | next |
-| MediaSession: previous item                | action   | click_or_voice | media_session | prev |
-| MediaSession: seek                         | action   | click_or_voice | media_session | seek |
+| Event                                      | category | method         | object        | value          |
+|--------------------------------------------|----------|----------------|---------------|----------------|
+| MediaSession: play                         | action   | click_or_voice | media_session | play           |
+| MediaSession: pause                        | action   | click_or_voice | media_session | pause          |
+| MediaSession: next item                    | action   | click_or_voice | media_session | next           |
+| MediaSession: previous item                | action   | click_or_voice | media_session | prev           |
+| MediaSession: seek                         | action   | click_or_voice | media_session | seek           |
 | MediaSession: play/pause remote button     | action   | click          | media_session | play_pause_btn |
 
 Fire OS controls media (e.g. videos, audio) playback with a `MediaSession`. MediaSession probes are sent when the user interacts with media through Fire OS (e.g. hardware media buttons, voice commands) **but not** when they interact through web content (e.g. pressing pause with the dpad Cursor). Right now, MediaSession **only supports video** ([#935](https://github.com/mozilla-mobile/firefox-tv/issues/935) is to add audio support).
