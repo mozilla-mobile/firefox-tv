@@ -69,7 +69,7 @@ class SettingsFragment : Fragment() {
         })
 
         val dataPreferenceClickListener = { _: View ->
-            settingsViewModel.setDataCollectionEnabled(telemetryButton.isChecked)
+            settingsViewModel.setDataCollectionEnabled(!telemetryButton.isChecked)
         }
         // Due to accessibility hack for #293, where we want to focus a different (visible) element
         // for accessibility, either of these views could be unfocusable, so we need to set the
