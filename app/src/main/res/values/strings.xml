@@ -168,4 +168,7 @@
     Clicking on that button in the YouTube app will show YouTube's instructions on how to cast. -->
     <string name="youtube_casting_onboarding_toast">Cast YouTube videos from your phone or tablet. Open YouTube on your device and tap %s to get started.</string>
 
+    <!-- Content description for the Exit Firefox button -->
+    <string name="exit_firefox_a11y">Exit Firefox</string>
+
 </resources>
