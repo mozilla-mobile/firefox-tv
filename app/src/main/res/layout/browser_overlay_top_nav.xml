@@ -50,6 +50,12 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+    <ImageButton
+        android:id="@+id/exitButton"
+        style="@style/NavigationButton"
+        android:src="@drawable/ic_home"
+        android:contentDescription="@string/exit_firefox_a11y"/>
+
     <!-- Image src set in code to fix SVG. -->
     <ImageButton
         android:id="@+id/navButtonSettings"
