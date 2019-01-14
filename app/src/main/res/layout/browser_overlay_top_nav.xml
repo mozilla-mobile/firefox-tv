@@ -35,15 +35,13 @@
         android:id="@+id/turboButton"
         style="@style/NavigationButton"
         android:src="@drawable/turbo_selector"
-        android:contentDescription="@string/turbo_mode"
-        android:nextFocusRight="@+id/desktopModeButton"/>
+        android:contentDescription="@string/turbo_mode"/>
 
     <org.mozilla.tv.firefox.widget.CheckableImageButton
         android:id="@+id/desktopModeButton"
         style="@style/NavigationButton"
         android:src="@drawable/mozac_ic_device_desktop"
-        android:contentDescription="@string/request_desktop_site_a11y"
-        android:nextFocusRight="@+id/navButtonSettings"/>
+        android:contentDescription="@string/request_desktop_site_a11y"/>
 
     <View
         android:layout_width="0dp"
@@ -60,9 +58,8 @@
     <ImageButton
         android:id="@+id/navButtonSettings"
         style="@style/NavigationButton"
-        android:nextFocusLeft="@id/desktopModeButton"
         android:contentDescription="@string/menu_settings"
-        android:nextFocusRight="@+id/navButtonSettings"/>
+        android:nextFocusRight="@id/navButtonSettings"/>
 
     <ImageView
         android:layout_width="wrap_content"
