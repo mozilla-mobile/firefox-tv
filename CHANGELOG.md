@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 ### Fixed
+- Accessibility on Pocket megatile
 
 ## [3.2]
 ### Added
