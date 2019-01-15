@@ -8,11 +8,27 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.support.test.runner.AndroidJUnitRunner
+import org.mozilla.tv.firefox.helpers.FakePocketVideoRepoProvider
+import org.mozilla.tv.firefox.ui.PocketBasicUserFlowTest
+import org.mozilla.tv.firefox.ui.screenshots.PocketErrorTest
 
 class FirefoxTestRunner : AndroidJUnitRunner() {
 
     override fun newApplication(cl: ClassLoader?, className: String?, context: Context?): Application {
         return super.newApplication(cl, FirefoxTestApplication::class.java.name, context)
+    }
+
+    override fun onCreate(arguments: Bundle?) {
+        when (arguments.extractClass()) {
+            // Set up class specific dependencies to be used in the ServiceLocator
+            PocketBasicUserFlowTest::class.java.name -> {
+                TestDependencyProvider.pocketVideoRepo = FakePocketVideoRepoProvider.fakedPocketRepo
+            }
+            PocketErrorTest::class.java.name -> {
+                TestDependencyProvider.pocketVideoRepo = FakePocketVideoRepoProvider.fakedPocketRepo
+            }
+        }
+        super.onCreate(arguments)
     }
 }
 

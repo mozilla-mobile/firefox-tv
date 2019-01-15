@@ -27,10 +27,6 @@ import org.mozilla.tv.firefox.ui.robots.navigationOverlay
  */
 class PocketBasicUserFlowTest {
 
-    init {
-        TestDependencyProvider.pocketVideoRepo = FakePocketVideoRepoProvider.fakedPocketRepo
-    }
-
     @get:Rule val activityTestRule = MainActivityTestRule()
 
     private lateinit var page: TestAssetHelper.TestAsset

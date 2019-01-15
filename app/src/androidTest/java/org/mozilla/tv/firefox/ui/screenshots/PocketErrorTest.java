@@ -34,10 +34,6 @@ import static org.hamcrest.Matchers.allOf;
 
 public class PocketErrorTest extends ScreenshotTest {
 
-    public PocketErrorTest() {
-        TestDependencyProvider.INSTANCE.setPocketVideoRepo(FakePocketVideoRepoProvider.INSTANCE.getFakedPocketRepo());
-    }
-
     private UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
     @ClassRule
