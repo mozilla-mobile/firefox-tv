@@ -30,6 +30,8 @@ class PocketVideoMegaTile(
 
         LayoutInflater.from(context).inflate(R.layout.pocket_video_mega_tile, this, true)
         PocketDrawable.setImageDrawableAsPocketWordmark(pocketWordmarkView)
+        pocketVideosContainer.contentDescription = resources.getString(R.string.pocket_home_a11y_tile_focused,
+                resources.getString(R.string.pocket_brand_name))
     }
 
     fun setContent(feedItems: List<PocketViewModel.FeedItem>) {
