@@ -50,6 +50,7 @@ open class TelemetryIntegration protected constructor(
         val ACTION = "action"
         val AGGREGATE = "aggregate"
         val ERROR = "error"
+        val POCKET = "pocket"
     }
 
     private object Method {
@@ -68,6 +69,9 @@ open class TelemetryIntegration protected constructor(
         val NO_ACTION_TAKEN = "no_action_taken"
         val YOUTUBE_CAST = "youtube_cast"
         val VIEW_INTENT = "view_intent"
+        val IMPRESSION = "impression"
+        val VIEW = "view"
+        val FINISH = "finish"
     }
 
     private object Object {
@@ -82,6 +86,7 @@ open class TelemetryIntegration protected constructor(
         val POCKET_VIDEO = "pocket_video"
         val MEDIA_SESSION = "media_session"
         val DESKTOP_MODE = "desktop_mode"
+        val VIDEO_ID = "video_id"
     }
 
     internal object Value {
