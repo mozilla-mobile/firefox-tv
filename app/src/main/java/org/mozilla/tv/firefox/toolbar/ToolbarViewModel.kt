@@ -132,6 +132,11 @@ class ToolbarViewModel(
         hideOverlay()
     }
 
+    @UiThread
+    fun exitFirefoxButtonClicked() {
+        sendOverlayClickTelemetry(NavigationEvent.EXIT_FIREFOX)
+    }
+
     private fun sendOverlayClickTelemetry(
         event: NavigationEvent,
         turboChecked: Boolean? = null,

@@ -392,6 +392,7 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
             NavigationEvent.TURBO -> toolbarViewModel.turboButtonClicked()
             NavigationEvent.DESKTOP_MODE -> toolbarViewModel.desktopModeButtonClicked()
             NavigationEvent.EXIT_FIREFOX -> {
+                toolbarViewModel.exitFirefoxButtonClicked()
                 (activity as MainActivity).moveTaskToBack(true)
             }
             else -> Unit // Nothing to do.

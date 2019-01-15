@@ -96,6 +96,7 @@ open class TelemetryIntegration protected constructor(
         val TILE_CUSTOM = "custom"
         val POCKET_VIDEO_MEGATILE = "pocket_video_tile"
         val YOUTUBE_TILE = "youtube_tile"
+        val EXIT_FIREFOX = "exit"
     }
 
     private object Extra {
@@ -272,6 +273,7 @@ open class TelemetryIntegration protected constructor(
             NavigationEvent.FORWARD -> Value.FORWARD
             NavigationEvent.RELOAD -> Value.RELOAD
             NavigationEvent.POCKET -> Value.POCKET_VIDEO_MEGATILE
+            NavigationEvent.EXIT_FIREFOX -> Value.EXIT_FIREFOX
 
             // For legacy reasons, turbo has different telemetry params so we special case it.
             // Pin has a similar state change so we model it after turbo.
