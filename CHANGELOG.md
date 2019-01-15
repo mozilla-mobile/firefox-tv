@@ -4,8 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+
+### Fixed
+- Accessibility on Pocket megatile
+
 ## [3.2.1] - 2019-01-14
-###Fixed
+### Fixed
 - Fixed a bug where "send usage data" could not be unchecked
 
 ## [3.2] - 2019-01-11
