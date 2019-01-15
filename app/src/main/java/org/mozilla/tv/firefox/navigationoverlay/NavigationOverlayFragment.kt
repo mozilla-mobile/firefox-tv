@@ -66,7 +66,7 @@ private const val COL_COUNT = 5
 private val uiHandler = Handler(Looper.getMainLooper())
 
 enum class NavigationEvent {
-    SETTINGS, BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION, POCKET, DESKTOP_MODE;
+    SETTINGS, BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION, POCKET, DESKTOP_MODE, EXIT_FIREFOX;
 
     companion object {
         fun fromViewClick(viewId: Int?) = when (viewId) {
@@ -78,6 +78,7 @@ enum class NavigationEvent {
             R.id.pinButton -> PIN_ACTION
             R.id.pocketVideoMegaTileView -> POCKET
             R.id.desktopModeButton -> DESKTOP_MODE
+            R.id.exitButton -> EXIT_FIREFOX
             else -> null
         }
     }
@@ -120,7 +121,7 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
                 }
             }
             NavigationEvent.TURBO, NavigationEvent.PIN_ACTION, NavigationEvent.DESKTOP_MODE, NavigationEvent.BACK,
-            NavigationEvent.FORWARD, NavigationEvent.RELOAD -> { /* not handled by this object */ }
+            NavigationEvent.FORWARD, NavigationEvent.RELOAD, NavigationEvent.EXIT_FIREFOX -> { /* not handled by this object */ }
         }
         Unit
     }
@@ -390,6 +391,9 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
             NavigationEvent.PIN_ACTION -> toolbarViewModel.pinButtonClicked()
             NavigationEvent.TURBO -> toolbarViewModel.turboButtonClicked()
             NavigationEvent.DESKTOP_MODE -> toolbarViewModel.desktopModeButtonClicked()
+            NavigationEvent.EXIT_FIREFOX -> {
+                (activity as MainActivity).moveTaskToBack(true)
+            }
             else -> Unit // Nothing to do.
         }
         onNavigationEvent.invoke(event, null, null)
