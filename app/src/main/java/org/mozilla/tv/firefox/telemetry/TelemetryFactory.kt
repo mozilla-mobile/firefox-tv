@@ -14,6 +14,7 @@ import org.mozilla.telemetry.measurement.DefaultSearchMeasurement
 import org.mozilla.telemetry.net.TelemetryClient
 import org.mozilla.telemetry.ping.TelemetryCorePingBuilder
 import org.mozilla.telemetry.ping.TelemetryMobileEventPingBuilder
+import org.mozilla.telemetry.ping.TelemetryPocketEventPingBuilder
 import org.mozilla.telemetry.schedule.jobscheduler.JobSchedulerTelemetryScheduler
 import org.mozilla.telemetry.serialize.JSONPingSerializer
 import org.mozilla.telemetry.storage.FileTelemetryStorage
@@ -55,6 +56,7 @@ object TelemetryFactory {
         return Telemetry(configuration, storage, client, scheduler)
                 .addPingBuilder(TelemetryCorePingBuilder(configuration))
                 .addPingBuilder(TelemetryMobileEventPingBuilder(configuration))
+                .addPingBuilder(TelemetryPocketEventPingBuilder(configuration))
                 .setDefaultSearchProvider(createDefaultSearchProvider(context))
     }
 
