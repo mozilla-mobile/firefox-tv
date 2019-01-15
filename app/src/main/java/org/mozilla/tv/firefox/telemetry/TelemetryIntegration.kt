@@ -147,6 +147,9 @@ open class TelemetryIntegration protected constructor(
         resetSessionMeasurements(context)
     }
 
+    // EXT to add events to pocket ping (independently from mobile_events)
+    fun TelemetryEvent.queueInPocketPing() = (TelemetryHolder.get().getPingBuilder(TelemetryPocketEventPingBuilder.TYPE) as TelemetryPocketEventPingBuilder).eventsMeasurement.add(this)
+
     private fun queueSessionMeasurements(context: Context) {
         TelemetryHomeTileUniqueClickPerSessionCounter.queueEvent(context)
         TelemetryEvent.create(Category.AGGREGATE, Method.CLICK, Object.POCKET_VIDEO,
