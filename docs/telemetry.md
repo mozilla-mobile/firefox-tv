@@ -62,6 +62,7 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 | Menu shown by user                     | action   | user_show             | menu         |                          |               |
 | Menu hidden by user                    | action   | user_hide             | menu         |                          |               |
 | No menu action taken                   | aggregate| no_action_taken       | menu         |                          |               |
+| Exit Firefox clicked                   | action   | click                 | menu         | exit                     |               |
 
 (*)When the pin site switch is clicked, the state (on/off) of the desktop mode switch is also sent.
 
