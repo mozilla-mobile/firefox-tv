@@ -5,13 +5,13 @@
 package org.mozilla.tv.firefox
 
 import android.os.StrictMode
-import org.mozilla.tv.firefox.pocket.PocketVideoRepo
+import org.mozilla.tv.firefox.TestDependencyProvider.serviceLocator
 import org.mozilla.tv.firefox.utils.ServiceLocator
 
 class FirefoxTestApplication : FirefoxApplication() {
 
-    override fun createServiceLocator() = object : ServiceLocator(this) {
-        override val pocketRepo = TestDependencyProvider.pocketVideoRepo ?: super.pocketRepo
+    override fun createServiceLocator(): ServiceLocator {
+        return TestDependencyProvider.serviceLocator ?: super.createServiceLocator()
     }
 
     override fun enableStrictMode() {
@@ -36,18 +36,20 @@ class FirefoxTestApplication : FirefoxApplication() {
 /**
  * Used to provide fake dependencies to the Application at startup.
  *
- * [FirefoxTestApplication.createServiceLocator] should check here for any
- * dependencies that must vary between tests, then return super if they are found
- * to be null. This allows individual tests to set these properties, thus
- * substituting their own fakes into tests.
+ * [FirefoxTestApplication.createServiceLocator] checks here for a custom
+ * [ServiceLocator], then return super if it is null. This allows individual
+ * tests to create this object, thus substituting their own fakes into tests.
  *
  * Note that Application#onCreate is called by Espresso before @Before blocks,
- * so to use this class dependencies must be fulfilled from [FirefoxTestRunner.onCreate].
+ * so to use this class [serviceLocator] must be provisioned from
+ * [FirefoxTestRunner.onCreate].
  *
- * *IMPORTANT NOTE:* this means that multiple tests declared within the same class
- * will share dependencies. *Do not declare multiple tests in the same class* when
- * using [TestDependencyProvider].
+ * *IMPORTANT NOTE:* as currently implemented, multiple tests declared within the
+ * same class will share dependencies. We generally do not write more than one
+ * test in each Espresso file, so this is an acceptable limitation at this time.
+ * Should this requirement change, update code in [FirefoxTestRunner]. *Do not
+ * declare multiple tests in the same class* when using [TestDependencyProvider].
  */
 object TestDependencyProvider {
-    var pocketVideoRepo: PocketVideoRepo? = null
+    var serviceLocator: ServiceLocator? = null
 }
