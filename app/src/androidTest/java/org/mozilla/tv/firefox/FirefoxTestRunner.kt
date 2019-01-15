@@ -14,8 +14,12 @@ import org.mozilla.tv.firefox.ui.screenshots.PocketErrorTest
 
 class FirefoxTestRunner : AndroidJUnitRunner() {
 
+    private lateinit var app: Application
+
     override fun newApplication(cl: ClassLoader?, className: String?, context: Context?): Application {
-        return super.newApplication(cl, FirefoxTestApplication::class.java.name, context)
+        return super.newApplication(cl, FirefoxTestApplication::class.java.name, context).also {
+            app = it
+        }
     }
 
     override fun onCreate(arguments: Bundle?) {
