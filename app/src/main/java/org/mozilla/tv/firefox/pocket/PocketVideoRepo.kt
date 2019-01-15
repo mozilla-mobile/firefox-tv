@@ -40,6 +40,8 @@ open class PocketVideoRepo(
     }
 
     private val _feedState = MutableLiveData<FeedState>().apply {
+        // setValue must be called from the main thread, and this repo is instantiated
+        // off of the main thread in Espresso tests, so postValue is used instead
         postValue(buildConfigDerivables.initialPocketRepoState)
     }
     open val feedState: LiveData<FeedState> = _feedState
