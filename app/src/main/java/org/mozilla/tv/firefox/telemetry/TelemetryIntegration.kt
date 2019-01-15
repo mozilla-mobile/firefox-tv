@@ -24,6 +24,7 @@ import org.mozilla.telemetry.event.TelemetryEvent
 import org.mozilla.telemetry.measurement.SearchesMeasurement
 import org.mozilla.telemetry.ping.TelemetryCorePingBuilder
 import org.mozilla.telemetry.ping.TelemetryMobileEventPingBuilder
+import org.mozilla.telemetry.ping.TelemetryPocketEventPingBuilder
 import org.mozilla.tv.firefox.ext.serviceLocator
 import java.util.Collections
 
@@ -162,6 +163,7 @@ open class TelemetryIntegration protected constructor(
         TelemetryHolder.get()
                 .queuePing(TelemetryCorePingBuilder.TYPE)
                 .queuePing(TelemetryMobileEventPingBuilder.TYPE)
+                .queuePing(TelemetryPocketEventPingBuilder.TYPE)
                 .scheduleUpload()
     }
 
