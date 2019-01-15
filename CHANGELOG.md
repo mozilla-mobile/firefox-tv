@@ -7,10 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 
+### Changed
+
 ### Fixed
+
+## [3.2.2] - 2019-01-15
+### Fixed 
 - Accessibility on Pocket megatile
 
-## [3.2]
+## [3.2.1] - 2019-01-14
+### Fixed
+- Fixed a bug where "send usage data" could not be unchecked
+
+## [3.2] - 2019-01-11
 ### Added
 - Clicking remote menu button from Pocket feed now returns to overlay
 
@@ -138,8 +147,10 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 ## [1.0] - 2017-12-20
 *Initial release! A browser including home tile shortcuts.*
 
-[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2..HEAD
-[3.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.3...v3.1.2
+[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.2...HEAD
+[3.2.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.1...3.2.2
+[3.2.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2...3.2.1
+[3.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.3...v3.2
 [3.1.3]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.2...v3.1.3
 [3.1.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.1...v3.1.2
 [3.1.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1...v3.1.1
