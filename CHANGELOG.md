@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Fixed Pocket Crash issue for non-EN locales (#1684)
 - Crash when using unrecognized remote control (#1685)
+- Fixed mismatch between internal and display state after clearing data (#1691)
 
 ## [3.2.2] - 2019-01-15
 ### Fixed 
