@@ -132,7 +132,10 @@ private class PocketVideoAdapter(
                 .showBrowserScreenForUrl(fragmentManager, item.url)
             TelemetryIntegration.INSTANCE.pocketVideoClickEvent(item.id)
         }
-        itemView.setOnFocusChangeListener { _, hasFocus -> updateForFocusState(this, hasFocus) }
+        itemView.setOnFocusChangeListener { _, hasFocus ->
+            updateForFocusState(this, hasFocus)
+            TelemetryIntegration.INSTANCE.pocketVideoImpressionEvent(item.id)
+        }
         updateForFocusState(this, itemView.isFocused)
 
         titleView.text = item.title
