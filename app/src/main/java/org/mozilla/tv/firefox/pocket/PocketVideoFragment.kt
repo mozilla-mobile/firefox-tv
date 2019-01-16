@@ -57,9 +57,7 @@ class PocketVideoFragment : Fragment() {
             when (state) {
                 is PocketViewModel.State.Error -> { /* TODO: #769: display error screen */ }
                 is PocketViewModel.State.Feed -> adapter.setVideos(state.feed)
-                is PocketViewModel.State.NotDisplayed -> {
-                    throw IllegalStateException("PocketVideoFragment reached while PocketViewModel.State == NotDisplayed")
-                }
+                is PocketViewModel.State.NotDisplayed -> Unit // We may come here on non-EN locales
                 null -> { }
             }.forceExhaustive
         })
