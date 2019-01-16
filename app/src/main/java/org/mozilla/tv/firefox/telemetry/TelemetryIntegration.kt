@@ -118,6 +118,7 @@ open class TelemetryIntegration protected constructor(
 
     // Available on any thread: we synchronize.
     private val pocketUniqueClickedVideoIDs = Collections.synchronizedSet(mutableSetOf<Int>())
+    private val pocketUniqueImpressedVideoIDs = Collections.synchronizedSet(mutableSetOf<Int>())
 
     fun init(context: Context) {
         // When initializing the telemetry library it will make sure that all directories exist and
@@ -153,18 +154,29 @@ open class TelemetryIntegration protected constructor(
     }
 
     // EXT to add events to pocket ping (independently from mobile_events)
-    fun TelemetryEvent.queueInPocketPing() = (TelemetryHolder.get().getPingBuilder(TelemetryPocketEventPingBuilder.TYPE) as TelemetryPocketEventPingBuilder).eventsMeasurement.add(this)
+    fun TelemetryEvent.queueInPocketPing() {
+        if (!TelemetryHolder.get().configuration.isCollectionEnabled) {
+            return
+        }
+
+        (TelemetryHolder.get()
+                .getPingBuilder(TelemetryPocketEventPingBuilder.TYPE) as TelemetryPocketEventPingBuilder)
+                .eventsMeasurement.add(this)
+    }
 
     private fun queueSessionMeasurements(context: Context) {
         TelemetryHomeTileUniqueClickPerSessionCounter.queueEvent(context)
         TelemetryEvent.create(Category.AGGREGATE, Method.CLICK, Object.POCKET_VIDEO,
                 pocketUniqueClickedVideoIDs.size.toString()).queue()
+        queuePocketVideoImpressionEvent()
+        queuePocketVideoClickEvent()
     }
 
     private fun resetSessionMeasurements(context: Context) {
         TelemetryHomeTileUniqueClickPerSessionCounter.resetSessionData(context)
         TelemetryRemoteControlTracker.resetSessionData(context)
         pocketUniqueClickedVideoIDs.clear()
+        pocketUniqueImpressedVideoIDs.clear()
     }
 
     fun stopMainActivity() {
@@ -324,6 +336,25 @@ open class TelemetryIntegration protected constructor(
     @AnyThread // pocketUniqueClickedVideoIDs is synchronized.
     fun pocketVideoClickEvent(id: Int) {
         pocketUniqueClickedVideoIDs.add(id)
+    }
+
+    @AnyThread // pocketUniqueImpressVideoIDs is synchronized.
+    fun pocketVideoImpressionEvent(id: Int) {
+        pocketUniqueImpressedVideoIDs.add(id)
+    }
+
+    private fun queuePocketVideoImpressionEvent() {
+        for (videoId in pocketUniqueImpressedVideoIDs) {
+            TelemetryEvent.create(Category.POCKET, Method.IMPRESSION, Object.VIDEO_ID,
+                    videoId.toString()).queueInPocketPing()
+        }
+    }
+
+    private fun queuePocketVideoClickEvent() {
+        for (videoId in pocketUniqueClickedVideoIDs) {
+            TelemetryEvent.create(Category.POCKET, Method.CLICK, Object.VIDEO_ID,
+                    videoId.toString()).queueInPocketPing()
+        }
     }
 
     fun mediaSessionEvent(eventType: MediaSessionEventType) {
