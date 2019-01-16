@@ -66,6 +66,7 @@ open class TelemetryIntegration protected constructor(
         val REMOVE = "remove"
         val NO_ACTION_TAKEN = "no_action_taken"
         val YOUTUBE_CAST = "youtube_cast"
+        val VIEW_INTENT = "view_intent"
     }
 
     private object Object {
@@ -333,6 +334,8 @@ open class TelemetryIntegration protected constructor(
     @UiThread
     fun saveRemoteControlInformation(context: Context, keyEvent: KeyEvent) =
             TelemetryRemoteControlTracker.saveRemoteControlInformation(context, keyEvent)
+
+    fun viewIntentEvent() = TelemetryEvent.create(Category.ACTION, Method.VIEW_INTENT, Object.APP).queue()
 }
 
 enum class MediaSessionEventType(internal val value: String) {

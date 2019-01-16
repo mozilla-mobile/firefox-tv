@@ -65,7 +65,7 @@ object IntentValidator {
                 if (TextUtils.isEmpty(dataString)) {
                     return null // We can't create a session from an Intent without a URL.
                 }
-
+                TelemetryIntegration.INSTANCE.viewIntentEvent()
                 return ValidatedIntentData(dataString, Session.Source.ACTION_VIEW)
             }
             Intent.ACTION_SEND -> {
