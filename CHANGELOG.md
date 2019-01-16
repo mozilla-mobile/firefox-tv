@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 ### Fixed
+
+## [3.2.3] - 2019-01-16
+### Fixed
 - Fixed Pocket Crash issue for non-EN locales (#1684)
 
 ## [3.2.2] - 2019-01-15
@@ -148,7 +151,8 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 ## [1.0] - 2017-12-20
 *Initial release! A browser including home tile shortcuts.*
 
-[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.2...HEAD
+[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.3...HEAD
+[3.2.3]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.2...v3.2.3
 [3.2.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.1...3.2.2
 [3.2.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2...3.2.1
 [3.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.3...v3.2
