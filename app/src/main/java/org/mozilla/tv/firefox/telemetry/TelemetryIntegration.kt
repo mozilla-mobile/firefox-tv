@@ -385,7 +385,9 @@ private object TelemetryHomeTileUniqueClickPerSessionCounter {
     }
 }
 
-/** Tracks the name of the remote control used. Only the first remote used per session is reported. */
+/** Tracks the name of the remote control used. Only the first remote used per session is reported.
+ * If the remote name returns as null, we save as "null". This way, we can also determine how many
+ * users use remotes that are not recognized. */
 @UiThread // We get-and-set over SharedPreferences so we need resource protection.
 private object TelemetryRemoteControlTracker {
 
@@ -393,7 +395,7 @@ private object TelemetryRemoteControlTracker {
         Assert.isUiThread()
         if (!TelemetryHolder.get().configuration.isCollectionEnabled) { return }
 
-        val remoteName = InputDevice.getDevice(keyEvent.deviceId).name
+        val remoteName = InputDevice.getDevice(keyEvent.deviceId)?.name ?: "null"
         val sharedPrefs = getSharedPrefs(context)
 
         if (!sharedPrefs.contains(KEY_REMOTE_CONTROL_NAME)) {
