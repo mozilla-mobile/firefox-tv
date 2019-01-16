@@ -41,6 +41,7 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 |----------------------------------------|------------|-----------------------|--------------|------------|------------|
 | Settings: confirms clear data dialog   | action     | change                | setting      | clear_data |            |
 | Pocket video feed: unique videos clicked per session|aggregate|click        | pocket_video | `<int>`    |            |
+| App opened from view intent            | action     | view_intent           | app          |            |            |
 
 (*) This event is sent at the end of every session.
 
