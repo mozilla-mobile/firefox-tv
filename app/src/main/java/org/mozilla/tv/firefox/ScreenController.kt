@@ -8,7 +8,6 @@ package org.mozilla.tv.firefox
 import android.content.Context
 import android.support.v4.app.FragmentManager
 import android.text.TextUtils
-import io.sentry.Sentry
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition
@@ -49,12 +48,7 @@ class ScreenController {
             .hide(settingsFragment)
             .commitNow()
 
-        if (currentActiveScreen != ActiveScreen.NAVIGATION_OVERLAY) {
-            Sentry.capture(
-                    IllegalStateException("Inconsistent state, expected " +
-                            "${ActiveScreen.NAVIGATION_OVERLAY.name}," +
-                            " got ${currentActiveScreen.name}"))
-        }
+        currentActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
     }
 
     /**
