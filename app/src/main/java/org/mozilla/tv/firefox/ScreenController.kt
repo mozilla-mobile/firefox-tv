@@ -132,7 +132,7 @@ class ScreenController {
                 .show(renderFragment)
             MenuInteractionMonitor.menuClosed()
         }
-        transaction.commit()
+        transaction.commitNow()
     }
 
     fun handleBack(fragmentManager: FragmentManager): Boolean {
@@ -170,28 +170,28 @@ class ScreenController {
                 fragmentManager.beginTransaction()
                     .show(fragmentManager.pocketFragment())
                     .hide(fragmentManager.navigationOverlayFragment())
-                    .commit()
+                    .commitNow()
                 currentActiveScreen = ActiveScreen.POCKET
             }
             Transition.REMOVE_POCKET -> {
                 fragmentManager.beginTransaction()
                     .show(fragmentManager.navigationOverlayFragment())
                     .hide(fragmentManager.pocketFragment())
-                    .commit()
+                    .commitNow()
                 currentActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
             }
             Transition.ADD_SETTINGS -> {
                 fragmentManager.beginTransaction()
                     .show(fragmentManager.settingsFragment())
                     .hide(fragmentManager.navigationOverlayFragment())
-                    .commit()
+                    .commitNow()
                 currentActiveScreen = ActiveScreen.SETTINGS
             }
             Transition.REMOVE_SETTINGS -> {
                 fragmentManager.beginTransaction()
                     .show(fragmentManager.navigationOverlayFragment())
                     .hide(fragmentManager.settingsFragment())
-                    .commit()
+                    .commitNow()
                 currentActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
             }
             Transition.SHOW_BROWSER -> {
