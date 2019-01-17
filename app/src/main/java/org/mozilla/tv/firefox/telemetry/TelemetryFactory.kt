@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.telemetry
 
 import android.content.Context
+import mozilla.components.concept.fetch.Client
 import mozilla.components.lib.fetch.httpurlconnection.HttpURLConnectionClient
 import org.mozilla.tv.firefox.BuildConfig
 import org.mozilla.tv.firefox.utils.Settings
@@ -26,6 +27,7 @@ private const val TELEMETRY_APP_NAME_FOCUS_TV = "FirefoxForFireTV"
  * Constructs objects related to telemetry
  */
 object TelemetryFactory {
+    var client: Client = HttpURLConnectionClient() // Set it to [TestClient] to intercept request payload
 
     fun createTelemetry(context: Context): Telemetry {
         val configuration = TelemetryConfiguration(context)
@@ -50,10 +52,10 @@ object TelemetryFactory {
 
         val serializer = JSONPingSerializer()
         val storage = FileTelemetryStorage(configuration, serializer)
-        val client = TelemetryClient(HttpURLConnectionClient())
+        val telemetryClient = TelemetryClient(client)
         val scheduler = JobSchedulerTelemetryScheduler()
 
-        return Telemetry(configuration, storage, client, scheduler)
+        return Telemetry(configuration, storage, telemetryClient, scheduler)
                 .addPingBuilder(TelemetryCorePingBuilder(configuration))
                 .addPingBuilder(TelemetryMobileEventPingBuilder(configuration))
                 .addPingBuilder(TelemetryPocketEventPingBuilder(configuration))
