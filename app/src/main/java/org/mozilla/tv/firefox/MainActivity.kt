@@ -6,6 +6,7 @@
 package org.mozilla.tv.firefox
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -27,7 +28,6 @@ import org.mozilla.tv.firefox.telemetry.SentryIntegration
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.OnUrlEnteredListener
-import org.mozilla.tv.firefox.utils.SafeIntent
 import org.mozilla.tv.firefox.utils.Settings
 import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.utils.ViewUtils
@@ -62,19 +62,19 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         setContentView(R.layout.activity_main)
 
-        val intent = SafeIntent(intent)
-        val intentData = IntentValidator.validateOnCreate(this, intent, savedInstanceState)
+        val intentData = IntentValidator.validateOnCreate(this, intent.toSafeIntent(), savedInstanceState)
 
         val session = getOrCreateSession(intentData)
-
         val screenController = serviceLocator.screenController
         screenController.setUpFragmentsForNewSession(supportFragmentManager, session)
 
-        if (intentData != null) {
-            screenController.showBrowserScreenForUrl(supportFragmentManager, intentData.url)
-        } else {
-            screenController.showBrowserScreenForCurrentSession(supportFragmentManager, session)
-        }
+        serviceLocator.intentLiveData.observe(this, Observer {
+            if (it != null) {
+                screenController.showBrowserScreenForUrl(supportFragmentManager, it.url)
+            } else {
+                screenController.showBrowserScreenForCurrentSession(supportFragmentManager, session)
+            }
+        })
 
         if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding()) {
             val onboardingIntents =
@@ -86,6 +86,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             val onboardingIntent = Intent(this@MainActivity, OnboardingActivity::class.java)
             startActivity(onboardingIntent)
         }
+
+        serviceLocator.intentLiveData.value = intentData
     }
 
     @SuppressLint("MissingSuperCall")
@@ -116,7 +118,9 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         // We can't do anything if the intent does not contain valid data, so short
         val intentData = IntentValidator.validate(this, unsafeIntent.toSafeIntent()) ?: return
-        serviceLocator.screenController.showBrowserScreenForUrl(supportFragmentManager, intentData.url)
+        /** ScreenController operations rely on Activity.LifeCycle (i.e. FragmentTransactions)
+         *  Using LiveData allows such methods to be called in the correct LifeCycle */
+        serviceLocator.intentLiveData.value = intentData
     }
 
     override fun applyLocale() {
