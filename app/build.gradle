@@ -73,6 +73,12 @@ android {
             }
         }
     }
+
+    // Needed until WorkManager from a-c gets upgraded
+    // See https://developer.android.com/jetpack/docs/release-notes#september_19_2018
+    packagingOptions {
+        exclude 'META-INF/proguard/androidx-annotations.pro'
+    }
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
@@ -116,6 +122,7 @@ dependencies {
     implementation "org.mozilla.components:ui-fonts:$moz_components_version"
     implementation "org.mozilla.components:feature-session:$moz_components_version"
     implementation "org.mozilla.components:ui-icons:$moz_components_version"
+    implementation "org.mozilla.components:service-fretboard:$moz_components_version"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
