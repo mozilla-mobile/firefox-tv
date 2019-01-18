@@ -21,9 +21,7 @@
   <string name="preference_performance_block_webfonts_summary">Móže k tomu wjesć, zo symbole abo wobrazy faluja</string>
     <string name="preference_mozilla_telemetry2">Wužiwanske daty pósłać</string>
     <string name="preference_privacy_notice">Zdźělenka priwatnosće</string>
-    <string name="accessibility_announcement_loading">Začitanje</string>
-  <string name="accessibility_announcement_loading_finished">Websydło je so začitało</string>
-    <string name="content_description_forward">Doprědka</string>
+  <string name="content_description_forward">Doprědka</string>
   <string name="content_description_reload">Websydło znowa začitać</string>
   <string name="content_description_back">Wróćo</string>
     <string name="external_app_prompt_title">Wotkaz w druhim nałoženju wočinić</string>
@@ -33,21 +31,6 @@
   <string name="external_multiple_apps_matched_exit">Priwatny modus wopušćić?</string>
     <string name="errorpage_title">Zmylk při čitanju strony</string>
   <string name="errorpage_refresh">Hišće raz spytać</string>
-  <string name="error_connectionfailure_title">Žadyn zwisk móžny</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>Syd&#322;o njesteji snano nachwilu k dispoziciji abo je p&#345;e&#263;e&#382;ene. Spytaj&#263;e za ma&#322;o wokomikow hi&#353;&#263;e raz.</li>"\n        "<li>Jeli njem&#243;&#382;e&#263;e strony za&#269;ita&#263;, p&#345;epruwuj&#263;e datowy abo WLAN-zwisk wa&#353;eho mobilneho grata.</li>"\n        "</ul>]]></string>
-  <string name="error_timeout_title">Čas zwiska je překročeny</string>
-  <string name="error_hostLookup_title">Serwer namakany njeje</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>"P&#345;epruwuj&#263;e adresu za pisanskimi zmylkami ka&#382;\n          "<strong>ww</strong>".example.com m&#283;sto\n          "<strong>www</strong>.example.com</li>"\n        "<li>Jeli njem&#243;&#382;e&#263;e strony za&#269;ita&#263;, p&#345;epruwuj&#263;e daty swojeho grata abo sw&#243;j WLAN-zwisk.</li>"\n      "</ul>]]></string>
-  <string name="error_malformedURI_title">Adresa płaćiwa njeje</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"Webadresy so z wa&#353;njom ka&#382; "<strong>http://www.example.com/</strong>" pisaja."</li>"\n  "<li>"Zaw&#283;s&#263;&#263;e, zo wu&#382;iwa&#263;e dopr&#283;dka nachilene nak&#243;sne smu&#382;ki (t.j. "<strong>/</strong>).</li>\n</ul>]]></string>
-  <string name="error_redirectLoop_title">Strona njeprawje posrědkuje</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Tut&#243;n problem so druhdy p&#345;ez znjem&#243;&#382;njenje abo wotpokazowanje plackow zawinuje.</li>\n</ul>]]></string>
-  <string name="error_unsupportedprotocol_title">Tuta adresa njeje so zrozumiła</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Snano dyrbi&#263;e druhe programy instalowa&#263;, zo by so tuta adresa wo&#269;ini&#322;a.</li>\n</ul>]]></string>
-  <string name="error_sslhandshake_title">Wěsty zwisk móžny njeje</string>
-  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>To m&#243;h&#322;o problem z konfiguraciju serwera by&#263;, abo m&#243;h&#322;o by&#263;,\nzo n&#283;cht&#243; pospytuje serwer imitowa&#263;.</li>"\n  "<li>Jeli s&#263;e ze serwerom w za&#324;d&#378;enos&#263;i wusp&#283;&#353;nje zwjazany by&#322;, m&#243;h&#322; zmylk snano\nnachwilny by&#263; a m&#243;&#382;e&#263;e pozd&#378;i&#353;o hi&#353;&#263;e raz spyta&#263;.</li>\n</ul>]]></string>
-  <string name="error_generic_title">Hopla</string>
-  <string name="error_generic_message">Z někajkeje přičiny njemóžemy tutu stronu začitać.</string>
   <string name="your_rights">Waše prawa</string>
     <string name="your_rights_content1">%1$s je darmotna softwara wotewrjeneho žórła wot Mozilla a druhich sobuskutkowarjow.</string>
   <string name="your_rights_content2"><![CDATA["%1$s so pod wuměnjenjemi licency "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" a druhimi licencami wotewrjeneho žórła k dispoziciji staja."]]></string>

@@ -21,9 +21,7 @@
   <string name="preference_performance_block_webfonts_summary">Boleh menyebabkan imej atau ikon hilang</string>
     <string name="preference_mozilla_telemetry2">Hantar data penggunaan</string>
     <string name="preference_privacy_notice">Notis Privasi</string>
-    <string name="accessibility_announcement_loading">Memuatkan</string>
-  <string name="accessibility_announcement_loading_finished">Laman web dimuatkan</string>
-    <string name="content_description_forward">Navigasi depan</string>
+  <string name="content_description_forward">Navigasi depan</string>
   <string name="content_description_reload">Muat semula laman web</string>
   <string name="content_description_back">Navigasi undur</string>
     <string name="external_app_prompt_title">Buka pautan guna aplikasi lain</string>
@@ -33,21 +31,6 @@
   <string name="external_multiple_apps_matched_exit">Tamatkan Pelayaran Peribadi?</string>
     <string name="errorpage_title">Masalah memuatkan halaman</string>
   <string name="errorpage_refresh">Cuba Lagi</string>
-  <string name="error_connectionfailure_title">Tidak dapat menyambung</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>Laman ini tidak tersedia buat masa ini atau terlalu sibuk. Cuba lagi selepas beberapa saat.</li>"\n        "<li>Jika anda tidak dapat memuatkan sebarang halaman, semak data peranti telefon atau sambungan Wi-Fi anda.</li>"\n      "</ul>]]></string>
-  <string name="error_timeout_title">Sambungan tamat masa</string>
-  <string name="error_hostLookup_title">Pelayan tidak ditemui</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>"Semak alamat untuk kesilapan seperti\n          "<strong>ww</strong>".example.com yang sepatutnya\n          "<strong>www</strong>.example.com</li>"\n        "<li>Jika anda tidak dapat memuat sebarang halaman, semak data peranti atau sambungan Wi-Fi anda.</li>"\n      "</ul>]]></string>
-  <string name="error_malformedURI_title">Alamat tidak sah</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"Alamat Web lazimnya ditulis begini "<strong>http://www.example.com/</strong></li>"\n  "<li>"Pastikan anda menggunakan garis miring hadapan (iaitu "<strong>/</strong>).</li>\n</ul>]]></string>
-  <string name="error_redirectLoop_title">Halaman tidak diarahkan semula dengan betul</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Masalah ini kadangkala disebabkan oleh menyahdayakan atau enggan menerima kuki.</li>\n</ul>]]></string>
-  <string name="error_unsupportedprotocol_title">Alamat tidak difahami</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Anda mungkin perlu memasang perisian lain untuk membuka alamat ini.</li>\n</ul>]]></string>
-  <string name="error_sslhandshake_title">Sambungan selamat gagal</string>
-  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Ini mungkin masalah dengan konfigurasi pelayan, atau boleh jadi\nada pihak yang cuba menyamar sebagai pelayan.</li>"\n  "<li>Jika anda pernah berjaya mendapatkan hubungan dengan pelayan ini dulu, ralat ini mungkin\nsementara dan anda boleh cuba lagi nanti.</li>\n</ul>]]></string>
-  <string name="error_generic_title">Oops</string>
-  <string name="error_generic_message">Kami tidak dapat memuat halaman ini untuk sebab-sebab tertentu.</string>
   <string name="your_rights">Hak Anda</string>
     <string name="your_rights_content1">%1$s adalah perisian percuma dan sumber terbuka yang dihasilkan oleh Mozilla dan para penyumbang lain.</string>
   <string name="your_rights_content2"><![CDATA["%1$s disediakan untuk anda di bawah terma "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Lesen Umum Mozilla</a>" dan lesen sumber terbuka lain."]]></string>

@@ -21,8 +21,6 @@
   <string name="preference_performance_block_webfonts_summary">Ikonoak edo irudiak ez bistaratzea eragin lezake</string>
     <string name="preference_mozilla_telemetry2">Bidali erabilera-datuak</string>
     <string name="preference_privacy_notice">Pribatutasun-oharra</string>
-    <string name="accessibility_announcement_loading">Kargatzen</string>
-  <string name="accessibility_announcement_loading_finished">Webgunea kargatuta</string>
   <string name="content_description_forward">Nabigatu aurrera</string>
   <string name="content_description_reload">Berritu webgunea</string>
   <string name="content_description_back">Nabigatu atzera</string>
@@ -33,21 +31,6 @@
   <string name="external_multiple_apps_matched_exit">Irten nabigazio pribatutik?</string>
   <string name="errorpage_title">Arazoa orria kargatzerakoan</string>
   <string name="errorpage_refresh">Saiatu berriro</string>
-  <string name="error_connectionfailure_title">Ezin da konektatu</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>Gunea une batez desgaituta edo oso lanpetuta egon daiteke. Saiatu berriro minutu batzuen buruan.</li>"\n        "<li>Ezin baduzu beste orririk kargatu, egiaztatu zure gailu mugikorraren datu- edo WiFi-konexioa.</li>"\n      "</ul>]]></string>
-  <string name="error_timeout_title">Konexioaren denbora-muga gainditu da</string>
-  <string name="error_hostLookup_title">Zerbitzaria ez da aurkitu</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>"Helbidea ondo begiratu mota honetako erroreak ekiditeko:\n          "<strong>ww</strong>".adibidea.eus \n          "<strong>www</strong>.adibidea.eus-en ordez</li>"\n        "<li>Ezin baduzu inolako orririk kargatu, begiratu zure gailuaren datu- edo WiFi-konexioa.</li>"\n      "</ul>]]></string>
-  <string name="error_malformedURI_title">Helbidea ez da baliozkoa</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"Web helbideak normalean "<strong>http://www.adibidea.eus/</strong>" formatukoak dira"</li>"\n  "<li>"Ziurtatu aurrerako barrak erabiltzen dituzula (hau da, "<strong>/</strong>).</li>\n</ul>]]></string>
-  <string name="error_redirectLoop_title">Orriak ez du birbideraketa ondo egiten</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Arazo hau baliteke cookieak desgaituta eduki edo ez onartzeagatik izatea.</li>\n</ul>]]></string>
-  <string name="error_unsupportedprotocol_title">Ez da helbidea ulertu</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Agian bestelako softwarea instalatu behar duzu helbide hau irekitzeko.</li>\n</ul>]]></string>
-  <string name="error_sslhandshake_title">Konexio seguruak huts egin du</string>
-  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Hau zerbitzariaren konfigurazio-errore batengatik edo\nnorbait zerbitzariaren nortasuna hartzen ari delako izan daiteke.</li>"\n  "<li>Aurretik zerbitzari honetara behar bezala konektatu bazara, errorea\nbehin-behinekoa izan daiteke eta geroago saia zaitezke.</li>\n</ul>]]></string>
-  <string name="error_generic_title">Iepa</string>
-  <string name="error_generic_message">Ezin dugu orri hau kargatu arrazoi ezezagun batengatik.</string>
   <string name="your_rights">Zure eskubideak</string>
     <string name="your_rights_content1">Mozillak eta beste hainbat laguntzailek egindako software libre eta kode irekikoa da %1$s.</string>
   <string name="your_rights_content2"><![CDATA["%1$s zure eskura dago "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" eta kode irekiko beste lizentzien baldintzapean."]]></string>

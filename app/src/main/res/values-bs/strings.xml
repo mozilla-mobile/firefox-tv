@@ -21,8 +21,6 @@
   <string name="preference_performance_block_webfonts_summary">Može prouzrokovati nestajanje ikona ili slika</string>
     <string name="preference_mozilla_telemetry2">Šalji podatke o korištenju</string>
     <string name="preference_privacy_notice">Napomena o privatnosti</string>
-    <string name="accessibility_announcement_loading">Učitavanje</string>
-  <string name="accessibility_announcement_loading_finished">Web stranica učitana</string>
   <string name="content_description_forward">Idite naprijed</string>
   <string name="content_description_reload">Ponovo učitaj web stranicu</string>
   <string name="content_description_back">Idite nazad</string>
@@ -33,21 +31,6 @@
   <string name="external_multiple_apps_matched_exit">Izaći iz privatnog pretraživanja?</string>
   <string name="errorpage_title">Problem učitavanja stranice</string>
   <string name="errorpage_refresh">Pokušaj ponovo</string>
-  <string name="error_connectionfailure_title">Povezivanje nije moguće</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>Stranica je mo&#382;da trenutno nedostupna ili prezauzeta. Poku&#353;ajte ponovo za par minuta.</li>"\n        "<li>Ako ne mo&#382;ete u&#269;itati nijednu stranicu, provjerite internet na va&#353;em telefonu ili Wi-Fi konekciju.</li>"\n      "</ul>]]></string>
-  <string name="error_timeout_title">Veza je istekla</string>
-  <string name="error_hostLookup_title">Server nije pronađen</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>"Provjerite adresu radi gre&#353;aka u kucanju kao &#353;to su\n          "<strong>ww</strong>".example.com umjesto\n          "<strong>www</strong>.example.com</li>"\n        "<li>Ako ne mo&#382;ete u&#269;itati nijednu stranicu, provjerite internet na va&#353;em telefonu ili Wi-Fi konekciju.</li>"\n      "</ul>]]></string>
-  <string name="error_malformedURI_title">Adresa je nevažeća</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"Web adrese se obi&#269;no pi&#353;u kao "<strong>http://www.example.com/</strong></li>"\n  "<li>"Uvjerite se da koristite kose crte (tj. "<strong>/</strong>).</li>\n</ul>]]></string>
-  <string name="error_redirectLoop_title">Stranica ne preusmjerava pravilno</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Ovaj problem ponekad mo&#382;e biti izazvan onemogu&#263;avanjem ili odbijanjem prihvatanja kola&#269;i&#263;a.</li>\n</ul>]]></string>
-  <string name="error_unsupportedprotocol_title">Adresa nije razumljiva</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Mo&#382;da &#263;ete morati instalirati drugi softver da otvorite ovu adresu.</li>\n</ul>]]></string>
-  <string name="error_sslhandshake_title">Sigurna veza nije uspjela</string>
-  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Ovo bi mogao biti problem sa pode&#353;avanjima servera ili se neko mo&#382;da poku&#353;ava predstaviti kao server.</li>"\n  "<li>Ako ste se i ranije uspje&#353;no povezivali na ovaj server, gre&#353;ka mo&#382;e biti privremena i mo&#382;ete ponovo poku&#353;ati kasnije.</li>\n</ul>]]></string>
-  <string name="error_generic_title">Ups</string>
-  <string name="error_generic_message">Iz nekog razloga ne možemo učitati ovu stranicu.</string>
   <string name="your_rights">Vaša prava</string>
     <string name="your_rights_content1">%1$s je besplatan softver i otvorenog koda napravljen od strane Mozille i drugih doprinosilaca.</string>
   <string name="your_rights_content2"><![CDATA["%1$s vam je omogućen pod uslovima "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" i drugih licenci otvorenog koda."]]></string>

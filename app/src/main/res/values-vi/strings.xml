@@ -21,9 +21,7 @@
   <string name="preference_performance_block_webfonts_summary">Có thể dẫn đến thiếu biểu tượng hoặc hình ảnh</string>
     <string name="preference_mozilla_telemetry2">Gửi dữ liệu sử dụng</string>
     <string name="preference_privacy_notice">Chính sách riêng tư</string>
-    <string name="accessibility_announcement_loading">Đang tải</string>
-  <string name="accessibility_announcement_loading_finished">Đã tải xong trang web</string>
-    <string name="content_description_forward">Điều hướng tiến</string>
+  <string name="content_description_forward">Điều hướng tiến</string>
   <string name="content_description_reload">Tải lại trang web</string>
   <string name="content_description_back">Điều hướng lùi</string>
     <string name="external_app_prompt_title">Mở đường dẫn trong ứng dụng khác</string>
@@ -33,21 +31,6 @@
   <string name="external_multiple_apps_matched_exit">Thoát duyệt web riêng tư?</string>
     <string name="errorpage_title">Gặp vấn đề khi tải trang</string>
   <string name="errorpage_refresh">Thử lại</string>
-  <string name="error_connectionfailure_title">Không thể kết nối</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>Trang web c&#243; th&#7875; t&#7841;m th&#7901;i kh&#244;ng ho&#7841;t &#273;&#7897;ng ho&#7863;c qu&#225; t&#7843;i. H&#227;y th&#7917; l&#7841;i sau v&#224;i ph&#250;t.</li>"\n        "<li>N&#7871;u b&#7841;n kh&#244;ng th&#7875; t&#7843;i b&#7845;t k&#7923; trang n&#224;o, h&#227;y ki&#7875;m tra d&#7919; li&#7879;u di &#273;&#7897;ng ho&#7863;c k&#7871;t n&#7889;i Wi-Fi.</li>"\n      "</ul>]]></string>
-  <string name="error_timeout_title">Kết nối mất quá nhiều thời gian</string>
-  <string name="error_hostLookup_title">Không tìm thấy máy chủ</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>"Ki&#7875;m tra c&#225;c l&#7895;i &#7903; &#273;&#7883;a ch&#7881; nh&#432;\n          "<strong>ww</strong>".example.com thay v&#236; nh&#7853;p \n          "<strong>www</strong>.example.com</li>"\n        "<li>N&#7871;u b&#7841;n kh&#244;ng th&#7875; t&#7843;i b&#7845;t k&#7923; trang n&#224;o, h&#227;y ki&#7875;m tra d&#7919; li&#7879;u di &#273;&#7897;ng ho&#7863;c k&#7871;t n&#7889;i Wi-Fi c&#7911;a b&#7841;n.</li>"\n      "</ul>]]></string>
-  <string name="error_malformedURI_title">Địa chỉ không hợp lệ</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>&#272;&#7883;a ch&#7881; web th&#432;&#7901;ng &#273;&#432;&#7907;c vi&#7871;t nh&#432;\n<strong>http://www.example.com/</strong></li>"\n  "<li>"&#272;&#7843;m b&#7843;o b&#7841;n &#273;ang s&#7917; d&#7909;ng d&#7845;u g&#7841;ch ch&#233;o (t&#7913;c l&#224; "<strong>/</strong>).\n</li>\n</ul>]]></string>
-  <string name="error_redirectLoop_title">Trang này không chuyển hướng đúng cách</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>V&#7845;n &#273;&#7873; n&#224;y &#273;&#244;i khi c&#243; th&#7875; l&#224; do v&#244; hi&#7879;u ho&#7863;c t&#7915; ch&#7889;i ch&#7845;p nh&#7853;n cookie.</li>\n</ul>]]></string>
-  <string name="error_unsupportedprotocol_title">Địa chỉ không được hỗ trợ</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>B&#7841;n c&#243; th&#7875; c&#7847;n c&#224;i &#273;&#7863;t ph&#7847;n m&#7873;m kh&#225;c &#273;&#7875; m&#7903; &#273;&#7883;a ch&#7881; n&#224;y.</li>\n</ul>]]></string>
-  <string name="error_sslhandshake_title">Kết nối bảo mật thất bại</string>
-  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>&#272;&#226;y c&#243; th&#7875; l&#224; s&#7921; c&#7889; v&#7899;i c&#7845;u h&#236;nh c&#7911;a m&#225;y ch&#7911; ho&#7863;c c&#243; th&#7875; l&#224; m&#7897;t ng&#432;&#7901;i c&#7889; m&#7841;o danh m&#225;y ch&#7911;.</li>"\n  "<li>N&#7871;u tr&#432;&#7899;c &#273;&#226;y b&#7841;n &#273;&#227; k&#7871;t n&#7889;i v&#7899;i m&#225;y ch&#7911; n&#224;y, l&#7895;i n&#224;y c&#243; th&#7875; l&#224; t&#7841;m th&#7901;i v&#224; b&#7841;n c&#243; th&#7875; th&#7917; l&#7841;i sau.</li>\n</ul>]]></string>
-  <string name="error_generic_title">Ôi</string>
-  <string name="error_generic_message">Chúng tôi không thể tải trang này vì một số lý do.</string>
   <string name="your_rights">Quyền lợi của bạn</string>
     <string name="your_rights_content1">%1$s là phần mềm miễn phí và mã nguồn mở do Mozilla và các cộng tác viên khác cung cấp.</string>
   <string name="your_rights_content2"><![CDATA["%1$s được cung cấp cho bạn theo các điều khoản của "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">gi&#7845;y ph&#233;p Mozilla Public</a>" và các giấy phép nguồn mở khác."]]></string>

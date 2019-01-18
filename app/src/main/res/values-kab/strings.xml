@@ -21,9 +21,7 @@
   <string name="preference_performance_block_webfonts_summary">Ahat yekka-d seg tigitin neγ tugniwin yettwattun</string>
     <string name="preference_mozilla_telemetry2">Azen isefka n useqdec</string>
     <string name="preference_privacy_notice">Tasertit n tbaḍnit</string>
-    <string name="accessibility_announcement_loading">Asali</string>
-  <string name="accessibility_announcement_loading_finished">Asmel web yuli-d</string>
-    <string name="content_description_forward">Inig ar zdat</string>
+  <string name="content_description_forward">Inig ar zdat</string>
   <string name="content_description_reload">Ales asali n usmel web</string>
   <string name="content_description_back">Inig ar deffir</string>
     <string name="external_app_prompt_title">Ldi aseγwen deg usnas-nniḍen</string>
@@ -33,21 +31,6 @@
   <string name="external_multiple_apps_matched_exit">Ffeγ si tunigin tusligt?</string>
     <string name="errorpage_title">Ugur deg usali n usebter</string>
   <string name="errorpage_refresh">Σreḍ tikelt-nniḍen</string>
-  <string name="error_connectionfailure_title">Igguma ad iqqen</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>Ahat asmel ulac-it akka tura ne&#947; &#947;ur-s tta&#603;ebga. &#931;re&#7693; tikelt-nni&#7693;en.</li>"\n        "<li>Ma yella ur tezmire&#7693; ara ad tinige&#7693; ar usmel, senqed tuqqna-ik n isefka n&#947; Wi-Fi n yibenk-ik.</li>"\n      "</ul>]]></string>
-  <string name="error_timeout_title">Akud n tuqqna yezri</string>
-  <string name="error_hostLookup_title">Ulac aqeddac</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">\n<li>"Senqed taseddast n tensa (tira n "<strong>ww</strong>".example.com deg um&#7693;iq n "<strong>www</strong>.example.com par exemple)&#160;;</li>\n<li>Ma yella ur tessaw&#7693;e&#7693; ara ad tinige&#7693; deg ismal, senqed tuqqna n isefka ne&#611; Wi-Fi n yibenk-ik.</li>\n</ul>" "]]></string>
-  <string name="error_malformedURI_title">Tansa mačči d tameγtut</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"Tansiwin web ttwarunt am "<strong>http://www.example.com/</strong></li>"\n  "<li>"Wali ma yella tseqdace&#7693; amgal islacen (i.e. "<strong>/</strong>).</li>\n</ul>]]></string>
-  <string name="error_redirectLoop_title">Asebter ur yettuwelleh ara akken iwata</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Tikwal ugur-agi itekk-d seg usensi ne&#947; tugwin n unqbal n inagan n tuqqna.</li>\n</ul>]]></string>
-  <string name="error_unsupportedprotocol_title">Ur nessin ara tansa</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Issefk ahat ad tesbedde&#7693; ase&#947;zan-nni&#7693;en akken ad d-ldi&#7693; tansa-agi.</li>\n</ul>]]></string>
-  <string name="error_sslhandshake_title">Tuqqna taγelsant ur teddi ara</string>
-  <string name="error_sslhandshake_message"><![CDATA[" "<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">" "<li>Ayagi yekka-d ahat seg ugur n twila n uqeddac ne&#947; amdan yetta&#603;ra&#7693;en ad yakker timagit n uqeddac.</li>"\n  "<li>Ma yella teqqne&#7693; yakan ar uqeddac-agi, ahat tucc&#7693;a d umatu kan, tzemre&#7693; ad t&#603;er&#7693;e&#7693; tikelt-nni&#7693;en ticki.</li></ul>]]></string>
-  <string name="error_generic_title">Ihuh</string>
-  <string name="error_generic_message">Ur nezmir ara ad d-nsali asebter-agi, ur neẓri ara acuγer.</string>
   <string name="your_rights">Izerfan-ik</string>
     <string name="your_rights_content1">"%1$s baṭṭel s waɣbalu yeldin ixeddem-it Mozilla d imettekiyen nniḍen. "</string>
   <string name="your_rights_content2"><![CDATA[%1$s yella ddaw tiwtilin n<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Turagt tazayezt n Mozilla</a>akked turagt yeldin nniḍen.]]></string>

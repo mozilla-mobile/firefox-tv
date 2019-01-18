@@ -21,8 +21,6 @@
   <string name="preference_performance_block_webfonts_summary">Mund të sjellë në mungesë ikonash ose figurash</string>
     <string name="preference_mozilla_telemetry2">Dërgo të dhëna përdorimi</string>
     <string name="preference_privacy_notice">Shënim Mbi Privatësinë</string>
-    <string name="accessibility_announcement_loading">Po ngarkohet</string>
-  <string name="accessibility_announcement_loading_finished">Sajti u ngarkua</string>
   <string name="content_description_forward">Lëvizni përpara</string>
   <string name="content_description_reload">Ringarko sajtin</string>
   <string name="content_description_back">Shko mbrapsht</string>
@@ -33,21 +31,6 @@
   <string name="external_multiple_apps_matched_exit">Të dilet nga Shfletimi Privat?</string>
   <string name="errorpage_title">Problem në ngarkimin e faqes</string>
   <string name="errorpage_refresh">Riprovoni</string>
-  <string name="error_connectionfailure_title">S’arrihet të lidhet</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>Sajti mund t&#235; jet&#235; p&#235;rkoh&#235;sisht jasht&#235; funksionimit ose shum&#235; i z&#235;n&#235;. Riprovoni pas pak &#231;astesh.</li>"\n        "<li>N&#235;se s&#8217;jeni n&#235; gjendje t&#235; ngarkoni asnj&#235; faqe, kontrolloni lidhjen data ose Wi-Fi t&#235; pajisjes suaj celulare.</li>"\n      "</ul>]]></string>
-  <string name="error_timeout_title">Lidhjes i mbaroi koha</string>
-  <string name="error_hostLookup_title">S’u gjet shërbyes</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>"Kontrolloni adres&#235;n p&#235;r gabime shkrimi, t&#235; tilla si\n          "<strong>ww</strong>".example.com, n&#235; vend se\n          "<strong>www</strong>.example.com</li>"\n        "<li>If you are unable to load any pages, check your device&#8217;s data or Wi-Fi connection.</li>"\n      "</ul>]]></string>
-  <string name="error_malformedURI_title">Adresa s’është e vlefshme</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"Adresat Web zakonisht shkruhen si "<strong>http://www.example.com/</strong></li>"\n  "<li>"Sigurohuni q&#235; po p&#235;rdorni pjerr&#235;se djathtas (d.m.th. "<strong>/</strong>).</li>\n</ul>]]></string>
-  <string name="error_redirectLoop_title">Faqja s’ridrejton si duhet</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Ndonj&#235;her&#235; ky problem mund t&#235; shkaktohet nga &#231;aktivizim apo mospranim cookie-sh.</li>\n</ul>]]></string>
-  <string name="error_unsupportedprotocol_title">Adresa s’u kuptua</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Mund t&#235; duhet t&#235; instaloni software tjet&#235;r q&#235; t&#235; hapni k&#235;t&#235; adres.</li>\n</ul>]]></string>
-  <string name="error_sslhandshake_title">Lidhja e sigurt dështoi</string>
-  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Ky mund t&#235; jet&#235; problem i ardhur nga form&#235;simi i sh&#235;rbyesit, ose mund t&#235; b&#235;het fjal&#235; p&#235;r dik&#235; q&#235; po provon t&#235; imitoj&#235; sh&#235;rbyesin.</li>"\n  "<li>Po qe se n&#235; t&#235; kaluar&#235;n jeni lidhur me sukses te ky sh&#235;rbyes, gabimi mund t&#235; jet&#235; i p&#235;rkohsh&#235;m, dhe mund t&#235; riprovoni m&#235; von&#235;.</li>\n</ul>]]></string>
-  <string name="error_generic_title">Mos!</string>
-  <string name="error_generic_message">Për ndonjë farë arsyeje, s’e ngarkojmë dot këtë faqe.</string>
   <string name="your_rights">Të drejtat Tuaja</string>
     <string name="your_rights_content1">%1$s është software i lirë dhe me burim të hapur, i krijuar nga Mozilla dhe kontribues të tjerë.</string>
   <string name="your_rights_content2"><![CDATA["%1$s ju jepet sipas kushteve të licencës "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" dhe të tjerash licencash me burim të hapur."]]></string>

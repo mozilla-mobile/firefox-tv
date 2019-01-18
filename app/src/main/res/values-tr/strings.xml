@@ -21,9 +21,7 @@
   <string name="preference_performance_block_webfonts_summary">Simge ve resimlerin görünmemesine yol açabilir</string>
     <string name="preference_mozilla_telemetry2">Kullanım verilerini gönder</string>
     <string name="preference_privacy_notice">Gizlilik bildirimi</string>
-    <string name="accessibility_announcement_loading">Yükleniyor</string>
-  <string name="accessibility_announcement_loading_finished">Web sitesi yüklendi</string>
-    <string name="content_description_forward">İleri git</string>
+  <string name="content_description_forward">İleri git</string>
   <string name="content_description_reload">Siteyi tazele</string>
   <string name="content_description_back">Geri git</string>
     <string name="external_app_prompt_title">Bağlantıyı farklı uygulamada aç</string>
@@ -33,21 +31,6 @@
   <string name="external_multiple_apps_matched_exit">Gizli Gezinti\'den çıkılsın mı?</string>
     <string name="errorpage_title">Sayfa yükleme sorunu</string>
   <string name="errorpage_refresh">Yeniden dene</string>
-  <string name="error_connectionfailure_title">Bağlanılamadı</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>Site ge&#231;ici olarak kapal&#305; olabilir veya &#231;ok me&#351;gul olabilir. Birka&#231; dakika sonra yeniden deneyin.</li>"\n        "<li>Hi&#231;bir sayfa a&#231;&#305;lm&#305;yorsa cihaz&#305;n&#305;z&#305;n mobil internet veya Wi-Fi ba&#287;lant&#305;s&#305;n&#305; kontrol edin.</li>"\n      "</ul>]]></string>
-  <string name="error_timeout_title">Bağlantı zaman aşımına uğradı</string>
-  <string name="error_hostLookup_title">Sunucu bulunamadı</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"Adres "<strong>www</strong>".example.com yerine "<strong>ww</strong>.example.com gibi yanl&#305;&#351; yaz&#305;lm&#305;&#351; olabilir.</li>"\n  "<li>Hi&#231;bir sayfa a&#231;&#305;lm&#305;yorsa cihaz&#305;n&#305;z&#305;n mobil internet veya Wi-Fi ba&#287;lant&#305;s&#305;n&#305; kontrol edin.</li>\n</ul>]]></string>
-  <string name="error_malformedURI_title">Adres geçersiz</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"Web adresleri genelde "<strong>http://www.example.com/</strong>" bi&#231;iminde yaz&#305;l&#305;r."</li>"\n  "<li>Adreste sa&#287;a yat&#305;k b&#246;l&#252; i&#351;areti (<strong>/</strong>) bulundu&#287;undan emin olun.</li>\n</ul>]]></string>
-  <string name="error_redirectLoop_title">Sayfa doğru bir şekilde yönlendirilmiyor</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Bu sorun bazen &#231;erezlerin devre d&#305;&#351;&#305; b&#305;rak&#305;lmas&#305;ndan veya reddedilmesinden kaynaklabilir.</li>\n</ul>]]></string>
-  <string name="error_unsupportedprotocol_title">Adres anlaşılamadı</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Bu adresi a&#231;mak i&#231;in ba&#351;ka bir uygulama y&#252;klemeniz gerekebilir.</li>\n</ul>]]></string>
-  <string name="error_sslhandshake_title">Güvenli bağlantı hatası</string>
-  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">" \n  "<li>Sunucunun yap&#305;land&#305;rmas&#305;yla ilgili bir sorun olabilir veya birisi sunucuyu taklit etmeye &#231;al&#305;&#351;&#305;yor olabilir.</li>"\n  "<li>Daha &#246;nce bu sunucuya sorunsuz ba&#287;land&#305;ysan&#305;z sorun ge&#231;ici olabilir ve daha sonra yeniden ba&#287;lanmay&#305; deneyebilirsiniz.</li>\n</ul>]]></string>
-  <string name="error_generic_title">Hata</string>
-  <string name="error_generic_message">Bilinmeyen bir nedenden dolayı bu sayfa yüklenemedi.</string>
   <string name="your_rights">Haklarınız</string>
     <string name="your_rights_content1">Mozilla ve gönüllüler tarafından geliştirilen %1$s, özgür ve açık kaynaklı bir yazılımdır.</string>
   <string name="your_rights_content2"><![CDATA["%1$s, "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Kamu Lisans&#305;</a>" ve diğer açık kaynak lisanslarının koşullarıyla sunulmaktadır."]]></string>

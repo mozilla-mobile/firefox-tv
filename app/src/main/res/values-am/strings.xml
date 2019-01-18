@@ -20,9 +20,7 @@
   <string name="preference_performance_block_webfonts_summary">አዶዎችን ወይም ምስሎችን የጠፉ ሊያስከትል ይችላል\n</string>
     <string name="preference_mozilla_telemetry2">የአጠቃቀም ውሂብ ይላኩ</string>
     <string name="preference_privacy_notice">የግላዊነት ማሳወቂያ</string>
-    <string name="accessibility_announcement_loading">በመጫን ላይ</string>
-  <string name="accessibility_announcement_loading_finished">ድር ጣቢያ ተጭኗል</string>
-    <string name="content_description_forward">ወደ ፊት አስስ</string>
+  <string name="content_description_forward">ወደ ፊት አስስ</string>
   <string name="content_description_reload">ድር ጣቢያ እንደገና ይጫኑ</string>
   <string name="content_description_back">ወደ ኋላ ዳስስ</string>
     <string name="external_app_prompt_title">አገናኙን በሌላ መተግበሪያ ውስጥ ይክፈቱ</string>
@@ -31,15 +29,6 @@
   <string name="external_multiple_apps_matched_exit">የግል አሰሳውን ውጣ?</string>
     <string name="errorpage_title">ገጽን በመጫን ላይ ችግር</string>
   <string name="errorpage_refresh">እንደገና ሞክር</string>
-  <string name="error_connectionfailure_title">መገናኘት አልተቻለም</string>
-  <string name="error_timeout_title">ግንኙነቱ ጊዜው አልፎበታል</string>
-  <string name="error_hostLookup_title">አገልጋይ አልተገኘም</string>
-  <string name="error_malformedURI_title">አድራሻው ልክ ያልሆነ ነው</string>
-  <string name="error_redirectLoop_title">ገጹ በአግባቡ ላይ እየሄደ አይደለም</string>
-  <string name="error_unsupportedprotocol_title">አድራሻው አልተረዳም ነበር</string>
-  <string name="error_sslhandshake_title">ደህንነቱ የተጠበቀ ግንኙነት አልተሳካም</string>
-  <string name="error_generic_title">ውይ</string>
-  <string name="error_generic_message">ይህን ገጽ በሆነ ምክንያት ልንጭነውም አንችልም</string>
   <string name="your_rights">የእርስዎ መብቶች</string>
     <string name="your_rights_content1">%1$s ሞዚላ እና ሌሎች አስተዋፅዖ አድራጊዎች የተሰሩ ነጻ እና ግልጽ ምንጭ ሶፍትዌሮች ናቸው</string>
 </resources>

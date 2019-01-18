@@ -10,12 +10,8 @@
   <string name="preference_privacy_block_analytics">TòɁw-ná lô men dè-kè</string>
   <string name="preference_privacy_block_social">TòɁw-ná lô men dè-kè</string>
   <string name="preference_privacy_block_content">TòɁw-ná lô men dè-kè</string>
-    <string name="accessibility_announcement_loading_finished">Lô nó-šàlɁ</string>
-    <string name="external_app_prompt_title">Mb-šàlɁ nêt (n̆eza) lenɁ tá thîb app</string>
+  <string name="external_app_prompt_title">Mb-šàlɁ nêt (n̆eza) lenɁ tá thîb app</string>
   <string name="external_multiple_apps_matched_exit">¿Mb-ròɁ gá?</string>
   <string name="errorpage_refresh">Bí~rè lìy</string>
-  <string name="error_hostLookup_title">Ngyé-n yìb rè</string>
-  <string name="error_malformedURI_title">Ngyé-n nêt (n̆eza) ré</string>
-  <string name="error_generic_title">Oops</string>
   <string name="your_rights">Ko nákin niél</string>
 </resources>
