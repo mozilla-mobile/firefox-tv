@@ -17,6 +17,7 @@ import io.sentry.Sentry
 import kotlinx.android.synthetic.main.activity_main.*
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
+import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.components.locale.LocaleAwareAppCompatActivity
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.setupForApp
@@ -69,10 +70,13 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         screenController.setUpFragmentsForNewSession(supportFragmentManager, session)
 
         serviceLocator.intentLiveData.observe(this, Observer {
-            if (it != null) {
-                screenController.showBrowserScreenForUrl(supportFragmentManager, it.url)
-            } else {
-                screenController.showBrowserScreenForCurrentSession(supportFragmentManager, session)
+            it?.consume {
+                if (it != null) {
+                    screenController.showBrowserScreenForUrl(supportFragmentManager, it.url)
+                } else {
+                    screenController.showBrowserScreenForCurrentSession(supportFragmentManager, session)
+                }
+                true
             }
         })
 
@@ -87,7 +91,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             startActivity(onboardingIntent)
         }
 
-        serviceLocator.intentLiveData.value = intentData
+        serviceLocator.intentLiveData.value = Consumable.from(intentData)
     }
 
     @SuppressLint("MissingSuperCall")
@@ -118,9 +122,10 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         // We can't do anything if the intent does not contain valid data, so short
         val intentData = IntentValidator.validate(this, unsafeIntent.toSafeIntent()) ?: return
+
         /** ScreenController operations rely on Activity.LifeCycle (i.e. FragmentTransactions)
          *  Using LiveData allows such methods to be called in the correct LifeCycle */
-        serviceLocator.intentLiveData.value = intentData
+        serviceLocator.intentLiveData.value = Consumable.from(intentData)
     }
 
     override fun applyLocale() {

@@ -9,6 +9,7 @@ import android.arch.lifecycle.MutableLiveData
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import mozilla.components.browser.search.SearchEngineManager
+import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ValidatedIntentData
@@ -61,7 +62,7 @@ open class ServiceLocator(val app: Application) {
     private val pocketFeedStateMachine get() = PocketFeedStateMachine()
     private val getIsEnglishLocale = { LocaleManager.getInstance().currentLanguageIsEnglish(app) }
 
-    val intentLiveData by lazy { MutableLiveData<ValidatedIntentData>() }
+    val intentLiveData by lazy { MutableLiveData<Consumable<ValidatedIntentData?>>() }
     val turboMode: TurboMode by lazy { TurboMode(app) }
     val pocketRepoCache by lazy { PocketRepoCache(pocketRepo).apply { setup() } }
     val viewModelFactory by lazy { ViewModelFactory(this, app) }
