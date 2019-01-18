@@ -21,8 +21,6 @@
   <string name="preference_performance_block_webfonts_summary">Pote resultar in icones o imagines mancante</string>
     <string name="preference_mozilla_telemetry2">Inviar datos de uso</string>
     <string name="preference_privacy_notice">Advertentia de confidentialitate</string>
-    <string name="accessibility_announcement_loading">Cargante</string>
-  <string name="accessibility_announcement_loading_finished">Sito web cargate</string>
   <string name="content_description_forward">Naviga in avante</string>
   <string name="content_description_reload">Recarga le sito web</string>
   <string name="content_description_back">Naviga a retro</string>
@@ -33,21 +31,6 @@
   <string name="external_multiple_apps_matched_exit">Exir del navigation private?</string>
   <string name="errorpage_title">Problema a cargar le pagina</string>
   <string name="errorpage_refresh">Retenta</string>
-  <string name="error_connectionfailure_title">Incapace de connecter se</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">\n<li>Le sito pote esser temporarimente indisponibile o troppo occupate. Retenta in alcun instantes.</li>\n<li>Si tu es incapace de cargar qualcunque pagina, verifica le connexion de datos o Wi-Fi de tu apparato mobile.</li>\n</ul>]]></string>
-  <string name="error_timeout_title">Le connexion ha expirate</string>
-  <string name="error_hostLookup_title">Servitor non trovate</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>"Verifica si le adresse ha errores orthographic, pro exemplo\n          "<strong>ww</strong>".example.com in vice de\n          "<strong>www</strong>.example.com</li>"\n        "<li>Si tu es incapace de cargar ulle pagina, verifica le connexion de datos o Wi-Fi de tu apparato.</li>\n</ul>]]></string>
-  <string name="error_malformedURI_title">Le adresse non es valide</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"Le adresses web sole esser scribite in le forma "<strong>http://www.example.com/</strong></li>"\n  "<li>"Assecura te que tu usa le barras oblique ascendente (i.e. "<strong>/</strong>).</li>\n</ul>]]></string>
-  <string name="error_redirectLoop_title">Le pagina non redirige correctemente</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Iste problema pote esser causate a vices per le inactivation o le refusa de cookies.</li>\n</ul>]]></string>
-  <string name="error_unsupportedprotocol_title">Le adresse non ha essite recognoscite</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Pote esser necessari installar altere software pro aperir iste adresse</li>\n</ul>]]></string>
-  <string name="error_sslhandshake_title">Connexion secur fallite</string>
-  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Isto pote esser un problema in le configuration del servitor o il pote esser\nalcuno tentante usurpar le servitor.</li>"\n  "<li>Si tu ha connectite a iste servitor correctemente in le passato, le error pote\nesser temporari e tu pote retentar plus tarde.</li>\n</ul>]]></string>
-  <string name="error_generic_title">Ups</string>
-  <string name="error_generic_message">Nos non pote cargar iste pagina pro alcun ration.</string>
   <string name="your_rights">Tu derectos</string>
     <string name="your_rights_content1">%1$s es libere, de codice aperite e facite per Mozilla e altere contributores.</string>
   <string name="your_rights_content2"><![CDATA["%1$s es distribuite a te sub le terminos del "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Licentia public Mozilla</a>" e altere licentias de codice aperite."]]></string>

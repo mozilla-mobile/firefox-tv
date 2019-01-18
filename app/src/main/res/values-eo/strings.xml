@@ -21,9 +21,7 @@
   <string name="preference_performance_block_webfonts_summary">Tio povus malaperigi emblemojn aŭ bildojn</string>
     <string name="preference_mozilla_telemetry2">Sendi datumojn pri uzo</string>
     <string name="preference_privacy_notice">Rimarko pri privateco</string>
-    <string name="accessibility_announcement_loading">Ŝargado</string>
-  <string name="accessibility_announcement_loading_finished">Retejo ŝargita</string>
-    <string name="content_description_forward">Iri antaŭen</string>
+  <string name="content_description_forward">Iri antaŭen</string>
   <string name="content_description_reload">Reŝargi retejon</string>
   <string name="content_description_back">Iri reen</string>
     <string name="external_app_prompt_title">Malfermi ligilon en alia programo</string>
@@ -33,21 +31,6 @@
   <string name="external_multiple_apps_matched_exit">Ĉu eliri el privata retumo?</string>
     <string name="errorpage_title">Problemo dum ŝargado de paĝo</string>
   <string name="errorpage_refresh">Provi denove</string>
-  <string name="error_connectionfailure_title">Ne eblas konekti</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>La retejo povas esti nuntempe ne alirebla, a&#365; tro okupata. Bonvolu klopodi denove post iom da tempo.</li>"\n        "<li>Se vi ne povas malfermi iun ajn pa&#285;on, kontrolu la datuman a&#365; sendratan konekton de via po&#349;aparato.</li>"\n      "</ul>]]></string>
-  <string name="error_timeout_title">La tempo por la konekto elĉerpiĝis</string>
-  <string name="error_hostLookup_title">Servilo ne trovita</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>"Kontrolu en la literumo de la adreso ke ne estu eraroj kiel\n          "<strong>ww</strong>".example.com anstata&#365;\n          "<strong>www</strong>.example.com</li>"\n        "<li>Se vi ne povas malfermi iun ajn pa&#285;on , kontrolu la datuman a&#365; sendratan konekton de via aparato.</li>"\n      "</ul>]]></string>
-  <string name="error_malformedURI_title">La adreso ne estas valida</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"Retadresoj estas kutime &#265;i tiel skribitaj "<strong>http://www.example.com/</strong></li>"\n  "<li>"Estu certa uzi la &#285;ustajn oblikvajn strekojn (i.e. "<strong>/</strong>).</li>\n</ul>]]></string>
-  <string name="error_redirectLoop_title">La paĝo malbone redirektas</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Tio povas okazi kelkfoje kiam oni malebligas a&#365; rifuzas kuketojn.</li>\n</ul>]]></string>
-  <string name="error_unsupportedprotocol_title">La adreso ne estis komprenita</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Vi eble bezonas instali alian programon por povi malfermi tiun &#265;i adreson.</li>\n</ul>]]></string>
-  <string name="error_sslhandshake_title">Malsukcesa sekura konekto</string>
-  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Tio povus esti problemo kun la agordoj de la servilo, a&#365; iu kiu klopodas trompe &#349;ajnigi esti tiu servilo.</li>"\n  "<li>Se vi konekti&#285;is al tiu servilo en la pasinto, la eraro povas esti momenta, kaj vi povos klopodi denove poste.</li>\n</ul>]]></string>
-  <string name="error_generic_title">Fuŝ\'</string>
-  <string name="error_generic_message">Ni ne povas ŝargi tiun ĉi paĝon pro iu kialo.</string>
   <string name="your_rights">Viaj rajtoj</string>
     <string name="your_rights_content1">"%1$s estas libera kaj malfermitkoda programaro, farita de Mozilla kaj aliaj kontribuintoj. "</string>
   <string name="your_rights_content2"><![CDATA["%1$s estas liverita al vi sub la kondiĉoj de la "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Publika permesilo de Mozilla</a>" aŭ aliaj malfermitkodaj permesiloj."]]></string>

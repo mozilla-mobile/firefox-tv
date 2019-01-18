@@ -21,9 +21,7 @@
   <string name="preference_performance_block_webfonts_summary">Kin ta ûntbrekkende piktogrammen of ôfbyldingen liede</string>
     <string name="preference_mozilla_telemetry2">Brûksgegevens ferstjoere</string>
     <string name="preference_privacy_notice">Privacyferklearring</string>
-    <string name="accessibility_announcement_loading">Lade</string>
-  <string name="accessibility_announcement_loading_finished">Website laden</string>
-    <string name="content_description_forward">Foarút blêdzje</string>
+  <string name="content_description_forward">Foarút blêdzje</string>
   <string name="content_description_reload">Website opnij lade</string>
   <string name="content_description_back">Werom blêdzje</string>
     <string name="external_app_prompt_title">Keppeling yn oare app iepenje</string>
@@ -33,21 +31,6 @@
   <string name="external_multiple_apps_matched_exit">Priveenavigaasje ôfslute?</string>
     <string name="errorpage_title">Probleem by it laden fan de side</string>
   <string name="errorpage_refresh">Opnij probearje</string>
-  <string name="error_connectionfailure_title">Kin gjin ferbining meitsje</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>Miskien is de website tydlik net beskikber of oerbel&#234;st. Probearje it oer inkelde mominten opnij.</li>"\n        "<li>As jo gjin inkelde side lade kinne, kontrolearje dan de gegevens- of wifi-ferbining fan jo apparaat.</li>"\n      "</ul>]]></string>
-  <string name="error_timeout_title">De wachttiid foar de ferbining is ferstrutsen</string>
-  <string name="error_hostLookup_title">Server net fûn</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>"Kontrolearje it adres op typflaters, lykas\n          "<strong>ww</strong>".example.com yn stee fan\n          "<strong>www</strong>.example.com</li>"\n        "<li>As jo gjin inkelde side lade kinne, kontrolearje dan de gegevens- of wifi-ferbining fan jo apparaat.</li>"\n      "</ul>]]></string>
-  <string name="error_malformedURI_title">It adres is net jildich</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"Webadressen wurde trochgeans skreaun as "<strong>http://www.example.com/</strong></li>"\n  "<li>"Let derop dat jo foar&#250;tgeande slashes br&#251;ke (d.y. "<strong>/</strong>).</li>\n</ul>]]></string>
-  <string name="error_redirectLoop_title">De side ferwiist net op in krekte wize troch</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Dit probleem kin soms feroarsake wurde troch it &#250;tskeakeljen of wegerjen fan cookies</li>\n</ul>]]></string>
-  <string name="error_unsupportedprotocol_title">It adres waard net begrepen</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Miskien moatte jo oare software ynstallearje om dit adres te iepenjen.</li>\n</ul>]]></string>
-  <string name="error_sslhandshake_title">Befeilige ferbining mislearre</string>
-  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Dit kin in probleem mei de serverkonfiguraasje w&#234;ze, of ien probearret\ndizze server nei te meitsjen.</li>"\n  "<li>As jo yn it ferline wol mei sukses ferbining makke hawwe mei dizze server,\ndan is de flater mooglik tydlik en kinne jo it letter nochris probearje.</li>\n</ul>]]></string>
-  <string name="error_generic_title">Oeps</string>
-  <string name="error_generic_message">De side kin om de ien oft oare reden net laden wurde.</string>
   <string name="your_rights">Jo rjochten</string>
     <string name="your_rights_content1">%1$s is fergese en iepenboarnesoftware makke troch Mozilla en oare meiwurkers.</string>
   <string name="your_rights_content2"><![CDATA["%1$s wurdt beskikber steld ûnder de betingsten fan de "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" en oare iepenboarnelisinsjes."]]></string>

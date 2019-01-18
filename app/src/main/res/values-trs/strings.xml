@@ -21,8 +21,6 @@
   <string name="preference_performance_block_webfonts_summary">Ga\'ue narugui\'ìj riña a\'ngô ikono</string>
     <string name="preference_mozilla_telemetry2">Ga\'nïnj nej datô arâj sunt</string>
     <string name="preference_privacy_notice">Noticia huìi</string>
-    <string name="accessibility_announcement_loading">Hìaj ayì\'ij</string>
-  <string name="accessibility_announcement_loading_finished">Gayi\'ìj \'iaj sunj</string>
   <string name="content_description_forward">Gache nu gan\'anjt ne\' ñaa</string>
   <string name="content_description_reload">Nayi\'ì nakà ñû riña sîtio</string>
   <string name="content_description_back">Gache nu gan\'anj rukùt</string>
@@ -33,21 +31,6 @@
   <string name="external_multiple_apps_matched_exit">Gahui riña aché nu huìt</string>
   <string name="errorpage_title">Hua sa \'iaj chì\' guendâ gayi\'ìj</string>
   <string name="errorpage_refresh">Ginùn huin ñûn</string>
-  <string name="error_connectionfailure_title">Na\'ue gayi\'ìj</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>Ga\'ue sisi hua r&#225;n ri&#241;a siti&#244; nan \'ngo di&#251;. Gin&#249;n huin &#241;&#226;n nan&#226; doj.</li>"\n        "<li>sisi hu&#234; dan \'iaj daran\' chre nej p&#226;jina, ni\'aj sisi \'iaj sun hue\'&#234; si gaga\'t asi hua internet ri&#241;anj an.</li>"\n      "</ul>]]></string>
-  <string name="error_timeout_title">Ganauij diû hua koneksiôn</string>
-  <string name="error_hostLookup_title">Nu narì\'ij serbidor</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>"Ni\'iaj si gachrun hue\'&#234;t direksi&#244;n\n          "<strong>ww</strong>".example.com lug&#226; gachrunt\n          "<strong>www</strong>.example.com</li>"\n        "<li>Sisi hu&#234; dan \'ia ng&#224; daran chre p&#226;jina, ni\'iaj si \'iaj sun hue\'&#234; si gag&#226;\'t asi si hua internet ri&#241;anj.</li>"\n      "</ul>]]></string>
-  <string name="error_malformedURI_title">Hua a\'nan direksiôn na</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"Hua da\'aj ni achr&#251;n\' \'ngo direksi&#244;n dananj "<strong>http://www.example.com/</strong></li>"\n  "<li>"Ni\'iaj hue\'&#234; sisi araj sunt huij chrun li nik&#239;n\' nit&#239;n dan &#226;n (i.e. "<strong>/</strong>).</li>\n</ul>]]></string>
-  <string name="error_redirectLoop_title">Nitaj si \'iaj redireksionando hue\'ê pajinâ nan</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>" Sa&#241;un li nan ni ga\'ue si gurugui\' le\'ej dan guend&#226; nitaj si ni\'&#241;an siti&#244; asi rayi\'&#238; nej cookies "</li>\n</ul>]]></string>
-  <string name="error_unsupportedprotocol_title">Nu nani\'in man direksiôn</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>" Si guruhuaj ni da\'u&#238;t nadun&#239;njt a\'ng&#244; sa ga\'ue na\'n&#239;n ri&#241;a sa gachr&#251;nt nan."</li>\n</ul>]]></string>
-  <string name="error_sslhandshake_title">Gire\' koneksiôn</string>
-  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Yi\'&#238; configurasi&#244;n \'iaj re\' nan si guruhuaj, asi hua \'ngo sa huin ruhu&#226; gatsin ri&#241;a man.</li>"\n  "<li>Sisi a\'n&#239;n atuj hue\'&#234;t ri&#241;a serbidor nej di&#251; gachin ni, man si \'iaj akuan\' man si guruhuaj, gin&#249;n huin &#241;&#251;n nana doj.</li>\n</ul>]]></string>
-  <string name="error_generic_title">\'uâ\'</string>
-  <string name="error_generic_message">Hua sa \'iaj na\'ue gayi\'ì pajinâ nan</string>
   <string name="your_rights">Nej sa tna\'uej rayi\'ît</string>
     <string name="your_rights_content1">%1$s ‘ngō software chre nī sa huā nî’nïnj ï huin man giri Mozilla nī a’ngô nej duguî’ rugûñu’ūnj.</string>
   <string name="your_rights_content2"><![CDATA["%1$s huin guendâ gārasunt sanī da’uît gārayinat "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">si nugu&#224;n&#8217; Mozilla</a>" nī a’ngô nej nuguan’ nikāj nej sa huā nî’nïnj ïn."]]></string>

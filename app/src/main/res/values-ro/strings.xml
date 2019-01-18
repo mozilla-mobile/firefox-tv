@@ -21,9 +21,7 @@
   <string name="preference_performance_block_webfonts_summary">Poate duce la pictograme și imagini lipsă</string>
     <string name="preference_mozilla_telemetry2">Trimite date privind utilizarea</string>
     <string name="preference_privacy_notice">Politica de confidențialitate</string>
-    <string name="accessibility_announcement_loading">Se încarcă</string>
-  <string name="accessibility_announcement_loading_finished">Site web încărcat</string>
-    <string name="content_description_forward">Navighează înainte</string>
+  <string name="content_description_forward">Navighează înainte</string>
   <string name="content_description_reload">Reîncarcă site-ul web</string>
   <string name="content_description_back">Navighează înapoi</string>
     <string name="external_app_prompt_title">Deschide linkul în altă aplicație</string>
@@ -33,21 +31,6 @@
   <string name="external_multiple_apps_matched_exit">Ieși din navigarea privată?</string>
     <string name="errorpage_title">Problemă la încărcarea paginii</string>
   <string name="errorpage_refresh">Încearcă din nou</string>
-  <string name="error_connectionfailure_title">Nu se poate conecta</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>Site-ul ar putea fi indisponibil temporar sau prea ocupat. &#206;ncearc&#259; din nou &#238;n c&#226;teva momente.</li>"\n        "<li>Dac&#259; nu po&#539;i s&#259; &#238;ncarci nicio pagin&#259;, verific&#259; conexiunea de date sau Wi-Fi a dispozitivului.</li>"\n      "</ul>]]></string>
-  <string name="error_timeout_title">Conexiunea a expirat</string>
-  <string name="error_hostLookup_title">Server negăsit</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>"Verific&#259; adresa de erori de tastare cum ar fi\n          "<strong>ww</strong>".exemplu.ro &#238;n loc de\n          "<strong>www</strong>.exemplu.ro</li>"\n        "<li>Dac&#259; nu po&#539;i s&#259; &#238;ncarci nicio pagin&#259;, verific&#259; conexiunea de date sau Wi-Fi a dispozitivului.</li>"\n      "</ul>]]></string>
-  <string name="error_malformedURI_title">Adresa nu este validă</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"Adresele web sunt scrise de obicei ca "<strong>http://www.example.com/</strong></li>"\n  "<li>"Ai grij&#259; s&#259; folose&#537;ti slash-uri corecte (i.e. "<strong>/</strong>).</li>\n</ul>]]></string>
-  <string name="error_redirectLoop_title">Pagina nu redirecționează corect</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Aceast&#259; problem&#259; uneori poate fi cauzat&#259; de dezactivarea sau refuzarea de a accepta cookie-uri.</li>\n</ul>]]></string>
-  <string name="error_unsupportedprotocol_title">Adresa nu a fost înțeleasă</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>S-ar putea s&#259; fie nevoie s&#259; instalezi alt program pentru a deschide aceast&#259; adres&#259;.</li>\n</ul>]]></string>
-  <string name="error_sslhandshake_title">Conexiunea securizată a eșuat</string>
-  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Aceasta s-ar putea datora unei probleme &#238;n configura&#539;ia serverului sau ar putea s&#259; fie cineva care &#238;ncearc&#259; s&#259; uzurpeze identitatea serverului.</li>"\n  "<li>Dac&#259; te-ai conectat cu succes &#238;n trecut la acest server, eroarea poate fi temporar&#259; &#537;i po&#539;i &#238;ncerca din nou mai t&#226;rziu.</li>\n</ul>]]></string>
-  <string name="error_generic_title">Ups</string>
-  <string name="error_generic_message">Nu putem încărca această pagină dintr-un motiv oarecare.</string>
   <string name="your_rights">Drepturile tale</string>
     <string name="your_rights_content1">%1$s este un program gratuit şi cu sursă deschisă realizat de Mozilla și alţi contribuitori.</string>
   <string name="your_rights_content2"><![CDATA["%1$s este disponibil sub termenii "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Licen&#539;ei Publice Mozilla</a>" și alte licențe cu sursă deschisă."]]></string>

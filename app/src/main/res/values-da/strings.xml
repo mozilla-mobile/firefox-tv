@@ -21,9 +21,7 @@
   <string name="preference_performance_block_webfonts_summary">Kan medføre at ikoner eller billeder mangler</string>
     <string name="preference_mozilla_telemetry2">Send data for anvendelse</string>
     <string name="preference_privacy_notice">Privatlivspolitik</string>
-    <string name="accessibility_announcement_loading">Siden indlæses</string>
-  <string name="accessibility_announcement_loading_finished">Siden er indlæst</string>
-    <string name="content_description_forward">Gå frem</string>
+  <string name="content_description_forward">Gå frem</string>
   <string name="content_description_reload">Genindlæs siden</string>
   <string name="content_description_back">Gå tilbage</string>
     <string name="external_app_prompt_title">Åbn link i en anden app</string>
@@ -33,21 +31,6 @@
   <string name="external_multiple_apps_matched_exit">Afslut privat browsing?</string>
     <string name="errorpage_title">Problem med indlæsning af side</string>
   <string name="errorpage_refresh">Prøv igen</string>
-  <string name="error_connectionfailure_title">Ude af stand til at oprette forbindelse</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>Siden kan v&#230;re midlertidigt utilg&#230;ngelig eller travlt optaget. Pr&#248;v igen om et &#248;jeblik.</li>"\n        "<li>Hvis du ikke kan indl&#230;se nogen websider overhovedet, kontroll&#233;r da din enheds data- eller wi-fi-forbindelse.</li>"\n      "</ul>]]></string>
-  <string name="error_timeout_title">Forbindelsens tidsfrist udløb</string>
-  <string name="error_hostLookup_title">Serveren blev ikke fundet</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>"Kontroll&#233;r, om adressen indeholder tastefejl, fx\n          "<strong>ww</strong>".eksempel.dk i stedet for\n          "<strong>www</strong>.eksempel.dk</li>"\n        "<li>Hvis du ikke kan indl&#230;se nogen websider overhovedet, kontroll&#233;r da din enheds data- eller wi-fi-forbindelse.</li>"\n      "</ul>]]></string>
-  <string name="error_malformedURI_title">Adressen er ikke gyldig</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"Webadresser skrives normalt som "<strong>http://www.eksempel.dk/</strong></li>"\n  "<li>"Kontroll&#233;r at du ikke benytter divisionstegn (dvs. "<strong>/</strong>)</li>\n</ul>]]></string>
-  <string name="error_redirectLoop_title">Denne side viderefører ikke forespørgslen korrekt</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Dette problem kan nogle gange skyldes, at cookies er sl&#229;et fra, eller modtagelse af cookies er blevet n&#230;gtet.</li>\n</ul>]]></string>
-  <string name="error_unsupportedprotocol_title">Adressen kunne ikke forstås</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Du er m&#229;ske n&#248;dt til at installere andet software for at &#229;bne denne adresse.</li>\n</ul>]]></string>
-  <string name="error_sslhandshake_title">Sikker forbindelse mislykkedes</string>
-  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Dette kan v&#230;re et problem med serverens konfiguration,\neller det kan betyde, at nogen fors&#248;ger at give sig ud for at v&#230;re serveren.</li>"\n  "<li>Hvis du har kunnet tilg&#229; serveren tidligere kan dette problem v&#230;re midlertidigt\nog du anbefales at pr&#248;ve igen senere.</li>\n</ul>]]></string>
-  <string name="error_generic_title">Ups</string>
-  <string name="error_generic_message">Siden kan af uvisse årsager ikke indlæses.</string>
   <string name="your_rights">Dine rettigheder</string>
     <string name="your_rights_content1">%1$s er frit og åbent software, udviklet af Mozilla og andre bidragydere.</string>
   <string name="your_rights_content2"><![CDATA["%1$s er tilgængelig under de vilkår der er fastsat i "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" og andre licenser til åben kildekode."]]></string>

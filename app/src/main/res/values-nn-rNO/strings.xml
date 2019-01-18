@@ -21,9 +21,7 @@
   <string name="preference_performance_block_webfonts_summary">Kan resultere i at ikon eller bilde manglar</string>
     <string name="preference_mozilla_telemetry2">Send brukardata</string>
     <string name="preference_privacy_notice">Personvernerklæring</string>
-    <string name="accessibility_announcement_loading">Lastar</string>
-  <string name="accessibility_announcement_loading_finished">Nettside lasta</string>
-    <string name="content_description_forward">Naviger framover</string>
+  <string name="content_description_forward">Naviger framover</string>
   <string name="content_description_reload">Last sida på nytt</string>
   <string name="content_description_back">Naviger tilbake</string>
     <string name="external_app_prompt_title">Opne lenke i ein annan app</string>
@@ -33,21 +31,6 @@
   <string name="external_multiple_apps_matched_exit">Avslutte privat nettlesing?</string>
     <string name="errorpage_title">Problem med lasting av sida</string>
   <string name="errorpage_refresh">Prøv igjen</string>
-  <string name="error_connectionfailure_title">Kan ikkje kople til</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>Sida kan vere mellombels utilgjengeleg, eller opptatt. Pr&#248;v igjen om ei stund.</li>"\n        "<li>Viss du ikkje klarer &#229; laste nokre sider, kontroller data- eller Wi-Fi-sambandet til eininga di.</li>"\n      "</ul>]]></string>
-  <string name="error_timeout_title">Tilkoplinga fekk tidsavbrot</string>
-  <string name="error_hostLookup_title">Fant ikke serveren</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>"Kontroller om det er skrivefeil i adressa, for eksempel\n          "<strong>ww</strong>".eksempel.no i staden for \n          "<strong>www</strong>.eksempel.no</li>"\n        "<li>Viss du ikkje klarer &#229; laste nokre nettsider, kontroller data- eller Wi-Fi-sambandet til eininga di.</li>"\n      "</ul>]]></string>
-  <string name="error_malformedURI_title">Adressa er ikkje gyldig</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"Nettadresser skriv ein vanlegvis som "<strong>http://www.example.com/</strong></li>"\n  "<li>"Pass p&#229; at du brukar vanleg skr&#229;strek (dvs. "<strong>/</strong>).</li>\n</ul>]]></string>
-  <string name="error_redirectLoop_title">Nettsida vidaresender ikkje korrekt</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Dette problemet kan av og til skyldast at infokapslar er avsl&#229;tt eller ved &#229; ikkje godta infokapslar.</li>\n</ul>]]></string>
-  <string name="error_unsupportedprotocol_title">Klarte ikkje å forstå adressa</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Du m&#229; kanskje installere anna programvare for &#229; opne denne adressa.</li>\n</ul>]]></string>
-  <string name="error_sslhandshake_title">Sikker tilkopling feila</string>
-  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Dette kan vere p&#229; grunn av eit problem med serverkonfigurasjonen, eller det kan vere fordi nokon pr&#248;ver &#229; forfalske tilkoplinga til serveren.</li>"\n  "<li>Dersom du har klart &#229; kople til serveren tidlegare, kan problemet vere mellombels og du kan pr&#248;ve igjen seinare.</li>\n</ul>]]></string>
-  <string name="error_generic_title">Ops</string>
-  <string name="error_generic_message">Vi kan ikkje laste inn denne sida av ulike grunnar.</string>
   <string name="your_rights">Dine rettar</string>
     <string name="your_rights_content1">%1$s er fri og open kjeldekode-programvare laga av Mozilla og andre bidragsytarar.</string>
   <string name="your_rights_content2"><![CDATA["%1$s er gjort tilgjengeleg for deg under vilkåra i "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" og andre lisensar for open kjeldekode."]]></string>

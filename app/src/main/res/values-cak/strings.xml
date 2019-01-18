@@ -21,8 +21,6 @@
   <string name="preference_performance_block_webfonts_summary">Tikirel nib\'anatäj pa kiwachaj chuqa\' taq wachib\'äl</string>
     <string name="preference_mozilla_telemetry2">Ketaq taq tzij richin ye\'okisäx</string>
     <string name="preference_privacy_notice">Rutzijol Ichinanem</string>
-    <string name="accessibility_announcement_loading">Tajin nusamajin</string>
-  <string name="accessibility_announcement_loading_finished">Ruxaq ajk\'amaya\'l qasan</string>
   <string name="content_description_forward">Katok pa k\'amaya\'l chuwäch</string>
   <string name="content_description_reload">Tisamajix chik ruxaq ajk\'amaya\'l</string>
   <string name="content_description_back">Katok pa k\'amaya\'l titzolin</string>
@@ -33,21 +31,6 @@
   <string name="external_multiple_apps_matched_exit">¿La Nel pa Ichinan Okem pa K\'amaya\'l?</string>
   <string name="errorpage_title">K\'o k\'ayewal toq nitikirisäx ri ruxaq k\'amaya\'l</string>
   <string name="errorpage_refresh">Titojtob\'ëx chik</string>
-  <string name="error_connectionfailure_title">Man tikirel ta nok</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>Ri ruxaq k\'amaya\'l rik\'in jub\'a\' man okel ta wakami o yalan tajin nokis&#228;x. Tatojtob\'ej chik pa jun ti mej</li>" \n        "<li>We man yatik&#239;r ta nasamajij jujun taq ruxaq k\'amaya\'l, tanik\'oj ri rutzij oyonib\'&#228;l okisaxel o ri Wi-Fi awokem.</li>"\n      "</ul>]]></string>
-  <string name="error_timeout_title">Xk\'is ri okem</string>
-  <string name="error_hostLookup_title">Man xilitäj ta ri ruk\'u\'x samaj</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>"Ke\'anik\'oj ri kochochib\'al taq sachoj richin\n          "<strong>ww</strong>".example.com pa ruk\'exel\n          "<strong>www</strong>.example.com</li>"\n        "<li>We man yatik&#239;r ta ye\'asamaj taq ruxaq, ke\'anik\'oj taq rutzij awokisaxel o ri Wi-Fi awokem.</li>"\n      "</ul>]]></string>
-  <string name="error_malformedURI_title">Man nuk\'äm ta ri\' ri ochochib\'äl</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"Rochochib\'al Ajk\'amaya\'l achi\'el jantape\' nitz\'ib\'&#228;x achi\'el "<strong>http://www.example.com/</strong></li>"\n  "<li>"Tajikib\'a\' chi tajin ye\'awokisaj ri q\'eq\'el taq juch\' (achi\'el "<strong>/</strong>).</li>\n</ul>]]></string>
-  <string name="error_redirectLoop_title">Man tajin nrokisaj pa rub\'eyal ri ruxaq</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Re k\'ayewal re\' nib\'anat&#228;j ruma echupun o exutun taq kaxlanwey.</li>" \n"</ul>]]></string>
-  <string name="error_unsupportedprotocol_title">Man xq\'ax ta chi ütz ri ochochib\'äl</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Rik\'in jub\'a\' k\'o chi nay&#228;k jun chik kema\' richin naj&#228;q re ochochib\'&#228;l re\'.</li>\n</ul>]]></string>
-  <string name="error_sslhandshake_title">Xq\'ate\' ri ütz okem</string>
-  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Rik\'in jub\'a\' k\'o jun k\'ayewal rik\'in ri runuk\'ulem k\'uxasamaj o rik\'in jub\'a\' k\'o najowan nik\'exon ri k\'uxasamaj.</li>"\n  "<li>We atokin&#228;q chik pa re k\'uxasamaj re\' ojer kan, rik\'in jub\'a\' xa jun jumej sachoj ruma ri\' yatik&#239;r natojtob\'ej pa jun chik ti ramaj.</li>\n</ul>]]></string>
-  <string name="error_generic_title">Uy.</string>
-  <string name="error_generic_message">Man qetaman ta achike ruma man yojtikïr ta niqasamajij re ruxaq re\'.</string>
   <string name="your_rights">Taq Ach\'ojib\'al</string>
     <string name="your_rights_content1">%1$s jun jamäl kema\' chuqa\' jaqäl b\'itz\'ib\' nuk\'un ruma Mozilla chuqa\' ch\'aqa\' chik to\'onela\'.</string>
   <string name="your_rights_content2"><![CDATA["%1$s niya\' pan aq\'a\' rik\'in rojqanem ri "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Aj win&#228;q Ya\'oj Ruq\'ij Mozilla</a>" chuqa\' ch\'aqa\' chik taq ya\'öj q\'ij kichin ch\'aqa\' chik taq jaqäl b\'itz\'ib\'."]]></string>
