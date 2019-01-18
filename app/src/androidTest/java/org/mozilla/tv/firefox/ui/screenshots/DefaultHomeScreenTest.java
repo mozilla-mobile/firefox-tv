@@ -5,9 +5,7 @@
 
 package org.mozilla.tv.firefox.ui.screenshots;
 
-import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.uiautomator.UiDevice;
 
 import org.junit.After;
 import org.junit.ClassRule;
@@ -28,8 +26,6 @@ import static org.hamcrest.Matchers.allOf;
 
 
 public class DefaultHomeScreenTest extends ScreenshotTest {
-
-    private UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
     @ClassRule
     public static final LocaleTestRule localeTestRule = new LocaleTestRule();
