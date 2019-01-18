@@ -7,20 +7,14 @@
     <color name="colorPrimaryDark">#6c3b6e</color>
     <color name="colorAccent">@color/photonBlue70</color>
 
-    <color name="colorAccentSettings">@color/photonBlue50</color>
-
     <color name="snackbarBackground">#FF414146</color>
     <color name="snackbarTextColor">#ffffffff</color>
 
     <color name="scrollbarThumb">#b2b2b2b2</color>
-    <color name="teal50">#00feff</color>
-    <color name="teal_nav">#03d8ff</color>
     <color name="blue_nav">#0060df</color>
     <color name="ink70">#474959</color>
     <color name="ink80">#333540</color>
-    <color name="default_background_gray">#e3e3e5</color>
 
-    <color name="onboarding_overlay">#cc000000</color>
     <color name="onboarding_button_higlight_stroke">@color/photonBlue50</color>
 
     <color name="browser_overlay_background">@color/photonGrey70</color>
