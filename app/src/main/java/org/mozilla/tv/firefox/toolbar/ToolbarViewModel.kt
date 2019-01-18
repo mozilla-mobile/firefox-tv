@@ -41,6 +41,7 @@ class ToolbarViewModel(
         data class ShowTopToast(@StringRes val textId: Int) : Action()
         data class ShowBottomToast(@StringRes val textId: Int) : Action()
         data class SetOverlayVisible(val visible: Boolean) : Action()
+        object ExitFirefox : Action()
     }
 
     // Values should be pushed to _events using setValue. Two values are set in
@@ -135,6 +136,7 @@ class ToolbarViewModel(
     @UiThread
     fun exitFirefoxButtonClicked() {
         sendOverlayClickTelemetry(NavigationEvent.EXIT_FIREFOX)
+        _events.value = Consumable.from(Action.ExitFirefox)
     }
 
     private fun sendOverlayClickTelemetry(
