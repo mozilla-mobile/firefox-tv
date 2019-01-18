@@ -271,10 +271,15 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
                     is ToolbarViewModel.Action.ShowBottomToast -> ViewUtils.showCenteredBottomToast(context, it.textId)
                     is ToolbarViewModel.Action.SetOverlayVisible -> serviceLocator.screenController
                             .showNavigationOverlay(fragmentManager, it.visible)
+                    ToolbarViewModel.Action.ExitFirefox -> exitFirefox()
                 }.forceExhaustive
                 true
             }
         })
+    }
+
+    private fun exitFirefox() {
+        activity!!.moveTaskToBack(true)
     }
 
     /**
@@ -391,10 +396,7 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
             NavigationEvent.PIN_ACTION -> toolbarViewModel.pinButtonClicked()
             NavigationEvent.TURBO -> toolbarViewModel.turboButtonClicked()
             NavigationEvent.DESKTOP_MODE -> toolbarViewModel.desktopModeButtonClicked()
-            NavigationEvent.EXIT_FIREFOX -> {
-                toolbarViewModel.exitFirefoxButtonClicked()
-                (activity as MainActivity).moveTaskToBack(true)
-            }
+            NavigationEvent.EXIT_FIREFOX -> toolbarViewModel.exitFirefoxButtonClicked()
             else -> Unit // Nothing to do.
         }
         onNavigationEvent.invoke(event, null, null)
