@@ -23,8 +23,6 @@
   <string name="preference_performance_block_webfonts_summary">Pode resultar em falta de ícones ou imagens</string>
   <string name="preference_mozilla_telemetry2">Enviar dados de utilização</string>
   <string name="preference_privacy_notice">Política de Privacidade</string>
-  <string name="accessibility_announcement_loading">Carregando</string>
-  <string name="accessibility_announcement_loading_finished">Site carregado</string>
   <string name="content_description_forward">Navegar para a frente</string>
   <string name="content_description_reload">Recarregar o site</string>
   <string name="content_description_back">Navegar de volta</string>
@@ -35,21 +33,6 @@
   <string name="external_multiple_apps_matched_exit">Sair da navegação privativa?</string>
   <string name="errorpage_title">Problemas ao carregar a página</string>
   <string name="errorpage_refresh">Tentar novamente</string>
-  <string name="error_connectionfailure_title">Não foi possível conectar</string>
-  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n        \""<li>O site pode estar temporariamente indispon&amp;#237;vel ou ocupado demais. Tente novamente em alguns instantes.</li>"\"\\n        \""<li>Se n&amp;#227;o conseguir carregar nenhuma p&amp;#225;gina, verifique a conex&amp;#227;o de dados ou Wi-Fi do seu dispositivo m&amp;#243;vel.</li>"\"\\n      \""</ul>]]></string>
-  <string name="error_timeout_title">A conexão expirou</string>
-  <string name="error_hostLookup_title">Servidor não encontrado</string>
-  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n        \""<li>"\"Verifique se o endere&amp;#231;o cont&amp;#233;m erros de digita&amp;#231;&amp;#227;o, como\\n          \""<strong>ww</strong>"\".example.com ao inv&amp;#233;s de\\n          \""<strong>www</strong>.example.com</li>"\"\\n        \""<li>Se n&amp;#227;o conseguir carregar nenhuma p&amp;#225;gina, verifique a conex&amp;#227;o de dados ou Wi-Fi de seu dispositivo.</li>"\"\\n      \""</ul>]]></string>
-  <string name="error_malformedURI_title">O endereço não é válido</string>
-  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>\"Os endere&amp;#231;os da Web s&amp;#227;o geralmente escritos como \"<strong>http://www.example.com/</strong></li>"\"\\n  \""<li>\"Certifique-se de usar barras obl&amp;#237;quas (ex. \"<strong>/</strong>).</li>\\n</ul>]]></string>
-  <string name="error_redirectLoop_title">A página não está sendo redirecionada corretamente</string>
-  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>Este problema, &amp;#224;s vezes, pode ser causado pela desativa&amp;#231;&amp;#227;o ou recusa em aceitar os cookies.</li>\\n</ul>]]></string>
-  <string name="error_unsupportedprotocol_title">O endereço não foi compreendido</string>
-  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>Talvez seja necess&amp;#225;rio instalar outro software para abrir esse endere&amp;#231;o.</li>\\n</ul>]]></string>
-  <string name="error_sslhandshake_title">Falha na conexão segura</string>
-  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>Isto pode ser um problema com a configura&amp;#231;&amp;#227;o do servidor ou pode ser algu&amp;#233;m tentando se passar pelo servidor.</li>"\"\\n  \""<li>Se voc&amp;#234; se conectou a este servidor com sucesso no passado, o erro pode ser tempor&amp;#225;rio, e voc&amp;#234; pode tentar novamente mais tarde.</li>\\n</ul>]]></string>
-  <string name="error_generic_title">Ops</string>
-  <string name="error_generic_message">Não podemos carregar esta página por algum motivo.</string>
   <string name="your_rights">Seus direitos</string>
   <string name="your_rights_content1">O %1$s é um software livre e de código aberto feita pela Mozilla e outros contribuidores.</string>
   <string name="your_rights_content2"><![CDATA["O %1$s é disponibilizado de acordo com os termos da "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Licen&#231;a P&#250;blica da Mozilla</a>" e outras licenças de código aberto."]]></string>
@@ -59,22 +42,14 @@
   <string name="settings_cookies_dialog_title">Limpar todos os cookies e dados do site</string>
   <string name="settings_cookies_dialog_content2">Está ação irá limpar todos os dados de cookies e sites, portanto, pode ser que as sessões de sites sejam finalizadas e que conteúdos da web armazenado off-line sejam apagados.</string>
   <string name="turbo_mode">Modo Turbo</string>
-  <string name="turbo_mode_enabled_toast">Modo Turbo ativado</string>
-  <string name="turbo_mode_disabled_toast">Modo Turbo desativado</string>
   <string name="onboarding_turbo_mode_title">O Modo Turbo auxilia você a navegar mais rápido</string>
   <string name="onboarding_turbo_mode_body2">O modo turbo bloqueia anúncios e rastreadores automaticamente.\nCaso um site não haja da forma que você espera, tente desativa-lo.</string>
   <string name="button_turbo_mode_keep_enabled2">Manter o modo turbo ativado</string>
   <string name="button_turbo_mode_turn_off2">Desativar o modo turbo</string>
-  <string name="turbo_mode_disable_a11y">Desativar o Modo Turbo</string>
-  <string name="turbo_mode_enable_a11y">Ativar o Modo Turbo</string>
   <string name="turbo_mode_image_a11y">Exemplo de modo turbo ativado</string>
   <string name="homescreen_unpin_tutorial_toast">Pressione e segure o SELECT para desafixar da tela inicial</string>
   <string name="homescreen_tile_remove">Remover</string>
-  <string name="homescreen_unpin_a11y">Desafixar</string>
-  <string name="homescreen_title">Tela inicial</string>
   <string name="pin_label">Fixar na tela inicial</string>
-  <string name="notification_pinned_general2">%1$s foi fixado à tela inicial</string>
-  <string name="notification_unpinned_general2">%1$s foi removido da tela inicial</string>
   <string name="notification_pinned_site">Fixado à tela inicial do Firefox TV</string>
   <string name="notification_unpinned_site">Removido da tela inicial do Firefox TV</string>
   <string name="pocket_home_tutorial_title">Introduzindo os vídeos recomendados pelo %1$s</string>
@@ -85,15 +60,8 @@
   <string name="pocket_video_feed_recommended_videos_title">Vídeos recomendados</string>
   <string name="pocket_video_feed_failed_to_load">Hmm. Nós estamos com problemas na exibição das recomendações de vídeos do %1$s.</string>
   <string name="pocket_video_feed_reload_button">Tentar novamente</string>
-  <string name="pocket_video_feed_a11y_navigation">Utilize esquerda ou direita para mover-se entre os vídeos</string>
-  <string name="pocket_video_feed_a11y_feed_item_focused">%1$s em %2$s</string>
-  <string name="google_search_tile_title">Pesquisar com o Google</string>
-  <string name="google_search_hint_text">Pesquise com o Google ou insira o endereço</string>
-  <string name="blank_tile_title">Adicionar site</string>
-  <string name="dialog_clear_cookies_title">Limpar os Cookies?</string>
   <string name="request_desktop_site_a11y">Solicitar versão para desktop deste site</string>
   <string name="notification_request_desktop_site">Versão desktop solicitada</string>
   <string name="notification_request_non_desktop_site">Retornou para a versão padrão</string>
   <string name="youtube_casting_onboarding_toast">Transmita vídeos do YouTube a partir do seu celular ou tablet. Abra o YouTube no seu dispositivo e toque em %s para começar.</string>
-  <string name="fullscreen_toast_pinch_to_exit">Reduza com os dedos para sair do modo de tela cheia</string>
 </resources>
