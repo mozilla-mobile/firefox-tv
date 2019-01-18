@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
-import android.support.test.uiautomator.UiDevice;
 
 import org.junit.After;
 import org.junit.Before;
@@ -36,7 +35,6 @@ public class OnboardingLaunchTest extends ScreenshotTest {
 
     private Intent intent;
     private SharedPreferences.Editor preferencesEditor;
-    private UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
     @ClassRule
     public static final LocaleTestRule localeTestRule = new LocaleTestRule();
