@@ -120,6 +120,9 @@ open class TelemetryIntegration protected constructor(
         }
     }
 
+    val clientId: String
+        get() = TelemetryHolder.get().clientId
+
     @UiThread // via TelemetryHomeTileUniqueClickPerSessionCounter
     fun startSession(context: Context) {
         TelemetryHolder.get().recordSessionStart()
