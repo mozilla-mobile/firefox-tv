@@ -5,6 +5,7 @@
 
 package org.mozilla.tv.firefox.ui.screenshots
 
+import android.app.Application
 import android.support.test.InstrumentationRegistry
 import android.support.test.rule.ActivityTestRule
 import android.support.test.uiautomator.UiDevice
@@ -29,16 +30,22 @@ import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.view.View
 import org.hamcrest.Matchers.allOf
+import org.mozilla.tv.firefox.ServiceLocatorFactory
+import org.mozilla.tv.firefox.utils.ServiceLocator
 
 class PocketErrorTest : ScreenshotTest() {
 
-    companion object {
+    companion object : ServiceLocatorFactory {
         // TODO 'lazy' as a workaround due to an incompatibility between
         // Fastlane and AndroidX. Remove lazy delegate when this
         // incompatibility has been fixed
         // See: https://github.com/fastlane/fastlane/issues/13810
         @get:ClassRule
         val localeTestRule by lazy { LocaleTestRule() }
+
+        override fun createServiceLocator(app: Application) = object : ServiceLocator(app) {
+            override val pocketRepo = FakePocketVideoRepoProvider.fakedPocketRepo
+        }
     }
 
     private val mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
