@@ -8,7 +8,6 @@ package org.mozilla.tv.firefox.ui.screenshots
 import android.support.test.InstrumentationRegistry
 import android.support.test.rule.ActivityTestRule
 import android.support.test.uiautomator.UiDevice
-import android.support.test.uiautomator.UiObject
 import android.support.test.uiautomator.UiSelector
 
 import org.junit.After
@@ -28,13 +27,23 @@ import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.withId
+import android.view.View
 import org.hamcrest.Matchers.allOf
 
 class PocketErrorTest : ScreenshotTest() {
 
+    companion object {
+        // TODO 'lazy' as a workaround due to an incompatibility between
+        // Fastlane and AndroidX. Remove lazy delegate when this
+        // incompatibility has been fixed
+        // See: https://github.com/fastlane/fastlane/issues/13810
+        @get:ClassRule
+        val localeTestRule by lazy { LocaleTestRule() }
+    }
+
     private val mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
-    @Rule
+    @get:Rule
     var mActivityTestRule: ActivityTestRule<MainActivity> = MainActivityTestRule()
 
     @After
@@ -58,11 +67,5 @@ class PocketErrorTest : ScreenshotTest() {
 
         onView(allOf<View>(withId(R.id.megaTileTryAgainButton), isDisplayed()))
             .perform(click())
-    }
-
-    companion object {
-
-        @ClassRule
-        val localeTestRule = LocaleTestRule()
     }
 }
