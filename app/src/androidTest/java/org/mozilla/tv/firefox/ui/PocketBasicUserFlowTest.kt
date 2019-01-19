@@ -4,10 +4,12 @@
 
 package org.mozilla.tv.firefox.ui
 
+import android.app.Application
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mozilla.tv.firefox.ServiceLocatorFactory
 import org.mozilla.tv.firefox.helpers.AndroidAssetDispatcher
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.helpers.FakePocketVideoRepoProvider
@@ -16,6 +18,7 @@ import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.ui.robots.DeviceButton
 import org.mozilla.tv.firefox.ui.robots.navigationOverlay
+import org.mozilla.tv.firefox.utils.ServiceLocator
 
 /**
  * Tests the Pocket happy path.
@@ -25,6 +28,12 @@ import org.mozilla.tv.firefox.ui.robots.navigationOverlay
  * - Click on a video
  */
 class PocketBasicUserFlowTest {
+
+    companion object : ServiceLocatorFactory {
+        override fun createServiceLocator(app: Application) = object : ServiceLocator(app) {
+            override val pocketRepo = FakePocketVideoRepoProvider.fakedPocketRepo
+        }
+    }
 
     @get:Rule val activityTestRule = MainActivityTestRule()
 

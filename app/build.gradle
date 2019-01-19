@@ -166,6 +166,8 @@ dependencies {
 
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestUtil 'com.android.support.test:orchestrator:1.0.2'
+
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}"
 }
 
 task validateReleaseConfiguration(type: ValidateAndroidAppReleaseConfiguration)

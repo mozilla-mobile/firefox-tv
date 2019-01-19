@@ -8,34 +8,39 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.support.test.runner.AndroidJUnitRunner
-import org.mozilla.tv.firefox.helpers.FakePocketVideoRepoProvider
-import org.mozilla.tv.firefox.pocket.PocketVideoRepo
-import org.mozilla.tv.firefox.ui.PocketBasicUserFlowTest
-import org.mozilla.tv.firefox.ui.screenshots.PocketErrorTest
 import org.mozilla.tv.firefox.utils.ServiceLocator
+import kotlin.reflect.full.companionObjectInstance
 
 class FirefoxTestRunner : AndroidJUnitRunner() {
 
     private lateinit var app: Application
+    private lateinit var classLoader: ClassLoader
 
     override fun newApplication(cl: ClassLoader?, className: String?, context: Context?): Application {
         return super.newApplication(cl, FirefoxTestApplication::class.java.name, context).also {
             app = it
+            classLoader = cl!!
         }
     }
 
     override fun onCreate(arguments: Bundle?) {
-        when (arguments.extractClass()) {
-            // Set up test class specific ServiceLocator
-            PocketBasicUserFlowTest::class.java.name,
-            PocketErrorTest::class.java.name -> {
-                TestDependencyProvider.serviceLocator = object : ServiceLocator(app) {
-                    override val pocketRepo: PocketVideoRepo = FakePocketVideoRepoProvider.fakedPocketRepo
-                }
-            }
-        }
+        val classString = arguments?.extractClass()
+        val testClass = classString?.let { classLoader.loadClass(it).kotlin }
+        val dependencyProvider = testClass?.companionObjectInstance as? ServiceLocatorFactory
+        val fakeServiceLocator = dependencyProvider?.createServiceLocator(app)
+
+        fakeServiceLocator?.let { TestDependencyProvider.serviceLocator = it }
+
         super.onCreate(arguments)
     }
+}
+
+/**
+ * Tests that require faked dependencies should include companion objects that
+ * implement this interface
+ */
+interface ServiceLocatorFactory {
+    fun createServiceLocator(app: Application): ServiceLocator
 }
 
 /**
@@ -44,8 +49,8 @@ class FirefoxTestRunner : AndroidJUnitRunner() {
  * Note that this is an implementation detail of Espresso, and could be a likely
  * point of failure on version updates
  */
-private fun Bundle?.extractClass(): String {
+private fun Bundle.extractClass(): String? {
     // The class is stored in the format of {class}#{test}
     // e.g., org.mozilla.tv.firefox.ui.PocketBasicUserFlowTest#pocketBasicUserFlowTest
-    return this!!.getString("class")!!.split("#").first()
+    return this.getString("class")?.split("#")?.firstOrNull()
 }
