@@ -42,7 +42,11 @@ open class FirefoxApplication : LocaleAwareApplication() {
         PreferenceManager.setDefaultValues(this, R.xml.settings, false)
 
         serviceLocator = createServiceLocator()
-        serviceLocator.fretboardProvider.loadExperiments()
+
+        with(serviceLocator.fretboardProvider) {
+            updateExperiments()
+            loadExperiments()
+        }
 
         enableStrictMode()
 
@@ -51,8 +55,6 @@ open class FirefoxApplication : LocaleAwareApplication() {
         visibilityLifeCycleCallback = VisibilityLifeCycleCallback(this).also {
             registerActivityLifecycleCallbacks(it)
         }
-
-        serviceLocator.fretboardProvider.updateExperiments()
     }
 
     // ServiceLocator needs to be created in onCreate in order to accept Application

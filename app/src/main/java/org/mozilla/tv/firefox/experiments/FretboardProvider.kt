@@ -38,7 +38,16 @@ class FretboardProvider(private val applicationContext: Context) : CoroutineScop
                 }
             })
 
+    /**
+     * Asynchronously requests new experiments from the server and
+     * saves them to local storage
+     */
     fun updateExperiments() = launch(Dispatchers.IO) { fretboard.updateExperiments() }
 
-    fun loadExperiments() = launch(Dispatchers.IO) { fretboard.loadExperiments() }
+    /**
+     * Synchronously loads experiments from local storage.
+     * This is completed quickly, so we are comfortable blocking in order to
+     * reduce complexity by making experiments always available
+     */
+    fun loadExperiments() = fretboard.loadExperiments()
 }
