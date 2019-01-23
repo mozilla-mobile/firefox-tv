@@ -36,6 +36,7 @@ tasks:
           && git fetch {{ event.head.repo.url }} {{ event.head.repo.branch }}
           && git config advice.detachedHead false
           && git checkout {{event.head.sha}}
+          && yes | sdkmanager --licenses
           && ./gradlew -PisPullRequest clean assemble assembleAndroidTest lint checkstyle ktlint pmd detekt test
       artifacts:
         'public':
@@ -80,6 +81,7 @@ tasks:
           && git fetch {{ event.head.repo.url }}
           && git config advice.detachedHead false
           && git checkout {{event.head.sha}}
+          && yes | sdkmanager --licenses
           && ./gradlew -PisPullRequest clean assemble assembleAndroidTest lint checkstyle ktlint pmd detekt test
       artifacts:
         'public':
