@@ -168,6 +168,8 @@ class NavigationOverlayFragment : Fragment(), View.OnClickListener {
         initPinnedTiles()
 
         navButtonSettings.setImageResource(R.drawable.ic_settings) // Must be set in code for SVG to work correctly.
+        exitButton.contentDescription = resources.getString(R.string.exit_firefox_a11y,
+                resources.getString(R.string.firefox_tv_brand_name_short))
 
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context!!, R.color.photonGrey10_a60p)) }
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)

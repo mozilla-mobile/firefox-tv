@@ -10,6 +10,7 @@
 
     <!-- The brand name of this app -->
     <string name="firefox_tv_brand_name" tools:keep="@string/firefox_tv_brand_name">Firefox TV</string>
+    <string name="firefox_tv_brand_name_short" tools:keep="@string/firefox_tv_brand_name_short">Firefox</string>
 
     <!-- The brand name of our partner company, Pocket. -->
     <string name="pocket_brand_name">Pocket</string>
@@ -168,7 +169,8 @@
     Clicking on that button in the YouTube app will show YouTube's instructions on how to cast. -->
     <string name="youtube_casting_onboarding_toast">Cast YouTube videos from your phone or tablet. Open YouTube on your device and tap %s to get started.</string>
 
-    <!-- Content description for the Exit Firefox button -->
-    <string name="exit_firefox_a11y">Exit Firefox</string>
+    <!-- Content description for the Exit Firefox button.
+     %1$s will be replaced with the Firefox brand name. -->
+    <string name="exit_firefox_a11y">Exit %1$s</string>
 
 </resources>
