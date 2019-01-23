@@ -73,3 +73,11 @@
 -dontwarn org.conscrypt.**
 # A resource is loaded with a relative path so the package of this class must be preserved.
 -keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+
+####################################################################################################
+# AndroidX
+####################################################################################################
+
+# A reference class used by androidx.concurrent.futures.AbstractFuture$UnsafeAtomicHelper
+# Currently consumed (in depenendecies) by mozilla.components.service.freboard.scheduler
+-dontwarn sun.misc.Unsafe
