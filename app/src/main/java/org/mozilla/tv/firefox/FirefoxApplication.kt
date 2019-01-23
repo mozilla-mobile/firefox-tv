@@ -43,14 +43,14 @@ open class FirefoxApplication : LocaleAwareApplication() {
 
         serviceLocator = createServiceLocator()
 
+        TelemetryIntegration.INSTANCE.init(this)
+
         with(serviceLocator.fretboardProvider) {
             updateExperiments()
             loadExperiments()
         }
 
         enableStrictMode()
-
-        TelemetryIntegration.INSTANCE.init(this)
 
         visibilityLifeCycleCallback = VisibilityLifeCycleCallback(this).also {
             registerActivityLifecycleCallbacks(it)
