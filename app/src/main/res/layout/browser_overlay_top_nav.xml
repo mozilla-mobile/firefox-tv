@@ -52,7 +52,7 @@
         android:id="@+id/exitButton"
         style="@style/NavigationButton"
         android:src="@drawable/ic_home"
-        android:contentDescription="@string/exit_firefox_a11y"/>
+        android:contentDescription="@null"/>
 
     <!-- Image src set in code to fix SVG. -->
     <ImageButton
