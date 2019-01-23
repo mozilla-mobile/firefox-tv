@@ -23,6 +23,8 @@
   <string name="preference_performance_block_webfonts_summary">Alcune immagini e icone potrebbero non essere visualizzate</string>
   <string name="preference_mozilla_telemetry2">Invia dati sull’uso</string>
   <string name="preference_privacy_notice">Informativa sulla privacy</string>
+  <string name="accessibility_announcement_loading">Caricamento…</string>
+  <string name="accessibility_announcement_loading_finished">Sito web caricato</string>
   <string name="content_description_forward">Naviga in avanti</string>
   <string name="content_description_reload">Ricarica il sito web</string>
   <string name="content_description_back">Torna indietro</string>
@@ -33,6 +35,21 @@
   <string name="external_multiple_apps_matched_exit">Uscire da Navigazione anonima?</string>
   <string name="errorpage_title">Errore caricamento pagina</string>
   <string name="errorpage_refresh">Riprova</string>
+  <string name="error_connectionfailure_title">Connessione non riuscita</string>
+  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>Il sito potrebbe essere non disponibile o sovraccarico. Riprovare fra qualche istante.</li>"\"\\n  \""<li>Se non &amp;#232; possibile caricare alcuna pagina, controllare la connessione dati o Wi-Fi del dispositivo.</li>\\n</ul>]]></string>
+  <string name="error_timeout_title">Tempo per la connessione esaurito</string>
+  <string name="error_hostLookup_title">Impossibile contattare il server</string>
+  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>\"Verificare se l\\\'indirizzo contiene errori di battitura del tipo \"<strong>ww</strong>\".example.com invece di \"<strong>www</strong>.example.com</li>"\" \\n  \""<li>Se non &amp;#232; possibile caricare alcuna pagina, controllare la connessione dati o Wi-Fi del dispositivo.</li>\\n</ul>\" \"]]></string>
+  <string name="error_malformedURI_title">L’indirizzo non è valido</string>
+  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>\"Gli indirizzi internet normalmente si scrivono nella forma \"<strong>http://www.example.com/</strong></li>"\"\\n  \""<li>\"Verificare di aver utilizzato le barre corrette \"<strong>/</strong>.</li>\\n</ul>\" \"]]></string>
+  <string name="error_redirectLoop_title">Questa pagina non reindirizza in modo corretto</string>
+  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>Questo problema spesso &amp;#232; causato dal blocco o dal rifiuto dei cookie.</li>\\n</ul>]]></string>
+  <string name="error_unsupportedprotocol_title">Indirizzo non interpretabile</string>
+  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>&amp;#200; necessario installare del software aggiuntivo per aprire questo indirizzo.</li>\\n</ul>]]></string>
+  <string name="error_sslhandshake_title">Connessione sicura non riuscita</string>
+  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>Potrebbe trattarsi di un problema nella configurazione del server oppure di un tentativo da parte di qualcuno di sostituirsi al server stesso.</li>"\"\\n  \""<li>Se &amp;#232; stato possibile connettersi a questo server in passato, il problema potrebbe essere solo temporaneo. Si consiglia di riprovare in seguito.</li>\\n</ul>]]></string>
+  <string name="error_generic_title">Oops</string>
+  <string name="error_generic_message">Per qualche motivo non è stato possibile caricare questa pagina.</string>
   <string name="your_rights">I tuoi diritti</string>
   <string name="your_rights_content1">%1$s è un software libero e Open Source realizzato da Mozilla e altri collaboratori.</string>
   <string name="your_rights_content2"><![CDATA[\"%1$s è disponibile nei termini della \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>\" e di altre licenze Open Source.\"]]></string>
@@ -42,14 +59,22 @@
   <string name="settings_cookies_dialog_title">Elimina tutti i cookie e i dati dei siti web</string>
   <string name="settings_cookies_dialog_content2">Ciò eliminerà tutti i cookie e i dati raccolti. Rimuovere queste informazioni potrebbe causare la disconnessione da siti web e l\'eliminazione dei contenuti web salvati offline.</string>
   <string name="turbo_mode">Modalità turbo</string>
+  <string name="turbo_mode_enabled_toast">Modalità turbo attivata</string>
+  <string name="turbo_mode_disabled_toast">Modalità turbo disattivata</string>
   <string name="onboarding_turbo_mode_title">La modalità turbo ti permette di navigare più velocemente</string>
   <string name="onboarding_turbo_mode_body2">La modalità turbo blocca automaticamente pubblicità ed elementi traccianti.\nSe un sito non funziona nel modo previsto, prova a disattivarla.</string>
   <string name="button_turbo_mode_keep_enabled2">Mantieni modalità turbo</string>
   <string name="button_turbo_mode_turn_off2">Disattiva modalità turbo</string>
+  <string name="turbo_mode_disable_a11y">Disattiva modalità turbo</string>
+  <string name="turbo_mode_enable_a11y">Attiva modalità turbo</string>
   <string name="turbo_mode_image_a11y">Esempio con la modalità turbo attiva</string>
   <string name="homescreen_unpin_tutorial_toast">Per sbloccare un elemento nella pagina principale tieni premuto SELECT</string>
   <string name="homescreen_tile_remove">Rimuovi</string>
+  <string name="homescreen_unpin_a11y">Rimuovi dalla bacheca</string>
+  <string name="homescreen_title">Schermata principale</string>
   <string name="pin_label">Fissa alla schermata principale</string>
+  <string name="notification_pinned_general2">Fissato alla schermata di %1$s</string>
+  <string name="notification_unpinned_general2">Rimosso dalla schermata di %1$s</string>
   <string name="notification_pinned_site">Fissato alla schermata principale di Firefox TV</string>
   <string name="notification_unpinned_site">Rimosso dalla schermata principale di Firefox TV</string>
   <string name="pocket_home_tutorial_title">Ti presentiamo i video consigliati da %1$s</string>
@@ -60,8 +85,15 @@
   <string name="pocket_video_feed_recommended_videos_title">Video consigliati</string>
   <string name="pocket_video_feed_failed_to_load">Uhm… Sembra che ci sia un problema con la visualizzazione dei video consigliati da %1$s.</string>
   <string name="pocket_video_feed_reload_button">Riprova</string>
+  <string name="pocket_video_feed_a11y_navigation">Utilizza i tasti verso sinistra e destra per muoverti tra i video</string>
+  <string name="pocket_video_feed_a11y_feed_item_focused">%1$s da %2$s</string>
+  <string name="google_search_tile_title">Cerca con Google</string>
+  <string name="google_search_hint_text">Cerca con Google o inserisci un indirizzo</string>
+  <string name="blank_tile_title">Aggiungi un sito web</string>
+  <string name="dialog_clear_cookies_title">Eliminare i cookie?</string>
   <string name="request_desktop_site_a11y">Richiedi la versione desktop di questo sito</string>
   <string name="notification_request_desktop_site">Versione desktop richiesta</string>
   <string name="notification_request_non_desktop_site">Versione desktop disattivata</string>
   <string name="youtube_casting_onboarding_toast">Guarda i video YouTube dal cellulare o dal tablet. Apri YouTube nel dispositivo e tocca %s per iniziare.</string>
+  <string name="fullscreen_toast_pinch_to_exit">Avvicina due dita per uscire dalla modalità Schermo intero</string>
 </resources>

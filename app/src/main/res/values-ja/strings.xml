@@ -23,6 +23,8 @@
   <string name="preference_performance_block_webfonts_summary">アイコンや画像が正常に表示されない場合があります</string>
   <string name="preference_mozilla_telemetry2">使用状況データを送信</string>
   <string name="preference_privacy_notice">プライバシー通知</string>
+  <string name="accessibility_announcement_loading">読み込み中</string>
+  <string name="accessibility_announcement_loading_finished">ウェブサイト読み込み完了</string>
   <string name="content_description_forward">次のページへ進む</string>
   <string name="content_description_reload">ウェブサイトを再読み込み</string>
   <string name="content_description_back">前のページへ戻る</string>
@@ -33,6 +35,21 @@
   <string name="external_multiple_apps_matched_exit">プライベートブラウジングを終了しますか？</string>
   <string name="errorpage_title">ページ読み込みエラー</string>
   <string name="errorpage_refresh">再試行</string>
+  <string name="error_connectionfailure_title">正常に接続できませんでした</string>
+  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li>&#12371;&#12398;&#12469;&#12452;&#12488;&#12364;&#19968;&#26178;&#30340;&#12395;&#21033;&#29992;&#12391;&#12365;&#12394;&#12367;&#12394;&#12387;&#12390;&#12356;&#12383;&#12426;&#12289;&#12469;&#12540;&#12496;&#12540;&#12398;&#36000;&#33655;&#12364;&#39640;&#12377;&#12366;&#12390;&#25509;&#32154;&#12391;&#12365;&#12394;&#12367;&#12394;&#12387;&#12390;&#12356;&#12427;&#21487;&#33021;&#24615;&#12364;&#12354;&#12426;&#12414;&#12377;&#12290;&#12375;&#12400;&#12425;&#12367;&#12375;&#12390;&#12363;&#12425;&#20877;&#24230;&#35430;&#12375;&#12390;&#12367;&#12384;&#12373;&#12356;&#12290;</li>"\n        "<li>&#20182;&#12398;&#12469;&#12452;&#12488;&#12418;&#34920;&#31034;&#12391;&#12365;&#12394;&#12356;&#22580;&#21512;&#12289;&#31471;&#26411;&#12398;&#12487;&#12540;&#12479;&#25509;&#32154;&#12420; Wi-Fi &#25509;&#32154;&#12434;&#30906;&#35469;&#12375;&#12390;&#12367;&#12384;&#12373;&#12356;&#12290;</li>"\n      "</ul>]]></string>
+  <string name="error_timeout_title">接続がタイムアウトしました</string>
+  <string name="error_hostLookup_title">サーバーが見つかりませんでした</string>
+  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n        "<li><strong>www</strong>".example.com &#12434;&#38291;&#36949;&#12360;&#12390; "<strong>ww</strong>.example.com &#12392;&#20837;&#21147;&#12377;&#12427;&#12394;&#12393;&#12289;&#12450;&#12489;&#12524;&#12473;&#12434;&#38291;&#36949;&#12387;&#12390;&#20837;&#21147;&#12375;&#12390;&#12356;&#12394;&#12356;&#12363;&#30906;&#35469;&#12375;&#12390;&#12367;&#12384;&#12373;&#12356;&#12290;</li>"\n        "<li>&#20182;&#12398;&#12469;&#12452;&#12488;&#12418;&#34920;&#31034;&#12391;&#12365;&#12394;&#12356;&#22580;&#21512;&#12289;&#31471;&#26411;&#12398;&#12487;&#12540;&#12479;&#25509;&#32154;&#12420; Wi-Fi &#25509;&#32154;&#12434;&#30906;&#35469;&#12375;&#12390;&#12367;&#12384;&#12373;&#12356;&#12290;</li>"\n      "</ul>]]></string>
+  <string name="error_malformedURI_title">アドレスの書式が正しくありません</string>
+  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>"&#12454;&#12455;&#12502;&#12450;&#12489;&#12524;&#12473;&#12399;&#36890;&#24120; "<strong>http://www.example.com/</strong>" &#12398;&#12424;&#12358;&#12395;&#26360;&#12365;&#12414;&#12377;&#12290;"</li>"\n  "<li>&#20870;&#35352;&#21495;&#12420;&#12496;&#12483;&#12463;&#12473;&#12521;&#12483;&#12471;&#12517;&#12391;&#12399;&#12394;&#12367;&#12289;&#12473;&#12521;&#12483;&#12471;&#12517; (<strong>/</strong>) &#12364;&#20351;&#12431;&#12428;&#12390;&#12356;&#12427;&#12363;&#30906;&#35469;&#12375;&#12390;&#12367;&#12384;&#12373;&#12356;&#12290;</li>\n</ul>]]></string>
+  <string name="error_redirectLoop_title">ページの自動転送設定が正しくありません</string>
+  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>Cookie &#12398;&#28961;&#21177;&#21270;&#12414;&#12383;&#12399;&#25298;&#21542;&#12364;&#12371;&#12398;&#21839;&#38988;&#12398;&#21407;&#22240;&#12392;&#12394;&#12427;&#12371;&#12392;&#12364;&#12354;&#12426;&#12414;&#12377;&#12290;</li>\n</ul>]]></string>
+  <string name="error_unsupportedprotocol_title">アドレスのプロトコルが不明です</string>
+  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>&#12371;&#12398;&#12450;&#12489;&#12524;&#12473;&#12434;&#38283;&#12367;&#12395;&#12399;&#12289;&#21029;&#12398;&#12477;&#12501;&#12488;&#12454;&#12455;&#12450;&#12434;&#12452;&#12531;&#12473;&#12488;&#12540;&#12523;&#12377;&#12427;&#24517;&#35201;&#12364;&#12354;&#12427;&#12363;&#12418;&#12375;&#12428;&#12414;&#12379;&#12435;&#12290;</li>\n</ul>]]></string>
+  <string name="error_sslhandshake_title">安全な接続ができませんでした</string>
+  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\n  "<li>&#12469;&#12540;&#12496;&#12540;&#12398;&#35373;&#23450;&#12395;&#21839;&#38988;&#12364;&#12354;&#12427;&#12363;&#12289;&#35504;&#12363;&#12364;&#27491;&#35215;&#12398;&#12469;&#12540;&#12496;&#12540;&#12395;&#12394;&#12426;&#12377;&#12414;&#12375;&#12390;&#12356;&#12427;&#21487;&#33021;&#24615;&#12364;&#12354;&#12426;&#12414;&#12377;&#12290;</li>"\n  "<li>&#20197;&#21069;&#12399;&#27491;&#24120;&#12395;&#25509;&#32154;&#12391;&#12365;&#12390;&#12356;&#12383;&#22580;&#21512;&#12289;&#12371;&#12398;&#21839;&#38988;&#12399;&#24656;&#12425;&#12367;&#19968;&#26178;&#30340;&#12394;&#12418;&#12398;&#12391;&#12377;&#12398;&#12391;&#12289;&#24460;&#12391;&#20877;&#24230;&#35430;&#12375;&#12390;&#12415;&#12390;&#12367;&#12384;&#12373;&#12356;&#12290;</li>\n</ul>]]></string>
+  <string name="error_generic_title">申し訳ありません</string>
+  <string name="error_generic_message">何らかの理由によりこのページを正常に読み込めませんでした。</string>
   <string name="your_rights">あなたの権利</string>
   <string name="your_rights_content1">%1$s は Mozilla や他の貢献者によって開発されているフリーでオープンソースのソフトウェアです。</string>
   <string name="your_rights_content2"><![CDATA["%1$s は "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" やその他オープンソースライセンスの条件に基づいて使用可能となっています。"]]></string>
@@ -42,14 +59,22 @@
   <string name="settings_cookies_dialog_title">すべての Cookie とサイトデータの消去</string>
   <string name="settings_cookies_dialog_content2">これにより、すべての Cookie とサイトデータが消去され、ウェブサイトからログアウトしたり、オフライン用に保存されているコンテンツが削除されたりする可能性があります。</string>
   <string name="turbo_mode">ターボモード</string>
+  <string name="turbo_mode_enabled_toast">ターボモード有効</string>
+  <string name="turbo_mode_disabled_toast">ターボモード無効</string>
   <string name="onboarding_turbo_mode_title">ターボモードはより速くブラウズするのに役立ちます</string>
   <string name="onboarding_turbo_mode_body2">ターボモードは自動的に広告やトラッカーをブロックします。\nサイトが期待通りの動作をしない場合は、これをオフにしてみてください。</string>
   <string name="button_turbo_mode_keep_enabled2">ターボモードを有効のままにする</string>
   <string name="button_turbo_mode_turn_off2">ターボモードをオフにする</string>
+  <string name="turbo_mode_disable_a11y">ターボモードを無効にする</string>
+  <string name="turbo_mode_enable_a11y">ターボモードを有効にする</string>
   <string name="turbo_mode_image_a11y">ターボモードが有効な例</string>
   <string name="homescreen_unpin_tutorial_toast">ホーム画面からピン留めを外すには [選択] ボタンを長押ししてください</string>
   <string name="homescreen_tile_remove">削除</string>
+  <string name="homescreen_unpin_a11y">ピン留めを外す</string>
+  <string name="homescreen_title">ホーム画面</string>
   <string name="pin_label">ホーム画面にピン留め</string>
+  <string name="notification_pinned_general2">%1$s のホーム画面にピン留めしました</string>
+  <string name="notification_unpinned_general2">%1$s のホーム画面から削除しました</string>
   <string name="notification_pinned_site">Firefox TV のホーム画面にピン留めしました</string>
   <string name="notification_unpinned_site">Firefox TV のホーム画面から削除しました</string>
   <string name="pocket_home_tutorial_title">%1$s からおすすめの動画を紹介します</string>
@@ -60,8 +85,15 @@
   <string name="pocket_video_feed_recommended_videos_title">おすすめ動画</string>
   <string name="pocket_video_feed_failed_to_load">申し訳ありませんが、%1$s のおすすめ動画を表示中に何か問題が発生しました。</string>
   <string name="pocket_video_feed_reload_button">再読み込み</string>
+  <string name="pocket_video_feed_a11y_navigation">動画を選択するには左右のボタンを使ってください</string>
+  <string name="pocket_video_feed_a11y_feed_item_focused">%2$s 上の %1$s</string>
+  <string name="google_search_tile_title">Google で検索</string>
+  <string name="google_search_hint_text">Google で検索またはアドレスを入力</string>
+  <string name="blank_tile_title">ウェブサイトを追加</string>
+  <string name="dialog_clear_cookies_title">Cookie を消去しますか？</string>
   <string name="request_desktop_site_a11y">このサイトのデスクトップ版を見る</string>
   <string name="notification_request_desktop_site">デスクトップ版を表示します</string>
   <string name="notification_request_non_desktop_site">デスクトップ版でない表示に戻しました</string>
   <string name="youtube_casting_onboarding_toast">YouTube 動画をスマートフォンやタブレットからキャスト配信します。開始するには、端末で YouTube を開き、%s をタップしてください。</string>
+  <string name="fullscreen_toast_pinch_to_exit">ピンチ操作で全画面表示モードを終了します</string>
 </resources>

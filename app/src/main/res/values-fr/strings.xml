@@ -23,6 +23,8 @@
   <string name="preference_performance_block_webfonts_summary">Peut empêcher certaines icônes ou images de s’afficher</string>
   <string name="preference_mozilla_telemetry2">Envoyer des données d’utilisation</string>
   <string name="preference_privacy_notice">Politique de confidentialité</string>
+  <string name="accessibility_announcement_loading">Chargement…</string>
+  <string name="accessibility_announcement_loading_finished">Site web chargé</string>
   <string name="content_description_forward">Avancer dans l’historique</string>
   <string name="content_description_reload">Actualiser la page web</string>
   <string name="content_description_back">Précédent</string>
@@ -33,6 +35,21 @@
   <string name="external_multiple_apps_matched_exit">Quitter la navigation privée ?</string>
   <string name="errorpage_title">Erreur de chargement de la page</string>
   <string name="errorpage_refresh">Réessayer</string>
+  <string name="error_connectionfailure_title">La connexion a échoué</string>
+  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"><li>Le site est peut-&#234;tre temporairement indisponible ou surcharg&#233;. R&#233;essayez plus tard&#160;;</li>\\n<li>Si vous n&#8217;arrivez &#224; naviguer sur aucun site, v&#233;rifiez la connexion donn&#233;es ou Wi-Fi de votre appareil.</li></ul>]]></string>
+  <string name="error_timeout_title">Délai de connexion dépassé</string>
+  <string name="error_hostLookup_title">Adresse introuvable</string>
+  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"><li>"Veuillez v&#233;rifier la syntaxe de l&#8217;adresse (saisie de "<strong>ww</strong>".example.com au lieu de "<strong>www</strong>.example.com par exemple)&#160;;</li>\\n<li>Si vous n&#8217;arrivez &#224; naviguer sur aucun site, v&#233;rifiez la connexion donn&#233;es ou Wi-Fi de votre appareil.</li>\\n</ul>]]></string>
+  <string name="error_malformedURI_title">L’adresse n’est pas valide</string>
+  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"><li>"La syntaxe des adresses web est g&#233;n&#233;ralement "<strong>http://www.example.com/</strong>&#160;;</li>\\n<li>"Assurez-vous de bien utiliser des barres obliques (c.-&#224;-d. "<strong>/</strong>).</li>\\n</ul>]]></string>
+  <string name="error_redirectLoop_title">La page n’est pas redirigée correctement</string>
+  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"><li>La cause de ce probl&#232;me peut &#234;tre la d&#233;sactivation ou le refus des cookies.</li></ul>]]></string>
+  <string name="error_unsupportedprotocol_title">L’adresse n’a pas été reconnue</string>
+  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"><li>Il est peut-&#234;tre n&#233;cessaire d&#8217;installer une autre application pour ouvrir ce type d&#8217;adresse.</li></ul>]]></string>
+  <string name="error_sslhandshake_title">Échec de la connexion sécurisée</string>
+  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2"><li>Ceci peut &#234;tre d&#251; &#224; un probl&#232;me de configuration du serveur ou &#224; une personne essayant d&#8217;usurper l&#8217;identit&#233; du serveur.</li><li>Si vous avez d&#233;j&#224; pu vous connecter &#224; ce serveur, l&#8217;erreur est peut-&#234;tre temporaire et vous pouvez essayer &#224; nouveau plus tard.</li></ul>]]></string>
+  <string name="error_generic_title">La requête ne peut aboutir</string>
+  <string name="error_generic_message">Pour une raison inconnue, nous ne pouvons pas charger cette page.</string>
   <string name="your_rights">Droits de l’utilisateur</string>
   <string name="your_rights_content1">%1$s est un logiciel libre et ouvert réalisé par Mozilla avec l’aide d’autres contributeurs.</string>
   <string name="your_rights_content2"><![CDATA["%1$s est distribué suivant les modalités de la "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" et d’autres licences open source."]]></string>
@@ -42,14 +59,22 @@
   <string name="settings_cookies_dialog_title">Effacer les cookies et les données de sites</string>
   <string name="settings_cookies_dialog_content2">Cette action effacera l’ensemble des cookies et des données de sites. Effacer ces données peut vous déconnecter de certains sites web et supprimer du contenu web stocké hors connexion.</string>
   <string name="turbo_mode">Mode turbo</string>
+  <string name="turbo_mode_enabled_toast">Mode turbo activé</string>
+  <string name="turbo_mode_disabled_toast">Mode turbo désactivé</string>
   <string name="onboarding_turbo_mode_title">Le mode turbo vous permet de naviguer plus rapidement</string>
   <string name="onboarding_turbo_mode_body2">Le mode turbo bloque automatiquement publicités et traqueurs.\nSi un site ne fonctionne pas comme vous l’attendiez, essayez de le désactiver.</string>
   <string name="button_turbo_mode_keep_enabled2">Laisser le mode turbo activé</string>
   <string name="button_turbo_mode_turn_off2">Désactiver le mode turbo</string>
+  <string name="turbo_mode_disable_a11y">Désactiver le mode turbo</string>
+  <string name="turbo_mode_enable_a11y">Activer le mode turbo</string>
   <string name="turbo_mode_image_a11y">Exemple avec le mode turbo activé</string>
   <string name="homescreen_unpin_tutorial_toast">Effectuez un appui long sur SELECT pour détacher cet élément de l’écran d’accueil</string>
   <string name="homescreen_tile_remove">Retirer</string>
+  <string name="homescreen_unpin_a11y">Détacher</string>
+  <string name="homescreen_title">Écran d’accueil</string>
   <string name="pin_label">Épingler à l’écran d’accueil</string>
+  <string name="notification_pinned_general2">Épinglé à l’écran d’accueil de %1$s</string>
+  <string name="notification_unpinned_general2">Retiré de l’écran d’accueil de %1$s</string>
   <string name="notification_pinned_site">Épinglé à l’écran d’accueil Firefox TV</string>
   <string name="notification_unpinned_site">Retiré de l’écran d’accueil Firefox TV</string>
   <string name="pocket_home_tutorial_title">Découvrez des vidéos recommandées par %1$s</string>
@@ -60,8 +85,15 @@
   <string name="pocket_video_feed_recommended_videos_title">Vidéos recommandées</string>
   <string name="pocket_video_feed_failed_to_load">Hum, nous ne parvenons pas à afficher les recommandations de vidéos par %1$s.</string>
   <string name="pocket_video_feed_reload_button">Réessayer</string>
+  <string name="pocket_video_feed_a11y_navigation">Utilisez les touches gauche et droite pour naviguer parmi les vidéos</string>
+  <string name="pocket_video_feed_a11y_feed_item_focused">%1$s sur %2$s</string>
+  <string name="google_search_tile_title">Rechercher avec Google</string>
+  <string name="google_search_hint_text">Rechercher avec Google ou saisir une adresse</string>
+  <string name="blank_tile_title">Ajouter un site web</string>
+  <string name="dialog_clear_cookies_title">Effacer les cookies ?</string>
   <string name="request_desktop_site_a11y">Afficher la version du site pour ordinateurs</string>
   <string name="notification_request_desktop_site">Affichage du site pour ordinateurs</string>
   <string name="notification_request_non_desktop_site">Retour à la version par défaut</string>
   <string name="youtube_casting_onboarding_toast">Diffusez des vidéos YouTube à partir de votre téléphone ou de votre tablette. Ouvrez YouTube sur votre appareil et appuyez sur %s pour commencer.</string>
+  <string name="fullscreen_toast_pinch_to_exit">Pincer pour quitter le mode plein écran</string>
 </resources>

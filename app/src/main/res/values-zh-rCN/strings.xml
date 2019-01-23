@@ -23,6 +23,8 @@
   <string name="preference_performance_block_webfonts_summary">可能造成图标或图像缺失</string>
   <string name="preference_mozilla_telemetry2">发送使用统计</string>
   <string name="preference_privacy_notice">隐私声明</string>
+  <string name="accessibility_announcement_loading">正在载入</string>
+  <string name="accessibility_announcement_loading_finished">网站已载入</string>
   <string name="content_description_forward">浏览下一页</string>
   <string name="content_description_reload">重新载入网站</string>
   <string name="content_description_back">浏览上一页</string>
@@ -33,6 +35,21 @@
   <string name="external_multiple_apps_matched_exit">退出隐私浏览模式？</string>
   <string name="errorpage_title">页面载入出错</string>
   <string name="errorpage_refresh">重试</string>
+  <string name="error_connectionfailure_title">无法连接</string>
+  <string name="error_connectionfailure_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n        \""<li>&amp;#35813;&amp;#32593;&amp;#31449;&amp;#21487;&amp;#33021;&amp;#26242;&amp;#26102;&amp;#19981;&amp;#21487;&amp;#29992;&amp;#25110;&amp;#22826;&amp;#24537;&amp;#20102;&amp;#12290;&amp;#19968;&amp;#20250;&amp;#20799;&amp;#20877;&amp;#35797;&amp;#35797;&amp;#21543;&amp;#12290;</li>"\"\\n        \""<li>&amp;#22914;&amp;#26524;&amp;#20320;&amp;#26080;&amp;#27861;&amp;#36733;&amp;#20837;&amp;#20219;&amp;#20309;&amp;#39029;&amp;#38754;&amp;#65292;&amp;#35831;&amp;#26816;&amp;#26597;&amp;#24744;&amp;#30340;&amp;#31227;&amp;#21160;&amp;#35774;&amp;#22791;&amp;#30340;&amp;#25968;&amp;#25454;&amp;#25110; Wi-Fi &amp;#36830;&amp;#25509;&amp;#12290;</li>"\"\\n      \""</ul>]]></string>
+  <string name="error_timeout_title">连接超时</string>
+  <string name="error_hostLookup_title">找不到服务器</string>
+  <string name="error_hostLookup_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n        \""<li>"\"&amp;#35831;&amp;#26816;&amp;#26597;&amp;#35813;&amp;#22320;&amp;#22336;&amp;#26159;&amp;#21542;&amp;#36755;&amp;#38169;&amp;#65292;&amp;#27604;&amp;#22914;&amp;#23558;\\n          \""<strong>www</strong>"\".example.com &amp;#38169;&amp;#20889;&amp;#25104; \\n          \""<strong>ww</strong>.example.com</li>"\"\\n        \""<li>&amp;#22914;&amp;#26524;&amp;#24744;&amp;#26080;&amp;#27861;&amp;#36733;&amp;#20837;&amp;#20219;&amp;#20309;&amp;#39029;&amp;#38754;&amp;#65292;&amp;#35831;&amp;#26816;&amp;#26597;&amp;#35813;&amp;#35774;&amp;#22791;&amp;#30340;&amp;#25968;&amp;#25454;&amp;#25110; Wi-Fi &amp;#36830;&amp;#25509;&amp;#12290;</li>"\"\\n      \""</ul>]]></string>
+  <string name="error_malformedURI_title">地址无效</string>
+  <string name="error_malformedURI_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>\"&amp;#32593;&amp;#39029;&amp;#22320;&amp;#22336;&amp;#36890;&amp;#24120;&amp;#26684;&amp;#24335;&amp;#20026; \"<strong>http://www.example.com/</strong></li>"\"\\n  \""<li>\"&amp;#35831;&amp;#30830;&amp;#35748;&amp;#24744;&amp;#20351;&amp;#29992;&amp;#30340;&amp;#26159;&amp;#27491;&amp;#26012;&amp;#26464;&amp;#65288;&amp;#21363; \"<strong>/</strong>&amp;#65289;&amp;#12290;</li>\\n</ul>]]></string>
+  <string name="error_redirectLoop_title">此页面不正确地重定向</string>
+  <string name="error_redirectLoop_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>&amp;#26377;&amp;#26102;&amp;#20505;&amp;#31105;&amp;#29992;&amp;#25110;&amp;#25298;&amp;#32477;&amp;#25509;&amp;#21463; Cookie &amp;#20250;&amp;#23548;&amp;#33268;&amp;#27492;&amp;#38382;&amp;#39064;&amp;#12290;</li>\\n</ul>]]></string>
+  <string name="error_unsupportedprotocol_title">无法理解该地址</string>
+  <string name="error_unsupportedprotocol_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>&amp;#24744;&amp;#21487;&amp;#33021;&amp;#38656;&amp;#35201;&amp;#23433;&amp;#35013;&amp;#20854;&amp;#20182;&amp;#36719;&amp;#20214;&amp;#25165;&amp;#33021;&amp;#25171;&amp;#24320;&amp;#27492;&amp;#22320;&amp;#22336;&amp;#12290;</li>\\n</ul>]]></string>
+  <string name="error_sslhandshake_title">安全连接失败</string>
+  <string name="error_sslhandshake_message"><![CDATA[<ul xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">"\"\\n  \""<li>&amp;#36825;&amp;#21487;&amp;#33021;&amp;#26159;&amp;#26381;&amp;#21153;&amp;#22120;&amp;#37197;&amp;#32622;&amp;#30340;&amp;#38382;&amp;#39064;&amp;#65292;&amp;#25110;&amp;#32773;&amp;#26377;&amp;#20154;&amp;#23581;&amp;#35797;&amp;#20882;&amp;#20805;&amp;#35813;&amp;#26381;&amp;#21153;&amp;#22120;&amp;#25152;&amp;#33268;&amp;#12290;</li>"\"\\n  \""<li>&amp;#22914;&amp;#26524;&amp;#24744;&amp;#20043;&amp;#21069;&amp;#26366;&amp;#25104;&amp;#21151;&amp;#36830;&amp;#25509;&amp;#35813;&amp;#26381;&amp;#21153;&amp;#22120;&amp;#65292;&amp;#37027;&amp;#20040;&amp;#27492;&amp;#38169;&amp;#35823;&amp;#21487;&amp;#33021;&amp;#26159;&amp;#26242;&amp;#26102;&amp;#30340;&amp;#65292;&amp;#24744;&amp;#21487;&amp;#20197;&amp;#31245;&amp;#21518;&amp;#20877;&amp;#35797;&amp;#12290;</li>\\n</ul>]]></string>
+  <string name="error_generic_title">啊哦</string>
+  <string name="error_generic_message">由于某些原因，我们无法载入此页面。</string>
   <string name="your_rights">您的权利</string>
   <string name="your_rights_content1">%1$s 是由 Mozilla 及贡献者制作的一款自由的开源软件。</string>
   <string name="your_rights_content2"><![CDATA[\"%1$s 依照 \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla &amp;#20844;&amp;#20849;&amp;#35768;&amp;#21487;&amp;#35777;</a>及其他一些开源许可证向您授权。]]></string>
@@ -42,14 +59,22 @@
   <string name="settings_cookies_dialog_title">清除所有 Cookie 和站点数据</string>
   <string name="settings_cookies_dialog_content2">这将清除所有 Cookie 和网站数据。清除此信息可能会使您退出网站登录并删除存储的离线 Web 内容。</string>
   <string name="turbo_mode">加速模式</string>
+  <string name="turbo_mode_enabled_toast">已启用加速模式</string>
+  <string name="turbo_mode_disabled_toast">已禁用加速模式</string>
   <string name="onboarding_turbo_mode_title">加速模式下浏览更快更轻巧</string>
   <string name="onboarding_turbo_mode_body2">加速模式会自动拦截广告和跟踪器。\n如果网站的行为不符合您的预期，请尝试将其关闭。</string>
   <string name="button_turbo_mode_keep_enabled2">保持加速模式启用</string>
   <string name="button_turbo_mode_turn_off2">退出加速模式</string>
+  <string name="turbo_mode_disable_a11y">已关闭加速模式</string>
+  <string name="turbo_mode_enable_a11y">已打开加速模式</string>
   <string name="turbo_mode_image_a11y">加速模式启用范例</string>
   <string name="homescreen_unpin_tutorial_toast">长按 SELECT 键从主屏幕取消固定</string>
   <string name="homescreen_tile_remove">移除</string>
+  <string name="homescreen_unpin_a11y">取消固定</string>
+  <string name="homescreen_title">主屏幕</string>
   <string name="pin_label">固定到主屏幕</string>
+  <string name="notification_pinned_general2">已固定到 %1$s 的主屏幕上</string>
+  <string name="notification_unpinned_general2">已从 %1$s 的主屏幕上移除</string>
   <string name="notification_pinned_site">已固定到 Firefox TV 主屏幕</string>
   <string name="notification_unpinned_site">已从 Firefox TV 主屏幕移除</string>
   <string name="pocket_home_tutorial_title">介绍由“%1$s”推荐的视频</string>
@@ -60,8 +85,15 @@
   <string name="pocket_video_feed_recommended_videos_title">推荐视频</string>
   <string name="pocket_video_feed_failed_to_load">呃，我们在显示由“%1$s”推荐的视频时遇到一些问题。</string>
   <string name="pocket_video_feed_reload_button">重试</string>
+  <string name="pocket_video_feed_a11y_navigation">使用左键和右键在视频之间移动</string>
+  <string name="pocket_video_feed_a11y_feed_item_focused">%2$s 上的 %1$s</string>
+  <string name="google_search_tile_title">使用 Google 搜索</string>
+  <string name="google_search_hint_text">使用 Google 搜索，或者输入网址</string>
+  <string name="blank_tile_title">添加网站</string>
+  <string name="dialog_clear_cookies_title">清除 Cookie？</string>
   <string name="request_desktop_site_a11y">要求此站点的桌面版</string>
   <string name="notification_request_desktop_site">已发出桌面版请求</string>
   <string name="notification_request_non_desktop_site">返回非桌面版</string>
   <string name="youtube_casting_onboarding_toast">用您的手机或平板电脑投屏 YouTube 视频。在您的设备上打开 YouTube，然后点按 %s 即可开始使用。</string>
+  <string name="fullscreen_toast_pinch_to_exit">双指捏合即可退出全屏模式</string>
 </resources>
