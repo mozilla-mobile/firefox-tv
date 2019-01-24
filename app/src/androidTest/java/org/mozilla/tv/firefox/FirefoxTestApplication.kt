@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.os.StrictMode
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
@@ -43,4 +44,22 @@ class FirefoxTestApplication : FirefoxApplication() {
     }
 
     fun pushPocketRepoState(state: PocketVideoRepo.FeedState) = pocketVideoRepoState.postValue(state)
+
+    override fun enableStrictMode() {
+        // This method duplicates some code, but due to 1) the quantity of code
+        // required to build a clean solution compared to the few lines
+        // duplicated, and 2) the low risk nature of test only code, duplication
+        // was determined to be a better solution in this instance
+        val threadPolicyBuilder = StrictMode.ThreadPolicy.Builder().detectAll()
+        val vmPolicyBuilder = StrictMode.VmPolicy.Builder().detectAll()
+
+        // Log instead of showing a dialog during Espresso tests. This is because
+        // dialogs present issues when automating test runs, and OkHttp causes
+        // StrictMode violations on some devices.  See #1362
+        threadPolicyBuilder.penaltyLog()
+        vmPolicyBuilder.penaltyLog()
+
+        StrictMode.setThreadPolicy(threadPolicyBuilder.build())
+        StrictMode.setVmPolicy(vmPolicyBuilder.build())
+    }
 }

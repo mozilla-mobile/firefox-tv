@@ -58,7 +58,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
     // ServiceLocator. To prevent this land mine, we override this method instead
     open fun createServiceLocator() = ServiceLocator(this)
 
-    private fun enableStrictMode() {
+    protected open fun enableStrictMode() {
         // Android/WebView sometimes commit strict mode violations, see e.g.
         // https://github.com/mozilla-mobile/focus-android/issues/660
         if (BuildConstants.isReleaseBuild) {
