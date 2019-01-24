@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
   <string name="firefox_tv_brand_name">Firefox TV</string>
+  <string name="firefox_tv_brand_name_short">Firefox</string>
   <string name="pocket_brand_name">Pocket</string>
   <string name="action_cancel">取消</string>
   <string name="action_ok">确定</string>
@@ -64,4 +65,5 @@
   <string name="notification_request_desktop_site">已发出桌面版请求</string>
   <string name="notification_request_non_desktop_site">返回非桌面版</string>
   <string name="youtube_casting_onboarding_toast">用您的手机或平板电脑投屏 YouTube 视频。在您的设备上打开 YouTube，然后点按 %s 即可开始使用。</string>
+  <string name="exit_firefox_a11y">退出 %1$s</string>
 </resources>

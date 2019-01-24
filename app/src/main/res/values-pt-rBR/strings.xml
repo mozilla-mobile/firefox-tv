@@ -19,7 +19,7 @@
   <string name="preference_privacy_block_content">Bloquear outros rastreadores</string>
   <string name="preference_privacy_block_content_summary2">Ativar pode causar comportamento inesperado em algumas páginas</string>
   <string name="preference_category_performance">Desempenho</string>
-  <string name="preference_performance_block_webfonts">Bloquear fontes Web</string>
+  <string name="preference_performance_block_webfonts">Bloquear fontes web</string>
   <string name="preference_performance_block_webfonts_summary">Pode resultar em falta de ícones ou imagens</string>
   <string name="preference_mozilla_telemetry2">Enviar dados de utilização</string>
   <string name="preference_privacy_notice">Política de Privacidade</string>
