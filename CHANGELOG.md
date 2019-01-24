@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Fixed
+
+## [3.3] - 2019-01-28
+### Added
 - Button to homescreen to exit Firefox
 
 ### Changed
@@ -151,9 +158,10 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 ## [1.0] - 2017-12-20
 *Initial release! A browser including home tile shortcuts.*
 
-[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.2...HEAD
-[3.2.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.1...3.2.2
-[3.2.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2...3.2.1
+[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.3...HEAD
+[3.3]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.2...v3.3
+[3.2.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.1...v3.2.2
+[3.2.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2...v3.2.1
 [3.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.3...v3.2
 [3.1.3]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.2...v3.1.3
 [3.1.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.1...v3.1.2
