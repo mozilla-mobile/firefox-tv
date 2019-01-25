@@ -10,7 +10,6 @@ import android.os.Handler
 import android.os.Looper
 import android.webkit.ValueCallback
 import android.webkit.WebView
-import android.widget.FrameLayout
 import mozilla.components.browser.engine.system.SystemEngineSession
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
@@ -36,7 +35,7 @@ fun EngineView.setupForApp() {
         WebView.setWebContentsDebuggingEnabled(true)
     }
 
-    webView.setOnFocusChangeListener { _, hasFocus ->
+    webView?.setOnFocusChangeListener { _, hasFocus ->
         if (!hasFocus) {
             // For why we're modifying the focusedDOMElement, see FocusedDOMElementCacheInterface.
             //
@@ -59,7 +58,7 @@ fun EngineView.setupForApp() {
  * requires JS injection to browser-engine-system.
  */
 fun EngineView.evalJS(javascript: String, callback: ValueCallback<String>? = null) {
-    webView.evaluateJavascript(javascript, callback)
+    webView?.evaluateJavascript(javascript, callback)
 }
 
 /**
@@ -67,18 +66,18 @@ fun EngineView.evalJS(javascript: String, callback: ValueCallback<String>? = nul
  */
 @SuppressLint("JavascriptInterface")
 fun EngineView.addJavascriptInterface(obj: Any, name: String) {
-    webView.addJavascriptInterface(obj, name)
+    webView?.addJavascriptInterface(obj, name)
 }
 
 /**
  * This functionality is not supported by browser-engine-system yet. See [EngineView.evalJS] comment for details.
  */
 fun EngineView.removeJavascriptInterface(interfaceName: String) {
-    webView.removeJavascriptInterface(interfaceName)
+    webView?.removeJavascriptInterface(interfaceName)
 }
 
 fun EngineView.scrollByClamped(vx: Int, vy: Int) {
-    webView.apply {
+    webView?.apply {
         fun clampScroll(scroll: Int, canScroll: (direction: Int) -> Boolean) = if (scroll != 0 && canScroll(scroll)) {
             scroll
         } else {
@@ -99,20 +98,30 @@ val EngineView.focusedDOMElement: FocusedDOMElementCache
 
 fun EngineView.saveState(): Bundle {
     val bundle = Bundle()
-    getOrPutExtension(this).webView.saveState(bundle)
+    getOrPutExtension(this).webView?.saveState(bundle)
     return bundle
 }
 
 fun EngineView.restoreState(state: Bundle) {
-    getOrPutExtension(this).webView.restoreState(state)
+    getOrPutExtension(this).webView?.restoreState(state)
 }
 
 fun EngineView.canGoBackTwice(): Boolean {
-    return getOrPutExtension(this).webView.canGoBackOrForward(-2)
+    return getOrPutExtension(this).webView?.canGoBackOrForward(-2) ?: false
+}
+
+fun EngineView.onPauseIfNotNull() {
+    if (webView != null)
+        this.onPause()
+}
+
+fun EngineView.onResumeIfNotNull() {
+    if (webView != null)
+        this.onResume()
 }
 
 // This method is only for adding extension methods here (as a workaround). Do not expose WebView to the app.
-private val EngineView.webView: WebView
+private val EngineView.webView: WebView?
     get() = getOrPutExtension(this).webView
 
 private val extensions = WeakHashMap<EngineView, EngineViewExtension>()
@@ -138,13 +147,13 @@ private class EngineViewExtension(private val engineView: EngineView) {
      * Extract the wrapped WebView from the EngineSession. This is a temporary workaround until all required functionality has
      * been implemented in the upstream component.
      */
-    val webView: WebView
+    val webView: WebView?
         get() =
             if (sessionManager.size > 0) {
                 (sessionManager.getOrCreateEngineSession() as SystemEngineSession).webView
             } else {
-                // After clearing all session we temporarily don't have a selected session so
-                // we need to get it from the view hierarchy.
-                (engineView.asView() as FrameLayout).getChildAt(0) as WebView
+                // After clearing all session we temporarily don't have a selected session
+                // and [SessionRepo.clear()] destroyed the existing webView - see [SystemEngineView.onDestroy()]
+                null
             }
 }
