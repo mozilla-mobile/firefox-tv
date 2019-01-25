@@ -13,6 +13,8 @@ import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.components.locale.LocaleAwareFragment
 import org.mozilla.tv.firefox.components.locale.LocaleManager
+import org.mozilla.tv.firefox.ext.onPauseIfNotNull
+import org.mozilla.tv.firefox.ext.onResumeIfNotNull
 import java.util.Locale
 
 /**
@@ -62,14 +64,14 @@ abstract class EngineViewLifecycleFragment : LocaleAwareFragment() {
         //
         // The problem is not reproducible when onPause is called here in onStop (even if pauseTimers is
         // called in onPause, in the android-components library).
-        webView!!.onPause() // internally calls WebView.onPause: see impl for details.
+        webView!!.onPauseIfNotNull() // internally calls WebView.onPause: see impl for details.
     }
 
     override fun onStart() {
         super.onStart()
 
         // NB: onStart unexpectedly calls onResume: see onStop for details.
-        webView!!.onResume()
+        webView!!.onResumeIfNotNull()
     }
 
     override fun applyLocale() {
