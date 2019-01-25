@@ -46,8 +46,8 @@ open class FirefoxApplication : LocaleAwareApplication() {
         TelemetryIntegration.INSTANCE.init(this)
 
         with(serviceLocator.fretboardProvider) {
-            updateExperiments()
             loadExperiments()
+            updateExperiments()
         }
 
         enableStrictMode()
