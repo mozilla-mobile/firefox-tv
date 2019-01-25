@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
   <string name="firefox_tv_brand_name">Firefox TV</string>
+  <string name="firefox_tv_brand_name_short">Firefox</string>
   <string name="pocket_brand_name">Pocket</string>
   <string name="action_cancel">Abbrechen</string>
   <string name="action_ok">OK</string>
@@ -64,4 +65,5 @@
   <string name="notification_request_desktop_site">Desktop-Version angefordert</string>
   <string name="notification_request_non_desktop_site">Zu Nicht-Desktop-Version zurückgekehrt</string>
   <string name="youtube_casting_onboarding_toast">Spielen Sie YouTube-Videos von Ihrem Handy oder Tablet ab. Öffnen Sie YouTube auf Ihrem Gerät und berühren Sie %s, um zu beginnen.</string>
+  <string name="exit_firefox_a11y">%1$s beenden</string>
 </resources>
