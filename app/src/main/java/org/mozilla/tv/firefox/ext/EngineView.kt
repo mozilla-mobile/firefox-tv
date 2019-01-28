@@ -35,6 +35,8 @@ fun EngineView.setupForApp() {
         WebView.setWebContentsDebuggingEnabled(true)
     }
 
+    // WebView can be null temporarily after clearData(); however, activity.recreate() would
+    // instantiate a new WebView instance
     webView?.setOnFocusChangeListener { _, hasFocus ->
         if (!hasFocus) {
             // For why we're modifying the focusedDOMElement, see FocusedDOMElementCacheInterface.
