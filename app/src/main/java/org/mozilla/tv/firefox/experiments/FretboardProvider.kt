@@ -31,12 +31,24 @@ class FretboardProvider(private val applicationContext: Context) : CoroutineScop
     private val experimentSource = KintoExperimentSource(
             EXPERIMENTS_BASE_URL, EXPERIMENTS_BUCKET_NAME, EXPERIMENTS_COLLECTION_NAME
     )
+
+    // We use the telemetry clientId because the data team wants to be able to reproduce
+    // buckets server-side in order to verify that clients are being bucketed correctly.
+    // This is low risk because:
+    // a) ID only gets sent to Mozilla servers
+    // b) ID + bucket doesn't leak personally identifiable information
     val fretboard: Fretboard = Fretboard(experimentSource, FlatFileExperimentStorage(experimentsFile),
             object : ValuesProvider() {
                 override fun getClientId(context: Context): String {
                     return TelemetryIntegration.INSTANCE.clientId
                 }
             })
+
+    // A list of the experiment names with the user's branch (A or B) appended.
+    // If the user is in the experiment (active), they are in branch B, otherwise branch A.
+    private val experimentBranches: List<String>
+        get() = fretboard.getExperimentsMap(applicationContext)
+                .map { it.key + if (it.value) ":B" else ":A" }
 
     /**
      * Asynchronously requests new experiments from the server and
@@ -49,5 +61,8 @@ class FretboardProvider(private val applicationContext: Context) : CoroutineScop
      * This is completed quickly, so we are comfortable blocking in order to
      * reduce complexity by making experiments always available
      */
-    fun loadExperiments() = fretboard.loadExperiments()
+    fun loadExperiments() {
+        fretboard.loadExperiments()
+        TelemetryIntegration.INSTANCE.recordActiveExperiments(experimentBranches)
+    }
 }

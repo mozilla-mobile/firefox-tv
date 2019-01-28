@@ -341,6 +341,10 @@ open class TelemetryIntegration protected constructor(
             TelemetryRemoteControlTracker.saveRemoteControlInformation(context, keyEvent)
 
     fun viewIntentEvent() = TelemetryEvent.create(Category.ACTION, Method.VIEW_INTENT, Object.APP).queue()
+
+    fun recordActiveExperiments(experimentNames: List<String>) {
+        TelemetryHolder.get().recordActiveExperiments(experimentNames)
+    }
 }
 
 enum class MediaSessionEventType(internal val value: String) {
