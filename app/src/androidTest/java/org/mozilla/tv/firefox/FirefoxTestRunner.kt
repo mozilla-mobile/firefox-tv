@@ -23,13 +23,21 @@ class FirefoxTestRunner : AndroidJUnitRunner() {
         }
     }
 
+    /**
+     * See [TestDependencyProvider] doc for an explanation of why we do this
+     */
     override fun onCreate(arguments: Bundle?) {
+        fun ServiceLocator?.swapIfNotNull() {
+            this ?: return
+            TestDependencyProvider.serviceLocator = this
+        }
+
         val classString = arguments?.extractClass()
         val testClass = classString?.let { classLoader.loadClass(it).kotlin }
-        val dependencyProvider = testClass?.companionObjectInstance as? ServiceLocatorFactory
+        val dependencyProvider = testClass?.companionObjectInstance as? TestDependencyFactory
         val fakeServiceLocator = dependencyProvider?.createServiceLocator(app)
 
-        fakeServiceLocator?.let { TestDependencyProvider.serviceLocator = it }
+        fakeServiceLocator.swapIfNotNull()
 
         super.onCreate(arguments)
     }
@@ -39,7 +47,7 @@ class FirefoxTestRunner : AndroidJUnitRunner() {
  * Tests that require faked dependencies should include companion objects that
  * implement this interface
  */
-interface ServiceLocatorFactory {
+interface TestDependencyFactory {
     fun createServiceLocator(app: Application): ServiceLocator
 }
 
