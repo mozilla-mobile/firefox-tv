@@ -18,7 +18,7 @@ import org.junit.Test
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
-import org.mozilla.tv.firefox.helpers.FakePocketVideoRepoProvider
+import org.mozilla.tv.firefox.helpers.CustomPocketFeedStateProvider
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 
 import tools.fastlane.screengrab.Screengrab
@@ -30,21 +30,24 @@ import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.view.View
 import org.hamcrest.Matchers.allOf
-import org.mozilla.tv.firefox.ServiceLocatorFactory
+import org.mozilla.tv.firefox.TestDependencyFactory
 import org.mozilla.tv.firefox.utils.ServiceLocator
 
 class PocketErrorTest : ScreenshotTest() {
 
-    companion object : ServiceLocatorFactory {
+    companion object : TestDependencyFactory {
+        private val customPocketFeedStateProvider = CustomPocketFeedStateProvider()
+
         // TODO 'lazy' as a workaround due to an incompatibility between
         // Fastlane and AndroidX. Remove lazy delegate when this
         // incompatibility has been fixed
-        // See: https://github.com/fastlane/fastlane/issues/13810
+        // FFTV issue: #1741
+        // Fastlane issue: https://github.com/fastlane/fastlane/issues/13810
         @get:ClassRule
         val localeTestRule by lazy { LocaleTestRule() }
 
         override fun createServiceLocator(app: Application) = object : ServiceLocator(app) {
-            override val pocketRepo = FakePocketVideoRepoProvider.fakedPocketRepo
+            override val pocketRepo = customPocketFeedStateProvider.fakedPocketRepo
         }
     }
 
@@ -60,7 +63,7 @@ class PocketErrorTest : ScreenshotTest() {
 
     @Test
     fun showPocketTileError() {
-        FakePocketVideoRepoProvider.fakedPocketRepoState.postValue(PocketVideoRepo.FeedState.FetchFailed)
+        customPocketFeedStateProvider.fakedPocketRepoState.postValue(PocketVideoRepo.FeedState.FetchFailed)
 
         val errorMsg = mDevice.findObject(
             UiSelector()

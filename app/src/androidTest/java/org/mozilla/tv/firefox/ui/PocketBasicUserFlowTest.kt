@@ -9,10 +9,10 @@ import okhttp3.mockwebserver.MockWebServer
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mozilla.tv.firefox.ServiceLocatorFactory
+import org.mozilla.tv.firefox.TestDependencyFactory
 import org.mozilla.tv.firefox.helpers.AndroidAssetDispatcher
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
-import org.mozilla.tv.firefox.helpers.FakePocketVideoRepoProvider
+import org.mozilla.tv.firefox.helpers.CustomPocketFeedStateProvider
 import org.mozilla.tv.firefox.helpers.TestAssetHelper
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.pocket.PocketViewModel
@@ -29,9 +29,11 @@ import org.mozilla.tv.firefox.utils.ServiceLocator
  */
 class PocketBasicUserFlowTest {
 
-    companion object : ServiceLocatorFactory {
+    companion object : TestDependencyFactory {
+        private val customPocketFeedStateProvider = CustomPocketFeedStateProvider()
+
         override fun createServiceLocator(app: Application) = object : ServiceLocator(app) {
-            override val pocketRepo = FakePocketVideoRepoProvider.fakedPocketRepo
+            override val pocketRepo = customPocketFeedStateProvider.fakedPocketRepo
         }
     }
 
@@ -60,7 +62,7 @@ class PocketBasicUserFlowTest {
             )
         ))
 
-        FakePocketVideoRepoProvider.fakedPocketRepoState.postValue(mockedState)
+        customPocketFeedStateProvider.fakedPocketRepoState.postValue(mockedState)
     }
 
     /* ktlint-disable no-blank-line-before-rbrace */ // This imposes unreadable grouping.

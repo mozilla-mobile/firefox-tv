@@ -37,12 +37,13 @@ class FirefoxTestApplication : FirefoxApplication() {
  * Used to provide fake dependencies to the Application at startup.
  *
  * [FirefoxTestApplication.createServiceLocator] checks here for a custom
- * [ServiceLocator], then return super if it is null. This allows individual
- * tests to create this object, thus substituting their own fakes into tests.
+ * [ServiceLocator], then returns super if it is null. This allows individual
+ * tests to create a service locator, thus substituting their own fakes into
+ * tests.
  *
- * Note that Application#onCreate is called by Espresso before @Before blocks,
- * so to use this class [serviceLocator] must be provisioned from
- * [FirefoxTestRunner.onCreate].
+ * Note that Application#onCreate is called by Espresso before any code in an
+ * instance of any test class is run. [serviceLocator] must be provisioned from
+ * [FirefoxTestRunner] for it to be used.
  *
  * *IMPORTANT NOTE:* as currently implemented, multiple tests declared within the
  * same class will share dependencies. We generally do not write more than one
