@@ -30,8 +30,7 @@ private const val NAVIGATION_BUTTON_DISABLED_ALPHA = 0.3f
 class ToolbarUiController(
     private val toolbarViewModel: ToolbarViewModel,
     private val exitFirefox: () -> Unit,
-    private val getCurrentFocus: () -> View?,
-    private val updateFocusableViews: (View?) -> Unit,
+    private val updateFocusableViews: () -> Unit,
     private val onNavigationEvent: (NavigationEvent, String?, InlineAutocompleteEditText.AutocompleteResult?) -> Unit
 ) {
 
@@ -93,14 +92,13 @@ class ToolbarUiController(
 
         toolbarViewModel.state.observe(viewLifecycleOwner, Observer {
             if (it == null) return@Observer
-            val focusedView = getCurrentFocus()
             updateOverlayButtonState(it.backEnabled, layout.navButtonBack)
             updateOverlayButtonState(it.forwardEnabled, layout.navButtonForward)
             updateOverlayButtonState(it.pinEnabled, layout.pinButton)
             updateOverlayButtonState(it.refreshEnabled, layout.navButtonReload)
             updateOverlayButtonState(it.desktopModeEnabled, layout.desktopModeButton)
 
-            updateFocusableViews(focusedView)
+            updateFocusableViews()
 
             layout.pinButton.isChecked = it.pinChecked
             layout.desktopModeButton.isChecked = it.desktopModeChecked
