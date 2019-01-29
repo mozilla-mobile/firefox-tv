@@ -128,7 +128,7 @@ class NavigationOverlayFragment : Fragment() {
     private lateinit var tileAdapter: PinnedTileAdapter
 
     // TODO: remove this when FocusRepo is in place #1395
-    var defaultFocusTag = NavigationOverlayFragment.FRAGMENT_TAG
+    private var defaultFocusTag = NavigationOverlayFragment.FRAGMENT_TAG
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -315,7 +315,7 @@ class NavigationOverlayFragment : Fragment() {
         }
     }
 
-    fun updateFocusableViews(focusedView: View? = currFocus) { // TODO this will be replaced when FocusRepo is introduced
+    private fun updateFocusableViews(focusedView: View? = currFocus) { // TODO this will be replaced when FocusRepo is introduced
         val toolbarState = toolbarViewModel.state.value
 
         // Prevent the focus from looping to the bottom row when reaching the last
