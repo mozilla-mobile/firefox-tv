@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
   <string name="firefox_tv_brand_name">Firefox TV</string>
+  <string name="firefox_tv_brand_name_short">Firefox</string>
   <string name="pocket_brand_name">Pocket</string>
   <string name="action_cancel">Cancelar</string>
   <string name="action_ok">Aceptar</string>
@@ -64,4 +65,5 @@
   <string name="notification_request_desktop_site">Se ha pedido la versión de escritorio</string>
   <string name="notification_request_non_desktop_site">Se vuelve a la versión predeterminada</string>
   <string name="youtube_casting_onboarding_toast">Transmite vídeos de YouTube desde tu móvil o tableta. Abre YouTube en tu dispositivo y pulsa %s para comenzar.</string>
+  <string name="exit_firefox_a11y">Salir de %1$s</string>
 </resources>
