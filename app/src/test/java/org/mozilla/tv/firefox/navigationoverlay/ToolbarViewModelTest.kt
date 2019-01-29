@@ -1,4 +1,4 @@
-package org.mozilla.tv.firefox.toolbar
+package org.mozilla.tv.firefox.navigationoverlay
 
 import android.arch.lifecycle.MutableLiveData
 import org.junit.Before

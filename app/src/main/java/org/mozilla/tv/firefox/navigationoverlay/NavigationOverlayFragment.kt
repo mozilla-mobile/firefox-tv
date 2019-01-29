@@ -49,7 +49,6 @@ import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
-import org.mozilla.tv.firefox.toolbar.ToolbarViewModel
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.utils.ViewUtils

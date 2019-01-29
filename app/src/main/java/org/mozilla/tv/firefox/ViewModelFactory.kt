@@ -10,7 +10,7 @@ import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
-import org.mozilla.tv.firefox.toolbar.ToolbarViewModel
+import org.mozilla.tv.firefox.navigationoverlay.ToolbarViewModel
 import org.mozilla.tv.firefox.settings.SettingsViewModel
 import org.mozilla.tv.firefox.utils.ServiceLocator
 
