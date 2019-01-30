@@ -18,6 +18,8 @@ import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.experiments.FretboardProvider
 import org.mozilla.tv.firefox.experiments.ExperimentsProvider
+import org.mozilla.tv.firefox.ext.getAccessibilityManager
+import org.mozilla.tv.firefox.framework.FrameworkRepo
 import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
 import org.mozilla.tv.firefox.pocket.PocketRepoCache
@@ -76,6 +78,7 @@ open class ServiceLocator(val app: Application) {
     val sessionUseCases get() = app.webRenderComponents.sessionUseCases
     val searchEngineManager = SearchEngineManager().apply { GlobalScope.launch { load(app) } }
 
+    open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())
     open val pinnedTileRepo by lazy { PinnedTileRepo(app) }
     open val pocketRepo = PocketVideoRepo(pocketEndpoint, pocketFeedStateMachine, getIsEnglishLocale, buildConfigDerivables).apply {
         update()
