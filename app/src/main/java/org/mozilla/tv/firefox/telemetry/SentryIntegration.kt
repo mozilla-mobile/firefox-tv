@@ -5,10 +5,12 @@
 package org.mozilla.tv.firefox.telemetry
 
 import android.content.Context
+import android.support.annotation.VisibleForTesting
+import android.support.annotation.VisibleForTesting.NONE
 import io.sentry.Sentry
 import io.sentry.android.AndroidSentryClientFactory
 import org.mozilla.tv.firefox.BuildConfig
-import org.mozilla.tv.firefox.ext.serviceLocator
+import org.mozilla.tv.firefox.utils.ServiceLocator
 
 /**
  * An interface to the Sentry crash reporting SDK. All code that touches the Sentry APIs
@@ -28,8 +30,20 @@ import org.mozilla.tv.firefox.ext.serviceLocator
  * "Sentry DSN (amazonWebviewRelease): X_X"
  */
 object SentryIntegration {
-    fun init(context: Context) {
-        context.serviceLocator.settingsRepo.dataCollectionEnabled.observeForever { isEnabled ->
+
+    @VisibleForTesting(otherwise = NONE)
+    var isInit = false
+        private set
+
+    /**
+     * Initializes Sentry. This method should only be called once.
+     */
+    fun init(appContext: Context, serviceLocator: ServiceLocator) {
+        isInit = true
+
+        // This listener binds to the Context and observes forever so it's important
+        // that we use an appContext to avoid memory leaks.
+        serviceLocator.settingsRepo.dataCollectionEnabled.observeForever { isEnabled ->
             if (isEnabled != null) {
                 // The BuildConfig value is populated from a file at compile time.
                 // If the file did not exist, the value will be null.
@@ -41,7 +55,7 @@ object SentryIntegration {
                 // stored client and DSN, thus calling it with a null DSN will have the affect of
                 // disabling the client: https://github.com/getsentry/sentry-java/issues/574#issuecomment-378406105
                 val sentryDsn = if (isEnabled) BuildConfig.SENTRY_DSN else null
-                Sentry.init(sentryDsn, AndroidSentryClientFactory(context.applicationContext))
+                Sentry.init(sentryDsn, AndroidSentryClientFactory(appContext))
             }
         }
     }

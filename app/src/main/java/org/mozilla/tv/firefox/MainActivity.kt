@@ -25,7 +25,6 @@ import org.mozilla.tv.firefox.ext.toSafeIntent
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
 import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity
-import org.mozilla.tv.firefox.telemetry.SentryIntegration
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.OnUrlEnteredListener
@@ -36,7 +35,6 @@ import org.mozilla.tv.firefox.utils.publicsuffix.PublicSuffix
 import org.mozilla.tv.firefox.webrender.VideoVoiceCommandMediaSession
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
-import java.lang.IllegalStateException
 
 interface MediaSessionHolder {
     val videoVoiceCommandMediaSession: VideoVoiceCommandMediaSession
@@ -53,8 +51,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         // goes through onCreate.
         super.onCreate(savedInstanceState)
 
-        // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.
-        SentryIntegration.init(this)
         PublicSuffix.init(this) // Used by Pocket Video feed & custom home tiles.
         initMediaSession()
         lifecycle.addObserver(serviceLocator.webViewCache)

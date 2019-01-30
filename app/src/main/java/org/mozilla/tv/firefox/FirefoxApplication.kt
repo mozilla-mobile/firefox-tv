@@ -9,6 +9,7 @@ import android.preference.PreferenceManager
 import android.support.annotation.VisibleForTesting
 import android.webkit.WebSettings
 import org.mozilla.tv.firefox.components.locale.LocaleAwareApplication
+import org.mozilla.tv.firefox.telemetry.SentryIntegration
 import org.mozilla.tv.firefox.webrender.VisibilityLifeCycleCallback
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.BuildConstants
@@ -40,8 +41,10 @@ open class FirefoxApplication : LocaleAwareApplication() {
         super.onCreate()
 
         PreferenceManager.setDefaultValues(this, R.xml.settings, false)
-
         serviceLocator = createServiceLocator()
+
+        // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.
+        SentryIntegration.init(this, serviceLocator)
 
         TelemetryIntegration.INSTANCE.init(this)
 
