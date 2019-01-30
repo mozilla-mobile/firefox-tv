@@ -26,6 +26,41 @@ class ToggleDataCollectionTest {
         settingsRepo = activityTestRule.activity.application.serviceLocator.settingsRepo
     }
 
+    /**
+     * We have two code paths, one for a11y and one for non-a11y - therefore we test both the telemetry button
+     * and the container.
+     */
+    @Test
+    fun WHEN_data_collection_button_container_is_toggled_THEN_data_collection_matches_button_state() {
+        navigationOverlay {
+        }.openSettings {
+            assertDataCollectionButtonState(IS_TELEMETRY_ENABLED_DEFAULT)
+
+            toggleDataCollectionButtonContainer()
+            assertNotNull(settingsRepo.dataCollectionEnabled.value)
+            assertDataCollectionButtonState(settingsRepo.dataCollectionEnabled.value ?: false)
+
+            toggleDataCollectionButtonContainer()
+            assertNotNull(settingsRepo.dataCollectionEnabled.value)
+            assertDataCollectionButtonState(settingsRepo.dataCollectionEnabled.value ?: false)
+        }
+    }
+
+    @Test
+    fun WHEN_data_collection_button_container_is_toggled_THEN_button_state_persists_when_returning_to_settings() {
+        var cachedDataCollectionButtonIsChecked = IS_TELEMETRY_ENABLED_DEFAULT
+
+        navigationOverlay {
+        }.openSettings {
+            assertDataCollectionButtonState(cachedDataCollectionButtonIsChecked)
+            toggleDataCollectionButtonContainer()
+            cachedDataCollectionButtonIsChecked = !cachedDataCollectionButtonIsChecked
+        }.exitToOverlay {
+        }.openSettings {
+            assertDataCollectionButtonState(cachedDataCollectionButtonIsChecked)
+        }
+    }
+
     @Test
     fun WHEN_data_collection_button_is_toggled_THEN_data_collection_matches_button_state() {
         navigationOverlay {
