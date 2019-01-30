@@ -83,6 +83,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
     override fun onLowMemory() {
         super.onLowMemory()
         OkHttpWrapper.onLowMemory()
+        serviceLocator.sessionManager.onLowMemory()
         // If you need to dump more memory, you may be able to clear the Picasso cache.
     }
 }
