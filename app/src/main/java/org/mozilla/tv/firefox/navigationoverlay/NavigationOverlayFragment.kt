@@ -74,7 +74,6 @@ enum class NavigationEvent {
     }
 }
 
-@Suppress("LargeClass") // TODO remove this. See https://github.com/mozilla-mobile/firefox-tv/issues/1187
 class NavigationOverlayFragment : Fragment() {
     companion object {
         const val FRAGMENT_TAG = "overlay"
