@@ -11,11 +11,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-## [3.3] - 2019-01-28
+## [3.3.1] - 2019-01-30
+*Released to Fire TV 4K.*
+
 ### Added
 - Button to homescreen to exit Firefox
-
-### Changed
 
 ### Fixed
 - Fixed Pocket Crash issue for non-EN locales (#1684)
