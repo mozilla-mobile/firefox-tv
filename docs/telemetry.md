@@ -1,5 +1,5 @@
 # Telemetry
-For clients that have "send anonymous usage data" enabled Firefox for Fire TV sends a "core" ping and an "event" ping to Mozilla's telemetry service. Sending telemetry can be disabled in the app's settings. Builds of "Firefox for Fire TV" have telemetry enabled by default ("opt-out").
+For clients that have "send anonymous usage data" enabled Firefox for Fire TV sends a "core" ping, an "event" ping and "pocket" ping to Mozilla's telemetry service. Sending telemetry can be disabled in the app's settings. Builds of "Firefox for Fire TV" have telemetry enabled by default ("opt-out").
 
 # Core ping
 
@@ -8,6 +8,10 @@ Firefox for Fire TV creates and tries to send a "core" ping whenever the app goe
 # Event ping
 
 In addition to the core ping an event ping for UI telemetry is generated and sent as soon as the app is sent to the background.
+
+# Pocket ping
+
+Similarly to event ping, pocket ping for Pocket feed is generated and sent whenever the app goes to the background. Pocket ping maintains its own unique id that has no direct association with core ping or event ping.
 
 ## Settings
 
@@ -123,6 +127,14 @@ MediaSession doesn't distinguish between hardware buttons and voice commands. If
 To elaborate on these events:
 - "Next/previous item" is intended to go to the next video/song in a playlist. We send the corresponding key event to the page which must support this functionality (it works on YouTube).
 - "Seek" aggregates the "fast-forward", "rewind", and "restart" commands ([#988](https://github.com/mozilla-mobile/firefox-tv/issues/988) is to split up this telemetry)
+
+### Pocket Feed
+| Event                                      | category | method         | object        | value          |
+|--------------------------------------------|----------|----------------|---------------|----------------|
+| PocketFeed: video click                    | action   | click          | video_id      | `<int>`        |
+| POcketFeed: video impression*              | action   | impression     | video_id      | `<int>`        |
+
+(*) Video impressions are aggregated by the user initiating focus on the videos in the Pocket feed
 
 ## Limits
 
