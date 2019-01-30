@@ -44,11 +44,10 @@ class FretboardProvider(private val applicationContext: Context) : CoroutineScop
                 }
             })
 
-    // A list of the experiment names with the user's branch (A or B) appended.
-    // If the user is in the experiment (active), they are in branch B, otherwise branch A.
-    private val experimentBranches: List<String>
-        get() = fretboard.getExperimentsMap(applicationContext)
-                .map { it.key + if (it.value) ":B" else ":A" }
+    // A list of the experiment names that the user is a part of.
+    private val activeExperimentNames: List<String>
+        get() = fretboard.getActiveExperiments(applicationContext)
+                .map { it.name }
 
     /**
      * Asynchronously requests new experiments from the server and
@@ -63,6 +62,6 @@ class FretboardProvider(private val applicationContext: Context) : CoroutineScop
      */
     fun loadExperiments() {
         fretboard.loadExperiments()
-        TelemetryIntegration.INSTANCE.recordActiveExperiments(experimentBranches)
+        TelemetryIntegration.INSTANCE.recordActiveExperiments(activeExperimentNames)
     }
 }
