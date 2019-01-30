@@ -19,6 +19,10 @@ class SettingsRobot {
         dataCollectionButton().click()
     }
 
+    fun toggleDataCollectionButtonContainer() {
+        dataCollectionButtonContainer().click()
+    }
+
     fun assertDataCollectionButtonState(isChecked: Boolean) {
         dataCollectionButton().assertIsChecked(isChecked)
     }
@@ -52,6 +56,7 @@ fun settings(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
 }
 
 private fun dataCollectionButton() = onView(withId(R.id.telemetryButton))
+private fun dataCollectionButtonContainer() = onView(withId(R.id.telemetryButtonContainer))
 private fun aboutButton() = onView(withId(R.id.aboutButton))
 private fun privacyButton() = onView(withId(R.id.privacyNoticeButton))
 private fun clearDataButton() = onView(withId(R.id.deleteButton))

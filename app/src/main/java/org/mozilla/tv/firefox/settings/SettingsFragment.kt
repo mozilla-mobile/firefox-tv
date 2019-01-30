@@ -68,14 +68,17 @@ class SettingsFragment : Fragment() {
             }
         })
 
-        val dataPreferenceClickListener = { _: View ->
-            settingsViewModel.setDataCollectionEnabled(!telemetryButton.isChecked)
-        }
         // Due to accessibility hack for #293, where we want to focus a different (visible) element
         // for accessibility, either of these views could be unfocusable, so we need to set the
         // click listener on both.
-        parentView.telemetryButtonContainer.setOnClickListener(dataPreferenceClickListener)
-        parentView.telemetryButton.setOnClickListener(dataPreferenceClickListener)
+        parentView.telemetryButtonContainer.setOnClickListener {
+            // Manually toggle the telemetry button from the container click
+            telemetryButton.isChecked = !telemetryButton.isChecked
+            settingsViewModel.setDataCollectionEnabled((telemetryButton.isChecked))
+        }
+        parentView.telemetryButton.setOnClickListener {
+            settingsViewModel.setDataCollectionEnabled(telemetryButton.isChecked)
+        }
 
         parentView.deleteButton.setOnClickListener { _ ->
             AlertDialog.Builder(activity)
