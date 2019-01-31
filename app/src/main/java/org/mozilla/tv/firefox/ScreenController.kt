@@ -109,6 +109,9 @@ class ScreenController {
         fragmentManagerShowNavigationOverlay(fragmentManager, toShow)
         currentActiveScreen = if (toShow) ActiveScreen.NAVIGATION_OVERLAY
                 else ActiveScreen.WEB_RENDER
+
+        // Fixes cursor disappearing when on overlay during page load finish (#1732)
+        fragmentManager.webRenderFragment().cursor?.setEnabledForCurrentState()
     }
 
     private fun fragmentManagerShowNavigationOverlay(fragmentManager: FragmentManager, toShow: Boolean) {
