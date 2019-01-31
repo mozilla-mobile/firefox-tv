@@ -44,7 +44,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
         serviceLocator = createServiceLocator()
 
         // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.
-        SentryIntegration.init(this, serviceLocator)
+        SentryIntegration.init(this, serviceLocator.settingsRepo)
 
         TelemetryIntegration.INSTANCE.init(this)
 
