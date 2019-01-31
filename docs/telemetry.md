@@ -5,6 +5,16 @@ For clients that have "send anonymous usage data" enabled Firefox for Fire TV se
 
 Firefox for Fire TV creates and tries to send a "core" ping whenever the app goes to the background. This core ping uses the same format as Firefox for Android and is [documented on firefox-source-docs.mozilla.org](https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/telemetry/data/core-ping.html).
 
+## Experiments
+
+We run A/B tests using [Fretboard](https://github.com/mozilla-mobile/android-components/blob/master/components/service/fretboard/README.md#android-components--service--fretboard), with a Kinto backend as the experiment source. As part of the core ping, we send the names of the experiments that the user is part of, in order to measure experiment results.
+
+Fretboard does not currently support experiments with multiple branches, so to handle this use case we create an experiment config for each branch in the split test. Experiment names follow the format
+
+`experimentName-XXXX:branch`
+
+where `XXXX` is the related GitHub issue and `branch` is a letter with **A always representing the control branch**.
+
 # Event ping
 
 In addition to the core ping an event ping for UI telemetry is generated and sent as soon as the app is sent to the background.
