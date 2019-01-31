@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-## [3.3.1] - 2019-01-30
+## [3.3.1] - 2019-01-31
 *Released to Fire TV 4K.*
 
 ### Added
@@ -21,6 +21,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed Pocket Crash issue for non-EN locales (#1684)
 - Crash when using unrecognized remote control (#1685)
 - Fixed mismatch between internal and display state after clearing data (#1691)
+
+## [3.3] - 2019-01-31
+*Released to all devices except Fire TV 4K.*  
+  
+Version-bump only - no change from v3.2.5
+
+## [3.2.5] - 2019-01-16
+*Rollback to v3.1.3*
 
 ## [3.2.2] - 2019-01-15
 ### Fixed 
@@ -158,8 +166,10 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 ## [1.0] - 2017-12-20
 *Initial release! A browser including home tile shortcuts.*
 
-[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.3...HEAD
-[3.3]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.2...v3.3
+[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.3.1...HEAD
+[3.3.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.3...v3.3.1
+[3.3]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.5...v3.3
+[3.2.5]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.2...v3.2.5
 [3.2.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.1...v3.2.2
 [3.2.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2...v3.2.1
 [3.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.3...v3.2
