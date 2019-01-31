@@ -5,22 +5,55 @@
 package org.mozilla.tv.firefox.experiments
 
 import android.content.Context
+import mozilla.components.service.fretboard.ExperimentDescriptor
 import mozilla.components.service.fretboard.Fretboard
 import org.mozilla.tv.firefox.R
 
 /**
  * [ExperimentsProvider] checks for experiment branch from [Fretboard] to provide its respective content.
  * See [getAAExitButtonExperiment] for example
+ *
+ * Note: Consider implementing fallback options since fretboard doesn't necessarily load the
+ * latest changes from Kinto backend. See [FretboardProvider.updateExperiments] and
+ * [FretboardProvider.loadExperiments] for more details
  */
 class ExperimentsProvider(private val fretboard: Fretboard, private val context: Context) {
 
     fun getAAExitButtonExperiment(expConfig: ExperimentConfig): String {
-        return if (fretboard.isInExperiment(context, expConfig.value)) {
-            context.resources.getString(R.string.exit_firefox_a11y,
-                    context.resources.getString(R.string.firefox_tv_brand_name_short))
+        val expDescriptor = checkBranchVariants(expConfig)
+        return if (expDescriptor != null) {
+            when {
+                (expDescriptor.name.endsWith(ExperimentSuffix.A.value)) ->
+                    context.resources.getString(R.string.exit_firefox_a11y,
+                        context.resources.getString(R.string.firefox_tv_brand_name_short))
+                (expDescriptor.name.endsWith(ExperimentSuffix.B.value)) ->
+                    context.resources.getString(R.string.exit_firefox_a11y,
+                        context.resources.getString(R.string.firefox_tv_brand_name_short))
+                // Fallback: AA testing should be 50/50 so technically should never get to else.
+                else -> context.resources.getString(R.string.exit_firefox_a11y,
+                        context.resources.getString(R.string.firefox_tv_brand_name_short))
+            }
         } else {
+            // Fallback: AA testing should be 50/50 so technically should never get to else.
             context.resources.getString(R.string.exit_firefox_a11y,
-                    context.resources.getString(R.string.firefox_tv_brand_name_short))
+                context.resources.getString(R.string.firefox_tv_brand_name_short))
         }
+    }
+
+    /**
+     * Check if [ExperimentConfig] + [ExperimentSuffix] is in the experiment and return its
+     * corresponding [ExperimentDescriptor].
+     *
+     * Return null otherwise
+     */
+    private fun checkBranchVariants(expConfig: ExperimentConfig): ExperimentDescriptor? {
+        var expDescriptor: ExperimentDescriptor? = null
+
+        for (suffix in ExperimentSuffix.values()) {
+            expDescriptor = ExperimentDescriptor(expConfig.value + ":" + suffix.name)
+            if (fretboard.isInExperiment(context, expDescriptor)) break
+        }
+
+        return expDescriptor
     }
 }
