@@ -9,6 +9,17 @@ import mozilla.components.service.fretboard.ExperimentDescriptor
 /**
  * [ExperimentConfig] defines a set of supported [ExperimentDescriptor] from [Fretboard]
  */
-enum class ExperimentConfig(val value: ExperimentDescriptor) {
-    AA_TEST(ExperimentDescriptor("AAtest-1523416"))
+enum class ExperimentConfig(val value: String) {
+    AA_TEST("AAtest-1675")
+}
+
+/**
+ * [ExperimentSuffix] defines branch variant suffix to each experiments
+ */
+enum class ExperimentSuffix(val value: String) {
+    A("A"),
+    B("B"),
+    C("C"),
+    D("D"),
+    E("E"),
 }
