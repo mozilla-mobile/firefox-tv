@@ -10,7 +10,7 @@ import android.support.annotation.VisibleForTesting.NONE
 import io.sentry.Sentry
 import io.sentry.android.AndroidSentryClientFactory
 import org.mozilla.tv.firefox.BuildConfig
-import org.mozilla.tv.firefox.utils.ServiceLocator
+import org.mozilla.tv.firefox.settings.SettingsRepo
 
 /**
  * An interface to the Sentry crash reporting SDK. All code that touches the Sentry APIs
@@ -38,12 +38,12 @@ object SentryIntegration {
     /**
      * Initializes Sentry. This method should only be called once.
      */
-    fun init(appContext: Context, serviceLocator: ServiceLocator) {
+    fun init(appContext: Context, settingsRepo: SettingsRepo) {
         isInit = true
 
         // This listener binds to the Context and observes forever so it's important
         // that we use an appContext to avoid memory leaks.
-        serviceLocator.settingsRepo.dataCollectionEnabled.observeForever { isEnabled ->
+        settingsRepo.dataCollectionEnabled.observeForever { isEnabled ->
             if (isEnabled != null) {
                 // The BuildConfig value is populated from a file at compile time.
                 // If the file did not exist, the value will be null.
