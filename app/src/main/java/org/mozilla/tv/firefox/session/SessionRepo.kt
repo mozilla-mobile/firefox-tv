@@ -84,9 +84,7 @@ class SessionRepo(
     fun currentURLScreenshot(): Bitmap? = session?.thumbnail
 
     fun exitFullScreenIfPossibleAndBack() {
-        // Backing while full-screened can lead to unstable behavior (see #1224),
-        // so we always attempt to exit full-screen before backing
-        sessionManager.getEngineSession()?.exitFullScreenMode()
+        exitFullScreenIfPossible()
         if (session?.canGoBack == true) sessionUseCases.goBack.invoke()
     }
 
@@ -116,5 +114,12 @@ class SessionRepo(
         sessionManager.engine.deleteData(context)
         sessionManager.removeAll()
         engineViewCache.doNotPersist()
+    }
+
+    private fun exitFullScreenIfPossible() {
+        // Changing the URL while full-screened can lead to unstable behavior
+        // (see #1224 and #1719), so we always attempt to exit full-screen
+        // before doing so
+        sessionManager.getEngineSession()?.exitFullScreenMode()
     }
 }
