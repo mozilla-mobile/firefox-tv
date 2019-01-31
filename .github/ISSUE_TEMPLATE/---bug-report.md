@@ -1,6 +1,7 @@
 ---
 name: "\U0001F41E Bug report"
 about: Create a report to help us improve
+label: "bug"
 
 ---
 
@@ -11,6 +12,5 @@ about: Create a report to help us improve
 ### Actual behavior
 
 ### Device information
-
 * Fire TV device: ?
 * Firefox version: ?
