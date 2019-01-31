@@ -93,6 +93,8 @@ class WebViewCache(private val sessionRepo: SessionRepo) : LifecycleObserver {
 
     private fun clear() {
         sessionRepo.canGoBackTwice = null
+        cachedView?.removeAllViews()
+        cachedView?.onPause()
         cachedView?.onStop()
         cachedView?.onDestroy()
         cachedView = null
