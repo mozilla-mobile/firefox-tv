@@ -13,6 +13,7 @@ import android.text.TextUtils
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition
+import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.settings.SettingsFragment
@@ -123,6 +124,13 @@ class ScreenController {
         val renderFragment = fragmentManager.webRenderFragment()
 
         if (toShow) {
+            // If a user navigates to YouTube while a video is fullscreened, it will cause YouTube
+            // to display oddly (see #1719). Exiting fullscreen is asynchronous, so handling it
+            // here is safer than just before navigation. Most browsers don't show the URL
+            // bar while fullscreen is active and so we are aligning with that strategy and exiting
+            // fullscreen before any navigation options on the overlay are made available to the user
+            overlayFragment.context?.serviceLocator?.sessionRepo?.exitFullScreenIfPossible()
+
             transaction.show(overlayFragment)
                 // TODO note that hiding WebRenderFragment will not be possible under a split overlay
                 .hide(renderFragment)
