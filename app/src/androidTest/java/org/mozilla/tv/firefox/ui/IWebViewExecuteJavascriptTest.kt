@@ -53,9 +53,9 @@ class IWebViewExecuteJavascriptTest {
         val expectedChangedText = "Changed"
         val browserFragment = activityTestRule.activity.supportFragmentManager.findFragmentByTag(
                 WebRenderFragment.FRAGMENT_TAG) as WebRenderFragment
-        val webView = browserFragment.webView!!
+        val engineView = browserFragment.engineView!!
         activityTestRule.runOnUiThread {
-            webView.evalJS(
+            engineView.evalJS(
                     "document.getElementsByTagName('body')[0].innerText = '$expectedChangedText';")
         }
 

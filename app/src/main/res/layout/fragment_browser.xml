@@ -24,7 +24,7 @@
             android:clipChildren="false">
 
             <mozilla.components.concept.engine.EngineView
-                android:id="@+id/webview"
+                android:id="@+id/engineView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbarThumbVertical="@drawable/scrollbar_thumb">

@@ -125,7 +125,7 @@ class CursorController(
         val scrollX = getDeltaScrollAdjustedForTime(percentMaxScrollVel.x)
         val scrollY = getDeltaScrollAdjustedForTime(percentMaxScrollVel.y)
 
-        webRenderFragment.webView?.scrollByClamped(scrollX, scrollY)
+        webRenderFragment.engineView?.scrollByClamped(scrollX, scrollY)
     }
 
     private inner class CursorIsLoadingObserver : Session.Observer {

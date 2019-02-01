@@ -105,21 +105,21 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         layout.progressBar.initialize(this)
 
-        // We break encapsulation here: we should use the super.webView reference but it's not init until
+        // We break encapsulation here: we should use the super.engineView reference but it's not init until
         // onViewCreated. However, overriding both onCreateView and onViewCreated in a single class
         // is confusing so I'd rather break encapsulation than confuse devs.
-        mediaSessionHolder?.videoVoiceCommandMediaSession?.onCreateWebView(layout.webview, session)
+        mediaSessionHolder?.videoVoiceCommandMediaSession?.onCreateEngineView(layout.engineView, session)
 
         return layout
     }
 
-    override fun onWebViewCreated(webView: EngineView) {
+    override fun onEngineViewCreated(engineView: EngineView) {
         // The SessionFeature implementation will take care of making sure that we always render the currently selected
         // session in our engine view.
         sessionFeature = SessionFeature(
             requireWebRenderComponents.sessionManager,
             requireWebRenderComponents.sessionUseCases,
-            webView)
+            engineView)
     }
 
     override fun onStart() {
@@ -135,7 +135,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     }
 
     override fun onDestroyView() {
-        mediaSessionHolder?.videoVoiceCommandMediaSession?.onDestroyWebView(webView!!, session)
+        mediaSessionHolder?.videoVoiceCommandMediaSession?.onDestroyEngineView(engineView!!, session)
 
         super.onDestroyView()
 
@@ -203,7 +203,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 } else (activity as MainActivity).dispatchKeyEvent(escKeyEvent)
             }
             // This will return true if the currently focused YouTube element is a button in the left sidebar, false otherwise
-            webView?.evalJS("""
+            engineView?.evalJS("""
                 (function () {
                     return document.activeElement.parentElement.parentElement.id === 'guide-list';
                 })();
@@ -215,7 +215,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     }
 
     private fun goBackBeforeYouTube() {
-        val webView = (webView as ViewGroup).getChildAt(0) as WebView
+        val webView = (engineView as ViewGroup).getChildAt(0) as WebView
         val backForwardUrlList = webView.copyBackForwardList().toList().map { it.originalUrl }
         val youtubeIndex = backForwardUrlList.lastIndexOf(URLs.YOUTUBE_TILE_URL)
         val goBackSteps = backForwardUrlList.size - youtubeIndex

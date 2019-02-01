@@ -86,7 +86,7 @@ class SettingsFragment : Fragment() {
                     .setCancelable(true)
                     .setPositiveButton(getString(R.string.action_ok)) { dialog, _ ->
                         with(requireContext()) {
-                            settingsViewModel.clearBrowsingData(this, serviceLocator.webViewCache)
+                            settingsViewModel.clearBrowsingData(this, serviceLocator.engineViewCache)
                             dialog.cancel()
                         }
                     }
