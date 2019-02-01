@@ -43,6 +43,7 @@ import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.webrender.VideoVoiceCommandMediaSession.MediaSessionCallbacks
 import org.mozilla.tv.firefox.ext.addJavascriptInterface
 import org.mozilla.tv.firefox.ext.evalJS
+import org.mozilla.tv.firefox.ext.pauseAllVideoPlaybacks
 import org.mozilla.tv.firefox.ext.removeJavascriptInterface
 import org.mozilla.tv.firefox.telemetry.MediaSessionEventType
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
@@ -171,7 +172,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         //
         // The videos may send playback state update events to Java, which we're forced to ignore:
         // see JavascriptVideoPlaybackStateSyncer for the code.
-        engineView?.evalJS("document.querySelectorAll('video').forEach(v => v.pause());")
+        engineView?.pauseAllVideoPlaybacks()
 
         // Move MediaSession to inactive state.
         val playbackState = cachedPlaybackStateBuilder

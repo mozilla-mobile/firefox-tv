@@ -63,6 +63,10 @@ fun EngineView.evalJS(javascript: String, callback: ValueCallback<String>? = nul
     webView?.evaluateJavascript(javascript, callback)
 }
 
+fun EngineView.pauseAllVideoPlaybacks() {
+    evalJS("document.querySelectorAll('video').forEach(v => v.pause());")
+}
+
 /**
  * This functionality is not supported by browser-engine-system yet. See [EngineView.evalJS] comment for details.
  */
