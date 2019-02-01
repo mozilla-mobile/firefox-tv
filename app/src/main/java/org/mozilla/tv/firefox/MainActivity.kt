@@ -61,7 +61,10 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         val intentData = IntentValidator.validateOnCreate(this, intent.toSafeIntent(), savedInstanceState)
 
+        // This restores the SessionManager sessions so must be called before getOrCreateSession.
+        webRenderComponents.applicationLifecycleSessionCache.onCreateMaybeRestoreSessions()
         val session = getOrCreateSession(intentData)
+
         val screenController = serviceLocator.screenController
         screenController.setUpFragmentsForNewSession(supportFragmentManager, session)
 
@@ -88,6 +91,13 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         }
 
         serviceLocator.intentLiveData.value = Consumable.from(intentData)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        // This removes the Sessions from the SessionManager so should be called last.
+        webRenderComponents.applicationLifecycleSessionCache.onDestroyCacheSessions()
     }
 
     @SuppressLint("MissingSuperCall")
