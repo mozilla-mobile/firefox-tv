@@ -53,7 +53,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         PublicSuffix.init(this) // Used by Pocket Video feed & custom home tiles.
         initMediaSession()
-        lifecycle.addObserver(serviceLocator.webViewCache)
+        lifecycle.addObserver(serviceLocator.engineViewCache)
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
@@ -153,7 +153,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
         return if (name == EngineView::class.java.name) {
-            context.serviceLocator.webViewCache.getWebView(context, attrs) {
+            context.serviceLocator.engineViewCache.getEngineView(context, attrs) {
                 setupForApp()
             }
         } else super.onCreateView(name, context, attrs)

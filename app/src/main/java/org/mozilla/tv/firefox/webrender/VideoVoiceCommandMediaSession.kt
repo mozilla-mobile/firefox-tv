@@ -67,7 +67,7 @@ private val KEY_CODES_MEDIA_PLAY_PAUSE = listOf(KEYCODE_MEDIA_PLAY, KEYCODE_MEDI
  * Before use, callers should:
  * - Add this as a [LifecycleObserver]
  * - Add [dispatchKeyEvent] to KeyEvent handling
- * - Call [onCreateWebView] and [onDestroyWebView] for fragment lifecycle handling.
+ * - Call [onCreateEngineView] and [onDestroyEngineView] for fragment lifecycle handling.
  *
  * To save time, we don't handle audio through either voice or the remote play/pause button: we don't
  * explicitly handle playback changes ourselves and we mute play/pause events from being received
@@ -100,7 +100,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
     private val cachedPlaybackStateBuilder = PlaybackStateCompat.Builder()
             .setActions(SUPPORTED_ACTIONS)
 
-    private var webView: EngineView? = null
+    private var engineView: EngineView? = null
     private var sessionIsLoadingObserver: SessionIsLoadingObserver? = null
 
     private var isLifecycleResumed = false
@@ -115,19 +115,19 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
                 MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
     }
 
-    fun onCreateWebView(webView: EngineView, session: Session) {
-        this.webView = webView.apply {
+    fun onCreateEngineView(engineView: EngineView, session: Session) {
+        this.engineView = engineView.apply {
             addJavascriptInterface(JavascriptVideoPlaybackStateSyncer(), JS_INTERFACE_IDENTIFIER)
         }
 
-        val sessionIsLoadingObserver = SessionIsLoadingObserver(webView, session)
+        val sessionIsLoadingObserver = SessionIsLoadingObserver(engineView, session)
         session.register(sessionIsLoadingObserver, owner = activity)
         this.sessionIsLoadingObserver = sessionIsLoadingObserver
     }
 
-    fun onDestroyWebView(webView: EngineView, session: Session) {
-        webView.removeJavascriptInterface(JS_INTERFACE_IDENTIFIER)
-        this.webView = null
+    fun onDestroyEngineView(engineView: EngineView, session: Session) {
+        engineView.removeJavascriptInterface(JS_INTERFACE_IDENTIFIER)
+        this.engineView = null
 
         session.unregister(sessionIsLoadingObserver!!)
         this.sessionIsLoadingObserver = null
@@ -171,7 +171,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         //
         // The videos may send playback state update events to Java, which we're forced to ignore:
         // see JavascriptVideoPlaybackStateSyncer for the code.
-        webView?.evalJS("document.querySelectorAll('video').forEach(v => v.pause());")
+        engineView?.evalJS("document.querySelectorAll('video').forEach(v => v.pause());")
 
         // Move MediaSession to inactive state.
         val playbackState = cachedPlaybackStateBuilder
@@ -205,10 +205,10 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         else -> false
     }
 
-    class SessionIsLoadingObserver(private val webView: EngineView, private val session: Session) : Session.Observer {
+    class SessionIsLoadingObserver(private val engineView: EngineView, private val session: Session) : Session.Observer {
         override fun onLoadingStateChanged(session: Session, loading: Boolean) {
             if (!loading) {
-                webView.evalJS(JS_OBSERVE_PLAYBACK_STATE) // Calls through to JavascriptVideoPlaybackStateSyncer.
+                engineView.evalJS(JS_OBSERVE_PLAYBACK_STATE) // Calls through to JavascriptVideoPlaybackStateSyncer.
             }
         }
     }
@@ -279,7 +279,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
 
         private fun evalJSWithTargetVideo(getExpressionToEval: (videoId: String) -> String) {
             val expressionToEval = getExpressionToEval(ID_TARGET_VIDEO)
-            webView?.evalJS("""
+            engineView?.evalJS("""
                 |(function() {
                 |    $GET_TARGET_VIDEO_OR_RETURN
                 |    $expressionToEval

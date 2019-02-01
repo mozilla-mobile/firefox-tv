@@ -17,7 +17,7 @@ import org.mozilla.tv.firefox.ext.deleteData
 import org.mozilla.tv.firefox.ext.postIfNew
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.utils.TurboMode
-import org.mozilla.tv.firefox.webrender.WebViewCache
+import org.mozilla.tv.firefox.webrender.EngineViewCache
 
 /**
  * Repository that is responsible for storing state related to the browser.
@@ -112,9 +112,9 @@ class SessionRepo(
 
     private val session: Session? get() = sessionManager.selectedSession
 
-    fun clearBrowsingData(context: Context, webViewCache: WebViewCache) {
+    fun clearBrowsingData(context: Context, engineViewCache: EngineViewCache) {
         sessionManager.engine.deleteData(context)
         sessionManager.removeAll()
-        webViewCache.doNotPersist()
+        engineViewCache.doNotPersist()
     }
 }

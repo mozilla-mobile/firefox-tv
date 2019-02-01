@@ -75,7 +75,7 @@ public class SettingsTest extends ScreenshotTest {
         onView(allOf(withId(R.id.aboutButton), isDisplayed()))
                 .perform(click());
 
-        onView(allOf(withId(R.id.webview), isDisplayed()));
+        onView(allOf(withId(R.id.engineView), isDisplayed()));
         onView(allOf(withId(R.string.your_rights), isDisplayed()));
 
         mDevice.waitForIdle();

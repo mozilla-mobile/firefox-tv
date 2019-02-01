@@ -6,7 +6,7 @@ import android.arch.lifecycle.ViewModel
 import android.content.Context
 import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.session.SessionRepo
-import org.mozilla.tv.firefox.webrender.WebViewCache
+import org.mozilla.tv.firefox.webrender.EngineViewCache
 
 class SettingsViewModel(private val settingsRepo: SettingsRepo, private val sessionRepo: SessionRepo) : ViewModel() {
     private var _events = MutableLiveData<Consumable<SettingsFragment.Action>>()
@@ -18,8 +18,8 @@ class SettingsViewModel(private val settingsRepo: SettingsRepo, private val sess
         settingsRepo.setDataCollectionEnabled(toEnable)
     }
 
-    fun clearBrowsingData(context: Context, webViewCache: WebViewCache) {
-        sessionRepo.clearBrowsingData(context, webViewCache)
+    fun clearBrowsingData(context: Context, engineViewCache: EngineViewCache) {
+        sessionRepo.clearBrowsingData(context, engineViewCache)
         _events.value = Consumable.from(SettingsFragment.Action.SESSION_CLEARED)
     }
 }

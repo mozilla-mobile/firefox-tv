@@ -26,7 +26,7 @@ import org.mozilla.tv.firefox.session.SessionRepo
  * This allows us to maintain [WebView] state when the view would otherwise
  * be destroyed
  */
-class WebViewCache(private val sessionRepo: SessionRepo) : LifecycleObserver {
+class EngineViewCache(private val sessionRepo: SessionRepo) : LifecycleObserver {
 
     companion object {
         // According to Android docs, WebView.saveState and WebView.restoreState do "not restore
@@ -51,7 +51,7 @@ class WebViewCache(private val sessionRepo: SessionRepo) : LifecycleObserver {
     private var cachedView: SystemEngineView? = null
     private var shouldPersist = true
 
-    fun getWebView(
+    fun getEngineView(
         context: Context,
         attrs: AttributeSet,
         initialize: SystemEngineView.() -> Unit

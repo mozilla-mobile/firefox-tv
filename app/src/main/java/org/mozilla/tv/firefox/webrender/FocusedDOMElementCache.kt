@@ -10,14 +10,14 @@ import org.mozilla.tv.firefox.ext.evalJS
 private const val CACHE_VAR = "_firefoxForFireTvPreviouslyFocusedElement"
 private const val CACHE_JS = "var $CACHE_VAR = document.activeElement;"
 
-class FocusedDOMElementCache(private val webView: EngineView) :
+class FocusedDOMElementCache(private val engineView: EngineView) :
         FocusedDOMElementCacheInterface {
 
     override fun cache() {
-        webView.evalJS(CACHE_JS)
+        engineView.evalJS(CACHE_JS)
     }
 
     override fun restore() {
-        webView.evalJS("if ($CACHE_VAR) $CACHE_VAR.focus();")
+        engineView.evalJS("if ($CACHE_VAR) $CACHE_VAR.focus();")
     }
 }

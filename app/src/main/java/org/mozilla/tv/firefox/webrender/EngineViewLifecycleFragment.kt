@@ -34,19 +34,19 @@ abstract class EngineViewLifecycleFragment : LocaleAwareFragment() {
      * The [EngineView] in use by this fragment. If the value is non-null, the EngineView is present
      * in the view hierarchy, null otherwise.
      */
-    var webView: EngineView? = null
+    var engineView: EngineView? = null
         @UiThread get // On a background thread, it may have been removed from the view hierarchy.
         private set
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        webView = (view.findViewById<View>(R.id.webview) as EngineView).apply {
-            onWebViewCreated(this)
+        engineView = (view.findViewById<View>(R.id.engineView) as EngineView).apply {
+            onEngineViewCreated(this)
         }
     }
 
-    open fun onWebViewCreated(webView: EngineView) = Unit
+    open fun onEngineViewCreated(engineView: EngineView) = Unit
 
     override fun onStop() {
         super.onStop()
@@ -54,24 +54,24 @@ abstract class EngineViewLifecycleFragment : LocaleAwareFragment() {
         // NB: onStop unexpectedly calls onPause: see below.
         //
         // When the user says "Alexa pause [the video]", the Activity will be paused/resumed while
-        // Alexa handles the request. If the WebView is paused during video playback, the video will
+        // Alexa handles the request. If the EngineView is paused during video playback, the video will
         // have poor behavior (on YouTube the screen goes black, may rebuffer, and may lose the voice
         // command). Unfortunately, there does not appear to be any way to prevent this other than
-        // to not call WebView.onPause so we pause the WebView later, here in onStop, when it isn't
+        // to not call EngineView.onPause so we pause the EngineView later, here in onStop, when it isn't
         // affected by Alexa voice commands. Luckily, Alexa pauses the video for us. afaict, on
         // Fire TV, `onPause` without `onStop` isn't called very often so I don't think there will
         // be many side effects (#936).
         //
         // The problem is not reproducible when onPause is called here in onStop (even if pauseTimers is
         // called in onPause, in the android-components library).
-        webView!!.onPauseIfNotNull() // internally calls WebView.onPause: see impl for details.
+        engineView!!.onPauseIfNotNull() // internally calls EngineView.onPause: see impl for details.
     }
 
     override fun onStart() {
         super.onStart()
 
         // NB: onStart unexpectedly calls onResume: see onStop for details.
-        webView!!.onResumeIfNotNull()
+        engineView!!.onResumeIfNotNull()
     }
 
     override fun applyLocale() {

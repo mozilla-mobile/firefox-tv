@@ -23,7 +23,7 @@ import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
 import org.mozilla.tv.firefox.pocket.PocketRepoCache
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.settings.SettingsRepo
-import org.mozilla.tv.firefox.webrender.WebViewCache
+import org.mozilla.tv.firefox.webrender.EngineViewCache
 import org.mozilla.tv.firefox.session.SessionRepo
 
 /**
@@ -71,7 +71,7 @@ open class ServiceLocator(val app: Application) {
     val pocketRepoCache by lazy { PocketRepoCache(pocketRepo).apply { setup() } }
     val viewModelFactory by lazy { ViewModelFactory(this, app) }
     val screenController by lazy { ScreenController() }
-    val webViewCache by lazy { WebViewCache(sessionRepo) }
+    val engineViewCache by lazy { EngineViewCache(sessionRepo) }
     val sessionManager get() = app.webRenderComponents.sessionManager
     val sessionUseCases get() = app.webRenderComponents.sessionUseCases
     val searchEngineManager = SearchEngineManager().apply { GlobalScope.launch { load(app) } }
