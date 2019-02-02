@@ -49,19 +49,20 @@ class CursorController(
         view.visibility = if (newValue) View.VISIBLE else View.GONE
     }
 
-    private val viewModel = CursorViewModel(uiLifecycleCancelJob, onUpdate = { x, y, percentMaxScrollVel, framesPassed ->
+    @Suppress("DEPRECATION") // We are transitioning to CursorViewModel
+    private val legacyViewModel = CursorLegacyViewModel(uiLifecycleCancelJob, onUpdate = { x, y, percentMaxScrollVel, framesPassed ->
         view.updatePosition(x, y)
         scrollWebView(percentMaxScrollVel, framesPassed)
     }, simulateTouchEvent = { webRenderFragment.activity?.dispatchTouchEvent(it) })
 
     val keyDispatcher = CursorKeyDispatcher(isEnabled, onDirectionKey = { dir, action ->
         when (action) {
-            KeyEvent.ACTION_DOWN -> viewModel.onDirectionKeyDown(dir)
-            KeyEvent.ACTION_UP -> viewModel.onDirectionKeyUp(dir)
+            KeyEvent.ACTION_DOWN -> legacyViewModel.onDirectionKeyDown(dir)
+            KeyEvent.ACTION_UP -> legacyViewModel.onDirectionKeyUp(dir)
             else -> Unit
         }
     }, onSelectKey = { event ->
-        viewModel.onSelectKeyEvent(event.action)
+        legacyViewModel.onSelectKeyEvent(event.action)
         view.updateCursorPressedState(event)
     })
 
@@ -69,7 +70,7 @@ class CursorController(
 
     init {
         cursorParent.addOnLayoutChangeListener { _, _, _, right, bottom, _, _, _, _ ->
-            viewModel.maxBounds = PointF(right.toFloat(), bottom.toFloat())
+            legacyViewModel.maxBounds = PointF(right.toFloat(), bottom.toFloat())
         }
     }
 
@@ -99,7 +100,7 @@ class CursorController(
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun onPause() {
         view.cancelUpdates()
-        viewModel.cancelUpdates()
+        legacyViewModel.cancelUpdates()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
