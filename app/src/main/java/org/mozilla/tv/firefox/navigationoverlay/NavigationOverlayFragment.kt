@@ -24,8 +24,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.Toast
-import kotlinx.android.synthetic.main.browser_overlay.*
-import kotlinx.android.synthetic.main.browser_overlay_top_nav.*
+import kotlinx.android.synthetic.main.fragment_navigation_overlay.*
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.*
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.*
 import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.MainActivity
@@ -139,7 +139,7 @@ class NavigationOverlayFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.browser_overlay, container, false)
+        return inflater.inflate(R.layout.fragment_navigation_overlay, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

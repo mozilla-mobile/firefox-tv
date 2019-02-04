@@ -9,8 +9,8 @@ import android.arch.lifecycle.Observer
 import android.support.v4.app.FragmentManager
 import android.view.View
 import android.widget.ImageButton
-import kotlinx.android.synthetic.main.browser_overlay.view.*
-import kotlinx.android.synthetic.main.browser_overlay_top_nav.view.*
+import kotlinx.android.synthetic.main.fragment_navigation_overlay.view.*
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.view.*
 import mozilla.components.browser.domains.autocomplete.ShippedDomainsProvider
 import mozilla.components.support.ktx.android.view.forEach
 import mozilla.components.support.ktx.android.view.hideKeyboard
