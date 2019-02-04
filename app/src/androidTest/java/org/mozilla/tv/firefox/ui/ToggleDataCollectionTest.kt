@@ -58,6 +58,7 @@ class ToggleDataCollectionTest {
         }.exitToOverlay {
         }.openSettings {
             assertDataCollectionButtonState(cachedDataCollectionButtonIsChecked)
+            toggleDataCollectionButton() // For resetting the data on Cloud Test
         }
     }
 
@@ -89,6 +90,7 @@ class ToggleDataCollectionTest {
         }.exitToOverlay {
         }.openSettings {
             assertDataCollectionButtonState(cachedDataCollectionButtonIsChecked)
+            toggleDataCollectionButton() // For resetting the data on Cloud Test
         }
     }
 }
