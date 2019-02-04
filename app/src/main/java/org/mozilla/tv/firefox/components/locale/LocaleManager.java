@@ -290,6 +290,11 @@ public class LocaleManager {
         if (current == null) {
             current = context.getResources().getConfiguration().locale;
         }
+        // In a very small number of cases, this locale will still be null. Most of our
+        // userbase uses English as a primary language, so we default to that as a fallback
+        if (current == null) {
+            return true;
+        }
         String language = Locales.getLanguage(current);
         return language.toLowerCase(current).startsWith("en");
     }
