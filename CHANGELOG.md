@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Bug where cursor would disappear if on overlay during page load finish (#1732)
 - Bug that could cause a crash on startup (#1778)
 
-## [3.3.1] - 2019-01-31
+## [3.3.1] - 2019-02-04
 *Released to Fire TV 4K.*
 
 ### Added
@@ -24,13 +24,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Crash when using unrecognized remote control (#1685)
 - Fixed mismatch between internal and display state after clearing data (#1691)
 
-## [3.3] - 2019-01-31
+## [3.3] - 2019-02-04
 *Released to all devices except Fire TV 4K.*  
   
 Version-bump only - no change from v3.2.5
 
 ## [3.2.5] - 2019-01-16
 *Rollback to v3.1.3*
+
+Several crashes were found in the previously released version, so this was rolled back to the most recent stable release (v3.1.3).
+
+## 3.2.3 and 3.2.4 - **never released**
+
+These version numbers were skipped due to build errors. They had to be re-built with a bumped version.
 
 ## [3.2.2] - 2019-01-15
 ### Fixed 
