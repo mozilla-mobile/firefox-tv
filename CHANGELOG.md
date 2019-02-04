@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Bug where cursor would disappear if on overlay during page load finish (#1732)
+- Bug that could cause a crash on startup (#1778)
 
 ## [3.3.1] - 2019-01-30
 *Released to Fire TV 4K.*
