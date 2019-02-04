@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -288,7 +289,11 @@ public class LocaleManager {
         Locale current = getCurrentLocale(context);
         // If locale hasn't been updated (i.e., 'current' is null), use system default
         if (current == null) {
-            current = context.getResources().getConfiguration().locale;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                current = context.getResources().getConfiguration().getLocales().get(0);
+            } else {
+                current = context.getResources().getConfiguration().locale;
+            }
         }
         // In a very small number of cases, this locale will still be null. Most of our
         // userbase uses English as a primary language, so we default to that as a fallback
