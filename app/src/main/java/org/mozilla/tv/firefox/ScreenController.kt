@@ -5,6 +5,8 @@
 
 package org.mozilla.tv.firefox
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.support.v4.app.FragmentManager
 import android.text.TextUtils
@@ -23,7 +25,11 @@ import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 
 class ScreenController {
-    var currentActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
+
+    private var _currentActiveScreen = MutableLiveData<ActiveScreen>().apply {
+        value = ActiveScreen.NAVIGATION_OVERLAY
+    }
+    val currentActiveScreen: LiveData<ActiveScreen> = _currentActiveScreen
 
     /**
      * To keep things simple, we add all the fragments at start instead of creating them when needed
@@ -48,7 +54,7 @@ class ScreenController {
             .hide(settingsFragment)
             .commitNow()
 
-        currentActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
+        _currentActiveScreen.value = ActiveScreen.NAVIGATION_OVERLAY
     }
 
     /**
@@ -107,7 +113,7 @@ class ScreenController {
     fun showNavigationOverlay(fragmentManager: FragmentManager?, toShow: Boolean) {
         fragmentManager ?: return
         fragmentManagerShowNavigationOverlay(fragmentManager, toShow)
-        currentActiveScreen = if (toShow) ActiveScreen.NAVIGATION_OVERLAY
+        _currentActiveScreen.value = if (toShow) ActiveScreen.NAVIGATION_OVERLAY
                 else ActiveScreen.WEB_RENDER
 
         // Fixes cursor disappearing when on overlay during page load finish (#1732)
@@ -134,15 +140,15 @@ class ScreenController {
 
     fun handleBack(fragmentManager: FragmentManager): Boolean {
         val webRenderFragment = fragmentManager.webRenderFragment()
-        if (currentActiveScreen == ActiveScreen.WEB_RENDER) {
+        if (_currentActiveScreen.value == ActiveScreen.WEB_RENDER) {
             if (webRenderFragment.onBackPressed()) return true
         }
-        val transition = ScreenControllerStateMachine.getNewStateBackPress(currentActiveScreen, isOnHomeUrl(fragmentManager))
+        val transition = ScreenControllerStateMachine.getNewStateBackPress(_currentActiveScreen.value!!, isOnHomeUrl(fragmentManager))
         return handleTransitionAndUpdateActiveScreen(fragmentManager, transition)
     }
 
     fun handleMenu(fragmentManager: FragmentManager) {
-        val transition = ScreenControllerStateMachine.getNewStateMenuPress(currentActiveScreen, isOnHomeUrl(fragmentManager))
+        val transition = ScreenControllerStateMachine.getNewStateMenuPress(_currentActiveScreen.value!!, isOnHomeUrl(fragmentManager))
         handleTransitionAndUpdateActiveScreen(fragmentManager, transition)
     }
 
@@ -157,39 +163,39 @@ class ScreenController {
         when (transition) {
             Transition.ADD_OVERLAY -> {
                 fragmentManagerShowNavigationOverlay(fragmentManager, true)
-                currentActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
+                _currentActiveScreen.value = ActiveScreen.NAVIGATION_OVERLAY
             }
             Transition.REMOVE_OVERLAY -> {
                 showNavigationOverlay(fragmentManager, false)
-                currentActiveScreen = ActiveScreen.WEB_RENDER
+                _currentActiveScreen.value = ActiveScreen.WEB_RENDER
             }
             Transition.ADD_POCKET -> {
                 fragmentManager.beginTransaction()
                     .show(fragmentManager.pocketFragment())
                     .hide(fragmentManager.navigationOverlayFragment())
                     .commit()
-                currentActiveScreen = ActiveScreen.POCKET
+                _currentActiveScreen.value = ActiveScreen.POCKET
             }
             Transition.REMOVE_POCKET -> {
                 fragmentManager.beginTransaction()
                     .show(fragmentManager.navigationOverlayFragment())
                     .hide(fragmentManager.pocketFragment())
                     .commit()
-                currentActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
+                _currentActiveScreen.value = ActiveScreen.NAVIGATION_OVERLAY
             }
             Transition.ADD_SETTINGS -> {
                 fragmentManager.beginTransaction()
                     .show(fragmentManager.settingsFragment())
                     .hide(fragmentManager.navigationOverlayFragment())
                     .commit()
-                currentActiveScreen = ActiveScreen.SETTINGS
+                _currentActiveScreen.value = ActiveScreen.SETTINGS
             }
             Transition.REMOVE_SETTINGS -> {
                 fragmentManager.beginTransaction()
                     .show(fragmentManager.navigationOverlayFragment())
                     .hide(fragmentManager.settingsFragment())
                     .commit()
-                currentActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
+                _currentActiveScreen.value = ActiveScreen.NAVIGATION_OVERLAY
             }
             Transition.SHOW_BROWSER -> {
                 fragmentManager.beginTransaction()
@@ -198,7 +204,7 @@ class ScreenController {
                     .hide(fragmentManager.pocketFragment())
                     .hide(fragmentManager.settingsFragment())
                     .commitNow()
-                currentActiveScreen = ActiveScreen.WEB_RENDER
+                _currentActiveScreen.value = ActiveScreen.WEB_RENDER
             }
             Transition.EXIT_APP -> { return false }
             Transition.NO_OP -> { return true }
