@@ -18,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import io.sentry.Sentry;
 import org.mozilla.tv.firefox.R;
 import org.mozilla.tv.firefox.generated.LocaleList;
 
@@ -298,6 +299,7 @@ public class LocaleManager {
         // In a very small number of cases, this locale will still be null. Most of our
         // userbase uses English as a primary language, so we default to that as a fallback
         if (current == null) {
+            Sentry.capture(new AssertionError("Selected locale not available. Falling back to EN"));
             return true;
         }
         String language = Locales.getLanguage(current);
