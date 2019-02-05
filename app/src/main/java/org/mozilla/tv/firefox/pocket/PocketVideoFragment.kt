@@ -5,7 +5,6 @@
 package org.mozilla.tv.firefox.pocket
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -25,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_pocket_video.view.*
 import mozilla.components.support.ktx.android.os.resetAfter
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.updateLayoutParams
@@ -50,8 +50,7 @@ class PocketVideoFragment : Fragment() {
         PocketDrawable.setImageDrawableAsPocketWordmark(layout.pocketWordmarkView)
         layout.pocketHelpButton.setImageDrawable(context!!.getDrawable(R.drawable.pocket_onboarding_help_button))
 
-        val factory = context!!.serviceLocator.viewModelFactory
-        val viewModel = ViewModelProviders.of(this, factory).get(PocketViewModel::class.java)
+        val viewModel = FirefoxViewModelProviders.of(this).get(PocketViewModel::class.java)
 
         viewModel.state.observe(viewLifecycleOwner, Observer<PocketViewModel.State> { state ->
             when (state) {

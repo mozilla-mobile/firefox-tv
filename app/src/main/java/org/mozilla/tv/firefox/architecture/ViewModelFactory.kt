@@ -17,10 +17,10 @@ import org.mozilla.tv.firefox.utils.ServiceLocator
 /**
  * Used by [ViewModelProviders] to instantiate [ViewModel]s with constructor arguments.
  *
+ * This should be used through [FirefoxViewModelProviders.of].
  * Example usage:
  * ```kotlin
- * val factory = ViewModelFactory(serviceLocator)
- * val myViewModel = ViewModelProviders.of(this, factory).get(ExampleViewModel::class.java)
+ * val myViewModel = FirefoxViewModelProviders.of(this).get(ExampleViewModel::class.java)
  * ```
  */
 class ViewModelFactory(

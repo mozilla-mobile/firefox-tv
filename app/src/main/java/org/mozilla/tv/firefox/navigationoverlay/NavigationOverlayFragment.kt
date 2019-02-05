@@ -5,7 +5,6 @@
 package org.mozilla.tv.firefox.navigationoverlay
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
@@ -31,6 +30,7 @@ import kotlinx.android.synthetic.main.pocket_video_mega_tile.*
 import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.experiments.ExperimentConfig
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isEffectivelyVisible
@@ -133,10 +133,9 @@ class NavigationOverlayFragment : Fragment() {
 
         serviceLocator = context!!.serviceLocator
 
-        val factory = serviceLocator.viewModelFactory
-        toolbarViewModel = ViewModelProviders.of(this, factory).get(ToolbarViewModel::class.java)
-        pinnedTileViewModel = ViewModelProviders.of(this, factory).get(PinnedTileViewModel::class.java)
-        pocketViewModel = ViewModelProviders.of(this, factory).get(PocketViewModel::class.java)
+        toolbarViewModel = FirefoxViewModelProviders.of(this).get(ToolbarViewModel::class.java)
+        pinnedTileViewModel = FirefoxViewModelProviders.of(this).get(PinnedTileViewModel::class.java)
+        pocketViewModel = FirefoxViewModelProviders.of(this).get(PocketViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
