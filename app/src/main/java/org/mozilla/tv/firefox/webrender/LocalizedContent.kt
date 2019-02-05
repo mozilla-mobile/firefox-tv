@@ -11,12 +11,9 @@ import android.view.View
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.components.locale.Locales
 import org.mozilla.tv.firefox.utils.HtmlLoader
+import org.mozilla.tv.firefox.utils.URLs
 
 object LocalizedContent {
-    // We can't use "about:" because webview silently swallows about: pages, hence we use
-    // a custom scheme.
-    const val URL_ABOUT = "firefox:about"
-
     /**
      * Load the content for firefox:about
      */

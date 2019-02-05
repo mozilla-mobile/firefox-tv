@@ -26,7 +26,7 @@ class CustomContentRequestInterceptor(
             URLs.APP_URL_HOME, URLs.APP_URL_POCKET_ERROR ->
                 RequestInterceptor.InterceptionResponse.Content("<html></html>")
 
-            LocalizedContent.URL_ABOUT -> RequestInterceptor.InterceptionResponse.Content(
+            URLs.URL_ABOUT -> RequestInterceptor.InterceptionResponse.Content(
                 LocalizedContent.generateAboutPage(context))
 
             else -> null
