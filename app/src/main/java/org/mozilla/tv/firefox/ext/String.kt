@@ -93,3 +93,8 @@ fun String?.toJavaURI(): URI? = if (this == null) {
         null
     }
 }
+
+// TODO: move to Uri class android-components#648
+// This algorithm is imperfect but we've used it for a while.
+val String.isUriYouTubeTV: Boolean
+    get() = toLowerCase().contains("youtube.com/tv")
