@@ -117,9 +117,11 @@ class SessionRepo(
     }
 
     fun exitFullScreenIfPossible() {
-        // Changing the URL while full-screened can lead to unstable behavior
-        // (see #1224 and #1719), so we always attempt to exit full-screen
-        // before doing so
-        sessionManager.getEngineSession()?.exitFullScreenMode()
+        if (session?.fullScreenMode == true) {
+            // Changing the URL while full-screened can lead to unstable behavior
+            // (see #1224 and #1719), so we always attempt to exit full-screen
+            // before doing so
+            sessionManager.getEngineSession()?.exitFullScreenMode()
+        }
     }
 }
