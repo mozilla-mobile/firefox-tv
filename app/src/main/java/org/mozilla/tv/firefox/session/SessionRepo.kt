@@ -6,7 +6,6 @@ package org.mozilla.tv.firefox.session
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.support.annotation.AnyThread
@@ -109,7 +108,8 @@ class SessionRepo(
 
     private val session: Session? get() = sessionManager.selectedSession
 
-    fun clearBrowsingData(context: Context, engineViewCache: EngineViewCache) {
+    fun clearBrowsingData(engineViewCache: EngineViewCache) {
+        sessionManager.getEngineSession()?.clearData() // Only works for [SystemEngineView]
         sessionManager.removeAll()
         engineViewCache.doNotPersist()
     }
