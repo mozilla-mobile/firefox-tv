@@ -38,4 +38,4 @@ var Session.savedWebViewState: Bundle?
     set(value) { getOrPutExtension(this).savedWebViewState = value }
 
 val Session.isYoutubeTV: Boolean
-    get() = url.contains("youtube.com/tv")
+    get() = url.isUriYouTubeTV
