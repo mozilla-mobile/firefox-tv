@@ -23,6 +23,8 @@ tasks:
           - pull_request.edited
           - pull_request.synchronize
           - pull_request.reopened
+    scopes:
+    - "secrets:get:project/mobile/firefox-tv/tokens"
     payload:
       maxRunTime: 3600
       deadline: "{{ '2 hours' | $fromNow }}"
@@ -38,11 +40,23 @@ tasks:
           && git checkout {{event.head.sha}}
           && yes | sdkmanager --licenses
           && ./gradlew -PisPullRequest clean assemble assembleAndroidTest lint checkstyle ktlint pmd detekt test
+          && ./tools/taskcluster/download-firebase-sdk.sh
+          && ./tools/taskcluster/google-firebase-testlab-login.sh
+          && ./tools/taskcluster/execute-firebase-test.sh debug app-debug model=taimen,version=26,orientation=landscape
       artifacts:
-        'public':
+        'public/reports':
           type: 'directory'
           path: '/opt/firefox-tv/app/build/reports'
           expires: "{{ '1 week' | $fromNow }}"
+
+        'public/test-artifacts':  # Test artifacts from Firebase UI
+          type: 'directory'
+          path: '/opt/firefox-tv/test_artifacts'
+          expires: "{{ '1 week' | $fromNow }}"
+
+      features:
+          taskclusterProxy: true
+
     metadata:
       name: Firefox for Amazon's Fire TV - Build - Pull Request
       description: Building Firefox for Amazon's Fire TV (via Gradle) - triggered by a pull request.
@@ -72,6 +86,7 @@ tasks:
       maxRunTime: 3600
       deadline: "{{ '2 hours' | $fromNow }}"
       image: 'mozillamobile/firefox-tv:2.0'
+      taskclusterProxy: true
       command:
         - /bin/bash
         - '--login'
@@ -88,6 +103,7 @@ tasks:
           type: 'directory'
           path: '/opt/firefox-tv/app/build/reports'
           expires: "{{ '1 week' | $fromNow }}"
+
     metadata:
       name: Firefox for Amazon's Fire TV - Build - Master
       description: Building Firefox for Amazon's Fire TV (via Gradle) - Master
@@ -109,7 +125,7 @@ tasks:
         events:
           - release
     scopes:
-      - "secrets:get:project/firefox-tv/tokens"
+      - "secrets:get:project/mobile/firefox-tv/tokens"
     payload:
       maxRunTime: 3600
       deadline: "{{ '2 hours' | $fromNow }}"
