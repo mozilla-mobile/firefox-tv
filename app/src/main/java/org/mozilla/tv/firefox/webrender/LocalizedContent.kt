@@ -65,11 +65,17 @@ object LocalizedContent {
             else -> "auto"
         }
 
-        // We use a file:/// base URL so that we have the right origin to load file:/// css and image resources.
+        substitutionMap["%css%"] = HtmlLoader.loadResourceFile(context, R.raw.style, null)
+
         return HtmlLoader.loadResourceFile(context, R.raw.about, substitutionMap)
     }
 
     fun generatePage(context: Context, page: Int): String {
-        return HtmlLoader.loadResourceFile(context, page, null)
+        val substitutionMap = ArrayMap<String, String>()
+
+        /** See comment in [ErrorPage] for why we need to load css this way. */
+        substitutionMap["%css%"] = HtmlLoader.loadResourceFile(context, R.raw.style, null)
+
+        return HtmlLoader.loadResourceFile(context, page, substitutionMap)
     }
 }
