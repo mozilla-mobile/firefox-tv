@@ -135,14 +135,13 @@ dependencies {
     testImplementation "org.robolectric:shadows-supportv4:$robolectric_version"
     testImplementation 'org.mockito:mockito-core:2.21.0'
 
-    testImplementation 'androidx.test:core:1.0.0' // required for robolectric 4.0+
+    testImplementation "androidx.test:core:$test_core"
 
-    androidTestImplementation 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
+    androidTestImplementation "com.android.support.test.uiautomator:uiautomator-v18:$uiautomator_version"
 
     androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_version", {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-
     androidTestImplementation("com.android.support.test.espresso:espresso-contrib:$espresso_version") {
         exclude module: 'appcompat-v7'
         exclude module: 'support-v4'
@@ -151,12 +150,14 @@ dependencies {
         exclude module: 'design'
         exclude module: 'espresso-core'
     }
-
     androidTestImplementation "com.android.support.test.espresso:espresso-idling-resource:$espresso_version"
     androidTestImplementation "com.android.support.test.espresso:espresso-web:$espresso_version", {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    androidTestImplementation "com.android.support.test:rules:1.0.2"
+
+    androidTestImplementation "com.android.support.test:runner:$test_runner"
+    androidTestImplementation "com.android.support.test:rules:$test_rules"
+    androidTestUtil "androidx.test:orchestrator:$test_orchestrator"
 
     androidTestImplementation 'com.squareup.okhttp3:mockwebserver:3.10.0'
     testImplementation 'com.squareup.okhttp3:mockwebserver:3.10.0'
@@ -164,9 +165,6 @@ dependencies {
     androidTestImplementation "tools.fastlane:screengrab:1.2.0", {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestUtil 'androidx.test:orchestrator:1.1.1'
 
     androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}"
 }
