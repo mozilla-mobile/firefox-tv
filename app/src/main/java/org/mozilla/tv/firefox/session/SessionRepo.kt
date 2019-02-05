@@ -13,7 +13,6 @@ import android.support.annotation.AnyThread
 import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.feature.session.SessionUseCases
-import org.mozilla.tv.firefox.ext.deleteData
 import org.mozilla.tv.firefox.ext.postIfNew
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.utils.TurboMode
@@ -111,7 +110,6 @@ class SessionRepo(
     private val session: Session? get() = sessionManager.selectedSession
 
     fun clearBrowsingData(context: Context, engineViewCache: EngineViewCache) {
-        sessionManager.engine.deleteData(context)
         sessionManager.removeAll()
         engineViewCache.doNotPersist()
     }
