@@ -45,8 +45,10 @@ class ViewModelFactory(
             ) as T
 
             SettingsViewModel::class.java -> SettingsViewModel(
-                    serviceLocator.settingsRepo,
-                    serviceLocator.sessionRepo) as T
+                serviceLocator.frameworkRepo,
+                serviceLocator.settingsRepo,
+                serviceLocator.sessionRepo
+            ) as T
 
             CursorViewModel::class.java -> CursorViewModel(
                 serviceLocator.frameworkRepo,

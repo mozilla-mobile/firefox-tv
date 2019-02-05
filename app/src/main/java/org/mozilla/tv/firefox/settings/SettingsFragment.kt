@@ -11,14 +11,11 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.accessibility.AccessibilityManager
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.ext.forceExhaustive
-import org.mozilla.tv.firefox.ext.getAccessibilityManager
-import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.URLs
@@ -27,10 +24,6 @@ import org.mozilla.tv.firefox.utils.URLs
 class SettingsFragment : Fragment() {
     enum class Action {
         SESSION_CLEARED
-    }
-
-    private val voiceViewStateChangeListener = AccessibilityManager.TouchExplorationStateChangeListener {
-        updateForAccessibility()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -51,6 +44,10 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setupSettingsViewModel(parentView: View, settingsViewModel: SettingsViewModel) {
+        settingsViewModel.isVoiceViewEnabled.observe(viewLifecycleOwner, Observer<Boolean> {
+            updateForAccessibility(it!!)
+        })
+
         settingsViewModel.dataCollectionEnabled.observe(viewLifecycleOwner, Observer<Boolean> { state ->
             parentView.telemetryButton.isChecked = state ?: return@Observer
         })
@@ -95,22 +92,11 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        context?.getAccessibilityManager()?.addTouchExplorationStateChangeListener(voiceViewStateChangeListener)
-        updateForAccessibility()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        context?.getAccessibilityManager()?.removeTouchExplorationStateChangeListener(voiceViewStateChangeListener)
-    }
-
     /**
      * Updates the views in this fragment based on Accessibility status.
      * See the comment at the declaration of these views in XML for more details.
      */
-    private fun updateForAccessibility() {
+    private fun updateForAccessibility(isVoiceViewEnabled: Boolean) {
         // In order to read Accessibility text for the Telemetry checkbox WITH checked state,
         // we need to focus the checkbox in VoiceView instead of the containing view.
         //
@@ -118,7 +104,7 @@ class SettingsFragment : Fragment() {
         // cleared from this setting and nothing is selected. This is fine: the user can press
         // left-right to focus something else and it's an edge case that I don't think it is worth
         // adding code to fix.
-        val shouldFocusButton = context?.isVoiceViewEnabled() ?: return
+        val shouldFocusButton = isVoiceViewEnabled
         if (shouldFocusButton) {
             // Clear focus so that focus passes to child telemetryButton view.
             telemetryButtonContainer.isFocusable = false
