@@ -6,21 +6,14 @@ package org.mozilla.tv.firefox.webrender.cursor
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.OnLifecycleEvent
 import android.graphics.PointF
 import android.view.KeyEvent
 import android.view.View
-import android.view.accessibility.AccessibilityManager
 import kotlinx.coroutines.Job
-import mozilla.components.browser.session.Session
-import org.mozilla.tv.firefox.ScreenController
-import org.mozilla.tv.firefox.ScreenControllerStateMachine
-import org.mozilla.tv.firefox.webrender.WebRenderFragment
-import org.mozilla.tv.firefox.ext.getAccessibilityManager
-import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
-import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.scrollByClamped
-import kotlin.properties.Delegates
+import org.mozilla.tv.firefox.webrender.WebRenderFragment
 
 private const val MAX_SCROLL_VELOCITY = 13
 
@@ -35,19 +28,13 @@ private const val MAX_SCROLL_VELOCITY = 13
  *
  * When using this class, don't forget to add it as a [LifecycleObserver].
  */
-class CursorController(
+class CursorController private constructor(
     // Our lifecycle is shorter than BrowserFragment, so we can hold a reference.
     private val webRenderFragment: WebRenderFragment,
-    cursorParent: View,
-    private val view: CursorView,
-    private val screenController: ScreenController
-) : AccessibilityManager.TouchExplorationStateChangeListener, LifecycleObserver {
-    private val uiLifecycleCancelJob = Job()
+    private val view: CursorView
+) : LifecycleObserver {
 
-    private var isEnabled: Boolean by Delegates.observable(true) { _, _, newValue ->
-        keyDispatcher.isEnabled = newValue
-        view.visibility = if (newValue) View.VISIBLE else View.GONE
-    }
+    private val uiLifecycleCancelJob = Job()
 
     @Suppress("DEPRECATION") // We are transitioning to CursorViewModel
     private val legacyViewModel = CursorLegacyViewModel(uiLifecycleCancelJob, onUpdate = { x, y, percentMaxScrollVel, framesPassed ->
@@ -55,7 +42,8 @@ class CursorController(
         scrollWebView(percentMaxScrollVel, framesPassed)
     }, simulateTouchEvent = { webRenderFragment.activity?.dispatchTouchEvent(it) })
 
-    val keyDispatcher = CursorKeyDispatcher(isEnabled, onDirectionKey = { dir, action ->
+    // Initial value does not matter: it will be reactively replaced during start-up.
+    val keyDispatcher = CursorKeyDispatcher(isEnabled = false, onDirectionKey = { dir, action ->
         when (action) {
             KeyEvent.ACTION_DOWN -> legacyViewModel.onDirectionKeyDown(dir)
             KeyEvent.ACTION_UP -> legacyViewModel.onDirectionKeyUp(dir)
@@ -66,35 +54,16 @@ class CursorController(
         view.updateCursorPressedState(event)
     })
 
-    private val isLoadingObserver = CursorIsLoadingObserver()
-
-    init {
+    fun initOnCreateView(viewModel: CursorViewModel, cursorParent: View) {
         cursorParent.addOnLayoutChangeListener { _, _, _, right, bottom, _, _, _, _ ->
             legacyViewModel.maxBounds = PointF(right.toFloat(), bottom.toFloat())
         }
-    }
 
-    /** Gets the current state of the browser and updates the cursor enabled state accordingly. */
-    fun setEnabledForCurrentState() {
-        // These sources have their own navigation controls.
-
-        isEnabled = !webRenderFragment.session.isYoutubeTV && !(webRenderFragment.context?.isVoiceViewEnabled() ?: false) &&
-            screenController.currentActiveScreen == ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onStart() {
-        webRenderFragment.context?.getAccessibilityManager()?.addTouchExplorationStateChangeListener(this)
-        setEnabledForCurrentState() // VoiceView state may change.
-
-        webRenderFragment.session.register(isLoadingObserver, owner = webRenderFragment)
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onStop() {
-        webRenderFragment.context?.getAccessibilityManager()?.removeTouchExplorationStateChangeListener(this)
-
-        webRenderFragment.session.unregister(isLoadingObserver)
+        viewModel.isEnabled.observe(webRenderFragment.viewLifecycleOwner, Observer { isEnabled ->
+            // isEnabled should not emit until value is non-null.
+            keyDispatcher.isEnabled = isEnabled!!
+            view.visibility = if (isEnabled) View.VISIBLE else View.GONE
+        })
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
@@ -113,10 +82,6 @@ class CursorController(
         uiLifecycleCancelJob.cancel()
     }
 
-    override fun onTouchExplorationStateChanged(isEnabled: Boolean) {
-        setEnabledForCurrentState()
-    }
-
     private fun scrollWebView(percentMaxScrollVel: PointF, framesPassed: Float) {
         fun getDeltaScrollAdjustedForTime(percentScrollVel: Float) =
                 Math.round(percentScrollVel * MAX_SCROLL_VELOCITY * framesPassed)
@@ -129,9 +94,16 @@ class CursorController(
         webRenderFragment.engineView?.scrollByClamped(scrollX, scrollY)
     }
 
-    private inner class CursorIsLoadingObserver : Session.Observer {
-        override fun onLoadingStateChanged(session: Session, loading: Boolean) {
-            setEnabledForCurrentState()
+    companion object {
+        fun newInstanceOnCreateView(
+            webRenderFragment: WebRenderFragment,
+            cursorParent: View,
+            view: CursorView,
+            viewModel: CursorViewModel
+        ): CursorController {
+            return CursorController(webRenderFragment, view).apply {
+                initOnCreateView(viewModel, cursorParent)
+            }
         }
     }
 }

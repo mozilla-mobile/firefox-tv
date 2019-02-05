@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.webrender
 
 import android.app.Activity
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.annotation.UiThread
 import android.view.KeyEvent
@@ -24,15 +25,16 @@ import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.MediaSessionHolder
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.evalJS
-import org.mozilla.tv.firefox.webrender.cursor.CursorController
-import org.mozilla.tv.firefox.ext.webRenderComponents
-import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.isYoutubeTV
-import org.mozilla.tv.firefox.ext.toList
+import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.serviceLocator
+import org.mozilla.tv.firefox.ext.toList
+import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
-import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
+import org.mozilla.tv.firefox.utils.URLs
+import org.mozilla.tv.firefox.webrender.cursor.CursorController
+import org.mozilla.tv.firefox.webrender.cursor.CursorViewModel
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 
@@ -97,11 +99,18 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         permissionRequest.grantIf { it is Permission.ContentProtectedMediaId }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        val context = inflater.context
         val layout = inflater.inflate(R.layout.fragment_browser, container, false)
 
-        cursor = CursorController(this, cursorParent = layout.browserFragmentRoot,
-                view = layout.cursorView, screenController = layout.context.serviceLocator.screenController)
-        lifecycle.addObserver(cursor!!)
+        val viewModelFactory = context.serviceLocator.viewModelFactory
+        cursor = CursorController.newInstanceOnCreateView(
+            this,
+            cursorParent = layout.browserFragmentRoot,
+            view = layout.cursorView,
+            viewModel = ViewModelProviders.of(this, viewModelFactory).get(CursorViewModel::class.java)
+        ).also {
+            lifecycle.addObserver(it)
+        }
 
         layout.progressBar.initialize(this)
 
