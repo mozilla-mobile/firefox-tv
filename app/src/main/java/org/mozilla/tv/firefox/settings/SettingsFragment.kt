@@ -6,7 +6,6 @@ package org.mozilla.tv.firefox.settings
 
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -16,6 +15,7 @@ import android.view.accessibility.AccessibilityManager
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.getAccessibilityManager
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
@@ -45,8 +45,7 @@ class SettingsFragment : Fragment() {
             serviceLocator?.screenController?.showBrowserScreenForUrl(fragmentManager!!, URLs.PRIVACY_NOTICE_URL)
         }
 
-        val factory = view.context.serviceLocator.viewModelFactory
-        ViewModelProviders.of(this@SettingsFragment, factory).get(SettingsViewModel::class.java).also { settingsVM ->
+        FirefoxViewModelProviders.of(this@SettingsFragment).get(SettingsViewModel::class.java).also { settingsVM ->
             setupSettingsViewModel(view, settingsVM)
         }
         return view
