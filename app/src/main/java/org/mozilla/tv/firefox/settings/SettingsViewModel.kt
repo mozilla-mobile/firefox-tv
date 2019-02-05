@@ -3,7 +3,6 @@ package org.mozilla.tv.firefox.settings
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.content.Context
 import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.framework.FrameworkRepo
 import org.mozilla.tv.firefox.session.SessionRepo
@@ -25,8 +24,8 @@ class SettingsViewModel(
         settingsRepo.setDataCollectionEnabled(toEnable)
     }
 
-    fun clearBrowsingData(context: Context, engineViewCache: EngineViewCache) {
-        sessionRepo.clearBrowsingData(context, engineViewCache)
+    fun clearBrowsingData(engineViewCache: EngineViewCache) {
+        sessionRepo.clearBrowsingData(engineViewCache)
         _events.value = Consumable.from(SettingsFragment.Action.SESSION_CLEARED)
     }
 }
