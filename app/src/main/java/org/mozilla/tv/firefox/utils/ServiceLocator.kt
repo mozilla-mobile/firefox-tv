@@ -13,7 +13,7 @@ import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ValidatedIntentData
-import org.mozilla.tv.firefox.ViewModelFactory
+import org.mozilla.tv.firefox.architecture.ViewModelFactory
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.experiments.FretboardProvider
