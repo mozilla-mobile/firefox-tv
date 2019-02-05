@@ -8,6 +8,7 @@ import android.content.Context
 import mozilla.components.browser.errorpages.ErrorType
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.request.RequestInterceptor
+import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.utils.URLs
 
 /**
@@ -28,6 +29,12 @@ class CustomContentRequestInterceptor(
 
             URLs.URL_ABOUT -> RequestInterceptor.InterceptionResponse.Content(
                 LocalizedContent.generateAboutPage(context))
+
+            URLs.URL_GPL -> RequestInterceptor.InterceptionResponse.Content(
+                LocalizedContent.generatePage(context, R.raw.gpl))
+
+            URLs.URL_LICENSES -> RequestInterceptor.InterceptionResponse.Content(
+                LocalizedContent.generatePage(context, R.raw.licenses))
 
             else -> null
         }

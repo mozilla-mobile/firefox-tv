@@ -39,9 +39,7 @@ object LocalizedContent {
         val appName = context.resources.getString(R.string.app_name)
         val mplUrl = "https://www.mozilla.org/en-US/MPL/"
         val trademarkPolicyUrl = "https://www.mozilla.org/foundation/trademarks/policy/"
-        val gplUrl = "gpl.html"
         val trackingProtectionUrl = "https://wiki.mozilla.org/Security/Tracking_protection#Lists"
-        val licensesUrl = "licenses.html"
 
         val yourRights = resources.getString(R.string.your_rights)
         substitutionMap["%your-rights%"] = yourRights
@@ -55,10 +53,10 @@ object LocalizedContent {
         val content3 = resources.getString(R.string.your_rights_content3, appName, trademarkPolicyUrl)
         substitutionMap["%your-rights-content3%"] = content3
 
-        val content4 = resources.getString(R.string.your_rights_content4, appName, licensesUrl)
+        val content4 = resources.getString(R.string.your_rights_content4, appName, URLs.URL_LICENSES)
         substitutionMap["%your-rights-content4%"] = content4
 
-        val content5 = resources.getString(R.string.your_rights_content5, appName, gplUrl, trackingProtectionUrl)
+        val content5 = resources.getString(R.string.your_rights_content5, appName, URLs.URL_GPL, trackingProtectionUrl)
         substitutionMap["%your-rights-content5%"] = content5
 
         substitutionMap["%dir%"] = when (context.resources.configuration.layoutDirection) {
@@ -69,5 +67,9 @@ object LocalizedContent {
 
         // We use a file:/// base URL so that we have the right origin to load file:/// css and image resources.
         return HtmlLoader.loadResourceFile(context, R.raw.about, substitutionMap)
+    }
+
+    fun generatePage(context: Context, page: Int): String {
+        return HtmlLoader.loadResourceFile(context, page, null)
     }
 }
