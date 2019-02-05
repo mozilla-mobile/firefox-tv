@@ -27,7 +27,8 @@ fun <T> MutableLiveData<T>.postIfNew(new: T) {
 
 object LiveDataCombiners {
 
-    // If more advanced versions of this are required, we should import RxJava instead of duplicating their effort
+    // If more advanced versions of this are required, we should import RxJava instead of duplicating their effort #1783
+    // Note: CursorViewModel.isEnabled combines 3 streams by calling this twice
     fun <T, U, R> combineLatest(
         source1: LiveData<T>,
         source2: LiveData<U>,

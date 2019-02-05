@@ -13,6 +13,7 @@ import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.navigationoverlay.ToolbarViewModel
 import org.mozilla.tv.firefox.settings.SettingsViewModel
 import org.mozilla.tv.firefox.utils.ServiceLocator
+import org.mozilla.tv.firefox.webrender.cursor.CursorViewModel
 
 /**
  * Used by [ViewModelProviders] to instantiate [ViewModel]s with constructor arguments.
@@ -30,20 +31,29 @@ class ViewModelFactory(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        println(app)
         return when (modelClass) {
             PinnedTileViewModel::class.java -> PinnedTileViewModel(serviceLocator.pinnedTileRepo) as T
+
             PocketViewModel::class.java -> PocketViewModel(
                 serviceLocator.pocketRepo,
                 serviceLocator.pocketRepoCache
             ) as T
+
             ToolbarViewModel::class.java -> ToolbarViewModel(
                 sessionRepo = serviceLocator.sessionRepo,
                 pinnedTileRepo = serviceLocator.pinnedTileRepo
             ) as T
+
             SettingsViewModel::class.java -> SettingsViewModel(
                     serviceLocator.settingsRepo,
                     serviceLocator.sessionRepo) as T
+
+            CursorViewModel::class.java -> CursorViewModel(
+                serviceLocator.frameworkRepo,
+                serviceLocator.screenController,
+                serviceLocator.sessionRepo
+            ) as T
+
         // This class needs to either return a ViewModel or throw, so we have no good way of silently handling
         // failures in production. However a failure could only occur if code requests a VM that we have not added
         // to this factory, so any problems should be caught in dev.
