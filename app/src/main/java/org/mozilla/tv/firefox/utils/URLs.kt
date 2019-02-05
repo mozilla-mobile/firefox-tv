@@ -15,5 +15,7 @@ object URLs {
 
     // Settings > About pages
     const val URL_ABOUT = "${APP_URL_PREFIX}about"
+    const val URL_GPL = "${APP_URL_PREFIX}gpl"
+    const val URL_LICENSES = "${APP_URL_PREFIX}licenses"
     const val PRIVACY_NOTICE_URL = "https://www.mozilla.org/privacy/firefox-fire-tv/"
 }
