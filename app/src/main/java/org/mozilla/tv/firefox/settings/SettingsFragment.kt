@@ -22,7 +22,6 @@ import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.URLs
-import org.mozilla.tv.firefox.webrender.LocalizedContent
 
 /** The settings for the app. */
 class SettingsFragment : Fragment() {
@@ -39,7 +38,7 @@ class SettingsFragment : Fragment() {
         view.ic_lock.setImageResource(R.drawable.mozac_ic_lock)
 
         view.aboutButton.setOnClickListener {
-            serviceLocator?.screenController?.showBrowserScreenForUrl(fragmentManager!!, LocalizedContent.URL_ABOUT)
+            serviceLocator?.screenController?.showBrowserScreenForUrl(fragmentManager!!, URLs.URL_ABOUT)
         }
         view.privacyNoticeButton.setOnClickListener {
             serviceLocator?.screenController?.showBrowserScreenForUrl(fragmentManager!!, URLs.PRIVACY_NOTICE_URL)
