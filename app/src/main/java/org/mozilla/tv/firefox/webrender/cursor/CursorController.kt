@@ -37,7 +37,7 @@ class CursorController private constructor(
     private val uiLifecycleCancelJob = Job()
 
     @Suppress("DEPRECATION") // We are transitioning to CursorViewModel
-    private val legacyViewModel = CursorLegacyViewModel(uiLifecycleCancelJob, onUpdate = { x, y, percentMaxScrollVel, framesPassed ->
+    private val legacyViewModel = LegacyCursorViewModel(uiLifecycleCancelJob, onUpdate = { x, y, percentMaxScrollVel, framesPassed ->
         view.updatePosition(x, y)
         scrollWebView(percentMaxScrollVel, framesPassed)
     }, simulateTouchEvent = { webRenderFragment.activity?.dispatchTouchEvent(it) })

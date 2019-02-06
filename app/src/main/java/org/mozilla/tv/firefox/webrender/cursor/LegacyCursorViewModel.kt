@@ -31,7 +31,7 @@ private const val DOWN_TIME_OFFSET_MILLIS = 100
 
 /**
  * A model to back the Cursor view; transition to [CursorViewModel], our MVVM reimplementation. The
- * CursorLegacyViewModel existed before the MVVM rearchitecture.
+ * LegacyCursorViewModel existed before the MVVM rearchitecture.
  *
  * It has the following responsibilities:
  * - Data: stores current cursor position, velocity, etc.
@@ -47,7 +47,7 @@ private const val DOWN_TIME_OFFSET_MILLIS = 100
  * @param simulateTouchEvent Takes the given touch event and simulates a touch to the screen.
  */
 @Deprecated("Transition to CursorViewModel")
-class CursorLegacyViewModel(
+class LegacyCursorViewModel(
     uiLifecycleCancelJob: Job,
     private val onUpdate: (x: Float, y: Float, percentMaxScrollVel: PointF, framesPassed: Float) -> Unit,
     private val simulateTouchEvent: (MotionEvent) -> Unit
