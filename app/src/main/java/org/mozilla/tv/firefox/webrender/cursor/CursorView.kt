@@ -22,7 +22,7 @@ private const val HIDE_ANIMATION_DURATION_MILLIS = 250L
 private val HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3)
 
 /**
- * A drawn Cursor: see [CursorLegacyViewModel] for responding to keys and setting position.
+ * A drawn Cursor: see [LegacyCursorViewModel] for responding to keys and setting position.
  * The cursor will hide itself when it hasn't received a location update recently.
  */
 class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(context, attrs) {
