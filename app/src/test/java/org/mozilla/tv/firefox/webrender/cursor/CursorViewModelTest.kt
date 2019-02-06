@@ -143,7 +143,7 @@ class CursorViewModelTest {
             .firstAndRest()
 
         // 1 event is emitted across all initial values: no events are emitted until all initial values are set.
-        val emittedEventCount = 1 + + restUrls.size
+        val emittedEventCount = 1 + restUrls.size
 
         viewModel.isEnabled.assertValueForEmissionCount(true, emittedEventCount) {
             isVoiceViewEnabled.value = false
