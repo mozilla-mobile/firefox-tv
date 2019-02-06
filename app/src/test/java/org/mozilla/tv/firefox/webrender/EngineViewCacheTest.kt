@@ -19,39 +19,39 @@ import org.mozilla.tv.firefox.session.SessionRepo
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class WebViewCacheTest {
+class EngineViewCacheTest {
 
-    private lateinit var webViewCache: WebViewCache
+    private lateinit var engineViewCache: EngineViewCache
 
     @Before
     fun setup() {
         // A fake user agent is required in order to instantiate WebRenderComponents.engine in a test
         SystemEngine.defaultUserAgent = "test-ua-string"
-        webViewCache = WebViewCache(mock(SessionRepo::class.java))
+        engineViewCache = EngineViewCache(mock(SessionRepo::class.java))
     }
 
     @Test
-    fun `WHEN getWebView is called multiple times THEN the same WebView is returned`() {
-        val webView = getWebView()
-        val message = "Expected saved webView to equal retrieved WebView"
-        assertTrue(message, webView === getWebView())
-        assertTrue(message, webView === getWebView())
-        assertTrue(message, webView === getWebView())
+    fun `WHEN getEngineView is called multiple times THEN the same EngineView is returned`() {
+        val engineView = getEngineView()
+        val message = "Expected saved engineView to equal retrieved EngineView"
+        assertTrue(message, engineView === getEngineView())
+        assertTrue(message, engineView === getEngineView())
+        assertTrue(message, engineView === getEngineView())
     }
 
     @Test
-    fun `GIVEN cached WebView has a parent WHEN WebView is returned THEN WebView should be removed from parent`() {
+    fun `GIVEN cached EngineView has a parent WHEN EngineView is returned THEN EngineView should be removed from parent`() {
         // Setup
-        val webView = getWebView()
-        assertEquals(null, webView.parent)
+        val engineView = getEngineView()
+        assertEquals(null, engineView.parent)
         val parent = FrameLayout(ApplicationProvider.getApplicationContext())
-        parent.addView(webView)
-        assertEquals(parent, webView.parent)
+        parent.addView(engineView)
+        assertEquals(parent, engineView.parent)
 
         // Test
-        assertEquals(null, getWebView().parent)
+        assertEquals(null, getEngineView().parent)
     }
 
-    private fun getWebView(): SystemEngineView =
-            webViewCache.getWebView(ApplicationProvider.getApplicationContext(), mock(AttributeSet::class.java)) {}
+    private fun getEngineView(): SystemEngineView =
+            engineViewCache.getEngineView(ApplicationProvider.getApplicationContext(), mock(AttributeSet::class.java)) {}
 }
