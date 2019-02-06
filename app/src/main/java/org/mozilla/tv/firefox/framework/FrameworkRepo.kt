@@ -16,10 +16,19 @@ import android.view.accessibility.AccessibilityManager
  */
 class FrameworkRepo @VisibleForTesting(otherwise = PRIVATE) constructor() {
 
+    private var wasInitCalled = false
+
     private val _isVoiceViewEnabled = MutableLiveData<Boolean>()
     val isVoiceViewEnabled: LiveData<Boolean> = _isVoiceViewEnabled
 
+    /**
+     * Initializes this repository.
+     * @throws IllegalStateException when called twice.
+     */
     fun init(accessibilityManager: AccessibilityManager) {
+        if (wasInitCalled) throw IllegalStateException("FrameworkRepo.init unexpectedly called twice")
+        wasInitCalled = true
+
         // We call the listener directly to set the initial state.
         val touchExplorationStateChangeListener = TouchExplorationStateChangeListener()
         accessibilityManager.addTouchExplorationStateChangeListener(touchExplorationStateChangeListener)
