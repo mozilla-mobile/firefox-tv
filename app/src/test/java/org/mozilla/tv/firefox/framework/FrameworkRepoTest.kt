@@ -14,6 +14,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.any
 import org.mockito.Mockito.mock
 import org.mozilla.tv.firefox.helpers.ext.assertValues
+import java.lang.IllegalStateException
 import kotlin.properties.Delegates
 
 class FrameworkRepoTest {
@@ -21,17 +22,22 @@ class FrameworkRepoTest {
     @get:Rule val instantTaskRule = InstantTaskExecutorRule() // necessary for LiveData tests.
 
     private lateinit var repo: FrameworkRepo
+
+    // Different variants for different tests.
+    private lateinit var accessibilityManager: AccessibilityManager
     private lateinit var touchExplorationA11yManagerWrapper: MockTouchExplorationA11yManagerWrapper
 
     @Before
     fun setUp() {
         repo = FrameworkRepo()
+
+        accessibilityManager = mock(AccessibilityManager::class.java)
         touchExplorationA11yManagerWrapper = MockTouchExplorationA11yManagerWrapper()
     }
 
     @Test
     fun `GIVEN the framework has voice view disabled WHEN init is called THEN the voice view is disabled`() {
-        val accessibilityManager = touchExplorationA11yManagerWrapper.mock.also {
+        accessibilityManager.also {
             `when`(it.isTouchExplorationEnabled).thenReturn(false)
         }
 
@@ -42,7 +48,7 @@ class FrameworkRepoTest {
 
     @Test
     fun `GIVEN the framework has voice view enabled WHEN init is called THEN the voice view is enabled`() {
-        val accessibilityManager = touchExplorationA11yManagerWrapper.mock.also {
+        accessibilityManager.also {
             `when`(it.isTouchExplorationEnabled).thenReturn(true)
         }
 
@@ -69,6 +75,12 @@ class FrameworkRepoTest {
         repo.isVoiceViewEnabled.assertValues(defaultValue, true) {
             touchExplorationA11yManagerWrapper.isTouchExplorationStateEnabled = true
         }
+    }
+
+    @Test(expected = IllegalStateException::class)
+    fun `WHEN init is called twice THEN an exception is thrown`() {
+        repo.init(accessibilityManager)
+        repo.init(accessibilityManager)
     }
 }
 
