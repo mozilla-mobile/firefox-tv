@@ -7,59 +7,96 @@ package org.mozilla.tv.firefox.framework
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.view.accessibility.AccessibilityManager
 import android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.any
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.ext.assertValues
+import kotlin.properties.Delegates
 
-@RunWith(RobolectricTestRunner::class)
 class FrameworkRepoTest {
 
     @get:Rule val instantTaskRule = InstantTaskExecutorRule() // necessary for LiveData tests.
 
     private lateinit var repo: FrameworkRepo
+    private lateinit var touchExplorationA11yManagerWrapper: MockTouchExplorationA11yManagerWrapper
 
     @Before
     fun setUp() {
         repo = FrameworkRepo()
+        touchExplorationA11yManagerWrapper = MockTouchExplorationA11yManagerWrapper()
     }
 
     @Test
-    fun `WHEN init is called THEN a touch exploration state change listener is added`() {
-        val a11yManager = mock(AccessibilityManager::class.java)
-        repo.init(a11yManager)
-        verify(a11yManager, times(1)).addTouchExplorationStateChangeListener(any(TouchExplorationStateChangeListener::class.java))
+    fun `GIVEN the framework has voice view disabled WHEN init is called THEN the voice view is disabled`() {
+        val accessibilityManager = touchExplorationA11yManagerWrapper.mock.also {
+            `when`(it.isTouchExplorationEnabled).thenReturn(false)
+        }
+
+        repo.isVoiceViewEnabled.assertValues(false) {
+            repo.init(accessibilityManager)
+        }
     }
 
     @Test
-    fun `WHEN init is called THEN an initial touch exploration state is set from the accessibility manager`() {
-        val a11yManager = mock(AccessibilityManager::class.java)
-        `when`(a11yManager.isTouchExplorationEnabled).thenReturn(true)
-        repo.init(a11yManager)
-        assertTrue(repo.isVoiceViewEnabled.value!!)
+    fun `GIVEN the framework has voice view enabled WHEN init is called THEN the voice view is enabled`() {
+        val accessibilityManager = touchExplorationA11yManagerWrapper.mock.also {
+            `when`(it.isTouchExplorationEnabled).thenReturn(true)
+        }
 
-        `when`(a11yManager.isTouchExplorationEnabled).thenReturn(false)
-        repo.init(a11yManager)
-        assertFalse(repo.isVoiceViewEnabled.value!!)
+        repo.isVoiceViewEnabled.assertValues(true) {
+            repo.init(accessibilityManager)
+        }
     }
 
     @Test
-    fun `WHEN touch exploration state changes to false THEN voice view is disabled`() {
-        repo.touchExplorationStateChangeListener.onTouchExplorationStateChanged(false)
-        repo.isVoiceViewEnabled.observeForever { assertFalse(it!!) }
+    fun `GIVEN init is called WHEN the framework emits touch exploration disabled THEN voice view is disabled`() {
+        repo.init(touchExplorationA11yManagerWrapper.mock)
+
+        val defaultValue = touchExplorationA11yManagerWrapper.isTouchExplorationStateEnabled
+        repo.isVoiceViewEnabled.assertValues(defaultValue, false) {
+            touchExplorationA11yManagerWrapper.isTouchExplorationStateEnabled = false
+        }
     }
 
     @Test
-    fun `WHEN touch exploration state changes to true THEN voice view is enabled`() {
-        repo.touchExplorationStateChangeListener.onTouchExplorationStateChanged(true)
-        repo.isVoiceViewEnabled.observeForever { assertTrue(it!!) }
+    fun `GIVEN init is called WHEN the framework emits touch exploration enabled THEN voice view is enabled`() {
+        repo.init(touchExplorationA11yManagerWrapper.mock)
+
+        val defaultValue = touchExplorationA11yManagerWrapper.isTouchExplorationStateEnabled
+        repo.isVoiceViewEnabled.assertValues(defaultValue, true) {
+            touchExplorationA11yManagerWrapper.isTouchExplorationStateEnabled = true
+        }
+    }
+}
+
+/**
+ * A wrapper to interact with an underlying mock [AccessibilityManager] instance that supports
+ * [AccessibilityManager.addTouchExplorationStateChangeListener].
+ *
+ * It is necessary to write our own implementation because the Robolectric shadows do not support
+ * [TouchExplorationStateChangeListener]s.
+ *
+ * Note that this does not recreate [AccessibilityManager.isEnabled] functionality:
+ * [AccessibilityManager.isTouchExplorationEnabled] and friends are derived from that value so the application
+ * never checks it and we don't need to model it either.
+ */
+private class MockTouchExplorationA11yManagerWrapper {
+
+    val mock: AccessibilityManager = mock(AccessibilityManager::class.java).also {
+        `when`(it.addTouchExplorationStateChangeListener(any())).then { invocationOnMock ->
+            val listener = invocationOnMock.getArgument<TouchExplorationStateChangeListener>(0)
+            touchExplorationStateChangeListeners.add(listener)
+        }
+    }
+
+    private val touchExplorationStateChangeListeners = mutableListOf<TouchExplorationStateChangeListener>()
+
+    var isTouchExplorationStateEnabled by Delegates.observable(mock.isTouchExplorationEnabled) { _, _, isTouchExplorationStateEnabled ->
+        touchExplorationStateChangeListeners.forEach {
+            it.onTouchExplorationStateChanged(isTouchExplorationStateEnabled)
+        }
     }
 }

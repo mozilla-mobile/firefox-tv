@@ -19,16 +19,14 @@ class FrameworkRepo @VisibleForTesting(otherwise = PRIVATE) constructor() {
     private val _isVoiceViewEnabled = MutableLiveData<Boolean>()
     val isVoiceViewEnabled: LiveData<Boolean> = _isVoiceViewEnabled
 
-    @VisibleForTesting(otherwise = PRIVATE) val touchExplorationStateChangeListener = TouchExplorationStateChangeListener()
-
     fun init(accessibilityManager: AccessibilityManager) {
         // We call the listener directly to set the initial state.
+        val touchExplorationStateChangeListener = TouchExplorationStateChangeListener()
         accessibilityManager.addTouchExplorationStateChangeListener(touchExplorationStateChangeListener)
         touchExplorationStateChangeListener.onTouchExplorationStateChanged(accessibilityManager.isTouchExplorationEnabled)
     }
 
-    @VisibleForTesting(otherwise = PRIVATE)
-    inner class TouchExplorationStateChangeListener : AccessibilityManager.TouchExplorationStateChangeListener {
+    private inner class TouchExplorationStateChangeListener : AccessibilityManager.TouchExplorationStateChangeListener {
         @UiThread // for simplicity: listener should be called from UI thread anyway.
         override fun onTouchExplorationStateChanged(isEnabled: Boolean) {
             _isVoiceViewEnabled.value = isEnabled // Touch exploration state == VoiceView.
