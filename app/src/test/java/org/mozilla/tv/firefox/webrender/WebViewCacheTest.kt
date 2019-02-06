@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox.webrender
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.test.core.app.ApplicationProvider
+import mozilla.components.browser.engine.system.SystemEngine
 import mozilla.components.browser.engine.system.SystemEngineView
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -24,6 +25,8 @@ class WebViewCacheTest {
 
     @Before
     fun setup() {
+        // A fake user agent is required in order to instantiate WebRenderComponents.engine in a test
+        SystemEngine.defaultUserAgent = "test-ua-string"
         webViewCache = WebViewCache(mock(SessionRepo::class.java))
     }
 
