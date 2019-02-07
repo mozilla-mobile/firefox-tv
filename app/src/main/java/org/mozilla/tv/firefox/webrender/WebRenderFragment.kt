@@ -14,8 +14,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.webkit.ValueCallback
-import android.webkit.WebView
 import kotlinx.android.synthetic.main.fragment_browser.view.*
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
@@ -26,12 +24,10 @@ import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.MediaSessionHolder
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
-import org.mozilla.tv.firefox.ext.evalJS
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.pauseAllVideoPlaybacks
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.serviceLocator
-import org.mozilla.tv.firefox.ext.toList
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
@@ -209,38 +205,10 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         if (session.isYoutubeTV &&
                 event.keyCode == KeyEvent.KEYCODE_BACK) {
-            val escKeyEvent = KeyEvent(event.action, KeyEvent.KEYCODE_ESCAPE)
-
-            /**
-             * If YouTube guide-list element is focused:
-             * - Suppress the DOWN,BACK key event
-             * - Change the UP,BACK key event to go back in history before YouTube
-             * Else:
-             * - Dispatch ESC key event
-             */
-            val jsCallback = ValueCallback<String> {
-                if (it == "true") {
-                    if (event.action == KeyEvent.ACTION_DOWN) Unit
-                    else goBackBeforeYouTube()
-                } else (activity as MainActivity).dispatchKeyEvent(escKeyEvent)
-            }
-            // This will return true if the currently focused YouTube element is a button in the left sidebar, false otherwise
-            engineView?.evalJS("""
-                (function () {
-                    return document.activeElement.parentElement.parentElement.id === 'guide-list';
-                })();
-                """,
-                    jsCallback)
+            val youtubeBackHandler = YouTubeBackHandler(event, engineView, activity as MainActivity)
+            youtubeBackHandler.handleBackClick()
             return true
         }
         return false
-    }
-
-    private fun goBackBeforeYouTube() {
-        val webView = (engineView as ViewGroup).getChildAt(0) as WebView
-        val backForwardUrlList = webView.copyBackForwardList().toList().map { it.originalUrl }
-        val youtubeIndex = backForwardUrlList.lastIndexOf(URLs.YOUTUBE_TILE_URL)
-        val goBackSteps = backForwardUrlList.size - youtubeIndex
-        webView.goBackOrForward(-goBackSteps)
     }
 }
