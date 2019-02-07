@@ -58,22 +58,18 @@ class FrameworkRepoTest {
     }
 
     @Test
-    fun `GIVEN init is called WHEN the framework emits touch exploration disabled THEN voice view is disabled`() {
+    fun `GIVEN init is called WHEN the framework updates touch exploration values THEN voice view enabled state is updated`() {
         repo.init(touchExplorationA11yManagerWrapper.mock)
 
+        // To ensure the emission change logic is working, we make sure to test
+        // in both directions irrespective of the initial value.
         val defaultValue = touchExplorationA11yManagerWrapper.isTouchExplorationStateEnabled
-        repo.isVoiceViewEnabled.assertValues(defaultValue, false) {
-            touchExplorationA11yManagerWrapper.isTouchExplorationStateEnabled = false
-        }
-    }
-
-    @Test
-    fun `GIVEN init is called WHEN the framework emits touch exploration enabled THEN voice view is enabled`() {
-        repo.init(touchExplorationA11yManagerWrapper.mock)
-
-        val defaultValue = touchExplorationA11yManagerWrapper.isTouchExplorationStateEnabled
-        repo.isVoiceViewEnabled.assertValues(defaultValue, true) {
-            touchExplorationA11yManagerWrapper.isTouchExplorationStateEnabled = true
+        repo.isVoiceViewEnabled.assertValues(defaultValue, false, true, false) {
+            with(touchExplorationA11yManagerWrapper) {
+                isTouchExplorationStateEnabled = false
+                isTouchExplorationStateEnabled = true
+                isTouchExplorationStateEnabled = false
+            }
         }
     }
 
