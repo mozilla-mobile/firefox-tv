@@ -5,14 +5,11 @@
 package org.mozilla.tv.firefox.webrender
 
 import android.view.KeyEvent
-import android.view.ViewGroup
 import android.webkit.ValueCallback
-import android.webkit.WebView
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.ext.evalJS
-import org.mozilla.tv.firefox.ext.toList
-import org.mozilla.tv.firefox.utils.URLs
+import org.mozilla.tv.firefox.ext.handleYoutubeBack
 
 /**
  * youtube/tv does not handle their back stack correctly. Going back in history visits redirects which do not alter the UI.
@@ -51,10 +48,6 @@ class YouTubeBackHandler(event: KeyEvent, engineView: EngineView?, activity: Mai
     }
 
     private fun goBackBeforeYouTube() {
-        val webView = (engineView as ViewGroup).getChildAt(0) as WebView
-        val backForwardUrlList = webView.copyBackForwardList().toList().map { it.originalUrl }
-        val youtubeIndex = backForwardUrlList.lastIndexOf(URLs.YOUTUBE_TILE_URL)
-        val goBackSteps = backForwardUrlList.size - youtubeIndex
-        webView.goBackOrForward(-goBackSteps)
+        engineView?.handleYoutubeBack()
     }
 }

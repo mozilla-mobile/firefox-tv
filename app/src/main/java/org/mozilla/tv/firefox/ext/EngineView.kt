@@ -15,6 +15,7 @@ import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.webrender.FocusedDOMElementCache
 import org.mozilla.tv.firefox.utils.BuildConstants
+import org.mozilla.tv.firefox.utils.URLs
 import java.util.WeakHashMap
 
 // Extension methods on the EngineView class. This is used for additional features that are not part
@@ -97,6 +98,13 @@ fun EngineView.scrollByClamped(vx: Int, vy: Int) {
 
         scrollBy(scrollX, scrollY)
     }
+}
+
+fun EngineView.handleYoutubeBack() {
+    val backForwardUrlList = webView!!.copyBackForwardList().toList().map { it.originalUrl }
+    val youtubeIndex = backForwardUrlList.lastIndexOf(URLs.YOUTUBE_TILE_URL)
+    val goBackSteps = backForwardUrlList.size - youtubeIndex
+    webView!!.goBackOrForward(-goBackSteps)
 }
 
 val EngineView.focusedDOMElement: FocusedDOMElementCache
