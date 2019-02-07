@@ -36,10 +36,10 @@ we're available Monday-Friday, GMT and PST working hours.
 2. Import the project into Android Studio or build on the command line:
 
   ```shell
-  ./gradlew clean app:assembledebug
+  ./gradlew clean app:assembleSystemDebug
   ```
 
-3. Make sure to select the right build variant in Android Studio: **debug**
+3. Make sure to select the right build variant in Android Studio: **systemDebug**
 
 ### Running
 It is recommended to test directly on a Fire TV: see the [developer guide][dev guide] for more info.
@@ -60,7 +60,7 @@ simulate a menu button press.
 ### Unit Testing
 To run a reasonable subset of the unit tests, we recommend:
 ```sh
-./gradlew testDebug
+./gradlew testSystemDebug
 ```
 
 To generate code coverage reports, run:
@@ -99,14 +99,14 @@ git push <remote> --no-verify
 ### Building release builds
 Release builds can be built in Android Studio or via the command line:
 ```sh
-./gradlew assembleRelease # unsigned build
+./gradlew assembleSystemRelease # unsigned build
 ```
 
 These builds will run validation checks that the build is ready for a production release. If you
 do not want to run these checks (e.g. building release builds for local debugging), you can add this
 argument:
 ```sh
-./gradlew assembleRelease -PnoValidate
+./gradlew assembleSystemRelease -PnoValidate
 ```
 
 #### API keys
