@@ -13,7 +13,7 @@ import taskcluster
 
 # Get JSON data from taskcluster secrets service
 secrets = taskcluster.Secrets({'baseUrl': 'http://taskcluster/secrets/v1'})
-data = secrets.get('project/firefox-tv/tokens')
+data = secrets.get('project/mobile/firefox-tv/tokens')
 
 token_file_path = os.path.join(os.path.dirname(__file__), '../../.pocket_key_release')
 with open(token_file_path, 'w') as token_file:

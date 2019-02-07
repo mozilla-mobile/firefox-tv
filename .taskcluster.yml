@@ -109,7 +109,7 @@ tasks:
         events:
           - release
     scopes:
-      - "secrets:get:project/firefox-tv/tokens"
+      - "secrets:get:project/mobile/firefox-tv/tokens"
     payload:
       maxRunTime: 3600
       deadline: "{{ '2 hours' | $fromNow }}"
