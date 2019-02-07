@@ -4,22 +4,18 @@
 
 package org.mozilla.tv.firefox.ext
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.webkit.ValueCallback
-import android.webkit.WebView
-import mozilla.components.browser.engine.system.SystemEngineSession
-import mozilla.components.browser.session.SessionManager
+import android.widget.FrameLayout
 import mozilla.components.concept.engine.EngineView
+import org.mozilla.geckoview.GeckoView
 import org.mozilla.tv.firefox.webrender.FocusedDOMElementCache
-import org.mozilla.tv.firefox.utils.BuildConstants
-import org.mozilla.tv.firefox.utils.URLs
 import java.util.WeakHashMap
 
 // Extension methods on the EngineView class. This is used for additional features that are not part
-// of the upstream browser-engine(-system) component yet.
+// of the upstream browser-engine(-gecko) component yet.
 
 private val uiHandler = Handler(Looper.getMainLooper())
 
@@ -30,15 +26,15 @@ fun EngineView.setupForApp() {
     // Also increase text size to fill the viewport (this mirrors the behaviour of Firefox,
     // Chrome does this in the current Chrome Dev, but not Chrome release).
     // TODO #33: TEXT_AUTOSIZING does not exist in AmazonWebSettings
-    // webView.settings.setLayoutAlgorithm(AmazonWebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
+    // geckoView.settings.setLayoutAlgorithm(AmazonWebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
 
-    if (BuildConstants.isDevBuild) {
-        WebView.setWebContentsDebuggingEnabled(true)
-    }
+//    if (BuildConstants.isDevBuild) {
+//        GeckoView.setWebContentsDebuggingEnabled(true)
+//    }
 
-    // WebView can be null temporarily after clearData(); however, activity.recreate() would
-    // instantiate a new WebView instance
-    webView?.setOnFocusChangeListener { _, hasFocus ->
+    // GeckoView can be null temporarily after clearData(); however, activity.recreate() would
+    // instantiate a new GeckoView instance
+    geckoView?.setOnFocusChangeListener { _, hasFocus ->
         if (!hasFocus) {
             // For why we're modifying the focusedDOMElement, see FocusedDOMElementCacheInterface.
             //
@@ -54,14 +50,8 @@ fun EngineView.setupForApp() {
     }
 }
 
-/**
- * For certain functionality Firefox for Fire TV needs to inject JavaScript into the web content. The engine component
- * does not have such an API yet. It's questionable whether the component will get this raw API as GeckoView doesn't
- * offer a matching API (WebExtensions are likely going to be the preferred way). We may move the functionality that
- * requires JS injection to browser-engine-system.
- */
 fun EngineView.evalJS(javascript: String, callback: ValueCallback<String>? = null) {
-    webView?.evaluateJavascript(javascript, callback)
+//    geckoView?.evaluateJavascript(javascript, callback)
 }
 
 fun EngineView.pauseAllVideoPlaybacks() {
@@ -71,20 +61,16 @@ fun EngineView.pauseAllVideoPlaybacks() {
 /**
  * This functionality is not supported by browser-engine-system yet. See [EngineView.evalJS] comment for details.
  */
-@SuppressLint("JavascriptInterface")
 fun EngineView.addJavascriptInterface(obj: Any, name: String) {
-    webView?.addJavascriptInterface(obj, name)
+//    geckoView?.addJavascriptInterface(obj, name)
 }
 
-/**
- * This functionality is not supported by browser-engine-system yet. See [EngineView.evalJS] comment for details.
- */
 fun EngineView.removeJavascriptInterface(interfaceName: String) {
-    webView?.removeJavascriptInterface(interfaceName)
+//    geckoView?.removeJavascriptInterface(interfaceName)
 }
 
 fun EngineView.scrollByClamped(vx: Int, vy: Int) {
-    webView?.apply {
+    geckoView?.apply {
         fun clampScroll(scroll: Int, canScroll: (direction: Int) -> Boolean) = if (scroll != 0 && canScroll(scroll)) {
             scroll
         } else {
@@ -101,10 +87,10 @@ fun EngineView.scrollByClamped(vx: Int, vy: Int) {
 }
 
 fun EngineView.handleYoutubeBack() {
-    val backForwardUrlList = webView!!.copyBackForwardList().toList().map { it.originalUrl }
-    val youtubeIndex = backForwardUrlList.lastIndexOf(URLs.YOUTUBE_TILE_URL)
-    val goBackSteps = backForwardUrlList.size - youtubeIndex
-    webView!!.goBackOrForward(-goBackSteps)
+//    val backForwardUrlList = webView!!.copyBackForwardList().toList().map { it.originalUrl }
+//    val youtubeIndex = backForwardUrlList.lastIndexOf(URLs.YOUTUBE_TILE_URL)
+//    val goBackSteps = backForwardUrlList.size - youtubeIndex
+//    webView!!.goBackOrForward(-goBackSteps)
 }
 
 val EngineView.focusedDOMElement: FocusedDOMElementCache
@@ -112,31 +98,32 @@ val EngineView.focusedDOMElement: FocusedDOMElementCache
 
 fun EngineView.saveState(): Bundle {
     val bundle = Bundle()
-    getOrPutExtension(this).webView?.saveState(bundle)
+//    getOrPutExtension(this).geckoView?.saveState(bundle)
     return bundle
 }
 
 fun EngineView.restoreState(state: Bundle) {
-    getOrPutExtension(this).webView?.restoreState(state)
+//    getOrPutExtension(this).geckoView?.restoreState(state)
 }
 
 fun EngineView.canGoBackTwice(): Boolean {
-    return getOrPutExtension(this).webView?.canGoBackOrForward(-2) ?: false
+//    return getOrPutExtension(this).geckoView?.canGoBackOrForward(-2) ?: false
+    return false
 }
 
 fun EngineView.onPauseIfNotNull() {
-    if (webView != null)
+    if (geckoView != null)
         this.onPause()
 }
 
 fun EngineView.onResumeIfNotNull() {
-    if (webView != null)
+    if (geckoView != null)
         this.onResume()
 }
 
 // This method is only for adding extension methods here (as a workaround). Do not expose WebView to the app.
-private val EngineView.webView: WebView?
-    get() = getOrPutExtension(this).webView
+private val EngineView.geckoView: GeckoView?
+    get() = getOrPutExtension(this).geckoView
 
 private val extensions = WeakHashMap<EngineView, EngineViewExtension>()
 
@@ -155,19 +142,10 @@ private fun getOrPutExtension(engineView: EngineView): EngineViewExtension {
 private class EngineViewExtension(private val engineView: EngineView) {
     val domElementCache: FocusedDOMElementCache = FocusedDOMElementCache(engineView)
 
-    private val sessionManager: SessionManager = engineView.asView().context.webRenderComponents.sessionManager
-
     /**
      * Extract the wrapped WebView from the EngineSession. This is a temporary workaround until all required functionality has
      * been implemented in the upstream component.
      */
-    val webView: WebView?
-        get() =
-            if (sessionManager.size > 0) {
-                (sessionManager.getOrCreateEngineSession() as SystemEngineSession).webView
-            } else {
-                // After clearing all session we temporarily don't have a selected session
-                // and [SessionRepo.clear()] destroyed the existing webView - see [SystemEngineView.onDestroy()]
-                null
-            }
+    val geckoView: GeckoView?
+        get() = (engineView.asView() as FrameLayout).getChildAt(0) as GeckoView
 }

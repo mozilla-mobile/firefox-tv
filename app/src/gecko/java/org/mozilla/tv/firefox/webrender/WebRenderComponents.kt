@@ -5,7 +5,7 @@
 package org.mozilla.tv.firefox.webrender
 
 import android.content.Context
-import mozilla.components.browser.engine.system.SystemEngine
+import mozilla.components.browser.engine.gecko.GeckoEngine
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.DefaultSettings
 import mozilla.components.concept.engine.Engine
@@ -24,7 +24,7 @@ class WebRenderComponents(applicationContext: Context, systemUserAgent: String) 
                 systemUserAgent = systemUserAgent,
                 appName = applicationContext.resources.getString(R.string.useragent_appname))
 
-        SystemEngine(applicationContext, DefaultSettings(
+        GeckoEngine(applicationContext, DefaultSettings(
                 trackingProtectionPolicy = Settings.getInstance(applicationContext).trackingProtectionPolicy,
                 requestInterceptor = CustomContentRequestInterceptor(applicationContext),
                 userAgentString = getUserAgent(),
