@@ -20,9 +20,9 @@ before_install:
   - touch local.properties
 
 script:
-  - ./gradlew clean assembleDebug
+  - ./gradlew clean assembleSystemDebug
   - echo "--" > .adjust_token
-  - ./gradlew -Pcoverage jacocoDebugTestReport
+  - ./gradlew -Pcoverage jacocoSystemDebugTestReport
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
