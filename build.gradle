@@ -23,6 +23,9 @@ buildscript {
 
     repositories {
         google()
+        maven {
+            url "https://maven.mozilla.org/maven2"
+        }
         jcenter()
     }
 
