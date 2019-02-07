@@ -19,7 +19,7 @@
         pmd \
         detekt \
         assembleAndroidTest \
-        testdebug
+        testSystemDebug
 
 # Tasks omitted because they take a long time to run:
 # - unit test on all variants
