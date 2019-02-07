@@ -129,7 +129,10 @@ class ScreenController {
             // here is safer than just before navigation. Most browsers don't show the URL
             // bar while fullscreen is active and so we are aligning with that strategy and exiting
             // fullscreen before any navigation options on the overlay are made available to the user
-            overlayFragment.context?.serviceLocator?.sessionRepo?.exitFullScreenIfPossible()
+            val fullScreenExited = overlayFragment.context?.serviceLocator?.sessionRepo?.exitFullScreenIfPossible()
+            if (fullScreenExited == true) {
+                TelemetryIntegration.INSTANCE.fullScreenVideoProgrammaticallyClosed()
+            }
 
             transaction.show(overlayFragment)
                 // TODO note that hiding WebRenderFragment will not be possible under a split overlay

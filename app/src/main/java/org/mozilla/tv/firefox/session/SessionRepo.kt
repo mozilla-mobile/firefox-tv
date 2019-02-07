@@ -116,12 +116,17 @@ class SessionRepo(
         engineViewCache.doNotPersist()
     }
 
-    fun exitFullScreenIfPossible() {
+    /**
+     * Returns true if fullscreen was exited
+     */
+    fun exitFullScreenIfPossible(): Boolean {
         if (session?.fullScreenMode == true) {
             // Changing the URL while full-screened can lead to unstable behavior
             // (see #1224 and #1719), so we always attempt to exit full-screen
             // before doing so
             sessionManager.getEngineSession()?.exitFullScreenMode()
+            return true
         }
+        return false
     }
 }
