@@ -15,8 +15,6 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import mozilla.components.browser.engine.gecko.GeckoEngineView
 import org.mozilla.tv.firefox.ext.canGoBackTwice
-import org.mozilla.tv.firefox.ext.restoreState
-import org.mozilla.tv.firefox.ext.saveState
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.session.SessionRepo
 
@@ -67,7 +65,6 @@ class EngineViewCache(private val sessionRepo: SessionRepo) : LifecycleObserver 
             // This will need to be updated for GeckoView.
             val engineView = context.webRenderComponents.engine.createView(context, attrs) as GeckoEngineView
             return engineView.apply {
-                state?.let { this.restoreState(it) }
                 initialize()
             }.also {
                 cachedView = it
@@ -86,11 +83,6 @@ class EngineViewCache(private val sessionRepo: SessionRepo) : LifecycleObserver 
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     private fun onDestroy() {
-        state = when (shouldPersist) {
-            true -> cachedView?.saveState()
-            false -> null
-        }
-
         clear()
     }
 

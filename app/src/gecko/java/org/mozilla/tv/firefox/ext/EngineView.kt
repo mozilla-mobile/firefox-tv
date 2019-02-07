@@ -4,7 +4,6 @@
 
 package org.mozilla.tv.firefox.ext
 
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.webkit.ValueCallback
@@ -51,7 +50,8 @@ fun EngineView.setupForApp() {
 }
 
 fun EngineView.evalJS(javascript: String, callback: ValueCallback<String>? = null) {
-//    geckoView?.evaluateJavascript(javascript, callback)
+    geckoView?.session?.loadUri("javascript:$javascript")
+    callback.forceExhaustive
 }
 
 fun EngineView.pauseAllVideoPlaybacks() {
@@ -59,14 +59,14 @@ fun EngineView.pauseAllVideoPlaybacks() {
 }
 
 /**
- * This functionality is not supported by browser-engine-system yet. See [EngineView.evalJS] comment for details.
+ * This functionality is not supported by browser-engine-gecko yet. See [EngineView.evalJS] comment for details.
  */
 fun EngineView.addJavascriptInterface(obj: Any, name: String) {
-//    geckoView?.addJavascriptInterface(obj, name)
+    println("TODO: require media interface from platform team $obj $name")
 }
 
 fun EngineView.removeJavascriptInterface(interfaceName: String) {
-//    geckoView?.removeJavascriptInterface(interfaceName)
+    println("TODO: require media interface from platform team $interfaceName")
 }
 
 fun EngineView.scrollByClamped(vx: Int, vy: Int) {
@@ -96,15 +96,15 @@ fun EngineView.handleYoutubeBack() {
 val EngineView.focusedDOMElement: FocusedDOMElementCache
     get() = getOrPutExtension(this).domElementCache
 
-fun EngineView.saveState(): Bundle {
-    val bundle = Bundle()
-//    getOrPutExtension(this).geckoView?.saveState(bundle)
-    return bundle
-}
-
-fun EngineView.restoreState(state: Bundle) {
-//    getOrPutExtension(this).geckoView?.restoreState(state)
-}
+// fun EngineView.saveState(): Bundle {
+//     val bundle = Bundle()
+//     getOrPutExtension(this).geckoView?
+//     return bundle
+// }
+//
+// fun EngineView.restoreState(state: Bundle) {
+//     getOrPutExtension(this).geckoView?.restoreState(state)
+// }
 
 fun EngineView.canGoBackTwice(): Boolean {
 //    return getOrPutExtension(this).geckoView?.canGoBackOrForward(-2) ?: false
