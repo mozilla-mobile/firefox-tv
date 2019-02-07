@@ -14,7 +14,6 @@ import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition
 import org.mozilla.tv.firefox.ext.serviceLocator
-import org.mozilla.tv.firefox.ext.pauseAllVideoPlaybacks
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.settings.SettingsFragment
@@ -93,11 +92,6 @@ class ScreenController {
     }
 
     fun showSettingsScreen(fragmentManager: FragmentManager) {
-        /**
-         *  Pause all the videos when transitioning to [SettingsFragment] to mitigate possible memory
-         *  leak when clearing data. See [WebViewCache.clear] as well as #1720
-         */
-        fragmentManager.webRenderFragment().engineView?.pauseAllVideoPlaybacks()
         handleTransitionAndUpdateActiveScreen(fragmentManager, Transition.ADD_SETTINGS)
     }
 

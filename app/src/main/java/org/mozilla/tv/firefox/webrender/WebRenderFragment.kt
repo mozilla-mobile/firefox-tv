@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.webrender
 
 import android.app.Activity
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.annotation.UiThread
@@ -24,8 +25,10 @@ import mozilla.components.feature.session.SessionFeature
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.MediaSessionHolder
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.ext.evalJS
 import org.mozilla.tv.firefox.ext.isYoutubeTV
+import org.mozilla.tv.firefox.ext.pauseAllVideoPlaybacks
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.toList
@@ -129,6 +132,16 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             requireWebRenderComponents.sessionManager,
             requireWebRenderComponents.sessionUseCases,
             engineView)
+
+        /**
+         *  Pause all the videos when transitioning out of [WebRenderFragment] to mitigate possible
+         *  memory leak while clearing data. See [WebViewCache.clear] as well as #1720
+         */
+        serviceLocator?.screenController?.currentActiveScreen?.observe(viewLifecycleOwner, Observer {
+            if (it != ScreenControllerStateMachine.ActiveScreen.WEB_RENDER) {
+                engineView.pauseAllVideoPlaybacks()
+            }
+        })
     }
 
     override fun onStart() {
