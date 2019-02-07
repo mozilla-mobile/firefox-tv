@@ -15,6 +15,7 @@ import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.webrender.FocusedDOMElementCache
 import org.mozilla.tv.firefox.utils.BuildConstants
+import org.mozilla.tv.firefox.utils.URLs
 import java.util.WeakHashMap
 
 // Extension methods on the EngineView class. This is used for additional features that are not part
@@ -55,7 +56,7 @@ fun EngineView.setupForApp() {
 
 /**
  * For certain functionality Firefox for Fire TV needs to inject JavaScript into the web content. The engine component
- * does not have such an API yet. It's questionable whether the component will get this raw API as GeckoView doesn't
+ * does not have such an API yet. It's questionable whether the component will get this raw API as WebView doesn't
  * offer a matching API (WebExtensions are likely going to be the preferred way). We may move the functionality that
  * requires JS injection to browser-engine-system.
  */
@@ -93,6 +94,13 @@ fun EngineView.scrollByClamped(vx: Int, vy: Int) {
 
         scrollBy(scrollX, scrollY)
     }
+}
+
+fun EngineView.handleYoutubeBack() {
+    val backForwardUrlList = webView!!.copyBackForwardList().toList().map { it.originalUrl }
+    val youtubeIndex = backForwardUrlList.lastIndexOf(URLs.YOUTUBE_TILE_URL)
+    val goBackSteps = backForwardUrlList.size - youtubeIndex
+    webView!!.goBackOrForward(-goBackSteps)
 }
 
 val EngineView.focusedDOMElement: FocusedDOMElementCache
@@ -155,7 +163,7 @@ private class EngineViewExtension(private val engineView: EngineView) {
                 (sessionManager.getOrCreateEngineSession() as SystemEngineSession).webView
             } else {
                 // After clearing all session we temporarily don't have a selected session
-                // and [SessionRepo.clear()] destroyed the existing webView - see [SystemEngineView.onDestroy()]
+                // and [SessionRepo.clear()] destroyed the existing webview - see [SystemEngineView.onDestroy()]
                 null
             }
 }

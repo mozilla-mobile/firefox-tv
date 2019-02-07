@@ -13,7 +13,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
-import mozilla.components.browser.engine.system.SystemEngineView
+import mozilla.components.browser.engine.gecko.GeckoEngineView
 import org.mozilla.tv.firefox.ext.canGoBackTwice
 import org.mozilla.tv.firefox.ext.restoreState
 import org.mozilla.tv.firefox.ext.saveState
@@ -21,7 +21,7 @@ import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.session.SessionRepo
 
 /**
- * Caches a [SystemEngineView], which internally maintains a [WebView].
+ * Caches a [GeckoEngineView], which internally maintains a [WebView].
  *
  * This allows us to maintain [WebView] state when the view would otherwise
  * be destroyed
@@ -48,14 +48,14 @@ class EngineViewCache(private val sessionRepo: SessionRepo) : LifecycleObserver 
         private var state: Bundle? = null
     }
 
-    private var cachedView: SystemEngineView? = null
+    private var cachedView: GeckoEngineView? = null
     private var shouldPersist = true
 
     fun getEngineView(
         context: Context,
         attrs: AttributeSet,
-        initialize: SystemEngineView.() -> Unit
-    ): SystemEngineView {
+        initialize: GeckoEngineView.() -> Unit
+    ): GeckoEngineView {
         fun View?.removeFromParentIfAble() {
             // If the WebView has already been added to the view hierarchy, we
             // need to remove it from its parent before attempting to add it
@@ -63,9 +63,9 @@ class EngineViewCache(private val sessionRepo: SessionRepo) : LifecycleObserver 
             (this?.parent as? ViewGroup)?.removeView(cachedView)
         }
 
-        fun createAndCacheEngineView(): SystemEngineView {
+        fun createAndCacheEngineView(): GeckoEngineView {
             // This will need to be updated for GeckoView.
-            val engineView = context.webRenderComponents.engine.createView(context, attrs) as SystemEngineView
+            val engineView = context.webRenderComponents.engine.createView(context, attrs) as GeckoEngineView
             return engineView.apply {
                 state?.let { this.restoreState(it) }
                 initialize()
