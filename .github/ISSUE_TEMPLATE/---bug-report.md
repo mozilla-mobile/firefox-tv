@@ -13,4 +13,5 @@ label: "bug"
 
 ### Device information
 * Fire TV device: ?
-* Firefox version: ?
+* Latest affected Firefox version: ?
+* Earliest affected Firefox version: ?
