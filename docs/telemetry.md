@@ -51,11 +51,12 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 
 ### General
 
-| Event                                  | category   | method                | object       | value      | extras.    |
-|----------------------------------------|------------|-----------------------|--------------|------------|------------|
-| Settings: confirms clear data dialog   | action     | change                | setting      | clear_data |            |
-| Pocket video feed: unique videos clicked per session|aggregate|click        | pocket_video | `<int>`    |            |
-| App opened from view intent            | action     | view_intent           | app          |            |            |
+| Event                                                | category   | method                  | object            | value      | extras.    |
+|------------------------------------------------------|------------|-------------------------|-------------------|------------|------------|
+| Settings: confirms clear data dialog                 | action     | change                  | setting           | clear_data |            |
+| Pocket video feed: unique videos clicked per session | aggregate  | click                   | pocket_video      | `<int>`    |            |
+| App opened from view intent                          | action     | view_intent             | app               |            |            |
+| Opening the overlay forced a video out of fullscreen | action     | programmatically_closed | full_screen_video |            |            |
 
 (*) This event is sent at the end of every session.
 

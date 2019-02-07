@@ -72,6 +72,7 @@ open class TelemetryIntegration protected constructor(
         val IMPRESSION = "impression"
         val VIEW = "view"
         val FINISH = "finish"
+        val PROGRAMMATICALLY_CLOSED = "programmatically_closed"
     }
 
     private object Object {
@@ -87,6 +88,7 @@ open class TelemetryIntegration protected constructor(
         val MEDIA_SESSION = "media_session"
         val DESKTOP_MODE = "desktop_mode"
         val VIDEO_ID = "video_id"
+        val FULL_SCREEN_VIDEO = "full_screen_video"
     }
 
     internal object Value {
@@ -238,6 +240,10 @@ open class TelemetryIntegration protected constructor(
         TelemetryEvent.create(Category.ERROR, if (fromPage) Method.PAGE else Method.RESOURCE, Object.BROWSER)
                 .extra(Extra.ERROR_CODE, primaryErrorMessage)
                 .queue()
+    }
+
+    fun fullScreenVideoProgrammaticallyClosed() {
+        TelemetryEvent.create(Category.ACTION, Method.PROGRAMMATICALLY_CLOSED, Object.FULL_SCREEN_VIDEO).queue()
     }
 
     @UiThread // via TelemetryHomeTileUniqueClickPerSessionCounter
