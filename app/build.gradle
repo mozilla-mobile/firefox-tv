@@ -58,6 +58,18 @@ android {
         }
     }
 
+    flavorDimensions "engine"
+
+    productFlavors {
+        system {
+            dimension "engine"
+        }
+
+        gecko {
+            dimension "engine"
+        }
+    }
+
     testOptions {
         unitTests.includeAndroidResources true // for robolectric.
         execution 'ANDROID_TEST_ORCHESTRATOR'
@@ -83,6 +95,11 @@ android {
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     kotlinOptions.allWarningsAsErrors = true
+}
+
+configurations {
+    systemImplementation {}
+    geckoImplementation {}
 }
 
 dependencies {
@@ -116,13 +133,16 @@ dependencies {
     implementation "org.mozilla.components:browser-search:$moz_components_version"
     implementation "org.mozilla.components:browser-domains:$moz_components_version"
     implementation "org.mozilla.components:concept-engine:$moz_components_version"
-    implementation "org.mozilla.components:browser-engine-system:$moz_components_version"
     implementation "org.mozilla.components:service-telemetry:$moz_components_version"
     implementation "org.mozilla.components:ui-colors:$moz_components_version"
     implementation "org.mozilla.components:ui-fonts:$moz_components_version"
     implementation "org.mozilla.components:feature-session:$moz_components_version"
     implementation "org.mozilla.components:ui-icons:$moz_components_version"
     implementation "org.mozilla.components:service-fretboard:$moz_components_version"
+
+    systemImplementation "org.mozilla.components:browser-engine-system:$moz_components_version"
+    geckoImplementation "org.mozilla.components:browser-engine-gecko-nightly:$moz_components_version"
+    geckoImplementation Gecko.geckoview_nightly_arm
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
@@ -226,9 +246,9 @@ def addSecretToBuildConfig(variant, fieldName, fileBaseName) {
     // We separate the debug files from the release files so that we don't
     // accidentally ship a release using the debug key or vice versa.
     def fileSuffix
-    if (variantName.contains("debug")) {
+    if (variantName.contains("Debug")) {
         fileSuffix = "debug"
-    } else if (variantName.contains("release")) {
+    } else if (variantName.contains("Release")) {
         fileSuffix = "release"
     } else {
         throw new IllegalStateException("Unhandled variant $variantName")
