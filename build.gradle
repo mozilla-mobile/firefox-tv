@@ -8,7 +8,6 @@ buildscript {
     ext.kotlin_version = '1.3.0'
     ext.moz_components_version = '0.41.0'
 
-    ext.espresso_version = '3.0.2'
     ext.robolectric_version = '4.0.1' // required for SDK 28.
 
     // Support library test dependencies
