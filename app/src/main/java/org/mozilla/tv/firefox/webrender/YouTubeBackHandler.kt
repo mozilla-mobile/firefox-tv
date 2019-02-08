@@ -12,9 +12,10 @@ import org.mozilla.tv.firefox.ext.evalJS
 import org.mozilla.tv.firefox.ext.handleYoutubeBack
 
 /**
- * youtube/tv does not handle their back stack correctly. Going back in history visits redirects which do not alter the UI.
- * Users must navigate back by pressing ESC. To deal with this, we remap BACK presses to ESC.
- * When the top of YouTube's back stack is reached, we back all the way out of YouTube.
+ * youtube/tv does not handle their back stack correctly. Going back in history visits redirects
+ * which do not alter the UI. Users must navigate back by pressing ESC. To deal with this,
+ * we remap BACK presses to ESC. When the top of YouTube's back stack is reached, we back
+ * all the way out of YouTube.
  *
  * If YouTube guide-list element is focused:
  * - Suppress the DOWN,BACK key event
