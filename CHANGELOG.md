@@ -10,11 +10,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 ### Fixed
+
+## [3.4.1] 2019-02-12
+*Released to Fire TV 4K.*
+### Added
+
+### Changed
+
+### Fixed
 - Bug where cursor would disappear if on overlay during page load finish (#1732)
 - Bug that could cause a crash on startup (#1778)
 - Fixed links on settings About page that did not load (#1731)
 - A memory leak (#1628)
 - Fixed bug that could cause YouTube to display vertically offset from where it should be (#1719)
+
+## [3.4] - 2019-02-12
+*Released to all devices except Fire TV 4K.*
+
+Second stage rollout of 3.3.1 to all devices - version-bump of v3.3.1
 
 ## [3.3.1] - 2019-02-04
 *Released to Fire TV 4K.*
@@ -177,7 +190,9 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 ## [1.0] - 2017-12-20
 *Initial release! A browser including home tile shortcuts.*
 
-[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.3.1...HEAD
+[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.4.1...HEAD
+[3.4.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.4...v3.4.1
+[3.4]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.3.1...v3.4
 [3.3.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.3...v3.3.1
 [3.3]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.5...v3.3
 [3.2.5]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.2...v3.2.5
