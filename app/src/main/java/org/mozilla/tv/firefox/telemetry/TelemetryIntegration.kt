@@ -164,17 +164,17 @@ open class TelemetryIntegration protected constructor(
             return
         }
 
-        (TelemetryHolder.get()
-                .getPingBuilder(TelemetryPocketEventPingBuilder.TYPE) as TelemetryPocketEventPingBuilder)
-                .eventsMeasurement.add(this)
+//        (TelemetryHolder.get()
+//                .getPingBuilder(TelemetryPocketEventPingBuilder.TYPE) as TelemetryPocketEventPingBuilder)
+//                .eventsMeasurement.add(this)
     }
 
     private fun queueSessionMeasurements(context: Context) {
         TelemetryHomeTileUniqueClickPerSessionCounter.queueEvent(context)
         TelemetryEvent.create(Category.AGGREGATE, Method.CLICK, Object.POCKET_VIDEO,
                 pocketUniqueClickedVideoIDs.size.toString()).queue()
-        queuePocketVideoImpressionEvent()
-        queuePocketVideoClickEvent()
+//        queuePocketVideoImpressionEvent()
+//        queuePocketVideoClickEvent()
     }
 
     private fun resetSessionMeasurements(context: Context) {
