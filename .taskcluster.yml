@@ -42,7 +42,7 @@ tasks:
           && ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
           && ./tools/taskcluster/download-firebase-sdk.sh
           && ./tools/taskcluster/google-firebase-testlab-login.sh
-          && ./tools/taskcluster/execute-firebase-test.sh debug app-debug model=taimen,version=26,orientation=landscape
+          && ./tools/taskcluster/execute-firebase-test.sh system/debug app-system-debug model=taimen,version=26,orientation=landscape
       artifacts:
         'public/reports':
           type: 'directory'
