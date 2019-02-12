@@ -13,6 +13,7 @@ tasks:
 # - Build the app (all flavors)
 # - Run unit tests
 # - Run code quality tools (findbugs, lint, checkstyle etc.)
+# - Upload build to Bitbar and run UI tests
 ###############################################################################
   - provisionerId: '{{ taskcluster.docker.provisionerId }}'
     workerType: '{{ taskcluster.docker.workerType }}'
@@ -39,7 +40,8 @@ tasks:
           && git config advice.detachedHead false
           && git checkout {{event.head.sha}}
           && yes | sdkmanager --licenses
-          && ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
+          && python tools/taskcluster/get-bitbar-token.py
+          && ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test testdroidUpload
           && ./tools/taskcluster/download-firebase-sdk.sh
           && ./tools/taskcluster/google-firebase-testlab-login.sh
           && ./tools/taskcluster/execute-firebase-test.sh system/debug app-system-debug model=taimen,version=26,orientation=landscape

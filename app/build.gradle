@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import org.mozilla.gradle.tasks.ValidateAndroidAppReleaseConfiguration
+import java.text.SimpleDateFormat
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
@@ -12,6 +13,7 @@ apply plugin: 'jacoco'
 apply plugin: 'pmd'
 apply plugin: 'checkstyle'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'testdroid'
 
 apply from: "$project.rootDir/tools/gradle/versionCode.gradle"
 
@@ -465,4 +467,35 @@ if (project.hasProperty("coverage")) {
 
 afterEvaluate {
     check.dependsOn 'findbugs', 'pmd', 'checkstyle'
+}
+
+// -------------------------------------------------------------------------------------------------
+// Bitbar Cloud Testing: testDroidUpload
+// Upload both the application and test APK and conduct a UI test-run
+// Utilizes a preset group of Amazon Fire TV devices on a preset project and framework
+// -------------------------------------------------------------------------------------------------
+
+testdroid {
+
+    try {
+        def tokenFile = new File("${rootDir}/.bitbar_token.json")
+        def parsedFile = new groovy.json.JsonSlurper().parseText(tokenFile.text)
+
+        apiKey parsedFile.secret.bitbarToken.api_key
+        cloudUrl parsedFile.secret.bitbarToken.cloud_url
+
+        println "(Added from .bitbar_token file)"
+    } catch (FileNotFoundException ignored) {
+        println("X_X")
+    }
+
+    authorization "APIKEY"
+    deviceGroup "Amazon"
+    projectName "Firefox for Fire TV"
+    testRunName "Build: " + android.defaultConfig.versionName + " - " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
+    frameworkId 24
+    fullRunConfig {
+        instrumentationRunner = android.defaultConfig.testInstrumentationRunner
+        withAnnotation = "org.mozilla.tv.firefox.ui"
+    }
 }
