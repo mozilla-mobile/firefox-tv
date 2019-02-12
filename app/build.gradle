@@ -480,8 +480,8 @@ testdroid {
         def tokenFile = new File("${rootDir}/.bitbar_token.json")
         def parsedFile = new groovy.json.JsonSlurper().parseText(tokenFile.text)
 
-        apiKey parsedFile.bitbarToken.api_key
-        cloudUrl parsedFile.bitbarToken.cloud_url
+        apiKey parsedFile.api_key
+        cloudUrl parsedFile.cloud_url
 
         println "(Added from .bitbar_token file)"
     } catch (FileNotFoundException ignored) {
