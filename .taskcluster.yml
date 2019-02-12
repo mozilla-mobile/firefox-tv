@@ -41,7 +41,7 @@ tasks:
           && git checkout {{event.head.sha}}
           && yes | sdkmanager --licenses
           && python tools/taskcluster/get-bitbar-token.py
-          && ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test testdroidUpload
+          && ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test testdroidUploadSystemDebugAndroidTest
           && ./tools/taskcluster/download-firebase-sdk.sh
           && ./tools/taskcluster/google-firebase-testlab-login.sh
           && ./tools/taskcluster/execute-firebase-test.sh system/debug app-system-debug model=taimen,version=26,orientation=landscape
