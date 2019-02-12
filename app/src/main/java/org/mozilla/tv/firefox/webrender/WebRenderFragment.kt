@@ -149,6 +149,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     override fun onStop() {
         super.onStop()
 
+        serviceLocator!!.sessionRepo.exitFullScreenIfPossible()
         sessionFeature?.stop()
     }
 
