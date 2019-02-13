@@ -8,7 +8,6 @@ import android.graphics.PointF
 import android.os.SystemClock
 import android.support.annotation.UiThread
 import android.support.v4.math.MathUtils
-import android.view.MotionEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -46,7 +45,8 @@ private const val MAX_VELOCITY = 21.25f
 @Deprecated("Transition to CursorViewModel")
 class LegacyCursorViewModel(
     uiLifecycleCancelJob: Job,
-    private val onUpdate: (x: Float, y: Float, percentMaxScrollVel: PointF, framesPassed: Float) -> Unit) {
+    private val onUpdate: (x: Float, y: Float, percentMaxScrollVel: PointF, framesPassed: Float) -> Unit
+) {
 
     private val scrollVelReturnVal = PointF()
 

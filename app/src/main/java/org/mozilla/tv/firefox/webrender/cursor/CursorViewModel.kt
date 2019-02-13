@@ -82,8 +82,8 @@ class CursorViewModel(
      * (*) Capture the first instance of [KeyEvent.ACTION_DOWN] upon long press and check against
      * the first instance of [KeyEvent.ACTION_UP].
      */
-    @VisibleForTesting
-    private fun validateMotionEvent(action: Int, now: Long, pos: PointF) : MotionEvent? {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun validateMotionEvent(action: Int, now: Long, pos: PointF): MotionEvent? {
         var curr = MotionEvent.obtain(now - DOWN_TIME_OFFSET_MILLIS, now, action, pos.x, pos.y, 0)
 
         // ACTION_DOWN == 0, ACTION_UP == 1

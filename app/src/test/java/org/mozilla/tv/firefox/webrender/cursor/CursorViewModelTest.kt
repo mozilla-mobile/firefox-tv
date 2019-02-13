@@ -6,9 +6,16 @@ package org.mozilla.tv.firefox.webrender.cursor
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.graphics.PointF
+import android.view.KeyEvent
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mozilla.tv.firefox.ScreenController
@@ -18,6 +25,7 @@ import org.mozilla.tv.firefox.framework.FrameworkRepo
 import org.mozilla.tv.firefox.helpers.ext.assertValues
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.PreventLiveDataMainLooperCrashRule
+import org.robolectric.RobolectricTestRunner
 
 /** A list of test URLs that span different "categories".  */
 private val POSSIBLE_URLS = listOf(
@@ -38,6 +46,7 @@ private val POSSIBLE_URLS = listOf(
     "https://m.youtube.com"
 )
 
+@RunWith(RobolectricTestRunner::class) // Required to mock MotionEvent.obtain() tests
 class CursorViewModelTest {
 
     @get:Rule
@@ -153,6 +162,48 @@ class CursorViewModelTest {
             // Now that initial value is set, iterate over remaining states.
             restUrls.forEach { sessionState.value = newStateWithUrl(it) }
         }
+    }
+
+    @Test
+    fun `GIVEN intended Click event THEN ACTION_UP MotionEvent returns same event_time as ACTION_DOWN`() {
+        val pos = PointF(0f, 0f)
+        val downTime = 1000L
+        val upTime = 1234L // upTime and downTime diff < 500
+
+        val downEvent = viewModel.validateMotionEvent(KeyEvent.ACTION_DOWN, downTime, pos)
+
+        assertNotNull(downEvent)
+        assertEquals(downEvent!!.eventTime, downTime)
+
+        val upEvent = viewModel.validateMotionEvent(KeyEvent.ACTION_UP, upTime, pos)
+
+        assertNotNull(upEvent)
+        assertEquals(upEvent!!.eventTime, downEvent.eventTime)
+    }
+
+    @Test
+    fun `GIVEN intended LongPress event THEN ACTION_UP MotionEvent returns different event_time as ACTION_DOWN`() {
+        val pos = PointF(0f, 0f)
+        val downTimeInitial = 1000L
+        val upTime = 2300L // upTime and downTime diff > 500
+
+        val downEvent = viewModel.validateMotionEvent(KeyEvent.ACTION_DOWN, downTimeInitial, pos)
+
+        assertNotNull(downEvent)
+        assertEquals(downEvent!!.eventTime, downTimeInitial)
+
+        // Simulate spammed consecutive down events
+        for (i in 1..5) {
+            val currDownTime = downTimeInitial + i
+            val consecutiveDown = viewModel.validateMotionEvent(KeyEvent.ACTION_DOWN, currDownTime, pos)
+            assertNull(consecutiveDown)
+        }
+
+        val upEvent = viewModel.validateMotionEvent(KeyEvent.ACTION_UP, upTime, pos)
+
+        assertNotNull(upEvent)
+        assertNotEquals(upEvent!!.eventTime, downEvent.eventTime)
+        assertEquals(upEvent.eventTime, upTime)
     }
 
     private fun newStateWithUrl(url: String): SessionRepo.State {
