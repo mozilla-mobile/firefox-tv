@@ -177,7 +177,6 @@ class ScreenController {
             Transition.REMOVE_OVERLAY -> {
                 _currentActiveScreen.value = ActiveScreen.WEB_RENDER
                 showNavigationOverlay(fragmentManager, false)
-                fragmentManager.webRenderFragment().onShowEngineView()
             }
             Transition.ADD_POCKET -> {
                 _currentActiveScreen.value = ActiveScreen.POCKET
@@ -215,7 +214,6 @@ class ScreenController {
                     .hide(fragmentManager.pocketFragment())
                     .hide(fragmentManager.settingsFragment())
                     .commitNow()
-                fragmentManager.webRenderFragment().onShowEngineView()
             }
             Transition.EXIT_APP -> { return false }
             Transition.NO_OP -> { return true }
