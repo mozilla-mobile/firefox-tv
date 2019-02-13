@@ -40,7 +40,7 @@
   <string name="your_rights_content3"><![CDATA[\"Ihnen werden keine Rechte oder Lizenzen an den Markenrechten der Mozilla Foundation oder einer anderen Partei eingeräumt, dazu zählen die Namen und Logos von Mozilla, Firefox oder %1$s. Weitere Informationen finden Sie \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">hier</a>.]]></string>
   <string name="your_rights_content4"><![CDATA[Sonstiger Quelltext für %1$s steht unter diversen anderen freien und Open-Source-<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Lizenzen</a>.]]></string>
   <string name="your_rights_content5"><![CDATA[\"%1$s nutzt auch von Disconnect, Inc. angebotene Blockierlisten als separate und unabhängige Werke unter der \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License3</a>\", die \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">hier</a>\" verfügbar sind.\"]]></string>
-  <string name="settings_cookies_dialog_title">Alle Cookies und Websitedaten entfernen</string>
+  <string name="settings_cookies_dialog_title">Alle Cookies und Website-Daten entfernen</string>
   <string name="settings_cookies_dialog_content2">Dadurch werden alle Cookies und Website-Daten gelöscht. Wenn Sie diese Daten löschen, werden Sie möglicherweise von Websites abgemeldet und offline gespeicherte Web-Inhalte werden gelöscht.</string>
   <string name="turbo_mode">Turbo-Modus</string>
   <string name="onboarding_turbo_mode_title">Der Turbo-Modus hilft Ihnen, schneller zu surfen</string>
