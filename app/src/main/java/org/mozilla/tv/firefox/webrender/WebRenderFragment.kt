@@ -24,6 +24,7 @@ import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.MediaSessionHolder
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
+import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.pauseAllVideoPlaybacks
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
@@ -211,5 +212,12 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             return true
         }
         return false
+    }
+
+    /**
+     * Called before the [EngineView] is shown
+     */
+    fun onShowEngineView() {
+        engineView?.focusedDOMElement?.cache()
     }
 }
