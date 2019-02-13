@@ -135,8 +135,13 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
          *  memory leak while clearing data. See [WebViewCache.clear] as well as #1720
          */
         serviceLocator?.screenController?.currentActiveScreen?.observe(viewLifecycleOwner, Observer {
-            if (it != ScreenControllerStateMachine.ActiveScreen.WEB_RENDER) {
-                engineView.pauseAllVideoPlaybacks()
+            when (it) {
+                // Cache focused DOM element just before WebView gains focus. See comment in
+                // FocusedDOMElementCacheInterface for details
+                ScreenControllerStateMachine.ActiveScreen.WEB_RENDER -> engineView.focusedDOMElement.cache()
+                // Pause all the videos when transitioning out of [WebRenderFragment] to mitigate possible
+                // memory leak while clearing data. See [WebViewCache.clear] as well as #1720
+                else -> engineView.pauseAllVideoPlaybacks()
             }
         })
     }
@@ -211,12 +216,5 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             return true
         }
         return false
-    }
-
-    /**
-     * Called before the [EngineView] is shown
-     */
-    fun onShowEngineView() {
-        engineView?.focusedDOMElement?.cache()
     }
 }
