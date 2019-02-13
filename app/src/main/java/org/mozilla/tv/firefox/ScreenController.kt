@@ -27,9 +27,10 @@ import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 
 class ScreenController {
 
-    private var _currentActiveScreen = MutableLiveData<ActiveScreen>().apply {
+    private val _currentActiveScreen = MutableLiveData<ActiveScreen>().apply {
         value = ActiveScreen.NAVIGATION_OVERLAY
     }
+    // This is updated just before the fragment transaction is committed
     val currentActiveScreen: LiveData<ActiveScreen> = _currentActiveScreen
 
     /**
@@ -170,43 +171,44 @@ class ScreenController {
         // Call show() before hide() so that focus moves correctly to the shown fragment once others are hidden
         when (transition) {
             Transition.ADD_OVERLAY -> {
-                fragmentManagerShowNavigationOverlay(fragmentManager, true)
                 _currentActiveScreen.value = ActiveScreen.NAVIGATION_OVERLAY
+                fragmentManagerShowNavigationOverlay(fragmentManager, true)
             }
             Transition.REMOVE_OVERLAY -> {
-                fragmentManager.webRenderFragment().onShowEngineView()
-                showNavigationOverlay(fragmentManager, false)
                 _currentActiveScreen.value = ActiveScreen.WEB_RENDER
+                showNavigationOverlay(fragmentManager, false)
+                fragmentManager.webRenderFragment().onShowEngineView()
             }
             Transition.ADD_POCKET -> {
+                _currentActiveScreen.value = ActiveScreen.POCKET
                 fragmentManager.beginTransaction()
                     .show(fragmentManager.pocketFragment())
                     .hide(fragmentManager.navigationOverlayFragment())
                     .commit()
-                _currentActiveScreen.value = ActiveScreen.POCKET
             }
             Transition.REMOVE_POCKET -> {
+                _currentActiveScreen.value = ActiveScreen.NAVIGATION_OVERLAY
                 fragmentManager.beginTransaction()
                     .show(fragmentManager.navigationOverlayFragment())
                     .hide(fragmentManager.pocketFragment())
                     .commit()
-                _currentActiveScreen.value = ActiveScreen.NAVIGATION_OVERLAY
             }
             Transition.ADD_SETTINGS -> {
+                _currentActiveScreen.value = ActiveScreen.SETTINGS
                 fragmentManager.beginTransaction()
                     .show(fragmentManager.settingsFragment())
                     .hide(fragmentManager.navigationOverlayFragment())
                     .commit()
-                _currentActiveScreen.value = ActiveScreen.SETTINGS
             }
             Transition.REMOVE_SETTINGS -> {
+                _currentActiveScreen.value = ActiveScreen.NAVIGATION_OVERLAY
                 fragmentManager.beginTransaction()
                     .show(fragmentManager.navigationOverlayFragment())
                     .hide(fragmentManager.settingsFragment())
                     .commit()
-                _currentActiveScreen.value = ActiveScreen.NAVIGATION_OVERLAY
             }
             Transition.SHOW_BROWSER -> {
+                _currentActiveScreen.value = ActiveScreen.WEB_RENDER
                 fragmentManager.beginTransaction()
                     .show(fragmentManager.webRenderFragment())
                     .hide(fragmentManager.navigationOverlayFragment())
@@ -214,7 +216,6 @@ class ScreenController {
                     .hide(fragmentManager.settingsFragment())
                     .commitNow()
                 fragmentManager.webRenderFragment().onShowEngineView()
-                _currentActiveScreen.value = ActiveScreen.WEB_RENDER
             }
             Transition.EXIT_APP -> { return false }
             Transition.NO_OP -> { return true }
