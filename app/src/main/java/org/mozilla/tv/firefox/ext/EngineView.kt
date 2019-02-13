@@ -39,14 +39,7 @@ fun EngineView.setupForApp() {
     // WebView can be null temporarily after clearData(); however, activity.recreate() would
     // instantiate a new WebView instance
     webView?.setOnFocusChangeListener { _, hasFocus ->
-        if (!hasFocus) {
-            // For why we're modifying the focusedDOMElement, see FocusedDOMElementCacheInterface.
-            //
-            // Any views (like BrowserNavigationOverlay) that may clear the cache, e.g. by
-            // reloading the page, are required to handle their own caching. Here we'll handle
-            // cases where the page cache isn't cleared.
-            focusedDOMElement.cache()
-        } else {
+        if (hasFocus) {
             // Trying to restore immediately doesn't work - perhaps the WebView hasn't actually
             // received focus yet? Posting to the end of the UI queue seems to solve the problem.
             uiHandler.post { focusedDOMElement.restore() }
