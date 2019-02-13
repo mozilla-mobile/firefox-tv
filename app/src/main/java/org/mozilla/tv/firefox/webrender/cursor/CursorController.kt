@@ -40,7 +40,7 @@ class CursorController private constructor(
     private val legacyViewModel = LegacyCursorViewModel(uiLifecycleCancelJob, onUpdate = { x, y, percentMaxScrollVel, framesPassed ->
         view.updatePosition(x, y)
         scrollWebView(percentMaxScrollVel, framesPassed)
-    }, simulateTouchEvent = { webRenderFragment.activity?.dispatchTouchEvent(it) })
+    })
 
     // Initial value does not matter: it will be reactively replaced during start-up.
     lateinit var keyDispatcher: CursorKeyDispatcher
