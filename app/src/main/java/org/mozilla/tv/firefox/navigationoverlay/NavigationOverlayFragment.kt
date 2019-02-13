@@ -14,6 +14,7 @@ import android.os.Looper
 import android.preference.PreferenceManager
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
@@ -412,7 +413,7 @@ class NavigationOverlayFragment : Fragment() {
 class BrowserNavigationOverlayScrollView(
     context: Context,
     attrs: AttributeSet
-) : ScrollView(context, attrs) {
+) : NestedScrollView(context, attrs) {
 
     private val deltaScrollPadding = resources.getDimensionPixelSize(R.dimen.browser_overlay_delta_scroll_padding)
 
