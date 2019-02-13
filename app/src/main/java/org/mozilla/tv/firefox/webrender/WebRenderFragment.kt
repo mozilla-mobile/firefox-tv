@@ -66,6 +66,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 //    private var overlayVisibleCached: Int? = null
 
     var sessionFeature: SessionFeature? = null
+    private val youtubeBackHandler by lazy { YouTubeBackHandler(engineView, activity as MainActivity) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +90,11 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     override fun onUrlChanged(session: Session, url: String) {
         if (url == URLs.APP_URL_HOME) serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, true)
+        youtubeBackHandler.saveIndex(url)
+    }
+
+    override fun onLoadingStateChanged(session: Session, loading: Boolean) {
+        if (!loading) youtubeBackHandler.updateUrlIndexList()
     }
 
     override fun onDesktopModeChanged(session: Session, enabled: Boolean) {
@@ -209,8 +215,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         if (session.isYoutubeTV &&
                 event.keyCode == KeyEvent.KEYCODE_BACK) {
-            val youtubeBackHandler = YouTubeBackHandler(event, engineView, activity as MainActivity)
-            youtubeBackHandler.handleBackClick()
+            youtubeBackHandler.handleBackClick(event)
             return true
         }
         return false

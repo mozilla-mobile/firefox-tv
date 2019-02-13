@@ -9,12 +9,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.webkit.ValueCallback
+import android.webkit.WebBackForwardList
 import android.webkit.WebView
 import mozilla.components.browser.engine.system.SystemEngineSession
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.webrender.FocusedDOMElementCache
-import org.mozilla.tv.firefox.utils.URLs
 import java.util.WeakHashMap
 
 // Extension methods on the EngineView class. This is used for additional features that are not part
@@ -94,12 +94,13 @@ fun EngineView.scrollByClamped(vx: Int, vy: Int) {
     }
 }
 
-fun EngineView.handleYoutubeBack() {
-    val backForwardUrlList = webView!!.copyBackForwardList().toList().map { it.originalUrl }
-    val youtubeIndex = backForwardUrlList.lastIndexOf(URLs.YOUTUBE_TILE_URL)
-    val goBackSteps = backForwardUrlList.size - youtubeIndex
+fun EngineView.handleYoutubeBack(indexToGoBackTo: Int) {
+    val goBackSteps = backForwardList.currentIndex - indexToGoBackTo
     webView!!.goBackOrForward(-goBackSteps)
 }
+
+val EngineView.backForwardList: WebBackForwardList
+        get() = webView!!.copyBackForwardList()
 
 val EngineView.focusedDOMElement: FocusedDOMElementCache
     get() = getOrPutExtension(this).domElementCache
