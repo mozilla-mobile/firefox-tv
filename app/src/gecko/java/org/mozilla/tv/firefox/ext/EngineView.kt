@@ -75,12 +75,19 @@ fun EngineView.scrollByClamped(vx: Int, vy: Int) {
     }
 }
 
-fun EngineView.handleYoutubeBack() {
-//    val backForwardUrlList = webView!!.copyBackForwardList().toList().map { it.originalUrl }
-//    val youtubeIndex = backForwardUrlList.lastIndexOf(URLs.YOUTUBE_TILE_URL)
-//    val goBackSteps = backForwardUrlList.size - youtubeIndex
-//    webView!!.goBackOrForward(-goBackSteps)
+/** TODO: Investigate a way to handle exiting YouTube with hardware back in GV (See #1837) */
+fun EngineView.handleYoutubeBack(@Suppress("UNUSED_PARAMETER") indexToGoBackTo: Int) {
+//    val goBackSteps = backForwardList.currentIndex - indexToGoBackTo
+//    geckoView!!.goBackOrForward(-goBackSteps)
 }
+object WebHistory {
+    val currentIndex: Int
+        get() = 0
+}
+
+val EngineView.backForwardList: WebHistory
+    get() = WebHistory
+//  get() = geckoView!!.copyBackForwardList()
 
 val EngineView.focusedDOMElement: FocusedDOMElementCache
     get() = getOrPutExtension(this).domElementCache
