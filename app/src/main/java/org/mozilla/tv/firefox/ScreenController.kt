@@ -174,6 +174,7 @@ class ScreenController {
                 _currentActiveScreen.value = ActiveScreen.NAVIGATION_OVERLAY
             }
             Transition.REMOVE_OVERLAY -> {
+                fragmentManager.webRenderFragment().onShowEngineView()
                 showNavigationOverlay(fragmentManager, false)
                 _currentActiveScreen.value = ActiveScreen.WEB_RENDER
             }
@@ -212,6 +213,7 @@ class ScreenController {
                     .hide(fragmentManager.pocketFragment())
                     .hide(fragmentManager.settingsFragment())
                     .commitNow()
+                fragmentManager.webRenderFragment().onShowEngineView()
                 _currentActiveScreen.value = ActiveScreen.WEB_RENDER
             }
             Transition.EXIT_APP -> { return false }
