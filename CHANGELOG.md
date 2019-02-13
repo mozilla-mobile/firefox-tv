@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 ### Fixed
+- Bug where you could not use remote back button to exit YouTube if it was visited from Pocket (#1584)
 
 ## [3.4.1] 2019-02-12
 *Released to Fire TV 4K.*
