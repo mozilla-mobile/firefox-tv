@@ -46,9 +46,7 @@ private const val MAX_VELOCITY = 21.25f
 @Deprecated("Transition to CursorViewModel")
 class LegacyCursorViewModel(
     uiLifecycleCancelJob: Job,
-    private val onUpdate: (x: Float, y: Float, percentMaxScrollVel: PointF, framesPassed: Float) -> Unit,
-    private val simulateTouchEvent: (MotionEvent) -> Unit
-) {
+    private val onUpdate: (x: Float, y: Float, percentMaxScrollVel: PointF, framesPassed: Float) -> Unit) {
 
     private val scrollVelReturnVal = PointF()
 
