@@ -17,6 +17,9 @@ ENV ANDROID_PLATFORM_VERSION "27"
 
 ENV PROJECT_REPOSITORY "https://github.com/mozilla-mobile/firefox-tv.git"
 
+# Disable interactive gradle output on taskcluster
+ENV TERM dumb
+
 # -- System -----------------------------------------------------------------------------
 
 RUN apt-get update -qq
@@ -64,22 +67,17 @@ RUN touch /build/android-sdk/.android/repositories.cfg
 
 RUN yes | sdkmanager --licenses
 
-RUN sdkmanager --verbose "platform-tools" \
-    "platforms;android-${ANDROID_PLATFORM_VERSION}" \
-    "build-tools;${ANDROID_BUILD_TOOLS}" \
-    "extras;android;m2repository" \
-    "extras;google;m2repository"
-
 # -- Project setup ----------------------------------------------------------------------
 
 WORKDIR /opt
 
 # Checkout source code
-RUN git clone ${PROJECT_REPOSITORY}
+RUN git clone --depth=1 ${PROJECT_REPOSITORY}
 
 # Build project and run gradle tasks once to pull all dependencies
 WORKDIR /opt/firefox-tv/
-RUN ./gradlew --no-daemon clean assemble lint checkstyle ktlint pmd detektCheck
+RUN ./gradlew --no-daemon clean assembleDebug lint checkstyle ktlint pmd detekt testSystemDebugUnitTest \
+    && ./gradlew --no-daemon clean
 
 # -- Post setup -------------------------------------------------------------------------
 
@@ -87,8 +85,4 @@ RUN ./gradlew --no-daemon clean assemble lint checkstyle ktlint pmd detektCheck
 RUN pip install -r tools/l10n/android2po/requirements.txt
 
 # Install taskcluster python library (used by decision tasks)
-RUN pip install taskcluster
-
-# -- Cleanup ----------------------------------------------------------------------------
-
-RUN apt-get clean
+RUN pip install 'taskcluster>=4,<5'
