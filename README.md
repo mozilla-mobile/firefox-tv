@@ -77,7 +77,7 @@ To run all UI tests, follow these steps
   - Either use `adb connect` for a real device, or start an emulator instance using AVD
   - Prefer a real device (emulators will fail some tests)
   - The next step will fail if you are connected to more than one device
-2. Run `./gradlew connectedAndroidTest` from the command line
+2. Run `./gradlew connectedSystemDebugAndroidTest` from the command line
   - Aliasing this command is recommended
 
 ### Pre-push hooks
