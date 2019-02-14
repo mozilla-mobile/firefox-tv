@@ -168,7 +168,7 @@ class CursorViewModelTest {
     fun `GIVEN intended Click event THEN ACTION_UP MotionEvent returns same event_time as ACTION_DOWN`() {
         val pos = PointF(0f, 0f)
         val downTime = 1000L
-        val upTime = 1234L // upTime and downTime diff < 500
+        val upTime = downTime + DPAD_TAP_TIMEOUT - 1
 
         val downEvent = viewModel.validateMotionEvent(KeyEvent.ACTION_DOWN, downTime, pos)
 
@@ -185,7 +185,7 @@ class CursorViewModelTest {
     fun `GIVEN intended LongPress event THEN ACTION_UP MotionEvent returns different event_time as ACTION_DOWN`() {
         val pos = PointF(0f, 0f)
         val downTimeInitial = 1000L
-        val upTime = 2300L // upTime and downTime diff > 500
+        val upTime = downTimeInitial + DPAD_LONG_PRESS_TIMEOUT - 1
 
         val downEvent = viewModel.validateMotionEvent(KeyEvent.ACTION_DOWN, downTimeInitial, pos)
 
@@ -224,11 +224,11 @@ class CursorViewModelTest {
         }
 
         // Down event comes when neither a long press or tab => everything should reset
-        val downTimeNew = downTimeInitial + 500
+        val downTimeNew = downTimeInitial + DPAD_LONG_PRESS_TIMEOUT + 1
         val downEventNew = viewModel.validateMotionEvent(KeyEvent.ACTION_DOWN, downTimeNew, pos)
 
         assertNotNull(downEventNew)
-        assertEquals(downEvent, downTimeNew)
+        assertEquals(downEventNew!!.eventTime, downTimeNew)
     }
 
     private fun newStateWithUrl(url: String): SessionRepo.State {
