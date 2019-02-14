@@ -18,7 +18,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/browser_overlay_background"
             android:descendantFocusability="afterDescendants"
             android:orientation="vertical">
 
@@ -26,6 +25,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="412dp"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="32dp"
+                android:background="@color/browser_overlay_background">
             <!-- Content description added in code. -->
             <org.mozilla.tv.firefox.pocket.PocketVideoMegaTile
                 android:id="@+id/pocketVideoMegaTileView"
@@ -44,9 +49,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="45dp"
                 android:layout_marginEnd="45dp"
-                android:background="@android:color/transparent"
                 android:clipChildren="false"
                 android:clipToPadding="false" />
+            </LinearLayout>
 
         </LinearLayout>
     </org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlayScrollView>
@@ -54,6 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="27dp"
+        android:background="@color/browser_overlay_background"
         android:orientation="vertical">
 
         <LinearLayout

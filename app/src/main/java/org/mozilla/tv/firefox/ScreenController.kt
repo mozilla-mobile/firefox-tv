@@ -10,6 +10,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.support.v4.app.FragmentManager
 import android.text.TextUtils
+import kotlinx.android.synthetic.main.fragment_navigation_overlay.*
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition
@@ -138,13 +139,12 @@ class ScreenController {
             }
 
             transaction.show(overlayFragment)
-                // TODO note that hiding WebRenderFragment will not be possible under a split overlay
-                .hide(renderFragment)
             MenuInteractionMonitor.menuOpened()
+            overlayFragment.navUrlInput.requestFocus()
         } else {
             transaction.hide(overlayFragment)
-                .show(renderFragment)
             MenuInteractionMonitor.menuClosed()
+            renderFragment.view?.requestFocus()
         }
         transaction.commit()
     }
