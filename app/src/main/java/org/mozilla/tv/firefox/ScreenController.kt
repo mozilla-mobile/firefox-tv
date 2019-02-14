@@ -30,7 +30,9 @@ class ScreenController {
     private val _currentActiveScreen = MutableLiveData<ActiveScreen>().apply {
         value = ActiveScreen.NAVIGATION_OVERLAY
     }
-    // This is updated just before the fragment transaction is committed
+    /**
+     * Observers will be notified just before the fragment transaction is committed
+     */
     val currentActiveScreen: LiveData<ActiveScreen> = _currentActiveScreen
 
     /**
@@ -171,6 +173,7 @@ class ScreenController {
         // Call show() before hide() so that focus moves correctly to the shown fragment once others are hidden
         when (transition) {
             Transition.ADD_OVERLAY -> {
+                // We always update the currentActiveScreen value before beginning the fragment transaction
                 _currentActiveScreen.value = ActiveScreen.NAVIGATION_OVERLAY
                 fragmentManagerShowNavigationOverlay(fragmentManager, true)
             }

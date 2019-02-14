@@ -17,6 +17,10 @@ import android.view.View
  * to restore the focused element, dpad navigation is entirely broken (#393): that is
  * why this class is necessary.
  *
+ * It is important that this value be cached just before the WebView regains focus.  Otherwise
+ * edge cases present themselves where a DOM element is cached, a new element is focused by a
+ * site, and then we return focus to the earlier (now incorrect) element (see #1830).
+ *
  * NB: if you create an Android View which steals focus from the WebView and it refreshes the
  * DOM state (e.g. page reload), *you must add custom handling to that view* in order to cache
  * the focused DOMElement: on your view that returns (and maybe takes) focus to the WebView,
