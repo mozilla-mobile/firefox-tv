@@ -20,9 +20,11 @@
             android:layout_height="wrap_content"
             android:background="@color/browser_overlay_background"
             android:descendantFocusability="afterDescendants"
-            android:orientation="vertical"
-            android:paddingTop="27dp"
-            android:paddingBottom="0dp">
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="412dp"/>
 
             <!-- Content description added in code. -->
             <org.mozilla.tv.firefox.pocket.PocketVideoMegaTile
@@ -51,6 +53,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="27dp"
         android:orientation="vertical">
 
         <LinearLayout
