@@ -206,6 +206,31 @@ class CursorViewModelTest {
         assertEquals(upEvent.eventTime, upTime)
     }
 
+    @Test
+    fun `GIVEN down event exceeding LongPressTimeout THEN MotionEvents reset and register new down event`() {
+        val pos = PointF(0f, 0f)
+        val downTimeInitial = 1000L
+
+        val downEvent = viewModel.validateMotionEvent(KeyEvent.ACTION_DOWN, downTimeInitial, pos)
+
+        assertNotNull(downEvent)
+        assertEquals(downEvent!!.eventTime, downTimeInitial)
+
+        // Simulate spammed consecutive down events
+        for (i in 1..5) {
+            val currDownTime = downTimeInitial + i
+            val consecutiveDown = viewModel.validateMotionEvent(KeyEvent.ACTION_DOWN, currDownTime, pos)
+            assertNull(consecutiveDown)
+        }
+
+        // Down event comes when neither a long press or tab => everything should reset
+        val downTimeNew = downTimeInitial + 500
+        val downEventNew = viewModel.validateMotionEvent(KeyEvent.ACTION_DOWN, downTimeNew, pos)
+
+        assertNotNull(downEventNew)
+        assertEquals(downEvent, downTimeNew)
+    }
+
     private fun newStateWithUrl(url: String): SessionRepo.State {
         return SessionRepo.State(false, false, false, false, url)
     }
