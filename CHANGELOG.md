@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed links on settings About page that did not load (#1731)
 - A memory leak (#1628)
 - Fixed bug that could cause YouTube to display vertically offset from where it should be (#1719)
-- Bug that could cause YouTube to lose focus if the overlay was opened during loading (#1830)
+- Bug that could cause YouTube to be unresponsive if the overlay was opened during loading (#1830)
 
 ## [3.4] - 2019-02-12
 *Released to all devices except Fire TV 4K.*

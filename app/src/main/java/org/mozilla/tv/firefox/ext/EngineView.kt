@@ -40,6 +40,10 @@ fun EngineView.setupForApp() {
     // instantiate a new WebView instance
     webView?.setOnFocusChangeListener { _, hasFocus ->
         if (hasFocus) {
+            // See FocusedDOMElementCacheInterface for details on why this happens
+            //
+            // Note that caching of this value is done elsewhere
+            //
             // Trying to restore immediately doesn't work - perhaps the WebView hasn't actually
             // received focus yet? Posting to the end of the UI queue seems to solve the problem.
             uiHandler.post { focusedDOMElement.restore() }
