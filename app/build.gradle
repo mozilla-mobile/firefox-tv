@@ -493,6 +493,7 @@ testdroid {
     projectName "Firefox for Fire TV"
     testRunName "Build: " + android.defaultConfig.versionName + " - " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
     frameworkId 24
+    scheduler "PARALLEL"
     fullRunConfig {
         instrumentationRunner = android.defaultConfig.testInstrumentationRunner
         withAnnotation = "org.mozilla.tv.firefox.ui"
