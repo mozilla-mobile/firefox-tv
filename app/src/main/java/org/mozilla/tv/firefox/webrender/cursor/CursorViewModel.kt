@@ -10,7 +10,6 @@ import android.arch.lifecycle.ViewModel
 import android.graphics.PointF
 import android.os.SystemClock
 import android.support.annotation.VisibleForTesting
-import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.ViewConfiguration
@@ -25,6 +24,12 @@ import org.mozilla.tv.firefox.framework.FrameworkRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 
 private const val DOWN_TIME_OFFSET_MILLIS = 100
+
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+const val DPAD_LONG_PRESS_TIMEOUT = 1500 // ViewConfiguration.DEFAULT_LONG_PRESS_TIMEOUT * 3
+
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+const val DPAD_TAP_TIMEOUT = 300 // ViewConfiguration.TAP_TIMEOUT * 3
 
 /**
  * A [ViewModel] representing the spatial, d-pad cursor used to navigate web pages.
@@ -83,42 +88,43 @@ class CursorViewModel(
      * the first instance of [KeyEvent.ACTION_UP].
      */
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun validateMotionEvent(action: Int, now: Long, pos: PointF): MotionEvent? {
-        var curr = MotionEvent.obtain(now - DOWN_TIME_OFFSET_MILLIS, now, action, pos.x, pos.y, 0)
-
-        // ACTION_DOWN == 0, ACTION_UP == 1
-        Log.d("ValidatedMotionEvent", String.format("curr: %d, prev: %d", action, prevDownMotionEvent?.action))
+    @Synchronized
+    fun validateMotionEvent(action: Int, eventTime: Long, pos: PointF): MotionEvent? {
+        val downTime = eventTime - DOWN_TIME_OFFSET_MILLIS
 
         when (action) {
             KeyEvent.ACTION_DOWN -> {
-                if (prevDownMotionEvent == null) {
-                    prevDownMotionEvent = MotionEvent.obtain(curr)
-                } else {
-                    return null
+                prevDownMotionEvent?.let {
+                    if (eventTime - it.eventTime >= DPAD_LONG_PRESS_TIMEOUT) {
+                        prevDownMotionEvent = MotionEvent.obtain(downTime, eventTime, action, pos.x, pos.y, 0)
+                    } else {
+                        return null
+                    }
+                } ?: let {
+                    prevDownMotionEvent = MotionEvent.obtain(downTime, eventTime, action, pos.x, pos.y, 0)
                 }
+
+                return prevDownMotionEvent
             }
             KeyEvent.ACTION_UP -> {
-                if (prevDownMotionEvent != null) {
-                    // Record the time diff between curr and prev event event times (>500 => LONG_PRESS)
-                    Log.d("updatedMotionEvent", String.format("%d", curr.eventTime - prevDownMotionEvent!!.eventTime))
-                    if (curr.eventTime - prevDownMotionEvent!!.eventTime < ViewConfiguration.getLongPressTimeout()) {
+                prevDownMotionEvent?.let {
+                    if (eventTime - it.eventTime < DPAD_TAP_TIMEOUT) {
                         // Register it as a "Click" Event and match the down & event time with the previous event
-                        curr = MotionEvent.obtain(prevDownMotionEvent!!.downTime, prevDownMotionEvent!!.eventTime, action, pos.x, pos.y, 0)
+                        return MotionEvent.obtain(it.downTime, it.eventTime, action, pos.x, pos.y, 0)
+                    } else if (eventTime - it.eventTime < DPAD_LONG_PRESS_TIMEOUT) {
+                        return MotionEvent.obtain(downTime, eventTime, action, pos.x, pos.y, 0)
                     }
 
-                    prevDownMotionEvent!!.recycle()
                     prevDownMotionEvent = null
-                } else {
-                    return null
-                }
+                } ?: return null
             }
             else -> {
                 // Fallback Option - See [MotionEvent#Consistency Guarantees]
-                prevDownMotionEvent!!.recycle()
+                prevDownMotionEvent?.recycle()
                 prevDownMotionEvent = null
             }
         }.forceExhaustive
 
-        return curr
+        return null
     }
 }
