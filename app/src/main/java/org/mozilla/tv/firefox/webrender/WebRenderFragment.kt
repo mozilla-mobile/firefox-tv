@@ -23,7 +23,7 @@ import mozilla.components.feature.session.SessionFeature
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.MediaSessionHolder
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.ScreenControllerStateMachine
+import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.pauseAllVideoPlaybacks
@@ -130,18 +130,15 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             requireWebRenderComponents.sessionUseCases,
             engineView)
 
-        /**
-         *  Pause all the videos when transitioning out of [WebRenderFragment] to mitigate possible
-         *  memory leak while clearing data. See [WebViewCache.clear] as well as #1720
-         */
         serviceLocator?.screenController?.currentActiveScreen?.observe(viewLifecycleOwner, Observer {
-            when (it) {
+            if (it == ActiveScreen.WEB_RENDER) {
                 // Cache focused DOM element just before WebView gains focus. See comment in
                 // FocusedDOMElementCacheInterface for details
-                ScreenControllerStateMachine.ActiveScreen.WEB_RENDER -> engineView.focusedDOMElement.cache()
+                engineView.focusedDOMElement.cache()
+            } else {
                 // Pause all the videos when transitioning out of [WebRenderFragment] to mitigate possible
                 // memory leak while clearing data. See [WebViewCache.clear] as well as #1720
-                else -> engineView.pauseAllVideoPlaybacks()
+                engineView.pauseAllVideoPlaybacks()
             }
         })
     }
