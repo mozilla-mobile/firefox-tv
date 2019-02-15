@@ -19,7 +19,10 @@ import android.view.View
  *
  * It is important that this value be cached just before the WebView regains focus.  Otherwise
  * edge cases present themselves where a DOM element is cached, a new element is focused by a
- * site, and then we return focus to the earlier (now incorrect) element (see #1830).
+ * site, and then we return focus to the earlier (now incorrect) element (see #1830).  This
+ * strategy alone does not cover all cases. Focus must also be cached (see #1850) when the
+ * app is backgrounded, or pressing the home button or sleeping will lead to the wrong element
+ * receiving focus when the app is resumed.
  *
  * NB: if you create an Android View which steals focus from the WebView and it refreshes the
  * DOM state (e.g. page reload), *you must add custom handling to that view* in order to cache
