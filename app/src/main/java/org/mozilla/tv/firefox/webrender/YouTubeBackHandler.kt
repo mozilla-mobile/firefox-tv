@@ -24,10 +24,11 @@ import org.mozilla.tv.firefox.ext.handleYoutubeBack
  * - Dispatch ESC key event
  */
 
-class YouTubeBackHandler(event: KeyEvent, engineView: EngineView?, activity: MainActivity) {
-    private val event = event
-    private val engineView = engineView
-    private val activity = activity
+class YouTubeBackHandler(
+    private val event: KeyEvent,
+    private val engineView: EngineView?,
+    private val activity: MainActivity
+) {
 
     fun handleBackClick() {
         val jsCallback = ValueCallback<String> {
@@ -39,10 +40,13 @@ class YouTubeBackHandler(event: KeyEvent, engineView: EngineView?, activity: Mai
                 activity.dispatchKeyEvent(escKeyEvent)
             }
         }
-        // This will return true if the currently focused YouTube element is a button in the left sidebar, false otherwise
+        // This will return true if there is no focused element, the body tag is focused, or the
+        // currently focused element is a button in the left sidebar. Otherwise it will return false
         engineView?.evalJS("""
                 (function () {
-                    return document.activeElement.parentElement.parentElement.id === 'guide-list';
+                    return document.activeElement === null ||
+                        document.activeElement.tagName === "BODY" ||
+                        document.activeElement.parentElement.parentElement.id === 'guide-list';
                 })();
                 """,
                 jsCallback)
