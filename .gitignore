@@ -59,3 +59,4 @@ Screengrabfile
 .sentry_dsn_*
 .pocket_key_*
 .firebase_token*
+.bitbar_token_*
