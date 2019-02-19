@@ -11,6 +11,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.AttributeSet
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import io.sentry.Sentry
@@ -41,6 +42,7 @@ interface MediaSessionHolder {
 }
 
 class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, MediaSessionHolder {
+    private val LOG_TAG = "MainActivity"
 
     // There should be at most one MediaSession per process, hence it's in MainActivity.
     // We crash if we init MediaSession at init time, hence lateinit.
@@ -59,7 +61,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         setContentView(R.layout.activity_main)
 
-        val intentData = IntentValidator.validateOnCreate(this, intent.toSafeIntent(), savedInstanceState)
+        val safeIntent = intent.toSafeIntent()
+        val intentData = IntentValidator.validateOnCreate(this, safeIntent, savedInstanceState)
 
         val session = getOrCreateSession(intentData)
 
@@ -79,15 +82,21 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             }
         })
 
-        if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding()) {
-            val onboardingIntents =
-                    Intent(this@MainActivity, PocketOnboardingActivity::class.java)
-            startActivity(onboardingIntents)
-        }
+        if (!intent.hasExtra("TURBO_MODE")) {
+            if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding()) {
+                val onboardingIntents =
+                        Intent(this@MainActivity, PocketOnboardingActivity::class.java)
+                startActivity(onboardingIntents)
+            }
 
-        if (Settings.getInstance(this@MainActivity).shouldShowTurboModeOnboarding()) {
-            val onboardingIntent = Intent(this@MainActivity, OnboardingActivity::class.java)
-            startActivity(onboardingIntent)
+            if (Settings.getInstance(this@MainActivity).shouldShowTurboModeOnboarding()) {
+                val onboardingIntent = Intent(this@MainActivity, OnboardingActivity::class.java)
+                startActivity(onboardingIntent)
+            }
+        } else {
+            val turboMode = intent.getBooleanExtra("TURBO_MODE", true)
+            Log.i(LOG_TAG, "Setting turboMode.isEnabled = " + turboMode)
+            serviceLocator.turboMode.isEnabled = turboMode
         }
 
         serviceLocator.intentLiveData.value = Consumable.from(intentData)
