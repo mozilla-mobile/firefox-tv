@@ -42,7 +42,8 @@ fun EngineView.setupForApp() {
         if (!hasFocus) {
             // For why we're modifying the focusedDOMElement, see FocusedDOMElementCacheInterface.
             //
-            // This ensures that focus is cached when the app is backgrounded.
+            // This will cache focus whenever the app is backgrounded or the device goes to sleep,
+            // as well as whenever another view takes focus.
             focusedDOMElement.cache()
         } else {
             // Trying to restore immediately doesn't work - perhaps the WebView hasn't actually
