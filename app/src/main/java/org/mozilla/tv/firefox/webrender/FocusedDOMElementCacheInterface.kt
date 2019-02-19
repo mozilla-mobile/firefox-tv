@@ -35,7 +35,13 @@ import android.view.View
  * DOMElement, which is in [View.setVisibility].
  */
 interface FocusedDOMElementCacheInterface {
-    /** Caches the currently focused DOMElement in the DOM (i.e. it will be cleared if the page is reloaded). */
+    /**
+     * Caches the currently focused DOMElement in the DOM (i.e. it will be cleared if the page is reloaded).
+     *
+     * We cache focus whenever 1) the [WebRenderFragment] becomes the currently active screen or 2) the
+     * WebView loses focus. Case 1 ensures that we always have the most up to date focus (see #1830). Case 2
+     * ensures that we always have a cached value when the user backgrounds the app (see #1850).
+     */
     fun cache()
 
     /** Focuses the cached DOMElement from [cache], if it's available, or does nothing. */
