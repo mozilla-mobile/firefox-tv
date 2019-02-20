@@ -49,11 +49,6 @@ tasks:
           path: '/opt/firefox-tv/app/build/reports'
           expires: "{{ '1 week' | $fromNow }}"
 
-        'public/test-artifacts':  # Test artifacts from Firebase UI
-          type: 'directory'
-          path: '/opt/firefox-tv/test_artifacts'
-          expires: "{{ '1 week' | $fromNow }}"
-
       features:
           taskclusterProxy: true
 
