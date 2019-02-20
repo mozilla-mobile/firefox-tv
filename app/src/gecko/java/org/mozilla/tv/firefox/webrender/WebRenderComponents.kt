@@ -10,7 +10,10 @@ import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.DefaultSettings
 import mozilla.components.concept.engine.Engine
 import mozilla.components.feature.session.SessionUseCases
+import org.mozilla.geckoview.GeckoRuntime
+import org.mozilla.geckoview.GeckoRuntimeSettings
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.utils.BuildConstants
 import org.mozilla.tv.firefox.utils.Settings
 
@@ -24,6 +27,19 @@ class WebRenderComponents(applicationContext: Context, systemUserAgent: String) 
                 applicationContext,
                 systemUserAgent = systemUserAgent,
                 appName = applicationContext.resources.getString(R.string.useragent_appname))
+
+        val runtimeSettingsBuilder = GeckoRuntimeSettings.Builder()
+        if (BuildConstants.isDevBuild) {
+            // In debug builds, allow to invoke via an Intent that has extras customizing Gecko.
+            // In particular, this allows to add command line arguments for custom profiles, etc.
+            val extras = applicationContext.serviceLocator.launchSafeIntent.extras
+            if (extras != null) {
+                runtimeSettingsBuilder.extras(extras)
+            }
+        }
+
+        val runtime = GeckoRuntime.create(applicationContext,
+                runtimeSettingsBuilder.build())
 
         GeckoEngine(applicationContext, DefaultSettings(
                 trackingProtectionPolicy = Settings.getInstance(applicationContext).trackingProtectionPolicy,
@@ -41,7 +57,7 @@ class WebRenderComponents(applicationContext: Context, systemUserAgent: String) 
                 remoteDebuggingEnabled = BuildConstants.isDevBuild,
 
                 mediaPlaybackRequiresUserGesture = false // Allows auto-play (which improves YouTube experience).
-        ))
+        ), runtime)
     }
 
     val sessionManager by lazy { SessionManager(engine) }
