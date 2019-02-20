@@ -67,6 +67,9 @@ android {
 
         gecko {
             dimension "engine"
+            // Move the suffix to the `system` product flavor when the shipping
+            // version is based on Gecko.
+            applicationIdSuffix ".gecko"
         }
     }
 
