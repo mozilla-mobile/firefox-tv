@@ -83,4 +83,17 @@ open class ServiceLocator(val app: Application) {
     open val pocketRepo = PocketVideoRepo(pocketEndpoint, pocketFeedStateMachine, buildConfigDerivables.initialPocketRepoState)
     open val sessionRepo by lazy { SessionRepo(sessionManager, sessionUseCases, turboMode).apply { observeSources() } }
     open val settingsRepo by lazy { SettingsRepo(app) }
+
+    // The first intent the App was launched with.  Used to pass configuration through to Gecko.
+    lateinit var launchSafeIntent: SafeIntent
+
+    fun notifyLaunchWithSafeIntent(safeIntent: SafeIntent): Boolean {
+        // We can't access the property reference outside of our own lexical scope,
+        // so this helper must be in this class.
+        if (!this::launchSafeIntent.isInitialized) {
+            launchSafeIntent = safeIntent
+            return true
+        }
+        return false
+    }
 }

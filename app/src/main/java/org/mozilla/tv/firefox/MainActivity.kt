@@ -55,13 +55,17 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         PublicSuffix.init(this) // Used by Pocket Video feed & custom home tiles.
         initMediaSession()
+
+        // The launch intent is needed to create the engines in the engine cache.
+        val safeIntent = intent.toSafeIntent()
+        serviceLocator.notifyLaunchWithSafeIntent(safeIntent)
+
         lifecycle.addObserver(serviceLocator.engineViewCache)
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
         setContentView(R.layout.activity_main)
 
-        val safeIntent = intent.toSafeIntent()
         val intentData = IntentValidator.validateOnCreate(this, safeIntent, savedInstanceState)
 
         val session = getOrCreateSession(intentData)
