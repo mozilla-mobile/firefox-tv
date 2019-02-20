@@ -7,7 +7,7 @@
 # and collects test artifacts into the test_artifacts folder
 
 # If a command fails then do not proceed and fail this script too.
-set -ex
+set -e
 #########################
 # The command line help #
 #########################
@@ -40,7 +40,7 @@ for ((i=4; i <= $#; i++))
 set +e
 
 # Execute test set
-./google-cloud-sdk/bin/gcloud --format="json" firebase test android run \
+output=$(./google-cloud-sdk/bin/gcloud --format="json" firebase test android run \
 --type instrumentation \
 --app ./app/build/outputs/apk/$1/$2.apk \
 --test ./app/build/outputs/apk/androidTest/$1/$2-androidTest.apk \
@@ -48,14 +48,20 @@ set +e
 --environment-variables clearPackageData=true \
 --results-bucket firefox-tv_test_artifacts \
 --timeout 30m \
---no-auto-google-login $config_param
+--no-auto-google-login $config_param)
 
 exitcode=$?
 
-echo "Downloading artifacts"
-
-mkdir test_artifacts
-./google-cloud-sdk/bin/gsutil ls gs://firefox-tv_test_artifacts | tail -1 | ./google-cloud-sdk/bin/gsutil -m cp -r -I ./test_artifacts
+# Disabling the download of artifacts, they can be found in the Firebase UI URL shown below
+#echo "Downloading artifacts"
+#mkdir test_artifacts
+#./google-cloud-sdk/bin/gsutil ls gs://firefox-tv_test_artifacts | tail -1 | ./google-cloud-sdk/bin/gsutil cp -r -I ./test_artifacts > /dev/null 2>&1
 
 # Now exit the script with the exit code from the test run. (Only 0 if all test executions passed)
+if [[ $exitcode -ne 0 ]]; then
+    echo "UI Test(s) have failed, please check above URL"
+    else
+    echo "All UI Test(s) have passed!"
+fi
+
 exit $exitcode
