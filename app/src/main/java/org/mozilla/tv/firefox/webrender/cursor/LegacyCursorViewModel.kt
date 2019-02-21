@@ -66,7 +66,10 @@ class LegacyCursorViewModel(
     }
 
     private var isInitialPosSet = false
+
+    // FIXME: Remove this as soon as possible because this is dangerously exposed
     val pos = PointF(0f, 0f)
+
     private var vel = 0f
 
     private val pressedDirections = EnumSet.noneOf(Direction::class.java)
