@@ -4,21 +4,14 @@
 
 package org.mozilla.tv.firefox.pocket
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.os.SystemClock
 import android.support.annotation.UiThread
-import android.support.annotation.VisibleForTesting
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import org.mozilla.tv.firefox.utils.BuildConfigDerivables
-import java.util.concurrent.TimeUnit
-import kotlin.math.min
-
-private val CACHE_UPDATE_FREQUENCY_MILLIS = TimeUnit.MINUTES.toMillis(45)
-private const val BASE_RETRY_TIME = 1_000L
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
+import org.mozilla.tv.firefox.utils.PeriodicRequester
+import org.mozilla.tv.firefox.utils.Response
 
 /**
  * Manages backing state for Pocket data, as well as any logic related to
@@ -27,8 +20,7 @@ private const val BASE_RETRY_TIME = 1_000L
 open class PocketVideoRepo(
     private val pocketEndpoint: PocketEndpoint,
     private val pocketFeedStateMachine: PocketFeedStateMachine,
-    private val localeIsEnglish: () -> Boolean,
-    buildConfigDerivables: BuildConfigDerivables
+    initialState: PocketVideoRepo.FeedState
 ) {
 
     sealed class FeedState {
@@ -39,102 +31,46 @@ open class PocketVideoRepo(
         object Inactive : FeedState()
     }
 
-    private val _feedState = MutableLiveData<FeedState>().apply {
-        // setValue must be called from the main thread, and this repo is instantiated
-        // off of the main thread in Espresso tests, so postValue is used instead
-        postValue(buildConfigDerivables.initialPocketRepoState)
-    }
-    open val feedState: LiveData<FeedState> = _feedState
+    private val _feedState = BehaviorSubject.createDefault(initialState)
+    open val feedState = _feedState.hide()
+        .observeOn(AndroidSchedulers.mainThread())
 
-    @Suppress("ANNOTATION_TARGETS_NON_EXISTENT_ACCESSOR") // Private properties generate fields so method annotations can't apply.
-    @get:UiThread
-    @set:UiThread
-    private var backgroundUpdates: Job? = null
-    @Volatile private var lastSuccessfulUpdateMillis = -1L
-    @Volatile private var lastUpdateAttemptMillis = -1L
-    @Volatile private var retryDelayMillis = BASE_RETRY_TIME
-    @Volatile private var lastAttemptWasSuccessful = false
+    private val periodicRequester = PeriodicRequester(pocketEndpoint)
+    private val compositeDisposable = CompositeDisposable()
 
     fun update() {
-        retryDelayMillis = BASE_RETRY_TIME
-        GlobalScope.launch { updateInner() }
+        pocketEndpoint.request()
+            .subscribeOn(Schedulers.io())
+            .subscribe(this::postUpdate)
+            .addTo(compositeDisposable)
     }
 
     @UiThread // update backgroundUpdates.
     fun startBackgroundUpdates() {
-        backgroundUpdates?.cancel() // Cancelling unexpectedly active Pocket update job to ensure only one is running
-        backgroundUpdates = startBackgroundUpdatesInner()
+        compositeDisposable.clear()
+        periodicRequester.start()
+            .subscribe(this::postUpdate)
+            .addTo(compositeDisposable)
     }
 
     // When we the app is not in use, we don't want to hit the network for no reason, so we cancel updates
     @UiThread // stop updating backgroundUpdates.
     fun stopBackgroundUpdates() {
-        backgroundUpdates?.cancel()
-        backgroundUpdates = null
+        compositeDisposable.clear()
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    suspend fun updateInner() {
-
-        suspend fun requestVideos(): List<PocketViewModel.FeedItem>? = pocketEndpoint.getRecommendedVideos()
-
-        fun List<PocketViewModel.FeedItem>?.wasSuccessful() = this?.isNotEmpty() == true
-
-        fun updateRequestTimers(requestSuccessful: Boolean) {
-            lastAttemptWasSuccessful = requestSuccessful
-            val now = SystemClock.elapsedRealtime()
-            lastUpdateAttemptMillis = now
-            when (requestSuccessful) {
-                true -> {
-                    lastSuccessfulUpdateMillis = now
-                    retryDelayMillis = BASE_RETRY_TIME
-                }
-                // Exponential backoff on failure
-                false -> {
-                    val doubled = retryDelayMillis * 2
-                    // Do nothing on overflow
-                    if (doubled > retryDelayMillis) retryDelayMillis = doubled
-                }
-            }
-        }
+    private fun postUpdate(response: Response<PocketData>) {
+        fun Response<PocketData>.toRepoState(): FeedState =
+            if (this is Response.Success) FeedState.LoadComplete(this.data)
+            else FeedState.FetchFailed
 
         fun postState(newState: PocketVideoRepo.FeedState) {
             val computed = pocketFeedStateMachine.computeNewState(newState, _feedState.value)
             if (_feedState.value !== computed) {
-                _feedState.postValue(computed)
+                _feedState.onNext(computed)
             }
         }
 
-        fun List<PocketViewModel.FeedItem>?.toRepoState(): FeedState =
-            if (this?.isNotEmpty() == true) FeedState.LoadComplete(this)
-            else FeedState.FetchFailed
-
-        if (!localeIsEnglish.invoke()) {
-            postState(FeedState.Inactive)
-            return
-        }
-
-        postState(FeedState.Loading)
-        val response = requestVideos()
-        updateRequestTimers(response.wasSuccessful())
         postState(response.toRepoState())
-    }
-
-    private fun startBackgroundUpdatesInner() = GlobalScope.launch {
-        while (true) {
-            val nextScheduledUpdateMillis = lastUpdateAttemptMillis + CACHE_UPDATE_FREQUENCY_MILLIS
-            val nextRetryUpdateMillis = lastUpdateAttemptMillis + retryDelayMillis
-            val nextUpdateMillis = if (lastAttemptWasSuccessful) {
-                nextScheduledUpdateMillis
-            } else {
-                min(nextScheduledUpdateMillis, nextRetryUpdateMillis)
-            }
-
-            val delayForMillis = nextUpdateMillis - SystemClock.elapsedRealtime()
-            if (delayForMillis > 0) {
-                delay(delayForMillis)
-            }
-            updateInner()
-        }
     }
 }
