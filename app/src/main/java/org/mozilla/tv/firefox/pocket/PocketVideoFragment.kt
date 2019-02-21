@@ -4,7 +4,6 @@
 
 package org.mozilla.tv.firefox.pocket
 
-import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -19,8 +18,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_pocket_video.*
-import kotlinx.android.synthetic.main.fragment_pocket_video.view.*
 import mozilla.components.support.ktx.android.os.resetAfter
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
@@ -40,33 +40,45 @@ class PocketVideoFragment : Fragment() {
         const val FRAGMENT_TAG = "pocket"
     }
 
+    private val compositeDisposable = CompositeDisposable()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val layout = inflater.inflate(R.layout.fragment_pocket_video, container, false)
-        val adapter = PocketVideoAdapter(context!!, fragmentManager!!).also {
-            layout.videoFeed.gridView.adapter = it
-        }
-
-        // SVGs can have artifacts if we set them in XML so we set it in code.
-        PocketDrawable.setImageDrawableAsPocketWordmark(layout.pocketWordmarkView)
-        layout.pocketHelpButton.setImageDrawable(context!!.getDrawable(R.drawable.pocket_onboarding_help_button))
-
-        val viewModel = FirefoxViewModelProviders.of(this).get(PocketViewModel::class.java)
-
-        viewModel.state.observe(viewLifecycleOwner, Observer<PocketViewModel.State> { state ->
-            when (state) {
-                is PocketViewModel.State.Error -> { /* TODO: #769: display error screen */ }
-                is PocketViewModel.State.Feed -> adapter.setVideos(state.feed)
-                is PocketViewModel.State.NotDisplayed -> Unit // We may come here on non-EN locales
-                null -> { }
-            }.forceExhaustive
-        })
-        return layout
+        return inflater.inflate(R.layout.fragment_pocket_video, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         pocketHelpButton.setOnClickListener { _ ->
             startActivity(Intent(context, PocketOnboardingActivity::class.java))
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val adapter = PocketVideoAdapter(context!!, fragmentManager!!).also {
+            videoFeed.gridView.adapter = it
+        }
+
+        // SVGs can have artifacts if we set them in XML so we set it in code.
+        PocketDrawable.setImageDrawableAsPocketWordmark(pocketWordmarkView)
+        pocketHelpButton.setImageDrawable(context!!.getDrawable(R.drawable.pocket_onboarding_help_button))
+
+        val viewModel = FirefoxViewModelProviders.of(this).get(PocketViewModel::class.java)
+
+        viewModel.state
+            .subscribe { state ->
+                when (state) {
+                    is PocketViewModel.State.Error -> { /* TODO: #769: display error screen */ }
+                    is PocketViewModel.State.Feed -> adapter.setVideos(state.feed)
+                    is PocketViewModel.State.NotDisplayed -> Unit // We may come here on non-EN locales
+                    null -> { }
+                }.forceExhaustive
+            }
+            .addTo(compositeDisposable)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        compositeDisposable.clear()
     }
 
     // When menu is pressed from the Pocket feed, go back to overlay
