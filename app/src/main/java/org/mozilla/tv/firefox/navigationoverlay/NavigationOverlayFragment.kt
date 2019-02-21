@@ -27,6 +27,9 @@ import android.widget.ScrollView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.*
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.*
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.*
 import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.MainActivity
@@ -85,6 +88,7 @@ class NavigationOverlayFragment : Fragment() {
      * and cancel this job at the end of the UI lifecycle, cancelling the children.
      */
     private val uiLifecycleCancelJob: Job = Job()
+    private val compositeDisposable = CompositeDisposable()
 
     // We need this in order to show the unpin toast, at max, once per
     // instantiation of the BrowserNavigationOverlay
@@ -128,6 +132,8 @@ class NavigationOverlayFragment : Fragment() {
 
     // TODO: remove this when FocusRepo is in place #1395
     private var defaultFocusTag = NavigationOverlayFragment.FRAGMENT_TAG
+    @Deprecated(message = "VM state should be used reactively, not imperatively. See #1395, which will fix this")
+    private var lastPocketState: PocketViewModel.State? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -196,8 +202,40 @@ class NavigationOverlayFragment : Fragment() {
         updateFocusableViews()
     }
 
+    override fun onStart() {
+        super.onStart()
+        observePocketState()
+            .addTo(compositeDisposable)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        compositeDisposable.clear()
+    }
+
     private fun exitFirefox() {
         activity!!.moveTaskToBack(true)
+    }
+
+    private fun observePocketState(): Disposable {
+        return pocketViewModel.state
+            .subscribe { state ->
+                @Suppress("DEPRECATION")
+                lastPocketState = state
+                when (state) {
+                    is PocketViewModel.State.Error -> {
+                        pocketVideoMegaTileView.visibility = View.VISIBLE
+                        showMegaTileError()
+                    }
+                    is PocketViewModel.State.Feed -> {
+                        pocketVideoMegaTileView.visibility = View.VISIBLE
+                        pocketVideoMegaTileView.setContent(state.feed)
+                        hideMegaTileError()
+                    }
+                    is PocketViewModel.State.NotDisplayed -> pocketVideoMegaTileView.visibility = View.GONE
+                    null -> return@subscribe
+                }.forceExhaustive
+            }
     }
 
     /**
@@ -232,22 +270,6 @@ class NavigationOverlayFragment : Fragment() {
             val event = NavigationEvent.fromViewClick(view.id) ?: return@setOnClickListener
             onNavigationEvent.invoke(event, null, null)
         }
-
-        pocketViewModel.state.observe(viewLifecycleOwner, Observer { state ->
-            when (state) {
-                is PocketViewModel.State.Error -> {
-                    pocketVideoMegaTileView.visibility = View.VISIBLE
-                    showMegaTileError()
-                }
-                is PocketViewModel.State.Feed -> {
-                    pocketVideoMegaTileView.visibility = View.VISIBLE
-                    pocketVideoMegaTileView.setContent(state.feed)
-                    hideMegaTileError()
-                }
-                is PocketViewModel.State.NotDisplayed -> pocketVideoMegaTileView.visibility = View.GONE
-                null -> return@Observer
-            }.forceExhaustive
-        })
     }
 
     private fun initPinnedTiles() = with(tileContainer) {
@@ -344,8 +366,10 @@ class NavigationOverlayFragment : Fragment() {
         }
 
         navUrlInput.nextFocusDownId = when {
-            pocketViewModel.state.value is PocketViewModel.State.Feed -> R.id.pocketVideoMegaTileView
-            pocketViewModel.state.value === PocketViewModel.State.Error -> R.id.megaTileTryAgainButton
+            @Suppress("DEPRECATION")
+            lastPocketState is PocketViewModel.State.Feed -> R.id.pocketVideoMegaTileView
+            @Suppress("DEPRECATION")
+            lastPocketState === PocketViewModel.State.Error -> R.id.megaTileTryAgainButton
             tileAdapter.itemCount == 0 -> R.id.navUrlInput
             else -> R.id.tileContainer
         }
