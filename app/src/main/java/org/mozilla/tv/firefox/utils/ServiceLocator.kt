@@ -70,7 +70,7 @@ open class ServiceLocator(val app: Application) {
     val fretboardProvider: FretboardProvider by lazy { FretboardProvider(app) }
     val experimentsProvider by lazy { ExperimentsProvider(fretboardProvider.fretboard, app) }
     val turboMode: TurboMode by lazy { TurboMode(app) }
-    val pocketRepoCache by lazy { PocketRepoCache(pocketRepo).apply { setup() } }
+    val pocketRepoCache by lazy { PocketRepoCache(pocketRepo) }
     val viewModelFactory by lazy { ViewModelFactory(this, app) }
     val screenController by lazy { ScreenController() }
     val engineViewCache by lazy { EngineViewCache(sessionRepo) }
@@ -80,9 +80,7 @@ open class ServiceLocator(val app: Application) {
 
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())
     open val pinnedTileRepo by lazy { PinnedTileRepo(app) }
-    open val pocketRepo = PocketVideoRepo(pocketEndpoint, pocketFeedStateMachine, getIsEnglishLocale, buildConfigDerivables).apply {
-        update()
-    }
+    open val pocketRepo = PocketVideoRepo(pocketEndpoint, pocketFeedStateMachine, buildConfigDerivables.initialPocketRepoState)
     open val sessionRepo by lazy { SessionRepo(sessionManager, sessionUseCases, turboMode).apply { observeSources() } }
     open val settingsRepo by lazy { SettingsRepo(app) }
 }
