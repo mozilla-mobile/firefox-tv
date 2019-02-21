@@ -7,31 +7,28 @@ package org.mozilla.tv.firefox.ui.screenshots
 
 import android.app.Application
 import android.support.test.InstrumentationRegistry
+import android.support.test.espresso.Espresso.onView
+import android.support.test.espresso.action.ViewActions.click
+import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
+import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.rule.ActivityTestRule
 import android.support.test.uiautomator.UiDevice
 import android.support.test.uiautomator.UiSelector
-
+import android.view.View
+import org.hamcrest.Matchers.allOf
 import org.junit.After
 import org.junit.ClassRule
 import org.junit.Rule
 import org.junit.Test
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.helpers.MainActivityTestRule
+import org.mozilla.tv.firefox.TestDependencyFactory
 import org.mozilla.tv.firefox.helpers.CustomPocketFeedStateProvider
+import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
-
+import org.mozilla.tv.firefox.utils.ServiceLocator
 import tools.fastlane.screengrab.Screengrab
 import tools.fastlane.screengrab.locale.LocaleTestRule
-
-import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.action.ViewActions.click
-import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
-import android.support.test.espresso.matcher.ViewMatchers.withId
-import android.view.View
-import org.hamcrest.Matchers.allOf
-import org.mozilla.tv.firefox.TestDependencyFactory
-import org.mozilla.tv.firefox.utils.ServiceLocator
 
 class PocketErrorTest : ScreenshotTest() {
 
@@ -63,7 +60,7 @@ class PocketErrorTest : ScreenshotTest() {
 
     @Test
     fun showPocketTileError() {
-        customPocketFeedStateProvider.fakedPocketRepoState.postValue(PocketVideoRepo.FeedState.FetchFailed)
+        customPocketFeedStateProvider.fakedPocketRepoState.onNext(PocketVideoRepo.FeedState.FetchFailed)
 
         val errorMsg = mDevice.findObject(
             UiSelector()
