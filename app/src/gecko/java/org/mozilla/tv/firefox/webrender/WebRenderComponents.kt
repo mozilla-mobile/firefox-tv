@@ -10,7 +10,10 @@ import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.DefaultSettings
 import mozilla.components.concept.engine.Engine
 import mozilla.components.feature.session.SessionUseCases
+import org.mozilla.geckoview.GeckoRuntime
+import org.mozilla.geckoview.GeckoRuntimeSettings
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.utils.BuildConstants
 import org.mozilla.tv.firefox.utils.Settings
 
 /**
@@ -38,10 +41,21 @@ class WebRenderComponents(applicationContext: Context, systemUserAgent: String) 
                 allowContentAccess = false,
 
                 mediaPlaybackRequiresUserGesture = false // Allows auto-play (which improves YouTube experience).
-        ))
+        ), getOrCreateRuntime(applicationContext))
     }
 
     val sessionManager by lazy { SessionManager(engine) }
 
     val sessionUseCases by lazy { SessionUseCases(sessionManager) }
+
+    @Synchronized
+    private fun getOrCreateRuntime(context: Context): GeckoRuntime {
+        val builder = GeckoRuntimeSettings.Builder()
+
+        if (BuildConstants.isDevBuild) {
+            builder.remoteDebuggingEnabled(true)
+        }
+
+        return GeckoRuntime.create(context, builder.build())
+    }
 }

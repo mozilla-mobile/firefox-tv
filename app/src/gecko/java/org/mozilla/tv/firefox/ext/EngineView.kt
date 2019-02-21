@@ -22,17 +22,6 @@ private val uiHandler = Handler(Looper.getMainLooper())
  * Firefox for Fire TV needs to configure every WebView appropriately.
  */
 fun EngineView.setupForApp() {
-    // Also increase text size to fill the viewport (this mirrors the behaviour of Firefox,
-    // Chrome does this in the current Chrome Dev, but not Chrome release).
-    // TODO #33: TEXT_AUTOSIZING does not exist in AmazonWebSettings
-    // geckoView.settings.setLayoutAlgorithm(AmazonWebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
-
-//    if (BuildConstants.isDevBuild) {
-//        GeckoView.setWebContentsDebuggingEnabled(true)
-//    }
-
-    // GeckoView can be null temporarily after clearData(); however, activity.recreate() would
-    // instantiate a new GeckoView instance
     geckoView?.setOnFocusChangeListener { _, hasFocus ->
         if (!hasFocus) {
             // For why we're modifying the focusedDOMElement, see FocusedDOMElementCacheInterface.
