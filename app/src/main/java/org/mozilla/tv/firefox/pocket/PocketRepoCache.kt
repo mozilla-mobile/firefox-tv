@@ -4,8 +4,7 @@
 
 package org.mozilla.tv.firefox.pocket
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import io.reactivex.Observable
 
 /**
  * Wraps a [PocketVideoRepo] instance and selectively forwards its emissions.
@@ -22,25 +21,20 @@ import android.arch.lifecycle.MutableLiveData
  * screen should not allow updates, but navigating from overlay to browser
  * should. This lets us manually control when updates are allowed.
  */
-open class PocketRepoCache(private val repo: PocketVideoRepo) {
-
-    private val _feedState = MutableLiveData<PocketVideoRepo.FeedState>() // Mutable backer for feedState
-    open val feedState: LiveData<PocketVideoRepo.FeedState> = _feedState
+open class PocketRepoCache(repo: PocketVideoRepo) {
 
     // This should only be unfrozen when Pocket videos are not visible to the user.
     // See class kdoc
     var frozen = false
 
-    fun setup() {
-        repo.feedState.observeForever {
-            // Freezing the cache should prevent new videos from overwriting old ones, but we don't want to (for
-            // example) prevent new videos from overwriting a loading state. cachedValueIsBad means that the cached
-            // value is not a successful load
-            val cachedValueIsBad = _feedState.value !is PocketVideoRepo.FeedState.LoadComplete
-
-            if (!frozen || cachedValueIsBad) {
-                _feedState.postValue(it)
+    open val feedState: Observable<PocketVideoRepo.FeedState> =
+        repo.feedState
+            .scan { cachedValue: PocketVideoRepo.FeedState, currentValue: PocketVideoRepo.FeedState ->
+                val cachedValueIsBad = cachedValue !is PocketVideoRepo.FeedState.LoadComplete
+                if (!frozen || cachedValueIsBad) currentValue
+                else cachedValue
             }
-        }
-    }
+            .distinctUntilChanged()
+            .replay(1)
+            .autoConnect(0)
 }
