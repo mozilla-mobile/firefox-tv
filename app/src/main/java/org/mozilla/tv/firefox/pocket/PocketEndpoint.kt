@@ -8,7 +8,6 @@ import android.net.Uri
 import android.support.annotation.AnyThread
 import android.support.annotation.VisibleForTesting
 import android.util.Log
-import io.reactivex.Maybe
 import io.reactivex.Single
 import kotlinx.coroutines.runBlocking
 import okhttp3.Request
@@ -35,7 +34,9 @@ typealias PocketData = List<PocketViewModel.FeedItem.Video>
 open class PocketEndpoint(private val appVersion: String, private val pocketEndpoint: Uri?) : Endpoint<PocketData> {
 
     /**
-     * Wraps the suspend function [getRecommendedVideos] in a [Maybe]
+     * Wraps the suspend function [getRecommendedVideos] in a [Single]
+     *
+     * Note that this is a blocking call
      */
     override fun request(): Single<Response<PocketData>> {
         val videos = runBlocking { getRecommendedVideos() }
