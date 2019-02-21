@@ -4,8 +4,9 @@
 
 package org.mozilla.tv.firefox.helpers
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.subjects.PublishSubject
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
@@ -28,14 +29,14 @@ class CustomPocketFeedStateProvider {
 
     private val localeIsEnglish: () -> Boolean = { true }
 
-    val fakedPocketRepoState = MutableLiveData<PocketVideoRepo.FeedState>()
+    val fakedPocketRepoState = PublishSubject.create<PocketVideoRepo.FeedState>()
     val fakedPocketRepo = object : PocketVideoRepo(
         pocketEndpoint,
         PocketFeedStateMachine(),
-        localeIsEnglish,
-        BuildConfigDerivables(localeIsEnglish)
+        BuildConfigDerivables(localeIsEnglish).initialPocketRepoState
     ) {
-        override val feedState: LiveData<FeedState>
+        override val feedState: Observable<FeedState>
             get() = fakedPocketRepoState
+                .observeOn(AndroidSchedulers.mainThread())
     }
 }
