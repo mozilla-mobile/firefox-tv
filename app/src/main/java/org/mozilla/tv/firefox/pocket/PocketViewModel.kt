@@ -6,9 +6,9 @@ package org.mozilla.tv.firefox.pocket
 
 import android.arch.lifecycle.ViewModel
 import android.support.annotation.VisibleForTesting
+import io.reactivex.Observable
 import org.json.JSONObject
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.ext.map
 
 const val POCKET_VIDEO_COUNT = 20
 
@@ -47,7 +47,7 @@ class PocketViewModel(
         }
     }
 
-    val state = pocketRepoCache.feedState
+    val state: Observable<State> = pocketRepoCache.feedState
         .map { repoState ->
             when (repoState) {
                 is PocketVideoRepo.FeedState.Loading -> State.Feed(loadingPlaceholders)
@@ -57,6 +57,8 @@ class PocketViewModel(
                 is PocketVideoRepo.FeedState.Inactive -> State.NotDisplayed
             }
         }
+        .replay(1)
+        .autoConnect(0)
 
     companion object {
         @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
