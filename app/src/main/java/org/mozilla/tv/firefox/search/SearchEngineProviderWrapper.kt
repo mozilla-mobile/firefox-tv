@@ -10,7 +10,6 @@ import java.util.Locale
 import mozilla.components.browser.search.SearchEngine
 import mozilla.components.browser.search.provider.AssetsSearchEngineProvider
 import mozilla.components.browser.search.provider.SearchEngineProvider
-import mozilla.components.browser.search.provider.localization.LocaleSearchLocalizationProvider
 import mozilla.components.browser.search.provider.localization.SearchLocalizationProvider
 
 private const val LOGTAG = "Search"
@@ -27,10 +26,10 @@ class SearchEngineProviderWrapper(private val replacements: Map<String, String>)
     val myLocalizationProvider = object : SearchLocalizationProvider() {
         override val language: String
             get() = Locale.getDefault().language
-    
+
         override val country: String
             get() = Locale.getDefault().country
-    
+
         override val region: String? = country
     }
 
@@ -54,5 +53,4 @@ class SearchEngineProviderWrapper(private val replacements: Map<String, String>)
 
         return searchEngines
     }
-
 }
