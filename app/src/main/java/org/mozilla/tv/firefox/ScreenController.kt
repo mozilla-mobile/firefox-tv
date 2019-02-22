@@ -141,11 +141,13 @@ class ScreenController {
             transaction.show(overlayFragment)
             MenuInteractionMonitor.menuOpened()
             overlayFragment.navUrlInput.requestFocus()
+            overlayFragment.navOverlayScrollView.updateOverlayForHomescreen(isOnHomeUrl(fragmentManager))
         } else {
             transaction.hide(overlayFragment)
             MenuInteractionMonitor.menuClosed()
             renderFragment.view?.requestFocus()
         }
+
         transaction.commit()
     }
 
