@@ -26,6 +26,7 @@ import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_navigation_overlay.*
+import kotlinx.android.synthetic.main.fragment_navigation_overlay.view.*
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.*
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.*
 import kotlinx.coroutines.Job
@@ -410,6 +411,8 @@ class NavigationOverlayFragment : Fragment() {
  * clicks up twice quickly), it will skip and not scroll smoothly. Since we don't scroll often,
  * this seems fine.
  */
+private const val OVERLAY_SPACER_HOMESCREEN_HEIGHT = 393
+private const val OVERLAY_SPACER_WEBRENDER_HEIGHT = 800
 class BrowserNavigationOverlayScrollView(
     context: Context,
     attrs: AttributeSet
@@ -425,5 +428,14 @@ class BrowserNavigationOverlayScrollView(
         //    scroll the screen but nothing new is focused: we don't want that.
         val deltaScrollForOnScreen = super.computeScrollDeltaToGetChildRectOnScreen(rect)
         return deltaScrollForOnScreen + deltaScrollPadding * Integer.signum(deltaScrollForOnScreen)
+    }
+
+    fun updateOverlayForHomescreen(isHomescreen: Boolean) {
+        val windowSpacerHeight = if (isHomescreen) OVERLAY_SPACER_HOMESCREEN_HEIGHT else OVERLAY_SPACER_WEBRENDER_HEIGHT
+        overlayWindowSpacer.apply {
+            layoutParams.height = windowSpacerHeight
+            requestLayout()
+        }
+        scrollY = 0
     }
 }
