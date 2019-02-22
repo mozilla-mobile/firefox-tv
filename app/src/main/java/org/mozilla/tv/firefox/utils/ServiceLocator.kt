@@ -79,7 +79,7 @@ open class ServiceLocator(val app: Application) {
     val sessionUseCases get() = app.webRenderComponents.sessionUseCases
     val searchEngineManager by lazy {
         val replacements = mapOf("google" to "google-b-amzftv", "google-2018" to "google-b-1-amzftv",
-                                 "google-b-m" to "google-b-amzftv", "google-b-1-m" to "google-b-1-amzftv")
+            "google-b-m" to "google-b-amzftv", "google-b-1-m" to "google-b-1-amzftv")
         val engineProvider = SearchEngineProviderWrapper(replacements)
 
         SearchEngineManager(listOf(engineProvider)).apply { GlobalScope.launch { load(app) } }
