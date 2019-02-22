@@ -21,13 +21,13 @@ import org.mozilla.tv.firefox.utils.BuildConfigDerivables
  */
 class CustomPocketFeedStateProvider {
 
-    private val pocketEndpoint = object : PocketEndpoint("VERSION", "www.mock.com".toUri()) {
+    private val localeIsEnglish: () -> Boolean = { true }
+
+    private val pocketEndpoint = object : PocketEndpoint("VERSION", "www.mock.com".toUri(), localeIsEnglish) {
         override suspend fun getRecommendedVideos(): List<PocketViewModel.FeedItem.Video>? {
             return PocketViewModel.noKeyPlaceholders
         }
     }
-
-    private val localeIsEnglish: () -> Boolean = { true }
 
     val fakedPocketRepoState = PublishSubject.create<PocketVideoRepo.FeedState>()
     val fakedPocketRepo = object : PocketVideoRepo(

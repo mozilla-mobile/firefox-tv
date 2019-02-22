@@ -31,7 +31,11 @@ typealias PocketData = List<PocketViewModel.FeedItem.Video>
  * The methods of this class call the endpoint directly and does not cache results or rate limit,
  * outside of the network layer (e.g. with OkHttp).
  */
-open class PocketEndpoint(private val appVersion: String, private val pocketEndpoint: Uri?) : Endpoint<PocketData> {
+open class PocketEndpoint(
+    private val appVersion: String,
+    private val pocketEndpoint: Uri?,
+    private val getIsEnglishLocale: () -> Boolean
+) : Endpoint<PocketData> {
 
     /**
      * Wraps the suspend function [getRecommendedVideos] in a [Single]
@@ -49,9 +53,10 @@ open class PocketEndpoint(private val appVersion: String, private val pocketEndp
     /** @return The global video recommendations or null on error; the list will never be empty. */
     @AnyThread // via PocketEndpointRaw.
     open suspend fun getRecommendedVideos(): List<PocketViewModel.FeedItem.Video>? {
-        return pocketEndpoint
-            ?.let { endpoint -> PocketEndpointRaw.getGlobalVideoRecommendations(appVersion, endpoint) }
-            ?.let { json -> convertVideosJSON(json) }
+        if (!getIsEnglishLocale.invoke()) return null
+        pocketEndpoint ?: return null
+        val jsonResponse = PocketEndpointRaw.getGlobalVideoRecommendations(appVersion, pocketEndpoint) ?: return null
+        return convertVideosJSON(jsonResponse)
     }
 
     /** @return The videos or null on error; the list will never be empty. */

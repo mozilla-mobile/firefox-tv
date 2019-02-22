@@ -61,7 +61,7 @@ import org.mozilla.tv.firefox.session.SessionRepo
  */
 open class ServiceLocator(val app: Application) {
     private val appVersion = app.packageManager.getPackageInfo(app.packageName, 0).versionName
-    private val pocketEndpoint get() = PocketEndpoint(appVersion, buildConfigDerivables.globalPocketVideoEndpoint)
+    private val pocketEndpoint get() = PocketEndpoint(appVersion, buildConfigDerivables.globalPocketVideoEndpoint, getIsEnglishLocale)
     private val buildConfigDerivables get() = BuildConfigDerivables(getIsEnglishLocale)
     private val pocketFeedStateMachine get() = PocketFeedStateMachine()
     private val getIsEnglishLocale = { LocaleManager.getInstance().currentLanguageIsEnglish(app) }
