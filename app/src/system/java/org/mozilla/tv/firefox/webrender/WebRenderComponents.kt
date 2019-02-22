@@ -11,6 +11,7 @@ import mozilla.components.concept.engine.DefaultSettings
 import mozilla.components.concept.engine.Engine
 import mozilla.components.feature.session.SessionUseCases
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.utils.BuildConstants
 import org.mozilla.tv.firefox.utils.Settings
 
 /**
@@ -36,6 +37,8 @@ class WebRenderComponents(applicationContext: Context, systemUserAgent: String) 
                 // be loaded via file:///android_asset/
                 allowFileAccess = false,
                 allowContentAccess = false,
+
+                remoteDebuggingEnabled = BuildConstants.isDevBuild,
 
                 mediaPlaybackRequiresUserGesture = false // Allows auto-play (which improves YouTube experience).
         ))

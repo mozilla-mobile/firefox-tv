@@ -14,7 +14,6 @@ import mozilla.components.browser.engine.system.SystemEngineSession
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.webrender.FocusedDOMElementCache
-import org.mozilla.tv.firefox.utils.BuildConstants
 import org.mozilla.tv.firefox.utils.URLs
 import java.util.WeakHashMap
 
@@ -31,10 +30,6 @@ fun EngineView.setupForApp() {
     // Chrome does this in the current Chrome Dev, but not Chrome release).
     // TODO #33: TEXT_AUTOSIZING does not exist in AmazonWebSettings
     // webView.settings.setLayoutAlgorithm(AmazonWebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
-
-    if (BuildConstants.isDevBuild) {
-        WebView.setWebContentsDebuggingEnabled(true)
-    }
 
     // WebView can be null temporarily after clearData(); however, activity.recreate() would
     // instantiate a new WebView instance
