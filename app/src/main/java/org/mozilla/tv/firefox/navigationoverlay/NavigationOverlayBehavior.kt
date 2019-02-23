@@ -12,6 +12,10 @@ import android.view.View
 import android.widget.LinearLayout
 import org.mozilla.tv.firefox.R
 
+/**
+ * Custom CoordinatorLayout.Behavior to link Toolbar upper half of split overlay to scrolling of the
+ * bottom half, to simulate the toolbar being "pushed" up by the bottom half of the split overlay.
+ */
 class NavigationOverlayBehavior(context: Context, attrs: AttributeSet) : CoordinatorLayout.Behavior<LinearLayout>(context, attrs) {
     var toolbarHeight = 0
 
@@ -28,6 +32,7 @@ class NavigationOverlayBehavior(context: Context, attrs: AttributeSet) : Coordin
         axes: Int,
         type: Int
     ): Boolean {
+        // We're interested in receiving scroll events, so return true.
         return true
     }
 
