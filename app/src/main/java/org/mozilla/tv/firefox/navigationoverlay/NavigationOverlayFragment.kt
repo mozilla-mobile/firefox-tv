@@ -25,8 +25,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_navigation_overlay.*
-import kotlinx.android.synthetic.main.fragment_navigation_overlay.view.*
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.*
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.*
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.*
 import kotlinx.coroutines.Job
@@ -141,7 +140,7 @@ class NavigationOverlayFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_navigation_overlay, container, false)
+        return inflater.inflate(R.layout.fragment_navigation_overlay_orig, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -160,8 +159,6 @@ class NavigationOverlayFragment : Fragment() {
 
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context!!, R.color.photonGrey10_a60p)) }
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
-
-        overlayScrollView.scrollTo(0, 0)
 
         // TODO: remove this when FocusRepo is in place #1395
         when (defaultFocusTag) {
@@ -430,6 +427,8 @@ class BrowserNavigationOverlayScrollView(
         return deltaScrollForOnScreen + deltaScrollPadding * Integer.signum(deltaScrollForOnScreen)
     }
 
+    // TODO: Add back in once #1666 is ready to land.
+    /*
     fun updateOverlayForHomescreen(isHomescreen: Boolean) {
         val windowSpacerHeight = if (isHomescreen) OVERLAY_SPACER_HOMESCREEN_HEIGHT else OVERLAY_SPACER_WEBRENDER_HEIGHT
         overlayWindowSpacer.apply {
@@ -438,4 +437,5 @@ class BrowserNavigationOverlayScrollView(
         }
         scrollY = 0
     }
+    */
 }
