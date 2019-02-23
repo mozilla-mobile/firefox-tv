@@ -142,7 +142,7 @@ class ScreenController {
             MenuInteractionMonitor.menuOpened()
             overlayFragment.navUrlInput.requestFocus()
             // TODO: Disabled until Overlay refactor is complete #1666
-//            overlayFragment.navOverlayScrollView.updateOverlayForHomescreen(isOnHomeUrl(fragmentManager))
+            // overlayFragment.navOverlayScrollView.updateOverlayForHomescreen(isOnHomeUrl(fragmentManager))
         } else {
             transaction.hide(overlayFragment)
             MenuInteractionMonitor.menuClosed()

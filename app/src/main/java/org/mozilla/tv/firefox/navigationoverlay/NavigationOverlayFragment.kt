@@ -151,6 +151,24 @@ class NavigationOverlayFragment : Fragment() {
             onNavigationEvent
         ).onCreateView(view, viewLifecycleOwner, fragmentManager!!)
 
+        // TODO: Add back in once #1666 is ready to land.
+        /*
+        // Handle split overlay state on homescreen or webrender
+        FirefoxViewModelProviders.of(this@NavigationOverlayFragment)
+                .get(NavigationOverlayViewModel::class.java)
+                .apply {
+                    viewIsSplit.observe(viewLifecycleOwner, Observer { isSplit ->
+                        isSplit ?: return@Observer
+                        val windowSpacerHeight = if (isSplit) OVERLAY_SPACER_WEBRENDER_HEIGHT else OVERLAY_SPACER_HOMESCREEN_HEIGHT
+                        overlayWindowSpacer.apply {
+                            layoutParams.height = windowSpacerHeight
+                            requestLayout()
+                        }
+                        navOverlayScrollView.scrollY = 0
+                    })
+                }
+                */
+
         initMegaTile()
         initPinnedTiles()
 
@@ -426,16 +444,4 @@ class BrowserNavigationOverlayScrollView(
         val deltaScrollForOnScreen = super.computeScrollDeltaToGetChildRectOnScreen(rect)
         return deltaScrollForOnScreen + deltaScrollPadding * Integer.signum(deltaScrollForOnScreen)
     }
-
-    // TODO: Add back in once #1666 is ready to land.
-    /*
-    fun updateOverlayForHomescreen(isHomescreen: Boolean) {
-        val windowSpacerHeight = if (isHomescreen) OVERLAY_SPACER_HOMESCREEN_HEIGHT else OVERLAY_SPACER_WEBRENDER_HEIGHT
-        overlayWindowSpacer.apply {
-            layoutParams.height = windowSpacerHeight
-            requestLayout()
-        }
-        scrollY = 0
-    }
-    */
 }
