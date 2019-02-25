@@ -23,6 +23,7 @@ import androidx.test.uiautomator.Until
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert.assertTrue
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.helpers.RecyclerViewHelpers
 import org.mozilla.tv.firefox.helpers.ext.assertIsChecked
@@ -87,6 +88,26 @@ class NavigationOverlayRobot {
             urlBar().perform(clearText(),
                     typeText(url.toString()),
                     pressImeActionButton())
+
+            BrowserRobot().interact()
+            return BrowserRobot.Transition()
+        }
+
+        fun openYouTubeAndWaitForRedirects(
+            activityTestRule: MainActivityTestRule,
+            interact: BrowserRobot.() -> Unit
+        ): BrowserRobot.Transition {
+            val session = activityTestRule.activity.webRenderComponents.sessionManager.selectedSession
+
+            urlBar().perform(clearText(),
+                    typeText("youtube.com/tv"),
+                    pressImeActionButton())
+
+            // The session thinks YouTube has completed loading before all of the redirects are visited.
+            // This will make the IdlingResource wait until the url is the final YouTube redirect, or a
+            // video link. Otherwise, the test will append the next url onto the youtube url and fail the test.
+            activityTestRule.loadingIdlingResource.waitUntil = { session?.url!!
+                .contains("youtube.com/tv#/surface?c=FEtopics&resume") }
 
             BrowserRobot().interact()
             return BrowserRobot.Transition()

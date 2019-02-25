@@ -14,6 +14,7 @@ import org.mozilla.tv.firefox.FirefoxApplication
  */
 class SessionLoadedIdlingResource : IdlingResource {
     private var resourceCallback: IdlingResource.ResourceCallback? = null
+    var waitUntil: (() -> Boolean)? = null
 
     override fun getName(): String {
         return SessionLoadedIdlingResource::class.java.simpleName
@@ -25,9 +26,20 @@ class SessionLoadedIdlingResource : IdlingResource {
 
         val session = sessionManager.selectedSession
 
+        /**
+         * Used for [org.mozilla.tv.firefox.ui.YouTubeNavigationTest].
+         * This will cause the test to wait until a specific condition is true before moving on.
+         */
+        val waitUntil = waitUntil
+
         return if (session?.loading == true) {
             false
         } else {
+            when {
+                waitUntil == null -> {}
+                waitUntil() -> this.waitUntil = null
+                !waitUntil() -> return false
+            }
             invokeCallback()
             true
         }
