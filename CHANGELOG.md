@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.4-A] - 2019-02-25
+** Version bump only from 3.3, released to all devices **
+
+## [3.3] - 2019-01-31
+** Version bump only from 3.2.5, released to all devices but 4k **
+
+## [3.2.5] - 2019-01-16
+** Version bump only from 3.1.3, released to all devices **
+
 ## [3.1.3] - 2018-12-20
 ### Added
 - Ability to exit Firefox with remote back button
@@ -125,6 +134,9 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 *Initial release! A browser including home tile shortcuts.*
 
 [Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1..HEAD
+[3.4-A]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.3...v3.4-A
+[3.3]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.5...v3.3
+[3.2.5]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.3...v3.2.5
 [3.1.3]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.2...v3.1.3
 [3.1.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.1...v3.1.2
 [3.1.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1...v3.1.1
