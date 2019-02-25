@@ -33,10 +33,8 @@ private const val sidebarFocused = "document.activeElement.parentElement.parentE
  */
 
 class YouTubeBackHandler(private val engineView: EngineView?, private val activity: MainActivity) {
-    private var urlIndexList: MutableList<Int> = mutableListOf()
-    private var goingToYouTube: Boolean = false // Flag for when navigating from a non-YouTube site to YouTube
-    private var backForwardUrlList = engineView!!.backForwardList
-    private var indexToAdd: Int = 0
+    private val preYouTubeIndexHistory: MutableList<Int> = mutableListOf()
+    private var currentPreYouTubeIndex: Int? = null
 
     fun handleBackClick(event: KeyEvent) {
         val shouldWeExitPage = """
@@ -61,33 +59,33 @@ class YouTubeBackHandler(private val engineView: EngineView?, private val activi
         engineView?.evalJS(javascript = shouldWeExitPage, callback = backOrMoveFocus)
     }
 
+    fun onUrlChanged(url: String) {
+        if (!url.isUriYouTubeTV) currentPreYouTubeIndex = null
+        else if (currentPreYouTubeIndex == null) {
+            // Store the current (pre-YouTube) backForwardIndex when the URL first changes to YouTube
+            currentPreYouTubeIndex = engineView!!.backForwardList.currentIndex
+        }
+    }
+
     /**
      * We only want to add indexes to the list that are a forward navigation from non-YouTube site
      * to YouTube. If you hit back from a non-YouTube site to YouTube, we do not want to save the index
      * of that non-YouTube site. The web history list is only updated after loading has completed,
      * which is why this function is called from onLoadingStateChanged callback.
      */
-    fun updateUrlIndexList() {
-        if (goingToYouTube) {
-            backForwardUrlList = engineView!!.backForwardList
-            if (indexToAdd < backForwardUrlList.currentIndex)
-                urlIndexList.add(indexToAdd)
+    fun onLoadComplete() {
+        // Don't store anything if we aren't navigating to YouTube
+        val preYouTubeIndex = currentPreYouTubeIndex ?: return
+
+        val navigationWasForward = preYouTubeIndex < engineView!!.backForwardList.currentIndex
+        if (navigationWasForward) {
+            preYouTubeIndexHistory.add(preYouTubeIndex)
         }
     }
 
-    fun saveIndex(url: String) {
-        // If you are visiting a YouTube url from a non-YouTube url, save the index
-        if (!goingToYouTube && url.isUriYouTubeTV) {
-            goingToYouTube = true
-            backForwardUrlList = engineView!!.backForwardList
-            indexToAdd = backForwardUrlList.currentIndex
-        } else if (!url.isUriYouTubeTV) goingToYouTube = false
-    }
-
     private fun getIndexToGoBackTo(): Int {
-        return if (urlIndexList.isNotEmpty())
-            urlIndexList.removeAt(urlIndexList.lastIndex)
-        else 0
+        return if (preYouTubeIndexHistory.isEmpty()) 0
+        else preYouTubeIndexHistory.removeAt(preYouTubeIndexHistory.lastIndex)
     }
 
     private fun goBackBeforeYouTube() = engineView!!.handleYoutubeBack(getIndexToGoBackTo())

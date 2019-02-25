@@ -90,11 +90,11 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     override fun onUrlChanged(session: Session, url: String) {
         if (url == URLs.APP_URL_HOME) serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, true)
-        youtubeBackHandler.saveIndex(url)
+        youtubeBackHandler.onUrlChanged(url)
     }
 
     override fun onLoadingStateChanged(session: Session, loading: Boolean) {
-        if (!loading) youtubeBackHandler.updateUrlIndexList()
+        if (!loading) youtubeBackHandler.onLoadComplete()
     }
 
     override fun onDesktopModeChanged(session: Session, enabled: Boolean) {
