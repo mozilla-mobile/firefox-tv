@@ -4,7 +4,7 @@
 
 package org.mozilla.tv.firefox.pocket
 
-import android.support.annotation.UiThread
+import androidx.annotation.UiThread
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
@@ -12,6 +12,10 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import org.mozilla.tv.firefox.utils.PeriodicRequester
 import org.mozilla.tv.firefox.utils.Response
+import java.util.concurrent.TimeUnit
+
+private val CACHE_UPDATE_FREQUENCY_MILLIS = TimeUnit.MINUTES.toMillis(45)
+private const val BASE_RETRY_TIME = 1_000L
 
 /**
  * Manages backing state for Pocket data, as well as any logic related to

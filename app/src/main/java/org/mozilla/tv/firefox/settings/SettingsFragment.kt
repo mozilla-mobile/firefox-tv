@@ -5,9 +5,9 @@
 package org.mozilla.tv.firefox.settings
 
 import android.app.AlertDialog
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +21,7 @@ import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.URLs
 
 /** The settings for the app. */
-class SettingsFragment : Fragment() {
+class SettingsFragment : androidx.fragment.app.Fragment() {
     enum class Action {
         SESSION_CLEARED
     }

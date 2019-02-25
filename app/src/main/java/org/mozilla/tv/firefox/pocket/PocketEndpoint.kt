@@ -5,8 +5,8 @@
 package org.mozilla.tv.firefox.pocket
 
 import android.net.Uri
-import android.support.annotation.AnyThread
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.AnyThread
+import androidx.annotation.VisibleForTesting
 import android.util.Log
 import io.reactivex.Single
 import kotlinx.coroutines.runBlocking

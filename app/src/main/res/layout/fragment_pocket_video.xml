@@ -4,13 +4,13 @@
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
 <!-- TODO: figure out how to handle Overdraw in #849 -->
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/photonGrey70"
-    tools:ignore="Overdraw"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent"
+                                                   android:background="@color/photonGrey70"
+                                                   tools:ignore="Overdraw"
     >
 
     <!-- We need to make this view larger than its children to allow the children to scale when
@@ -18,7 +18,7 @@
          We need 8dp+ of vertical padding to not clip the children at the current scale ratio.
 
          We add horizontal padding to the start and end item in code: see onBind for details. -->
-    <android.support.v17.leanback.widget.ListRowView
+    <androidx.leanback.widget.ListRowView
         android:id="@+id/videoFeed"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -89,4 +89,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/headerBackgroundView" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,8 +5,8 @@
 package org.mozilla.tv.firefox.telemetry
 
 import android.content.Context
-import android.support.annotation.VisibleForTesting
-import android.support.annotation.VisibleForTesting.NONE
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.NONE
 import io.sentry.Sentry
 import io.sentry.android.AndroidSentryClientFactory
 import org.mozilla.tv.firefox.BuildConfig

@@ -6,7 +6,7 @@ package org.mozilla.tv.firefox.webrender
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.support.v4.util.ArrayMap
+import androidx.collection.ArrayMap
 import android.view.View
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.components.locale.Locales
@@ -21,7 +21,7 @@ object LocalizedContent {
     fun generateAboutPage(context: Context): String {
         val resources = Locales.getLocalizedResources(context)
 
-        val substitutionMap = ArrayMap<String, String>()
+        val substitutionMap = androidx.collection.ArrayMap<String, String>()
 
         val appNameExtended = resources.getString(R.string.app_name_extended_fire)
         substitutionMap["%about-title%"] = appNameExtended
@@ -71,7 +71,7 @@ object LocalizedContent {
     }
 
     fun generatePage(context: Context, page: Int): String {
-        val substitutionMap = ArrayMap<String, String>()
+        val substitutionMap = androidx.collection.ArrayMap<String, String>()
 
         /** See comment in [ErrorPage] for why we need to load css this way. */
         substitutionMap["%css%"] = HtmlLoader.loadResourceFile(context, R.raw.style, null)

@@ -4,8 +4,8 @@
 
 package org.mozilla.tv.firefox.webrender.cursor
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import android.graphics.PointF
 import android.view.KeyEvent
 import org.junit.Assert.assertEquals

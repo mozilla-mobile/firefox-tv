@@ -5,8 +5,8 @@
 package org.mozilla.tv.firefox.navigationoverlay
 
 import android.content.Context
-import android.support.design.widget.CoordinatorLayout
-import android.support.v4.widget.NestedScrollView
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.widget.NestedScrollView
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
@@ -16,16 +16,16 @@ import org.mozilla.tv.firefox.R
  * Custom CoordinatorLayout.Behavior to link Toolbar upper half of split overlay to scrolling of the
  * bottom half, to simulate the toolbar being "pushed" up by the bottom half of the split overlay.
  */
-class NavigationOverlayBehavior(context: Context, attrs: AttributeSet) : CoordinatorLayout.Behavior<LinearLayout>(context, attrs) {
+class NavigationOverlayBehavior(context: Context, attrs: AttributeSet) : androidx.coordinatorlayout.widget.CoordinatorLayout.Behavior<LinearLayout>(context, attrs) {
     var toolbarHeight = 0
 
-    override fun onLayoutChild(parent: CoordinatorLayout, child: LinearLayout, layoutDirection: Int): Boolean {
+    override fun onLayoutChild(parent: androidx.coordinatorlayout.widget.CoordinatorLayout, child: LinearLayout, layoutDirection: Int): Boolean {
         toolbarHeight = child.measuredHeight
         return super.onLayoutChild(parent, child, layoutDirection)
     }
 
     override fun onStartNestedScroll(
-        coordinatorLayout: CoordinatorLayout,
+        coordinatorLayout: androidx.coordinatorlayout.widget.CoordinatorLayout,
         child: LinearLayout,
         directTargetChild: View,
         target: View,
@@ -37,7 +37,7 @@ class NavigationOverlayBehavior(context: Context, attrs: AttributeSet) : Coordin
     }
 
     override fun onNestedScroll(
-        coordinatorLayout: CoordinatorLayout,
+        coordinatorLayout: androidx.coordinatorlayout.widget.CoordinatorLayout,
         child: LinearLayout,
         target: View,
         dxConsumed: Int,

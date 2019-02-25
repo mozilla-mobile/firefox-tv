@@ -1,6 +1,6 @@
 package org.mozilla.tv.firefox.utils
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 
 /**
  * Used in situations where postValue should not be used

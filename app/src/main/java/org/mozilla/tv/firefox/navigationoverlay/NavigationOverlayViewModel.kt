@@ -4,8 +4,8 @@
 
 package org.mozilla.tv.firefox.navigationoverlay
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import org.mozilla.tv.firefox.ext.map
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.URLs

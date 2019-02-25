@@ -7,7 +7,7 @@ package org.mozilla.tv.firefox.integration
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.support.test.InstrumentationRegistry
+import androidx.test.InstrumentationRegistry
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertNotNull
 import org.junit.Before

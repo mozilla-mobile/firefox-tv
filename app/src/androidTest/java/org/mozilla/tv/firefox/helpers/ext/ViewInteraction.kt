@@ -4,9 +4,9 @@
 
 package org.mozilla.tv.firefox.helpers.ext
 
-import android.support.test.espresso.ViewInteraction
-import android.support.test.espresso.action.ViewActions
-import android.support.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.ViewInteraction
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import org.mozilla.tv.firefox.helpers.isChecked
 import org.mozilla.tv.firefox.helpers.isEnabled
 import org.mozilla.tv.firefox.helpers.isSelected

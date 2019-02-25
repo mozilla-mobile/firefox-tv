@@ -4,9 +4,9 @@
 
 package org.mozilla.tv.firefox.ui.robots
 
-import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.Espresso.pressBack
-import android.support.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.helpers.ext.assertIsChecked
 import org.mozilla.tv.firefox.helpers.ext.click

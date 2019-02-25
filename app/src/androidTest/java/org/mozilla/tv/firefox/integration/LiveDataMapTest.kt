@@ -4,8 +4,8 @@
 
 package org.mozilla.tv.firefox.integration
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule

@@ -6,8 +6,8 @@ package org.mozilla.tv.firefox.webrender.cursor
 
 import android.graphics.PointF
 import android.os.SystemClock
-import android.support.annotation.UiThread
-import android.support.v4.math.MathUtils
+import androidx.annotation.UiThread
+import androidx.core.math.MathUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers

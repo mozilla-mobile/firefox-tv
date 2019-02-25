@@ -7,9 +7,9 @@ package org.mozilla.tv.firefox.helpers
 import android.view.View
 import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Matcher
-import android.support.test.espresso.matcher.ViewMatchers.isChecked as espressoIsChecked
-import android.support.test.espresso.matcher.ViewMatchers.isEnabled as espressoIsEnabled
-import android.support.test.espresso.matcher.ViewMatchers.isSelected as espressoIsSelected
+import androidx.test.espresso.matcher.ViewMatchers.isChecked as espressoIsChecked
+import androidx.test.espresso.matcher.ViewMatchers.isEnabled as espressoIsEnabled
+import androidx.test.espresso.matcher.ViewMatchers.isSelected as espressoIsSelected
 
 /**
  * The [espressoIsEnabled] function that can also handle disabled state through the boolean argument.

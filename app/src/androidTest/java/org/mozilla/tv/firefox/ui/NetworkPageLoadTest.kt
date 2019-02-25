@@ -4,8 +4,8 @@
 
 package org.mozilla.tv.firefox.ui
 
-import android.support.test.espresso.web.webdriver.Locator
-import android.support.test.filters.FlakyTest
+import androidx.test.espresso.web.webdriver.Locator
+import androidx.test.filters.FlakyTest
 
 import org.junit.Rule
 import org.junit.Test

@@ -1,6 +1,6 @@
 package org.mozilla.tv.firefox.navigationoverlay
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

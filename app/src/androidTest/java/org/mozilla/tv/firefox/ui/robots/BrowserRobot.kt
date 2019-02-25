@@ -4,14 +4,14 @@
 
 package org.mozilla.tv.firefox.ui.robots
 
-import android.support.test.InstrumentationRegistry
-import android.support.test.espresso.web.assertion.WebViewAssertions.webMatches
-import android.support.test.espresso.web.model.Atoms
-import android.support.test.espresso.web.sugar.Web.onWebView
-import android.support.test.espresso.web.webdriver.DriverAtoms.findElement
-import android.support.test.espresso.web.webdriver.DriverAtoms.getText
-import android.support.test.espresso.web.webdriver.Locator
-import android.support.test.uiautomator.UiDevice
+import androidx.test.InstrumentationRegistry
+import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
+import androidx.test.espresso.web.model.Atoms
+import androidx.test.espresso.web.sugar.Web.onWebView
+import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
+import androidx.test.espresso.web.webdriver.DriverAtoms.getText
+import androidx.test.espresso.web.webdriver.Locator
+import androidx.test.uiautomator.UiDevice
 import org.hamcrest.CoreMatchers.equalTo
 
 class BrowserRobot {
