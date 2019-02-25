@@ -5,14 +5,14 @@
 package org.mozilla.tv.firefox.pinnedtile
 
 import android.app.Application
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.support.annotation.AnyThread
-import android.support.annotation.UiThread
+import androidx.annotation.AnyThread
+import androidx.annotation.UiThread
 import org.json.JSONArray
 import java.util.UUID
 import java.util.Collections

@@ -5,10 +5,10 @@
 package org.mozilla.tv.firefox.webrender
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.annotation.UiThread
+import androidx.annotation.UiThread
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View

@@ -4,9 +4,9 @@
 
 package org.mozilla.tv.firefox.navigationoverlay
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.Observer
-import android.support.v4.app.FragmentManager
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.fragment.app.FragmentManager
 import android.view.View
 import android.widget.ImageButton
 import kotlinx.android.synthetic.main.fragment_navigation_overlay.view.*
@@ -36,7 +36,7 @@ class ToolbarUiController(
 
     private var hasUserChangedURLSinceEditTextFocused = false
 
-    fun onCreateView(layout: View, viewLifecycleOwner: LifecycleOwner, fragmentManager: FragmentManager) {
+    fun onCreateView(layout: View, viewLifecycleOwner: LifecycleOwner, fragmentManager: androidx.fragment.app.FragmentManager) {
         val toolbarClickListener = ToolbarOnClickListener()
         layout.topNavContainer.forEach {
             it.nextFocusDownId = layout.navUrlInput.id
@@ -79,7 +79,7 @@ class ToolbarUiController(
         setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) hasUserChangedURLSinceEditTextFocused = false }
     }
 
-    private fun initToolbar(layout: View, viewLifecycleOwner: LifecycleOwner, fragmentManager: FragmentManager) {
+    private fun initToolbar(layout: View, viewLifecycleOwner: LifecycleOwner, fragmentManager: androidx.fragment.app.FragmentManager) {
         fun updateOverlayButtonState(isEnabled: Boolean, overlayButton: ImageButton) {
             overlayButton.isEnabled = isEnabled
             overlayButton.isFocusable = isEnabled

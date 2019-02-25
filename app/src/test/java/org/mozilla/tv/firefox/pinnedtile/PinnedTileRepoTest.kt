@@ -4,7 +4,7 @@
 
 package org.mozilla.tv.firefox.pinnedtile
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import androidx.test.core.app.ApplicationProvider
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull

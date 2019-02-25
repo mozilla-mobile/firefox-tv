@@ -8,7 +8,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.content_onboarding.*
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.serviceLocator

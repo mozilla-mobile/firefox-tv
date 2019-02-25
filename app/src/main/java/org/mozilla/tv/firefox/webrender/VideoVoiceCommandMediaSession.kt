@@ -4,15 +4,15 @@
 
 package org.mozilla.tv.firefox.webrender
 
-import android.arch.lifecycle.Lifecycle.Event.ON_DESTROY
-import android.arch.lifecycle.Lifecycle.Event.ON_PAUSE
-import android.arch.lifecycle.Lifecycle.Event.ON_RESUME
-import android.arch.lifecycle.Lifecycle.Event.ON_START
-import android.arch.lifecycle.Lifecycle.Event.ON_STOP
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.Lifecycle.Event.ON_DESTROY
+import androidx.lifecycle.Lifecycle.Event.ON_PAUSE
+import androidx.lifecycle.Lifecycle.Event.ON_RESUME
+import androidx.lifecycle.Lifecycle.Event.ON_START
+import androidx.lifecycle.Lifecycle.Event.ON_STOP
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import android.content.Intent
-import android.support.annotation.UiThread
+import androidx.annotation.UiThread
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_PAUSE
@@ -26,7 +26,7 @@ import android.support.v4.media.session.PlaybackStateCompat.STATE_BUFFERING
 import android.support.v4.media.session.PlaybackStateCompat.STATE_PAUSED
 import android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING
 import android.support.v4.media.session.PlaybackStateCompat.STATE_STOPPED
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_MEDIA_NEXT
 import android.view.KeyEvent.KEYCODE_MEDIA_PAUSE

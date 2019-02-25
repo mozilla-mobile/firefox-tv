@@ -4,8 +4,8 @@
 
 package org.mozilla.tv.firefox.pocket
 
-import android.support.v4.content.ContextCompat
-import android.support.v4.graphics.drawable.DrawableCompat.setTint
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat.setTint
 import android.widget.ImageView
 import org.mozilla.tv.firefox.R
 

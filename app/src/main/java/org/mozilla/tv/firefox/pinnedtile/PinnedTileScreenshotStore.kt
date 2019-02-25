@@ -7,9 +7,9 @@ package org.mozilla.tv.firefox.pinnedtile
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.support.annotation.AnyThread
-import android.support.annotation.VisibleForTesting
-import android.support.annotation.WorkerThread
+import androidx.annotation.AnyThread
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.WorkerThread
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex

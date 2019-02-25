@@ -8,19 +8,18 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.StrictMode
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.RecyclerView
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
-import kotlinx.android.synthetic.main.fragment_pocket_video.*
+import kotlinx.android.synthetic.main.fragment_pocket_video.pocketHelpButton
+import kotlinx.android.synthetic.main.fragment_pocket_video.pocketWordmarkView
+import kotlinx.android.synthetic.main.fragment_pocket_video.videoFeed
 import mozilla.components.support.ktx.android.os.resetAfter
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
@@ -35,7 +34,7 @@ import java.net.URI
 import java.net.URISyntaxException
 
 /** A feed of Pocket videos. */
-class PocketVideoFragment : Fragment() {
+class PocketVideoFragment : androidx.fragment.app.Fragment() {
     companion object {
         const val FRAGMENT_TAG = "pocket"
     }
@@ -95,8 +94,8 @@ class PocketVideoFragment : Fragment() {
 
 private class PocketVideoAdapter(
     context: Context,
-    private val fragmentManager: FragmentManager
-) : RecyclerView.Adapter<PocketVideoViewHolder>() {
+    private val fragmentManager: androidx.fragment.app.FragmentManager
+) : androidx.recyclerview.widget.RecyclerView.Adapter<PocketVideoViewHolder>() {
 
     private val pocketVideos = mutableListOf<PocketViewModel.FeedItem>()
 
@@ -211,7 +210,7 @@ private class PocketVideoAdapter(
     }
 }
 
-private class PocketVideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+private class PocketVideoViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
     val videoThumbnailView = itemView.findViewById<ImageView>(R.id.videoThumbnailView)
     val titleView = itemView.findViewById<TextView>(R.id.titleView)
     val domainView = itemView.findViewById<TextView>(R.id.domainView)

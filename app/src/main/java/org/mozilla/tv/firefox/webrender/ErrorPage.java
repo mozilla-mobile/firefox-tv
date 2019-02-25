@@ -6,8 +6,8 @@ package org.mozilla.tv.firefox.webrender;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.annotation.NonNull;
-import android.support.v4.util.ArrayMap;
+import androidx.annotation.NonNull;
+import androidx.collection.ArrayMap;
 
 import org.mozilla.tv.firefox.R;
 import org.mozilla.tv.firefox.utils.HtmlLoader;

@@ -4,8 +4,8 @@
 
 package org.mozilla.tv.firefox.utils
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.lifecycle.LiveData
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.LiveData
 
 /**
  * This rule prevents a crash when unit testing [LiveData].

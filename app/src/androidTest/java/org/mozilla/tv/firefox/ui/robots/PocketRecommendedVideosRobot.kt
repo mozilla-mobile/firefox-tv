@@ -4,12 +4,12 @@
 
 package org.mozilla.tv.firefox.ui.robots
 
-import android.support.test.InstrumentationRegistry
-import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.action.ViewActions.click
-import android.support.test.espresso.contrib.RecyclerViewActions
-import android.support.test.espresso.matcher.ViewMatchers.withId
-import android.support.test.uiautomator.UiDevice
+import androidx.test.InstrumentationRegistry
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.uiautomator.UiDevice
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.pinnedtile.TileViewHolder

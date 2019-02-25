@@ -7,7 +7,7 @@ package org.mozilla.tv.firefox.ext
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import org.mozilla.tv.firefox.FirefoxApplication
 import org.mozilla.tv.firefox.utils.ServiceLocator
 
@@ -20,5 +20,5 @@ val Activity.serviceLocator: ServiceLocator
 val Context.serviceLocator: ServiceLocator
     get() = this.application.serviceLocator
 
-val Fragment.serviceLocator: ServiceLocator?
+val androidx.fragment.app.Fragment.serviceLocator: ServiceLocator?
     get() = this.context?.serviceLocator

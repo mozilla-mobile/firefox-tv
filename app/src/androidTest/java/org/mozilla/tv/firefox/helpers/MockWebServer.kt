@@ -7,7 +7,7 @@ package org.mozilla.tv.firefox.helpers
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import android.support.test.InstrumentationRegistry
+import androidx.test.InstrumentationRegistry
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer

@@ -7,7 +7,7 @@ package org.mozilla.tv.firefox
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
-import android.support.test.runner.AndroidJUnitRunner
+import androidx.test.runner.AndroidJUnitRunner
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import kotlin.reflect.full.companionObjectInstance
 

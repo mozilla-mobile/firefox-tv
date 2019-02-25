@@ -4,8 +4,8 @@
 
 package org.mozilla.tv.firefox.architecture
 
-import android.arch.lifecycle.ViewModel
-import android.support.v4.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.fragment.app.Fragment
 import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
@@ -21,7 +21,7 @@ import org.robolectric.shadows.support.v4.SupportFragmentController
 class FirefoxViewModelProvidersTest {
 
     private lateinit var mainActivity: MainActivity
-    private lateinit var fragment: Fragment
+    private lateinit var fragment: androidx.fragment.app.Fragment
 
     @Before
     fun setUp() {

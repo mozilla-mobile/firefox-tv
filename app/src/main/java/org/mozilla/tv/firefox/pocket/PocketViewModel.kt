@@ -4,8 +4,8 @@
 
 package org.mozilla.tv.firefox.pocket
 
-import android.arch.lifecycle.ViewModel
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import org.json.JSONObject
 import org.mozilla.tv.firefox.R

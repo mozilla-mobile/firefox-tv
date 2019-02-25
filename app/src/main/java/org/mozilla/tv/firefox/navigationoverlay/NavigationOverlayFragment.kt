@@ -4,7 +4,7 @@
 
 package org.mozilla.tv.firefox.navigationoverlay
 
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.Observer
 import android.content.Context
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
@@ -12,11 +12,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.preference.PreferenceManager
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v4.widget.NestedScrollView
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
+import androidx.core.widget.NestedScrollView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.ContextMenu
 import android.view.LayoutInflater
@@ -78,7 +78,7 @@ enum class NavigationEvent {
     }
 }
 
-class NavigationOverlayFragment : Fragment() {
+class NavigationOverlayFragment : androidx.fragment.app.Fragment() {
     companion object {
         const val FRAGMENT_TAG = "overlay"
     }
@@ -423,8 +423,8 @@ class NavigationOverlayFragment : Fragment() {
     inner class HomeTileManager(
         context: Context,
         colCount: Int
-    ) : GridLayoutManager(context, colCount) {
-        override fun onRequestChildFocus(parent: RecyclerView, state: RecyclerView.State, child: View, focused: View?): Boolean {
+    ) : androidx.recyclerview.widget.GridLayoutManager(context, colCount) {
+        override fun onRequestChildFocus(parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State, child: View, focused: View?): Boolean {
             var position = spanCount
             if (focused != null) {
                 position = getPosition(focused)

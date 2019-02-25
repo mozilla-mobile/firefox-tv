@@ -9,7 +9,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.net.Uri
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import android.util.TypedValue
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.utils.UrlUtils

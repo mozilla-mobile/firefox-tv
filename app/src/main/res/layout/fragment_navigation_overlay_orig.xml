@@ -10,7 +10,7 @@
     android:focusable="false"
     android:scrollbars="none">
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -79,7 +79,7 @@
                 android:focusable="true"
                 android:nextFocusUp="@id/navUrlInput" />
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/tileContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -90,5 +90,5 @@
                 android:clipToPadding="false" />
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 </org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlayScrollView>

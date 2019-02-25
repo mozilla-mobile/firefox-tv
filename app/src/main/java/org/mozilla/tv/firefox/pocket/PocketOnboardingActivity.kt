@@ -6,7 +6,7 @@ package org.mozilla.tv.firefox.pocket
 
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.pocket_onboarding.*
 import org.mozilla.tv.firefox.R
 
