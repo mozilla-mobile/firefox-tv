@@ -75,19 +75,16 @@ fun EngineView.scrollByClamped(vx: Int, vy: Int) {
     }
 }
 
-/** TODO: Investigate a way to handle exiting YouTube with hardware back in GV (See #1837) */
-fun EngineView.handleYoutubeBack(@Suppress("UNUSED_PARAMETER") indexToGoBackTo: Int) {
-//    val goBackSteps = backForwardList.currentIndex - indexToGoBackTo
-//    geckoView!!.goBackOrForward(-goBackSteps)
-}
+/** TODO: Replace stub when functionality is available in GV (See #1837) */
+fun EngineView.handleYoutubeBack(@Suppress("UNUSED_PARAMETER") indexToGoBackTo: Int) { }
 object WebHistory {
     val currentIndex: Int
         get() = 0
 }
 
+/** TODO: Replace stub when functionality is available in GV (See #1837) */
 val EngineView.backForwardList: WebHistory
     get() = WebHistory
-//  get() = geckoView!!.copyBackForwardList()
 
 val EngineView.focusedDOMElement: FocusedDOMElementCache
     get() = getOrPutExtension(this).domElementCache
@@ -102,8 +99,8 @@ val EngineView.focusedDOMElement: FocusedDOMElementCache
 //     getOrPutExtension(this).geckoView?.restoreState(state)
 // }
 
+/** TODO: Replace stub when functionality is available in GV */
 fun EngineView.canGoBackTwice(): Boolean {
-//    return getOrPutExtension(this).geckoView?.canGoBackOrForward(-2) ?: false
     return false
 }
 
