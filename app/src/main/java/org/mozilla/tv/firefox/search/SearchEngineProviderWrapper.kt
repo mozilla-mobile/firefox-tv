@@ -41,13 +41,13 @@ class SearchEngineProviderWrapper(private val replacements: Map<String, String>)
     override suspend fun loadSearchEngines(context: Context): List<SearchEngine> {
         val searchEngines = inner.loadSearchEngines(context).toMutableList()
 
-        replacements.forEach { (to, from) ->
-            val toIndex = searchEngines.indexOfFirst { it.identifier == to }
-            val fromIndex = searchEngines.indexOfFirst { it.identifier == from }
-            if (toIndex != -1 && fromIndex != -1) {
-                searchEngines[toIndex] = searchEngines.removeAt(fromIndex)
+        replacements.forEach { (new, old) ->
+            val newIndex = searchEngines.indexOfFirst { it.identifier == new }
+            val oldIndex = searchEngines.indexOfFirst { it.identifier == old }
+            if (newIndex != -1 && oldIndex != -1) {
+                searchEngines[newIndex] = searchEngines.removeAt(oldIndex)
             } else {
-                Log.d(LOGTAG, "Failed to replace plugin $to with $from")
+                Log.d(LOGTAG, "Failed to replace plugin $new with $old")
             }
         }
 
