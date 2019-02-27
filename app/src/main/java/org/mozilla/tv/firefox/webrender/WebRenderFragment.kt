@@ -28,6 +28,7 @@ import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.pauseAllVideoPlaybacks
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
+import org.mozilla.tv.firefox.ext.resetView
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
@@ -192,6 +193,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             } else {
                 // There's no session (anymore). Let's create a new one.
                 requireWebRenderComponents.sessionManager.add(Session(url), selected = true)
+                requireWebRenderComponents.sessionManager.getOrCreateEngineSession().resetView(activity!!)
             }
         }
     }
