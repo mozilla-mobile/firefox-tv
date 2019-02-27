@@ -125,7 +125,6 @@ class ScreenController {
     private fun fragmentManagerShowNavigationOverlay(fragmentManager: FragmentManager, toShow: Boolean) {
         val transaction = fragmentManager.beginTransaction()
         val overlayFragment = fragmentManager.navigationOverlayFragment()
-        val renderFragment = fragmentManager.webRenderFragment()
 
         if (toShow) {
             // If a user navigates to YouTube while a video is fullscreened, it will cause YouTube
@@ -146,7 +145,6 @@ class ScreenController {
         } else {
             transaction.hide(overlayFragment)
             MenuInteractionMonitor.menuClosed()
-            renderFragment.view?.requestFocus()
         }
 
         transaction.commit()
