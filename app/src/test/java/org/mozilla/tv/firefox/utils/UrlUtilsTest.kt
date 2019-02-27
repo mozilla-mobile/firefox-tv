@@ -122,8 +122,9 @@ class UrlUtilsTest {
 
     private fun assertCreatedUrlContainsBase(searchTerm: String, baseUrl: String) {
         val searchString = UrlUtils.createSearchUrl(ApplicationProvider.getApplicationContext(), searchTerm)
+        // We need to remove the search code for this comparison since it could change based on the locale
         assertTrue("\"$searchString\" does not contain \"$baseUrl\"",
-                searchString.contains(baseUrl))
+                searchString.replaceFirst("(client=)(.*)(&)".toRegex(), "").contains(baseUrl))
     }
 
     @Test
