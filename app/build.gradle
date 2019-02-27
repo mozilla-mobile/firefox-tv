@@ -200,7 +200,13 @@ dependencies {
     testImplementation 'com.squareup.okhttp3:mockwebserver:3.10.0'
 
     androidTestImplementation "tools.fastlane:screengrab:1.2.0", {
-        exclude group: 'com.android.support', module: 'support-annotations' //TODO remove
+        // This Fastlane dependency causes our builds to fail due to having two different
+        // versions of UiAutomator. Fastlane is not on the most recent version of
+        // com.android.support.test.uiautomator, which presumably prevents Jetifier from
+        // fixing this
+        //
+        // TODO try removing this then running Espresso every time Fastlane is updated
+        exclude group: 'com.android.support.test.uiautomator', module: 'uiautomator-v18'
     }
 
     androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}"
