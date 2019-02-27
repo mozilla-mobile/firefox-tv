@@ -9,27 +9,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.annotation.StringRes;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.ViewCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import org.mozilla.tv.firefox.R;
+import androidx.core.view.ViewCompat;
 
 import java.lang.ref.WeakReference;
 
 public class ViewUtils {
-    /**
-     * Flag of imeOptions: used to request that the IME does not update any personalized data such
-     * as typing history and personalized language model based on what the user typed on this text
-     * editing object.
-     */
-    public static final int IME_FLAG_NO_PERSONALIZED_LEARNING = 0x01000000;
 
     /**
      * Runnable to show the keyboard for a specific view.
@@ -111,29 +99,6 @@ public class ViewUtils {
         }
 
         return imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
-    /**
-     * Create a snackbar with Focus branding (See #193).
-     */
-    public static void showBrandedSnackbar(View view, @StringRes int resId, int delayMillis) {
-        final Context context = view.getContext();
-        final Snackbar snackbar = Snackbar.make(view, resId, Snackbar.LENGTH_LONG);
-
-        final View snackbarView = snackbar.getView();
-        snackbarView.setBackgroundColor(ContextCompat.getColor(context, R.color.snackbarBackground));
-
-        final TextView snackbarTextView = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
-        snackbarTextView.setTextColor(ContextCompat.getColor(context, R.color.snackbarTextColor));
-        snackbarTextView.setGravity(Gravity.CENTER);
-        snackbarTextView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-
-        view.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                snackbar.show();
-            }
-        }, delayMillis);
     }
 
     public static boolean isRTL(View view) {
