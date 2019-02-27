@@ -3,8 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 buildscript {
-    ext.support_libraries_version = '1.0.0-beta01'
-    ext.architecture_components_version = '2.0.0-beta01'
+    ext.support_libraries_version = '1.0.0'
+    ext.architecture_components_version = '2.0.0'
     ext.kotlin_version = '1.3.0'
     ext.moz_components_version = '0.43.0'
 
@@ -14,12 +14,13 @@ buildscript {
     // - List of artifacts: https://developer.android.com/training/testing/set-up-project#android-test-dependencies
     // - Pin to tested versions (in release notes): https://developer.android.com/jetpack/androidx/releases/archive/test
     // TODO: these versions are not pinned to tested versions. Do this when upgrading to androidX #1398
-    ext.test_core = '1.0.0'
-    ext.test_runner = '1.1.0-alpha4'
+    ext.test_core = '1.1.0'
+    ext.test_runner = '1.1.1'
     ext.test_rules = ext.test_runner
     ext.test_orchestrator = '1.1.1'
-    ext.espresso_version = '3.1.0-alpha4'
-    ext.uiautomator_version = '2.2.0-alpha4'
+    ext.espresso_version = '3.1.1'
+    ext.uiautomator_version = '2.2.0'
+    ext.junit = "1.1.0"
 
     repositories {
         google()
