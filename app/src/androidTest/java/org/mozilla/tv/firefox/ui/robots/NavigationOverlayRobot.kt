@@ -113,6 +113,22 @@ class NavigationOverlayRobot {
             return BrowserRobot.Transition()
         }
 
+        fun openYouTubeAndDisableIdling(
+            activityTestRule: MainActivityTestRule,
+            interact: BrowserRobot.() -> Unit
+        ): BrowserRobot.Transition {
+            urlBar().perform(clearText(),
+                typeText("youtube.com/tv"),
+                pressImeActionButton())
+
+            // Disable the SessionLoadingIdlingResource temporarily. This is needed for the test for #1830
+            // which requires opening the overlay before loading has completed.
+            activityTestRule.loadingIdlingResource.ignoreLoading = true
+
+            BrowserRobot().interact()
+            return BrowserRobot.Transition()
+        }
+
         fun closeToBrowser(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
             device.pressMenu()
 

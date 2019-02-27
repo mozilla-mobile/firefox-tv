@@ -18,7 +18,6 @@ import org.mozilla.tv.firefox.ui.robots.navigationOverlay
  * A test for YouTube navigation including:
  * - Going back with hardware back acts as expected from YouTube tile and Pocket videos
  * - D-pad navigation works as expected
- * To be written:
  * - Checking that clicking on the YouTube tile, opening the overlay, waiting for loading to end, then closing the overlay
  *   does not disrupt navigation
  */
@@ -96,6 +95,18 @@ class YouTubeNavigationTest {
         navigationOverlay {
             assertURLBarDisplaysHint()
         }.openYouTubeAndWaitForRedirects(activityTestRule) {
+            backOutOfYouTube()
+        }.openOverlay {
+            assertURLBarDisplaysHint()
+        }
+
+        /**
+         * Open YouTube, open overlay before loading is complete, wait for loading to complete,
+         * make sure YouTube navigation still works (regression test for #1830).
+         */
+        .openYouTubeAndDisableIdling(activityTestRule) {
+        }.openOverlay {
+        }.closeToBrowser {
             /**
              * Test dpad navigation.
              * The only unique attribute between video elements is the 'aria-label'.
@@ -107,10 +118,6 @@ class YouTubeNavigationTest {
             assert(firstElementLabel != getActiveElementAttribute(ariaLabelAttribute))
             dpadLeft()
             assert(firstElementLabel == getActiveElementAttribute(ariaLabelAttribute))
-
-            backOutOfYouTube()
-        }.openOverlay {
-            assertURLBarDisplaysHint()
         }
     }
 
