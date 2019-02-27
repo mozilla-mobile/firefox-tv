@@ -4,7 +4,7 @@
 
 package org.mozilla.tv.firefox.helpers
 
-import androidx.test.InstrumentationRegistry
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.IdlingResource
 import org.mozilla.tv.firefox.FirefoxApplication
 
@@ -20,7 +20,7 @@ class SessionLoadedIdlingResource : IdlingResource {
     }
 
     override fun isIdleNow(): Boolean {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as FirefoxApplication
+        val context = ApplicationProvider.getApplicationContext<FirefoxApplication>()
         val sessionManager = context.components.sessionManager
 
         val session = sessionManager.selectedSession

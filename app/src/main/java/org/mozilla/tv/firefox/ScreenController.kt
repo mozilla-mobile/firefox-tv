@@ -43,7 +43,7 @@ class ScreenController {
      * We DO NOT use the Fragment backstack so that all transitions are controlled in the same manner, and we
      * don't end up mixing backstack actions with show/hide.
      */
-    fun setUpFragmentsForNewSession(fragmentManager: androidx.fragment.app.FragmentManager, session: Session) {
+    fun setUpFragmentsForNewSession(fragmentManager: FragmentManager, session: Session) {
         val renderFragment = WebRenderFragment.createForSession(session)
         val pocketFragment = PocketVideoFragment()
         val settingsFragment = SettingsFragment()
@@ -67,7 +67,7 @@ class ScreenController {
      */
     fun onUrlEnteredInner(
         context: Context,
-        fragmentManager: androidx.fragment.app.FragmentManager,
+        fragmentManager: FragmentManager,
         urlStr: String,
         isTextInput: Boolean,
         autocompleteResult: InlineAutocompleteEditText.AutocompleteResult?,
@@ -95,34 +95,34 @@ class ScreenController {
         }
     }
 
-    fun showSettingsScreen(fragmentManager: androidx.fragment.app.FragmentManager) {
+    fun showSettingsScreen(fragmentManager: FragmentManager) {
         handleTransitionAndUpdateActiveScreen(fragmentManager, Transition.ADD_SETTINGS)
     }
 
-    fun showPocketScreen(fragmentManager: androidx.fragment.app.FragmentManager) {
+    fun showPocketScreen(fragmentManager: FragmentManager) {
         handleTransitionAndUpdateActiveScreen(fragmentManager, Transition.ADD_POCKET)
     }
 
-    fun showBrowserScreenForCurrentSession(fragmentManager: androidx.fragment.app.FragmentManager, session: Session) {
+    fun showBrowserScreenForCurrentSession(fragmentManager: FragmentManager, session: Session) {
         if (session.url != URLs.APP_URL_HOME) {
             handleTransitionAndUpdateActiveScreen(fragmentManager, Transition.SHOW_BROWSER)
         }
     }
 
-    fun showBrowserScreenForUrl(fragmentManager: androidx.fragment.app.FragmentManager, url: String) {
+    fun showBrowserScreenForUrl(fragmentManager: FragmentManager, url: String) {
         handleTransitionAndUpdateActiveScreen(fragmentManager, Transition.SHOW_BROWSER)
         val webRenderFragment = fragmentManager.webRenderFragment()
         webRenderFragment.loadUrl(url)
     }
 
-    fun showNavigationOverlay(fragmentManager: androidx.fragment.app.FragmentManager?, toShow: Boolean) {
+    fun showNavigationOverlay(fragmentManager: FragmentManager?, toShow: Boolean) {
         fragmentManager ?: return
         fragmentManagerShowNavigationOverlay(fragmentManager, toShow)
         _currentActiveScreen.value = if (toShow) ActiveScreen.NAVIGATION_OVERLAY
                 else ActiveScreen.WEB_RENDER
     }
 
-    private fun fragmentManagerShowNavigationOverlay(fragmentManager: androidx.fragment.app.FragmentManager, toShow: Boolean) {
+    private fun fragmentManagerShowNavigationOverlay(fragmentManager: FragmentManager, toShow: Boolean) {
         val transaction = fragmentManager.beginTransaction()
         val overlayFragment = fragmentManager.navigationOverlayFragment()
         val renderFragment = fragmentManager.webRenderFragment()
@@ -152,7 +152,7 @@ class ScreenController {
         transaction.commit()
     }
 
-    fun handleBack(fragmentManager: androidx.fragment.app.FragmentManager): Boolean {
+    fun handleBack(fragmentManager: FragmentManager): Boolean {
         val webRenderFragment = fragmentManager.webRenderFragment()
         if (_currentActiveScreen.value == ActiveScreen.WEB_RENDER) {
             if (webRenderFragment.onBackPressed()) return true
@@ -161,18 +161,18 @@ class ScreenController {
         return handleTransitionAndUpdateActiveScreen(fragmentManager, transition)
     }
 
-    fun handleMenu(fragmentManager: androidx.fragment.app.FragmentManager) {
+    fun handleMenu(fragmentManager: FragmentManager) {
         val transition = ScreenControllerStateMachine.getNewStateMenuPress(_currentActiveScreen.value!!, isOnHomeUrl(fragmentManager))
         handleTransitionAndUpdateActiveScreen(fragmentManager, transition)
     }
 
-    private fun isOnHomeUrl(fragmentManager: androidx.fragment.app.FragmentManager): Boolean {
+    private fun isOnHomeUrl(fragmentManager: FragmentManager): Boolean {
         // TODO: Would be more correct to get this from the model rather than the Fragment.
         val webRenderFragment = fragmentManager.webRenderFragment()
         return webRenderFragment.session.url == URLs.APP_URL_HOME
     }
 
-    private fun handleTransitionAndUpdateActiveScreen(fragmentManager: androidx.fragment.app.FragmentManager, transition: Transition): Boolean {
+    private fun handleTransitionAndUpdateActiveScreen(fragmentManager: FragmentManager, transition: Transition): Boolean {
         // Call show() before hide() so that focus moves correctly to the shown fragment once others are hidden
         when (transition) {
             Transition.ADD_OVERLAY -> {
@@ -228,14 +228,14 @@ class ScreenController {
     }
 }
 
-private fun androidx.fragment.app.FragmentManager.webRenderFragment(): WebRenderFragment =
+private fun FragmentManager.webRenderFragment(): WebRenderFragment =
     this.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG) as WebRenderFragment
 
-private fun androidx.fragment.app.FragmentManager.navigationOverlayFragment(): NavigationOverlayFragment =
+private fun FragmentManager.navigationOverlayFragment(): NavigationOverlayFragment =
     this.findFragmentByTag(NavigationOverlayFragment.FRAGMENT_TAG) as NavigationOverlayFragment
 
-private fun androidx.fragment.app.FragmentManager.pocketFragment(): PocketVideoFragment =
+private fun FragmentManager.pocketFragment(): PocketVideoFragment =
     this.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG) as PocketVideoFragment
 
-private fun androidx.fragment.app.FragmentManager.settingsFragment(): SettingsFragment =
+private fun FragmentManager.settingsFragment(): SettingsFragment =
     this.findFragmentByTag(SettingsFragment.FRAGMENT_TAG) as SettingsFragment
