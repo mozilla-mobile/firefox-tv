@@ -47,7 +47,7 @@ class SearchEngineProviderWrapper(private val replacements: Map<String, String>)
             if (toIndex != -1 && fromIndex != -1) {
                 searchEngines[toIndex] = searchEngines.removeAt(fromIndex)
             } else {
-                Log.w(LOGTAG, "Failed to replace plugin $to with $from")
+                Log.d(LOGTAG, "Failed to replace plugin $to with $from")
             }
         }
 
