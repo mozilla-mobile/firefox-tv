@@ -12,20 +12,20 @@ import androidx.lifecycle.Lifecycle.Event.ON_STOP
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import android.content.Intent
+import android.media.session.MediaSession
+import android.media.session.PlaybackState
+import android.media.session.PlaybackState.ACTION_PAUSE
+import android.media.session.PlaybackState.ACTION_PLAY
+import android.media.session.PlaybackState.ACTION_PLAY_PAUSE
+import android.media.session.PlaybackState.ACTION_SEEK_TO
+import android.media.session.PlaybackState.ACTION_SKIP_TO_NEXT
+import android.media.session.PlaybackState.ACTION_SKIP_TO_PREVIOUS
+import android.media.session.PlaybackState.PLAYBACK_POSITION_UNKNOWN
+import android.media.session.PlaybackState.STATE_BUFFERING
+import android.media.session.PlaybackState.STATE_PAUSED
+import android.media.session.PlaybackState.STATE_PLAYING
+import android.media.session.PlaybackState.STATE_STOPPED
 import androidx.annotation.UiThread
-import android.support.v4.media.session.MediaSessionCompat
-import android.support.v4.media.session.PlaybackStateCompat
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_PAUSE
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY_PAUSE
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_SEEK_TO
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_SKIP_TO_NEXT
-import android.support.v4.media.session.PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
-import android.support.v4.media.session.PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN
-import android.support.v4.media.session.PlaybackStateCompat.STATE_BUFFERING
-import android.support.v4.media.session.PlaybackStateCompat.STATE_PAUSED
-import android.support.v4.media.session.PlaybackStateCompat.STATE_PLAYING
-import android.support.v4.media.session.PlaybackStateCompat.STATE_STOPPED
 import androidx.appcompat.app.AppCompatActivity
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_MEDIA_NEXT
@@ -62,7 +62,7 @@ private val KEY_CODES_MEDIA_NEXT_PREV = listOf(KEYCODE_MEDIA_NEXT, KEYCODE_MEDIA
 private val KEY_CODES_MEDIA_PLAY_PAUSE = listOf(KEYCODE_MEDIA_PLAY, KEYCODE_MEDIA_PAUSE, KEYCODE_MEDIA_PLAY_PAUSE)
 
 /**
- * An encapsulation of a [MediaSessionCompat] instance to allow voice commands on videos; we
+ * An encapsulation of a [MediaSession] instance to allow voice commands on videos; we
  * handle some hardware keys here too: see [MediaSessionCallbacks].
  *
  * Before use, callers should:
@@ -92,13 +92,13 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
 ) : LifecycleObserver {
 
     @Suppress("ANNOTATION_TARGETS_NON_EXISTENT_ACCESSOR") // Private properties generate fields so method annotations can't apply.
-    @get:UiThread // MediaSessionCompat is not thread safe.
-    private val mediaSession = MediaSessionCompat(activity, MEDIA_SESSION_TAG)
+    @get:UiThread // MediaSession is not thread safe.
+    private val mediaSession = MediaSession(activity, MEDIA_SESSION_TAG)
 
     /* Since we may update playback state often, we cache this builder to reduce allocation. */
     @Suppress("ANNOTATION_TARGETS_NON_EXISTENT_ACCESSOR") // Private properties generate fields so method annotations can't apply.
     @get:UiThread // PlaybackStateCompat.Builder is not thread safe.
-    private val cachedPlaybackStateBuilder = PlaybackStateCompat.Builder()
+    private val cachedPlaybackStateBuilder = PlaybackState.Builder()
             .setActions(SUPPORTED_ACTIONS)
 
     private var engineView: EngineView? = null
@@ -112,8 +112,12 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
 
     init {
         mediaSession.setCallback(MediaSessionCallbacks())
-        mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
-                MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
+        @Suppress("DEPRECATION")
+        // @deprecated This flag is no longer used. All media sessions are expected to handle media
+        // button events now.
+        // TODO verify that this still works as expected
+        mediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS or
+                MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS)
     }
 
     fun onCreateEngineView(engineView: EngineView, session: Session) {
@@ -266,7 +270,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
      * Due to time constraints, the code is written for a single video on the page,
      * which should cover the majority use case (#973 for multiple videos, #935 for audio).
      */
-    inner class MediaSessionCallbacks : MediaSessionCompat.Callback() {
+    inner class MediaSessionCallbacks : MediaSession.Callback() {
         private val ID_TARGET_VIDEO = "targetVideo"
         private val GET_TARGET_VIDEO_OR_RETURN = """
             |var videos = Array.from(document.querySelectorAll('video'));
@@ -317,7 +321,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
                 return true
             }
 
-            return super.onMediaButtonEvent(mediaButtonEvent)
+            return super.onMediaButtonEvent(mediaButtonEvent!!)
         }
 
         /**
