@@ -15,6 +15,7 @@ import org.mozilla.tv.firefox.FirefoxApplication
 class SessionLoadedIdlingResource : IdlingResource {
     private var resourceCallback: IdlingResource.ResourceCallback? = null
     var waitUntil: (() -> Boolean)? = null
+    var ignoreLoading = false // Used in YouTubeNavigationTest to temporarily ignore the session idler
 
     override fun getName(): String {
         return SessionLoadedIdlingResource::class.java.simpleName
@@ -32,7 +33,7 @@ class SessionLoadedIdlingResource : IdlingResource {
          */
         val waitUntil = waitUntil
 
-        return if (session?.loading == true) {
+        return if (session?.loading == true && !ignoreLoading) {
             false
         } else {
             when {
@@ -40,6 +41,7 @@ class SessionLoadedIdlingResource : IdlingResource {
                 waitUntil() -> this.waitUntil = null
                 !waitUntil() -> return false
             }
+            ignoreLoading = false
             invokeCallback()
             true
         }
