@@ -19,6 +19,7 @@ import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
 import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.components.locale.LocaleAwareAppCompatActivity
+import org.mozilla.tv.firefox.ext.resetView
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.setupForApp
 import org.mozilla.tv.firefox.ext.toSafeIntent
@@ -62,6 +63,9 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         val intentData = IntentValidator.validateOnCreate(this, intent.toSafeIntent(), savedInstanceState)
 
         val session = getOrCreateSession(intentData)
+
+        webRenderComponents.sessionManager.getOrCreateEngineSession().resetView(this@MainActivity)
+
         val screenController = serviceLocator.screenController
         screenController.setUpFragmentsForNewSession(supportFragmentManager, session)
 
@@ -149,6 +153,28 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         // TODO when MainActivity has a VM, route this call through it
         serviceLocator.pocketRepo.stopBackgroundUpdates()
         TelemetryIntegration.INSTANCE.stopMainActivity()
+    }
+
+    override fun onDestroy() {
+        if (webRenderComponents.sessionManager.size > 0) {
+            /**
+             * This is to clear the previously assigned WebView instance from EngineView (which
+             * uses ActivityContext) when it's destroyed via [EngineViewCache.onDestroy].
+             *
+             * webView instance is stored in the session, which means they'd stick around for the
+             * life-time of the app. So we would need to manually deallocate the webView whenever
+             * it's destroyed.
+             *
+             * Since [EngineSession.webView] is not nullable, we let [EngineSession.webView]
+             * assign to a new bogus WebView instance (with ApplicationContext). This allows previously
+             * assigned webView to be garbage collected and the newly assigned bogus webView to be replaced
+             * in [MainActivity.onCreate]
+             *
+             * See [EngineSession.resetView] for additional context
+             */
+            webRenderComponents.sessionManager.getEngineSession()?.resetView(applicationContext)
+        }
+        super.onDestroy()
     }
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
