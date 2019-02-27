@@ -5,8 +5,8 @@
 package org.mozilla.tv.firefox.helpers
 
 import android.preference.PreferenceManager
-import androidx.test.InstrumentationRegistry
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity.Companion.ONBOARD_SHOWN_PREF
