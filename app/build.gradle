@@ -161,7 +161,6 @@ dependencies {
 
     testImplementation "androidx.test.ext:junit:$junit"
     testImplementation "org.robolectric:robolectric:$robolectric_version"
-    testImplementation "org.robolectric:shadows-supportv4:$robolectric_version"
     testImplementation 'org.mockito:mockito-core:2.21.0'
 
     testImplementation "androidx.test:core:$test_core"
