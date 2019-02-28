@@ -4,7 +4,6 @@
 
 package org.mozilla.tv.firefox.webrender
 
-import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.test.core.app.ApplicationProvider
 import mozilla.components.browser.engine.system.SystemEngine
@@ -16,6 +15,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mozilla.tv.firefox.session.SessionRepo
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
@@ -52,6 +52,9 @@ class EngineViewCacheTest {
         assertEquals(null, getEngineView().parent)
     }
 
-    private fun getEngineView(): SystemEngineView =
-            engineViewCache.getEngineView(ApplicationProvider.getApplicationContext(), mock(AttributeSet::class.java)) {}
+    private fun getEngineView(): SystemEngineView {
+        return engineViewCache.getEngineView(ApplicationProvider.getApplicationContext(),
+                Robolectric.buildAttributeSet().build()) {}
+    }
 }
+

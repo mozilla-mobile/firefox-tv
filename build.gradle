@@ -8,12 +8,11 @@ buildscript {
     ext.kotlin_version = '1.3.0'
     ext.moz_components_version = '0.43.0'
 
-    ext.robolectric_version = '4.0.1' // required for SDK 28.
+    ext.robolectric_version = '4.0.2' // required for SDK 28.
 
     // Support library test dependencies
     // - List of artifacts: https://developer.android.com/training/testing/set-up-project#android-test-dependencies
-    // - Pin to tested versions (in release notes): https://developer.android.com/jetpack/androidx/releases/archive/test
-    // TODO: these versions are not pinned to tested versions. Do this when upgrading to androidX #1398
+    // - Keep pinned to tested versions (in release notes): https://developer.android.com/jetpack/androidx/releases/archive/test
     ext.test_core = '1.1.0'
     ext.test_runner = '1.1.1'
     ext.test_rules = ext.test_runner
