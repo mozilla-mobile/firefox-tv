@@ -57,4 +57,3 @@ class EngineViewCacheTest {
                 Robolectric.buildAttributeSet().build()) {}
     }
 }
-
