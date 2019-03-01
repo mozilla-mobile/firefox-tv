@@ -4,7 +4,7 @@ import android.Manifest;
 import android.app.Instrumentation;
 import android.content.Context;
 import androidx.annotation.StringRes;
-import androidx.test.InstrumentationRegistry;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.GrantPermissionRule;
 import androidx.test.uiautomator.UiDevice;
 import android.text.format.DateUtils;
