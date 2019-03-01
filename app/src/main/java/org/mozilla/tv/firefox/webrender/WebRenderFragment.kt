@@ -24,6 +24,7 @@ import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.MediaSessionHolder
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
+import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
 import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.pauseAllVideoPlaybacks
@@ -172,6 +173,11 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         cursor = null
 
         sessionFeature = null
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        FocusOnShowDelegate().onHiddenChanged(this, hidden)
+        super.onHiddenChanged(hidden)
     }
 
     fun onBackPressed(): Boolean {
