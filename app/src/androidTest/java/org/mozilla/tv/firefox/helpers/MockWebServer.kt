@@ -45,7 +45,12 @@ class AndroidAssetDispatcher : Dispatcher() {
     private val mainThreadHandler = Handler(Looper.getMainLooper())
 
     override fun dispatch(request: RecordedRequest): MockResponse {
-        val assetManager = ApplicationProvider.getApplicationContext<FirefoxApplication>().assets
+        val application = ApplicationProvider.getApplicationContext<FirefoxApplication>()
+        val testContextPackage = "${application.packageName}.test"
+        val assetManager = application
+                .packageManager
+                .getResourcesForApplication(testContextPackage)
+                .assets
         val assetContents = try {
             val pathNoLeadingSlash = request.path.drop(1)
             assetManager.open(pathNoLeadingSlash).use { inputStream ->
