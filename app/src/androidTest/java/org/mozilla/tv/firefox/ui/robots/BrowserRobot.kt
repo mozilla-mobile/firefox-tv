@@ -13,18 +13,11 @@ import androidx.test.espresso.web.webdriver.DriverAtoms.getText
 import androidx.test.espresso.web.webdriver.Locator
 import androidx.test.uiautomator.UiDevice
 import org.hamcrest.CoreMatchers.equalTo
-import org.mozilla.tv.firefox.ext.webRenderComponents
-import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 
 class BrowserRobot {
     private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
     fun remoteBack() = device.pressBack()
-    fun remoteBackAndWaitForYouTube(activityTestRule: MainActivityTestRule) {
-        val session = activityTestRule.activity.webRenderComponents.sessionManager.selectedSession
-        device.pressBack()
-        activityTestRule.loadingIdlingResource.waitUntil = { session?.url!!
-            .contains("youtube.com/tv#/surface?c=FEtopics&resume") }
-    }
+
     fun dpadLeft() = device.pressDPadLeft()
     fun dpadRight() = device.pressDPadRight()
 
