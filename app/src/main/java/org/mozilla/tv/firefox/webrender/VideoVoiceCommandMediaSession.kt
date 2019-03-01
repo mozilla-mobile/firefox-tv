@@ -113,9 +113,11 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
     init {
         mediaSession.setCallback(MediaSessionCallbacks())
         @Suppress("DEPRECATION")
-        // @deprecated This flag is no longer used. All media sessions are expected to handle media
-        // button events now.
-        // TODO verify that this still works as expected
+        // According to Android, these should now be handled by all MediaSession
+        // implementations. However it doesn't seem that Fire OS has caught up
+        // yet, so we still need these
+        //
+        // To test this, verify that the remote play/pause button works on YouTube
         mediaSession.setFlags(MediaSession.FLAG_HANDLES_MEDIA_BUTTONS or
                 MediaSession.FLAG_HANDLES_TRANSPORT_CONTROLS)
     }
