@@ -25,6 +25,12 @@ private val uiHandler = Handler(Looper.getMainLooper())
 private const val CACHE_VAR = "_firefoxForFireTvPreviouslyFocusedElement"
 private const val CACHE_JS = "var $CACHE_VAR = document.activeElement;"
 
+// This will only happen if YouTube is loading or navigation has broken
+private const val noElementFocused = "document.activeElement === null"
+// This will only happen if YouTube is loading or navigation has broken
+private const val bodyElementFocused = "document.activeElement.tagName === \"BODY\""
+private const val sidebarFocused = "document.activeElement.parentElement.parentElement.id === 'guide-list'"
+
 /**
  * Firefox for Fire TV needs to configure every WebView appropriately.
  */
@@ -140,6 +146,18 @@ fun EngineView.pauseTargetVideo(isInterruptedByVoiceCommand: Boolean) {
 
 fun EngineView.seekTargetVideoToPosition(absolutePositionSeconds: Long) {
     evalJSWithTargetVideo { videoId -> "$videoId.currentTime = $absolutePositionSeconds;" }
+}
+
+fun EngineView.checkYoutubeBack(callback: ValueCallback<String>) {
+    val shouldWeExitPage = """
+               (function () {
+                    return $noElementFocused ||
+                        $bodyElementFocused ||
+                        $sidebarFocused;
+                })();
+        """.trimIndent()
+
+    evalJS(shouldWeExitPage, callback)
 }
 
 /**
