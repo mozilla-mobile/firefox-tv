@@ -65,6 +65,7 @@ tasks:
 # - Build the app (all flavors)
 # - Run unit tests
 # - Run code quality tools (findbugs, lint, checkstyle etc.)
+# - Upload app and test build APKs to Bitbar Cloud and run UI tests
 #
 # - HACK: Used {{ event.head.repo.url }} instead of origin because origin routes to
 #   the Focus Android repo
@@ -77,6 +78,8 @@ tasks:
           - push
         branches:
           - master
+    scopes:
+    - "secrets:get:project/mobile/firefox-tv/tokens"
     payload:
       maxRunTime: 3600
       deadline: "{{ '2 hours' | $fromNow }}"
@@ -93,6 +96,8 @@ tasks:
           && git checkout {{event.head.sha}}
           && yes | sdkmanager --licenses
           && ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
+          && python ./tools/taskcluster/get-bitbar-token.py
+          && python ./tools/taskcluster/execute-bitbar-test.py system/debug app-system-debug
       artifacts:
         'public':
           type: 'directory'
