@@ -22,6 +22,9 @@ import java.util.WeakHashMap
 
 private val uiHandler = Handler(Looper.getMainLooper())
 
+private const val CACHE_VAR = "_firefoxForFireTvPreviouslyFocusedElement"
+private const val CACHE_JS = "var $CACHE_VAR = document.activeElement;"
+
 /**
  * Firefox for Fire TV needs to configure every WebView appropriately.
  */
@@ -60,6 +63,14 @@ fun EngineView.evalJS(javascript: String, callback: ValueCallback<String>? = nul
 
 fun EngineView.pauseAllVideoPlaybacks() {
     evalJS("document.querySelectorAll('video').forEach(v => v.pause());")
+}
+
+fun EngineView.domElementCache() {
+    evalJS(CACHE_JS)
+}
+
+fun EngineView.domElementRestore() {
+    evalJS("if ($CACHE_VAR) $CACHE_VAR.focus();")
 }
 
 /**
