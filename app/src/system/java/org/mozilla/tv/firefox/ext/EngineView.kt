@@ -8,6 +8,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.support.annotation.VisibleForTesting
 import android.webkit.ValueCallback
 import android.webkit.WebBackForwardList
 import android.webkit.WebView
@@ -63,6 +64,7 @@ fun EngineView.setupForApp() {
  * offer a matching API (WebExtensions are likely going to be the preferred way). We may move the functionality that
  * requires JS injection to browser-engine-system.
  */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun EngineView.evalJS(javascript: String, callback: ValueCallback<String>? = null) {
     webView?.evaluateJavascript(javascript, callback)
 }
