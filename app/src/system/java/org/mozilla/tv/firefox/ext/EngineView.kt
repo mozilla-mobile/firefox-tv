@@ -77,6 +77,71 @@ fun EngineView.observePlaybackState() {
     evalJS(JS_OBSERVE_PLAYBACK_STATE)
 }
 
+private fun EngineView.evalJSWithTargetVideo(getExpressionToEval: (videoId: String) -> String) {
+    val ID_TARGET_VIDEO = "targetVideo"
+    val GET_TARGET_VIDEO_OR_RETURN = """
+            |var videos = Array.from(document.querySelectorAll('video'));
+            |if (videos.length === 0) { return; }
+            |
+            |var $ID_TARGET_VIDEO = videos.find(function (video) { return !video.paused });
+            |if (!$ID_TARGET_VIDEO) {
+            |    $ID_TARGET_VIDEO = videos[0];
+            |}
+            """.trimMargin()
+
+    val expressionToEval = getExpressionToEval(ID_TARGET_VIDEO)
+    evalJS("""
+            |(function() {
+            |    $GET_TARGET_VIDEO_OR_RETURN
+            |    $expressionToEval
+            |})();
+            """.trimMargin())
+}
+
+fun EngineView.playTargetVideo() {
+    evalJSWithTargetVideo { videoId -> "$videoId.play();" }
+}
+
+fun EngineView.pauseTargetVideo(isInterruptedByVoiceCommand: Boolean) {
+    fun getJS(videoId: String) = if (!isInterruptedByVoiceCommand) {
+        "$videoId.pause();"
+    } else {
+        // The video is paused for us during a voice command: my theory is that WebView
+        // pauses/resumes videos when audio focus is revoked/granted to it (while it's given
+        // to the voice command). Unfortunately, afaict there is no way to prevent WebView
+        // from resuming these paused videos so we have to pause it after it resumes.
+        // Unfortunately, there is no callback for this (or audio focus changes) so we
+        // inject JS to pause the video immediately after it starts again.
+        //
+        // We timeout the if-playing-starts-pause listener so, if for some reason this
+        // listener isn't called immediately, it doesn't pause the video after the user
+        // attempts to play it in the future (e.g. user says "pause" while video is already
+        // paused and then requests a play).
+        """
+                    | var playingEvent = 'playing';
+                    | var initialExecuteMillis = new Date();
+                    |
+                    | function onPlay() {
+                    |     var now = new Date();
+                    |     var millisPassed = now.getTime() - initialExecuteMillis.getTime();
+                    |     if (millisPassed < 1000) {
+                    |         $videoId.pause();
+                    |     }
+                    |
+                    |     $videoId.removeEventListener(playingEvent, onPlay);
+                    | }
+                    |
+                    | $videoId.addEventListener(playingEvent, onPlay);
+                """.trimMargin()
+    }
+
+    evalJSWithTargetVideo(::getJS)
+}
+
+fun EngineView.seekTargetVideoToPosition(absolutePositionSeconds: Long) {
+    evalJSWithTargetVideo { videoId -> "$videoId.currentTime = $absolutePositionSeconds;" }
+}
+
 /**
  * This functionality is not supported by browser-engine-system yet. See [EngineView.evalJS] comment for details.
  */

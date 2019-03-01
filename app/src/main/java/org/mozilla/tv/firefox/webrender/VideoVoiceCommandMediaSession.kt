@@ -42,10 +42,12 @@ import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.webrender.VideoVoiceCommandMediaSession.MediaSessionCallbacks
 import org.mozilla.tv.firefox.ext.addJavascriptInterface
-import org.mozilla.tv.firefox.ext.evalJS
 import org.mozilla.tv.firefox.ext.observePlaybackState
 import org.mozilla.tv.firefox.ext.pauseAllVideoPlaybacks
+import org.mozilla.tv.firefox.ext.pauseTargetVideo
+import org.mozilla.tv.firefox.ext.playTargetVideo
 import org.mozilla.tv.firefox.ext.removeJavascriptInterface
+import org.mozilla.tv.firefox.ext.seekTargetVideoToPosition
 import org.mozilla.tv.firefox.telemetry.MediaSessionEventType
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import java.util.concurrent.TimeUnit
@@ -273,28 +275,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
      * Due to time constraints, the code is written for a single video on the page,
      * which should cover the majority use case (#973 for multiple videos, #935 for audio).
      */
-    inner class MediaSessionCallbacks : MediaSession.Callback() {
-        private val ID_TARGET_VIDEO = "targetVideo"
-        private val GET_TARGET_VIDEO_OR_RETURN = """
-            |var videos = Array.from(document.querySelectorAll('video'));
-            |if (videos.length === 0) { return; }
-            |
-            |var $ID_TARGET_VIDEO = videos.find(function (video) { return !video.paused });
-            |if (!$ID_TARGET_VIDEO) {
-            |    $ID_TARGET_VIDEO = videos[0];
-            |}
-            """.trimMargin()
-
-        private fun evalJSWithTargetVideo(getExpressionToEval: (videoId: String) -> String) {
-            val expressionToEval = getExpressionToEval(ID_TARGET_VIDEO)
-            engineView?.evalJS("""
-                |(function() {
-                |    $GET_TARGET_VIDEO_OR_RETURN
-                |    $expressionToEval
-                |})();
-                """.trimMargin())
-        }
-
+    inner class MediaSessionCallbacks : MediaSessionCompat.Callback() {
         /**
          * Potentially handles key events before they are received by the [mediaSession]: this is
          * called while the system handles key events. This is *only called for key down events*:
@@ -338,7 +319,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
          * We've already synced playback state from JS so the correct method should be chosen.
          */
         override fun onPlay() {
-            evalJSWithTargetVideo { videoId -> "$videoId.play();" }
+            engineView?.playTargetVideo()
             TelemetryIntegration.INSTANCE.mediaSessionEvent(MediaSessionEventType.PLAY)
         }
 
@@ -346,41 +327,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
         override fun onPause() {
             // If we receive a MediaSession callback while the app is paused, it's coming from a
             // voice command (which pauses the app to handle them).
-            val isInterruptedByVoiceCommand = !isLifecycleResumed
-
-            fun getJS(videoId: String) = if (!isInterruptedByVoiceCommand) {
-                "$videoId.pause();"
-            } else {
-                // The video is paused for us during a voice command: my theory is that WebView
-                // pauses/resumes videos when audio focus is revoked/granted to it (while it's given
-                // to the voice command). Unfortunately, afaict there is no way to prevent WebView
-                // from resuming these paused videos so we have to pause it after it resumes.
-                // Unfortunately, there is no callback for this (or audio focus changes) so we
-                // inject JS to pause the video immediately after it starts again.
-                //
-                // We timeout the if-playing-starts-pause listener so, if for some reason this
-                // listener isn't called immediately, it doesn't pause the video after the user
-                // attempts to play it in the future (e.g. user says "pause" while video is already
-                // paused and then requests a play).
-                """
-                    | var playingEvent = 'playing';
-                    | var initialExecuteMillis = new Date();
-                    |
-                    | function onPlay() {
-                    |     var now = new Date();
-                    |     var millisPassed = now.getTime() - initialExecuteMillis.getTime();
-                    |     if (millisPassed < 1000) {
-                    |         $videoId.pause();
-                    |     }
-                    |
-                    |     $videoId.removeEventListener(playingEvent, onPlay);
-                    | }
-                    |
-                    | $videoId.addEventListener(playingEvent, onPlay);
-                """.trimMargin()
-            }
-
-            evalJSWithTargetVideo(::getJS)
+            engineView?.pauseTargetVideo(!isLifecycleResumed)
             TelemetryIntegration.INSTANCE.mediaSessionEvent(MediaSessionEventType.PAUSE)
         }
 
@@ -400,7 +347,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
 
         override fun onSeekTo(absolutePositionMillis: Long) {
             val absolutePositionSeconds = TimeUnit.MILLISECONDS.toSeconds(absolutePositionMillis)
-            evalJSWithTargetVideo { videoId -> "$videoId.currentTime = $absolutePositionSeconds;" }
+            engineView?.seekTargetVideoToPosition(absolutePositionSeconds)
             TelemetryIntegration.INSTANCE.mediaSessionEvent(MediaSessionEventType.SEEK)
         }
     }
