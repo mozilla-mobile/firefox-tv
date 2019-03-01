@@ -35,6 +35,7 @@ import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
+import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
 import org.mozilla.tv.firefox.experiments.ExperimentConfig
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isEffectivelyVisible
@@ -211,6 +212,11 @@ class NavigationOverlayFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         compositeDisposable.clear()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        FocusOnShowDelegate().onHiddenChanged(this, hidden)
+        super.onHiddenChanged(hidden)
     }
 
     private fun exitFirefox() {

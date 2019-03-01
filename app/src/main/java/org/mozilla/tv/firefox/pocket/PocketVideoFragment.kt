@@ -27,6 +27,7 @@ import mozilla.components.support.ktx.android.os.resetAfter
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
+import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.updateLayoutParams
@@ -81,6 +82,11 @@ class PocketVideoFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         compositeDisposable.clear()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        FocusOnShowDelegate().onHiddenChanged(this, hidden)
+        super.onHiddenChanged(hidden)
     }
 
     // When menu is pressed from the Pocket feed, go back to overlay
