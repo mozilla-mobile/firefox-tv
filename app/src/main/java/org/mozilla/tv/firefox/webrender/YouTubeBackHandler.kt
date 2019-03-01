@@ -9,15 +9,9 @@ import android.webkit.ValueCallback
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.ext.backForwardList
-import org.mozilla.tv.firefox.ext.evalJS
+import org.mozilla.tv.firefox.ext.checkYoutubeBack
 import org.mozilla.tv.firefox.ext.handleYoutubeBack
 import org.mozilla.tv.firefox.ext.isUriYouTubeTV
-
-// This will only happen if YouTube is loading or navigation has broken
-private const val noElementFocused = "document.activeElement === null"
-// This will only happen if YouTube is loading or navigation has broken
-private const val bodyElementFocused = "document.activeElement.tagName === \"BODY\""
-private const val sidebarFocused = "document.activeElement.parentElement.parentElement.id === 'guide-list'"
 
 /**
  * youtube/tv does not handle their back stack correctly. Going back in history visits redirects
@@ -37,14 +31,6 @@ class YouTubeBackHandler(private val engineView: EngineView?, private val activi
     private var currentPreYouTubeIndex: Int? = null
 
     fun handleBackClick(event: KeyEvent) {
-        val shouldWeExitPage = """
-               (function () {
-                    return $noElementFocused ||
-                        $bodyElementFocused ||
-                        $sidebarFocused;
-                })();
-        """.trimIndent()
-
         val backOrMoveFocus = ValueCallback<String> { shouldExitPage ->
             if (shouldExitPage == "true") {
                 if (event.action == KeyEvent.ACTION_DOWN) Unit
@@ -56,7 +42,7 @@ class YouTubeBackHandler(private val engineView: EngineView?, private val activi
             }
         }
 
-        engineView?.evalJS(javascript = shouldWeExitPage, callback = backOrMoveFocus)
+        engineView?.checkYoutubeBack(backOrMoveFocus)
     }
 
     fun onUrlChanged(url: String) {
