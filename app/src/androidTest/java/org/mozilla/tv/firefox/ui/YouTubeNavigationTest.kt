@@ -8,6 +8,7 @@ import okhttp3.mockwebserver.MockWebServer
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.helpers.AndroidAssetDispatcher
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.helpers.TestAssetHelper
@@ -42,19 +43,24 @@ class YouTubeNavigationTest {
     @Test
     fun youtubeNavigationTest() {
         val youtubeUrl = "youtube.com/tv"
+        val youtubeFinalUrl = "youtube.com/tv#/surface?c=FEtopics&resume"
+        val youtubeFinalVideoUrl = "youtube.com/tv#/watch"
         /**
          * YouTube TV, Test page 1, back to YouTube, Test page 2, back to YouTube, back out of YouTube
          * Expected: Overlay
          */
         navigationOverlay {
-        }.openYouTubeAndWaitForRedirects(activityTestRule) {
+        }.enterUrlAndEnterToBrowser(youtubeUrl.toUri()!!) {
         }.openOverlay {
+            waitForYouTubeRedirects(youtubeFinalUrl)
         }.enterUrlAndEnterToBrowser(pages[0].url) {
-            remoteBackAndWaitForYouTube(activityTestRule)
+            remoteBack()
         }.openOverlay {
+            waitForYouTubeRedirects(youtubeFinalUrl)
         }.enterUrlAndEnterToBrowser(pages[1].url) {
-            remoteBackAndWaitForYouTube(activityTestRule)
+            remoteBack()
         }.openOverlay {
+            waitForYouTubeRedirects(youtubeFinalUrl)
             assertURLBarTextContains(youtubeUrl)
         }.closeToBrowser {
             backOutOfYouTube()
@@ -67,11 +73,13 @@ class YouTubeNavigationTest {
          */
         }.enterUrlAndEnterToBrowser(pages[2].url) {
         }.openOverlay {
-        }.openYouTubeAndWaitForRedirects(activityTestRule) {
+        }.enterUrlAndEnterToBrowser(youtubeUrl.toUri()!!) {
         }.openOverlay {
+            waitForYouTubeRedirects(youtubeFinalUrl)
         }.enterUrlAndEnterToBrowser(pages[1].url) {
-            remoteBackAndWaitForYouTube(activityTestRule)
+            remoteBack()
         }.openOverlay {
+            waitForYouTubeRedirects(youtubeFinalUrl)
             assertURLBarTextContains(youtubeUrl)
         }.closeToBrowser {
             backOutOfYouTube()
@@ -90,11 +98,18 @@ class YouTubeNavigationTest {
         navigationOverlay {
         }.openPocketMegatile {
         }.openTileToBrowser(0) {
+        }.openOverlay {
+            waitForYouTubeRedirects(youtubeFinalVideoUrl)
+        }.closeToBrowser {
             backOutOfYouTube()
         }
         navigationOverlay {
+            waitForURLBarToDisplayHint()
             assertURLBarDisplaysHint()
-        }.openYouTubeAndWaitForRedirects(activityTestRule) {
+        }.enterUrlAndEnterToBrowser(youtubeUrl.toUri()!!) {
+        }.openOverlay {
+            waitForYouTubeRedirects(youtubeFinalUrl)
+        }.closeToBrowser {
             backOutOfYouTube()
         }.openOverlay {
             assertURLBarDisplaysHint()
