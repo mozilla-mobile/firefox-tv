@@ -28,7 +28,7 @@ tasks:
     payload:
       maxRunTime: 3600
       deadline: "{{ '2 hours' | $fromNow }}"
-      image: 'mozillamobile/firefox-tv:2.2'
+      image: 'mozillamobile/firefox-tv:2.3'
       command:
         - /bin/bash
         - '--login'
@@ -80,7 +80,7 @@ tasks:
     payload:
       maxRunTime: 3600
       deadline: "{{ '2 hours' | $fromNow }}"
-      image: 'mozillamobile/firefox-tv:2.2'
+      image: 'mozillamobile/firefox-tv:2.3'
       taskclusterProxy: true
       command:
         - /bin/bash
@@ -124,7 +124,7 @@ tasks:
     payload:
       maxRunTime: 3600
       deadline: "{{ '2 hours' | $fromNow }}"
-      image: 'mozillamobile/firefox-tv:2.2'
+      image: 'mozillamobile/firefox-tv:2.3'
       command:
         - /bin/bash
         - '--login'
