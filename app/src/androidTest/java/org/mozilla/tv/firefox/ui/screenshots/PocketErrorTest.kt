@@ -7,7 +7,7 @@ package org.mozilla.tv.firefox.ui.screenshots
 
 import android.app.Application
 import android.view.View
-import androidx.test.InstrumentationRegistry
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
