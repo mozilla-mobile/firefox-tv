@@ -15,6 +15,12 @@ import android.webkit.WebView
 import mozilla.components.browser.engine.system.SystemEngineSession
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
+import org.mozilla.tv.firefox.ext.JS.CACHE_JS
+import org.mozilla.tv.firefox.ext.JS.CACHE_VAR
+import org.mozilla.tv.firefox.ext.JS.bodyElementFocused
+import org.mozilla.tv.firefox.ext.JS.noElementFocused
+import org.mozilla.tv.firefox.ext.JS.pauseVideo
+import org.mozilla.tv.firefox.ext.JS.sidebarFocused
 import org.mozilla.tv.firefox.webrender.FocusedDOMElementCache
 import java.util.WeakHashMap
 
@@ -22,15 +28,6 @@ import java.util.WeakHashMap
 // of the upstream browser-engine(-system) component yet.
 
 private val uiHandler = Handler(Looper.getMainLooper())
-
-private const val CACHE_VAR = "_firefoxForFireTvPreviouslyFocusedElement"
-private const val CACHE_JS = "var $CACHE_VAR = document.activeElement;"
-
-// This will only happen if YouTube is loading or navigation has broken
-private const val noElementFocused = "document.activeElement === null"
-// This will only happen if YouTube is loading or navigation has broken
-private const val bodyElementFocused = "document.activeElement.tagName === \"BODY\""
-private const val sidebarFocused = "document.activeElement.parentElement.parentElement.id === 'guide-list'"
 
 /**
  * Firefox for Fire TV needs to configure every WebView appropriately.
@@ -70,7 +67,7 @@ fun EngineView.evalJS(javascript: String, callback: ValueCallback<String>? = nul
 }
 
 fun EngineView.pauseAllVideoPlaybacks() {
-    evalJS("document.querySelectorAll('video').forEach(v => v.pause());")
+    evalJS(pauseVideo)
 }
 
 fun EngineView.domElementCache() {
