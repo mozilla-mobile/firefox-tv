@@ -88,24 +88,12 @@ class PocketVideoFragment : Fragment() {
         FocusOnShowDelegate().onHiddenChanged(this, hidden)
         super.onHiddenChanged(hidden)
     }
-
-    // When menu is pressed from the Pocket feed, go back to overlay
-    fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        return when (event.keyCode) {
-            KeyEvent.KEYCODE_MENU -> {
-                (activity as MainActivity).dispatchKeyEvent(KeyEvent(event.action, KeyEvent.KEYCODE_BACK))
-                true
-            }
-            else -> false
-        }
-    }
 }
 
 private class PocketVideoAdapter(
     context: Context,
     private val fragmentManager: FragmentManager
 ) : RecyclerView.Adapter<PocketVideoViewHolder>() {
-
     private val pocketVideos = mutableListOf<PocketViewModel.FeedItem>()
 
     private val photonGrey70 = ContextCompat.getColor(context, R.color.photonGrey70)
