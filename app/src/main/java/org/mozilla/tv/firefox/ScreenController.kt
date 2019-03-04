@@ -10,6 +10,7 @@ import androidx.lifecycle.MutableLiveData
 import android.content.Context
 import androidx.fragment.app.FragmentManager
 import android.text.TextUtils
+import android.view.KeyEvent
 import kotlinx.android.synthetic.main.fragment_navigation_overlay.*
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
@@ -150,6 +151,19 @@ class ScreenController {
         transaction.commit()
     }
 
+    fun dispatchKeyEvent(keyEvent: KeyEvent, fragmentManager: FragmentManager): Boolean {
+        val keyMenuDown = keyEvent.keyCode == KeyEvent.KEYCODE_MENU && keyEvent.action == KeyEvent.ACTION_DOWN
+        if (keyMenuDown) {
+            return handleMenu(fragmentManager)
+        }
+
+        val webRenderIsActive = currentActiveScreen.value == ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
+        if (webRenderIsActive) {
+            if (fragmentManager.webRenderFragment().dispatchKeyEvent(keyEvent)) return true
+        }
+        return false
+    }
+
     fun handleBack(fragmentManager: FragmentManager): Boolean {
         val webRenderFragment = fragmentManager.webRenderFragment()
         if (_currentActiveScreen.value == ActiveScreen.WEB_RENDER) {
@@ -159,9 +173,9 @@ class ScreenController {
         return handleTransitionAndUpdateActiveScreen(fragmentManager, transition)
     }
 
-    fun handleMenu(fragmentManager: FragmentManager) {
+    fun handleMenu(fragmentManager: FragmentManager): Boolean {
         val transition = ScreenControllerStateMachine.getNewStateMenuPress(_currentActiveScreen.value!!, isOnHomeUrl(fragmentManager))
-        handleTransitionAndUpdateActiveScreen(fragmentManager, transition)
+        return handleTransitionAndUpdateActiveScreen(fragmentManager, transition)
     }
 
     private fun isOnHomeUrl(fragmentManager: FragmentManager): Boolean {

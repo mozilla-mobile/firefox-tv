@@ -34,7 +34,6 @@ import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.utils.ViewUtils
 import org.mozilla.tv.firefox.utils.publicsuffix.PublicSuffix
 import org.mozilla.tv.firefox.webrender.VideoVoiceCommandMediaSession
-import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 
 interface MediaSessionHolder {
@@ -219,21 +218,10 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         val fragmentManager = supportFragmentManager
 
-        val maybeBrowserFragment = (fragmentManager.findFragmentByTag(WebRenderFragment.FRAGMENT_TAG)
-                as WebRenderFragment?)?.let {
-            if (it.isVisible) it else null
-        }
         TelemetryIntegration.INSTANCE.saveRemoteControlInformation(applicationContext, event)
 
-        if (event.keyCode == KeyEvent.KEYCODE_MENU) {
-            if (event.action == KeyEvent.ACTION_DOWN) {
-                serviceLocator.screenController.handleMenu(supportFragmentManager)
-            }
-            return true
-        }
-
         return videoVoiceCommandMediaSession.dispatchKeyEvent(event) ||
-                (maybeBrowserFragment?.dispatchKeyEvent(event) ?: false) ||
+                serviceLocator.screenController.dispatchKeyEvent(event, fragmentManager) ||
                 super.dispatchKeyEvent(event)
     }
 }
