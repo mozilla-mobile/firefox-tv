@@ -44,7 +44,10 @@ class NavigationOverlayRobot {
     fun toggleTurbo() = turboButton().click()
     fun openSettings() = settingsButton().click()
 
-    fun assertCanGoBack(canGoBack: Boolean) = backButton().assertIsEnabled(canGoBack)
+    fun assertCanGoBack(canGoBack: Boolean) {
+        device.wait(Until.findObject(By.resourceId(R.id.tileContainer), 2000)
+        backButton().assertIsEnabled(canGoBack)
+    }
     fun assertCanGoForward(canGoForward: Boolean) = forwardButton().assertIsEnabled(canGoForward)
     fun assertCanGoBackForward(canGoBack: Boolean, canGoForward: Boolean) {
         assertCanGoBack(canGoBack)
