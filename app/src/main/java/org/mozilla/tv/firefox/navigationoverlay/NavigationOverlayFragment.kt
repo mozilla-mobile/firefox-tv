@@ -21,6 +21,7 @@ import android.widget.ScrollView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -77,7 +78,7 @@ enum class NavigationEvent {
     }
 }
 
-class NavigationOverlayFragment : androidx.fragment.app.Fragment() {
+class NavigationOverlayFragment : Fragment() {
     companion object {
         const val FRAGMENT_TAG = "overlay"
     }

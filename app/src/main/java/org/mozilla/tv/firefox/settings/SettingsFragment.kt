@@ -21,7 +21,7 @@ import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.URLs
 
 /** The settings for the app. */
-class SettingsFragment : androidx.fragment.app.Fragment() {
+class SettingsFragment : Fragment() {
     enum class Action {
         SESSION_CLEARED
     }

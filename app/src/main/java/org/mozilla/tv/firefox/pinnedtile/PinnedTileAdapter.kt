@@ -44,7 +44,7 @@ class PinnedTileAdapter(
     private val loadUrl: (String) -> Unit,
     val onTileLongClick: (() -> Unit)?,
     val onTileFocused: (() -> Unit)?
-) : androidx.recyclerview.widget.RecyclerView.Adapter<TileViewHolder>() {
+) : RecyclerView.Adapter<TileViewHolder>() {
 
     private var tiles = listOf<PinnedTile>()
 
@@ -199,7 +199,7 @@ private fun onBindCustomHomeTile(
 
 class TileViewHolder(
     itemView: View
-) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
+) : RecyclerView.ViewHolder(itemView) {
     val iconView = itemView.tile_icon
     val titleView = itemView.tile_title
 }

@@ -36,7 +36,7 @@ class ToolbarUiController(
 
     private var hasUserChangedURLSinceEditTextFocused = false
 
-    fun onCreateView(layout: View, viewLifecycleOwner: LifecycleOwner, fragmentManager: androidx.fragment.app.FragmentManager) {
+    fun onCreateView(layout: View, viewLifecycleOwner: LifecycleOwner, fragmentManager: FragmentManager) {
         val toolbarClickListener = ToolbarOnClickListener()
         layout.topNavContainer.forEach {
             it.nextFocusDownId = layout.navUrlInput.id
@@ -79,7 +79,7 @@ class ToolbarUiController(
         setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) hasUserChangedURLSinceEditTextFocused = false }
     }
 
-    private fun initToolbar(layout: View, viewLifecycleOwner: LifecycleOwner, fragmentManager: androidx.fragment.app.FragmentManager) {
+    private fun initToolbar(layout: View, viewLifecycleOwner: LifecycleOwner, fragmentManager: FragmentManager) {
         fun updateOverlayButtonState(isEnabled: Boolean, overlayButton: ImageButton) {
             overlayButton.isEnabled = isEnabled
             overlayButton.isFocusable = isEnabled
