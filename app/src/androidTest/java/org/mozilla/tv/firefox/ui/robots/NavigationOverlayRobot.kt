@@ -69,10 +69,14 @@ class NavigationOverlayRobot {
     // against any of its views
     fun assertOverlayIsOpen() = urlBar().assertIsDisplayed(true)
 
-    fun assertCanGoBack(canGoBack: Boolean) = backButton().assertIsEnabled(canGoBack)
+    fun assertCanGoBack(canGoBack: Boolean) {
+        device.wait(Until.findObject(By.res(R.id.tileContainer.toString())), 5000)
+        backButton().assertIsEnabled(canGoBack)
+    }
     fun assertCanGoForward(canGoForward: Boolean) = forwardButton().assertIsEnabled(canGoForward)
     fun assertCanGoBackForward(canGoBack: Boolean, canGoForward: Boolean) {
-        assertCanGoBack(canGoBack)
+        device.wait(Until.findObject(By.res(R.id.navUrlInput.toString())), 5000)
+        backButton().assertIsEnabled(canGoBack)
         assertCanGoForward(canGoForward)
     }
 

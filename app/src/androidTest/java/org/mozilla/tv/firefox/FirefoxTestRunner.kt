@@ -5,11 +5,16 @@
 package org.mozilla.tv.firefox
 
 import android.app.Application
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import androidx.test.runner.AndroidJUnitRunner
+import androidx.test.runner.lifecycle.ActivityLifecycleCallback
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import kotlin.reflect.full.companionObjectInstance
+import android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
+import androidx.test.runner.lifecycle.Stage
 
 class FirefoxTestRunner : AndroidJUnitRunner() {
 
@@ -36,10 +41,20 @@ class FirefoxTestRunner : AndroidJUnitRunner() {
         val testClass = classString?.let { classLoader.loadClass(it).kotlin }
         val dependencyProvider = testClass?.companionObjectInstance as? TestDependencyFactory
         val fakeServiceLocator = dependencyProvider?.createServiceLocator(app)
-
         fakeServiceLocator.swapIfNotNull()
 
         super.onCreate(arguments)
+
+    /**
+    * This flag sets a preferences to keep the screen on between tests which addresses timing issues seen on the device.
+    */
+        ActivityLifecycleMonitorRegistry.getInstance().addLifecycleCallback(object : ActivityLifecycleCallback {
+            override fun onActivityLifecycleChanged(activity: Activity, stage: Stage) {
+                if (stage === Stage.PRE_ON_CREATE) {
+                    activity.window.addFlags(FLAG_KEEP_SCREEN_ON)
+                }
+            }
+        })
     }
 }
 
@@ -61,4 +76,4 @@ private fun Bundle.extractClass(): String? {
     // The class is stored in the format of {class}#{test}
     // e.g., org.mozilla.tv.firefox.ui.PocketBasicUserFlowTest#pocketBasicUserFlowTest
     return this.getString("class")?.split("#")?.firstOrNull()
-}
+    }
