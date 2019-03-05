@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                   xmlns:tools="http://schemas.android.com/tools"
-                                                   android:layout_width="fill_parent"
-                                                   android:layout_height="fill_parent"
-                                                   app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                                                   tools:context="org.mozilla.tv.firefox.onboarding.OnboardingActivity"
-                                                   tools:showIn="@layout/activity_onboarding">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="org.mozilla.tv.firefox.onboarding.OnboardingActivity"
+    tools:showIn="@layout/activity_onboarding">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_left_quarter"

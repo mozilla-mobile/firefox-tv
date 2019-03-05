@@ -15,6 +15,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_pocket_video.pocketHelpButton
@@ -34,7 +37,7 @@ import java.net.URI
 import java.net.URISyntaxException
 
 /** A feed of Pocket videos. */
-class PocketVideoFragment : androidx.fragment.app.Fragment() {
+class PocketVideoFragment : Fragment() {
     companion object {
         const val FRAGMENT_TAG = "pocket"
     }
@@ -94,8 +97,8 @@ class PocketVideoFragment : androidx.fragment.app.Fragment() {
 
 private class PocketVideoAdapter(
     context: Context,
-    private val fragmentManager: androidx.fragment.app.FragmentManager
-) : androidx.recyclerview.widget.RecyclerView.Adapter<PocketVideoViewHolder>() {
+    private val fragmentManager: FragmentManager
+) : RecyclerView.Adapter<PocketVideoViewHolder>() {
 
     private val pocketVideos = mutableListOf<PocketViewModel.FeedItem>()
 
@@ -210,7 +213,7 @@ private class PocketVideoAdapter(
     }
 }
 
-private class PocketVideoViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
+private class PocketVideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val videoThumbnailView = itemView.findViewById<ImageView>(R.id.videoThumbnailView)
     val titleView = itemView.findViewById<TextView>(R.id.titleView)
     val domainView = itemView.findViewById<TextView>(R.id.domainView)

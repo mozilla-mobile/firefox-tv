@@ -12,5 +12,5 @@ import org.mozilla.tv.firefox.webrender.WebRenderComponents
  *
  * @throws IllegalStateException if not currently associated with a context.
  */
-val androidx.fragment.app.Fragment.requireWebRenderComponents: WebRenderComponents
+val Fragment.requireWebRenderComponents: WebRenderComponents
     get() = requireContext().webRenderComponents
