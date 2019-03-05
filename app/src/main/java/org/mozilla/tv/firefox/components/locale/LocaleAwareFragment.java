@@ -5,7 +5,6 @@
 package org.mozilla.tv.firefox.components.locale;
 
 import java.util.Locale;
-
 import androidx.fragment.app.Fragment;
 
 public abstract class LocaleAwareFragment extends Fragment {

@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.ui
 
+import android.net.Uri
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Assert.assertNotEquals
 import org.junit.Ignore
@@ -132,6 +133,16 @@ class BasicNavigationTest {
         navigationOverlay {
             remoteBack()
             assertActivityFinishing(activityTestRule)
+        }
+    }
+    @Test
+    fun screenNavigationFocusTest() {
+        navigationOverlay {
+        }.enterUrlAndEnterToBrowser(Uri.parse("firefox:about")) {
+        }.openOverlay {
+        // Navigate to settings via keypresses, to maintain focus.
+        }.linearNavigateToSettingsAndOpen {
+            assertDataCollectionButtonFocused()
         }
     }
 }

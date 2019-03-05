@@ -42,7 +42,6 @@ class NavigationOverlayRobot {
     fun goForward() = forwardButton().click()
     fun reload() = reloadButton().click()
     fun toggleTurbo() = turboButton().click()
-    fun openSettings() = settingsButton().click()
 
     fun assertCanGoBack(canGoBack: Boolean) = backButton().assertIsEnabled(canGoBack)
     fun assertCanGoForward(canGoForward: Boolean) = forwardButton().assertIsEnabled(canGoForward)
@@ -118,6 +117,28 @@ class NavigationOverlayRobot {
 
         fun openSettings(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
             settingsButton().click()
+
+            SettingsRobot().interact()
+            return SettingsRobot.Transition()
+        }
+
+        /*
+         * Navigate to the settings button using keypresses and open, and maintain focus.
+         * Using click() to select buttons removes focus, so this is an alternative way to open
+         * Settings.
+         */
+        fun linearNavigateToSettingsAndOpen(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
+            // We hard-code this navigiation pattern because making a generic way to linearly navigate
+            // is very difficult within Espresso. Espresso supports asserting view state, but not
+            // querying it. Because of this, we can't write conditional logic based on the currently
+            // focused view.
+            device.apply {
+                // This will need to change if the button layout changes. However, such layout
+                // changes are infrequent, and updating this will be easy.
+                pressDPadUp()
+                repeat(5) { pressDPadRight() }
+                pressDPadCenter()
+            }
 
             SettingsRobot().interact()
             return SettingsRobot.Transition()
