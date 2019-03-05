@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.StrictMode
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_pocket_video.pocketHelpButton
 import kotlinx.android.synthetic.main.fragment_pocket_video.pocketWordmarkView
 import kotlinx.android.synthetic.main.fragment_pocket_video.videoFeed
 import mozilla.components.support.ktx.android.os.resetAfter
-import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
