@@ -11,6 +11,7 @@ import mozilla.components.browser.search.SearchEngine
 import mozilla.components.browser.search.provider.AssetsSearchEngineProvider
 import mozilla.components.browser.search.provider.SearchEngineProvider
 import mozilla.components.browser.search.provider.localization.SearchLocalizationProvider
+import java.util.Collections.addAll
 
 private const val LOGTAG = "Search"
 
@@ -39,7 +40,14 @@ class SearchEngineProviderWrapper(private val replacements: Map<String, String>)
     )
 
     override suspend fun loadSearchEngines(context: Context): List<SearchEngine> {
-        val searchEngines = inner.loadSearchEngines(context).toMutableList()
+        val searchEngines = inner.loadSearchEngines(context)
+
+        return updateSearchEngines(searchEngines, replacements)
+    }
+
+    private fun updateSearchEngines(searchEngines: List<SearchEngine>, replacements: Map<String, String>): List<SearchEngine> {
+        @Suppress("NAME_SHADOWING") // Defensive copy & mutable
+        val searchEngines = mutableListOf<SearchEngine>().apply { addAll(searchEngines) }
 
         replacements.forEach { (old, new) ->
             val newIndex = searchEngines.indexOfFirst { it.identifier == new }
@@ -57,7 +65,6 @@ class SearchEngineProviderWrapper(private val replacements: Map<String, String>)
                 Log.d(LOGTAG, "Failed to replace plugin $old with $new")
             }
         }
-
         return searchEngines
     }
 }
