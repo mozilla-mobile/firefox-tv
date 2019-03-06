@@ -4,14 +4,12 @@
 
 package org.mozilla.tv.firefox.search
 
+import junit.framework.TestCase.assertEquals
 import mozilla.components.browser.search.SearchEngine
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
-import org.robolectric.RobolectricTestRunner
 
 private val GOOGLE = mockSearchEngine("Google")
 private val YAHOO = mockSearchEngine("Yahoo")
