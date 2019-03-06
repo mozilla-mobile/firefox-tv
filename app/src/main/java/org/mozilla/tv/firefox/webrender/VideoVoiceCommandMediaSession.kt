@@ -304,8 +304,8 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
          * @return true for MediaSession to not handle the event but to continue system handling,
          * false for MediaSession to handle the event and stop system handling.
          */
-        override fun onMediaButtonEvent(mediaButtonEvent: Intent?): Boolean {
-            val key = mediaButtonEvent?.getParcelableExtra<KeyEvent?>(Intent.EXTRA_KEY_EVENT)
+        override fun onMediaButtonEvent(mediaButtonEvent: Intent): Boolean {
+            val key = mediaButtonEvent.getParcelableExtra<KeyEvent?>(Intent.EXTRA_KEY_EVENT)
 
             if (KEY_CODES_MEDIA_PLAY_PAUSE.contains(key?.keyCode)) {
                 // Our overall goal is to see how often voice commands are used. play/pause are the
@@ -323,7 +323,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
                 return true
             }
 
-            return super.onMediaButtonEvent(mediaButtonEvent!!)
+            return super.onMediaButtonEvent(mediaButtonEvent)
         }
 
         /**
