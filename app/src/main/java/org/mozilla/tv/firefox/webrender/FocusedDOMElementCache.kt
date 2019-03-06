@@ -5,17 +5,17 @@
 package org.mozilla.tv.firefox.webrender
 
 import mozilla.components.concept.engine.EngineView
-import org.mozilla.tv.firefox.ext.domElementCache
-import org.mozilla.tv.firefox.ext.domElementRestore
+import org.mozilla.tv.firefox.ext.cacheDomElement
+import org.mozilla.tv.firefox.ext.restoreDomElement
 
 class FocusedDOMElementCache(private val engineView: EngineView) :
         FocusedDOMElementCacheInterface {
 
     override fun cache() {
-        engineView.domElementCache()
+        engineView.cacheDomElement()
     }
 
     override fun restore() {
-        engineView.domElementRestore()
+        engineView.restoreDomElement()
     }
 }
