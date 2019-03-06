@@ -42,10 +42,17 @@ class SearchEngineProviderWrapper(private val replacements: Map<String, String>)
         val searchEngines = inner.loadSearchEngines(context).toMutableList()
 
         replacements.forEach { (old, new) ->
-            val oldIndex = searchEngines.indexOfFirst { it.identifier == old }
             val newIndex = searchEngines.indexOfFirst { it.identifier == new }
-            if (oldIndex != -1 && newIndex != -1) {
-                searchEngines[oldIndex] = searchEngines.removeAt(newIndex)
+            if (newIndex != -1) {
+                val initialOldIndex = searchEngines.indexOfFirst { it.identifier == old }
+                if (initialOldIndex != -1) {
+                    val newEngine = searchEngines.removeAt(newIndex)
+                    // index of old engine might have changed after removal
+                    val oldIndex = searchEngines.indexOfFirst { it.identifier == old }
+                    searchEngines[oldIndex] = newEngine;
+                } else {
+                    Log.d(LOGTAG, "Failed to replace plugin $old with $new")
+                }
             } else {
                 Log.d(LOGTAG, "Failed to replace plugin $old with $new")
             }
