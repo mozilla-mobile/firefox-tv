@@ -6,17 +6,17 @@ package org.mozilla.tv.firefox.ext
 
 import android.os.Handler
 import android.os.Looper
-import android.support.annotation.VisibleForTesting
 import android.webkit.ValueCallback
 import android.widget.FrameLayout
+import androidx.annotation.VisibleForTesting
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.geckoview.GeckoView
 import org.mozilla.tv.firefox.ext.Js.CACHE_JS
-import org.mozilla.tv.firefox.ext.Js.CACHE_VAR
 import org.mozilla.tv.firefox.ext.Js.BODY_ELEMENT_FOCUSED
 import org.mozilla.tv.firefox.ext.Js.JS_OBSERVE_PLAYBACK_STATE
 import org.mozilla.tv.firefox.ext.Js.NO_ELEMENT_FOCUSED
 import org.mozilla.tv.firefox.ext.Js.PAUSE_VIDEO
+import org.mozilla.tv.firefox.ext.Js.RESTORE_JS
 import org.mozilla.tv.firefox.ext.Js.SIDEBAR_FOCUSED
 import org.mozilla.tv.firefox.webrender.FocusedDOMElementCache
 import java.util.WeakHashMap
@@ -61,7 +61,7 @@ fun EngineView.cacheDomElement() {
 }
 
 fun EngineView.restoreDomElement() {
-    evalJS("if ($CACHE_VAR) $CACHE_VAR.focus();")
+    evalJS(RESTORE_JS)
 }
 
 fun EngineView.observePlaybackState() {
