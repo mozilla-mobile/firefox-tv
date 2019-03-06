@@ -24,6 +24,7 @@ import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
 import org.mozilla.tv.firefox.pocket.PocketRepoCache
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
+import org.mozilla.tv.firefox.search.SearchEngineManagerFactory
 import org.mozilla.tv.firefox.settings.SettingsRepo
 import org.mozilla.tv.firefox.webrender.EngineViewCache
 import org.mozilla.tv.firefox.session.SessionRepo
@@ -77,13 +78,7 @@ open class ServiceLocator(val app: Application) {
     val engineViewCache by lazy { EngineViewCache(sessionRepo) }
     val sessionManager get() = app.webRenderComponents.sessionManager
     val sessionUseCases get() = app.webRenderComponents.sessionUseCases
-    val searchEngineManager by lazy {
-        val replacements = mapOf("google" to "google-b-amzftv", "google-2018" to "google-b-1-amzftv",
-            "google-b-m" to "google-b-amzftv", "google-b-1-m" to "google-b-1-amzftv")
-        val engineProvider = SearchEngineProviderWrapper(replacements)
-
-        SearchEngineManager(listOf(engineProvider)).apply { GlobalScope.launch { load(app) } }
-    }
+    val searchEngineManager by lazy { SearchEngineManagerFactory.create(app) }
 
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())
     open val pinnedTileRepo by lazy { PinnedTileRepo(app) }
