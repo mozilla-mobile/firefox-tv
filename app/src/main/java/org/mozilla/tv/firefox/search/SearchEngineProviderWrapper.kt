@@ -58,7 +58,7 @@ class SearchEngineProviderWrapper(private val replacements: Map<String, String>)
                     val newEngine = searchEngines.removeAt(newIndex)
                     // index of old engine might have changed after removal
                     val oldIndex = searchEngines.indexOfFirst { it.identifier == old }
-                    searchEngines[oldIndex] = newEngine;
+                    searchEngines[oldIndex] = newEngine
                 } else {
                     Log.d(LOGTAG, "Failed to replace plugin $old with $new")
                 }
