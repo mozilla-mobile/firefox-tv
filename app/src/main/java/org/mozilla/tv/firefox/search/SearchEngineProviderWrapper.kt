@@ -5,13 +5,13 @@
 package org.mozilla.tv.firefox.search
 
 import android.content.Context
+import android.support.annotation.VisibleForTesting
 import android.util.Log
 import java.util.Locale
 import mozilla.components.browser.search.SearchEngine
 import mozilla.components.browser.search.provider.AssetsSearchEngineProvider
 import mozilla.components.browser.search.provider.SearchEngineProvider
 import mozilla.components.browser.search.provider.localization.SearchLocalizationProvider
-import java.util.Collections.addAll
 
 private const val LOGTAG = "Search"
 
@@ -45,7 +45,8 @@ class SearchEngineProviderWrapper(private val replacements: Map<String, String>)
         return updateSearchEngines(searchEngines, replacements)
     }
 
-    private fun updateSearchEngines(searchEngines: List<SearchEngine>, replacements: Map<String, String>): List<SearchEngine> {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun updateSearchEngines(searchEngines: List<SearchEngine>, replacements: Map<String, String>): List<SearchEngine> {
         @Suppress("NAME_SHADOWING") // Defensive copy & mutable
         val searchEngines = mutableListOf<SearchEngine>().apply { addAll(searchEngines) }
 
