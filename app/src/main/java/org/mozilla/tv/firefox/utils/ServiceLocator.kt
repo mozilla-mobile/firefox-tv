@@ -6,29 +6,25 @@ package org.mozilla.tv.firefox.utils
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import mozilla.components.browser.search.SearchEngineManager
 import mozilla.components.support.base.observer.Consumable
-import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ValidatedIntentData
 import org.mozilla.tv.firefox.architecture.ViewModelFactory
-import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.components.locale.LocaleManager
-import org.mozilla.tv.firefox.experiments.FretboardProvider
 import org.mozilla.tv.firefox.experiments.ExperimentsProvider
+import org.mozilla.tv.firefox.experiments.FretboardProvider
 import org.mozilla.tv.firefox.ext.getAccessibilityManager
+import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.framework.FrameworkRepo
+import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
 import org.mozilla.tv.firefox.pocket.PocketRepoCache
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.search.SearchEngineManagerFactory
+import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.settings.SettingsRepo
 import org.mozilla.tv.firefox.webrender.EngineViewCache
-import org.mozilla.tv.firefox.session.SessionRepo
-import org.mozilla.tv.firefox.search.SearchEngineProviderWrapper
 
 /**
  * Implementation of the Service Locator pattern. Use this class to provide dependencies without
