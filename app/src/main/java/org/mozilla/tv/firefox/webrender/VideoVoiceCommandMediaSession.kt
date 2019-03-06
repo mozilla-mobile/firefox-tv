@@ -275,7 +275,7 @@ class VideoVoiceCommandMediaSession @UiThread constructor(
      * Due to time constraints, the code is written for a single video on the page,
      * which should cover the majority use case (#973 for multiple videos, #935 for audio).
      */
-    inner class MediaSessionCallbacks : MediaSessionCompat.Callback() {
+    inner class MediaSessionCallbacks : MediaSession.Callback() {
         /**
          * Potentially handles key events before they are received by the [mediaSession]: this is
          * called while the system handles key events. This is *only called for key down events*:
