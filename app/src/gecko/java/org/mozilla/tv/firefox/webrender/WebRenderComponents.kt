@@ -13,7 +13,6 @@ import mozilla.components.feature.session.SessionUseCases
 import org.mozilla.geckoview.GeckoRuntime
 import org.mozilla.geckoview.GeckoRuntimeSettings
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.utils.BuildConstants
 import org.mozilla.tv.firefox.utils.SafeIntent
 import org.mozilla.tv.firefox.utils.Settings
