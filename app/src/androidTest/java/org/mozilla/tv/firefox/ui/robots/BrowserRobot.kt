@@ -54,6 +54,19 @@ class BrowserRobot {
             NavigationOverlayRobot().interact()
             return NavigationOverlayRobot.Transition()
         }
+
+        /**
+         * Will fail if pressing the back button does not open the overlay
+         */
+        fun backButtonToOverlay(interact: NavigationOverlayRobot.() -> Unit): NavigationOverlayRobot.Transition {
+            device.pressBack()
+
+            NavigationOverlayRobot().apply {
+                assertOverlayIsOpen()
+                interact()
+            }
+            return NavigationOverlayRobot.Transition()
+        }
     }
 }
 
