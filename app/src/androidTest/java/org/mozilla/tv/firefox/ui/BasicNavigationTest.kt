@@ -128,6 +128,7 @@ class BasicNavigationTest {
             assertNotEquals(preReloadTitle, getPageTitle())
         }
     }
+
     @Test
     fun exitAppByBackButtonTest() {
         navigationOverlay {
@@ -135,6 +136,24 @@ class BasicNavigationTest {
             assertActivityFinishing(activityTestRule)
         }
     }
+
+    @Test
+    fun navigateThenExitAppByBackButtonTest() {
+        val server = MockWebServer().apply {
+            setDispatcher(AndroidAssetDispatcher())
+            start()
+        }
+
+        val pages = TestAssetHelper.getGenericAssets(server)
+
+        navigationOverlay {
+        }.enterUrlAndEnterToBrowser(pages.first().url) {
+        }.backButtonToOverlay {
+            remoteBack()
+            assertActivityFinishing(activityTestRule)
+        }
+    }
+
     @Test
     fun screenNavigationFocusTest() {
         navigationOverlay {
