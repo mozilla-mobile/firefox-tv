@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 ### Fixed
+- Bug where you could not use remote back button to exit YouTube if it was visited from Pocket (#1584)
+- Fixed 4K YT bug (#277)
+- Backing from the navigation overlay when on the first site in your backstack will now properly exit the app (#1916)
 
 ## [3.5-RO] 2019-03-12
 *Released to Fire TV 4K, staged roll-out*
