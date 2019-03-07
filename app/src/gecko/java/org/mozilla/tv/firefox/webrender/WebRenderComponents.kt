@@ -15,6 +15,7 @@ import org.mozilla.geckoview.GeckoRuntimeSettings
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.utils.BuildConstants
+import org.mozilla.tv.firefox.utils.SafeIntent
 import org.mozilla.tv.firefox.utils.Settings
 
 /**
@@ -22,6 +23,19 @@ import org.mozilla.tv.firefox.utils.Settings
  * application.
  */
 class WebRenderComponents(applicationContext: Context, systemUserAgent: String) {
+    // The first intent the App was launched with.  Used to pass configuration through to Gecko.
+    lateinit var launchSafeIntent: SafeIntent
+
+    fun notifyLaunchWithSafeIntent(safeIntent: SafeIntent): Boolean {
+        // We can't access the property reference outside of our own lexical scope,
+        // so this helper must be in this class.
+        if (!this::launchSafeIntent.isInitialized) {
+            launchSafeIntent = safeIntent
+            return true
+        }
+        return false
+    }
+
     val engine: Engine by lazy {
         fun getUserAgent(): String = UserAgent.buildUserAgentString(
                 applicationContext,
@@ -32,7 +46,7 @@ class WebRenderComponents(applicationContext: Context, systemUserAgent: String) 
         if (BuildConstants.isDevBuild) {
             // In debug builds, allow to invoke via an Intent that has extras customizing Gecko.
             // In particular, this allows to add command line arguments for custom profiles, etc.
-            val extras = applicationContext.serviceLocator.launchSafeIntent.extras
+            val extras = launchSafeIntent.extras
             if (extras != null) {
                 runtimeSettingsBuilder.extras(extras)
             }

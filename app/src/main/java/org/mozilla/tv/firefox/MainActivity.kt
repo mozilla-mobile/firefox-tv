@@ -58,7 +58,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         // The launch intent is needed to create the engines in the engine cache.
         val safeIntent = intent.toSafeIntent()
-        serviceLocator.notifyLaunchWithSafeIntent(safeIntent)
+        webRenderComponents.notifyLaunchWithSafeIntent(safeIntent)
 
         lifecycle.addObserver(serviceLocator.engineViewCache)
 
