@@ -82,3 +82,9 @@ task ktlint(type: JavaExec, group: "verification") {
     main = "com.github.shyiko.ktlint.Main"
     args "**/*.kt"
 }
+
+// // To substitute a local GeckoView, uncomment and update the following line:
+// ext.topsrcdir = '/absolute/path/to/mozilla-central'
+// // And optionally, the following line:
+// ext.topobjdir = '/absolute/path/to/topobjdir'
+// apply from: "${ext.topsrcdir}/substitute-local-geckoview.gradle"

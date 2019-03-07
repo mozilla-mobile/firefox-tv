@@ -147,7 +147,7 @@ dependencies {
     // Required to override android.support lib in GeckoView dependency (uses palette-v7:26.1.0)
     geckoImplementation "androidx.palette:palette:$androidx_version"
     geckoImplementation "org.mozilla.components:browser-engine-gecko-nightly:$moz_components_version"
-    geckoImplementation Gecko.geckoview_nightly_arm
+    geckoImplementation "${Gecko.geckoview_nightly_arm}@aar"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
