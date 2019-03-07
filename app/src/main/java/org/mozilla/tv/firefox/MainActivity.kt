@@ -82,7 +82,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             }
         })
 
-        if (!intent.hasExtra("TURBO_MODE")) {
+        if (!safeIntent.hasExtra("TURBO_MODE")) {
             if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding()) {
                 val onboardingIntents =
                         Intent(this@MainActivity, PocketOnboardingActivity::class.java)
@@ -93,10 +93,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
                 val onboardingIntent = Intent(this@MainActivity, OnboardingActivity::class.java)
                 startActivity(onboardingIntent)
             }
-        } else {
-            val turboMode = intent.getBooleanExtra("TURBO_MODE", true)
-            Log.i(LOG_TAG, "Setting turboMode.isEnabled = " + turboMode)
-            serviceLocator.turboMode.isEnabled = turboMode
         }
 
         serviceLocator.intentLiveData.value = Consumable.from(intentData)
@@ -128,12 +124,19 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             return
         }
 
-        // We can't do anything if the intent does not contain valid data, so short
-        val intentData = IntentValidator.validate(this, unsafeIntent.toSafeIntent()) ?: return
+        // We can't do anything if the intent does not contain valid data, so short.
+        val safeIntent = unsafeIntent.toSafeIntent()
+        val intentData = IntentValidator.validate(this, safeIntent) ?: return
 
         /** ScreenController operations rely on Activity.LifeCycle (i.e. FragmentTransactions)
          *  Using LiveData allows such methods to be called in the correct LifeCycle */
         serviceLocator.intentLiveData.value = Consumable.from(intentData)
+
+        if (safeIntent.hasExtra("TURBO_MODE")) {
+            val turboMode = safeIntent.getBooleanExtra("TURBO_MODE", true)
+            Log.i(LOG_TAG, "Setting turboMode.isEnabled = " + turboMode)
+            serviceLocator.turboMode.isEnabled = turboMode
+        }
     }
 
     override fun applyLocale() {
