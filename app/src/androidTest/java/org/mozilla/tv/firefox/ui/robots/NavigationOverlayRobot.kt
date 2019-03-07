@@ -26,6 +26,7 @@ import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.helpers.RecyclerViewHelpers
 import org.mozilla.tv.firefox.helpers.ext.assertIsChecked
+import org.mozilla.tv.firefox.helpers.ext.assertIsDisplayed
 import org.mozilla.tv.firefox.helpers.ext.assertIsEnabled
 import org.mozilla.tv.firefox.helpers.ext.assertIsSelected
 import org.mozilla.tv.firefox.helpers.ext.click
@@ -42,6 +43,10 @@ class NavigationOverlayRobot {
     fun goForward() = forwardButton().click()
     fun reload() = reloadButton().click()
     fun toggleTurbo() = turboButton().click()
+
+    // The implementation of this method is arbitrary. We could run this check
+    // against any of its views
+    fun assertOverlayIsOpen() = urlBar().assertIsDisplayed()
 
     fun assertCanGoBack(canGoBack: Boolean) = backButton().assertIsEnabled(canGoBack)
     fun assertCanGoForward(canGoForward: Boolean) = forwardButton().assertIsEnabled(canGoForward)
