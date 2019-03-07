@@ -18,6 +18,7 @@ import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
+import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
@@ -27,7 +28,7 @@ import org.mozilla.tv.firefox.utils.UrlUtils
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 
-class ScreenController {
+class ScreenController(private val sessionRepo: SessionRepo) {
 
     private val _currentActiveScreen = MutableLiveData<ActiveScreen>().apply {
         value = ActiveScreen.NAVIGATION_OVERLAY
@@ -169,19 +170,21 @@ class ScreenController {
         if (_currentActiveScreen.value == ActiveScreen.WEB_RENDER) {
             if (webRenderFragment.onBackPressed()) return true
         }
-        val transition = ScreenControllerStateMachine.getNewStateBackPress(_currentActiveScreen.value!!, isOnHomeUrl(fragmentManager))
+        val transition = ScreenControllerStateMachine.getNewStateBackPress(_currentActiveScreen.value!!, canGoBack())
         return handleTransitionAndUpdateActiveScreen(fragmentManager, transition)
     }
 
     fun handleMenu(fragmentManager: FragmentManager): Boolean {
-        val transition = ScreenControllerStateMachine.getNewStateMenuPress(_currentActiveScreen.value!!, isOnHomeUrl(fragmentManager))
+        val transition = ScreenControllerStateMachine.getNewStateMenuPress(_currentActiveScreen.value!!, isOnHomeUrl())
         return handleTransitionAndUpdateActiveScreen(fragmentManager, transition)
     }
 
-    private fun isOnHomeUrl(fragmentManager: FragmentManager): Boolean {
-        // TODO: Would be more correct to get this from the model rather than the Fragment.
-        val webRenderFragment = fragmentManager.webRenderFragment()
-        return webRenderFragment.session.url == URLs.APP_URL_HOME
+    private fun canGoBack(): Boolean {
+        return sessionRepo.state.value?.backEnabled == true
+    }
+
+    private fun isOnHomeUrl(): Boolean {
+        return sessionRepo.state.value?.currentUrl == URLs.APP_URL_HOME
     }
 
     private fun handleTransitionAndUpdateActiveScreen(fragmentManager: FragmentManager, transition: Transition): Boolean {
