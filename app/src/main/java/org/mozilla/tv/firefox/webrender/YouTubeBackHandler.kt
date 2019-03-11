@@ -25,7 +25,6 @@ import org.mozilla.tv.firefox.ext.isUriYouTubeTV
  * Else:
  * - Dispatch ESC key event
  */
-
 class YouTubeBackHandler(private val engineView: EngineView?, private val activity: MainActivity) {
     private val preYouTubeIndexHistory: MutableList<Int> = mutableListOf()
     private var currentPreYouTubeIndex: Int? = null
@@ -68,10 +67,10 @@ class YouTubeBackHandler(private val engineView: EngineView?, private val activi
         }
     }
 
+    fun goBackBeforeYouTube() = engineView!!.handleYoutubeBack(getIndexToGoBackTo())
+
     private fun getIndexToGoBackTo(): Int {
         return if (preYouTubeIndexHistory.isEmpty()) 0
         else preYouTubeIndexHistory.removeAt(preYouTubeIndexHistory.lastIndex)
     }
-
-    private fun goBackBeforeYouTube() = engineView!!.handleYoutubeBack(getIndexToGoBackTo())
 }
