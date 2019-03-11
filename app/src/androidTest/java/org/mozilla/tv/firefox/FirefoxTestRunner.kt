@@ -5,11 +5,17 @@
 package org.mozilla.tv.firefox
 
 import android.app.Application
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.support.test.runner.AndroidJUnitRunner
+import android.support.test.runner.lifecycle.ActivityLifecycleCallback
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import kotlin.reflect.full.companionObjectInstance
+import android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
+import android.support.test.runner.lifecycle.Stage
+
 
 class FirefoxTestRunner : AndroidJUnitRunner() {
 
@@ -36,10 +42,17 @@ class FirefoxTestRunner : AndroidJUnitRunner() {
         val testClass = classString?.let { classLoader.loadClass(it).kotlin }
         val dependencyProvider = testClass?.companionObjectInstance as? TestDependencyFactory
         val fakeServiceLocator = dependencyProvider?.createServiceLocator(app)
-
         fakeServiceLocator.swapIfNotNull()
 
         super.onCreate(arguments)
+
+        ActivityLifecycleMonitorRegistry.getInstance().addLifecycleCallback(object : ActivityLifecycleCallback {
+            override fun onActivityLifecycleChanged(activity: Activity, stage: Stage) {
+                if (stage === Stage.PRE_ON_CREATE) {
+                    activity.window.addFlags( FLAG_KEEP_SCREEN_ON)
+                }
+            }
+        })
     }
 }
 
