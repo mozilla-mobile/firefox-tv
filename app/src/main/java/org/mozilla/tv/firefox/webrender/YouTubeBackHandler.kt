@@ -30,15 +30,14 @@ class YouTubeBackHandler(private val engineView: EngineView?, private val activi
     private val preYouTubeIndexHistory: MutableList<Int> = mutableListOf()
     private var currentPreYouTubeIndex: Int? = null
 
-    fun handleBackClick(event: KeyEvent) {
+    fun handleBackClick() {
         val backOrMoveFocus = ValueCallback<String> { shouldExitPage ->
             if (shouldExitPage == "true") {
-                if (event.action == KeyEvent.ACTION_DOWN) Unit
-                else goBackBeforeYouTube()
+                goBackBeforeYouTube()
             } else {
                 // Esc will move focus within YouTube
-                val escKeyEvent = KeyEvent(event.action, KeyEvent.KEYCODE_ESCAPE)
-                activity.dispatchKeyEvent(escKeyEvent)
+                activity.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ESCAPE))
+                activity.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ESCAPE))
             }
         }
 
