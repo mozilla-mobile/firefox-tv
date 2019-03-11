@@ -4,16 +4,22 @@
 
 package org.mozilla.tv.firefox.ui
 
+import android.app.Application
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mozilla.tv.firefox.TestDependencyFactory
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.helpers.AndroidAssetDispatcher
+import org.mozilla.tv.firefox.helpers.CustomPocketFeedStateProvider
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.helpers.TestAssetHelper
+import org.mozilla.tv.firefox.pocket.PocketVideoRepo
+import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.ui.robots.browser
 import org.mozilla.tv.firefox.ui.robots.navigationOverlay
+import org.mozilla.tv.firefox.utils.ServiceLocator
 
 /**
  * A test for YouTube navigation including:
@@ -23,6 +29,13 @@ import org.mozilla.tv.firefox.ui.robots.navigationOverlay
  *   does not disrupt navigation
  */
 class YouTubeNavigationTest {
+    companion object : TestDependencyFactory {
+        private val customPocketFeedStateProvider = CustomPocketFeedStateProvider()
+
+        override fun createServiceLocator(app: Application) = object : ServiceLocator(app) {
+            override val pocketRepo = customPocketFeedStateProvider.fakedPocketRepo
+        }
+    }
 
     @get:Rule val activityTestRule = MainActivityTestRule()
     private lateinit var server: MockWebServer
@@ -38,6 +51,19 @@ class YouTubeNavigationTest {
         }
 
         pages = TestAssetHelper.getGenericAssets(server)
+
+        val mockedState = PocketVideoRepo.FeedState.LoadComplete(listOf(
+            PocketViewModel.FeedItem.Video(
+                id = 27587,
+                title = "How a Master Pastry Chef Uses Architecture to Make Sky High Pastries",
+                url = "https://www.youtube.com/tv#/watch/video/idle?v=953Qt4FnAcU",
+                thumbnailURL = "https://img-getpocket.cdn.mozilla.net/direct?url=http%3A%2F%2Fimg.youtube.com%2Fvi%2F953Qt4FnAcU%2Fmaxresdefault.jpg&resize=w450",
+                popularitySortId = 20,
+                authors = "Eater"
+            )
+        ))
+
+        customPocketFeedStateProvider.fakedPocketRepoState.onNext(mockedState)
     }
 
     @Test
