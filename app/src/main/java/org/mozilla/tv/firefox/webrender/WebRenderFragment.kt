@@ -228,13 +228,13 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     private fun handleSpecialKeyEvent(event: KeyEvent): Boolean {
         val actionIsDown = event.action == KeyEvent.ACTION_DOWN
 
-        if (event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER && actionIsDown) MenuInteractionMonitor.selectPressed()
+        if (event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER && actionIsDown) MenuInteractionMonitor.selectPressed() // TODO move this (no longer makes sense here, now that overlay is its own fragment)
 
-        if (session.isYoutubeTV &&
-                event.keyCode == KeyEvent.KEYCODE_BACK) {
-            youtubeBackHandler.handleBackClick(event)
-            return true
-        }
+//        if (session.isYoutubeTV && // TODO replicate this
+//                event.keyCode == KeyEvent.KEYCODE_BACK) {
+//            youtubeBackHandler.handleBackClick(event)
+//            return true
+//        }
         return false
     }
 }

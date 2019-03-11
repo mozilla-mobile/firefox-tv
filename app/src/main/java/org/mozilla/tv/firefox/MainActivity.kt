@@ -241,6 +241,13 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     }
 
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        // Back presses are all handled through onBackPressed.
+        //
+        // Note: on device, back presses emit one KEYCODE_BACK. On emulator, they
+        // emit one KEYCODE_BACK **AND** one KEYCODE_DEL. We short on both to make
+        // code paths consistent between the two.
+        if (event.keyCode == KeyEvent.KEYCODE_BACK ||
+                event.keyCode == KeyEvent.KEYCODE_DEL) return super.dispatchKeyEvent(event)
         val fragmentManager = supportFragmentManager
 
         TelemetryIntegration.INSTANCE.saveRemoteControlInformation(applicationContext, event)
