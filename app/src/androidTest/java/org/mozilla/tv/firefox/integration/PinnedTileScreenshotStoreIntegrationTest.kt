@@ -7,7 +7,7 @@ package org.mozilla.tv.firefox.integration
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.support.test.InstrumentationRegistry
+import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -24,7 +24,7 @@ class PinnedTileScreenshotStoreIntegrationTest {
 
     @Before
     fun setUp() {
-        andyContext = InstrumentationRegistry.getTargetContext()
+        andyContext = ApplicationProvider.getApplicationContext()
         andyContext.filesDir.listFiles().forEach { it.deleteRecursively() } // Clean up between tests.
     }
 

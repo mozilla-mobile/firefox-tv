@@ -11,14 +11,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Bug where you could not use remote back button to exit YouTube if it was visited from Pocket (#1584)
+- Fixed 4K YT bug (#277)
+- Backing from the navigation overlay when on the first site in your backstack will now properly exit the app (#1916)
 
-## [3.4.1] 2019-02-12
-*Released to Fire TV 4K.*
+## [3.5-RO] 2019-03-12
+*Released to Fire TV 4K, staged roll-out*
 ### Added
 
 ### Changed
+- Updated dependencies to AndroidX
 
 ### Fixed
+- Bug where you could not use remote back button to exit YouTube if it was visited from Pocket (#1584)
+- Fixed 4K YT bug (#277)
 - Bug where cursor would disappear if on overlay during page load finish (#1732)
 - Bug that could cause a crash on startup (#1778)
 - Fixed links on settings About page that did not load (#1731)
@@ -26,10 +31,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed bug that could cause YouTube to display vertically offset from where it should be (#1719)
 - Bug that could cause YouTube to be unresponsive if the overlay was opened during loading (#1830)
 
-## [3.4] - 2019-02-12
-*Released to all devices except Fire TV 4K.*
+## [3.4-B] - 2019-03-12
+*Version bump only, no change from v3.4-A. Released to all devices except Fire TV 4K*
 
-Second stage rollout of 3.3.1 to all devices - version-bump of v3.3.1
+## [3.4-A] - 2019-02-12
+*Released to all devices*
+Rollback to 3.1.3 (same as 3.2.5) due to 4k bug and other regressions. Version bump only.
 
 ## [3.3.1] - 2019-02-04
 *Released to Fire TV 4K.*
@@ -43,8 +50,8 @@ Second stage rollout of 3.3.1 to all devices - version-bump of v3.3.1
 - Fixed mismatch between internal and display state after clearing data (#1691)
 
 ## [3.3] - 2019-02-04
-*Released to all devices except Fire TV 4K.*  
-  
+*Released to all devices except Fire TV 4K.*
+
 Version-bump only - no change from v3.2.5
 
 ## [3.2.5] - 2019-01-16
@@ -192,9 +199,9 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 ## [1.0] - 2017-12-20
 *Initial release! A browser including home tile shortcuts.*
 
-[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.4.1...HEAD
-[3.4.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.4...v3.4.1
-[3.4]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.3.1...v3.4
+[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.5-RO...HEAD
+[3.5-RO]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.4-A...v3.5-RO
+[3.4-A]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.3.1...v3.4-A
 [3.3.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.3...v3.3.1
 [3.3]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.5...v3.3
 [3.2.5]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.2...v3.2.5

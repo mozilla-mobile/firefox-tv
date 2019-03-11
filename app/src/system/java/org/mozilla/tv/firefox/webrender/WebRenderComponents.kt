@@ -12,6 +12,7 @@ import mozilla.components.concept.engine.Engine
 import mozilla.components.feature.session.SessionUseCases
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.utils.BuildConstants
+import org.mozilla.tv.firefox.utils.SafeIntent
 import org.mozilla.tv.firefox.utils.Settings
 
 /**
@@ -19,6 +20,12 @@ import org.mozilla.tv.firefox.utils.Settings
  * application.
  */
 class WebRenderComponents(applicationContext: Context, systemUserAgent: String) {
+    fun notifyLaunchWithSafeIntent(@Suppress("UNUSED_PARAMETER") safeIntent: SafeIntent): Boolean {
+        // For the system WebView, we don't need the initial launch intent right now.  In the
+        // future, we might configure a proxy server using this intent for automation.
+        return false
+    }
+
     val engine: Engine by lazy {
         fun getUserAgent(): String = UserAgent.buildUserAgentString(
                 applicationContext,

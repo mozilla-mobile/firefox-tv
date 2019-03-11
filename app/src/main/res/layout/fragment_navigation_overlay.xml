@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?><!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/overlayScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -98,7 +98,7 @@
                 android:focusable="true"
                 android:nextFocusUp="@id/navUrlInput" />
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/tileContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -110,4 +110,4 @@
 
         </LinearLayout>
     </org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlayScrollView>
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -4,7 +4,7 @@
 
 package org.mozilla.tv.firefox.utils
 
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers

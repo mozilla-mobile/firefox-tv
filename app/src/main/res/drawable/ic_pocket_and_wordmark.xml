@@ -3,7 +3,8 @@
     android:width="231dp"
     android:height="61dp"
     android:viewportWidth="231"
-    android:viewportHeight="61">
+    android:viewportHeight="61"
+    tools:ignore="VectorRaster">
 
   <!-- TODO: Figure out best solution for VectorPath in https://github.com/mozilla-mobile/firefox-tv/issues/848  -->
   <path

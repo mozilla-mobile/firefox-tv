@@ -11,9 +11,17 @@ import android.os.Looper
 import android.webkit.ValueCallback
 import android.webkit.WebBackForwardList
 import android.webkit.WebView
+import androidx.annotation.VisibleForTesting
 import mozilla.components.browser.engine.system.SystemEngineSession
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
+import org.mozilla.tv.firefox.ext.Js.BODY_ELEMENT_FOCUSED
+import org.mozilla.tv.firefox.ext.Js.CACHE_JS
+import org.mozilla.tv.firefox.ext.Js.JS_OBSERVE_PLAYBACK_STATE
+import org.mozilla.tv.firefox.ext.Js.NO_ELEMENT_FOCUSED
+import org.mozilla.tv.firefox.ext.Js.PAUSE_VIDEO
+import org.mozilla.tv.firefox.ext.Js.RESTORE_JS
+import org.mozilla.tv.firefox.ext.Js.SIDEBAR_FOCUSED
 import org.mozilla.tv.firefox.webrender.FocusedDOMElementCache
 import java.util.WeakHashMap
 
@@ -54,12 +62,102 @@ fun EngineView.setupForApp() {
  * offer a matching API (WebExtensions are likely going to be the preferred way). We may move the functionality that
  * requires JS injection to browser-engine-system.
  */
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun EngineView.evalJS(javascript: String, callback: ValueCallback<String>? = null) {
     webView?.evaluateJavascript(javascript, callback)
 }
 
 fun EngineView.pauseAllVideoPlaybacks() {
-    evalJS("document.querySelectorAll('video').forEach(v => v.pause());")
+    evalJS(PAUSE_VIDEO)
+}
+
+fun EngineView.cacheDomElement() {
+    evalJS(CACHE_JS)
+}
+
+fun EngineView.restoreDomElement() {
+    evalJS(RESTORE_JS)
+}
+
+fun EngineView.observePlaybackState() {
+    evalJS(JS_OBSERVE_PLAYBACK_STATE)
+}
+
+private fun EngineView.evalJSWithTargetVideo(getExpressionToEval: (videoId: String) -> String) {
+    val ID_TARGET_VIDEO = "targetVideo"
+    val GET_TARGET_VIDEO_OR_RETURN = """
+            |var videos = Array.from(document.querySelectorAll('video'));
+            |if (videos.length === 0) { return; }
+            |
+            |var $ID_TARGET_VIDEO = videos.find(function (video) { return !video.paused });
+            |if (!$ID_TARGET_VIDEO) {
+            |    $ID_TARGET_VIDEO = videos[0];
+            |}
+            """.trimMargin()
+
+    val expressionToEval = getExpressionToEval(ID_TARGET_VIDEO)
+    evalJS("""
+            |(function() {
+            |    $GET_TARGET_VIDEO_OR_RETURN
+            |    $expressionToEval
+            |})();
+            """.trimMargin())
+}
+
+fun EngineView.playTargetVideo() {
+    evalJSWithTargetVideo { videoId -> "$videoId.play();" }
+}
+
+fun EngineView.pauseTargetVideo(isInterruptedByVoiceCommand: Boolean) {
+    fun getJS(videoId: String) = if (!isInterruptedByVoiceCommand) {
+        "$videoId.pause();"
+    } else {
+        // The video is paused for us during a voice command: my theory is that WebView
+        // pauses/resumes videos when audio focus is revoked/granted to it (while it's given
+        // to the voice command). Unfortunately, afaict there is no way to prevent WebView
+        // from resuming these paused videos so we have to pause it after it resumes.
+        // Unfortunately, there is no callback for this (or audio focus changes) so we
+        // inject JS to pause the video immediately after it starts again.
+        //
+        // We timeout the if-playing-starts-pause listener so, if for some reason this
+        // listener isn't called immediately, it doesn't pause the video after the user
+        // attempts to play it in the future (e.g. user says "pause" while video is already
+        // paused and then requests a play).
+        """
+                    | var playingEvent = 'playing';
+                    | var initialExecuteMillis = new Date();
+                    |
+                    | function onPlay() {
+                    |     var now = new Date();
+                    |     var millisPassed = now.getTime() - initialExecuteMillis.getTime();
+                    |     if (millisPassed < 1000) {
+                    |         $videoId.pause();
+                    |     }
+                    |
+                    |     $videoId.removeEventListener(playingEvent, onPlay);
+                    | }
+                    |
+                    | $videoId.addEventListener(playingEvent, onPlay);
+                """.trimMargin()
+    }
+
+    evalJSWithTargetVideo(::getJS)
+}
+
+fun EngineView.seekTargetVideoToPosition(absolutePositionSeconds: Long) {
+    evalJSWithTargetVideo { videoId -> "$videoId.currentTime = $absolutePositionSeconds;" }
+}
+
+fun EngineView.checkYoutubeBack(callback: ValueCallback<String>) {
+    val shouldWeExitPage = """
+               (function () {
+                    return $NO_ELEMENT_FOCUSED ||
+                        $BODY_ELEMENT_FOCUSED ||
+                        $SIDEBAR_FOCUSED;
+                })();
+        """.trimIndent()
+
+    evalJS(shouldWeExitPage, callback)
 }
 
 /**

@@ -6,7 +6,7 @@ package org.mozilla.tv.firefox
 
 import android.os.StrictMode
 import android.preference.PreferenceManager
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting
 import android.webkit.WebSettings
 import org.mozilla.tv.firefox.components.locale.LocaleAwareApplication
 import org.mozilla.tv.firefox.telemetry.SentryIntegration

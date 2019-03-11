@@ -4,12 +4,15 @@
 
 package org.mozilla.tv.firefox.helpers.ext
 
-import android.support.test.espresso.ViewInteraction
-import android.support.test.espresso.action.ViewActions
-import android.support.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.ViewInteraction
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import org.hamcrest.CoreMatchers.not
 import org.mozilla.tv.firefox.helpers.isChecked
 import org.mozilla.tv.firefox.helpers.isEnabled
 import org.mozilla.tv.firefox.helpers.isSelected
+import org.mozilla.tv.firefox.helpers.hasFocus
 
 fun ViewInteraction.click(): ViewInteraction = this.perform(ViewActions.click())!!
 
@@ -23,4 +26,15 @@ fun ViewInteraction.assertIsChecked(isChecked: Boolean): ViewInteraction {
 
 fun ViewInteraction.assertIsSelected(isSelected: Boolean): ViewInteraction {
     return this.check(matches(isSelected(isSelected)))!!
+}
+
+fun ViewInteraction.assertHasFocus(hasFocus: Boolean): ViewInteraction {
+    return this.check(matches(hasFocus(hasFocus)))
+}
+
+fun ViewInteraction.assertIsDisplayed(displayed: Boolean = true): ViewInteraction {
+    return when (displayed) {
+        true -> this.check(matches(isDisplayed()))
+        false -> this.check(matches(not(isDisplayed())))
+    }
 }

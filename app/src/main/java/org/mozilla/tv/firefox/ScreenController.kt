@@ -5,11 +5,12 @@
 
 package org.mozilla.tv.firefox
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import android.content.Context
-import android.support.v4.app.FragmentManager
+import androidx.fragment.app.FragmentManager
 import android.text.TextUtils
+import android.view.KeyEvent
 import kotlinx.android.synthetic.main.fragment_navigation_overlay.*
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
@@ -17,6 +18,7 @@ import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
+import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
@@ -26,7 +28,7 @@ import org.mozilla.tv.firefox.utils.UrlUtils
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 
-class ScreenController {
+class ScreenController(private val sessionRepo: SessionRepo) {
 
     private val _currentActiveScreen = MutableLiveData<ActiveScreen>().apply {
         value = ActiveScreen.NAVIGATION_OVERLAY
@@ -125,7 +127,6 @@ class ScreenController {
     private fun fragmentManagerShowNavigationOverlay(fragmentManager: FragmentManager, toShow: Boolean) {
         val transaction = fragmentManager.beginTransaction()
         val overlayFragment = fragmentManager.navigationOverlayFragment()
-        val renderFragment = fragmentManager.webRenderFragment()
 
         if (toShow) {
             // If a user navigates to YouTube while a video is fullscreened, it will cause YouTube
@@ -146,10 +147,22 @@ class ScreenController {
         } else {
             transaction.hide(overlayFragment)
             MenuInteractionMonitor.menuClosed()
-            renderFragment.view?.requestFocus()
         }
 
         transaction.commit()
+    }
+
+    fun dispatchKeyEvent(keyEvent: KeyEvent, fragmentManager: FragmentManager): Boolean {
+        val keyMenuDown = keyEvent.keyCode == KeyEvent.KEYCODE_MENU && keyEvent.action == KeyEvent.ACTION_DOWN
+        if (keyMenuDown) {
+            return handleMenu(fragmentManager)
+        }
+
+        val webRenderIsActive = currentActiveScreen.value == ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
+        if (webRenderIsActive) {
+            if (fragmentManager.webRenderFragment().dispatchKeyEvent(keyEvent)) return true
+        }
+        return false
     }
 
     fun handleBack(fragmentManager: FragmentManager): Boolean {
@@ -157,19 +170,21 @@ class ScreenController {
         if (_currentActiveScreen.value == ActiveScreen.WEB_RENDER) {
             if (webRenderFragment.onBackPressed()) return true
         }
-        val transition = ScreenControllerStateMachine.getNewStateBackPress(_currentActiveScreen.value!!, isOnHomeUrl(fragmentManager))
+        val transition = ScreenControllerStateMachine.getNewStateBackPress(_currentActiveScreen.value!!, canGoBack())
         return handleTransitionAndUpdateActiveScreen(fragmentManager, transition)
     }
 
-    fun handleMenu(fragmentManager: FragmentManager) {
-        val transition = ScreenControllerStateMachine.getNewStateMenuPress(_currentActiveScreen.value!!, isOnHomeUrl(fragmentManager))
-        handleTransitionAndUpdateActiveScreen(fragmentManager, transition)
+    fun handleMenu(fragmentManager: FragmentManager): Boolean {
+        val transition = ScreenControllerStateMachine.getNewStateMenuPress(_currentActiveScreen.value!!, isOnHomeUrl())
+        return handleTransitionAndUpdateActiveScreen(fragmentManager, transition)
     }
 
-    private fun isOnHomeUrl(fragmentManager: FragmentManager): Boolean {
-        // TODO: Would be more correct to get this from the model rather than the Fragment.
-        val webRenderFragment = fragmentManager.webRenderFragment()
-        return webRenderFragment.session.url == URLs.APP_URL_HOME
+    private fun canGoBack(): Boolean {
+        return sessionRepo.state.value?.backEnabled == true
+    }
+
+    private fun isOnHomeUrl(): Boolean {
+        return sessionRepo.state.value?.currentUrl == URLs.APP_URL_HOME
     }
 
     private fun handleTransitionAndUpdateActiveScreen(fragmentManager: FragmentManager, transition: Transition): Boolean {

@@ -11,7 +11,7 @@ package org.mozilla.tv.firefox.webrender
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting
 import android.text.TextUtils
 
 /** A collection of user agent functionality. */

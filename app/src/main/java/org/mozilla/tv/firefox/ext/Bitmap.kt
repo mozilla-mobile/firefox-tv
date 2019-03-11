@@ -10,7 +10,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Shader
-import android.support.annotation.CheckResult
+import androidx.annotation.CheckResult
 
 fun Bitmap.arePixelsAllTheSame(): Boolean {
     val testPixel = getPixel(0, 0)

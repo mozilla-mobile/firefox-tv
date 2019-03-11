@@ -8,8 +8,8 @@ import android.app.Application
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.support.test.runner.AndroidJUnitRunner
-import android.support.test.runner.lifecycle.ActivityLifecycleCallback
+import androidx.test.runner.AndroidJUnitRunner
+import androidx.test.runner.lifecycle.ActivityLifecycleCallback
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import kotlin.reflect.full.companionObjectInstance
 import android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON

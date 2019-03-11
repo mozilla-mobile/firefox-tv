@@ -8,8 +8,8 @@ package org.mozilla.tv.firefox.telemetry
 import android.content.Context
 import android.net.http.SslError
 import android.os.StrictMode
-import android.support.annotation.AnyThread
-import android.support.annotation.UiThread
+import androidx.annotation.AnyThread
+import androidx.annotation.UiThread
 import android.view.InputDevice
 import android.view.KeyEvent
 import mozilla.components.support.ktx.android.os.resetAfter

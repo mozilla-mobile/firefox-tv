@@ -4,10 +4,13 @@
 
 package org.mozilla.tv.firefox.ui.robots
 
-import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.Espresso.pressBack
-import android.support.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.helpers.ext.assertHasFocus
 import org.mozilla.tv.firefox.helpers.ext.assertIsChecked
 import org.mozilla.tv.firefox.helpers.ext.click
 
@@ -15,6 +18,7 @@ import org.mozilla.tv.firefox.helpers.ext.click
  * Implementation of Robot Pattern for the settings page.
  */
 class SettingsRobot {
+    private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
     fun toggleDataCollectionButton() {
         dataCollectionButton().click()
     }
@@ -25,6 +29,10 @@ class SettingsRobot {
 
     fun assertDataCollectionButtonState(isChecked: Boolean) {
         dataCollectionButton().assertIsChecked(isChecked)
+    }
+
+    fun assertDataCollectionButtonFocused() {
+        dataCollectionButtonContainer().assertHasFocus(true)
     }
 
     class Transition {

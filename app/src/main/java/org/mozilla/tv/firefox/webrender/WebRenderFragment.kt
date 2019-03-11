@@ -5,10 +5,10 @@
 package org.mozilla.tv.firefox.webrender
 
 import android.app.Activity
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.annotation.UiThread
+import androidx.annotation.UiThread
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -24,10 +24,12 @@ import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.MediaSessionHolder
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
+import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
 import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.pauseAllVideoPlaybacks
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
+import org.mozilla.tv.firefox.ext.resetView
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
@@ -173,6 +175,11 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         sessionFeature = null
     }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        FocusOnShowDelegate().onHiddenChanged(this, hidden)
+        super.onHiddenChanged(hidden)
+    }
+
     fun onBackPressed(): Boolean {
         if (session.canGoBack) {
             serviceLocator!!.sessionRepo.exitFullScreenIfPossibleAndBack() // TODO do this through WebRenderViewModel when it exists
@@ -192,6 +199,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             } else {
                 // There's no session (anymore). Let's create a new one.
                 requireWebRenderComponents.sessionManager.add(Session(url), selected = true)
+                requireWebRenderComponents.sessionManager.getOrCreateEngineSession().resetView(activity!!)
             }
         }
     }

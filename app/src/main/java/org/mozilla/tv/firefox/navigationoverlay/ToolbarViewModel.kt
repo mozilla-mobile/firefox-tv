@@ -4,10 +4,10 @@
 
 package org.mozilla.tv.firefox.navigationoverlay
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.ViewModel
-import android.support.annotation.StringRes
-import android.support.annotation.UiThread
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.annotation.StringRes
+import androidx.annotation.UiThread
 import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo

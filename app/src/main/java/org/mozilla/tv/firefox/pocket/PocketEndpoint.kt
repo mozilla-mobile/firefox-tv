@@ -5,8 +5,8 @@
 package org.mozilla.tv.firefox.pocket
 
 import android.net.Uri
-import android.support.annotation.AnyThread
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.AnyThread
+import androidx.annotation.VisibleForTesting
 import android.util.Log
 import io.reactivex.Single
 import kotlinx.coroutines.runBlocking
@@ -43,7 +43,14 @@ open class PocketEndpoint(
      * Note that this is a blocking call
      */
     override fun request(): Single<Response<PocketData>> {
-        val videos = runBlocking { getRecommendedVideos() }
+        val videos = try {
+            runBlocking { getRecommendedVideos() }
+        } catch (e: InterruptedException) {
+            // RxJava disposals briefly interrupt their threads, which here will
+            // cause runBlocking to crash. We can treat this as a failed response
+            // without any additional handling.
+            null
+        }
         return when {
             videos == null || videos.isEmpty() -> Single.just(Response.Failure())
             else -> Single.just(Response.Success(videos))

@@ -4,9 +4,9 @@
 
 package org.mozilla.tv.firefox.navigationoverlay
 
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.Observer
-import android.support.v4.app.FragmentManager
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.fragment.app.FragmentManager
 import android.view.View
 import android.widget.ImageButton
 import kotlinx.android.synthetic.main.fragment_navigation_overlay.view.*
