@@ -124,6 +124,7 @@ class NavigationOverlayRobot {
         }
 
         fun openPocketMegatile(interact: PocketRecommendedVideosRobot.() -> Unit): PocketRecommendedVideosRobot.Transition {
+            device.wait(Until.findObject(By.res(R.id.pocketVideoMegaTileView.toString())), 1000)
             pocketMegaTile().click()
 
             PocketRecommendedVideosRobot().interact()
