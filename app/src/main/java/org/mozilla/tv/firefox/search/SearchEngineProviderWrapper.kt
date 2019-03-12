@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.search
 
 import android.content.Context
+import android.support.annotation.VisibleForTesting
 import android.util.Log
 import java.util.Locale
 import mozilla.components.browser.search.SearchEngine
@@ -39,7 +40,15 @@ class SearchEngineProviderWrapper(private val replacements: Map<String, String>)
     )
 
     override suspend fun loadSearchEngines(context: Context): List<SearchEngine> {
-        val searchEngines = inner.loadSearchEngines(context).toMutableList()
+        val searchEngines = inner.loadSearchEngines(context)
+
+        return updateSearchEngines(searchEngines, replacements)
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun updateSearchEngines(searchEngines: List<SearchEngine>, replacements: Map<String, String>): List<SearchEngine> {
+        @Suppress("NAME_SHADOWING") // Defensive copy & mutable
+        val searchEngines = mutableListOf<SearchEngine>().apply { addAll(searchEngines) }
 
         replacements.forEach { (old, new) ->
             val newIndex = searchEngines.indexOfFirst { it.identifier == new }
@@ -49,7 +58,7 @@ class SearchEngineProviderWrapper(private val replacements: Map<String, String>)
                     val newEngine = searchEngines.removeAt(newIndex)
                     // index of old engine might have changed after removal
                     val oldIndex = searchEngines.indexOfFirst { it.identifier == old }
-                    searchEngines[oldIndex] = newEngine;
+                    searchEngines[oldIndex] = newEngine
                 } else {
                     Log.d(LOGTAG, "Failed to replace plugin $old with $new")
                 }
@@ -57,7 +66,6 @@ class SearchEngineProviderWrapper(private val replacements: Map<String, String>)
                 Log.d(LOGTAG, "Failed to replace plugin $old with $new")
             }
         }
-
         return searchEngines
     }
 }
