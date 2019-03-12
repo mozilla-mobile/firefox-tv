@@ -8,7 +8,6 @@ import android.preference.PreferenceManager
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
-import androidx.annotation.VisibleForTesting
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity.Companion.ONBOARD_SHOWN_PREF
 import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity.Companion.POCKET_ONBOARDING_SHOWN_PREF
@@ -35,7 +34,6 @@ class MainActivityTestRule(
      * implementation changes and the tests break. In that case, this code might be
      * broken because it's not used, and thus tested, at present.
      */
-    @VisibleForTesting
     lateinit var loadingIdlingResource: SessionLoadedIdlingResource
 
     override fun beforeActivityLaunched() {
