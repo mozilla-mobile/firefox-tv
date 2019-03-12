@@ -5,7 +5,7 @@
 package org.mozilla.tv.firefox.search
 
 import android.content.Context
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting
 import android.util.Log
 import java.util.Locale
 import mozilla.components.browser.search.SearchEngine
