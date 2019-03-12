@@ -68,7 +68,7 @@ class NavigationOverlayRobot {
     }
 
     fun waitForURLBarToDisplayHint() {
-        device.wait(Until.findObject(By.textContains("")), 5000)
+        device.wait(Until.findObject(By.res(R.id.navUrlInput.toString()).textContains("")), 5000)
     }
 
     fun assertDesktopModeEnabled(desktopModeEnabled: Boolean) = desktopModeButton().assertIsEnabled(desktopModeEnabled)
@@ -84,8 +84,12 @@ class NavigationOverlayRobot {
 
     fun assertActivityFinishing(activity: MainActivityTestRule) = assertTrue(activity.activity.isFinishing)
 
-    fun waitForYouTubeRedirects(url: String) {
-        device.wait(Until.findObject(By.textContains(url)), 5000)
+    fun waitUntilYouTubeHomeLoads() {
+        device.wait(Until.findObject(By.res(R.id.navUrlInput.toString()).textContains("youtube.com/tv#/surface?c=FEtopics&resume")), 5000)
+    }
+
+    fun waitUntilYouTubeVideoLoads() {
+        device.wait(Until.findObject(By.res(R.id.navUrlInput.toString()).textContains("youtube.com/tv#/watch")), 5000)
     }
 
     class Transition {

@@ -69,8 +69,6 @@ class YouTubeNavigationTest {
     @Test
     fun youtubeNavigationTest() {
         val youtubeUrl = "youtube.com/tv"
-        val youtubeFinalUrl = "youtube.com/tv#/surface?c=FEtopics&resume"
-        val youtubeFinalVideoUrl = "youtube.com/tv#/watch"
         /**
          * YouTube TV, Test page 1, back to YouTube, Test page 2, back to YouTube, back out of YouTube
          * Expected: Overlay
@@ -78,15 +76,15 @@ class YouTubeNavigationTest {
         navigationOverlay {
         }.enterUrlAndEnterToBrowser(youtubeUrl.toUri()!!) {
         }.openOverlay {
-            waitForYouTubeRedirects(youtubeFinalUrl)
+            waitUntilYouTubeHomeLoads()
         }.enterUrlAndEnterToBrowser(pages[0].url) {
             remoteBack()
         }.openOverlay {
-            waitForYouTubeRedirects(youtubeFinalUrl)
+            waitUntilYouTubeHomeLoads()
         }.enterUrlAndEnterToBrowser(pages[1].url) {
             remoteBack()
         }.openOverlay {
-            waitForYouTubeRedirects(youtubeFinalUrl)
+            waitUntilYouTubeHomeLoads()
             assertURLBarTextContains(youtubeUrl)
         }.closeToBrowser {
             backOutOfYouTube()
@@ -101,11 +99,11 @@ class YouTubeNavigationTest {
         }.openOverlay {
         }.enterUrlAndEnterToBrowser(youtubeUrl.toUri()!!) {
         }.openOverlay {
-            waitForYouTubeRedirects(youtubeFinalUrl)
+            waitUntilYouTubeHomeLoads()
         }.enterUrlAndEnterToBrowser(pages[1].url) {
             remoteBack()
         }.openOverlay {
-            waitForYouTubeRedirects(youtubeFinalUrl)
+            waitUntilYouTubeHomeLoads()
             assertURLBarTextContains(youtubeUrl)
         }.closeToBrowser {
             backOutOfYouTube()
@@ -125,7 +123,7 @@ class YouTubeNavigationTest {
         }.openPocketMegatile {
         }.openTileToBrowser(0) {
         }.openOverlay {
-            waitForYouTubeRedirects(youtubeFinalVideoUrl)
+            waitUntilYouTubeVideoLoads()
         }.closeToBrowser {
             backOutOfYouTube()
         }
@@ -134,7 +132,7 @@ class YouTubeNavigationTest {
             assertURLBarDisplaysHint()
         }.enterUrlAndEnterToBrowser(youtubeUrl.toUri()!!) {
         }.openOverlay {
-            waitForYouTubeRedirects(youtubeFinalUrl)
+            waitUntilYouTubeHomeLoads()
         }.closeToBrowser {
             backOutOfYouTube()
         }.openOverlay {
