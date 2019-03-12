@@ -70,7 +70,7 @@ class ToolbarViewModel(
 
     @UiThread
     fun backButtonClicked() {
-        sessionRepo.exitFullScreenIfPossibleAndBack()
+        sessionRepo.attemptBack(forceYouTubeExit = true)
         hideOverlay()
     }
 

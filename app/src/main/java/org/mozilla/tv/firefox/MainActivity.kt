@@ -6,7 +6,6 @@
 package org.mozilla.tv.firefox
 
 import android.annotation.SuppressLint
-import androidx.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -14,9 +13,10 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import androidx.lifecycle.Observer
 import io.sentry.Sentry
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.overlay_debug.*
+import kotlinx.android.synthetic.main.activity_main.container_navigation_overlay
+import kotlinx.android.synthetic.main.overlay_debug.debugLog
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
 import mozilla.components.support.base.observer.Consumable
