@@ -5,8 +5,8 @@
 package org.mozilla.tv.firefox.utils
 
 import android.app.Application
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import org.mozilla.tv.firefox.ext.webRenderComponents
 
 /**

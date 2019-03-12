@@ -35,13 +35,13 @@ object ScreenControllerStateMachine {
         }
     }
 
-    fun getNewStateBackPress(currentActiveScreen: ActiveScreen, isUrlHome: Boolean): Transition {
+    fun getNewStateBackPress(currentActiveScreen: ActiveScreen, canGoBack: Boolean): Transition {
         return when (currentActiveScreen) {
             ActiveScreen.NAVIGATION_OVERLAY -> {
-                return if (isUrlHome) {
-                    Transition.EXIT_APP
-                } else {
+                return if (canGoBack) {
                     Transition.REMOVE_OVERLAY
+                } else {
+                    Transition.EXIT_APP
                 }
             }
             ActiveScreen.WEB_RENDER -> { // The browser handles webview back presses first

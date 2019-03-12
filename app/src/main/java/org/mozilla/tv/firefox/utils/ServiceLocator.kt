@@ -5,7 +5,10 @@
 package org.mozilla.tv.firefox.utils
 
 import android.app.Application
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import mozilla.components.browser.search.SearchEngineManager
 import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ValidatedIntentData
@@ -59,7 +62,7 @@ import org.mozilla.tv.firefox.webrender.EngineViewCache
  */
 open class ServiceLocator(val app: Application) {
     private val appVersion = app.packageManager.getPackageInfo(app.packageName, 0).versionName
-    private val pocketEndpoint get() = PocketEndpoint(appVersion, buildConfigDerivables.globalPocketVideoEndpoint)
+    private val pocketEndpoint get() = PocketEndpoint(appVersion, buildConfigDerivables.globalPocketVideoEndpoint, getIsEnglishLocale)
     private val buildConfigDerivables get() = BuildConfigDerivables(getIsEnglishLocale)
     private val pocketFeedStateMachine get() = PocketFeedStateMachine()
     private val getIsEnglishLocale = { LocaleManager.getInstance().currentLanguageIsEnglish(app) }
@@ -68,9 +71,9 @@ open class ServiceLocator(val app: Application) {
     val fretboardProvider: FretboardProvider by lazy { FretboardProvider(app) }
     val experimentsProvider by lazy { ExperimentsProvider(fretboardProvider.fretboard, app) }
     val turboMode: TurboMode by lazy { TurboMode(app) }
-    val pocketRepoCache by lazy { PocketRepoCache(pocketRepo).apply { setup() } }
+    val pocketRepoCache by lazy { PocketRepoCache(pocketRepo) }
     val viewModelFactory by lazy { ViewModelFactory(this, app) }
-    val screenController by lazy { ScreenController() }
+    val screenController by lazy { ScreenController(sessionRepo) }
     val engineViewCache by lazy { EngineViewCache(sessionRepo) }
     val sessionManager get() = app.webRenderComponents.sessionManager
     val sessionUseCases get() = app.webRenderComponents.sessionUseCases
@@ -78,9 +81,7 @@ open class ServiceLocator(val app: Application) {
 
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())
     open val pinnedTileRepo by lazy { PinnedTileRepo(app) }
-    open val pocketRepo = PocketVideoRepo(pocketEndpoint, pocketFeedStateMachine, getIsEnglishLocale, buildConfigDerivables).apply {
-        update()
-    }
+    open val pocketRepo = PocketVideoRepo(pocketEndpoint, pocketFeedStateMachine, buildConfigDerivables.initialPocketRepoState)
     open val sessionRepo by lazy { SessionRepo(sessionManager, sessionUseCases, turboMode).apply { observeSources() } }
     open val settingsRepo by lazy { SettingsRepo(app) }
 }

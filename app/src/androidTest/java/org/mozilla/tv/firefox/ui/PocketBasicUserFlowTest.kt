@@ -11,8 +11,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.mozilla.tv.firefox.TestDependencyFactory
 import org.mozilla.tv.firefox.helpers.AndroidAssetDispatcher
-import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.helpers.CustomPocketFeedStateProvider
+import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.helpers.TestAssetHelper
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.pocket.PocketViewModel
@@ -62,7 +62,7 @@ class PocketBasicUserFlowTest {
             )
         ))
 
-        customPocketFeedStateProvider.fakedPocketRepoState.postValue(mockedState)
+        customPocketFeedStateProvider.fakedPocketRepoState.onNext(mockedState)
     }
 
     /* ktlint-disable no-blank-line-before-rbrace */ // This imposes unreadable grouping.

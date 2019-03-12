@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.ui
 
+import android.net.Uri
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Assert.assertNotEquals
 import org.junit.Ignore
@@ -127,11 +128,40 @@ class BasicNavigationTest {
             assertNotEquals(preReloadTitle, getPageTitle())
         }
     }
+
     @Test
     fun exitAppByBackButtonTest() {
         navigationOverlay {
             remoteBack()
             assertActivityFinishing(activityTestRule)
+        }
+    }
+
+    @Test
+    fun navigateThenExitAppByBackButtonTest() {
+        val server = MockWebServer().apply {
+            setDispatcher(AndroidAssetDispatcher())
+            start()
+        }
+
+        val pages = TestAssetHelper.getGenericAssets(server)
+
+        navigationOverlay {
+        }.enterUrlAndEnterToBrowser(pages.first().url) {
+        }.backButtonToOverlay {
+            remoteBack()
+            assertActivityFinishing(activityTestRule)
+        }
+    }
+
+    @Test
+    fun screenNavigationFocusTest() {
+        navigationOverlay {
+        }.enterUrlAndEnterToBrowser(Uri.parse("firefox:about")) {
+        }.openOverlay {
+        // Navigate to settings via keypresses, to maintain focus.
+        }.linearNavigateToSettingsAndOpen {
+            assertDataCollectionButtonFocused()
         }
     }
 }

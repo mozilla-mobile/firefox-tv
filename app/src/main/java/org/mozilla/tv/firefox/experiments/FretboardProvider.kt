@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import mozilla.components.lib.fetch.httpurlconnection.HttpURLConnectionClient
 import mozilla.components.service.fretboard.Fretboard
 import mozilla.components.service.fretboard.ValuesProvider
 import mozilla.components.service.fretboard.source.kinto.KintoExperimentSource
@@ -29,7 +30,8 @@ class FretboardProvider(private val applicationContext: Context) : CoroutineScop
 
     private val experimentsFile = File(applicationContext.filesDir, EXPERIMENTS_JSON_FILENAME)
     private val experimentSource = KintoExperimentSource(
-            EXPERIMENTS_BASE_URL, EXPERIMENTS_BUCKET_NAME, EXPERIMENTS_COLLECTION_NAME
+            EXPERIMENTS_BASE_URL, EXPERIMENTS_BUCKET_NAME, EXPERIMENTS_COLLECTION_NAME,
+            HttpURLConnectionClient()
     )
 
     // We use the telemetry clientId because the data team wants to be able to reproduce

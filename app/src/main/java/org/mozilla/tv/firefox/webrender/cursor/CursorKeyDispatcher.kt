@@ -4,7 +4,7 @@
 
 package org.mozilla.tv.firefox.webrender.cursor
 
-import android.support.annotation.UiThread
+import androidx.annotation.UiThread
 import android.view.KeyEvent
 import org.mozilla.tv.firefox.utils.Direction
 import org.mozilla.tv.firefox.utils.RemoteKey

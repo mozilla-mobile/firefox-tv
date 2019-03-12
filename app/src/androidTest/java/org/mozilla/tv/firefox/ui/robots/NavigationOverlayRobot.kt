@@ -5,27 +5,28 @@
 package org.mozilla.tv.firefox.ui.robots
 
 import android.net.Uri
-import android.support.test.InstrumentationRegistry
-import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.action.ViewActions.clearText
-import android.support.test.espresso.action.ViewActions.click
-import android.support.test.espresso.action.ViewActions.pressImeActionButton
-import android.support.test.espresso.action.ViewActions.typeText
-import android.support.test.espresso.assertion.ViewAssertions.matches
-import android.support.test.espresso.contrib.RecyclerViewActions
-import android.support.test.espresso.matcher.ViewMatchers.hasDescendant
-import android.support.test.espresso.matcher.ViewMatchers.withHint
-import android.support.test.espresso.matcher.ViewMatchers.withId
-import android.support.test.espresso.matcher.ViewMatchers.withText
-import android.support.test.uiautomator.By
-import android.support.test.uiautomator.UiDevice
-import android.support.test.uiautomator.Until
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.clearText
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.pressImeActionButton
+import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
+import androidx.test.espresso.matcher.ViewMatchers.withHint
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.Until
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert.assertTrue
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.helpers.RecyclerViewHelpers
 import org.mozilla.tv.firefox.helpers.ext.assertIsChecked
+import org.mozilla.tv.firefox.helpers.ext.assertIsDisplayed
 import org.mozilla.tv.firefox.helpers.ext.assertIsEnabled
 import org.mozilla.tv.firefox.helpers.ext.assertIsSelected
 import org.mozilla.tv.firefox.helpers.ext.click
@@ -42,7 +43,10 @@ class NavigationOverlayRobot {
     fun goForward() = forwardButton().click()
     fun reload() = reloadButton().click()
     fun toggleTurbo() = turboButton().click()
-    fun openSettings() = settingsButton().click()
+
+    // The implementation of this method is arbitrary. We could run this check
+    // against any of its views
+    fun assertOverlayIsOpen() = urlBar().assertIsDisplayed()
 
     fun assertCanGoBack(canGoBack: Boolean) = backButton().assertIsEnabled(canGoBack)
     fun assertCanGoForward(canGoForward: Boolean) = forwardButton().assertIsEnabled(canGoForward)
@@ -118,6 +122,28 @@ class NavigationOverlayRobot {
 
         fun openSettings(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
             settingsButton().click()
+
+            SettingsRobot().interact()
+            return SettingsRobot.Transition()
+        }
+
+        /*
+         * Navigate to the settings button using keypresses and open, and maintain focus.
+         * Using click() to select buttons removes focus, so this is an alternative way to open
+         * Settings.
+         */
+        fun linearNavigateToSettingsAndOpen(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
+            // We hard-code this navigiation pattern because making a generic way to linearly navigate
+            // is very difficult within Espresso. Espresso supports asserting view state, but not
+            // querying it. Because of this, we can't write conditional logic based on the currently
+            // focused view.
+            device.apply {
+                // This will need to change if the button layout changes. However, such layout
+                // changes are infrequent, and updating this will be easy.
+                pressDPadUp()
+                repeat(5) { pressDPadRight() }
+                pressDPadCenter()
+            }
 
             SettingsRobot().interact()
             return SettingsRobot.Transition()
@@ -207,6 +233,6 @@ private fun turboButton() = onView(withId(R.id.turboButton))
 private fun settingsButton() = onView(withId(R.id.navButtonSettings))
 private fun urlBar() = onView(withId(R.id.navUrlInput))
 private fun homeTiles() = onView(withId(R.id.tileContainer))
-private fun overlay() = onView(withId(R.layout.browser_overlay))
+private fun overlay() = onView(withId(R.layout.fragment_navigation_overlay))
 private fun desktopModeButton() = onView(withId(R.id.desktopModeButton))
 private fun pocketMegaTile() = onView(withId(R.id.pocketVideosContainer))

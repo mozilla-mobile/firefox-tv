@@ -4,11 +4,11 @@
 
 package org.mozilla.tv.firefox.session
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import android.graphics.Bitmap
 import android.net.Uri
-import android.support.annotation.AnyThread
+import androidx.annotation.AnyThread
 import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.feature.session.SessionUseCases

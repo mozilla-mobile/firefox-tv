@@ -4,7 +4,6 @@
 
 package org.mozilla.tv.firefox.navigationoverlay
 
-import android.arch.lifecycle.Observer
 import android.content.Context
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
@@ -12,10 +11,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.preference.PreferenceManager
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.ContextMenu
 import android.view.LayoutInflater
@@ -24,13 +19,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.Toast
-import kotlinx.android.synthetic.main.browser_overlay.*
-import kotlinx.android.synthetic.main.browser_overlay_top_nav.*
+import androidx.core.content.ContextCompat
+import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.*
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.*
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.*
 import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
+import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
 import org.mozilla.tv.firefox.experiments.ExperimentConfig
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isEffectivelyVisible
@@ -84,6 +89,7 @@ class NavigationOverlayFragment : Fragment() {
      * and cancel this job at the end of the UI lifecycle, cancelling the children.
      */
     private val uiLifecycleCancelJob: Job = Job()
+    private val compositeDisposable = CompositeDisposable()
 
     // We need this in order to show the unpin toast, at max, once per
     // instantiation of the BrowserNavigationOverlay
@@ -127,6 +133,8 @@ class NavigationOverlayFragment : Fragment() {
 
     // TODO: remove this when FocusRepo is in place #1395
     private var defaultFocusTag = NavigationOverlayFragment.FRAGMENT_TAG
+    @Deprecated(message = "VM state should be used reactively, not imperatively. See #1395, which will fix this")
+    private var lastPocketState: PocketViewModel.State? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -139,7 +147,7 @@ class NavigationOverlayFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.browser_overlay, container, false)
+        return inflater.inflate(R.layout.fragment_navigation_overlay_orig, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -150,6 +158,24 @@ class NavigationOverlayFragment : Fragment() {
             onNavigationEvent
         ).onCreateView(view, viewLifecycleOwner, fragmentManager!!)
 
+        // TODO: Add back in once #1666 is ready to land.
+        /*
+        // Handle split overlay state on homescreen or webrender
+        FirefoxViewModelProviders.of(this@NavigationOverlayFragment)
+                .get(NavigationOverlayViewModel::class.java)
+                .apply {
+                    viewIsSplit.observe(viewLifecycleOwner, Observer { isSplit ->
+                        isSplit ?: return@Observer
+                        val windowSpacerHeight = if (isSplit) OVERLAY_SPACER_WEBRENDER_HEIGHT else OVERLAY_SPACER_HOMESCREEN_HEIGHT
+                        overlayWindowSpacer.apply {
+                            layoutParams.height = windowSpacerHeight
+                            requestLayout()
+                        }
+                        navOverlayScrollView.scrollY = 0
+                    })
+                }
+                */
+
         initMegaTile()
         initPinnedTiles()
 
@@ -158,8 +184,6 @@ class NavigationOverlayFragment : Fragment() {
 
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context!!, R.color.photonGrey10_a60p)) }
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
-
-        overlayScrollView.scrollTo(0, 0)
 
         // TODO: remove this when FocusRepo is in place #1395
         when (defaultFocusTag) {
@@ -179,8 +203,45 @@ class NavigationOverlayFragment : Fragment() {
         updateFocusableViews()
     }
 
+    override fun onStart() {
+        super.onStart()
+        observePocketState()
+            .addTo(compositeDisposable)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        compositeDisposable.clear()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        FocusOnShowDelegate().onHiddenChanged(this, hidden)
+        super.onHiddenChanged(hidden)
+    }
+
     private fun exitFirefox() {
         activity!!.moveTaskToBack(true)
+    }
+
+    private fun observePocketState(): Disposable {
+        return pocketViewModel.state
+            .subscribe { state ->
+                @Suppress("DEPRECATION")
+                lastPocketState = state
+                when (state) {
+                    is PocketViewModel.State.Error -> {
+                        pocketVideoMegaTileView.visibility = View.VISIBLE
+                        showMegaTileError()
+                    }
+                    is PocketViewModel.State.Feed -> {
+                        pocketVideoMegaTileView.visibility = View.VISIBLE
+                        pocketVideoMegaTileView.setContent(state.feed)
+                        hideMegaTileError()
+                    }
+                    is PocketViewModel.State.NotDisplayed -> pocketVideoMegaTileView.visibility = View.GONE
+                    null -> return@subscribe
+                }.forceExhaustive
+            }
     }
 
     /**
@@ -215,22 +276,6 @@ class NavigationOverlayFragment : Fragment() {
             val event = NavigationEvent.fromViewClick(view.id) ?: return@setOnClickListener
             onNavigationEvent.invoke(event, null, null)
         }
-
-        pocketViewModel.state.observe(viewLifecycleOwner, Observer { state ->
-            when (state) {
-                is PocketViewModel.State.Error -> {
-                    pocketVideoMegaTileView.visibility = View.VISIBLE
-                    showMegaTileError()
-                }
-                is PocketViewModel.State.Feed -> {
-                    pocketVideoMegaTileView.visibility = View.VISIBLE
-                    pocketVideoMegaTileView.setContent(state.feed)
-                    hideMegaTileError()
-                }
-                is PocketViewModel.State.NotDisplayed -> pocketVideoMegaTileView.visibility = View.GONE
-                null -> return@Observer
-            }.forceExhaustive
-        })
     }
 
     private fun initPinnedTiles() = with(tileContainer) {
@@ -327,8 +372,10 @@ class NavigationOverlayFragment : Fragment() {
         }
 
         navUrlInput.nextFocusDownId = when {
-            pocketViewModel.state.value is PocketViewModel.State.Feed -> R.id.pocketVideoMegaTileView
-            pocketViewModel.state.value === PocketViewModel.State.Error -> R.id.megaTileTryAgainButton
+            @Suppress("DEPRECATION")
+            lastPocketState is PocketViewModel.State.Feed -> R.id.pocketVideoMegaTileView
+            @Suppress("DEPRECATION")
+            lastPocketState === PocketViewModel.State.Error -> R.id.megaTileTryAgainButton
             tileAdapter.itemCount == 0 -> R.id.navUrlInput
             else -> R.id.tileContainer
         }
@@ -409,10 +456,12 @@ class NavigationOverlayFragment : Fragment() {
  * clicks up twice quickly), it will skip and not scroll smoothly. Since we don't scroll often,
  * this seems fine.
  */
+private const val OVERLAY_SPACER_HOMESCREEN_HEIGHT = 393
+private const val OVERLAY_SPACER_WEBRENDER_HEIGHT = 800
 class BrowserNavigationOverlayScrollView(
     context: Context,
     attrs: AttributeSet
-) : ScrollView(context, attrs) {
+) : NestedScrollView(context, attrs) {
 
     private val deltaScrollPadding = resources.getDimensionPixelSize(R.dimen.browser_overlay_delta_scroll_padding)
 

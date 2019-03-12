@@ -25,7 +25,7 @@ android {
         targetSdkVersion 28
         versionCode 11 // This versionCode is "frozen" for local builds. For "release" builds we
         // override this with a generated versionCode at build time.
-        versionName "3.4.1-LAT1"
+        versionName "3.5-LAT1"
         testInstrumentationRunner "org.mozilla.tv.firefox.FirefoxTestRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
@@ -67,12 +67,15 @@ android {
 
         gecko {
             dimension "engine"
+            // Move the suffix to the `system` product flavor when the shipping
+            // version is based on Gecko.
+            applicationIdSuffix ".gecko"
         }
     }
 
     testOptions {
         unitTests.includeAndroidResources true // for robolectric.
-        execution 'ANDROID_TEST_ORCHESTRATOR'
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 
     sourceSets {
@@ -111,22 +114,15 @@ configurations {
 dependencies {
     implementation 'io.sentry:sentry-android:1.7.9'
 
-    implementation "com.android.support:appcompat-v7:$support_libraries_version"
-    implementation "com.android.support:support-v4:$support_libraries_version"
-    implementation "com.android.support:cardview-v7:$support_libraries_version"
-    implementation "com.android.support:customtabs:$support_libraries_version"
-    implementation "com.android.support:design:$support_libraries_version"
-    implementation "com.android.support:leanback-v17:$support_libraries_version"
-    implementation "com.android.support:recyclerview-v7:$support_libraries_version"
-    implementation "com.android.support.constraint:constraint-layout:1.1.3"
-    implementation 'com.squareup.picasso:picasso:2.71828', {
-        // We temporarily don't include the packaged the support libs to avoid version mismatch.
-        // This can cause runtime errors so we should remove this ASAP! #883?
-        exclude group: 'com.android.support', module: 'exifinterface'
-        exclude group: 'com.android.support', module: 'support-annotations'
-        exclude group: 'com.android.support', module: 'support-compat'
-        exclude group: 'com.android.support', module: 'support-fragment'
-    }
+    implementation "androidx.appcompat:appcompat:$androidx_version"
+    implementation "androidx.legacy:legacy-support-v4:$androidx_version"
+    implementation "androidx.cardview:cardview:$androidx_version"
+    implementation "androidx.browser:browser:$androidx_version"
+    implementation "com.google.android.material:material:$androidx_version"
+    implementation "androidx.leanback:leanback:$androidx_version"
+    implementation "androidx.recyclerview:recyclerview:$androidx_version"
+    implementation "androidx.constraintlayout:constraintlayout:1.1.3"
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     implementation ("com.google.code.findbugs:annotations:3.0.1") {
         // We really only need the SuppressFBWarnings annotation, everything else can be ignored.
@@ -149,50 +145,49 @@ dependencies {
 
     systemImplementation "org.mozilla.components:browser-engine-system:$moz_components_version"
     // Required to override android.support lib in GeckoView dependency (uses palette-v7:26.1.0)
-    geckoImplementation "com.android.support:palette-v7:$support_libraries_version"
+    geckoImplementation "androidx.palette:palette:$androidx_version"
     geckoImplementation "org.mozilla.components:browser-engine-gecko-nightly:$moz_components_version"
     geckoImplementation Gecko.geckoview_nightly_arm
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation "android.arch.lifecycle:extensions:$architecture_components_version"
-    implementation "android.arch.lifecycle:viewmodel:$architecture_components_version"
-    testImplementation "android.arch.core:core-testing:$architecture_components_version"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.6"
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
-    testImplementation 'junit:junit:4.12'
+    implementation "androidx.lifecycle:lifecycle-extensions:$architecture_components_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$architecture_components_version"
+    testImplementation "androidx.arch.core:core-testing:$architecture_components_version"
+
+    testImplementation "androidx.test.ext:junit:$junit"
     testImplementation "org.robolectric:robolectric:$robolectric_version"
-    testImplementation "org.robolectric:shadows-supportv4:$robolectric_version"
     testImplementation 'org.mockito:mockito-core:2.21.0'
 
     testImplementation "androidx.test:core:$test_core"
+    androidTestImplementation "androidx.test:core:$test_core"
 
-    androidTestImplementation "com.android.support.test.uiautomator:uiautomator-v18:$uiautomator_version"
+    androidTestImplementation "androidx.test.uiautomator:uiautomator:$uiautomator_version"
 
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_version", {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
-    androidTestImplementation("com.android.support.test.espresso:espresso-contrib:$espresso_version") {
-        exclude module: 'appcompat-v7'
-        exclude module: 'support-v4'
-        exclude module: 'support-annotations'
-        exclude module: 'recyclerview-v7'
-        exclude module: 'design'
-        exclude module: 'espresso-core'
-    }
-    androidTestImplementation "com.android.support.test.espresso:espresso-idling-resource:$espresso_version"
-    androidTestImplementation "com.android.support.test.espresso:espresso-web:$espresso_version", {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:$espresso_version")
+    androidTestImplementation "androidx.test.espresso:espresso-idling-resource:$espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-web:$espresso_version"
 
-    androidTestImplementation "com.android.support.test:runner:$test_runner"
-    androidTestImplementation "com.android.support.test:rules:$test_rules"
+    androidTestImplementation "androidx.test:runner:$test_runner"
+    androidTestImplementation "androidx.test:rules:$test_rules"
     androidTestUtil "androidx.test:orchestrator:$test_orchestrator"
 
     androidTestImplementation 'com.squareup.okhttp3:mockwebserver:3.10.0'
     testImplementation 'com.squareup.okhttp3:mockwebserver:3.10.0'
 
     androidTestImplementation "tools.fastlane:screengrab:1.2.0", {
-        exclude group: 'com.android.support', module: 'support-annotations'
+        // This Fastlane dependency causes our builds to fail due to having two different
+        // versions of UiAutomator. Fastlane is not on the most recent version of
+        // com.android.support.test.uiautomator, which presumably prevents Jetifier from
+        // fixing this
+        //
+        // TODO try removing this then running Espresso every time Fastlane is updated
+        exclude group: 'com.android.support.test.uiautomator', module: 'uiautomator-v18'
     }
 
     androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}"

@@ -12,17 +12,17 @@ import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition.REMOVE_OVE
 class ScreenControllerStateMachineTest {
 
     @Test
-    fun `GIVEN overlay is active and url is home WHEN back is pressed THEN emit exit_app`() {
+    fun `GIVEN overlay is active and no previous sites are in the backstack WHEN back is pressed THEN emit exit_app`() {
         val currentActiveScreen = NAVIGATION_OVERLAY
-        val currentUrlIsHome = true
-        assertEquals(EXIT_APP, ScreenControllerStateMachine.getNewStateBackPress(currentActiveScreen, currentUrlIsHome))
+        val canGoBack = false
+        assertEquals(EXIT_APP, ScreenControllerStateMachine.getNewStateBackPress(currentActiveScreen, canGoBack))
     }
 
     @Test
-    fun `GIVEN overlay is active and url is not home WHEN back is pressed THEN emit remove_overlay`() {
+    fun `GIVEN overlay is active and previous sites are in the backstack WHEN back is pressed THEN emit remove_overlay`() {
         val currentActiveScreen = NAVIGATION_OVERLAY
-        val currentUrlIsHome = false
-        assertEquals(REMOVE_OVERLAY, ScreenControllerStateMachine.getNewStateBackPress(currentActiveScreen, currentUrlIsHome))
+        val canGoBack = true
+        assertEquals(REMOVE_OVERLAY, ScreenControllerStateMachine.getNewStateBackPress(currentActiveScreen, canGoBack))
     }
 
     @Test

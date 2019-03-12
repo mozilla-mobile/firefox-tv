@@ -7,11 +7,12 @@ package org.mozilla.tv.firefox.helpers
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
-import android.support.test.InstrumentationRegistry
+import androidx.test.core.app.ApplicationProvider
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
+import org.mozilla.tv.firefox.FirefoxApplication
 import org.mozilla.tv.firefox.ext.toUri
 import java.io.IOException
 
@@ -44,7 +45,12 @@ class AndroidAssetDispatcher : Dispatcher() {
     private val mainThreadHandler = Handler(Looper.getMainLooper())
 
     override fun dispatch(request: RecordedRequest): MockResponse {
-        val assetManager = InstrumentationRegistry.getContext().assets
+        val application = ApplicationProvider.getApplicationContext<FirefoxApplication>()
+        val testContextPackage = "${application.packageName}.test"
+        val assetManager = application
+                .packageManager
+                .getResourcesForApplication(testContextPackage)
+                .assets
         val assetContents = try {
             val pathNoLeadingSlash = request.path.drop(1)
             assetManager.open(pathNoLeadingSlash).use { inputStream ->

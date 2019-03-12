@@ -9,7 +9,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.support.customtabs.CustomTabsIntent
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.test.core.app.ApplicationProvider
 import mozilla.components.browser.session.Session
 import org.junit.Assert.assertEquals

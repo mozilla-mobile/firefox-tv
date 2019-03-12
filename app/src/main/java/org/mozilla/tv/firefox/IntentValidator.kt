@@ -7,7 +7,7 @@ package org.mozilla.tv.firefox
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting
 import android.text.TextUtils
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration

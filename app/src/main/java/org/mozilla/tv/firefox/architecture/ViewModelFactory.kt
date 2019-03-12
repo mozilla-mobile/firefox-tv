@@ -5,9 +5,10 @@
 package org.mozilla.tv.firefox.architecture
 
 import android.app.Application
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayViewModel
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.navigationoverlay.ToolbarViewModel
@@ -54,6 +55,10 @@ class ViewModelFactory(
                 serviceLocator.frameworkRepo,
                 serviceLocator.screenController,
                 serviceLocator.sessionRepo
+            ) as T
+
+            NavigationOverlayViewModel::class.java -> NavigationOverlayViewModel(
+                    serviceLocator.sessionRepo
             ) as T
 
         // This class needs to either return a ViewModel or throw, so we have no good way of silently handling

@@ -4,15 +4,15 @@
 
 package org.mozilla.tv.firefox.ui
 
-import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.action.ViewActions.pressImeActionButton
-import android.support.test.espresso.action.ViewActions.typeText
-import android.support.test.espresso.matcher.ViewMatchers.withId
-import android.support.test.espresso.web.assertion.WebViewAssertions.webMatches
-import android.support.test.espresso.web.sugar.Web.onWebView
-import android.support.test.espresso.web.webdriver.DriverAtoms.findElement
-import android.support.test.espresso.web.webdriver.DriverAtoms.getText
-import android.support.test.espresso.web.webdriver.Locator
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.pressImeActionButton
+import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
+import androidx.test.espresso.web.sugar.Web.onWebView
+import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
+import androidx.test.espresso.web.webdriver.DriverAtoms.getText
+import androidx.test.espresso.web.webdriver.Locator
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.hamcrest.Matchers.equalTo

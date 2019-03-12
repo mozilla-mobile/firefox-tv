@@ -3,10 +3,10 @@ package org.mozilla.tv.firefox.ui.screenshots;
 import android.Manifest;
 import android.app.Instrumentation;
 import android.content.Context;
-import android.support.annotation.StringRes;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.rule.GrantPermissionRule;
-import android.support.test.uiautomator.UiDevice;
+import androidx.annotation.StringRes;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.GrantPermissionRule;
+import androidx.test.uiautomator.UiDevice;
 import android.text.format.DateUtils;
 
 import org.junit.Before;

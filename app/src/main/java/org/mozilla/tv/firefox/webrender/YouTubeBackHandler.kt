@@ -8,14 +8,10 @@ import android.view.KeyEvent
 import android.webkit.ValueCallback
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.MainActivity
-import org.mozilla.tv.firefox.ext.evalJS
+import org.mozilla.tv.firefox.ext.backForwardList
+import org.mozilla.tv.firefox.ext.checkYoutubeBack
 import org.mozilla.tv.firefox.ext.handleYoutubeBack
-
-// This will only happen if YouTube is loading or navigation has broken
-private const val noElementFocused = "document.activeElement === null"
-// This will only happen if YouTube is loading or navigation has broken
-private const val bodyElementFocused = "document.activeElement.tagName === \"BODY\""
-private const val sidebarFocused = "document.activeElement.parentElement.parentElement.id === 'guide-list'"
+import org.mozilla.tv.firefox.ext.isUriYouTubeTV
 
 /**
  * youtube/tv does not handle their back stack correctly. Going back in history visits redirects
@@ -29,22 +25,12 @@ private const val sidebarFocused = "document.activeElement.parentElement.parentE
  * Else:
  * - Dispatch ESC key event
  */
-class YouTubeBackHandler(
-    private val event: KeyEvent,
-    private val engineView: EngineView?,
-    private val activity: MainActivity
-) {
 
-    fun handleBackClick() {
+class YouTubeBackHandler(private val engineView: EngineView?, private val activity: MainActivity) {
+    private val preYouTubeIndexHistory: MutableList<Int> = mutableListOf()
+    private var currentPreYouTubeIndex: Int? = null
 
-        val shouldWeExitPage = """
-               (function () {
-                    return $noElementFocused ||
-                        $bodyElementFocused ||
-                        $sidebarFocused;
-                })();
-        """.trimIndent()
-
+    fun handleBackClick(event: KeyEvent) {
         val backOrMoveFocus = ValueCallback<String> { shouldExitPage ->
             if (shouldExitPage == "true") {
                 if (event.action == KeyEvent.ACTION_DOWN) Unit
@@ -56,10 +42,37 @@ class YouTubeBackHandler(
             }
         }
 
-        engineView?.evalJS(javascript = shouldWeExitPage, callback = backOrMoveFocus)
+        engineView?.checkYoutubeBack(backOrMoveFocus)
     }
 
-    private fun goBackBeforeYouTube() {
-        engineView?.handleYoutubeBack()
+    fun onUrlChanged(url: String) {
+        if (!url.isUriYouTubeTV) currentPreYouTubeIndex = null
+        else if (currentPreYouTubeIndex == null) {
+            // Store the current (pre-YouTube) backForwardIndex when the URL first changes to YouTube
+            currentPreYouTubeIndex = engineView!!.backForwardList.currentIndex
+        }
     }
+
+    /**
+     * We only want to add indexes to the list that are a forward navigation from non-YouTube site
+     * to YouTube. If you hit back from a non-YouTube site to YouTube, we do not want to save the index
+     * of that non-YouTube site. The web history list is only updated after loading has completed,
+     * which is why this function is called from onLoadingStateChanged callback.
+     */
+    fun onLoadComplete() {
+        // Don't store anything if we aren't navigating to YouTube
+        val preYouTubeIndex = currentPreYouTubeIndex ?: return
+
+        val navigationWasForward = preYouTubeIndex < engineView!!.backForwardList.currentIndex
+        if (navigationWasForward) {
+            preYouTubeIndexHistory.add(preYouTubeIndex)
+        }
+    }
+
+    private fun getIndexToGoBackTo(): Int {
+        return if (preYouTubeIndexHistory.isEmpty()) 0
+        else preYouTubeIndexHistory.removeAt(preYouTubeIndexHistory.lastIndex)
+    }
+
+    private fun goBackBeforeYouTube() = engineView!!.handleYoutubeBack(getIndexToGoBackTo())
 }

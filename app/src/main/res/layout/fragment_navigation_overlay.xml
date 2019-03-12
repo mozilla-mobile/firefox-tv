@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?><!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/overlayScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:focusable="false"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="27dp"
+        android:background="@color/browser_overlay_background"
+        app:layout_behavior="org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayBehavior"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/topNavContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="57dp"
+            android:layout_marginEnd="57dp"
+            android:layout_marginBottom="27dp"
+            android:descendantFocusability="afterDescendants"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <include layout="@layout/fragment_navigation_overlay_top_nav" />
+        </LinearLayout>
+
+        <!-- An explicit nextFocusUp seems necessary to make up work consistently.
+        Drawable tinted in code (XML needs API 23+).
+
+        android:importantForAutofill (XML needs API 26+) requires tools:ignore="UnusedAttribute" for lint check -->
+        <org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
+            android:id="@+id/navUrlInput"
+            android:layout_width="498dp"
+            android:layout_height="@dimen/urlbar_height"
+            android:layout_marginStart="57dp"
+            android:layout_marginBottom="48dp"
+            android:background="@drawable/nav_urlbar_background"
+            android:cursorVisible="false"
+            android:drawableStart="@drawable/mozac_ic_search"
+            android:drawablePadding="10dp"
+            android:hint="@string/urlbar_hint"
+            android:imeOptions="actionGo|flagNoExtractUi|flagNoFullscreen"
+            android:importantForAutofill="no"
+            tools:ignore="UnusedAttribute"
+            android:inputType="textUri"
+            android:lines="1"
+            android:nextFocusRight="@id/navUrlInput"
+            android:nextFocusUp="@id/topNavContainer"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textColor="@color/photonGrey10"
+            android:textColorHint="@color/photonGrey10_a80p"
+            android:textIsSelectable="false" />
+    </LinearLayout>
+    <org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlayScrollView
+        android:id="@+id/navOverlayScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:descendantFocusability="afterDescendants"
+            android:orientation="vertical">
+
+            <View
+                android:id="@+id/overlayWindowSpacer"
+                android:layout_width="match_parent"
+                android:layout_height="196dp"/>
+
+            <LinearLayout
+                android:id="@+id/overlayBottomHalf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="32dp"
+                android:background="@color/browser_overlay_background">
+            <!-- Content description added in code. -->
+            <org.mozilla.tv.firefox.pocket.PocketVideoMegaTile
+                android:id="@+id/pocketVideoMegaTileView"
+                android:layout_width="match_parent"
+                android:layout_height="108dp"
+                android:layout_marginStart="45dp"
+                android:layout_marginEnd="45dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/pocket_video_mega_tile_background"
+                android:focusable="true"
+                android:nextFocusUp="@id/navUrlInput" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/tileContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="45dp"
+                android:layout_marginEnd="45dp"
+                android:clipChildren="false"
+                android:clipToPadding="false" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlayScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

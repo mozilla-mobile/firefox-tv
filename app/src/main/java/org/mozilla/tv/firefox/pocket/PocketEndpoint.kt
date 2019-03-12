@@ -5,19 +5,25 @@
 package org.mozilla.tv.firefox.pocket
 
 import android.net.Uri
-import android.support.annotation.AnyThread
-import android.support.annotation.VisibleForTesting
+import androidx.annotation.AnyThread
+import androidx.annotation.VisibleForTesting
 import android.util.Log
+import io.reactivex.Single
+import kotlinx.coroutines.runBlocking
 import okhttp3.Request
 import org.json.JSONException
 import org.json.JSONObject
 import org.mozilla.tv.firefox.BuildConfig
 import org.mozilla.tv.firefox.ext.executeAndAwait
 import org.mozilla.tv.firefox.ext.flatMapObj
+import org.mozilla.tv.firefox.utils.Endpoint
 import org.mozilla.tv.firefox.utils.OkHttpWrapper
+import org.mozilla.tv.firefox.utils.Response
 import java.io.IOException
 
 private const val LOGTAG = "PocketEndpoint"
+
+typealias PocketData = List<PocketViewModel.FeedItem.Video>
 
 /**
  * Make requests to the Pocket endpoint and returns internal objects.
@@ -25,14 +31,39 @@ private const val LOGTAG = "PocketEndpoint"
  * The methods of this class call the endpoint directly and does not cache results or rate limit,
  * outside of the network layer (e.g. with OkHttp).
  */
-open class PocketEndpoint(private val appVersion: String, private val pocketEndpoint: Uri?) {
+open class PocketEndpoint(
+    private val appVersion: String,
+    private val pocketEndpoint: Uri?,
+    private val getIsEnglishLocale: () -> Boolean
+) : Endpoint<PocketData> {
+
+    /**
+     * Wraps the suspend function [getRecommendedVideos] in a [Single]
+     *
+     * Note that this is a blocking call
+     */
+    override fun request(): Single<Response<PocketData>> {
+        val videos = try {
+            runBlocking { getRecommendedVideos() }
+        } catch (e: InterruptedException) {
+            // RxJava disposals briefly interrupt their threads, which here will
+            // cause runBlocking to crash. We can treat this as a failed response
+            // without any additional handling.
+            null
+        }
+        return when {
+            videos == null || videos.isEmpty() -> Single.just(Response.Failure())
+            else -> Single.just(Response.Success(videos))
+        }
+    }
 
     /** @return The global video recommendations or null on error; the list will never be empty. */
     @AnyThread // via PocketEndpointRaw.
     open suspend fun getRecommendedVideos(): List<PocketViewModel.FeedItem.Video>? {
-        return pocketEndpoint
-            ?.let { endpoint -> PocketEndpointRaw.getGlobalVideoRecommendations(appVersion, endpoint) }
-            ?.let { json -> convertVideosJSON(json) }
+        if (!getIsEnglishLocale.invoke()) return null
+        pocketEndpoint ?: return null
+        val jsonResponse = PocketEndpointRaw.getGlobalVideoRecommendations(appVersion, pocketEndpoint) ?: return null
+        return convertVideosJSON(jsonResponse)
     }
 
     /** @return The videos or null on error; the list will never be empty. */
@@ -55,9 +86,9 @@ private object PocketEndpointRaw {
     @AnyThread // executeAndAwait hands off the request to the OkHttp dispatcher.
     suspend fun getGlobalVideoRecommendations(version: String, pocketEndpoint: Uri): String? {
         val req = Request.Builder()
-                .url(pocketEndpoint.toString())
-                .header("User-Agent", "FirefoxTV-$version-${BuildConfig.BUILD_TYPE}")
-                .build()
+            .url(pocketEndpoint.toString())
+            .header("User-Agent", "FirefoxTV-$version-${BuildConfig.BUILD_TYPE}")
+            .build()
 
         val res = try {
             OkHttpWrapper.client.newCall(req).executeAndAwait()

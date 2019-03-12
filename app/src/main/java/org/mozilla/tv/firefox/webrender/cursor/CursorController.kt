@@ -4,10 +4,10 @@
 
 package org.mozilla.tv.firefox.webrender.cursor
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.Observer
+import androidx.lifecycle.OnLifecycleEvent
 import android.graphics.PointF
 import android.view.KeyEvent
 import android.view.View
@@ -40,29 +40,38 @@ class CursorController private constructor(
     private val legacyViewModel = LegacyCursorViewModel(uiLifecycleCancelJob, onUpdate = { x, y, percentMaxScrollVel, framesPassed ->
         view.updatePosition(x, y)
         scrollWebView(percentMaxScrollVel, framesPassed)
-    }, simulateTouchEvent = { webRenderFragment.activity?.dispatchTouchEvent(it) })
+    })
 
     // Initial value does not matter: it will be reactively replaced during start-up.
-    val keyDispatcher = CursorKeyDispatcher(isEnabled = false, onDirectionKey = { dir, action ->
-        when (action) {
-            KeyEvent.ACTION_DOWN -> legacyViewModel.onDirectionKeyDown(dir)
-            KeyEvent.ACTION_UP -> legacyViewModel.onDirectionKeyUp(dir)
-            else -> Unit
-        }
-    }, onSelectKey = { event ->
-        legacyViewModel.onSelectKeyEvent(event.action)
-        view.updateCursorPressedState(event)
-    })
+    lateinit var keyDispatcher: CursorKeyDispatcher
 
     fun initOnCreateView(viewModel: CursorViewModel, cursorParent: View) {
         cursorParent.addOnLayoutChangeListener { _, _, _, right, bottom, _, _, _, _ ->
             legacyViewModel.maxBounds = PointF(right.toFloat(), bottom.toFloat())
         }
 
+        keyDispatcher = CursorKeyDispatcher(isEnabled = false, onDirectionKey = { dir, action ->
+            when (action) {
+                KeyEvent.ACTION_DOWN -> legacyViewModel.onDirectionKeyDown(dir)
+                KeyEvent.ACTION_UP -> legacyViewModel.onDirectionKeyUp(dir)
+                else -> Unit
+            }
+        }, onSelectKey = { event ->
+            viewModel.onSelectKeyEvent(event.action, legacyViewModel.pos)
+            view.updateCursorPressedState(event)
+        })
+
         viewModel.isEnabled.observe(webRenderFragment.viewLifecycleOwner, Observer { isEnabled ->
-            // isEnabled should not emit until value is non-null.
-            keyDispatcher.isEnabled = isEnabled!!
+            isEnabled ?: return@Observer
+            keyDispatcher.isEnabled = isEnabled
             view.visibility = if (isEnabled) View.VISIBLE else View.GONE
+        })
+
+        viewModel.touchSimulationLiveData.observe(webRenderFragment.viewLifecycleOwner, Observer {
+            it?.consume {
+                webRenderFragment.activity?.dispatchTouchEvent(it)
+                true
+            }
         })
     }
 

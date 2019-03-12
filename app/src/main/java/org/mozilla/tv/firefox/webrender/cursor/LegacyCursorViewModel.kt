@@ -6,9 +6,8 @@ package org.mozilla.tv.firefox.webrender.cursor
 
 import android.graphics.PointF
 import android.os.SystemClock
-import android.support.annotation.UiThread
-import android.support.v4.math.MathUtils
-import android.view.MotionEvent
+import androidx.annotation.UiThread
+import androidx.core.math.MathUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +15,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
-import org.mozilla.tv.firefox.ext.use
 import org.mozilla.tv.firefox.utils.Direction
 import java.util.EnumSet
 import kotlin.properties.Delegates
@@ -26,8 +24,6 @@ private const val UPDATE_DELAY_MILLIS_F = UPDATE_DELAY_MILLIS.toFloat() // Avoid
 
 private const val ACCEL_MODIFIER = 0.98f
 private const val MAX_VELOCITY = 21.25f
-
-private const val DOWN_TIME_OFFSET_MILLIS = 100
 
 /**
  * A model to back the Cursor view; transition to [CursorViewModel], our MVVM reimplementation. The
@@ -49,8 +45,7 @@ private const val DOWN_TIME_OFFSET_MILLIS = 100
 @Deprecated("Transition to CursorViewModel")
 class LegacyCursorViewModel(
     uiLifecycleCancelJob: Job,
-    private val onUpdate: (x: Float, y: Float, percentMaxScrollVel: PointF, framesPassed: Float) -> Unit,
-    private val simulateTouchEvent: (MotionEvent) -> Unit
+    private val onUpdate: (x: Float, y: Float, percentMaxScrollVel: PointF, framesPassed: Float) -> Unit
 ) {
 
     private val scrollVelReturnVal = PointF()
@@ -71,7 +66,10 @@ class LegacyCursorViewModel(
     }
 
     private var isInitialPosSet = false
-    private val pos = PointF(0f, 0f)
+
+    // FIXME: Remove this as soon as possible because this is dangerously exposed
+    val pos = PointF(0f, 0f)
+
     private var vel = 0f
 
     private val pressedDirections = EnumSet.noneOf(Direction::class.java)
@@ -167,14 +165,6 @@ class LegacyCursorViewModel(
         pressedDirections.remove(dir)
         if (pressedDirections.isEmpty()) {
             cancelUpdates()
-        }
-    }
-
-    /** Dispatches a touch event on the current position, sending a click where the cursor is. */
-    fun onSelectKeyEvent(action: Int) {
-        val now = SystemClock.uptimeMillis()
-        MotionEvent.obtain(now - DOWN_TIME_OFFSET_MILLIS, now, action, pos.x, pos.y, 0).use {
-            simulateTouchEvent(it)
         }
     }
 

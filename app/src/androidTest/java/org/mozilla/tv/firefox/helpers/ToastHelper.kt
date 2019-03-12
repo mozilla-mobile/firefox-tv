@@ -4,12 +4,12 @@
 
 package org.mozilla.tv.firefox.helpers
 
-import android.support.annotation.StringRes
-import android.support.test.espresso.Espresso
-import android.support.test.espresso.assertion.ViewAssertions
-import android.support.test.espresso.matcher.RootMatchers
-import android.support.test.espresso.matcher.ViewMatchers
-import android.support.test.rule.ActivityTestRule
+import androidx.annotation.StringRes
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.matcher.RootMatchers
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.rule.ActivityTestRule
 import org.hamcrest.CoreMatchers
 
 object ToastHelper {

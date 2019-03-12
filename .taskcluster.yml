@@ -28,7 +28,7 @@ tasks:
     payload:
       maxRunTime: 3600
       deadline: "{{ '2 hours' | $fromNow }}"
-      image: 'mozillamobile/firefox-tv:2.2'
+      image: 'mozillamobile/firefox-tv:2.3'
       command:
         - /bin/bash
         - '--login'
@@ -49,11 +49,6 @@ tasks:
           path: '/opt/firefox-tv/app/build/reports'
           expires: "{{ '1 week' | $fromNow }}"
 
-        'public/test-artifacts':  # Test artifacts from Firebase UI
-          type: 'directory'
-          path: '/opt/firefox-tv/test_artifacts'
-          expires: "{{ '1 week' | $fromNow }}"
-
       features:
           taskclusterProxy: true
 
@@ -70,6 +65,7 @@ tasks:
 # - Build the app (all flavors)
 # - Run unit tests
 # - Run code quality tools (findbugs, lint, checkstyle etc.)
+# - Upload app and test build APKs to Bitbar Cloud and run UI tests
 #
 # - HACK: Used {{ event.head.repo.url }} instead of origin because origin routes to
 #   the Focus Android repo
@@ -82,11 +78,12 @@ tasks:
           - push
         branches:
           - master
+    scopes:
+    - "secrets:get:project/mobile/firefox-tv/tokens"
     payload:
       maxRunTime: 3600
       deadline: "{{ '2 hours' | $fromNow }}"
-      image: 'mozillamobile/firefox-tv:2.2'
-      taskclusterProxy: true
+      image: 'mozillamobile/firefox-tv:2.3'
       command:
         - /bin/bash
         - '--login'
@@ -98,11 +95,16 @@ tasks:
           && git checkout {{event.head.sha}}
           && yes | sdkmanager --licenses
           && ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
+          && python ./tools/taskcluster/get-bitbar-token.py
+          && python ./tools/taskcluster/execute-bitbar-test.py system/debug app-system-debug
       artifacts:
         'public':
           type: 'directory'
           path: '/opt/firefox-tv/app/build/reports'
           expires: "{{ '1 week' | $fromNow }}"
+
+      features:
+          taskclusterProxy: true
 
     metadata:
       name: Firefox for Amazon's Fire TV - Build - Master
@@ -129,7 +131,7 @@ tasks:
     payload:
       maxRunTime: 3600
       deadline: "{{ '2 hours' | $fromNow }}"
-      image: 'mozillamobile/firefox-tv:2.2'
+      image: 'mozillamobile/firefox-tv:2.3'
       command:
         - /bin/bash
         - '--login'

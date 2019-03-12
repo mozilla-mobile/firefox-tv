@@ -4,10 +4,10 @@
 
 package org.mozilla.tv.firefox.ext
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 
 fun <T, U> LiveData<T>.map(mapper: (T) -> U): LiveData<U> {
     return Transformations.map(this, mapper)

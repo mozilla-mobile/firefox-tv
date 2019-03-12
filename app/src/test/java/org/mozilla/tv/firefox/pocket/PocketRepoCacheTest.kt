@@ -4,73 +4,63 @@
 
 package org.mozilla.tv.firefox.pocket
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
+import io.reactivex.Observable
+import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.observers.TestObserver
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.any
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.spy
-import org.mockito.Mockito.times
-import org.mockito.Mockito.verify
-import org.mozilla.tv.firefox.helpers.ext.assertValues
-import org.mozilla.tv.firefox.utils.BuildConfigDerivables
-import org.mozilla.tv.firefox.utils.PreventLiveDataMainLooperCrashRule
 
 class PocketRepoCacheTest {
 
-    @get:Rule
-    val rule = PreventLiveDataMainLooperCrashRule()
-
-    private lateinit var repoOutput: MutableLiveData<PocketVideoRepo.FeedState>
-    private lateinit var cacheOutput: LiveData<PocketVideoRepo.FeedState>
-    private lateinit var observerSpy: Observer<PocketVideoRepo.FeedState>
+    private lateinit var repoOutput: Subject<PocketVideoRepo.FeedState>
+    private lateinit var cacheOutput: Observable<PocketVideoRepo.FeedState>
     private lateinit var repoCache: PocketRepoCache
+    private lateinit var testObserver: TestObserver<PocketVideoRepo.FeedState>
 
     @Before
     fun setup() {
-        repoOutput = MutableLiveData()
+        RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
+
+        repoOutput = PublishSubject.create()
 
         val repo = object :
             PocketVideoRepo(
                 mock(PocketEndpoint::class.java),
                 PocketFeedStateMachine(),
-                { true },
-                mock(BuildConfigDerivables::class.java)
+                PocketVideoRepo.FeedState.Loading
             ) {
-            override val feedState: LiveData<FeedState>
+            override val feedState: Observable<FeedState>
                 get() = repoOutput
         }
         repoCache = PocketRepoCache(repo)
         cacheOutput = repoCache.feedState
-        repoCache.setup()
+        testObserver = repoCache.feedState.test()
     }
 
     @Test
     fun `WHEN repo has not emitted anything THEN cache should not emit anything`() {
         repoCache.frozen = false
 
-        observerSpy = spy(Observer { })
-        cacheOutput.observeForever(observerSpy)
-        verify(observerSpy, times(0)).onChanged(any())
+        assertEquals(0, testObserver.valueCount())
     }
 
     @Test
     fun `GIVEN cache is unfrozen WHEN repo emits non-load-complete values THEN cache should emit the same values`() {
         repoCache.frozen = false
 
-        repoCache.feedState.assertValues(
-            PocketVideoRepo.FeedState.FetchFailed,
+        repoOutput.onNext(PocketVideoRepo.FeedState.FetchFailed)
+        repoOutput.onNext(PocketVideoRepo.FeedState.Loading)
+        repoOutput.onNext(PocketVideoRepo.FeedState.NoAPIKey)
+
+        testObserver.assertValues(PocketVideoRepo.FeedState.FetchFailed,
             PocketVideoRepo.FeedState.Loading,
-            PocketVideoRepo.FeedState.NoAPIKey
-        ) {
-            repoOutput.value = PocketVideoRepo.FeedState.FetchFailed
-            repoOutput.value = PocketVideoRepo.FeedState.Loading
-            repoOutput.value = PocketVideoRepo.FeedState.NoAPIKey
-        }
+            PocketVideoRepo.FeedState.NoAPIKey)
     }
 
     @Test
@@ -79,28 +69,26 @@ class PocketRepoCacheTest {
         val secondVideos = listOf(PocketViewModel.FeedItem.Video(2, "", "", "", 2, ""))
         assertNotEquals(firstVideos, secondVideos)
 
-        repoCache.frozen = false
+        repoOutput.onNext(PocketVideoRepo.FeedState.LoadComplete(firstVideos))
+        repoCache.frozen = true
+        repoOutput.onNext(PocketVideoRepo.FeedState.Loading)
+        repoOutput.onNext(PocketVideoRepo.FeedState.LoadComplete(secondVideos))
 
-        repoCache.feedState.assertValues(PocketVideoRepo.FeedState.LoadComplete(firstVideos)) {
-            repoOutput.value = PocketVideoRepo.FeedState.LoadComplete(firstVideos)
-            repoCache.frozen = true
-            repoOutput.value = PocketVideoRepo.FeedState.Loading
-            repoOutput.value = PocketVideoRepo.FeedState.LoadComplete(secondVideos)
-        }
+        testObserver.assertValue(PocketVideoRepo.FeedState.LoadComplete(firstVideos))
     }
 
     @Test
     fun `GIVEN cache has not received a valid value AND cache is frozen WHEN future values are emitted from the repo THEN new values should be emitted by the cache`() {
         repoCache.frozen = true
 
-        repoCache.feedState.assertValues(
+        repoOutput.onNext(PocketVideoRepo.FeedState.FetchFailed)
+        repoOutput.onNext(PocketVideoRepo.FeedState.Loading)
+        repoOutput.onNext(PocketVideoRepo.FeedState.NoAPIKey)
+
+        testObserver.assertValues(
             PocketVideoRepo.FeedState.FetchFailed,
             PocketVideoRepo.FeedState.Loading,
             PocketVideoRepo.FeedState.NoAPIKey
-        ) {
-            repoOutput.value = PocketVideoRepo.FeedState.FetchFailed
-            repoOutput.value = PocketVideoRepo.FeedState.Loading
-            repoOutput.value = PocketVideoRepo.FeedState.NoAPIKey
-        }
+        )
     }
 }

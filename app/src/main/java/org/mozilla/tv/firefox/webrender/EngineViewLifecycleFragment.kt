@@ -6,7 +6,7 @@
 package org.mozilla.tv.firefox.webrender
 
 import android.os.Bundle
-import android.support.annotation.UiThread
+import androidx.annotation.UiThread
 import android.view.View
 import android.webkit.WebView
 import mozilla.components.concept.engine.EngineView

@@ -27,7 +27,7 @@ class PocketEndpointTest {
 
     @Before
     fun setup() {
-        pocketEndpoint = PocketEndpoint(VERSION, mock(Uri::class.java))
+        pocketEndpoint = PocketEndpoint(VERSION, mock(Uri::class.java)) { true }
     }
 
     @Test
