@@ -4,13 +4,6 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-### Added
-
-### Changed
-
-### Fixed
-
 ## [3.5-RO] 2019-03-12
 *Released to Fire TV 4K, staged roll-out*
 ### Added
@@ -19,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Updated dependencies to AndroidX
 
 ### Fixed
+- Fixed Youtube back bug (#1939)
 - Bug where you could not use remote back button to exit YouTube if it was visited from Pocket (#1584)
 - Fixed 4K YT bug (#277)
 - Bug where cursor would disappear if on overlay during page load finish (#1732)
