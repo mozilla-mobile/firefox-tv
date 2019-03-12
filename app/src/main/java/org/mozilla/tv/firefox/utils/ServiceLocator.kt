@@ -6,9 +6,6 @@ package org.mozilla.tv.firefox.utils
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import mozilla.components.browser.search.SearchEngineManager
 import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ValidatedIntentData
