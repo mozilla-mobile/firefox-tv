@@ -16,6 +16,7 @@ import android.view.KeyEvent
 import android.view.View
 import io.sentry.Sentry
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.overlay_debug.*
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
 import mozilla.components.support.base.observer.Consumable
@@ -100,6 +101,16 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         }
 
         serviceLocator.intentLiveData.value = Consumable.from(intentData)
+
+        if (BuildConfig.DEBUG) {
+            debugLog.visibility = View.VISIBLE
+            val debugLogStr = "TYPE: ${BuildConfig.BUILD_TYPE} / " +
+                    "FLAVOR: ${BuildConfig.FLAVOR} / VERSION: ${BuildConfig.VERSION_NAME}"
+
+            debugLog.text = debugLogStr
+        } else {
+            debugLog.visibility = View.GONE
+        }
     }
 
     @SuppressLint("MissingSuperCall")
