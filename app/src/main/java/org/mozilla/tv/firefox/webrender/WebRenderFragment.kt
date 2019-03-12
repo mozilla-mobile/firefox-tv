@@ -6,16 +6,21 @@ package org.mozilla.tv.firefox.webrender
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.annotation.UiThread
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import kotlinx.android.synthetic.main.fragment_browser.view.*
+import androidx.annotation.UiThread
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import kotlinx.android.synthetic.main.fragment_browser.view.browserFragmentRoot
+import kotlinx.android.synthetic.main.fragment_browser.view.cursorView
+import kotlinx.android.synthetic.main.fragment_browser.view.engineView
+import kotlinx.android.synthetic.main.fragment_browser.view.progressBar
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
 import mozilla.components.concept.engine.permission.Permission
@@ -27,14 +32,14 @@ import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
 import org.mozilla.tv.firefox.ext.focusedDOMElement
-import org.mozilla.tv.firefox.ext.isYoutubeTV
+import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.pauseAllVideoPlaybacks
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.resetView
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.webRenderComponents
+import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
-import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.webrender.cursor.CursorController
 import org.mozilla.tv.firefox.webrender.cursor.CursorViewModel
@@ -57,6 +62,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     lateinit var session: Session
 
     private val mediaSessionHolder get() = activity as MediaSessionHolder? // null when not attached.
+    private val compositeDisposable = CompositeDisposable()
 
     /**
      * Encapsulates the cursor's components. If this value is null, the Cursor is not attached
@@ -164,6 +170,13 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         super.onStart()
 
         sessionFeature?.start()
+        serviceLocator!!.sessionRepo.events.subscribe {
+            when (it) {
+                SessionRepo.Event.YouTubeBack -> youtubeBackHandler.handleBackClick()
+                SessionRepo.Event.ExitYouTube -> youtubeBackHandler.goBackBeforeYouTube()
+                null -> return@subscribe
+            }.forceExhaustive
+        }.addTo(compositeDisposable)
     }
 
     override fun onStop() {
@@ -171,6 +184,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         serviceLocator!!.sessionRepo.exitFullScreenIfPossible()
         sessionFeature?.stop()
+        compositeDisposable.clear()
     }
 
     override fun onDestroyView() {
@@ -187,15 +201,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     override fun onHiddenChanged(hidden: Boolean) {
         FocusOnShowDelegate().onHiddenChanged(this, hidden)
         super.onHiddenChanged(hidden)
-    }
-
-    fun onBackPressed(): Boolean {
-        if (session.canGoBack) {
-            serviceLocator!!.sessionRepo.exitFullScreenIfPossibleAndBack() // TODO do this through WebRenderViewModel when it exists
-            TelemetryIntegration.INSTANCE.browserBackControllerEvent()
-            return true
-        }
-        return false
     }
 
     fun loadUrl(url: String) {
@@ -228,13 +233,9 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     private fun handleSpecialKeyEvent(event: KeyEvent): Boolean {
         val actionIsDown = event.action == KeyEvent.ACTION_DOWN
 
-        if (event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER && actionIsDown) MenuInteractionMonitor.selectPressed() // TODO move this (no longer makes sense here, now that overlay is its own fragment)
+        // TODO move this (into NavigationOverlayFragment?)
+        if (event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER && actionIsDown) MenuInteractionMonitor.selectPressed()
 
-//        if (session.isYoutubeTV && // TODO replicate this
-//                event.keyCode == KeyEvent.KEYCODE_BACK) {
-//            youtubeBackHandler.handleBackClick(event)
-//            return true
-//        }
         return false
     }
 }

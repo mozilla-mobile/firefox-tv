@@ -4,16 +4,20 @@
 
 package org.mozilla.tv.firefox.session
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.annotation.AnyThread
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.feature.session.SessionUseCases
+import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.postIfNew
 import org.mozilla.tv.firefox.ext.toUri
+import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.TurboMode
 import org.mozilla.tv.firefox.webrender.EngineViewCache
 
@@ -34,8 +38,15 @@ class SessionRepo(
         val currentUrl: String
     )
 
+    enum class Event {
+        YouTubeBack, ExitYouTube
+    }
+
     private val _state = MutableLiveData<State>()
     val state: LiveData<State> = _state
+
+    private val _events: Subject<Event> = PublishSubject.create()
+    val events = _events.hide()
 
     var canGoBackTwice: (() -> Boolean?)? = null
     private var previousURLHost: String? = null
@@ -81,9 +92,32 @@ class SessionRepo(
 
     fun currentURLScreenshot(): Bitmap? = session?.thumbnail
 
-    fun exitFullScreenIfPossibleAndBack() {
-        exitFullScreenIfPossible()
-        if (session?.canGoBack == true) sessionUseCases.goBack.invoke()
+    /**
+     * @param forceYouTubeExit if true while YouTube is active, back out of the
+     * site instead of moving focus
+     *
+     * @Returns true if the event was consumed
+     */
+    fun attemptBack(forceYouTubeExit: Boolean = false): Boolean {
+        val session = session ?: return false
+        if (session.isYoutubeTV && forceYouTubeExit) {
+            _events.onNext(Event.ExitYouTube)
+            return true
+        }
+
+        if (session.isYoutubeTV && !forceYouTubeExit) {
+            _events.onNext(Event.YouTubeBack)
+            return true
+        }
+
+        if (session.canGoBack) {
+            exitFullScreenIfPossible()
+            sessionUseCases.goBack.invoke()
+            TelemetryIntegration.INSTANCE.browserBackControllerEvent()
+            return true
+        }
+
+        return false
     }
 
     fun goForward() {

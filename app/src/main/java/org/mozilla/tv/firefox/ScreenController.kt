@@ -166,9 +166,8 @@ class ScreenController(private val sessionRepo: SessionRepo) {
     }
 
     fun handleBack(fragmentManager: FragmentManager): Boolean {
-        val webRenderFragment = fragmentManager.webRenderFragment()
         if (_currentActiveScreen.value == ActiveScreen.WEB_RENDER) {
-            if (webRenderFragment.onBackPressed()) return true
+            if (sessionRepo.attemptBack()) return true
         }
         val transition = ScreenControllerStateMachine.getNewStateBackPress(_currentActiveScreen.value!!, canGoBack())
         return handleTransitionAndUpdateActiveScreen(fragmentManager, transition)
