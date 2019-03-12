@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox.ext
 import android.content.Context
 import mozilla.components.browser.engine.system.NestedWebView
 import mozilla.components.browser.engine.system.SystemEngineSession
+import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineSession
 
 /**
@@ -15,6 +16,10 @@ import mozilla.components.concept.engine.EngineSession
  * By default, a-c [SystemEngineSession.webView] uses ApplicationContext. This allows us to
  * override the webView instance
  */
-fun EngineSession.resetView(context: Context) {
+fun EngineSession.resetView(context: Context, session: Session? = null) {
     (this as SystemEngineSession).webView = NestedWebView(context)
+
+    session?.let {
+        this.loadUrl(it.url)
+    }
 }
