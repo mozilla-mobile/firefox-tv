@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - A memory leak (#1628)
 - Fixed bug that could cause YouTube to display vertically offset from where it should be (#1719)
 - Bug that could cause YouTube to be unresponsive if the overlay was opened during loading (#1830)
+- Workaround for "grey screen" when returning to YouTube from Amazon homescreen (#1865)
+- Backing from the navigation overlay when on the first site in your backstack will now properly exit the app (#1916)
 
 ## [3.4-B] - 2019-03-12
 *Version bump only, no change from v3.4-A. Released to all devices except Fire TV 4K*
