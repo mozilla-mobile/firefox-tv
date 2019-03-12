@@ -211,35 +211,6 @@ android.applicationVariants.all { variant ->
 }
 
 // -------------------------------------------------------------------------------------------------
-// Generate blocklists
-// -------------------------------------------------------------------------------------------------
-
-def blockListOutputDir = 'src/amazonWebview/res/raw'
-
-task buildBlocklists(type:Copy) {
-    from('../shavar-prod-lists') {
-        include '*.json'
-    }
-    into blockListOutputDir
-
-    // Android can't handle dashes in the filename, so we need to rename:
-    rename 'disconnect-blacklist.json', 'blocklist.json'
-    rename 'disconnect-entitylist.json', 'entitylist.json'
-    // google_mapping.json already has an expected name
-}
-
-clean.doLast {
-    file(blockListOutputDir).deleteDir()
-}
-
-tasks.whenTaskAdded { task ->
-    def name = task.name
-    if (name.contains("generate") && name.contains("Config") && name.contains("Webview")) {
-        task.dependsOn buildBlocklists
-    }
-}
-
-// -------------------------------------------------------------------------------------------------
 // Secrets: add API secrets from config files into the BuildConfig instance.
 // We use files because they're easier to manage than environment variables.
 // -------------------------------------------------------------------------------------------------
