@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.webrender
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -15,6 +16,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.fragment_browser.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
 import mozilla.components.concept.engine.permission.Permission
@@ -73,6 +78,19 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSession()
+    }
+
+    @SuppressLint("RestrictedApi")
+    override fun onResume() {
+        super.onResume()
+        if (session.isYoutubeTV) {
+            // Send key events on the UI thread to clear webview grey screen, see #1865
+            GlobalScope.launch(Dispatchers.Main) {
+                delay(50)
+                activity?.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_RIGHT))
+                activity?.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DPAD_LEFT))
+            }
+        }
     }
 
     private fun initSession() {
