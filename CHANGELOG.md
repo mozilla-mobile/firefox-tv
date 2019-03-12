@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Backing from the navigation overlay when on the first site in your backstack will now properly exit the app (#1916)
 - Fixed Youtube back bug (#1939)
 - Workaround for "grey screen" when returning to YouTube from Amazon homescreen (#1865)
+- Bug that prevented the toolbar back button from working on YouTube (#1927)
 
 ## [3.5-RO] 2019-03-12
 *Released to Fire TV 4K, staged roll-out*
