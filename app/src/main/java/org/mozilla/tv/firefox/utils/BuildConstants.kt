@@ -13,10 +13,14 @@ import org.mozilla.tv.firefox.BuildConfig
 object BuildConstants {
     private const val BUILD_TYPE_DEBUG = "debug"
     private const val BUILD_TYPE_RELEASE = "release"
+    private const val PRODUCT_FLAVOR_GECKO = "gecko"
 
     val isDevBuild: Boolean
         get() = BUILD_TYPE_DEBUG == BuildConfig.BUILD_TYPE
 
     val isReleaseBuild: Boolean
         get() = BUILD_TYPE_RELEASE == BuildConfig.BUILD_TYPE
+
+    val isGeckoBuild: Boolean
+        get() = PRODUCT_FLAVOR_GECKO == BuildConfig.FLAVOR
 }
