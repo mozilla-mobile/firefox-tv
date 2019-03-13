@@ -250,8 +250,10 @@ android.applicationVariants.all { variant ->
 // Gecko: Put GeckoVersion into BuildConfig
 // -------------------------------------------------------------------------------------------------
 
-android.applicationVariants.all {
-    buildConfigField 'String', 'GECKOVIEW_VERSION', "\"${GeckoVersions.nightly_version}\""
+android.applicationVariants.all { variant ->
+    if (variant.flavorName == "gecko") {
+        buildConfigField 'String', 'GECKOVIEW_VERSION', "\"${GeckoVersions.nightly_version}\""
+    }
 }
 
 // -------------------------------------------------------------------------------------------------
