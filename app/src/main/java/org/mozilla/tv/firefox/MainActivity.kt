@@ -104,18 +104,10 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         serviceLocator.intentLiveData.value = Consumable.from(intentData)
 
         // Debug logging display for non public users
-        if (BuildConstants.isDevBuild) {
+        // TODO: refactor out the debug variant visibility check in #1953
+        BuildConstants.debugLogStr?.apply {
             debugLog.visibility = View.VISIBLE
-            var debugLogStr = "DEBUG / " +
-                    "FLAVOR: ${BuildConfig.FLAVOR} / VERSION: ${BuildConfig.VERSION_NAME}"
-
-            if (BuildConstants.isGeckoBuild) {
-                debugLogStr += " / GECKO: ${BuildConfig.GECKOVIEW_VERSION}"
-            }
-
-            debugLog.text = debugLogStr
-        } else {
-            debugLog.visibility = View.GONE
+            debugLog.text = this
         }
     }
 

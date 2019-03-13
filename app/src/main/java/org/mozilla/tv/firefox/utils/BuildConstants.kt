@@ -14,6 +14,7 @@ object BuildConstants {
     private const val BUILD_TYPE_DEBUG = "debug"
     private const val BUILD_TYPE_RELEASE = "release"
     private const val PRODUCT_FLAVOR_GECKO = "gecko"
+    private val flavor = BuildFlavor()
 
     val isDevBuild: Boolean
         get() = BUILD_TYPE_DEBUG == BuildConfig.BUILD_TYPE
@@ -23,4 +24,7 @@ object BuildConstants {
 
     val isGeckoBuild: Boolean
         get() = PRODUCT_FLAVOR_GECKO == BuildConfig.FLAVOR
+
+    val debugLogStr: String?
+        get() = flavor.getDebugLogStr(isDevBuild)
 }
