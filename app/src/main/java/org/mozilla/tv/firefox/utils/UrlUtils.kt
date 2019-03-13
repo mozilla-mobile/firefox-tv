@@ -158,8 +158,11 @@ object UrlUtils {
      */
     @JvmStatic
     fun toUrlBarDisplay(url: String): String {
-        return when (url) {
-            URLs.APP_URL_HOME -> "" // Empty string forces the EditText to show hint text
+        return when {
+            url == URLs.APP_URL_HOME -> "" // Empty string forces the EditText to show hint text
+            // GeckoView loads [data: url] when RequestInterceptor.InterceptionResponse.Content()
+            // due to lack of internal page api (bug #1535131)
+            url.startsWith("data:", false) -> ""
             else -> url
         }
     }
