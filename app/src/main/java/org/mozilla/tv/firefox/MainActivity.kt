@@ -30,6 +30,7 @@ import org.mozilla.tv.firefox.onboarding.OnboardingActivity
 import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
+import org.mozilla.tv.firefox.utils.BuildConstants
 import org.mozilla.tv.firefox.utils.OnUrlEnteredListener
 import org.mozilla.tv.firefox.utils.Settings
 import org.mozilla.tv.firefox.utils.URLs
@@ -102,10 +103,15 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         serviceLocator.intentLiveData.value = Consumable.from(intentData)
 
-        if (BuildConfig.DEBUG) {
+        // Debug logging display for non public users
+        if (BuildConstants.isDevBuild) {
             debugLog.visibility = View.VISIBLE
-            val debugLogStr = "TYPE: ${BuildConfig.BUILD_TYPE} / " +
+            var debugLogStr = "DEBUG / " +
                     "FLAVOR: ${BuildConfig.FLAVOR} / VERSION: ${BuildConfig.VERSION_NAME}"
+
+            if (BuildConstants.isGeckoBuild) {
+                debugLogStr += " / GECKO: ${BuildConfig.GECKOVIEW_VERSION}"
+            }
 
             debugLog.text = debugLogStr
         } else {

@@ -8,6 +8,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="end"
-    android:padding="@dimen/lb_action_icon_margin"
-    android:background="@color/lb_basic_card_bg_color"
-    android:textSize="@dimen/lb_action_text_size" />
+    android:padding="5dp"
+    android:background="#80000000"
+    android:textSize="14sp" />
