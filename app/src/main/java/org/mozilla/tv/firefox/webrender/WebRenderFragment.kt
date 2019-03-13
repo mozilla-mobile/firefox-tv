@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.webrender
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -73,6 +74,14 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSession()
+    }
+
+    @SuppressLint("RestrictedApi")
+    override fun onResume() {
+        super.onResume()
+        if (session.isYoutubeTV) {
+            YoutubeGreyScreenWorkaround.invoke(activity)
+        }
     }
 
     private fun initSession() {
