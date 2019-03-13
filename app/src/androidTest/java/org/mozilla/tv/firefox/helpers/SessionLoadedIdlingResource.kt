@@ -29,7 +29,6 @@ class SessionLoadedIdlingResource : IdlingResource {
         return if (session?.loading == true && !ignoreLoading) {
             false
         } else {
-            ignoreLoading = false
             invokeCallback()
             true
         }

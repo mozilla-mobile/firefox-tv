@@ -137,14 +137,16 @@ class YouTubeNavigationTest {
             backOutOfYouTube()
         }.openOverlay {
             assertURLBarDisplaysHint()
-        }
 
         /**
          * Open YouTube, open overlay before loading is complete, wait for loading to complete,
          * make sure YouTube navigation still works (regression test for #1830).
          */
-        .openYouTubeAndDisableIdling(activityTestRule) {
+            disableSessionIdling(activityTestRule)
+        }
+        .enterUrlAndEnterToBrowser(youtubeUrl.toUri()!!) {
         }.openOverlay {
+            enableSessionIdling(activityTestRule)
         }.closeToBrowser {
             /**
              * Test dpad navigation.
