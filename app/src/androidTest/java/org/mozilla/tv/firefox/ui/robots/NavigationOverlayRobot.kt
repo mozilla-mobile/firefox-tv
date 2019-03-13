@@ -92,6 +92,11 @@ class NavigationOverlayRobot {
         device.wait(Until.findObject(By.res(R.id.navUrlInput.toString()).textContains("youtube.com/tv#/watch")), 5000)
     }
 
+    // Disable the SessionLoadingIdlingResource temporarily. This is needed for the test for #1830
+    // which requires opening the overlay before loading has completed.
+    fun disableSessionIdling(activityTestRule: MainActivityTestRule) { activityTestRule.loadingIdlingResource.ignoreLoading = true }
+    fun enableSessionIdling(activityTestRule: MainActivityTestRule) { activityTestRule.loadingIdlingResource.ignoreLoading = false }
+
     class Transition {
         private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
@@ -99,22 +104,6 @@ class NavigationOverlayRobot {
             urlBar().perform(clearText(),
                     typeText(url.toString()),
                     pressImeActionButton())
-
-            BrowserRobot().interact()
-            return BrowserRobot.Transition()
-        }
-
-        fun openYouTubeAndDisableIdling(
-            activityTestRule: MainActivityTestRule,
-            interact: BrowserRobot.() -> Unit
-        ): BrowserRobot.Transition {
-            urlBar().perform(clearText(),
-                typeText("youtube.com/tv"),
-                pressImeActionButton())
-
-            // Disable the SessionLoadingIdlingResource temporarily. This is needed for the test for #1830
-            // which requires opening the overlay before loading has completed.
-            activityTestRule.loadingIdlingResource.ignoreLoading = true
 
             BrowserRobot().interact()
             return BrowserRobot.Transition()
