@@ -35,6 +35,7 @@ class MainActivityTestRule(
      * broken because it's not used, and thus tested, at present.
      */
     lateinit var loadingIdlingResource: SessionLoadedIdlingResource
+        private set
 
     override fun beforeActivityLaunched() {
         if (skipOnboarding) {
