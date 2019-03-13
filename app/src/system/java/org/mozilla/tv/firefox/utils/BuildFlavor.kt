@@ -15,8 +15,7 @@ class BuildFlavor {
         if (isDevBuild) {
             return "DEBUG / " +
                     "FLAVOR: ${BuildConfig.FLAVOR} / " +
-                    "VERSION: ${BuildConfig.VERSION_NAME} / " +
-                    "GECKO: ${BuildConfig.GECKOVIEW_VERSION}"
+                    "VERSION: ${BuildConfig.VERSION_NAME}" // TODO: show WebView version?
         }
 
         return null
