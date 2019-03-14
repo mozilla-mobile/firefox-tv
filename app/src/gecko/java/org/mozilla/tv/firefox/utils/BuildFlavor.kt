@@ -5,6 +5,7 @@
 
 package org.mozilla.tv.firefox.utils
 
+import mozilla.components.concept.engine.request.RequestInterceptor
 import org.mozilla.tv.firefox.BuildConfig
 
 /**
@@ -20,5 +21,17 @@ class BuildFlavor {
         }
 
         return null
+    }
+
+    /**
+     * (This is a workaround for bug 1535131)
+     * [GeckoEngineSession] calls GeckoSession.loadData() IFF encoding == "base64" (otherwise,
+     * it calls GeckoSession.loadUri()). This is an expected behaviour from a-c since raw html
+     * document is not base64 encoded. However, GeckoSession.loadUri() does not correctly load
+     * the localized html content. So we have to pass in "base64" encoding field to
+     * InterceptionResponse.Content for GeckoEngineSession to call GeckoSession.loadData()
+     */
+    fun getInterceptionResponseContent(localizedContent: String): RequestInterceptor.InterceptionResponse.Content {
+        return RequestInterceptor.InterceptionResponse.Content(localizedContent, "text/html", "base64")
     }
 }
