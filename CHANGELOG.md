@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [3.4-B] - 2019-03-12
+*Version bump only, no change from v3.4-A. Released to all devices except Fire TV 4K*
+
 ## [3.4-A] - 2019-02-25
 ** Version bump only from 3.3, released to all devices **
 
@@ -133,7 +136,8 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 ## [1.0] - 2017-12-20
 *Initial release! A browser including home tile shortcuts.*
 
-[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1..HEAD
+[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.4-B..HEAD
+[3.4-B]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.4-A...v3.4-B
 [3.4-A]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.3...v3.4-A
 [3.3]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.5...v3.3
 [3.2.5]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.3...v3.2.5
