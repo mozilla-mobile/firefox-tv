@@ -9,6 +9,7 @@ import mozilla.components.browser.errorpages.ErrorType
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.request.RequestInterceptor
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.utils.BuildConstants.getInterceptionResponseContent
 import org.mozilla.tv.firefox.utils.URLs
 
 /**
@@ -27,13 +28,13 @@ class CustomContentRequestInterceptor(
             URLs.APP_URL_HOME, URLs.APP_URL_POCKET_ERROR ->
                 RequestInterceptor.InterceptionResponse.Content("<html></html>")
 
-            URLs.URL_ABOUT -> RequestInterceptor.InterceptionResponse.Content(
+            URLs.URL_ABOUT -> getInterceptionResponseContent(
                 LocalizedContent.generateAboutPage(context))
 
-            URLs.URL_GPL -> RequestInterceptor.InterceptionResponse.Content(
+            URLs.URL_GPL -> getInterceptionResponseContent(
                 LocalizedContent.generatePage(context, R.raw.gpl))
 
-            URLs.URL_LICENSES -> RequestInterceptor.InterceptionResponse.Content(
+            URLs.URL_LICENSES -> getInterceptionResponseContent(
                 LocalizedContent.generatePage(context, R.raw.licenses))
 
             else -> null

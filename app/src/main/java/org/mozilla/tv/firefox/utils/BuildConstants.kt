@@ -5,6 +5,7 @@
 
 package org.mozilla.tv.firefox.utils
 
+import mozilla.components.concept.engine.request.RequestInterceptor
 import org.mozilla.tv.firefox.BuildConfig
 
 /**
@@ -14,6 +15,7 @@ object BuildConstants {
     private const val BUILD_TYPE_DEBUG = "debug"
     private const val BUILD_TYPE_RELEASE = "release"
     private const val PRODUCT_FLAVOR_GECKO = "gecko"
+    private val flavor = BuildFlavor()
 
     val isDevBuild: Boolean
         get() = BUILD_TYPE_DEBUG == BuildConfig.BUILD_TYPE
@@ -25,5 +27,9 @@ object BuildConstants {
         get() = PRODUCT_FLAVOR_GECKO == BuildConfig.FLAVOR
 
     val debugLogStr: String?
-        get() = BuildFlavor().getDebugLogStr(isDevBuild)
+        get() = flavor.getDebugLogStr(isDevBuild)
+
+    fun getInterceptionResponseContent(content: String): RequestInterceptor.InterceptionResponse.Content {
+        return flavor.getInterceptionResponseContent(content)
+    }
 }
