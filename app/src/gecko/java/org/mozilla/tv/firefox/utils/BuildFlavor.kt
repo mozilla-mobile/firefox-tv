@@ -5,6 +5,7 @@
 
 package org.mozilla.tv.firefox.utils
 
+import android.content.Context
 import mozilla.components.concept.engine.request.RequestInterceptor
 import org.mozilla.tv.firefox.BuildConfig
 
@@ -21,6 +22,13 @@ class BuildFlavor {
         }
 
         return null
+    }
+
+    /**
+     * SystemWebView requires context to acquire version
+     */
+    fun getEngineVersion(@Suppress("UNUSED_PARAMETER") context: Context): String {
+        return BuildConfig.GECKOVIEW_VERSION
     }
 
     /**
