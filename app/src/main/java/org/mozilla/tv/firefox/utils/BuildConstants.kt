@@ -5,6 +5,7 @@
 
 package org.mozilla.tv.firefox.utils
 
+import android.content.Context
 import mozilla.components.concept.engine.request.RequestInterceptor
 import org.mozilla.tv.firefox.BuildConfig
 
@@ -28,6 +29,10 @@ object BuildConstants {
 
     val debugLogStr: String?
         get() = flavor.getDebugLogStr(isDevBuild)
+
+    fun getEngineVersion(context: Context): String {
+        return flavor.getEngineVersion(context)
+    }
 
     fun getInterceptionResponseContent(content: String): RequestInterceptor.InterceptionResponse.Content {
         return flavor.getInterceptionResponseContent(content)

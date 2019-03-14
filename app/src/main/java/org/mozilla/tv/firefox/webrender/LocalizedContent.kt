@@ -10,6 +10,7 @@ import androidx.collection.ArrayMap
 import android.view.View
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.components.locale.Locales
+import org.mozilla.tv.firefox.utils.BuildConstants
 import org.mozilla.tv.firefox.utils.HtmlLoader
 import org.mozilla.tv.firefox.utils.URLs
 
@@ -29,7 +30,7 @@ object LocalizedContent {
         var aboutVersion = ""
         try {
             val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-            aboutVersion = String.format("%s", packageInfo.versionName)
+            aboutVersion = String.format("%s (Build #%s)", packageInfo.versionName, BuildConstants.getEngineVersion(context))
         } catch (e: PackageManager.NameNotFoundException) {
             // Nothing to do if we can't find the package name.
         }
