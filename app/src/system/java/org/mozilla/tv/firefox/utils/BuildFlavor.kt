@@ -5,6 +5,7 @@
 
 package org.mozilla.tv.firefox.utils
 
+import mozilla.components.concept.engine.request.RequestInterceptor
 import org.mozilla.tv.firefox.BuildConfig
 
 /**
@@ -19,5 +20,9 @@ class BuildFlavor {
         }
 
         return null
+    }
+
+    fun getInterceptionResponseContent(localizedContent: String): RequestInterceptor.InterceptionResponse.Content {
+        return RequestInterceptor.InterceptionResponse.Content(localizedContent)
     }
 }
