@@ -5,6 +5,8 @@
 
 package org.mozilla.tv.firefox.utils
 
+import android.content.Context
+import android.webkit.WebSettings
 import mozilla.components.concept.engine.request.RequestInterceptor
 import org.mozilla.tv.firefox.BuildConfig
 
@@ -20,6 +22,19 @@ class BuildFlavor {
         }
 
         return null
+    }
+
+    fun getEngineVersion(context: Context): String {
+        val userAgent = WebSettings.getDefaultUserAgent(context)
+        val regex = "Chrome[^\\s]+".toRegex()
+        val chromePrefixIndex = 7
+        var chromeVersion = ""
+
+        regex.find(userAgent)?.let {
+            chromeVersion = it.value.substring(chromePrefixIndex)
+        }
+
+        return chromeVersion
     }
 
     fun getInterceptionResponseContent(localizedContent: String): RequestInterceptor.InterceptionResponse.Content {
