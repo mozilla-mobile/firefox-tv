@@ -8,6 +8,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import android.graphics.PointF
 import android.view.KeyEvent
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
@@ -58,7 +60,7 @@ class CursorViewModelTest {
     private lateinit var isVoiceViewEnabled: MutableLiveData<Boolean>
 
     private lateinit var screenController: ScreenController
-    private lateinit var activeScreen: MutableLiveData<ActiveScreen>
+    private lateinit var activeScreen: Subject<ActiveScreen>
 
     private lateinit var sessionRepo: SessionRepo
     private lateinit var sessionState: MutableLiveData<SessionRepo.State>
@@ -71,7 +73,7 @@ class CursorViewModelTest {
         }
 
         screenController = mock(ScreenController::class.java).also {
-            activeScreen = MutableLiveData()
+            activeScreen = PublishSubject.create()
             `when`(it.currentActiveScreen).thenReturn(activeScreen)
         }
 
@@ -95,11 +97,11 @@ class CursorViewModelTest {
         viewModel.isEnabled.assertValueForEmissionCount(false, emittedEventCount) {
             isVoiceViewEnabled.value = true
 
-            activeScreen.value = initialScreen
+            activeScreen.onNext(initialScreen)
             sessionState.value = newStateWithUrl(initialUrl)
 
             // Now that initial value is set, iterate over remaining states. Ideally this would be all permutations.
-            restScreens.forEach { activeScreen.value = it }
+            restScreens.forEach { activeScreen.onNext(it) }
             restUrls.forEach { sessionState.value = newStateWithUrl(it) }
         }
     }
@@ -114,11 +116,11 @@ class CursorViewModelTest {
         viewModel.isEnabled.assertValueForEmissionCount(false, emittedEventCount) {
             sessionState.value = newStateWithUrl("https://youtube.com/tv/")
 
-            activeScreen.value = initialScreen
+            activeScreen.onNext(initialScreen)
             isVoiceViewEnabled.value = false
 
             // Now that initial value is set, iterate over remaining states. Ideally this would be all permutations.
-            restScreens.forEach { activeScreen.value = it }
+            restScreens.forEach { activeScreen.onNext(it) }
             isVoiceViewEnabled.value = true
         }
     }
@@ -136,10 +138,10 @@ class CursorViewModelTest {
         viewModel.isEnabled.assertValueForEmissionCount(false, emittedEventCount) {
             isVoiceViewEnabled.value = false
             sessionState.value = newStateWithUrl(initialUrl)
-            activeScreen.value = initialScreen
+            activeScreen.onNext(initialScreen)
 
             // Now that initial value is set, iterate over remaining states. Ideally this would be all permutations.
-            restScreens.forEach { activeScreen.value = it }
+            restScreens.forEach { activeScreen.onNext(it) }
             restUrls.forEach { sessionState.value = newStateWithUrl(it) }
             isVoiceViewEnabled.value = true
         }
@@ -156,7 +158,7 @@ class CursorViewModelTest {
 
         viewModel.isEnabled.assertValueForEmissionCount(true, emittedEventCount) {
             isVoiceViewEnabled.value = false
-            activeScreen.value = WEB_RENDER
+            activeScreen.onNext(WEB_RENDER)
             sessionState.value = newStateWithUrl(initialUrl)
 
             // Now that initial value is set, iterate over remaining states.

@@ -13,6 +13,8 @@ import androidx.annotation.VisibleForTesting
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.ViewConfiguration
+import androidx.lifecycle.LiveDataReactiveStreams
+import io.reactivex.BackpressureStrategy
 import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
@@ -43,6 +45,8 @@ class CursorViewModel(
     private val _touchSimulationLiveData = MutableLiveData<Consumable<MotionEvent>>()
     val touchSimulationLiveData: LiveData<Consumable<MotionEvent>> = _touchSimulationLiveData
     private var prevDownMotionEvent: MotionEvent? = null
+    private val currentActiveScreen = LiveDataReactiveStreams
+            .fromPublisher(screenController.currentActiveScreen.toFlowable(BackpressureStrategy.LATEST))
 
     private val isConfigurationWithOwnNavControls: LiveData<Boolean> = LiveDataCombiners.combineLatest(
         frameworkRepo.isVoiceViewEnabled,
@@ -55,7 +59,7 @@ class CursorViewModel(
     // TODO: this complexly combines 3 streams by calling combineLatest twice: consider using a library instead #1783
     val isEnabled: LiveData<Boolean> = LiveDataCombiners.combineLatest(
         isConfigurationWithOwnNavControls,
-        screenController.currentActiveScreen
+        currentActiveScreen
     ) { isConfigurationWithOwnNavControls, activeScreen ->
         val isWebRenderActive = activeScreen == WEB_RENDER
         isWebRenderActive && !isConfigurationWithOwnNavControls
