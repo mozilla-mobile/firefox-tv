@@ -24,11 +24,7 @@ import org.robolectric.RobolectricTestRunner
 class CustomContentRequestInterceptorTest {
     @Before
     fun setup() {
-        // This is setting a internal field just for testing purposes as
-        // WebSettings.getDefaultUserAgent isn't mocked by Roboelectric
-        val defaultUserAgentField = SystemEngine::class.java.getDeclaredField("defaultUserAgent")
-        defaultUserAgentField.isAccessible = true
-        defaultUserAgentField.set(null, "test-ua-string")
+        SystemEngine.defaultUserAgent = "test-ua-string"
     }
 
     @Test
