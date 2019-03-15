@@ -31,9 +31,7 @@ class BuildFlavor {
         var chromeVersion = ""
 
         userAgent?.apply {
-            regex.find(this)?.let {
-                chromeVersion = it.value.substring(chromePrefixIndex)
-            }
+            chromeVersion= regex.find(this)?.value?.substring(chromePrefixIndex) ?: ""
         }
 
         return chromeVersion
