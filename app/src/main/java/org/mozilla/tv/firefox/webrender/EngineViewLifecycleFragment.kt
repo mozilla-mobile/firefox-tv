@@ -6,9 +6,11 @@
 package org.mozilla.tv.firefox.webrender
 
 import android.os.Bundle
-import androidx.annotation.UiThread
 import android.view.View
 import android.webkit.WebView
+import androidx.annotation.UiThread
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.components.locale.LocaleAwareFragment
@@ -30,6 +32,9 @@ import java.util.Locale
  * tried in PR #428.
  */
 abstract class EngineViewLifecycleFragment : LocaleAwareFragment() {
+
+    private val compositeDisposable = CompositeDisposable()
+
     /**
      * The [EngineView] in use by this fragment. If the value is non-null, the EngineView is present
      * in the view hierarchy, null otherwise.
@@ -38,18 +43,12 @@ abstract class EngineViewLifecycleFragment : LocaleAwareFragment() {
         @UiThread get // On a background thread, it may have been removed from the view hierarchy.
         private set
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        engineView = (view.findViewById<View>(R.id.engineView) as EngineView).apply {
-            onEngineViewCreated(this)
-        }
-    }
-
-    open fun onEngineViewCreated(engineView: EngineView) = Unit
+    abstract fun onEngineViewCreated(engineView: EngineView): Disposable?
 
     override fun onStop() {
         super.onStop()
+
+        compositeDisposable.clear()
 
         // NB: onStop unexpectedly calls onPause: see below.
         //
@@ -70,8 +69,14 @@ abstract class EngineViewLifecycleFragment : LocaleAwareFragment() {
     override fun onStart() {
         super.onStart()
 
-        // NB: onStart unexpectedly calls onResume: see onStop for details.
-        engineView!!.onResumeIfNotNull()
+        // TODO update this commit message to explain why moving this out of onViewCreated is a good idea (and how i verified it's safe)
+        engineView = (view!!.findViewById<View>(R.id.engineView) as EngineView).apply {
+            val disposable = onEngineViewCreated(this)
+            disposable?.let { compositeDisposable.add(it) }
+
+            // NB: onStart unexpectedly calls onResume: see onStop for details.
+            onResumeIfNotNull()
+        }
     }
 
     override fun applyLocale() {
