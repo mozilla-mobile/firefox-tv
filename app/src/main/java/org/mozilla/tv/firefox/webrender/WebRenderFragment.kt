@@ -33,6 +33,7 @@ import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
 import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.forceExhaustive
+import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.pauseAllVideoPlaybacks
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.resetView
@@ -71,11 +72,10 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     var cursor: CursorController? = null
         @UiThread get set // Set from the UI thread so serial access is required for simplicity.
 
-//    // Cache the overlay visibility state to persist in fragment back stack
-//    private var overlayVisibleCached: Int? = null
-
     var sessionFeature: SessionFeature? = null
-    private val youtubeBackHandler by lazy { YouTubeBackHandler(engineView, activity as MainActivity) }
+    // If YouTubeBackHandler is instantiated without an EngineView, YouTube won't
+    // work properly, so we !!
+    private val youtubeBackHandler by lazy { YouTubeBackHandler(engineView!!, activity as MainActivity) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -172,8 +172,9 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         sessionFeature?.start()
         serviceLocator!!.sessionRepo.events.subscribe {
             when (it) {
-                SessionRepo.Event.YouTubeBack -> youtubeBackHandler.handleBackClick()
+                SessionRepo.Event.YouTubeBack -> youtubeBackHandler.onBackPressed()
                 SessionRepo.Event.ExitYouTube -> youtubeBackHandler.goBackBeforeYouTube()
+                // Rx will never emit a null, but the compiler doesn't believe me
                 null -> return@subscribe
             }.forceExhaustive
         }.addTo(compositeDisposable)

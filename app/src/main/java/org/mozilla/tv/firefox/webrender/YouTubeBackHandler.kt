@@ -25,11 +25,11 @@ import org.mozilla.tv.firefox.ext.isUriYouTubeTV
  * Else:
  * - Dispatch ESC key event
  */
-class YouTubeBackHandler(private val engineView: EngineView?, private val activity: MainActivity) {
+class YouTubeBackHandler(private val engineView: EngineView, private val activity: MainActivity) {
     private val preYouTubeIndexHistory: MutableList<Int> = mutableListOf()
     private var currentPreYouTubeIndex: Int? = null
 
-    fun handleBackClick() {
+    fun onBackPressed() {
         val backOrMoveFocus = ValueCallback<String> { shouldExitPage ->
             if (shouldExitPage == "true") {
                 goBackBeforeYouTube()
@@ -40,14 +40,14 @@ class YouTubeBackHandler(private val engineView: EngineView?, private val activi
             }
         }
 
-        engineView?.checkYoutubeBack(backOrMoveFocus)
+        engineView.checkYoutubeBack(backOrMoveFocus)
     }
 
     fun onUrlChanged(url: String) {
         if (!url.isUriYouTubeTV) currentPreYouTubeIndex = null
         else if (currentPreYouTubeIndex == null) {
             // Store the current (pre-YouTube) backForwardIndex when the URL first changes to YouTube
-            currentPreYouTubeIndex = engineView!!.backForwardList.currentIndex
+            currentPreYouTubeIndex = engineView.backForwardList.currentIndex
         }
     }
 
@@ -61,13 +61,13 @@ class YouTubeBackHandler(private val engineView: EngineView?, private val activi
         // Don't store anything if we aren't navigating to YouTube
         val preYouTubeIndex = currentPreYouTubeIndex ?: return
 
-        val navigationWasForward = preYouTubeIndex < engineView!!.backForwardList.currentIndex
+        val navigationWasForward = preYouTubeIndex < engineView.backForwardList.currentIndex
         if (navigationWasForward) {
             preYouTubeIndexHistory.add(preYouTubeIndex)
         }
     }
 
-    fun goBackBeforeYouTube() = engineView!!.handleYoutubeBack(getIndexToGoBackTo())
+    fun goBackBeforeYouTube() = engineView.handleYoutubeBack(getIndexToGoBackTo())
 
     private fun getIndexToGoBackTo(): Int {
         return if (preYouTubeIndexHistory.isEmpty()) 0
