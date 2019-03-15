@@ -26,12 +26,14 @@ class BuildFlavor {
 
     fun getEngineVersion(context: Context): String {
         val userAgent = context.webRenderComponents.engine.settings.userAgentString
+        // Fetch chromium version from user agent with regex (match Chrome + its predecessor
+        // and end when one or more space) (i.e. "Chrome/{Version} {s}"
         val regex = "Chrome[^\\s]+".toRegex()
         val chromePrefixIndex = 7
         var chromeVersion = ""
 
         userAgent?.apply {
-            chromeVersion= regex.find(this)?.value?.substring(chromePrefixIndex) ?: ""
+            chromeVersion = regex.find(this)?.value?.substring(chromePrefixIndex) ?: ""
         }
 
         return chromeVersion
