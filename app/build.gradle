@@ -161,6 +161,9 @@ dependencies {
 
     implementation "androidx.lifecycle:lifecycle-extensions:$architecture_components_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$architecture_components_version"
+    // TODO lifecycle-reactivestreams bridges between LiveData and Rx. Remove it
+    // when we fully migrate off of LiveData
+    implementation "androidx.lifecycle:lifecycle-reactivestreams:$architecture_components_version"
     testImplementation "androidx.arch.core:core-testing:$architecture_components_version"
 
     testImplementation "androidx.test.ext:junit:$junit"
