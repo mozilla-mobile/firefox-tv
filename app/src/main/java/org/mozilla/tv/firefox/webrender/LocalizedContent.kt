@@ -30,7 +30,9 @@ object LocalizedContent {
         var aboutVersion = ""
         try {
             val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
-            aboutVersion = String.format("%s (Build #%s)", packageInfo.versionName, BuildConstants.getEngineVersion(context))
+            val versionName = packageInfo.versionName
+            val engineVersion = BuildConstants.getEngineVersion(context)
+            aboutVersion = "$versionName (Build #$engineVersion)"
         } catch (e: PackageManager.NameNotFoundException) {
             // Nothing to do if we can't find the package name.
         }
