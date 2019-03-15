@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.engine
 
 import androidx.test.core.app.ApplicationProvider
+import mozilla.components.browser.engine.system.SystemEngine
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.request.RequestInterceptor
 import org.junit.Assert.assertEquals
@@ -12,6 +13,7 @@ import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
@@ -20,6 +22,15 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class CustomContentRequestInterceptorTest {
+    @Before
+    fun setup() {
+        // This is setting a internal field just for testing purposes as
+        // WebSettings.getDefaultUserAgent isn't mocked by Roboelectric
+        val defaultUserAgentField = SystemEngine::class.java.getDeclaredField("defaultUserAgent")
+        defaultUserAgentField.isAccessible = true
+        defaultUserAgentField.set(null, "test-ua-string")
+    }
+
     @Test
     fun `Interceptor should return content for firefox-home`() {
         val result = testInterceptor("firefox:home")
