@@ -13,9 +13,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.annotation.UiThread
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_browser.view.browserFragmentRoot
 import kotlinx.android.synthetic.main.fragment_browser.view.cursorView
@@ -146,7 +146,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         return layout
     }
 
-    override fun onEngineViewCreated(engineView: EngineView) {
+    override fun onEngineViewCreated(engineView: EngineView): Disposable? {
         // The SessionFeature implementation will take care of making sure that we always render the currently selected
         // session in our engine view.
         sessionFeature = SessionFeature(
@@ -154,7 +154,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             requireWebRenderComponents.sessionUseCases,
             engineView)
 
-        serviceLocator?.screenController?.currentActiveScreen?.observe(viewLifecycleOwner, Observer {
+        return serviceLocator?.screenController?.currentActiveScreen?.subscribe {
             if (it == ActiveScreen.WEB_RENDER) {
                 // Cache focused DOM element just before WebView gains focus. See comment in
                 // FocusedDOMElementCacheInterface for details
@@ -164,7 +164,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 // memory leak while clearing data. See [WebViewCache.clear] as well as #1720
                 engineView.pauseAllVideoPlaybacks()
             }
-        })
+        }
     }
 
     override fun onStart() {
