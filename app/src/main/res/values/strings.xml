@@ -173,4 +173,12 @@
      %1$s will be replaced with the Firefox brand name. -->
     <string name="exit_firefox_a11y">Exit %1$s</string>
 
+    <!-- Hint Strings -->
+    <!-- TODO THESE ARE PLACEHOLDERS. UPDATE BEFORE MERGING!!! -->
+    <string name="hint_press_menu_to_close_overlay">CLOSE OVERLAY</string>
+    <string name="hint_press_menu_to_open_overlay">OPEN OVERLAY</string>
+
+    <!-- Hardware Button Icon A11y -->
+    <string name="hardware_button_a11y_menu">MENU BUTTON CONTENT DESCRIPTION</string>
+
 </resources>
