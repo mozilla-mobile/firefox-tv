@@ -39,7 +39,8 @@ class ToolbarViewModelTest {
     fun setup() {
         sessionRepo = spy(mock(SessionRepo::class.java))
         sessionState = MutableLiveData()
-        `when`(sessionRepo.state).thenReturn(sessionState)
+        @Suppress("DEPRECATION")
+        `when`(sessionRepo.legacyState).thenReturn(sessionState)
         pinnedTileRepo = spy(mock(PinnedTileRepo::class.java))
         pinnedTiles = MutableLiveData()
         `when`(pinnedTileRepo.getPinnedTiles()).thenReturn(pinnedTiles)

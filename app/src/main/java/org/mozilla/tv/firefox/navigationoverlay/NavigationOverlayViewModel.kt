@@ -11,7 +11,8 @@ import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.URLs
 
 class NavigationOverlayViewModel(sessionRepo: SessionRepo) : ViewModel() {
-    val viewIsSplit: LiveData<Boolean> = sessionRepo.state.map {
+    @Suppress("DEPRECATION")
+    val viewIsSplit: LiveData<Boolean> = sessionRepo.legacyState.map {
         it.currentUrl != URLs.APP_URL_HOME
     }
 }

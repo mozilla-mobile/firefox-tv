@@ -79,7 +79,8 @@ class CursorViewModelTest {
 
         sessionRepo = mock(SessionRepo::class.java).also {
             sessionState = MutableLiveData()
-            `when`(it.state).thenReturn(sessionState)
+            @Suppress("DEPRECATION")
+            `when`(it.legacyState).thenReturn(sessionState)
         }
 
         viewModel = CursorViewModel(frameworkRepo, screenController, sessionRepo)

@@ -7,15 +7,16 @@ package org.mozilla.tv.firefox.session
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.annotation.AnyThread
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveDataReactiveStreams
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import mozilla.components.browser.session.Session
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.feature.session.SessionUseCases
 import org.mozilla.tv.firefox.ext.isYoutubeTV
-import org.mozilla.tv.firefox.ext.postIfNew
 import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.TurboMode
@@ -42,8 +43,11 @@ class SessionRepo(
         YouTubeBack, ExitYouTube
     }
 
-    private val _state = MutableLiveData<State>()
-    val state: LiveData<State> = _state
+    private val _state: BehaviorSubject<State> = BehaviorSubject.create()
+    val state: Observable<State> = _state.hide()
+    @Deprecated(message = "Use SessionRepo.state for new code")
+    val legacyState = LiveDataReactiveStreams
+            .fromPublisher(state.toFlowable(BackpressureStrategy.LATEST))
 
     private val _events: Subject<Event> = PublishSubject.create()
     val events = _events.hide()
@@ -76,6 +80,10 @@ class SessionRepo(
                 }
             }
 
+            fun <T> BehaviorSubject<T>.onNextIfNew(value: T) {
+                if (this.value != value) this.onNext(value)
+            }
+
             causeSideEffects()
 
             val newState = State(
@@ -86,7 +94,7 @@ class SessionRepo(
                 turboModeActive = turboMode.isEnabled,
                 currentUrl = session.url
             )
-            _state.postIfNew(newState)
+            _state.onNextIfNew(newState)
         }
     }
 
@@ -132,7 +140,8 @@ class SessionRepo(
      * Causes [state] to emit its most recently pushed value. This can be used
      * to reset UI that has been adjusted by the user (e.g., EditText text)
      */
-    fun pushCurrentValue() = _state.postValue(_state.value)
+    fun pushCurrentValue() = _state.onNext(_state.value!!) // TODO does this do anything? If not,
+    // we can have state.distinctUntilChanged and get rid of postIfNew
 
     fun loadURL(url: Uri) = session?.let { sessionManager.getEngineSession(it)?.loadUrl(url.toString()) }
 
