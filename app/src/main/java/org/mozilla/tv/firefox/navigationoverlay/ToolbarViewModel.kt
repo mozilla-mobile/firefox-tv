@@ -50,8 +50,9 @@ class ToolbarViewModel(
     // We use events in order to decouple the ViewModel from holding a reference to a context
     val events: LiveData<Consumable<Action>> = _events
 
+    @Suppress("DEPRECATION")
     val state: LiveData<ToolbarViewModel.State> =
-        LiveDataCombiners.combineLatest(sessionRepo.state, pinnedTileRepo.getPinnedTiles()) { sessionState, pinnedTiles ->
+        LiveDataCombiners.combineLatest(sessionRepo.legacyState, pinnedTileRepo.getPinnedTiles()) { sessionState, pinnedTiles ->
 
             fun isCurrentURLPinned() = pinnedTiles.containsKey(sessionState.currentUrl)
 
@@ -90,7 +91,8 @@ class ToolbarViewModel(
     @UiThread
     fun pinButtonClicked() {
         val pinChecked = state.value?.pinChecked ?: return
-        val url = sessionRepo.state.value?.currentUrl ?: return
+        @Suppress("DEPRECATION")
+        val url = sessionRepo.legacyState.value?.currentUrl ?: return
 
         sendOverlayClickTelemetry(NavigationEvent.PIN_ACTION, pinChecked = !pinChecked)
 
@@ -105,9 +107,10 @@ class ToolbarViewModel(
     }
 
     @UiThread
+    @Suppress("DEPRECATION")
     fun turboButtonClicked() {
-        val currentUrl = sessionRepo.state.value?.currentUrl
-        val turboModeActive = sessionRepo.state.value?.turboModeActive ?: true
+        val currentUrl = sessionRepo.legacyState.value?.currentUrl
+        val turboModeActive = sessionRepo.legacyState.value?.turboModeActive ?: true
 
         sessionRepo.setTurboModeEnabled(!turboModeActive)
         sessionRepo.reload()

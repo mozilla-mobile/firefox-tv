@@ -48,9 +48,10 @@ class CursorViewModel(
     private val currentActiveScreen = LiveDataReactiveStreams
             .fromPublisher(screenController.currentActiveScreen.toFlowable(BackpressureStrategy.LATEST))
 
+    @Suppress("DEPRECATION")
     private val isConfigurationWithOwnNavControls: LiveData<Boolean> = LiveDataCombiners.combineLatest(
         frameworkRepo.isVoiceViewEnabled,
-        sessionRepo.state
+        sessionRepo.legacyState
     ) { isVoiceViewEnabled, sessionState ->
         val isYouTubeTV = sessionState.currentUrl.isUriYouTubeTV
         isYouTubeTV || isVoiceViewEnabled
