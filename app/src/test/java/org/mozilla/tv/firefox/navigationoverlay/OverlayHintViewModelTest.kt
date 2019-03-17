@@ -58,7 +58,7 @@ class OverlayHintViewModelTest {
     @Test
     fun `WHEN always THEN hint should be close menu`() {
         // TODO update this when we have the real strings
-        val expectedHints = listOf(Hint("CLOSE OVERLAY", R.drawable.hardware_remote_menu))
+        val expectedHints = listOf(Hint(R.string.hint_press_menu_to_close_overlay, R.drawable.hardware_remote_menu))
         val hints = hintVM.hints.test()
 
         sessionRepoState.onNext(fakeSessionState("https://www.mozilla.org"))
