@@ -5,11 +5,16 @@
 package org.mozilla.tv.firefox
 
 import android.app.Application
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import androidx.test.runner.AndroidJUnitRunner
+import androidx.test.runner.lifecycle.ActivityLifecycleCallback
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import kotlin.reflect.full.companionObjectInstance
+import android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
+import androidx.test.runner.lifecycle.Stage
 
 class FirefoxTestRunner : AndroidJUnitRunner() {
 
@@ -40,6 +45,14 @@ class FirefoxTestRunner : AndroidJUnitRunner() {
         fakeServiceLocator.swapIfNotNull()
 
         super.onCreate(arguments)
+
+        ActivityLifecycleMonitorRegistry.getInstance().addLifecycleCallback(object : ActivityLifecycleCallback {
+            override fun onActivityLifecycleChanged(activity: Activity, stage: Stage) {
+                if (stage === Stage.PRE_ON_CREATE) {
+                    activity.window.addFlags( FLAG_KEEP_SCREEN_ON)
+                }
+            }
+        })
     }
 }
 
