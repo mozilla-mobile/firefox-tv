@@ -28,7 +28,8 @@ class BasicNavigationTest {
 
     /* ktlint-disable no-blank-line-before-rbrace */ // This imposes unreadable grouping.
     @Test
-    @Ignore
+    // Re-enabling because we run tests on BitBar now instead of the emulator
+    //
     // This test verifies (among other things) that the URL bar is filled with the page title after opening a URL.
     //
     // On emulators, the URL bar shows various assets instead of page titles (#1444) whenever Turbo mode is enabled.
