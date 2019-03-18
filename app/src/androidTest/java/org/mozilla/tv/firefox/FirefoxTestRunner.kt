@@ -13,8 +13,8 @@ import androidx.test.runner.lifecycle.ActivityLifecycleCallback
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import kotlin.reflect.full.companionObjectInstance
 import android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-import android.support.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
-import android.support.test.runner.lifecycle.Stage
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
+import androidx.test.runner.lifecycle.Stage
 
 
 class FirefoxTestRunner : AndroidJUnitRunner() {

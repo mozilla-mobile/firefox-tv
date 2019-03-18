@@ -54,7 +54,9 @@ class NavigationOverlayRobot {
     }
     fun assertCanGoForward(canGoForward: Boolean) = forwardButton().assertIsEnabled(canGoForward)
     fun assertCanGoBackForward(canGoBack: Boolean, canGoForward: Boolean) {
-        assertCanGoBack(canGoBack)
+        //assertCanGoBack(canGoBack)
+	    device.wait(Until.findObject(By.res(R.id.navUrlInput.toString())), 5000)
+	    backButton().assertIsEnabled(canGoBack)
         assertCanGoForward(canGoForward)
     }
 
