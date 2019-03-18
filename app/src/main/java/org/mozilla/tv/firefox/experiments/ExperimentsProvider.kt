@@ -51,13 +51,17 @@ class ExperimentsProvider(private val fretboard: Fretboard, private val context:
      * Return null otherwise
      */
     private fun checkBranchVariants(expConfig: ExperimentConfig): ExperimentDescriptor? {
-        var expDescriptor: ExperimentDescriptor? = null
+        var expDescriptor: ExperimentDescriptor?
 
         for (suffix in ExperimentSuffix.values()) {
             expDescriptor = ExperimentDescriptor(expConfig.value + ":" + suffix.name)
-            if (fretboard.isInExperiment(context, expDescriptor)) break
+            if (fretboard.isInExperiment(context, expDescriptor)) {
+                // Correct experiment variant is found
+                return expDescriptor
+            }
         }
 
-        return expDescriptor
+        // No matching experiment, so return null
+        return null
     }
 }
