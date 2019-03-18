@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import androidx.annotation.VisibleForTesting
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.geckoview.GeckoView
+import org.mozilla.geckoview.ScreenLength
 import org.mozilla.tv.firefox.ext.Js.CACHE_JS
 import org.mozilla.tv.firefox.ext.Js.BODY_ELEMENT_FOCUSED
 import org.mozilla.tv.firefox.ext.Js.JS_OBSERVE_PLAYBACK_STATE
@@ -156,20 +157,13 @@ fun EngineView.removeJavascriptInterface(interfaceName: String) {
     println("TODO: require media interface from platform team $interfaceName")
 }
 
+@Synchronized
 fun EngineView.scrollByClamped(vx: Int, vy: Int) {
     geckoView?.apply {
-        fun clampScroll(scroll: Int, canScroll: (direction: Int) -> Boolean) = if (scroll != 0 && canScroll(scroll)) {
-            scroll
-        } else {
-            0
-        }
+        val screenLengthX = ScreenLength.fromPixels((vx * 17).toDouble())
+        val screenLengthY = ScreenLength.fromPixels((vy * 17).toDouble())
 
-        // This is not a true clamp: it can only stop us from
-        // continuing to scroll if we've already overscrolled.
-        val scrollX = clampScroll(vx) { canScrollHorizontally(it) }
-        val scrollY = clampScroll(vy) { canScrollVertically(it) }
-
-        scrollBy(scrollX, scrollY)
+        panZoomController.scrollBy(screenLengthX, screenLengthY)
     }
 }
 
