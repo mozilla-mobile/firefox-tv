@@ -39,6 +39,7 @@ class ExperimentsProvider(private val fretboard: Fretboard, private val context:
             }
         } else {
             // The user is currently not part of the experiment
+            Sentry.capture(NotInExperimentException("AAExperiment"))
             context.resources.getString(R.string.exit_firefox_a11y,
                 context.resources.getString(R.string.firefox_tv_brand_name_short))
         }
