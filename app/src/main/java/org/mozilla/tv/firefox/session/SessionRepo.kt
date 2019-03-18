@@ -36,7 +36,8 @@ class SessionRepo(
         val forwardEnabled: Boolean,
         val desktopModeActive: Boolean,
         val turboModeActive: Boolean,
-        val currentUrl: String
+        val currentUrl: String,
+        val loading: Boolean
     )
 
     enum class Event {
@@ -92,7 +93,8 @@ class SessionRepo(
                 forwardEnabled = session.canGoForward,
                 desktopModeActive = session.desktopMode,
                 turboModeActive = turboMode.isEnabled,
-                currentUrl = session.url
+                currentUrl = session.url,
+                loading = session.loading
             )
             _state.onNextIfNew(newState)
         }
