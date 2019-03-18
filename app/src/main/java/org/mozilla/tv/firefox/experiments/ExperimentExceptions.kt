@@ -11,3 +11,11 @@ package org.mozilla.tv.firefox.experiments
  * considered an illegal experiment state
  */
 open class ExperimentIllegalStateException(message: String) : IllegalStateException(message)
+
+/**
+ * [NotInExperimentException] is for logging users that are currently not part of an
+ * Experiment
+ *
+ * @param name: Name of the experiment
+ */
+open class NotInExperimentException(name: String) : Exception(name)
