@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?><!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hintBarContainer"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:layout_gravity="bottom"
+    android:background="@color/hint_bar_background"
+    android:orientation="horizontal"
+    android:paddingStart="48dp"
+    android:paddingTop="16dp"
+    android:paddingEnd="48dp"
+    android:paddingBottom="32dp"
+    android:visibility="gone">
+
+    <!-- This will eventually contain multiple hints, but probably never more than two or three
+    at a time. It will also never scroll. For these reasons, and to simplify implementation, a
+    static layout is used rather than a RecyclerView -->
+
+    <!-- Content descriptions are set programmatically -->
+    <ImageView
+        android:id="@+id/hintBarIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/hintBarText"
+        style="@style/HintText"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

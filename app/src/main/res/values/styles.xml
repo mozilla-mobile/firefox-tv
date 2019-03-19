@@ -73,4 +73,9 @@
         <item name="android:paddingEnd">10dp</item>
     </style>
 
+    <style name="HintText">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/photonGrey10_a80p</item>
+    </style>
+
 </resources>

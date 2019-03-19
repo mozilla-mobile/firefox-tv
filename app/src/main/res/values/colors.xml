@@ -18,6 +18,7 @@
     <color name="onboarding_button_higlight_stroke">@color/photonBlue50</color>
 
     <color name="browser_overlay_background">@color/photonGrey70</color>
+    <color name="hint_bar_background">#0C0C0D</color>
 
     <color name="pocket_onboarding_background">#e60c0c0d</color>
 
