@@ -31,6 +31,8 @@
                     <requestFocus />
             </mozilla.components.concept.engine.EngineView>
 
+            <include layout="@layout/hint_bar"/>
+
         </org.mozilla.tv.firefox.widget.ResizableKeyboardCoordinatorLayout>
     </LinearLayout>
 

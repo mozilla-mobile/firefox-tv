@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_browser.view.browserFragmentRoot
 import kotlinx.android.synthetic.main.fragment_browser.view.cursorView
 import kotlinx.android.synthetic.main.fragment_browser.view.engineView
 import kotlinx.android.synthetic.main.fragment_browser.view.progressBar
+import kotlinx.android.synthetic.main.hint_bar.hintBarContainer
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.EngineView
@@ -32,6 +33,7 @@ import org.mozilla.tv.firefox.MediaSessionHolder
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
+import org.mozilla.tv.firefox.architecture.ViewModelFactory
 import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isYoutubeTV
@@ -40,6 +42,8 @@ import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.resetView
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.webRenderComponents
+import org.mozilla.tv.firefox.hint.HintHelper
+import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.utils.URLs
@@ -66,6 +70,8 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     private val mediaSessionHolder get() = activity as MediaSessionHolder? // null when not attached.
     private val compositeDisposable = CompositeDisposable()
 
+    private lateinit var hintViewModel: HintViewModel
+
     /**
      * Encapsulates the cursor's components. If this value is null, the Cursor is not attached
      * to the view hierarchy.
@@ -81,6 +87,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSession()
+        hintViewModel = serviceLocator!!.viewModelFactory.create(WebRenderHintViewModel::class.java)
     }
 
     @SuppressLint("RestrictedApi")
@@ -195,6 +202,8 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 null -> return@subscribe
             }.forceExhaustive
         }.addTo(compositeDisposable)
+
+        compositeDisposable.addAll(*HintHelper.observeHintVM(hintViewModel, hintBarContainer))
     }
 
     override fun onStop() {
