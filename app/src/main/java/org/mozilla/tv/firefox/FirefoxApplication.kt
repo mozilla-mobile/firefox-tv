@@ -4,6 +4,9 @@
 
 package org.mozilla.tv.firefox
 
+import android.app.ActivityManager
+import android.content.Context
+import android.os.Process
 import android.os.StrictMode
 import android.preference.PreferenceManager
 import androidx.annotation.VisibleForTesting
@@ -39,6 +42,14 @@ open class FirefoxApplication : LocaleAwareApplication() {
 
     override fun onCreate() {
         super.onCreate()
+
+        if (!isMainProcess(this)) {
+            // If this is not the main process then do not continue with the initialization here. Everything that
+            // follows only needs to be done in our app's main process and should not be done in other processes like
+            // a GeckoView child process or the crash handling process. Most importantly we never want to end up in a
+            // situation where we create a GeckoRuntime from the Gecko child process (
+            return
+        }
 
         PreferenceManager.setDefaultValues(this, R.xml.settings, false)
         serviceLocator = createServiceLocator()
@@ -89,4 +100,22 @@ open class FirefoxApplication : LocaleAwareApplication() {
         serviceLocator.sessionManager.onLowMemory()
         // If you need to dump more memory, you may be able to clear the Picasso cache.
     }
+}
+
+/**
+ * Are we running in the main process?
+ *
+ * Let's move this code to Android Components:
+ * https://github.com/mozilla-mobile/android-components/issues/2207
+ */
+private fun isMainProcess(context: Context): Boolean {
+    val pid = Process.myPid()
+    val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE)
+            as ActivityManager
+    activityManager.runningAppProcesses?.forEach { processInfo ->
+        if (processInfo.pid == pid) {
+            return processInfo.processName == context.packageName
+        }
+    }
+    return false
 }
