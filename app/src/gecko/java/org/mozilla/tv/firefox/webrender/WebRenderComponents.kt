@@ -50,6 +50,7 @@ class WebRenderComponents(applicationContext: Context, systemUserAgent: String) 
                 runtimeSettingsBuilder.extras(extras)
             }
         }
+        runtimeSettingsBuilder.autoplayDefault(GeckoRuntimeSettings.AUTOPLAY_DEFAULT_ALLOWED)
 
         val runtime = GeckoRuntime.create(applicationContext,
                 runtimeSettingsBuilder.build())
