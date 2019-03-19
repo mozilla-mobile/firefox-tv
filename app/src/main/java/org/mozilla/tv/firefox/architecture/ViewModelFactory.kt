@@ -9,11 +9,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayViewModel
+import org.mozilla.tv.firefox.navigationoverlay.OverlayHintViewModel
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.navigationoverlay.ToolbarViewModel
 import org.mozilla.tv.firefox.settings.SettingsViewModel
 import org.mozilla.tv.firefox.utils.ServiceLocator
+import org.mozilla.tv.firefox.webrender.WebRenderHintViewModel
 import org.mozilla.tv.firefox.webrender.cursor.CursorViewModel
 
 /**
@@ -58,6 +60,14 @@ class ViewModelFactory(
             ) as T
 
             NavigationOverlayViewModel::class.java -> NavigationOverlayViewModel(
+                    serviceLocator.sessionRepo
+            ) as T
+
+            OverlayHintViewModel::class.java -> OverlayHintViewModel(
+                    serviceLocator.sessionRepo
+            ) as T
+
+            WebRenderHintViewModel::class.java -> WebRenderHintViewModel(
                     serviceLocator.sessionRepo
             ) as T
 
