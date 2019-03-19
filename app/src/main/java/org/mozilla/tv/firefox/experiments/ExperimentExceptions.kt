@@ -16,6 +16,11 @@ open class ExperimentIllegalStateException(message: String) : IllegalStateExcept
  * [NotInExperimentException] is for logging users that are currently not part of an
  * Experiment
  *
+ * Our current implementation for [FretboardProvider.loadExperiments] and
+ * [FretboardProvider.updateExperiments] are not synchronized. This is causing some of the
+ * new users to be not part of an experiment (even though they should be) in the initial
+ * launch (restarting the app would have you properly sync'd up) - #1978
+ *
  * @param name: Name of the experiment
  */
 open class NotInExperimentException(name: String) : Exception(name)
