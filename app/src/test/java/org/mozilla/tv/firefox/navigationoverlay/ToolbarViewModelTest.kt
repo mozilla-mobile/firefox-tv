@@ -57,28 +57,32 @@ class ToolbarViewModelTest {
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = "www.google.com"
+                currentUrl = "www.google.com",
+                loading = false
             )
             sessionState.value = SessionRepo.State(
                 backEnabled = false,
                 forwardEnabled = true,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = "firefox:home"
+                currentUrl = "firefox:home",
+                loading = false
             )
             sessionState.value = SessionRepo.State(
                 backEnabled = false,
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = "https://www.wikipedia.org"
+                currentUrl = "https://www.wikipedia.org",
+                loading = false
             )
             sessionState.value = SessionRepo.State(
                 backEnabled = false,
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = "www.google.com"
+                currentUrl = "www.google.com",
+                loading = false
             )
         }
     }
@@ -92,21 +96,24 @@ class ToolbarViewModelTest {
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = "www.google.com"
+                currentUrl = "www.google.com",
+                loading = false
             )
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = true,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = "firefox:home"
+                currentUrl = "firefox:home",
+                loading = false
             )
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = "https://www.wikipedia.org"
+                currentUrl = "https://www.wikipedia.org",
+                loading = false
             )
         }
     }
@@ -121,21 +128,24 @@ class ToolbarViewModelTest {
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = google
+                currentUrl = google,
+                loading = false
             )
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = true,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = facebook
+                currentUrl = facebook,
+                loading = false
             )
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = wikipedia
+                currentUrl = wikipedia,
+                loading = false
             )
         }
     }
@@ -151,7 +161,8 @@ class ToolbarViewModelTest {
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
-                currentUrl = mozilla
+                currentUrl = mozilla,
+                loading = false
             )
         }
     }
