@@ -7,7 +7,6 @@ package org.mozilla.tv.firefox.ui
 import android.net.Uri
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Assert.assertNotEquals
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.mozilla.tv.firefox.helpers.AndroidAssetDispatcher
