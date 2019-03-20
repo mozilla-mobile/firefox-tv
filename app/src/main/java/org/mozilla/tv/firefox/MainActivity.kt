@@ -248,6 +248,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         // code paths consistent between the two.
         if (event.keyCode == KeyEvent.KEYCODE_BACK ||
                 event.keyCode == KeyEvent.KEYCODE_DEL) return super.dispatchKeyEvent(event)
+        serviceLocator.cursorEventRepo.pushKeyEvent(event)
+
         val fragmentManager = supportFragmentManager
 
         TelemetryIntegration.INSTANCE.saveRemoteControlInformation(applicationContext, event)

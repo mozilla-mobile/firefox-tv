@@ -25,6 +25,8 @@ private const val UPDATE_DELAY_MILLIS_F = UPDATE_DELAY_MILLIS.toFloat() // Avoid
 private const val ACCEL_MODIFIER = 0.98f
 private const val MAX_VELOCITY = 21.25f
 
+private const val EDGE_OF_SCREEN_MARGIN = 1
+
 /**
  * A model to back the Cursor view; transition to [CursorViewModel], our MVVM reimplementation. The
  * LegacyCursorViewModel existed before the MVVM rearchitecture.
@@ -174,6 +176,10 @@ class LegacyCursorViewModel(
         updateLoop = null
         vel = 0f // Stop moving.
     }
+
+    fun cursorIsNearTopOfScreen() = pos.y < EDGE_OF_SCREEN_MARGIN
+
+    fun cursorIsNearBottomOfScreen() = pos.y > maxBounds.y - EDGE_OF_SCREEN_MARGIN
 }
 
 private fun clampPos(pos: PointF, maxBounds: PointF) {

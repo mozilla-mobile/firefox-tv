@@ -4,14 +4,16 @@
 
 package org.mozilla.tv.firefox.webrender.cursor
 
+import android.graphics.PointF
+import android.view.KeyEvent
+import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
 import androidx.lifecycle.OnLifecycleEvent
-import android.graphics.PointF
-import android.view.KeyEvent
-import android.view.View
 import kotlinx.coroutines.Job
+import org.mozilla.tv.firefox.ext.couldScrollDown
+import org.mozilla.tv.firefox.ext.couldScrollUp
 import org.mozilla.tv.firefox.ext.scrollByClamped
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 
@@ -102,6 +104,14 @@ class CursorController private constructor(
 
         webRenderFragment.engineView?.scrollByClamped(scrollX, scrollY)
     }
+
+    fun cursorIsNearTopOfScreen() = legacyViewModel.cursorIsNearTopOfScreen()
+
+    fun cursorIsNearBottomOfScreen() = legacyViewModel.cursorIsNearBottomOfScreen()
+
+    fun webViewCouldScrollUp(): Boolean? = webRenderFragment.engineView?.couldScrollUp()
+
+    fun webViewCouldScrollDown(): Boolean? = webRenderFragment.engineView?.couldScrollDown()
 
     companion object {
         fun newInstanceOnCreateView(

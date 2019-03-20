@@ -33,7 +33,6 @@ import org.mozilla.tv.firefox.MediaSessionHolder
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
-import org.mozilla.tv.firefox.architecture.ViewModelFactory
 import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isYoutubeTV
@@ -141,6 +140,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             viewModel = ViewModelProviders.of(this, viewModelFactory).get(CursorViewModel::class.java)
         ).also {
             lifecycle.addObserver(it)
+            context.serviceLocator.cursorEventRepo.setCursorController(it)
         }
 
         layout.progressBar.initialize(this)
