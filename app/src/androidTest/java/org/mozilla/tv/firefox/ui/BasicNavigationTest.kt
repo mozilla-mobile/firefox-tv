@@ -28,7 +28,7 @@ class BasicNavigationTest {
 
     /* ktlint-disable no-blank-line-before-rbrace */ // This imposes unreadable grouping.
     @Test
-    // Re-enabling because we run tests on BitBar now instead of the emulator
+    // This test fails on emulators. CI is run on physical devices on BitBar, so this is acceptable.
     //
     // This test verifies (among other things) that the URL bar is filled with the page title after opening a URL.
     //
