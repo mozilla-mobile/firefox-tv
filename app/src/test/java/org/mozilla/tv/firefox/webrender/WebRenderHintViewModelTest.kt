@@ -9,12 +9,11 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
-import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.hint.Hint
 import org.mozilla.tv.firefox.session.SessionRepo

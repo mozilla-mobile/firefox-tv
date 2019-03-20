@@ -212,6 +212,10 @@ fun EngineView.onResumeIfNotNull() {
         this.onResume()
 }
 
+fun EngineView.couldScrollUp() = geckoView?.canScrollVertically(-1) == true
+
+fun EngineView.couldScrollDown() = geckoView?.canScrollVertically(1) == true
+
 // This method is only for adding extension methods here (as a workaround). Do not expose WebView to the app.
 private val EngineView.geckoView: GeckoView?
     get() = getOrPutExtension(this).geckoView

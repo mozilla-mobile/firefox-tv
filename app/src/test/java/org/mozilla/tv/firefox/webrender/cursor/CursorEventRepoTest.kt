@@ -10,10 +10,8 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

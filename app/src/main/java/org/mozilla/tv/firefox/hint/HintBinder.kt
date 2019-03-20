@@ -5,7 +5,6 @@
 package org.mozilla.tv.firefox.hint
 
 import android.view.View
-import android.widget.Space
 import androidx.core.view.isVisible
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.hint_bar.view.hintBarContainer
@@ -17,7 +16,7 @@ import kotlinx.android.synthetic.main.hint_bar.view.hintBarText
  */
 object HintBinder {
 
-    fun bindHintsToView(vm: HintViewModel, hintContainer: View): Array<Disposable> {
+    fun bindHintsToView(vm: HintViewModel, hintContainer: View): List<Disposable> {
         val displayedDisposable = vm.isDisplayed
                 .doOnDispose { hintContainer.hintBarContainer.isVisible = false }
                 .subscribe { hintContainer.hintBarContainer.isVisible = it }
@@ -30,6 +29,6 @@ object HintBinder {
             hintContainer.hintBarText.text = context.getString(hint.text)
         }
 
-        return arrayOf(displayedDisposable, hintDisposable)
+        return listOf(displayedDisposable, hintDisposable)
     }
 }

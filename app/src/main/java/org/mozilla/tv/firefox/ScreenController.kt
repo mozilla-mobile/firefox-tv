@@ -118,7 +118,7 @@ class ScreenController(private val sessionRepo: SessionRepo) {
     fun showNavigationOverlay(fragmentManager: FragmentManager?, toShow: Boolean) {
         fragmentManager ?: return
         fragmentManagerShowNavigationOverlay(fragmentManager, toShow)
-        
+
         val currentScreen = if (toShow) ActiveScreen.NAVIGATION_OVERLAY else ActiveScreen.WEB_RENDER
         _currentActiveScreen.onNext(currentScreen)
     }

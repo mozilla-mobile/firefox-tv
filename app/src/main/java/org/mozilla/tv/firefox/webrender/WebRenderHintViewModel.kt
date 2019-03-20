@@ -19,10 +19,10 @@ import org.mozilla.tv.firefox.webrender.cursor.CursorEventRepo
 import org.mozilla.tv.firefox.webrender.cursor.CursorEventRepo.CursorEvent.CursorMoved
 import org.mozilla.tv.firefox.webrender.cursor.CursorEventRepo.CursorEvent.ScrolledToEdge
 
-private val OPEN_MENU_HINT =  Hint(
-        R.string.hint_press_menu_to_open_overlay,
-        R.string.hardware_button_a11y_menu,
-        R.drawable.hardware_remote_menu
+private val OPEN_MENU_HINT = Hint(
+    R.string.hint_press_menu_to_open_overlay,
+    R.string.hardware_button_a11y_menu,
+    R.drawable.hardware_remote_menu
 )
 
 /**
@@ -31,9 +31,9 @@ private val OPEN_MENU_HINT =  Hint(
  * See comment on [OverlayHintViewModel] for why this is split into two classes.
  */
 class WebRenderHintViewModel(
-        sessionRepo: SessionRepo,
-        cursorEventRepo: CursorEventRepo,
-        screenController: ScreenController
+    sessionRepo: SessionRepo,
+    cursorEventRepo: CursorEventRepo,
+    screenController: ScreenController
 ) : ViewModel(), HintViewModel {
 
     override val isDisplayed by lazy {
