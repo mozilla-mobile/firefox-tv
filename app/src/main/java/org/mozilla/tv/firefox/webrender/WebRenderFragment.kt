@@ -41,7 +41,7 @@ import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.resetView
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.webRenderComponents
-import org.mozilla.tv.firefox.hint.HintHelper
+import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
@@ -203,7 +203,8 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             }.forceExhaustive
         }.addTo(compositeDisposable)
 
-        compositeDisposable.addAll(*HintHelper.observeHintVM(hintViewModel, hintBarContainer))
+        HintBinder.bindHintsToView(hintViewModel, hintBarContainer)
+                .forEach { compositeDisposable.add(it) }
     }
 
     override fun onStop() {

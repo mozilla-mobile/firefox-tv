@@ -22,11 +22,8 @@ import org.mozilla.tv.firefox.ext.Js.NO_ELEMENT_FOCUSED
 import org.mozilla.tv.firefox.ext.Js.PAUSE_VIDEO
 import org.mozilla.tv.firefox.ext.Js.RESTORE_JS
 import org.mozilla.tv.firefox.ext.Js.SIDEBAR_FOCUSED
-import org.mozilla.tv.firefox.utils.Direction
 import org.mozilla.tv.firefox.webrender.FocusedDOMElementCache
-import org.mozilla.tv.firefox.webrender.cursor.CursorEventRepo
 import java.util.WeakHashMap
-import kotlin.math.abs
 
 // Extension methods on the EngineView class. This is used for additional features that are not part
 // of the upstream browser-engine(-system) component yet.

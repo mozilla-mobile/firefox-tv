@@ -27,13 +27,21 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.*
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.navUrlInput
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.pocketVideoMegaTileView
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.tileContainer
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.exitButton
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.navButtonForward
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.navButtonReload
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.navButtonSettings
 import kotlinx.android.synthetic.main.hint_bar.hintBarContainer
-import kotlinx.android.synthetic.main.pocket_video_mega_tile.*
+import kotlinx.android.synthetic.main.pocket_video_mega_tile.megaTileTryAgainButton
+import kotlinx.android.synthetic.main.pocket_video_mega_tile.pocketErrorContainer
+import kotlinx.android.synthetic.main.pocket_video_mega_tile.pocketMegaTileLoadError
+import kotlinx.android.synthetic.main.pocket_video_mega_tile.pocketVideosContainer
 import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
@@ -83,6 +91,7 @@ enum class NavigationEvent {
     }
 }
 
+@Suppress("LargeClass")
 class NavigationOverlayFragment : Fragment() {
     companion object {
         const val FRAGMENT_TAG = "overlay"
@@ -213,7 +222,8 @@ class NavigationOverlayFragment : Fragment() {
         super.onStart()
         observePocketState()
             .addTo(compositeDisposable)
-        compositeDisposable.addAll(*HintBinder.bindHintsToView(hintViewModel, hintBarContainer))
+        HintBinder.bindHintsToView(hintViewModel, hintBarContainer)
+                .forEach { compositeDisposable.add(it) }
     }
 
     override fun onStop() {
