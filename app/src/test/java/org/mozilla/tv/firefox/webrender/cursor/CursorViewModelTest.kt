@@ -235,7 +235,7 @@ class CursorViewModelTest {
     }
 
     private fun newStateWithUrl(url: String): SessionRepo.State {
-        return SessionRepo.State(false, false, false, false, url)
+        return SessionRepo.State(false, false, false, false, url, false)
     }
 
     private fun firstAndRestScreens(): Pair<ActiveScreen, List<ActiveScreen>> {
