@@ -68,7 +68,8 @@ class ViewModelFactory(
             ) as T
 
             WebRenderHintViewModel::class.java -> WebRenderHintViewModel(
-                    serviceLocator.sessionRepo
+                    serviceLocator.sessionRepo,
+                    serviceLocator.cursorEventRepo
             ) as T
 
         // This class needs to either return a ViewModel or throw, so we have no good way of silently handling
