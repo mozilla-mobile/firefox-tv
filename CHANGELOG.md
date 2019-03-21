@@ -10,12 +10,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 ### Fixed
-- Bug where you could not use remote back button to exit YouTube if it was visited from Pocket (#1584)
-- Fixed 4K YT bug (#277)
-- Backing from the navigation overlay when on the first site in your backstack will now properly exit the app (#1916)
-- Fixed Youtube back bug (#1939)
-- Workaround for "grey screen" when returning to YouTube from Amazon homescreen (#1865)
+
+## [3.6-RO] 2019-03-26
+*Released to Fire TV 4K, staged roll-out*
+### Fixed
 - Bug that prevented the toolbar back button from working on YouTube (#1927)
+
+## 3.5-A - 2019-03-26
+*Staged rollout of 3.5, no change from v3.5-RO. Released to all devices except Fire TV 4K*
 
 ## [3.5-RO] 2019-03-12
 *Released to Fire TV 4K, staged roll-out*
@@ -37,7 +39,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Workaround for "grey screen" when returning to YouTube from Amazon homescreen (#1865)
 - Backing from the navigation overlay when on the first site in your backstack will now properly exit the app (#1916)
 
-## [3.4-B] - 2019-03-12
+## 3.4-B - 2019-03-12
 *Version bump only, no change from v3.4-A. Released to all devices except Fire TV 4K*
 
 ## [3.4-A] - 2019-02-12
@@ -205,7 +207,8 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 ## [1.0] - 2017-12-20
 *Initial release! A browser including home tile shortcuts.*
 
-[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.5-RO...HEAD
+[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.6-RO...HEAD
+[3.6-RO]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.5-RO...v3.6-RO
 [3.5-RO]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.4-A...v3.5-RO
 [3.4-A]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.3.1...v3.4-A
 [3.3.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.3...v3.3.1
