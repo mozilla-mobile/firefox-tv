@@ -14,6 +14,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/pocket_video_mega_tile_background"
+        android:focusable="true"
+        android:nextFocusDown="@+id/tabsTray"
         android:text="Add A Tab"/>
 
 
@@ -23,7 +26,9 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        android:focusable="true"
+        android:nextFocusUp="@+id/addTab">
 
     </mozilla.components.browser.tabstray.BrowserTabsTray>
 </androidx.constraintlayout.widget.ConstraintLayout>

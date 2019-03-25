@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_tabstray.*
 import mozilla.components.feature.tabs.tabstray.TabsFeature
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 
 /**
@@ -52,6 +53,11 @@ class TabsTrayFragment : Fragment() {
 
     // TODO
     private fun closeTabsTray() {}
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        FocusOnShowDelegate().onHiddenChanged(this, hidden)
+        super.onHiddenChanged(hidden)
+    }
 
     companion object {
         const val FRAGMENT_TAG = "tabs"
