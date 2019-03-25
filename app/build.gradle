@@ -144,6 +144,8 @@ dependencies {
     implementation "org.mozilla.components:ui-icons:$moz_components_version"
     implementation "org.mozilla.components:service-fretboard:$moz_components_version"
     implementation "org.mozilla.components:feature-tabs:$moz_components_version"
+    implementation "org.mozilla.components:browser-tabstray:$moz_components_version"
+    implementation "org.mozilla.components:concept-tabstray:$moz_components_version"
 
     systemImplementation "org.mozilla.components:browser-engine-system:$moz_components_version"
     // Required to override android.support lib in GeckoView dependency (uses palette-v7:26.1.0)
