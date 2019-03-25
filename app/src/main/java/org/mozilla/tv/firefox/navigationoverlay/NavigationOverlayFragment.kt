@@ -32,6 +32,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.*
 import kotlinx.coroutines.Job
+import mozilla.components.feature.tabs.tabstray.TabsFeature
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
@@ -41,6 +42,7 @@ import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isEffectivelyVisible
 import org.mozilla.tv.firefox.ext.isVisible
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
+import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.updateLayoutParams
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
@@ -95,6 +97,8 @@ class NavigationOverlayFragment : Fragment() {
     // We need this in order to show the unpin toast, at max, once per
     // instantiation of the BrowserNavigationOverlay
     private var canShowUnpinToast: Boolean = false
+
+    private var tabsFeature: TabsFeature? = null
 
     private val openHomeTileContextMenu: () -> Unit = { activity?.openContextMenu(tileContainer) }
 
@@ -203,17 +207,31 @@ class NavigationOverlayFragment : Fragment() {
         registerForContextMenu(tileContainer)
 
         updateFocusableViews()
+
+        tabsFeature = TabsFeature(
+            tabsTray,
+            requireWebRenderComponents.sessionManager,
+            requireWebRenderComponents.tabsUseCases,
+            ::closeOverlay)
+    }
+
+    private fun closeOverlay() {
+        serviceLocator.screenController.handleMenu(fragmentManager!!)
     }
 
     override fun onStart() {
         super.onStart()
         observePocketState()
             .addTo(compositeDisposable)
+
+        tabsFeature?.start()
     }
 
     override fun onStop() {
         super.onStop()
         compositeDisposable.clear()
+
+        tabsFeature?.stop()
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -373,21 +391,21 @@ class NavigationOverlayFragment : Fragment() {
             else -> R.id.navButtonForward
         }
 
-        navUrlInput.nextFocusDownId = when {
-            @Suppress("DEPRECATION")
-            lastPocketState is PocketViewModel.State.Feed -> R.id.pocketVideoMegaTileView
-            @Suppress("DEPRECATION")
-            lastPocketState === PocketViewModel.State.Error -> R.id.megaTileTryAgainButton
-            tileAdapter.itemCount == 0 -> R.id.navUrlInput
-            else -> R.id.tileContainer
-        }
-
         navUrlInput.nextFocusUpId = when {
             toolbarState?.backEnabled == true -> R.id.navButtonBack
             toolbarState?.forwardEnabled == true -> R.id.navButtonForward
             toolbarState?.refreshEnabled == true -> R.id.navButtonReload
             toolbarState?.pinEnabled == true -> R.id.pinButton
             else -> R.id.turboButton
+        }
+
+        tabsTray.nextFocusDownId = when {
+            @Suppress("DEPRECATION")
+            lastPocketState is PocketViewModel.State.Feed -> R.id.pocketVideoMegaTileView
+            @Suppress("DEPRECATION")
+            lastPocketState === PocketViewModel.State.Error -> R.id.megaTileTryAgainButton
+            tileAdapter.itemCount == 0 -> R.id.tabsTray
+            else -> R.id.tileContainer
         }
 
         pocketVideoMegaTileView.nextFocusDownId = when {

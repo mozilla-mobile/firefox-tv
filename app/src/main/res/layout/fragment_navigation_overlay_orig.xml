@@ -48,7 +48,7 @@
                 android:layout_width="498dp"
                 android:layout_height="@dimen/urlbar_height"
                 android:layout_marginStart="57dp"
-                android:layout_marginBottom="48dp"
+                android:layout_marginBottom="24dp"
                 android:background="@drawable/nav_urlbar_background"
                 android:cursorVisible="false"
                 android:drawableStart="@drawable/mozac_ic_search"
@@ -67,6 +67,16 @@
                 android:textColorHint="@color/photonGrey10_a80p"
                 android:textIsSelectable="false" />
 
+            <org.mozilla.tv.firefox.tabs.WebRenderTabsTray
+                android:id="@+id/tabsTray"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="45dp"
+                android:layout_marginEnd="45dp"
+                android:layout_marginBottom="24dp"
+                android:focusable="true"
+                android:nextFocusUp="@id/navUrlInput"/>
+
             <!-- Content description added in code. -->
             <org.mozilla.tv.firefox.pocket.PocketVideoMegaTile
                 android:id="@+id/pocketVideoMegaTileView"
@@ -77,7 +87,7 @@
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/pocket_video_mega_tile_background"
                 android:focusable="true"
-                android:nextFocusUp="@id/navUrlInput" />
+                android:nextFocusUp="@id/tabsTray" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/tileContainer"
