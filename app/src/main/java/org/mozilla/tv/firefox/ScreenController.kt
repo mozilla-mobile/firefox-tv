@@ -101,6 +101,9 @@ class ScreenController(private val sessionRepo: SessionRepo) {
         handleTransitionAndUpdateActiveScreen(fragmentManager, Transition.ADD_SETTINGS)
     }
 
+    fun showTabsTrayScreen(fragmentManager: FragmentManager) {
+    }
+
     fun showPocketScreen(fragmentManager: FragmentManager) {
         handleTransitionAndUpdateActiveScreen(fragmentManager, Transition.ADD_POCKET)
     }
