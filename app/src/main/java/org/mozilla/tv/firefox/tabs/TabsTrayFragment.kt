@@ -14,6 +14,7 @@ import mozilla.components.feature.tabs.tabstray.TabsFeature
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
+import org.mozilla.tv.firefox.ext.serviceLocator
 
 /**
  * A fragment for displaying the tabs tray.
@@ -51,8 +52,9 @@ class TabsTrayFragment : Fragment() {
         tabsFeature?.stop()
     }
 
-    // TODO
-    private fun closeTabsTray() {}
+    private fun closeTabsTray() {
+        serviceLocator!!.screenController.handleMenu(fragmentManager!!)
+    }
 
     override fun onHiddenChanged(hidden: Boolean) {
         FocusOnShowDelegate().onHiddenChanged(this, hidden)
