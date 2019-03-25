@@ -10,6 +10,7 @@ import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.DefaultSettings
 import mozilla.components.concept.engine.Engine
 import mozilla.components.feature.session.SessionUseCases
+import mozilla.components.feature.tabs.TabsUseCases
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.utils.BuildConstants
 import org.mozilla.tv.firefox.utils.SafeIntent
@@ -54,4 +55,6 @@ class WebRenderComponents(applicationContext: Context, systemUserAgent: String) 
     val sessionManager by lazy { SessionManager(engine) }
 
     val sessionUseCases by lazy { SessionUseCases(sessionManager) }
+
+    val tabsUseCases by lazy { TabsUseCases(sessionManager) }
 }
