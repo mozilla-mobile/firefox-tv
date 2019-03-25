@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.fragment_tabstray.*
 import mozilla.components.feature.tabs.tabstray.TabsFeature
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
+import org.mozilla.tv.firefox.settings.SettingsFragment
 
 /**
  * A fragment for displaying the tabs tray.
@@ -47,4 +48,11 @@ class TabsTrayFragment : Fragment() {
 
     // TODO
     private fun closeTabsTray() {}
+
+    companion object {
+        const val FRAGMENT_TAG = "tabs"
+
+        @JvmStatic
+        fun create() = TabsTrayFragment()
+    }
 }

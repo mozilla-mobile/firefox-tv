@@ -20,6 +20,7 @@ import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.settings.SettingsFragment
+import org.mozilla.tv.firefox.tabs.TabsTrayFragment
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
@@ -49,16 +50,19 @@ class ScreenController(private val sessionRepo: SessionRepo) {
         val renderFragment = WebRenderFragment.createForSession(session)
         val pocketFragment = PocketVideoFragment()
         val settingsFragment = SettingsFragment()
+        val tabsFragment = TabsTrayFragment()
         fragmentManager
             .beginTransaction()
             .add(R.id.container_settings, settingsFragment, SettingsFragment.FRAGMENT_TAG)
             .add(R.id.container_pocket, pocketFragment, PocketVideoFragment.FRAGMENT_TAG)
+            .add(R.id.container_tabs, tabsFragment, TabsTrayFragment.FRAGMENT_TAG)
             .add(R.id.container_web_render, renderFragment, WebRenderFragment.FRAGMENT_TAG)
             // We add NavigationOverlayFragment last so that it takes focus
             .add(R.id.container_navigation_overlay, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
             .hide(renderFragment) // TODO note that this will need to be changed in order to display WebRenderFragment under a split overlay
             .hide(pocketFragment)
             .hide(settingsFragment)
+            .hide(tabsFragment)
             .commitNow()
 
         _currentActiveScreen.value = ActiveScreen.NAVIGATION_OVERLAY
@@ -102,6 +106,7 @@ class ScreenController(private val sessionRepo: SessionRepo) {
     }
 
     fun showTabsTrayScreen(fragmentManager: FragmentManager) {
+        handleTransitionAndUpdateActiveScreen(fragmentManager, Transition.ADD_TABS)
     }
 
     fun showPocketScreen(fragmentManager: FragmentManager) {
@@ -238,6 +243,20 @@ class ScreenController(private val sessionRepo: SessionRepo) {
                     .hide(fragmentManager.settingsFragment())
                     .commitNow()
             }
+            Transition.ADD_TABS -> {
+                _currentActiveScreen.value = ActiveScreen.TABS
+                fragmentManager.beginTransaction()
+                        .show(fragmentManager.tabsFragment())
+                        .hide(fragmentManager.navigationOverlayFragment())
+                        .commit()
+            }
+            Transition.REMOVE_TABS -> {
+                _currentActiveScreen.value = ActiveScreen.NAVIGATION_OVERLAY
+                fragmentManager.beginTransaction()
+                        .show(fragmentManager.navigationOverlayFragment())
+                        .hide(fragmentManager.tabsFragment())
+                        .commit()
+            }
             Transition.EXIT_APP -> { return false }
             Transition.NO_OP -> { return true }
         }
@@ -256,3 +275,6 @@ private fun FragmentManager.pocketFragment(): PocketVideoFragment =
 
 private fun FragmentManager.settingsFragment(): SettingsFragment =
     this.findFragmentByTag(SettingsFragment.FRAGMENT_TAG) as SettingsFragment
+
+private fun FragmentManager.tabsFragment(): TabsTrayFragment =
+    this.findFragmentByTag(TabsTrayFragment.FRAGMENT_TAG) as TabsTrayFragment
