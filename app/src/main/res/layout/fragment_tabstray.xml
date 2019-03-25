@@ -7,7 +7,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <mozilla.components.concept.tabstray.TabsTray
+    <Button
+        android:id="@+id/addTab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Add A Tab"/>
+
+
+    <mozilla.components.browser.tabstray.BrowserTabsTray
         android:id="@+id/tabsTray"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -15,5 +25,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-    </mozilla.components.concept.tabstray.TabsTray>
+    </mozilla.components.browser.tabstray.BrowserTabsTray>
 </androidx.constraintlayout.widget.ConstraintLayout>
