@@ -30,9 +30,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.navUrlInput
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.pocketVideoMegaTileView
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.tileContainer
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.*
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.exitButton
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.navButtonForward
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.navButtonReload
@@ -55,6 +53,7 @@ import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.hint.InactiveHintViewModel
+import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsChannel
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
@@ -197,6 +196,7 @@ class NavigationOverlayFragment : Fragment() {
 
         initMegaTile()
         initPinnedTiles()
+        initSettingsChannel() // When pulling everything into channels, add this to the channel RV
 
         navButtonSettings.setImageResource(R.drawable.ic_settings) // Must be set in code for SVG to work correctly.
         exitButton.contentDescription = serviceLocator.experimentsProvider.getAAExitButtonExperiment(ExperimentConfig.AA_TEST)
@@ -374,6 +374,10 @@ class NavigationOverlayFragment : Fragment() {
             }
             else -> return false
         }
+    }
+
+    private fun initSettingsChannel() {
+        settingsContainer.gridView.adapter = SettingsChannel.makeAdapter()
     }
 
     private fun updateFocusableViews(focusedView: View? = currFocus) { // TODO this will be replaced when FocusRepo is introduced

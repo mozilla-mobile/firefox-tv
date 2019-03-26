@@ -96,6 +96,11 @@
                     android:clipChildren="false"
                     android:clipToPadding="false" />
 
+                <androidx.leanback.widget.ListRowView
+                    android:id="@+id/settingsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"/>
+
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
     </org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlayScrollView>
