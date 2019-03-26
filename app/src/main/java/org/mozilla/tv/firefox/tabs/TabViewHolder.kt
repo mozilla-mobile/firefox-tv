@@ -52,10 +52,10 @@ class TabViewHolder(
 
         if (isSelected) {
             tabView.setTextColor(tabsTray.styling.selectedItemTextColor)
-            cardView.background = tabsTray.styling.selectedItemBackground
+            cardView.background = tabsTray.context.getDrawable(R.drawable.tab_tile_background_selected)
         } else {
             tabView.setTextColor(tabsTray.styling.itemTextColor)
-            cardView.background = tabsTray.styling.itemBackground
+            cardView.background = tabsTray.context.getDrawable(R.drawable.tab_tile_background)
         }
 
         thumbnailView.setImageBitmap(session.thumbnail)
@@ -66,9 +66,27 @@ class TabViewHolder(
      */
     fun unbind() {
         session?.unregister(this)
+        cardView.clearFocus()
     }
 
     override fun onUrlChanged(session: Session, url: String) {
         tabView.text = url
+    }
+}
+
+class TabPlusHolder(
+    itemView: View,
+    private val tabsTray: WebRenderTabsTray
+) : RecyclerView.ViewHolder(itemView) {
+    private val cardView: CardView = (itemView as CardView).apply {
+        elevation = tabsTray.styling.itemElevation
+    }
+
+    fun bind() {
+        // TODO: Need UX
+        cardView.background = tabsTray.context.getDrawable(R.drawable.navigation_button_background)
+        cardView.setOnClickListener {
+            tabsTray.tabsUseCases.addTab.invoke("about:blank", selectTab = true)
+        }
     }
 }

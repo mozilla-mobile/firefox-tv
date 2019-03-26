@@ -13,13 +13,16 @@ import mozilla.components.support.base.observer.Observable
 import mozilla.components.support.base.observer.ObserverRegistry
 import org.mozilla.tv.firefox.R
 
+const val ADD_VIEW_TYPE = 300
+const val SESSION_VIEW_TYPE = 200
+
 /**
  * RecyclerView adapter implementation to display a list/grid of tabs.
  */
 @Suppress("TooManyFunctions")
 class TabsAdapter(
     delegate: Observable<TabsTray.Observer> = ObserverRegistry()
-) : RecyclerView.Adapter<TabViewHolder>(),
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     TabsTray,
     Observable<TabsTray.Observer> by delegate {
 
@@ -29,26 +32,48 @@ class TabsAdapter(
     private var sessions: List<Session> = listOf()
     private var selectedIndex: Int = -1
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TabViewHolder {
-        return TabViewHolder(
-                LayoutInflater.from(parent.context).inflate(
-                        R.layout.tabstray_item,
-                        parent,
-                        false),
-                tabsTray
-        ).also {
-            holders.add(it)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        if (viewType == ADD_VIEW_TYPE) {
+            return TabPlusHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                            R.layout.tabstray_add_item,
+                            parent,
+                            false),
+                    tabsTray
+            )
+        } else {
+            return TabViewHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                            R.layout.tabstray_item,
+                            parent,
+                            false),
+                    tabsTray
+            ).also {
+                holders.add(it)
+            }
         }
     }
 
-    override fun getItemCount() = sessions.size
-
-    override fun onBindViewHolder(holder: TabViewHolder, position: Int) {
-        holder.bind(sessions[position], position == selectedIndex, this)
+    override fun getItemViewType(position: Int): Int {
+        if (position == sessions.size) {
+            return ADD_VIEW_TYPE
+        }
+        return SESSION_VIEW_TYPE
     }
 
-    override fun onViewRecycled(holder: TabViewHolder) {
-        holder.unbind()
+    override fun getItemCount() = sessions.size + 1 // plus one for add VH
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is TabViewHolder) {
+            holder.bind(sessions[position], position == selectedIndex, this)
+        } else {
+            (holder as TabPlusHolder).bind()
+        }
+    }
+
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        if (holder is TabViewHolder)
+            holder.unbind()
     }
 
     fun unsubscribeHolders() {
