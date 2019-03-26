@@ -32,7 +32,7 @@ class TabsAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TabViewHolder {
         return TabViewHolder(
                 LayoutInflater.from(parent.context).inflate(
-                        R.layout.mozac_browser_tabstray_item,
+                        R.layout.tabstray_item,
                         parent,
                         false),
                 tabsTray

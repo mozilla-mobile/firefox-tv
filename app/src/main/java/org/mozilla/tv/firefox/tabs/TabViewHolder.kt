@@ -4,11 +4,9 @@
 
 package org.mozilla.tv.firefox.tabs
 
-import android.content.res.ColorStateList
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatImageButton
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import mozilla.components.browser.session.Session
@@ -26,9 +24,8 @@ class TabViewHolder(
     private val cardView: CardView = (itemView as CardView).apply {
         elevation = tabsTray.styling.itemElevation
     }
-    private val tabView: TextView = itemView.findViewById(R.id.mozac_browser_tabstray_url)
-    private val closeView: AppCompatImageButton = itemView.findViewById(R.id.mozac_browser_tabstray_close)
-    private val thumbnailView: ImageView = itemView.findViewById(R.id.mozac_browser_tabstray_thumbnail)
+    private val tabView: TextView = itemView.findViewById(R.id.tabstray_url)
+    private val thumbnailView: ImageView = itemView.findViewById(R.id.tabstray_thumbnail)
 
     private var session: Session? = null
 
@@ -50,18 +47,15 @@ class TabViewHolder(
             observable.notifyObservers { onTabSelected(session) }
         }
 
-        closeView.setOnClickListener {
-            observable.notifyObservers { onTabClosed(session) }
-        }
+        //TODO: close tab (long press?)
+        // observable.notifyObservers { onTabClosed(session) }
 
         if (isSelected) {
             tabView.setTextColor(tabsTray.styling.selectedItemTextColor)
             cardView.setCardBackgroundColor(tabsTray.styling.selectedItemBackgroundColor)
-            closeView.imageTintList = ColorStateList.valueOf(tabsTray.styling.selectedItemTextColor)
         } else {
             tabView.setTextColor(tabsTray.styling.itemTextColor)
             cardView.setCardBackgroundColor(tabsTray.styling.itemBackgroundColor)
-            closeView.imageTintList = ColorStateList.valueOf(tabsTray.styling.itemTextColor)
         }
 
         thumbnailView.setImageBitmap(session.thumbnail)
