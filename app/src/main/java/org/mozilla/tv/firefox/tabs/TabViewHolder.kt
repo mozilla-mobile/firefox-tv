@@ -4,15 +4,18 @@
 
 package org.mozilla.tv.firefox.tabs
 
+import android.app.AlertDialog
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.tabstray.TabsTray
 import mozilla.components.support.base.observer.Observable
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.ext.webRenderComponents
 
 /**
  * A RecyclerView ViewHolder implementation for "tab" items.
@@ -47,8 +50,24 @@ class TabViewHolder(
             observable.notifyObservers { onTabSelected(session) }
         }
 
-        // TODO: close tab (long press?)
-        // observable.notifyObservers { onTabClosed(session) }
+        itemView.setOnLongClickListener {
+            val builder = AlertDialog.Builder(tabsTray.context)
+            builder.setTitle(title)
+
+            builder.setPositiveButton("Close") { dialog, _ ->
+                if (tabsTray.context.webRenderComponents.sessionManager.size > 1) {
+                    observable.notifyObservers { onTabClosed(session) }
+                } else {
+                    Toast.makeText(tabsTray.context, "You must have at least one active tab", Toast.LENGTH_SHORT).show()
+                }
+
+                dialog.dismiss()
+            }
+
+            builder.create().show()
+
+            true
+        }
 
         if (isSelected) {
             tabView.setTextColor(tabsTray.styling.selectedItemTextColor)
