@@ -82,6 +82,7 @@ enum class NavigationEvent {
     }
 }
 
+@Suppress("LargeClass")
 class NavigationOverlayFragment : Fragment() {
     companion object {
         const val FRAGMENT_TAG = "overlay"
