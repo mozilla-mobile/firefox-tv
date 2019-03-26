@@ -18,18 +18,26 @@ class SettingsChannel {
         }
     }
 
-    enum class SettingsItem {
-        DATA_COLLECTION, CLEAR_COOKIES, ABOUT, PRIVACY_POLICY
-    }
-
     // TODO: Make TileViewHolder sealed class unifying Tile types
     private class SettingsAdapter: RecyclerView.Adapter<SettingsTileHolder>() {
 
         private val settingsItems = arrayOf(
-                SettingsChannel.SettingsItem.DATA_COLLECTION,
-                SettingsChannel.SettingsItem.CLEAR_COOKIES,
-                SettingsChannel.SettingsItem.ABOUT,
-                SettingsChannel.SettingsItem.PRIVACY_POLICY
+                SettingsItem(
+                        SettingsChannel.SettingsTileType.DATA_COLLECTION,
+                        R.drawable.lb_ic_sad_cloud,
+                        R.string.preference_mozilla_telemetry2),
+                SettingsItem(
+                        SettingsChannel.SettingsTileType.CLEAR_COOKIES,
+                        R.drawable.mozac_ic_delete,
+                        R.string.settings_cookies_dialog_title),
+                SettingsItem(
+                        SettingsChannel.SettingsTileType.ABOUT,
+                        R.drawable.mozac_ic_info,
+                        R.string.menu_about),
+                SettingsItem(
+                        SettingsChannel.SettingsTileType.PRIVACY_POLICY,
+                        R.drawable.mozac_ic_lock,
+                        R.string.preference_privacy_notice)
         )
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = SettingsTileHolder(
@@ -41,9 +49,8 @@ class SettingsChannel {
         }
 
         override fun onBindViewHolder(holder: SettingsTileHolder, position: Int) = with(holder) {
-            // TODO: load from settings item type
-            iconView.setImageResource(R.drawable.ic_about)
-            titleView.setText(R.string.preference_mozilla_telemetry2)
+            iconView.setImageResource(settingsItems[position].imgRes)
+            titleView.setText(settingsItems[position].titleRes)
         }
 
     }
@@ -52,4 +59,10 @@ class SettingsChannel {
         val iconView = itemView.tile_icon
         val titleView = itemView.tile_title
     }
+
+    private enum class SettingsTileType {
+        DATA_COLLECTION, CLEAR_COOKIES, ABOUT, PRIVACY_POLICY
+    }
+
+    private data class SettingsItem(val type: SettingsTileType, val imgRes: Int, val titleRes: Int)
 }
