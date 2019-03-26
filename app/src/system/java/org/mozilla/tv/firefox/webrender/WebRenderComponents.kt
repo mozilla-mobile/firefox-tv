@@ -48,6 +48,8 @@ class WebRenderComponents(applicationContext: Context, systemUserAgent: String) 
                 allowFileAccess = false,
                 allowContentAccess = false,
 
+                supportMultipleWindows = true,
+
                 remoteDebuggingEnabled = BuildConstants.isDevBuild,
 
                 mediaPlaybackRequiresUserGesture = false // Allows auto-play (which improves YouTube experience).

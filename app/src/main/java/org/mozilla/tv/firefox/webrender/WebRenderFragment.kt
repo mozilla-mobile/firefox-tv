@@ -26,6 +26,7 @@ import mozilla.components.concept.engine.EngineView
 import mozilla.components.concept.engine.permission.Permission
 import mozilla.components.concept.engine.permission.PermissionRequest
 import mozilla.components.feature.session.SessionFeature
+import mozilla.components.feature.session.WindowFeature
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.MediaSessionHolder
 import org.mozilla.tv.firefox.R
@@ -141,6 +142,12 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         // onViewCreated. However, overriding both onCreateView and onViewCreated in a single class
         // is confusing so I'd rather break encapsulation than confuse devs.
         mediaSessionHolder?.videoVoiceCommandMediaSession?.onCreateEngineView(layout.engineView, session)
+
+        // For multi-session sign-ins
+        val windowFeature = WindowFeature(requireWebRenderComponents.engine,
+                requireWebRenderComponents.sessionManager)
+
+        lifecycle.addObserver(windowFeature)
 
         return layout
     }
