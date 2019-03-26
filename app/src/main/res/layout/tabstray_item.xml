@@ -30,6 +30,7 @@
             android:id="@+id/tabstray_thumbnail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="12dp"
             android:layout_below="@id/tabstray_url"
             android:contentDescription="@string/mozac_browser_tabstray_close_tab" />
 

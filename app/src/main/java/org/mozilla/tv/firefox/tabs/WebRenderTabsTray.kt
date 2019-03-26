@@ -5,14 +5,14 @@
 package org.mozilla.tv.firefox.tabs
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import mozilla.components.concept.tabstray.TabsTray
+import org.mozilla.tv.firefox.R
 
-const val DEFAULT_ITEM_BACKGROUND_COLOR = 0xFFFFFFFF.toInt()
-const val DEFAULT_ITEM_BACKGROUND_SELECTED_COLOR = 0xFFFF45A1FF.toInt()
 const val DEFAULT_ITEM_TEXT_COLOR = 0xFF111111.toInt()
 const val DEFAULT_ITEM_TEXT_SELECTED_COLOR = 0xFFFFFFFF.toInt()
 
@@ -35,11 +35,11 @@ class WebRenderTabsTray @JvmOverloads constructor(
         adapter = tabsAdapter
 
         styling = TabsTrayStyling(
-            DEFAULT_ITEM_BACKGROUND_COLOR,
-            DEFAULT_ITEM_BACKGROUND_SELECTED_COLOR,
+            context.getDrawable(R.drawable.tab_tile_background)!!,
+            context.getDrawable(R.drawable.tab_tile_background_selected)!!,
             DEFAULT_ITEM_TEXT_COLOR,
             DEFAULT_ITEM_TEXT_SELECTED_COLOR,
-            0f
+            5f
         )
     }
 
@@ -61,8 +61,8 @@ class WebRenderTabsTray @JvmOverloads constructor(
 }
 
 internal data class TabsTrayStyling(
-    val itemBackgroundColor: Int,
-    val selectedItemBackgroundColor: Int,
+    val itemBackground: Drawable,
+    val selectedItemBackground: Drawable,
     val itemTextColor: Int,
     val selectedItemTextColor: Int,
     val itemElevation: Float

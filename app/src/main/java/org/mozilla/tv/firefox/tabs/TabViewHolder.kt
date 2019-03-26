@@ -47,15 +47,15 @@ class TabViewHolder(
             observable.notifyObservers { onTabSelected(session) }
         }
 
-        //TODO: close tab (long press?)
+        // TODO: close tab (long press?)
         // observable.notifyObservers { onTabClosed(session) }
 
         if (isSelected) {
             tabView.setTextColor(tabsTray.styling.selectedItemTextColor)
-            cardView.setCardBackgroundColor(tabsTray.styling.selectedItemBackgroundColor)
+            cardView.background = tabsTray.styling.selectedItemBackground
         } else {
             tabView.setTextColor(tabsTray.styling.itemTextColor)
-            cardView.setCardBackgroundColor(tabsTray.styling.itemBackgroundColor)
+            cardView.background = tabsTray.styling.itemBackground
         }
 
         thumbnailView.setImageBitmap(session.thumbnail)
