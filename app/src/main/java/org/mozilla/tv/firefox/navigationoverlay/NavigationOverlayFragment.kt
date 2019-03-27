@@ -53,7 +53,7 @@ import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.hint.InactiveHintViewModel
-import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsChannel
+import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsChannelAdapter
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
@@ -377,7 +377,7 @@ class NavigationOverlayFragment : Fragment() {
     }
 
     private fun initSettingsChannel() {
-        settingsContainer.gridView.adapter = SettingsChannel.makeAdapter()
+        settingsContainer.gridView.adapter = SettingsChannelAdapter()
     }
 
     private fun updateFocusableViews(focusedView: View? = currFocus) { // TODO this will be replaced when FocusRepo is introduced
