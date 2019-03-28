@@ -10,13 +10,12 @@
     android:clickable="true"
     android:focusable="true">
 
-    <!-- Need UX -->
-    <TextView
+    <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textSize="16sp"
-        android:textColor="#CCF9F9FA"
-        android:text="Add Tab" />
+        android:background="@drawable/navigation_button_background"
+        android:src="@drawable/mozac_ic_tab_new"
+        android:contentDescription="@null" />
 
 </androidx.cardview.widget.CardView>

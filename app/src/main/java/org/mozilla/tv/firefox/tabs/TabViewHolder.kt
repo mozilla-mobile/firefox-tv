@@ -97,14 +97,14 @@ class TabPlusHolder(
     itemView: View,
     private val tabsTray: WebRenderTabsTray
 ) : RecyclerView.ViewHolder(itemView) {
-    private val cardView: CardView = (itemView as CardView).apply {
-        elevation = tabsTray.styling.itemElevation
-    }
 
     fun bind() {
-        // TODO: Need UX
-        cardView.background = tabsTray.context.getDrawable(R.drawable.navigation_button_background)
-        cardView.setOnClickListener {
+        (itemView as CardView).apply {
+            elevation = tabsTray.styling.itemElevation
+        }
+
+        itemView.background = tabsTray.context.getDrawable(R.drawable.navigation_button_background)
+        itemView.setOnClickListener {
             tabsTray.tabsUseCases.addTab.invoke("about:blank", selectTab = true)
         }
     }

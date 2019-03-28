@@ -7,22 +7,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
+    <ImageButton
         android:id="@+id/addTab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/pocket_video_mega_tile_background"
-        android:focusable="true"
+        android:background="@drawable/navigation_button_background"
+        android:src="@drawable/mozac_ic_tab_new"
         android:nextFocusDown="@+id/tabsTray"
-        android:text="Add A Tab"/>
+        android:contentDescription="@null" />
 
 
     <mozilla.components.browser.tabstray.BrowserTabsTray
         android:id="@+id/tabsTray"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
