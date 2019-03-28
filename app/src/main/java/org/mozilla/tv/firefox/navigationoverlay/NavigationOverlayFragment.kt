@@ -32,6 +32,8 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.*
 import kotlinx.coroutines.Job
+import mozilla.components.browser.session.Session
+import mozilla.components.concept.tabstray.TabsTray
 import mozilla.components.feature.tabs.tabstray.TabsFeature
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
@@ -83,7 +85,7 @@ enum class NavigationEvent {
 }
 
 @Suppress("LargeClass")
-class NavigationOverlayFragment : Fragment() {
+class NavigationOverlayFragment : Fragment(), TabsTray.Observer {
     companion object {
         const val FRAGMENT_TAG = "overlay"
     }
@@ -220,12 +222,21 @@ class NavigationOverlayFragment : Fragment() {
         serviceLocator.screenController.handleMenu(fragmentManager!!)
     }
 
+    override fun onTabClosed(session: Session) {
+        // TODO: move this to FocusRepo
+        // When you close a tab, you may lose focus
+        navUrlInput.requestFocus()
+    }
+
+    override fun onTabSelected(session: Session) {}
+
     override fun onStart() {
         super.onStart()
         observePocketState()
             .addTo(compositeDisposable)
 
         tabsFeature?.start()
+        tabsTray.register(this)
         pocketViewModel.state.subscribe(tabsTray.pocketStateObserver).addTo(compositeDisposable)
     }
 
@@ -234,6 +245,7 @@ class NavigationOverlayFragment : Fragment() {
         compositeDisposable.clear()
 
         tabsFeature?.stop()
+        tabsTray.unregister(this)
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
