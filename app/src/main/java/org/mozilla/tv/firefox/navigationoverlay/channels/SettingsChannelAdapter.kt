@@ -17,19 +17,19 @@ class SettingsChannelAdapter(
 ) : RecyclerView.Adapter<SettingsTileHolder>() {
     private val settingsItems = arrayOf(
             SettingsItem(
-                    SettingsTileType.DATA_COLLECTION,
+                    SettingsType.DATA_COLLECTION,
                     R.drawable.lb_ic_sad_cloud,
                     R.string.preference_mozilla_telemetry2),
             SettingsItem(
-                    SettingsTileType.CLEAR_COOKIES,
+                    SettingsType.CLEAR_COOKIES,
                     R.drawable.mozac_ic_delete,
                     R.string.settings_cookies_dialog_title),
             SettingsItem(
-                    SettingsTileType.ABOUT,
+                    SettingsType.ABOUT,
                     R.drawable.mozac_ic_info,
                     R.string.menu_about),
             SettingsItem(
-                    SettingsTileType.PRIVACY_POLICY,
+                    SettingsType.PRIVACY_POLICY,
                     R.drawable.mozac_ic_lock,
                     R.string.preference_privacy_notice)
     )
@@ -47,10 +47,10 @@ class SettingsChannelAdapter(
         titleView.setText(settingsItems[position].titleRes)
         itemView.setOnClickListener {
             when (settingsItems.get(position).type) {
-                SettingsTileType.DATA_COLLECTION -> return@setOnClickListener // TODO
-                SettingsTileType.CLEAR_COOKIES -> return@setOnClickListener // TODO
-                SettingsTileType.ABOUT -> loadUrl(URLs.URL_ABOUT)
-                SettingsTileType.PRIVACY_POLICY -> loadUrl(URLs.PRIVACY_NOTICE_URL)
+                SettingsType.DATA_COLLECTION -> return@setOnClickListener // TODO
+                SettingsType.CLEAR_COOKIES -> return@setOnClickListener // TODO
+                SettingsType.ABOUT -> loadUrl(URLs.URL_ABOUT)
+                SettingsType.PRIVACY_POLICY -> loadUrl(URLs.PRIVACY_NOTICE_URL)
             }
         }
     }
@@ -61,8 +61,8 @@ class SettingsTileHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val titleView = itemView.tile_title
 }
 
-private enum class SettingsTileType {
+enum class SettingsType {
     DATA_COLLECTION, CLEAR_COOKIES, ABOUT, PRIVACY_POLICY
 }
 
-private data class SettingsItem(val type: SettingsTileType, val imgRes: Int, val titleRes: Int)
+private data class SettingsItem(val type: SettingsType, val imgRes: Int, val titleRes: Int)
