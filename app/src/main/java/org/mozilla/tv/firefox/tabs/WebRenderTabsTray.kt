@@ -10,6 +10,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import mozilla.components.concept.tabstray.TabsTray
+import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.webRenderComponents
 
 const val DEFAULT_ITEM_TEXT_COLOR = 0xFF111111.toInt()
@@ -31,7 +32,7 @@ class WebRenderTabsTray @JvmOverloads constructor(
 
     init {
         tabsAdapter.tabsTray = this
-        layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        layoutManager = TabsTileLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         adapter = tabsAdapter
 
         styling = TabsTrayStyling(
@@ -55,6 +56,23 @@ class WebRenderTabsTray @JvmOverloads constructor(
      */
     override fun asView(): View {
         return this
+    }
+
+    inner class TabsTileLayoutManager(
+        context: Context,
+        orientation: Int,
+        reverseLayout: Boolean
+    ) : LinearLayoutManager(context, orientation, reverseLayout) {
+        override fun onRequestChildFocus(parent: RecyclerView, state: RecyclerView.State, child: View, focused: View?): Boolean {
+            focused?.let {
+                // if last element, then focus navUrlInput
+                // TODO: move this to FocusRepo to eliminate tight coupling
+                if (getPosition(it) == itemCount - 1)
+                    it.nextFocusRightId = R.id.navUrlInput
+            }
+
+            return super.onRequestChildFocus(parent, state, child, focused)
+        }
     }
 }
 
