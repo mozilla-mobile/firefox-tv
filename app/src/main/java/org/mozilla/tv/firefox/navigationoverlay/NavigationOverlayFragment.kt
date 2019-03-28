@@ -377,7 +377,9 @@ class NavigationOverlayFragment : Fragment() {
     }
 
     private fun initSettingsChannel() {
-        settingsContainer.gridView.adapter = SettingsChannelAdapter()
+        settingsContainer.gridView.adapter = SettingsChannelAdapter(loadUrl = { urlStr ->
+            serviceLocator.screenController.showBrowserScreenForUrl(fragmentManager!!, urlStr)
+        })
     }
 
     private fun updateFocusableViews(focusedView: View? = currFocus) { // TODO this will be replaced when FocusRepo is introduced

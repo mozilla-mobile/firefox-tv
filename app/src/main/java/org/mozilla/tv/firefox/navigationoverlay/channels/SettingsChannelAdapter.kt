@@ -10,8 +10,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.home_tile.view.*
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.utils.URLs
 
-class SettingsChannelAdapter : RecyclerView.Adapter<SettingsTileHolder>() {
+class SettingsChannelAdapter(
+        private val loadUrl: (String) -> Unit
+) : RecyclerView.Adapter<SettingsTileHolder>() {
     private val settingsItems = arrayOf(
             SettingsItem(
                     SettingsTileType.DATA_COLLECTION,
@@ -42,8 +45,15 @@ class SettingsChannelAdapter : RecyclerView.Adapter<SettingsTileHolder>() {
     override fun onBindViewHolder(holder: SettingsTileHolder, position: Int) = with(holder) {
         iconView.setImageResource(settingsItems[position].imgRes)
         titleView.setText(settingsItems[position].titleRes)
+        itemView.setOnClickListener {
+            when (settingsItems.get(position).type) {
+                SettingsTileType.DATA_COLLECTION -> return@setOnClickListener // TODO
+                SettingsTileType.CLEAR_COOKIES -> return@setOnClickListener // TODO
+                SettingsTileType.ABOUT -> loadUrl(URLs.URL_ABOUT)
+                SettingsTileType.PRIVACY_POLICY -> loadUrl(URLs.PRIVACY_NOTICE_URL)
+            }
+        }
     }
-
 }
 
 class SettingsTileHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
