@@ -226,6 +226,7 @@ class NavigationOverlayFragment : Fragment() {
             .addTo(compositeDisposable)
 
         tabsFeature?.start()
+        pocketViewModel.state.subscribe(tabsTray.pocketStateObserver).addTo(compositeDisposable)
     }
 
     override fun onStop() {

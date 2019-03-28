@@ -9,9 +9,11 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.functions.Consumer
 import mozilla.components.concept.tabstray.TabsTray
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.webRenderComponents
+import org.mozilla.tv.firefox.pocket.PocketViewModel
 
 const val DEFAULT_ITEM_TEXT_COLOR = 0xFF111111.toInt()
 const val DEFAULT_ITEM_TEXT_SELECTED_COLOR = 0xFFFFFFFF.toInt()
@@ -29,6 +31,15 @@ class WebRenderTabsTray @JvmOverloads constructor(
 
     internal val styling: TabsTrayStyling
     val tabsUseCases = context.webRenderComponents.tabsUseCases
+
+    private var focusDownId = -1
+    val pocketStateObserver = Consumer<PocketViewModel.State> { state ->
+        focusDownId = when (state) {
+            is PocketViewModel.State.Error -> R.id.megaTileTryAgainButton
+            is PocketViewModel.State.Feed -> R.id.pocketVideoMegaTileView
+            else -> R.id.tileContainer
+        }
+    }
 
     init {
         tabsAdapter.tabsTray = this
@@ -64,11 +75,14 @@ class WebRenderTabsTray @JvmOverloads constructor(
         reverseLayout: Boolean
     ) : LinearLayoutManager(context, orientation, reverseLayout) {
         override fun onRequestChildFocus(parent: RecyclerView, state: RecyclerView.State, child: View, focused: View?): Boolean {
+            // TODO: move this to FocusRepo to eliminate tight coupling
             focused?.let {
                 // if last element, then focus navUrlInput
-                // TODO: move this to FocusRepo to eliminate tight coupling
                 if (getPosition(it) == itemCount - 1)
+                    it.nextFocusUpId = R.id.navUrlInput
                     it.nextFocusRightId = R.id.navUrlInput
+
+                it.nextFocusDownId = focusDownId
             }
 
             return super.onRequestChildFocus(parent, state, child, focused)
