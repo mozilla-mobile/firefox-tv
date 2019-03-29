@@ -20,16 +20,16 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
+import mozilla.components.support.android.test.espresso.assertIsChecked
+import mozilla.components.support.android.test.espresso.assertIsDisplayed
+import mozilla.components.support.android.test.espresso.assertIsEnabled
+import mozilla.components.support.android.test.espresso.assertIsSelected
+import mozilla.components.support.android.test.espresso.click
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert.assertTrue
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.helpers.RecyclerViewHelpers
-import org.mozilla.tv.firefox.helpers.ext.assertIsChecked
-import org.mozilla.tv.firefox.helpers.ext.assertIsDisplayed
-import org.mozilla.tv.firefox.helpers.ext.assertIsEnabled
-import org.mozilla.tv.firefox.helpers.ext.assertIsSelected
-import org.mozilla.tv.firefox.helpers.ext.click
 import org.mozilla.tv.firefox.pinnedtile.TileViewHolder
 
 /**
@@ -46,7 +46,7 @@ class NavigationOverlayRobot {
 
     // The implementation of this method is arbitrary. We could run this check
     // against any of its views
-    fun assertOverlayIsOpen() = urlBar().assertIsDisplayed()
+    fun assertOverlayIsOpen() = urlBar().assertIsDisplayed(true)
 
     fun assertCanGoBack(canGoBack: Boolean) = backButton().assertIsEnabled(canGoBack)
     fun assertCanGoForward(canGoForward: Boolean) = forwardButton().assertIsEnabled(canGoForward)
