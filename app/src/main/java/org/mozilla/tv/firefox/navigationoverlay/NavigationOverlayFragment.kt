@@ -55,6 +55,7 @@ import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.updateLayoutParams
 import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.HintViewModel
+import org.mozilla.tv.firefox.hint.InactiveHintViewModel
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
@@ -158,7 +159,11 @@ class NavigationOverlayFragment : Fragment() {
         toolbarViewModel = FirefoxViewModelProviders.of(this).get(ToolbarViewModel::class.java)
         pinnedTileViewModel = FirefoxViewModelProviders.of(this).get(PinnedTileViewModel::class.java)
         pocketViewModel = FirefoxViewModelProviders.of(this).get(PocketViewModel::class.java)
-        hintViewModel = FirefoxViewModelProviders.of(this).get(OverlayHintViewModel::class.java)
+        hintViewModel = if (serviceLocator.experimentsProvider.shouldShowHintBar()) {
+            FirefoxViewModelProviders.of(this).get(OverlayHintViewModel::class.java)
+        } else {
+            InactiveHintViewModel()
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

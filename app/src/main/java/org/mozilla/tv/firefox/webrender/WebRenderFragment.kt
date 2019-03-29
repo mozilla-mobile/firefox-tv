@@ -32,6 +32,7 @@ import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.MediaSessionHolder
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
+import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
 import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.forceExhaustive
@@ -43,6 +44,8 @@ import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.HintViewModel
+import org.mozilla.tv.firefox.hint.InactiveHintViewModel
+import org.mozilla.tv.firefox.navigationoverlay.OverlayHintViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.utils.URLs
@@ -86,7 +89,11 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSession()
-        hintViewModel = serviceLocator!!.viewModelFactory.create(WebRenderHintViewModel::class.java)
+        hintViewModel = if (serviceLocator!!.experimentsProvider.shouldShowHintBar()) {
+            FirefoxViewModelProviders.of(this).get(WebRenderHintViewModel::class.java)
+        } else {
+            InactiveHintViewModel()
+        }
     }
 
     @SuppressLint("RestrictedApi")
