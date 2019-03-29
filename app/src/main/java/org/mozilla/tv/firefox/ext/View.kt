@@ -6,8 +6,6 @@ package org.mozilla.tv.firefox.ext
 
 import android.view.View
 
-val View.isVisible: Boolean get() = (visibility == View.VISIBLE)
-
 /**
  * Returns false if the view or any of its ancestors are not visible
  */
