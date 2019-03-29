@@ -11,16 +11,6 @@ import org.mozilla.tv.firefox.FirefoxApplication
 
 // Extension functions for the Context class
 
-/**
- * The (visible) version name of the application, as specified by the <manifest> tag's versionName
- * attribute. E.g. "2.0".
- */
-val Context.appVersionName: String?
-    get() {
-        val packageInfo = packageManager.getPackageInfo(packageName, 0)
-        return packageInfo.versionName
-    }
-
 fun Context.getAccessibilityManager() = getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
 
 // AccessibilityManager.isAccessibilityEnabled can be enabled for more things than just VoiceView. If we want
