@@ -1,5 +1,5 @@
 # Telemetry
-For clients that have "send anonymous usage data" enabled Firefox for Fire TV sends a "core" ping, an "event" ping and "pocket" ping to Mozilla's telemetry service. Sending telemetry can be disabled in the app's settings. Builds of "Firefox for Fire TV" have telemetry enabled by default ("opt-out").
+
 
 # Core ping
 
