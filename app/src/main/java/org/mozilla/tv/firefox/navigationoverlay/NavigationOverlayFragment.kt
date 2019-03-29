@@ -374,8 +374,7 @@ class NavigationOverlayFragment : Fragment() {
                     serviceLocator.screenController.showBrowserScreenForUrl(fragmentManager!!, urlStr)
                 },
                 showSettings = { type ->
-                    // TODO Use Settings type
-                    serviceLocator.screenController.showSettingsScreen(fragmentManager!!)
+                    serviceLocator.screenController.showSettingsScreen(fragmentManager!!, type)
                 }
         )
     }
