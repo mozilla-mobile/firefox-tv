@@ -23,11 +23,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import mozilla.components.support.ktx.android.graphics.withRoundedCorners
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.toJavaURI
-import org.mozilla.tv.firefox.ext.withRoundedCorners
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.FormattedDomain
 

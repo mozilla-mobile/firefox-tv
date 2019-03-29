@@ -7,7 +7,7 @@ package org.mozilla.tv.firefox.utils
 import android.graphics.Bitmap
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Transformation
-import org.mozilla.tv.firefox.ext.withRoundedCorners
+import mozilla.components.support.ktx.android.graphics.withRoundedCorners
 
 /**
  * A holder for the shared Picasso instance. All calls to Picasso should go through this class.
