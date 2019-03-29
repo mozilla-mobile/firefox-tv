@@ -17,6 +17,7 @@ import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
+import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsType
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.settings.SettingsFragment
@@ -46,16 +47,13 @@ class ScreenController(private val sessionRepo: SessionRepo) {
     fun setUpFragmentsForNewSession(fragmentManager: FragmentManager, session: Session) {
         val renderFragment = WebRenderFragment.createForSession(session)
         val pocketFragment = PocketVideoFragment()
-        val settingsFragment = SettingsFragment()
         fragmentManager
             .beginTransaction()
-            .add(R.id.container_settings, settingsFragment, SettingsFragment.FRAGMENT_TAG)
             .add(R.id.container_pocket, pocketFragment, PocketVideoFragment.FRAGMENT_TAG)
             .add(R.id.container_web_render, renderFragment, WebRenderFragment.FRAGMENT_TAG)
             // We add NavigationOverlayFragment last so that it takes focus
             .add(R.id.container_navigation_overlay, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
             .hide(pocketFragment)
-            .hide(settingsFragment)
             .commitNow()
 
         _currentActiveScreen.onNext(ActiveScreen.NAVIGATION_OVERLAY)
@@ -94,8 +92,13 @@ class ScreenController(private val sessionRepo: SessionRepo) {
         }
     }
 
-    fun showSettingsScreen(fragmentManager: FragmentManager) {
+    fun showSettingsScreen(fragmentManager: FragmentManager, settingsType: SettingsType) {
         handleTransitionAndUpdateActiveScreen(fragmentManager, Transition.ADD_SETTINGS)
+        when (settingsType) {
+            SettingsType.DATA_COLLECTION -> return
+            SettingsType.CLEAR_COOKIES -> return
+            else -> return
+        }
     }
 
     fun showPocketScreen(fragmentManager: FragmentManager) {
@@ -215,23 +218,24 @@ class ScreenController(private val sessionRepo: SessionRepo) {
             Transition.ADD_SETTINGS -> {
                 _currentActiveScreen.onNext(ActiveScreen.SETTINGS)
                 fragmentManager.beginTransaction()
-                    .show(fragmentManager.settingsFragment())
                     .hide(fragmentManager.navigationOverlayFragment())
+                    .add(R.id.container_settings, SettingsFragment(), SettingsFragment.FRAGMENT_TAG)
                     .commit()
             }
             Transition.REMOVE_SETTINGS -> {
-                _currentActiveScreen.onNext(ActiveScreen.NAVIGATION_OVERLAY)
-                fragmentManager.beginTransaction()
-                    .show(fragmentManager.navigationOverlayFragment())
-                    .hide(fragmentManager.settingsFragment())
-                    .commit()
+               _currentActiveScreen.onNext(ActiveScreen.NAVIGATION_OVERLAY)
+                fragmentManager.findFragmentByTag(SettingsFragment.FRAGMENT_TAG).let {
+                    fragmentManager.beginTransaction()
+                        .remove(it!!)
+                        .show(fragmentManager.navigationOverlayFragment())
+                        .commit()
+                }
             }
             Transition.SHOW_BROWSER -> {
                 _currentActiveScreen.onNext(ActiveScreen.WEB_RENDER)
                 fragmentManager.beginTransaction()
                     .hide(fragmentManager.navigationOverlayFragment())
                     .hide(fragmentManager.pocketFragment())
-                    .hide(fragmentManager.settingsFragment())
                     .commitNow()
             }
             Transition.EXIT_APP -> { return false }
@@ -249,6 +253,3 @@ private fun FragmentManager.navigationOverlayFragment(): NavigationOverlayFragme
 
 private fun FragmentManager.pocketFragment(): PocketVideoFragment =
     this.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG) as PocketVideoFragment
-
-private fun FragmentManager.settingsFragment(): SettingsFragment =
-    this.findFragmentByTag(SettingsFragment.FRAGMENT_TAG) as SettingsFragment
