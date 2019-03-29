@@ -9,10 +9,10 @@ import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
+import mozilla.components.support.android.test.espresso.assertHasFocus
+import mozilla.components.support.android.test.espresso.assertIsChecked
+import mozilla.components.support.android.test.espresso.click
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.helpers.ext.assertHasFocus
-import org.mozilla.tv.firefox.helpers.ext.assertIsChecked
-import org.mozilla.tv.firefox.helpers.ext.click
 
 /**
  * Implementation of Robot Pattern for the settings page.
