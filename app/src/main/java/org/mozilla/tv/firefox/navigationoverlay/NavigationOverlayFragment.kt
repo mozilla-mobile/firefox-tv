@@ -349,6 +349,13 @@ class NavigationOverlayFragment : Fragment(), TabsTray.Observer {
             }
         })
 
+        // TODO: switch the Rx once PinnedTileRepo & PinnedTileVM Rx migration
+        pinnedTileViewModel.isEmpty.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                tabsTray.pinnedTilesEmpty = it
+            }
+        })
+
         adapter = tileAdapter
 
         layoutManager = HomeTileManager(context, COL_COUNT)

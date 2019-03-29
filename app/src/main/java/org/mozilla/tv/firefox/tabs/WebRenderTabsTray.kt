@@ -32,6 +32,9 @@ class WebRenderTabsTray @JvmOverloads constructor(
     internal val styling: TabsTrayStyling
     val tabsUseCases = context.webRenderComponents.tabsUseCases
 
+    // TODO: switch the Rx once PinnedTileRepo & PinnedTileVM Rx migration
+    var pinnedTilesEmpty: Boolean = false
+
     private var focusDownId = -1
     val pocketStateObserver = Consumer<PocketViewModel.State> { state ->
         focusDownId = when (state) {
@@ -78,9 +81,14 @@ class WebRenderTabsTray @JvmOverloads constructor(
             // TODO: move this to FocusRepo to eliminate tight coupling
             focused?.let {
                 // if last element, then focus navUrlInput
-                if (getPosition(it) == itemCount - 1)
+                if (getPosition(it) == itemCount - 1) {
                     it.nextFocusUpId = R.id.navUrlInput
                     it.nextFocusRightId = R.id.navUrlInput
+                }
+
+                if (focusDownId == R.id.tileContainer && pinnedTilesEmpty) {
+                    focusDownId = R.id.tabsTray
+                }
 
                 it.nextFocusDownId = focusDownId
             }
