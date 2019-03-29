@@ -6,6 +6,7 @@ buildscript {
     ext.androidx_version = '1.0.0'
     ext.architecture_components_version = '2.0.0'
     ext.kotlin_version = '1.3.0'
+    ext.coroutines_version = '1.0.1'
     ext.moz_components_version = '0.48.0'
 
     ext.robolectric_version = '4.0.2' // required for SDK 28.
