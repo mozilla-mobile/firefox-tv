@@ -63,7 +63,6 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 ### Browser Overlay
 | Event                                  | category | method                | object       | value                    | extras.       |
 |----------------------------------------|----------|-----------------------|--------------|--------------------------|---------------|
-| Settings clicked                       | action   | click                 | menu         | settings                 |               |
 | Browser: back clicked                  | action   | click                 | menu         | back                     |               |
 | Browser: forward clicked               | action   | click                 | menu         | forward                  |               |
 | Browser: refresh clicked               | action   | click                 | menu         | refresh                  |               |
