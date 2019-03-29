@@ -131,6 +131,7 @@ dependencies {
         transitive = false
     }
 
+    implementation "org.mozilla.components:concept-fetch:$moz_components_version"
     implementation "org.mozilla.components:lib-fetch-okhttp:$moz_components_version"
     implementation "org.mozilla.components:lib-fetch-httpurlconnection:$moz_components_version"
     implementation "org.mozilla.components:browser-session:$moz_components_version"
@@ -143,6 +144,7 @@ dependencies {
     implementation "org.mozilla.components:feature-session:$moz_components_version"
     implementation "org.mozilla.components:ui-icons:$moz_components_version"
     implementation "org.mozilla.components:service-fretboard:$moz_components_version"
+    implementation "org.mozilla.components:support-ktx:$moz_components_version"
 
     systemImplementation "org.mozilla.components:browser-engine-system:$moz_components_version"
     // Required to override android.support lib in GeckoView dependency (uses palette-v7:26.1.0)
