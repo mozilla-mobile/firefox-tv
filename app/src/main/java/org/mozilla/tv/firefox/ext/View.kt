@@ -5,7 +5,6 @@
 package org.mozilla.tv.firefox.ext
 
 import android.view.View
-import android.view.ViewGroup
 
 val View.isVisible: Boolean get() = (visibility == View.VISIBLE)
 
@@ -19,11 +18,4 @@ val View.isEffectivelyVisible: Boolean get() {
         node = node.parent as? View
     }
     return true
-}
-
-/** Updates the layout params with the mutations provided to [mutateLayoutParams]. */
-inline fun View.updateLayoutParams(mutateLayoutParams: (ViewGroup.LayoutParams) -> Unit) {
-    val layoutParams = this.layoutParams
-    mutateLayoutParams(layoutParams)
-    this.layoutParams = layoutParams // Calling setLayoutParams forces them to refresh internally.
 }

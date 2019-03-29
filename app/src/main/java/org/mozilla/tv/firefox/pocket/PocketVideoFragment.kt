@@ -11,9 +11,11 @@ import android.os.StrictMode
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,7 +30,6 @@ import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.serviceLocator
-import org.mozilla.tv.firefox.ext.updateLayoutParams
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.FormattedDomain
 import org.mozilla.tv.firefox.utils.PicassoWrapper
@@ -196,13 +197,12 @@ private class PocketVideoAdapter(
      * paddingStart/End. Unfortunately, this causes a visual glitch as each card scrolls offscreen.
      * Instead, we set the margins for the first and last card.
      */
-    private fun setHorizontalMargins(holder: PocketVideoViewHolder, position: Int) = holder.itemView.updateLayoutParams {
-        (it as ViewGroup.MarginLayoutParams).apply {
+    private fun setHorizontalMargins(holder: PocketVideoViewHolder, position: Int) =
+        holder.itemView.updateLayoutParams<MarginLayoutParams> {
             // We need to reset margins on every view, not just first/last, because the View instance can be re-used.
             marginStart = if (position == 0) feedHorizontalMargin else videoItemHorizontalMargin
             marginEnd = if (position == pocketVideos.size - 1) feedHorizontalMargin else videoItemHorizontalMargin
         }
-    }
 }
 
 private class PocketVideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

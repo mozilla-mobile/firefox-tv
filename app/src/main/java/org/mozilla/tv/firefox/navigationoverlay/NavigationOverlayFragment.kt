@@ -20,6 +20,7 @@ import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -42,7 +43,6 @@ import org.mozilla.tv.firefox.ext.isEffectivelyVisible
 import org.mozilla.tv.firefox.ext.isVisible
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
 import org.mozilla.tv.firefox.ext.serviceLocator
-import org.mozilla.tv.firefox.ext.updateLayoutParams
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
@@ -328,9 +328,8 @@ class NavigationOverlayFragment : Fragment() {
         // complex because we need to relayout more than the changed view when adding/removing a row.
         val tileBottomMargin = resources.getDimensionPixelSize(R.dimen.home_tile_margin_bottom) -
                 resources.getDimensionPixelSize(R.dimen.home_tile_container_margin_bottom)
-        updateLayoutParams {
-            val marginLayoutParams = it as ViewGroup.MarginLayoutParams
-            marginLayoutParams.bottomMargin = -tileBottomMargin
+        updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            bottomMargin = -tileBottomMargin
         }
     }
 
