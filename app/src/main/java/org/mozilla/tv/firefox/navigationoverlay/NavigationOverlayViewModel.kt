@@ -11,7 +11,18 @@ import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.URLs
 
 class NavigationOverlayViewModel(sessionRepo: SessionRepo) : ViewModel() {
+    private var currSessionId = ""
+
     val viewIsSplit: LiveData<Boolean> = sessionRepo.state.map {
         it.currentUrl != URLs.APP_URL_HOME
+    }
+
+    val isSessionChanged: LiveData<Boolean> = sessionRepo.state.map {
+        if (currSessionId != it.sessionId) {
+            currSessionId = it.sessionId
+            true
+        } else {
+            false
+        }
     }
 }

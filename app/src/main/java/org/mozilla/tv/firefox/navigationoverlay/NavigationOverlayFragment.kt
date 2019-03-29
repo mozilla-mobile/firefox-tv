@@ -134,6 +134,8 @@ class NavigationOverlayFragment : Fragment(), TabsTray.Observer {
         get() = activity?.currentFocus
 
     private lateinit var serviceLocator: ServiceLocator
+
+    private lateinit var navOverlayViewModel: NavigationOverlayViewModel
     private lateinit var toolbarViewModel: ToolbarViewModel
     private lateinit var pinnedTileViewModel: PinnedTileViewModel
     private lateinit var pocketViewModel: PocketViewModel
@@ -150,6 +152,7 @@ class NavigationOverlayFragment : Fragment(), TabsTray.Observer {
 
         serviceLocator = context!!.serviceLocator
 
+        navOverlayViewModel = FirefoxViewModelProviders.of(this).get(NavigationOverlayViewModel::class.java)
         toolbarViewModel = FirefoxViewModelProviders.of(this).get(ToolbarViewModel::class.java)
         pinnedTileViewModel = FirefoxViewModelProviders.of(this).get(PinnedTileViewModel::class.java)
         pocketViewModel = FirefoxViewModelProviders.of(this).get(PocketViewModel::class.java)
@@ -216,6 +219,12 @@ class NavigationOverlayFragment : Fragment(), TabsTray.Observer {
             requireWebRenderComponents.sessionManager,
             requireWebRenderComponents.tabsUseCases,
             ::closeOverlay)
+
+        navOverlayViewModel.isSessionChanged.observe(viewLifecycleOwner, Observer { changed ->
+            if (changed) {
+                navUrlInput.requestFocus()
+            }
+        })
     }
 
     private fun closeOverlay() {
