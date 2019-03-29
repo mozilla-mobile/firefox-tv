@@ -185,6 +185,8 @@ dependencies {
     androidTestImplementation "androidx.test:rules:$test_rules"
     androidTestUtil "androidx.test:orchestrator:$test_orchestrator"
 
+    androidTestImplementation "org.mozilla.components:support-android-test:$moz_components_version"
+
     androidTestImplementation 'com.squareup.okhttp3:mockwebserver:3.10.0'
     testImplementation 'com.squareup.okhttp3:mockwebserver:3.10.0'
 
