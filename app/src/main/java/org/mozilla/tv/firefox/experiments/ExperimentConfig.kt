@@ -10,7 +10,8 @@ import mozilla.components.service.fretboard.ExperimentDescriptor
  * [ExperimentConfig] defines a set of supported [ExperimentDescriptor] from [Fretboard]
  */
 enum class ExperimentConfig(val value: String) {
-    AA_TEST("AAtest-1675")
+    AA_TEST("AAtest-1675"),
+    HINT_BAR_TEST("TODO") // TODO set up test on backend
 }
 
 /**
