@@ -97,7 +97,6 @@ open class TelemetryIntegration protected constructor(
         val CLEAR_DATA = "clear_data"
         val BACK = "back"
         val FORWARD = "forward"
-        val SETTINGS = "settings"
         val ON = "on"
         val OFF = "off"
         val TILE_BUNDLED = "bundled"
@@ -298,8 +297,6 @@ open class TelemetryIntegration protected constructor(
         isDesktopModeButtonChecked: Boolean
     ) {
         val telemetryValue = when (event) {
-            NavigationEvent.SETTINGS -> Value.SETTINGS
-
             NavigationEvent.BACK -> Value.BACK
             NavigationEvent.FORWARD -> Value.FORWARD
             NavigationEvent.RELOAD -> Value.RELOAD

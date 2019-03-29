@@ -52,14 +52,8 @@
         android:id="@+id/exitButton"
         style="@style/NavigationButton"
         android:src="@drawable/ic_home"
-        android:contentDescription="@null"/>
-
-    <!-- Image src set in code to fix SVG. -->
-    <ImageButton
-        android:id="@+id/navButtonSettings"
-        style="@style/NavigationButton"
-        android:contentDescription="@string/menu_settings"
-        android:nextFocusRight="@id/navButtonSettings"/>
+        android:contentDescription="@null"
+        android:nextFocusRight="@id/exitButton"/>
 
     <ImageView
         android:layout_width="wrap_content"

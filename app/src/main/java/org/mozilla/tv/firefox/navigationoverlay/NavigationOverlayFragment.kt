@@ -58,7 +58,6 @@ import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.pocket.PocketViewModel
-import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.ServiceLocator
@@ -72,14 +71,13 @@ private const val COL_COUNT = 5
 private val uiHandler = Handler(Looper.getMainLooper())
 
 enum class NavigationEvent {
-    SETTINGS, BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION, POCKET, DESKTOP_MODE, EXIT_FIREFOX;
+    BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION, POCKET, DESKTOP_MODE, EXIT_FIREFOX;
 
     companion object {
         fun fromViewClick(viewId: Int?) = when (viewId) {
             R.id.navButtonBack -> BACK
             R.id.navButtonForward -> FORWARD
             R.id.navButtonReload -> RELOAD
-            R.id.navButtonSettings -> SETTINGS
             R.id.turboButton -> TURBO
             R.id.pinButton -> PIN_ACTION
             R.id.pocketVideoMegaTileView -> POCKET
@@ -112,7 +110,6 @@ class NavigationOverlayFragment : Fragment() {
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
                                       autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
         when (event) {
-            NavigationEvent.SETTINGS -> serviceLocator.screenController.showSettingsScreen(fragmentManager!!)
             NavigationEvent.LOAD_URL -> {
                 (activity as MainActivity).onTextInputUrlEntered(value!!, autocompleteResult!!, UrlTextInputLocation.MENU)
                 context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
@@ -198,7 +195,6 @@ class NavigationOverlayFragment : Fragment() {
         initPinnedTiles()
         initSettingsChannel() // When pulling everything into channels, add this to the channel RV
 
-        navButtonSettings.setImageResource(R.drawable.ic_settings) // Must be set in code for SVG to work correctly.
         exitButton.contentDescription = serviceLocator.experimentsProvider.getAAExitButtonExperiment(ExperimentConfig.AA_TEST)
 
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context!!, R.color.photonGrey10_a60p)) }
@@ -206,10 +202,6 @@ class NavigationOverlayFragment : Fragment() {
 
         // TODO: remove this when FocusRepo is in place #1395
         when (defaultFocusTag) {
-            SettingsFragment.FRAGMENT_TAG -> {
-                navButtonSettings.requestFocus()
-                defaultFocusTag = NavigationOverlayFragment.FRAGMENT_TAG
-            }
             PocketVideoFragment.FRAGMENT_TAG -> {
                 pocketVideoMegaTileView.requestFocus()
                 defaultFocusTag = NavigationOverlayFragment.FRAGMENT_TAG
