@@ -45,9 +45,9 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setupDataCollectionScreen(
-            inflater: LayoutInflater,
-            parentView: ViewGroup?,
-            settingsViewModel: SettingsViewModel
+        inflater: LayoutInflater,
+        parentView: ViewGroup?,
+        settingsViewModel: SettingsViewModel
     ): View {
         val view = inflater.inflate(R.layout.settings_screen_switch, parentView, false)
         settingsViewModel.dataCollectionEnabled.observe(viewLifecycleOwner, Observer<Boolean> { state ->
@@ -60,9 +60,9 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setupClearCookiesScreen(
-            inflater: LayoutInflater,
-            parentView: ViewGroup?,
-            settingsViewModel: SettingsViewModel
+        inflater: LayoutInflater,
+        parentView: ViewGroup?,
+        settingsViewModel: SettingsViewModel
     ): View {
         settingsViewModel.events.observe(viewLifecycleOwner, Observer {
             it?.consume { event ->

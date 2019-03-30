@@ -13,26 +13,26 @@ import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.utils.URLs
 
 class SettingsChannelAdapter(
-        private val loadUrl: (String) -> Unit,
-        private val showSettings: (SettingsType) -> Unit
+    private val loadUrl: (String) -> Unit,
+    private val showSettings: (SettingsType) -> Unit
 ) : RecyclerView.Adapter<SettingsTileHolder>() {
     private val settingsItems = arrayOf(
-            SettingsItem(
-                    SettingsType.DATA_COLLECTION,
-                    R.drawable.lb_ic_sad_cloud,
-                    R.string.preference_mozilla_telemetry2),
-            SettingsItem(
-                    SettingsType.CLEAR_COOKIES,
-                    R.drawable.mozac_ic_delete,
-                    R.string.settings_cookies_dialog_title),
-            SettingsItem(
-                    SettingsType.ABOUT,
-                    R.drawable.mozac_ic_info,
-                    R.string.menu_about),
-            SettingsItem(
-                    SettingsType.PRIVACY_POLICY,
-                    R.drawable.mozac_ic_lock,
-                    R.string.preference_privacy_notice)
+        SettingsItem(
+            SettingsType.DATA_COLLECTION,
+            R.drawable.lb_ic_sad_cloud,
+            R.string.preference_mozilla_telemetry2),
+        SettingsItem(
+            SettingsType.CLEAR_COOKIES,
+            R.drawable.mozac_ic_delete,
+            R.string.settings_cookies_dialog_title),
+        SettingsItem(
+            SettingsType.ABOUT,
+            R.drawable.mozac_ic_info,
+            R.string.menu_about),
+        SettingsItem(
+            SettingsType.PRIVACY_POLICY,
+            R.drawable.mozac_ic_lock,
+            R.string.preference_privacy_notice)
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = SettingsTileHolder(
