@@ -14,8 +14,8 @@ object ScreenControllerStateMachine {
     }
 
     enum class Transition {
-        ADD_OVERLAY, REMOVE_OVERLAY, ADD_POCKET, REMOVE_POCKET, ADD_SETTINGS, REMOVE_SETTINGS, SHOW_BROWSER,
-        EXIT_APP, NO_OP
+        ADD_OVERLAY, REMOVE_OVERLAY, ADD_POCKET, REMOVE_POCKET, ADD_SETTINGS_DATA,
+        ADD_SETTINGS_COOKIES, REMOVE_SETTINGS, SHOW_BROWSER, EXIT_APP, NO_OP
     }
 
     fun getNewStateMenuPress(currentActiveScreen: ActiveScreen, isUrlHome: Boolean): Transition {
