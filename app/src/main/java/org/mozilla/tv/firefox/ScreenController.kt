@@ -93,12 +93,12 @@ class ScreenController(private val sessionRepo: SessionRepo) {
     }
 
     fun showSettingsScreen(fragmentManager: FragmentManager, settingsType: SettingsType) {
-        handleTransitionAndUpdateActiveScreen(fragmentManager, Transition.ADD_SETTINGS)
-        when (settingsType) {
-            SettingsType.DATA_COLLECTION -> return
-            SettingsType.CLEAR_COOKIES -> return
+        val transition = when (settingsType) {
+            SettingsType.DATA_COLLECTION -> Transition.ADD_SETTINGS_DATA
+            SettingsType.CLEAR_COOKIES -> Transition.ADD_SETTINGS_COOKIES
             else -> return
         }
+        handleTransitionAndUpdateActiveScreen(fragmentManager, transition)
     }
 
     fun showPocketScreen(fragmentManager: FragmentManager) {
@@ -215,11 +215,18 @@ class ScreenController(private val sessionRepo: SessionRepo) {
                     .hide(fragmentManager.pocketFragment())
                     .commit()
             }
-            Transition.ADD_SETTINGS -> {
+            Transition.ADD_SETTINGS_DATA -> {
                 _currentActiveScreen.onNext(ActiveScreen.SETTINGS)
                 fragmentManager.beginTransaction()
                     .hide(fragmentManager.navigationOverlayFragment())
-                    .add(R.id.container_settings, SettingsFragment(), SettingsFragment.FRAGMENT_TAG)
+                    .add(R.id.container_settings, SettingsFragment.newInstance(SettingsType.DATA_COLLECTION), SettingsFragment.FRAGMENT_TAG)
+                    .commit()
+            }
+            Transition.ADD_SETTINGS_COOKIES -> {
+                _currentActiveScreen.onNext(ActiveScreen.SETTINGS)
+                fragmentManager.beginTransaction()
+                    .hide(fragmentManager.navigationOverlayFragment())
+                    .add(R.id.container_settings, SettingsFragment.newInstance(SettingsType.CLEAR_COOKIES), SettingsFragment.FRAGMENT_TAG)
                     .commit()
             }
             Transition.REMOVE_SETTINGS -> {

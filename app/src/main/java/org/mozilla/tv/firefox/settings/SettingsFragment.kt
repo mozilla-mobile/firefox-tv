@@ -13,13 +13,19 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.android.synthetic.main.fragment_settings.view.*
+import kotlinx.android.synthetic.main.settings_screen_buttons.*
+import kotlinx.android.synthetic.main.settings_screen_buttons.view.*
+import kotlinx.android.synthetic.main.settings_screen_switch.*
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.serviceLocator
+import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsType
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.URLs
+
+const val KEY_SETTINGS_TYPE = "KEY_SETTINGS_TYPE"
 
 /** The settings for the app. */
 class SettingsFragment : Fragment() {
@@ -28,25 +34,49 @@ class SettingsFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val view = inflater.inflate(R.layout.fragment_settings, container, false)
-        view.ic_lock.setImageResource(R.drawable.mozac_ic_lock)
+        val settingsVM = FirefoxViewModelProviders.of(this@SettingsFragment).get(SettingsViewModel::class.java)
+        val type: SettingsType = SettingsType.valueOf(arguments!!.getString(KEY_SETTINGS_TYPE)!!)
+        return when (type) {
+            SettingsType.DATA_COLLECTION -> setupDataCollectionScreen(inflater, container, settingsVM)
+            SettingsType.CLEAR_COOKIES -> setupClearCookiesScreen(inflater, container, settingsVM)
+            else -> return container!!
+        }
+    }
 
-        view.aboutButton.setOnClickListener {
-            serviceLocator?.screenController?.showBrowserScreenForUrl(fragmentManager!!, URLs.URL_ABOUT)
-        }
-        view.privacyNoticeButton.setOnClickListener {
-            serviceLocator?.screenController?.showBrowserScreenForUrl(fragmentManager!!, URLs.PRIVACY_NOTICE_URL)
-        }
-
-        FirefoxViewModelProviders.of(this@SettingsFragment).get(SettingsViewModel::class.java).also { settingsVM ->
-            setupSettingsViewModel(view, settingsVM)
-        }
+    private fun setupDataCollectionScreen(
+            inflater: LayoutInflater,
+            parentView: ViewGroup?,
+            settingsViewModel: SettingsViewModel
+    ): View {
+        val view = inflater.inflate(R.layout.settings_screen_switch, parentView, false)
+        settingsViewModel.dataCollectionEnabled.observe(viewLifecycleOwner, Observer<Boolean> { state ->
+            toggle.isChecked = state ?: return@Observer
+        })
         return view
     }
 
-    override fun onHiddenChanged(hidden: Boolean) {
-        FocusOnShowDelegate().onHiddenChanged(this, hidden)
-        super.onHiddenChanged(hidden)
+    private fun setupClearCookiesScreen(
+            inflater: LayoutInflater,
+            parentView: ViewGroup?,
+            settingsViewModel: SettingsViewModel
+    ): View {
+        val view = inflater.inflate(R.layout.settings_screen_buttons, parentView, false)
+        view.confirm_action.setOnClickListener {
+            AlertDialog.Builder(activity)
+                    .setTitle(R.string.settings_cookies_dialog_title)
+                    .setMessage(R.string.settings_cookies_dialog_content2)
+                    .setCancelable(true)
+                    .setPositiveButton(getString(R.string.action_ok)) { dialog, _ ->
+                    with(requireContext()) {
+                            settingsViewModel.clearBrowsingData(serviceLocator.engineViewCache)
+                            dialog.cancel()
+                        }
+                    }
+                    .setNegativeButton(
+                            getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel() }
+                    .create().show()
+        }
+        return view
     }
 
     private fun setupSettingsViewModel(parentView: View, settingsViewModel: SettingsViewModel) {
@@ -81,21 +111,7 @@ class SettingsFragment : Fragment() {
             settingsViewModel.setDataCollectionEnabled(telemetryButton.isChecked)
         }
 
-        parentView.deleteButton.setOnClickListener { _ ->
-            AlertDialog.Builder(activity)
-                    .setTitle(R.string.settings_cookies_dialog_title)
-                    .setMessage(R.string.settings_cookies_dialog_content2)
-                    .setCancelable(true)
-                    .setPositiveButton(getString(R.string.action_ok)) { dialog, _ ->
-                    with(requireContext()) {
-                            settingsViewModel.clearBrowsingData(serviceLocator.engineViewCache)
-                            dialog.cancel()
-                        }
-                    }
-                    .setNegativeButton(
-                            getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel() }
-                    .create().show()
-        }
+
     }
 
     /**
@@ -123,7 +139,12 @@ class SettingsFragment : Fragment() {
     companion object {
         const val FRAGMENT_TAG = "settings"
 
-        @JvmStatic
-        fun create() = SettingsFragment()
+        fun newInstance(type: SettingsType): SettingsFragment {
+            return SettingsFragment().apply {
+                arguments = Bundle().apply {
+                    putString(KEY_SETTINGS_TYPE, type.toString())
+                }
+            }
+        }
     }
 }
