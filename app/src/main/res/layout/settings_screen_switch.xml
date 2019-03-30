@@ -40,6 +40,7 @@
         android:layout_marginEnd="140dp"
         android:thumbTint="@color/preferences_switch_selector"
         android:trackTint="@color/preferences_switch_selector"
+        android:contentDescription="@string/preference_mozilla_telemetry2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/description">
 
