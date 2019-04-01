@@ -18,6 +18,7 @@ import org.mozilla.tv.firefox.ext.Js.NO_ELEMENT_FOCUSED
 import org.mozilla.tv.firefox.ext.Js.PAUSE_VIDEO
 import org.mozilla.tv.firefox.ext.Js.RESTORE_JS
 import org.mozilla.tv.firefox.ext.Js.SIDEBAR_FOCUSED
+import org.mozilla.tv.firefox.utils.Direction
 import org.mozilla.tv.firefox.webrender.FocusedDOMElementCache
 import java.util.WeakHashMap
 
@@ -212,9 +213,13 @@ fun EngineView.onResumeIfNotNull() {
         this.onResume()
 }
 
-fun EngineView.couldScrollUp() = geckoView?.canScrollVertically(-1) == true
-
-fun EngineView.couldScrollDown() = geckoView?.canScrollVertically(1) == true
+fun EngineView.couldScrollInDirection(direction: Direction): Boolean =
+        when (direction) {
+            Direction.UP -> geckoView?.canScrollVertically(-1)
+            Direction.DOWN -> geckoView?.canScrollVertically(1)
+            Direction.LEFT -> geckoView?.canScrollHorizontally(-1)
+            Direction.RIGHT -> geckoView?.canScrollHorizontally(1)
+        } == true
 
 // This method is only for adding extension methods here (as a workaround). Do not expose WebView to the app.
 private val EngineView.geckoView: GeckoView?
