@@ -13,7 +13,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.hint.Hint
+import org.mozilla.tv.firefox.hint.HintContent
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.URLs
 
@@ -58,7 +58,7 @@ class OverlayHintViewModelTest {
     @Test
     fun `WHEN always THEN hint should be close menu`() {
         // TODO update this when we have the real strings
-        val expectedHints = listOf(Hint(R.string.hint_press_menu_to_close_overlay, R.string.hardware_button_a11y_menu, R.drawable.hardware_remote_menu))
+        val expectedHints = listOf(HintContent(R.string.hint_press_menu_to_close_overlay, R.string.hardware_button_a11y_menu, R.drawable.hardware_remote_menu))
         val hints = hintVM.hints.test()
 
         sessionRepoState.onNext(fakeSessionState("https://www.mozilla.org"))

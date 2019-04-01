@@ -11,5 +11,5 @@ import io.reactivex.Observable
  */
 interface HintViewModel {
     val isDisplayed: Observable<Boolean>
-    val hints: Observable<List<Hint>>
+    val hints: Observable<List<HintContent>>
 }
