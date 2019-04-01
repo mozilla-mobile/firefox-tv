@@ -22,7 +22,7 @@ object HintBinder {
                 .subscribe { hintContainer.hintBarContainer.isVisible = it }
 
         val hintDisposable = vm.hints.subscribe {
-            val hint = it.first() // For the first version, only one hint is shown
+            val hint = it.firstOrNull() ?: return@subscribe // For the first version, only one hint is shown
             val context = hintContainer.context
             hintContainer.hintBarIcon.setImageDrawable(context.getDrawable(hint.icon))
             hintContainer.hintBarIcon.contentDescription = context.getString(hint.contentDescription)
