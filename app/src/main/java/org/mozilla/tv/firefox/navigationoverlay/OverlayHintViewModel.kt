@@ -7,13 +7,13 @@ package org.mozilla.tv.firefox.navigationoverlay
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.hint.Hint
+import org.mozilla.tv.firefox.hint.HintContent
 import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.webrender.WebRenderHintViewModel
 
-private val CLOSE_MENU_HINT = Hint(
+private val CLOSE_MENU_HINT = HintContent(
         R.string.hint_press_menu_to_close_overlay,
         R.string.hardware_button_a11y_menu,
         R.drawable.hardware_remote_menu
@@ -35,5 +35,5 @@ class OverlayHintViewModel(sessionRepo: SessionRepo) : ViewModel(), HintViewMode
             .map { it.currentUrl != URLs.APP_URL_HOME }
             .replay(1)
             .autoConnect(0)
-    override val hints: Observable<List<Hint>> = Observable.just(listOf(CLOSE_MENU_HINT))
+    override val hints: Observable<List<HintContent>> = Observable.just(listOf(CLOSE_MENU_HINT))
 }

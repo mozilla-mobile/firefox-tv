@@ -9,7 +9,7 @@ import io.reactivex.Observable
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
-import org.mozilla.tv.firefox.hint.Hint
+import org.mozilla.tv.firefox.hint.HintContent
 import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.navigationoverlay.OverlayHintViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
@@ -19,7 +19,7 @@ import org.mozilla.tv.firefox.webrender.cursor.CursorEventRepo
 import org.mozilla.tv.firefox.webrender.cursor.CursorEventRepo.CursorEvent.CursorMoved
 import org.mozilla.tv.firefox.webrender.cursor.CursorEventRepo.CursorEvent.ScrolledToEdge
 
-private val OPEN_MENU_HINT = Hint(
+private val OPEN_MENU_HINT = HintContent(
     R.string.hint_press_menu_to_open_overlay,
     R.string.hardware_button_a11y_menu,
     R.drawable.hardware_remote_menu
@@ -41,7 +41,7 @@ class WebRenderHintViewModel(
                 .replay(1)
                 .autoConnect(0)
     }
-    override val hints: Observable<List<Hint>> = Observable.just(listOf(OPEN_MENU_HINT))
+    override val hints: Observable<List<HintContent>> = Observable.just(listOf(OPEN_MENU_HINT))
 
     /**
      * Emits true when the hint bar should be shown, or false when it should be hidden

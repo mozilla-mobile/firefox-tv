@@ -11,5 +11,5 @@ import io.reactivex.Observable
  */
 class InactiveHintViewModel: HintViewModel {
     override val isDisplayed: Observable<Boolean> = Observable.just(false)
-    override val hints: Observable<List<Hint>> = Observable.just(listOf())
+    override val hints: Observable<List<HintContent>> = Observable.just(listOf())
 }

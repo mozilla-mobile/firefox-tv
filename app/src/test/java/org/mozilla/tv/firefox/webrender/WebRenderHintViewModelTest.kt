@@ -15,7 +15,7 @@ import org.junit.Test
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
-import org.mozilla.tv.firefox.hint.Hint
+import org.mozilla.tv.firefox.hint.HintContent
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.Direction
 import org.mozilla.tv.firefox.utils.URLs
@@ -46,7 +46,7 @@ class WebRenderHintViewModelTest {
 
     @Test
     fun `WHEN always THEN hint should be open menu`() {
-        val expectedHints = listOf(Hint(R.string.hint_press_menu_to_open_overlay, R.string.hardware_button_a11y_menu, R.drawable.hardware_remote_menu))
+        val expectedHints = listOf(HintContent(R.string.hint_press_menu_to_open_overlay, R.string.hardware_button_a11y_menu, R.drawable.hardware_remote_menu))
         val hints = hintVM.hints.test()
 
         sessionRepoState.onNext(fakeSessionState("https://www.mozilla.org"))

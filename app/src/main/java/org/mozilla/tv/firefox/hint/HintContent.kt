@@ -10,7 +10,7 @@ import androidx.annotation.StringRes
 /**
  * Backing data for hint to be displayed on the bottom hint bar
  */
-data class Hint(
+data class HintContent(
     @StringRes val text: Int,
     @StringRes val contentDescription: Int,
     @DrawableRes val icon: Int
