@@ -12,9 +12,9 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
 import androidx.lifecycle.OnLifecycleEvent
 import kotlinx.coroutines.Job
-import org.mozilla.tv.firefox.ext.couldScrollDown
-import org.mozilla.tv.firefox.ext.couldScrollUp
+import org.mozilla.tv.firefox.ext.couldScrollInDirection
 import org.mozilla.tv.firefox.ext.scrollByClamped
+import org.mozilla.tv.firefox.utils.Direction
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 
 private const val MAX_SCROLL_VELOCITY = 13
@@ -105,13 +105,10 @@ class CursorController private constructor(
         webRenderFragment.engineView?.scrollByClamped(scrollX, scrollY)
     }
 
-    fun cursorIsNearTopOfScreen() = legacyViewModel.cursorIsNearTopOfScreen()
+    fun getEdgeOfScreenNearCursor() = legacyViewModel.getEdgeOfScreenNearCursor()
 
-    fun cursorIsNearBottomOfScreen() = legacyViewModel.cursorIsNearBottomOfScreen()
-
-    fun webViewCouldScrollUp(): Boolean? = webRenderFragment.engineView?.couldScrollUp()
-
-    fun webViewCouldScrollDown(): Boolean? = webRenderFragment.engineView?.couldScrollDown()
+    fun webViewCouldScrollInDirection(direction: Direction) =
+            webRenderFragment.engineView?.couldScrollInDirection(direction)
 
     companion object {
         fun newInstanceOnCreateView(

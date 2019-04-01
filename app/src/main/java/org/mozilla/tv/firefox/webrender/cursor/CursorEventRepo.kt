@@ -85,17 +85,12 @@ class CursorEventRepo(screenController: ScreenController) {
 
         fun Observable<Direction>.mapToCursorEvent() =
                 this.map {
+                    val edgeNearCursor = cursorController?.getEdgeOfScreenNearCursor()
+                    val couldScroll = edgeNearCursor?.let { cursorController?.webViewCouldScrollInDirection(it) }
                     val scrollToEdgeEvent = when {
-                        it == Direction.UP &&
-                                cursorController?.cursorIsNearTopOfScreen() == true &&
-                                cursorController?.webViewCouldScrollUp() == false
-                        -> CursorEvent.ScrolledToEdge(Direction.UP)
-
-                        it == Direction.DOWN &&
-                                cursorController?.cursorIsNearBottomOfScreen() == true &&
-                                cursorController?.webViewCouldScrollDown() == false
-                        -> CursorEvent.ScrolledToEdge(Direction.DOWN)
-
+                        edgeNearCursor == null -> null
+                        couldScroll == true -> null
+                        it == edgeNearCursor -> CursorEvent.ScrolledToEdge(it)
                         else -> null
                     }
                     return@map scrollToEdgeEvent ?: CursorEvent.CursorMoved(it)

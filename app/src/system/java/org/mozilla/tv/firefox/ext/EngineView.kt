@@ -22,6 +22,7 @@ import org.mozilla.tv.firefox.ext.Js.NO_ELEMENT_FOCUSED
 import org.mozilla.tv.firefox.ext.Js.PAUSE_VIDEO
 import org.mozilla.tv.firefox.ext.Js.RESTORE_JS
 import org.mozilla.tv.firefox.ext.Js.SIDEBAR_FOCUSED
+import org.mozilla.tv.firefox.utils.Direction
 import org.mozilla.tv.firefox.webrender.FocusedDOMElementCache
 import java.util.WeakHashMap
 
@@ -192,9 +193,13 @@ fun EngineView.scrollByClamped(vx: Int, vy: Int) {
     }
 }
 
-fun EngineView.couldScrollUp() = webView?.canScrollVertically(-1) == true
-
-fun EngineView.couldScrollDown() = webView?.canScrollVertically(1) == true
+fun EngineView.couldScrollInDirection(direction: Direction): Boolean =
+        when (direction) {
+            Direction.UP -> webView?.canScrollVertically(-1)
+            Direction.DOWN -> webView?.canScrollVertically(1)
+            Direction.LEFT -> webView?.canScrollHorizontally(-1)
+            Direction.RIGHT -> webView?.canScrollHorizontally(1)
+        } == true
 
 fun EngineView.handleYoutubeBack(indexToGoBackTo: Int) {
     val goBackSteps = backForwardList.currentIndex - indexToGoBackTo
