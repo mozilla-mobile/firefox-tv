@@ -101,8 +101,7 @@ class CursorEventRepo(screenController: ScreenController) {
                     return@map scrollToEdgeEvent ?: CursorEvent.CursorMoved(it)
                 }
 
-        Observables.combineLatest(keyEvents, screenController.currentActiveScreen)
-                .throttleEvents()
+        Observables.combineLatest(keyEvents.throttleEvents(), screenController.currentActiveScreen)
                 .onlyEmitIfWebRenderIsActive()
                 .dropActiveScreen()
                 .filterIsDirectionKey()
