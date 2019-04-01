@@ -9,7 +9,7 @@ import io.reactivex.Observable
 /**
  * Used when a user is part of an experiment that does not show the hint bar
  */
-class InactiveHintViewModel: HintViewModel {
+class InactiveHintViewModel : HintViewModel {
     override val isDisplayed: Observable<Boolean> = Observable.just(false)
     override val hints: Observable<List<HintContent>> = Observable.just(listOf())
 }
