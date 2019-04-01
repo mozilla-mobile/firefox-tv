@@ -54,10 +54,8 @@ class CursorEventRepoTest {
         repo = CursorEventRepo(screenController)
         repo.setCursorController(cursorController)
 
-        every { cursorController.webViewCouldScrollUp() } answers { true }
-        every { cursorController.webViewCouldScrollDown() } answers { true }
-        every { cursorController.cursorIsNearTopOfScreen() } answers { false }
-        every { cursorController.cursorIsNearBottomOfScreen() } answers { false }
+        every { cursorController.webViewCouldScrollInDirection(any()) } answers { true }
+        every { cursorController.getEdgeOfScreenNearCursor() } answers { null }
     }
 
     @Test
@@ -77,24 +75,18 @@ class CursorEventRepoTest {
 
     @Test
     fun `WHEN cursor does not reach top or bottom of screen THEN only movement events should be emitted`() {
-        every { cursorController.cursorIsNearTopOfScreen() } answers { false }
-        every { cursorController.cursorIsNearBottomOfScreen() } answers { false }
-
-        every { cursorController.webViewCouldScrollUp() } answers { true }
-        every { cursorController.webViewCouldScrollDown() } answers { true }
-
         val events = repo.webRenderDirectionEvents.test()
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_UP)
 
-        every { cursorController.webViewCouldScrollUp() } answers { false }
+        every { cursorController.webViewCouldScrollInDirection(Direction.UP) } answers { false }
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_UP)
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_DOWN)
 
-        every { cursorController.webViewCouldScrollUp() } answers { true }
-        every { cursorController.webViewCouldScrollDown() } answers { false }
+        every { cursorController.webViewCouldScrollInDirection(Direction.UP) } answers { true }
+        every { cursorController.webViewCouldScrollInDirection(Direction.DOWN) } answers { false }
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_DOWN)
 
@@ -103,20 +95,18 @@ class CursorEventRepoTest {
 
     @Test
     fun `GIVEN webpage cannot scroll up or down WHEN cursor reaches top or bottom of screen THEN scroll events should be emitted`() {
-        every { cursorController.webViewCouldScrollUp() } answers { false }
-        every { cursorController.webViewCouldScrollDown() } answers { false }
+        every { cursorController.webViewCouldScrollInDirection(any()) } answers { false }
 
         val events = repo.webRenderDirectionEvents.test()
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_UP)
 
-        every { cursorController.cursorIsNearTopOfScreen() } answers { true }
+        every { cursorController.getEdgeOfScreenNearCursor() } answers { Direction.UP }
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_UP)
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_DOWN)
 
-        every { cursorController.cursorIsNearTopOfScreen() } answers { false }
-        every { cursorController.cursorIsNearBottomOfScreen() } answers { true }
+        every { cursorController.getEdgeOfScreenNearCursor() } answers { Direction.DOWN }
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_DOWN)
 

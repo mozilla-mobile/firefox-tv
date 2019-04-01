@@ -177,9 +177,19 @@ class LegacyCursorViewModel(
         vel = 0f // Stop moving.
     }
 
-    fun cursorIsNearTopOfScreen() = pos.y < EDGE_OF_SCREEN_MARGIN
-
-    fun cursorIsNearBottomOfScreen() = pos.y > maxBounds.y - EDGE_OF_SCREEN_MARGIN
+    /**
+     * If the cursor is near the edge of the screen, this will return that
+     * direction.  If not, it will return null.
+     *
+     * When in a corner, only UP or DOWN will be returned.
+     */
+    fun getEdgeOfScreenNearCursor(): Direction? = when {
+        pos.y < EDGE_OF_SCREEN_MARGIN -> Direction.UP
+        pos.y > maxBounds.y - EDGE_OF_SCREEN_MARGIN -> Direction.DOWN
+        pos.x < EDGE_OF_SCREEN_MARGIN -> Direction.LEFT
+        pos.x > maxBounds.x - EDGE_OF_SCREEN_MARGIN -> Direction.RIGHT
+        else -> null
+    }
 }
 
 private fun clampPos(pos: PointF, maxBounds: PointF) {
