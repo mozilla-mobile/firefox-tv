@@ -8,6 +8,7 @@ import android.os.StrictMode
 import android.preference.PreferenceManager
 import androidx.annotation.VisibleForTesting
 import android.webkit.WebSettings
+import mozilla.components.support.ktx.android.content.runOnlyInMainProcess
 import org.mozilla.tv.firefox.components.locale.LocaleAwareApplication
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
 import org.mozilla.tv.firefox.webrender.VisibilityLifeCycleCallback
@@ -40,23 +41,29 @@ open class FirefoxApplication : LocaleAwareApplication() {
     override fun onCreate() {
         super.onCreate()
 
-        PreferenceManager.setDefaultValues(this, R.xml.settings, false)
-        serviceLocator = createServiceLocator()
+        // If this is not the main process then do not continue with the initialization here. Everything that
+        // follows only needs to be done in our app's main process and should not be done in other processes like
+        // a GeckoView child process or the crash handling process. Most importantly we never want to end up in a
+        // situation where we create a GeckoRuntime from the Gecko child process
+        applicationContext.runOnlyInMainProcess {
+            PreferenceManager.setDefaultValues(this, R.xml.settings, false)
+            serviceLocator = createServiceLocator()
 
-        // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.
-        SentryIntegration.init(this, serviceLocator.settingsRepo)
+            // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.
+            SentryIntegration.init(this, serviceLocator.settingsRepo)
 
-        TelemetryIntegration.INSTANCE.init(this)
+            TelemetryIntegration.INSTANCE.init(this)
 
-        with(serviceLocator.fretboardProvider) {
-            loadExperiments()
-            updateExperiments()
-        }
+            with(serviceLocator.fretboardProvider) {
+                loadExperiments()
+                updateExperiments()
+            }
 
-        enableStrictMode()
+            enableStrictMode()
 
-        visibilityLifeCycleCallback = VisibilityLifeCycleCallback(this).also {
-            registerActivityLifecycleCallbacks(it)
+            visibilityLifeCycleCallback = VisibilityLifeCycleCallback(this).also {
+                registerActivityLifecycleCallbacks(it)
+            }
         }
     }
 
