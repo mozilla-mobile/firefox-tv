@@ -72,7 +72,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         val session = getOrCreateSession(intentData)
 
-        webRenderComponents.sessionManager.getOrCreateEngineSession().resetView(this@MainActivity, session)
+        webRenderComponents.sessionManager.getOrCreateEngineSession().resetView(this@MainActivity)
 
         val screenController = serviceLocator.screenController
         screenController.setUpFragmentsForNewSession(supportFragmentManager, session)
