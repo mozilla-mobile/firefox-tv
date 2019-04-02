@@ -32,7 +32,7 @@ class OverlayHintViewModel(sessionRepo: SessionRepo) : ViewModel(), HintViewMode
     // to change contextually according to the currently focused view
 
     override val isDisplayed: Observable<Boolean> = sessionRepo.state
-            .map { it.currentUrl != URLs.APP_URL_HOME }
+            .map { it.backEnabled }
             .replay(1)
             .autoConnect(0)
     override val hints: Observable<List<HintContent>> = Observable.just(listOf(CLOSE_MENU_HINT))
