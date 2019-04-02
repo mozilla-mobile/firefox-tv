@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.fragment_browser.view.cursorView
 import kotlinx.android.synthetic.main.fragment_browser.view.engineView
 import kotlinx.android.synthetic.main.fragment_browser.view.progressBar
 import mozilla.components.browser.session.Session
+import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.EngineView
 import mozilla.components.concept.engine.permission.Permission
 import mozilla.components.concept.engine.permission.PermissionRequest
@@ -171,6 +172,16 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         sessionFeature?.start()
 
         /**
+         * When calling getOrCreateEngineSession(), [SessionManager] lazily creates an [EngineSession]
+         * instance and links it with its respective [Session]. During the linking, [SessionManager]
+         * calls EngineSession.loadUrl(session.url), which, during initialization, is Session.initialUrl
+         *
+         * This is how "about:home" successfully gets added to [WebView.WebForwardList], with which
+         * we do various different operations (such as exiting the app and handling Youtube back)
+         *
+         * We need to manually reload the session.url since we are replacing the webview instance that
+         * has already called loadUrl(session.url) during [EngineView] lazy instantiation
+         *
          * [SessionFeature.start] would eventually call [EngineView.render] which then initializes
          * its associated [EngineSession.webview]. We need make sure to load initialUrl after
          * WebView sets its WebViewClient (which happens during EngineView.render())
