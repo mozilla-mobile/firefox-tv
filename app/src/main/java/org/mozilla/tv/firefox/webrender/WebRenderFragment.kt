@@ -168,8 +168,14 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     override fun onStart() {
         super.onStart()
-
         sessionFeature?.start()
+
+        /**
+         * [SessionFeature.start] would eventually call [EngineView.render] which then initializes
+         * its associated [EngineSession.webview]. We need make sure to load initialUrl after
+         * WebView sets its WebViewClient (which happens during EngineView.render())
+         */
+        requireWebRenderComponents.sessionManager.getOrCreateEngineSession().loadUrl(session.url)
         serviceLocator!!.sessionRepo.events.subscribe {
             when (it) {
                 SessionRepo.Event.YouTubeBack -> youtubeBackHandler.onBackPressed()
