@@ -21,7 +21,7 @@ import org.mozilla.tv.firefox.webrender.cursor.CursorEventRepo.CursorEvent.Scrol
 
 private val OPEN_MENU_HINT = HintContent(
     R.string.hint_press_menu_to_open_overlay,
-    R.string.hardware_button_a11y_menu,
+    R.string.hint_press_menu_to_open_overlay_a11y,
     R.drawable.hardware_remote_menu
 )
 

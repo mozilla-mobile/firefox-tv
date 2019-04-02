@@ -14,8 +14,8 @@ import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.webrender.WebRenderHintViewModel
 
 private val CLOSE_MENU_HINT = HintContent(
-        R.string.hint_press_menu_to_close_overlay,
-        R.string.hardware_button_a11y_menu,
+        R.string.hint_press_back_to_close_overlay,
+        R.string.hint_press_back_to_close_overlay_a11y,
         R.drawable.hardware_remote_menu
 )
 
