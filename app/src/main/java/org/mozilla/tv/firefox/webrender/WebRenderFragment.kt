@@ -7,16 +7,19 @@ package org.mozilla.tv.firefox.webrender
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
+import android.view.Gravity
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.FrameLayout
 import androidx.annotation.UiThread
 import androidx.lifecycle.ViewModelProviders
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
+import kotlinx.android.synthetic.main.fragment_browser.progressBar
 import kotlinx.android.synthetic.main.fragment_browser.view.browserFragmentRoot
 import kotlinx.android.synthetic.main.fragment_browser.view.cursorView
 import kotlinx.android.synthetic.main.fragment_browser.view.engineView
@@ -43,7 +46,6 @@ import org.mozilla.tv.firefox.ext.resetView
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.hint.HintBinder
-import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.hint.InactiveHintViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
@@ -71,8 +73,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     private val mediaSessionHolder get() = activity as MediaSessionHolder? // null when not attached.
     private val compositeDisposable = CompositeDisposable()
 
-    private lateinit var hintViewModel: HintViewModel
-
     /**
      * Encapsulates the cursor's components. If this value is null, the Cursor is not attached
      * to the view hierarchy.
@@ -88,11 +88,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSession()
-        hintViewModel = if (serviceLocator!!.experimentsProvider.shouldShowHintBar()) {
-            FirefoxViewModelProviders.of(this).get(WebRenderHintViewModel::class.java)
-        } else {
-            InactiveHintViewModel()
-        }
     }
 
     @SuppressLint("RestrictedApi")
@@ -208,6 +203,15 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 null -> return@subscribe
             }.forceExhaustive
         }.addTo(compositeDisposable)
+
+        val (hintViewModel, progressBarGravity) = if (serviceLocator!!.experimentsProvider.shouldShowHintBar()) {
+            FirefoxViewModelProviders.of(this).get(WebRenderHintViewModel::class.java) to
+                    (Gravity.END or Gravity.BOTTOM)
+        } else {
+            InactiveHintViewModel() to (Gravity.START or Gravity.BOTTOM)
+        }
+
+        (progressBar.layoutParams as? FrameLayout.LayoutParams)?.gravity = progressBarGravity
 
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = true)
                 .forEach { compositeDisposable.add(it) }

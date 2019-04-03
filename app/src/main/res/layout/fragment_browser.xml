@@ -52,11 +52,12 @@
         android:scaleType="centerInside"
         />
 
+    <!-- Layout Gravity for the FirefoxProgressBar is set programmatically
+         due to differing requirements between experiments -->
     <org.mozilla.tv.firefox.webrender.FirefoxProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
         android:descendantFocusability="blocksDescendants"
         android:focusable="false" />
 </FrameLayout>
