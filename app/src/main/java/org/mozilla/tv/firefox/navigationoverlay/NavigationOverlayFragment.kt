@@ -223,6 +223,10 @@ class NavigationOverlayFragment : Fragment(), TabsTray.Observer {
                 navUrlInput.requestFocus()
             }
         })
+
+        if (!serviceLocator.experimentsProvider.showTabsExperiment()) {
+            tabsTray.visibility = View.GONE
+        }
     }
 
     private fun closeOverlay() {
@@ -427,13 +431,17 @@ class NavigationOverlayFragment : Fragment(), TabsTray.Observer {
             else -> R.id.turboButton
         }
 
-        tabsTray.nextFocusDownId = when {
-            @Suppress("DEPRECATION")
-            lastPocketState is PocketViewModel.State.Feed -> R.id.pocketVideoMegaTileView
-            @Suppress("DEPRECATION")
-            lastPocketState === PocketViewModel.State.Error -> R.id.megaTileTryAgainButton
-            tileAdapter.itemCount == 0 -> R.id.tabsTray
-            else -> R.id.tileContainer
+        if (!serviceLocator.experimentsProvider.showTabsExperiment()) {
+            navUrlInput.nextFocusDownId = when {
+                @Suppress("DEPRECATION")
+                lastPocketState is PocketViewModel.State.Feed -> R.id.pocketVideoMegaTileView
+                @Suppress("DEPRECATION")
+                lastPocketState === PocketViewModel.State.Error -> R.id.megaTileTryAgainButton
+                tileAdapter.itemCount == 0 -> R.id.tabsTray
+                else -> R.id.tileContainer
+            }
+
+            pocketVideoMegaTileView.nextFocusUpId = R.id.navUrlInput
         }
 
         pocketVideoMegaTileView.nextFocusDownId = when {

@@ -74,8 +74,7 @@
                 android:layout_marginStart="45dp"
                 android:layout_marginEnd="45dp"
                 android:layout_marginBottom="24dp"
-                android:focusable="true"
-                android:nextFocusUp="@id/navUrlInput"/>
+                android:focusable="true"/>
 
             <!-- Content description added in code. -->
             <org.mozilla.tv.firefox.pocket.PocketVideoMegaTile
@@ -86,8 +85,7 @@
                 android:layout_marginEnd="45dp"
                 android:layout_marginBottom="24dp"
                 android:background="@drawable/pocket_video_mega_tile_background"
-                android:focusable="true"
-                android:nextFocusUp="@id/tabsTray" />
+                android:focusable="true" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/tileContainer"
