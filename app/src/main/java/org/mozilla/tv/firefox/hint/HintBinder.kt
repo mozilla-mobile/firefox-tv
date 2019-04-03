@@ -9,10 +9,12 @@ import android.text.SpannableStringBuilder
 import android.text.style.ImageSpan
 import android.view.View
 import androidx.core.view.isVisible
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.hint_bar.view.hintBarContainer
 import kotlinx.android.synthetic.main.hint_bar.view.hintBarText
 import mozilla.components.support.ktx.android.content.res.pxToDp
+import java.util.concurrent.TimeUnit
 
 private const val IMAGE = "%IMAGE"
 private const val IMAGE_SIZE_DP = 24
@@ -22,10 +24,35 @@ private const val IMAGE_SIZE_DP = 24
  */
 object HintBinder {
 
-    fun bindHintsToView(vm: HintViewModel, hintContainer: View): List<Disposable> {
-        val displayedDisposable = vm.isDisplayed
-                .doOnDispose { hintContainer.hintBarContainer.isVisible = false }
-                .subscribe { hintContainer.hintBarContainer.isVisible = it }
+    fun bindHintsToView(vm: HintViewModel, hintContainer: View, animate: Boolean): List<Disposable> {
+        val displayedDisposable = if (!animate) {
+            vm.isDisplayed
+                    .doOnDispose { hintContainer.hintBarContainer.isVisible = false }
+                    .subscribe { hintContainer.hintBarContainer.isVisible = it }
+        } else {
+            vm.isDisplayed
+                    .throttleFirst(300, TimeUnit.MILLISECONDS)
+                    .doOnDispose { hintContainer.hintBarContainer.isVisible = false }
+                    .doOnSubscribe {
+                        hintContainer.hintBarContainer.animate()
+                                .setDuration(0)
+                                .translationY(hintContainer.hintBarContainer.height.toFloat())
+                                .start()
+                    }
+                    .subscribe {  shouldDisplay ->
+                        hintContainer.hintBarContainer.isVisible = true
+                        val (translationY, alpha) = when (shouldDisplay) {
+                            true -> Pair(0f, 1f)
+                            false -> Pair(hintContainer.hintBarContainer.height.toFloat(), 0f)
+                        }
+                        hintContainer.hintBarContainer.animate()
+                                .setDuration(250)
+                                .setInterpolator(FastOutSlowInInterpolator())
+                                .translationY(translationY)
+                                .alpha(alpha)
+                                .start()
+                    }
+        }
 
         val hintDisposable = vm.hints.subscribe {
             val hint = it.firstOrNull() ?: return@subscribe // For the first version, only one hint is shown

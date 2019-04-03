@@ -227,7 +227,7 @@ class NavigationOverlayFragment : Fragment() {
         super.onStart()
         observePocketState()
             .addTo(compositeDisposable)
-        HintBinder.bindHintsToView(hintViewModel, hintBarContainer)
+        HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = false)
                 .forEach { compositeDisposable.add(it) }
     }
 
