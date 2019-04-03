@@ -209,7 +209,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             }.forceExhaustive
         }.addTo(compositeDisposable)
 
-        HintBinder.bindHintsToView(hintViewModel, hintBarContainer)
+        HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = true)
                 .forEach { compositeDisposable.add(it) }
     }
 
