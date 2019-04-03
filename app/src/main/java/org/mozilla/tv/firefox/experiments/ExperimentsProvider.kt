@@ -45,6 +45,11 @@ class ExperimentsProvider(private val fretboard: Fretboard, private val context:
         }
     }
 
+    // TODO: when UX verifies tabs, implement a tabs experiment
+    fun showTabsExperiment(): Boolean {
+        return false
+    }
+
     /**
      * Check if [ExperimentConfig] + [ExperimentSuffix] is in the experiment and return its
      * corresponding [ExperimentDescriptor].
