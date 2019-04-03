@@ -57,6 +57,7 @@ class CursorEventRepo(screenController: ScreenController) {
 
     val webRenderDirectionEvents: Observable<CursorEvent> by lazy {
         fun <T> Observable<T>.throttleEvents(): Observable<T> =
+                // Prior to throttling, this caused major performance problems
                 this.throttleFirst(10, TimeUnit.MILLISECONDS)
 
         fun <T> Observable<Pair<T, ScreenControllerStateMachine.ActiveScreen>>.onlyEmitIfWebRenderIsActive() =
