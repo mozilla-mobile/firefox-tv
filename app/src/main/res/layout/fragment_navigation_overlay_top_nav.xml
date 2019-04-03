@@ -54,12 +54,6 @@
         android:src="@drawable/ic_home"
         android:contentDescription="@null"/>
 
-    <ImageButton
-        android:id="@+id/tabsButton"
-        style="@style/NavigationButton"
-        android:src="@drawable/mozac_ic_tab"
-        android:contentDescription="@null"/>
-
     <!-- Image src set in code to fix SVG. -->
     <ImageButton
         android:id="@+id/navButtonSettings"

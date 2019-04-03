@@ -31,12 +31,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
-    <FrameLayout
-        android:orientation="vertical"
-        android:id="@+id/container_tabs"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
     <include layout="@layout/overlay_debug" />
 
 </merge>

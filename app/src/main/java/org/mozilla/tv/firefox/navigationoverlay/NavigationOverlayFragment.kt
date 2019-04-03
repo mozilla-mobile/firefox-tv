@@ -65,7 +65,7 @@ private const val COL_COUNT = 5
 private val uiHandler = Handler(Looper.getMainLooper())
 
 enum class NavigationEvent {
-    SETTINGS, BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION, POCKET, DESKTOP_MODE, EXIT_FIREFOX, TABS;
+    SETTINGS, BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION, POCKET, DESKTOP_MODE, EXIT_FIREFOX;
 
     companion object {
         fun fromViewClick(viewId: Int?) = when (viewId) {
@@ -78,7 +78,6 @@ enum class NavigationEvent {
             R.id.pocketVideoMegaTileView -> POCKET
             R.id.desktopModeButton -> DESKTOP_MODE
             R.id.exitButton -> EXIT_FIREFOX
-            R.id.tabsButton -> TABS
             else -> null
         }
     }
@@ -123,7 +122,6 @@ class NavigationOverlayFragment : Fragment(), TabsTray.Observer {
                     serviceLocator.screenController.showPocketScreen(fragmentManager)
                 }
             }
-            NavigationEvent.TABS -> serviceLocator.screenController.showTabsTrayScreen(fragmentManager!!)
             NavigationEvent.TURBO, NavigationEvent.PIN_ACTION, NavigationEvent.DESKTOP_MODE, NavigationEvent.BACK,
             NavigationEvent.FORWARD, NavigationEvent.RELOAD, NavigationEvent.EXIT_FIREFOX -> { /* not handled by this object */ }
         }

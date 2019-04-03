@@ -323,7 +323,6 @@ open class TelemetryIntegration protected constructor(
                         boolToOnOff(isDesktopModeButtonChecked)).queue()
                 return
             }
-            NavigationEvent.TABS -> return // TODO
 
             // Load is handled in a separate event
             NavigationEvent.LOAD_URL, NavigationEvent.LOAD_TILE -> return

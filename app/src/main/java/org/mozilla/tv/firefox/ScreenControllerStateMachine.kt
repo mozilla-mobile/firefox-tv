@@ -10,12 +10,12 @@ package org.mozilla.tv.firefox
 object ScreenControllerStateMachine {
 
     enum class ActiveScreen {
-        NAVIGATION_OVERLAY, WEB_RENDER, POCKET, SETTINGS, TABS
+        NAVIGATION_OVERLAY, WEB_RENDER, POCKET, SETTINGS
     }
 
     enum class Transition {
         ADD_OVERLAY, REMOVE_OVERLAY, ADD_POCKET, REMOVE_POCKET, ADD_SETTINGS, REMOVE_SETTINGS, SHOW_BROWSER,
-        EXIT_APP, ADD_TABS, REMOVE_TABS, NO_OP
+        EXIT_APP, NO_OP
     }
 
     fun getNewStateMenuPress(currentActiveScreen: ActiveScreen, isUrlHome: Boolean): Transition {
@@ -32,7 +32,6 @@ object ScreenControllerStateMachine {
             }
             ActiveScreen.POCKET -> Transition.REMOVE_POCKET
             ActiveScreen.SETTINGS -> Transition.REMOVE_SETTINGS
-            ActiveScreen.TABS -> Transition.REMOVE_TABS
         }
     }
 
@@ -53,9 +52,6 @@ object ScreenControllerStateMachine {
             }
             ActiveScreen.SETTINGS -> {
                 Transition.REMOVE_SETTINGS
-            }
-            ActiveScreen.TABS -> {
-                Transition.REMOVE_TABS
             }
         }
     }
