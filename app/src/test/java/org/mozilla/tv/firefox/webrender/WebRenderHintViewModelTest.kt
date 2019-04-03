@@ -46,7 +46,7 @@ class WebRenderHintViewModelTest {
 
     @Test
     fun `WHEN always THEN hint should be open menu`() {
-        val expectedHints = listOf(HintContent(R.string.hint_press_menu_to_open_overlay, R.string.hardware_button_a11y_menu, R.drawable.hardware_remote_menu))
+        val expectedHints = listOf(HintContent(R.string.hint_press_menu_to_open_overlay, R.string.hint_press_menu_to_open_overlay_a11y, R.drawable.hardware_remote_menu))
         val hints = hintVM.hints.test()
 
         sessionRepoState.onNext(fakeSessionState("https://www.mozilla.org"))

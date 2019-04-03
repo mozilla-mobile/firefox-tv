@@ -46,7 +46,7 @@ class ExperimentsProvider(private val fretboard: Fretboard, private val context:
     }
 
     fun shouldShowHintBar(): Boolean {
-// TODO before enabbling this code:
+// TODO before enabling this code:
 // - Get UX approval for hint bar UI
 // - Get localizations for all hint bar strings (hint_press_menu_to_close_overlay,
 //   hint_press_menu_to_open_overlay, hardware_button_a11y_menu, hardware_button_a11y_back)
