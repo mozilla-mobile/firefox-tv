@@ -10,7 +10,6 @@ import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.hint.HintContent
 import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
-import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.webrender.WebRenderHintViewModel
 
 private val CLOSE_MENU_HINT = HintContent(

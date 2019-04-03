@@ -32,40 +32,26 @@ class OverlayHintViewModelTest {
     }
 
     @Test
-    fun `WHEN current url is home THEN isDisplayed should be false`() {
+    fun `hint bar display state should always match back button enabled`() {
         val displayed = hintVM.isDisplayed.test()
 
-        sessionRepoState.onNext(fakeSessionState(URLs.APP_URL_HOME))
-
+        sessionRepoState.onNext(fakeSessionState(backEnabled = true))
+        assertEquals(true, displayed.values().last())
+        sessionRepoState.onNext(fakeSessionState(backEnabled = false))
         assertEquals(false, displayed.values().last())
     }
 
     @Test
-    fun `WHEN current url is not home THEN isDisplayed should be true`() {
-        val displayed = hintVM.isDisplayed.test()
-
-        sessionRepoState.onNext(fakeSessionState("https://www.mozilla.org"))
-        sessionRepoState.onNext(fakeSessionState("https://www.google.com"))
-        sessionRepoState.onNext(fakeSessionState(URLs.PRIVACY_NOTICE_URL))
-        sessionRepoState.onNext(fakeSessionState(URLs.APP_URL_POCKET_ERROR))
-        sessionRepoState.onNext(fakeSessionState(URLs.URL_LICENSES))
-
-        displayed.values().forEach {
-            assertEquals(true, it)
-        }
-    }
-
-    @Test
-    fun `WHEN always THEN hint should be close menu`() {
+    fun `WHEN always THEN hint should be close overlay`() {
         // TODO update this when we have the real strings
-        val expectedHints = listOf(HintContent(R.string.hint_press_back_to_close_overlay, R.string.hint_press_back_to_close_overlay_a11y, R.drawable.hardware_remote_menu))
+        val expectedHints = listOf(HintContent(R.string.hint_press_back_to_close_overlay, R.string.hint_press_back_to_close_overlay_a11y, R.drawable.hardware_remote_back))
         val hints = hintVM.hints.test()
 
-        sessionRepoState.onNext(fakeSessionState("https://www.mozilla.org"))
-        sessionRepoState.onNext(fakeSessionState("https://www.google.com"))
-        sessionRepoState.onNext(fakeSessionState(URLs.PRIVACY_NOTICE_URL))
-        sessionRepoState.onNext(fakeSessionState(URLs.APP_URL_POCKET_ERROR))
-        sessionRepoState.onNext(fakeSessionState(URLs.URL_LICENSES))
+        sessionRepoState.onNext(fakeSessionState(url = "https://www.mozilla.org"))
+        sessionRepoState.onNext(fakeSessionState(url = "https://www.google.com"))
+        sessionRepoState.onNext(fakeSessionState(url = URLs.PRIVACY_NOTICE_URL))
+        sessionRepoState.onNext(fakeSessionState(url = URLs.APP_URL_POCKET_ERROR))
+        sessionRepoState.onNext(fakeSessionState(url = URLs.URL_LICENSES))
 
         hints.values().forEach {
             assertEquals(expectedHints, it)
@@ -73,8 +59,8 @@ class OverlayHintViewModelTest {
     }
 }
 
-private fun fakeSessionState(url: String) = SessionRepo.State(
-        false,
+private fun fakeSessionState(url: String = "", backEnabled: Boolean = false) = SessionRepo.State(
+        backEnabled,
         false,
         false,
         false,

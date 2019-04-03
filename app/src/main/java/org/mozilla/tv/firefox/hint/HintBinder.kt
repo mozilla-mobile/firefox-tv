@@ -39,7 +39,7 @@ object HintBinder {
                                 .translationY(hintContainer.hintBarContainer.height.toFloat())
                                 .start()
                     }
-                    .subscribe {  shouldDisplay ->
+                    .subscribe { shouldDisplay ->
                         hintContainer.hintBarContainer.isVisible = true
                         val (translationY, alpha) = when (shouldDisplay) {
                             true -> Pair(0f, 1f)
