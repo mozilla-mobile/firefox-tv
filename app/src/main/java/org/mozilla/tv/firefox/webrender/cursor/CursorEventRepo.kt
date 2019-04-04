@@ -85,16 +85,18 @@ class CursorEventRepo(screenController: ScreenController) {
                 }
 
         fun Observable<Direction>.mapToCursorEvent() =
-                this.map {
+                this.map { cursorDirection ->
                     val edgeNearCursor = cursorController?.getEdgeOfScreenNearCursor()
                     val couldScroll = edgeNearCursor?.let { cursorController?.webViewCouldScrollInDirection(it) }
-                    val scrollToEdgeEvent = when {
-                        edgeNearCursor == null -> null
-                        couldScroll == true -> null
-                        it == edgeNearCursor -> CursorEvent.ScrolledToEdge(it)
-                        else -> null
+
+                    val cursorMovedToEdgeOfScreen = edgeNearCursor == cursorDirection
+                    val endOfDomContentReached = couldScroll == false
+
+                    return@map if (cursorMovedToEdgeOfScreen && endOfDomContentReached) {
+                        CursorEvent.ScrolledToEdge(cursorDirection)
+                    } else {
+                        CursorEvent.CursorMoved(cursorDirection)
                     }
-                    return@map scrollToEdgeEvent ?: CursorEvent.CursorMoved(it)
                 }
 
         Observables.combineLatest(keyEvents.throttleEvents(), screenController.currentActiveScreen)

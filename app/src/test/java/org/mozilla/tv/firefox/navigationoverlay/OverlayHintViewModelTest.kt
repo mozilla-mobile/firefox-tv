@@ -43,7 +43,6 @@ class OverlayHintViewModelTest {
 
     @Test
     fun `WHEN always THEN hint should be close overlay`() {
-        // TODO update this when we have the real strings
         val expectedHints = listOf(HintContent(R.string.hint_press_back_to_close_overlay, R.string.hint_press_back_to_close_overlay_a11y, R.drawable.hardware_remote_back))
         val hints = hintVM.hints.test()
 

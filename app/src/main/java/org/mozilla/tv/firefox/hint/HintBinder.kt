@@ -11,7 +11,6 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.hint_bar.view.hintBarContainer
 import kotlinx.android.synthetic.main.hint_bar.view.hintBarText
 import mozilla.components.support.ktx.android.content.res.pxToDp
 import java.util.concurrent.TimeUnit
@@ -27,25 +26,25 @@ object HintBinder {
     fun bindHintsToView(vm: HintViewModel, hintContainer: View, animate: Boolean): List<Disposable> {
         val displayedDisposable = if (!animate) {
             vm.isDisplayed
-                    .doOnDispose { hintContainer.hintBarContainer.isVisible = false }
-                    .subscribe { hintContainer.hintBarContainer.isVisible = it }
+                    .doOnDispose { hintContainer.isVisible = false }
+                    .subscribe { hintContainer.isVisible = it }
         } else {
             vm.isDisplayed
                     .throttleFirst(300, TimeUnit.MILLISECONDS)
-                    .doOnDispose { hintContainer.hintBarContainer.isVisible = false }
+                    .doOnDispose { hintContainer.isVisible = false }
                     .doOnSubscribe {
-                        hintContainer.hintBarContainer.animate()
+                        hintContainer.animate()
                                 .setDuration(0)
-                                .translationY(hintContainer.hintBarContainer.height.toFloat())
+                                .translationY(hintContainer.height.toFloat())
                                 .start()
                     }
                     .subscribe { shouldDisplay ->
-                        hintContainer.hintBarContainer.isVisible = true
+                        hintContainer.isVisible = true
                         val (translationY, alpha) = when (shouldDisplay) {
                             true -> Pair(0f, 1f)
-                            false -> Pair(hintContainer.hintBarContainer.height.toFloat(), 0f)
+                            false -> Pair(hintContainer.height.toFloat(), 0f)
                         }
-                        hintContainer.hintBarContainer.animate()
+                        hintContainer.animate()
                                 .setDuration(250)
                                 .setInterpolator(FastOutSlowInInterpolator())
                                 .translationY(translationY)
