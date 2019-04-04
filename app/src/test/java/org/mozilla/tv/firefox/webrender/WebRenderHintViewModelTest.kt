@@ -69,16 +69,15 @@ class WebRenderHintViewModelTest {
     fun `WHEN active screen changes to web render THEN hints should be displayed`() {
         val displayed = hintVM.isDisplayed.test()
 
+        currentActiveScreen.onNext(ActiveScreen.SETTINGS)
+        assertEquals(0, displayed.valueCount())
+
         currentActiveScreen.onNext(ActiveScreen.WEB_RENDER)
         assertEquals(1, displayed.valueCount())
         assertEquals(true, displayed.values().last())
 
         currentActiveScreen.onNext(ActiveScreen.SETTINGS)
         assertEquals(1, displayed.valueCount())
-
-        currentActiveScreen.onNext(ActiveScreen.WEB_RENDER)
-        assertEquals(2, displayed.valueCount())
-        assertEquals(true, displayed.values().last())
     }
 
     @Test
@@ -92,12 +91,16 @@ class WebRenderHintViewModelTest {
         pushCursorMove(Direction.LEFT)
         assertEquals(1, displayed.valueCount())
 
-        pushCursorMove(Direction.DOWN)
+        pushScrolledToEdge(Direction.DOWN)
         assertEquals(2, displayed.valueCount())
+        assertEquals(true, displayed.values().last())
+
+        pushCursorMove(Direction.DOWN)
+        assertEquals(3, displayed.valueCount())
         assertEquals(false, displayed.values().last())
 
         pushCursorMove(Direction.RIGHT)
-        assertEquals(2, displayed.valueCount())
+        assertEquals(3, displayed.valueCount())
     }
 
     @Test
@@ -111,12 +114,16 @@ class WebRenderHintViewModelTest {
         pushScrolledToEdge(Direction.LEFT)
         assertEquals(1, displayed.valueCount())
 
-        pushScrolledToEdge(Direction.DOWN)
+        pushCursorMove(Direction.DOWN)
         assertEquals(2, displayed.valueCount())
+        assertEquals(false, displayed.values().last())
+
+        pushScrolledToEdge(Direction.DOWN)
+        assertEquals(3, displayed.valueCount())
         assertEquals(true, displayed.values().last())
 
         pushScrolledToEdge(Direction.RIGHT)
-        assertEquals(2, displayed.valueCount())
+        assertEquals(3, displayed.valueCount())
     }
 
     @Test

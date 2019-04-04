@@ -38,6 +38,7 @@ class WebRenderHintViewModel(
 
     override val isDisplayed by lazy {
         Observable.merge(webRenderOpenedEvents, cursorEvents, loadCompleteEvents)
+                .distinctUntilChanged()
                 .replay(1)
                 .autoConnect(0)
     }

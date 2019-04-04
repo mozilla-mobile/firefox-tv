@@ -68,7 +68,6 @@ abstract class EngineViewLifecycleFragment : LocaleAwareFragment() {
     override fun onStart() {
         super.onStart()
 
-        // TODO update this commit message to explain why moving this out of onViewCreated is a good idea (and how i verified it's safe)
         engineView = (view!!.findViewById<View>(R.id.engineView) as EngineView).apply {
             val disposable = onEngineViewCreated(this)
             disposable?.let { compositeDisposable.add(it) }
