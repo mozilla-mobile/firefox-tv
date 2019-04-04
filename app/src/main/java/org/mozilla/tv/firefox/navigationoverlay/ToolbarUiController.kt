@@ -4,25 +4,34 @@
 
 package org.mozilla.tv.firefox.navigationoverlay
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import androidx.fragment.app.FragmentManager
+import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.PopupWindow
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_navigation_overlay.view.*
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.view.*
+import kotlinx.android.synthetic.main.tooltip.view.*
 import mozilla.components.browser.domains.autocomplete.ShippedDomainsProvider
+import mozilla.components.support.ktx.android.content.systemService
 import mozilla.components.support.ktx.android.view.forEach
 import mozilla.components.support.ktx.android.view.hideKeyboard
+import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.utils.ViewUtils
 import org.mozilla.tv.firefox.widget.IgnoreFocusMovementMethod
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
+import android.view.ViewTreeObserver
 
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
 private const val NAVIGATION_BUTTON_DISABLED_ALPHA = 0.3f
+private const val WRAP_CONTENT = LinearLayout.LayoutParams.WRAP_CONTENT
 
 /**
  * An encapsulation of the toolbar to set up and respond to UI operations.
@@ -36,15 +45,50 @@ class ToolbarUiController(
 
     private var hasUserChangedURLSinceEditTextFocused = false
 
+    private lateinit var tooltip: PopupWindow
+    private lateinit var tooltipView: View
+
     fun onCreateView(layout: View, viewLifecycleOwner: LifecycleOwner, fragmentManager: FragmentManager) {
         val toolbarClickListener = ToolbarOnClickListener()
         layout.topNavContainer.forEach {
             it.nextFocusDownId = layout.navUrlInput.id
             if (it.isFocusable) it.setOnClickListener(toolbarClickListener)
+
+            it.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) showTooltip(it)
+                else tooltip.dismiss() // Hide the tooltip when the button is not focused
+            }
         }
+
+        val layoutInflater = layout.context.systemService<LayoutInflater>(Context.LAYOUT_INFLATER_SERVICE)
+        tooltipView = layoutInflater.inflate(R.layout.tooltip, null)
+        tooltip = PopupWindow(tooltipView, WRAP_CONTENT, WRAP_CONTENT, false)
 
         setupUrlInput(layout)
         initToolbar(layout, viewLifecycleOwner, fragmentManager)
+    }
+
+    private fun showTooltip(navBarButton: View) {
+        tooltip.contentView.tooltip.text = navBarButton.contentDescription
+        tooltip.isClippingEnabled = false
+
+        // The measurement of the popup happens in onGlobalLayout. We need to update the position of the
+        // popup after this measurement has happened. Beforehand, the measuredWidth will be 0.
+        tooltipView.viewTreeObserver.addOnGlobalLayoutListener(
+            object : ViewTreeObserver.OnGlobalLayoutListener {
+                override fun onGlobalLayout() {
+                    tooltip.update(
+                        navBarButton,
+                        0 - (tooltip.contentView.measuredWidth - navBarButton.width) / 2,
+                        10,
+                        -1,
+                        -1
+                    )
+                    tooltipView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                }
+            }
+        )
+        tooltip.showAsDropDown(navBarButton)
     }
 
     private fun setupUrlInput(layout: View) = with(layout.navUrlInput) {
