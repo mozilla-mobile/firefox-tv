@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
+- Tooltips on toolbar buttons
 
 - Hint bar on home and browser screens (#1907)
 
@@ -23,7 +24,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [3.5-RO] 2019-03-12
 *Released to Fire TV 4K, staged roll-out*
-### Added
 
 ### Changed
 - Updated dependencies to AndroidX
