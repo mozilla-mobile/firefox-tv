@@ -55,8 +55,9 @@ class ClearDataTest {
                 assertCookieExists()
             }
 
-        }.openSettings {
-        }.clearAllDataToOverlay {
+            linearNavigateToSettings()
+            // TODO open Clear data overlay & clear data
+//        }.clearAllDataToOverlay {
             assertCanGoBackForward(false, false)
 
             engineInternals {

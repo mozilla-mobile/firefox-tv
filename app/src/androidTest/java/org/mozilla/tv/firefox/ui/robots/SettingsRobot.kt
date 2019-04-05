@@ -23,22 +23,13 @@ class SettingsRobot {
         dataCollectionButton().click()
     }
 
-    fun toggleDataCollectionButtonContainer() {
-        dataCollectionButtonContainer().click()
-    }
-
     fun assertDataCollectionButtonState(isChecked: Boolean) {
         dataCollectionButton().assertIsChecked(isChecked)
     }
 
-    fun assertDataCollectionButtonFocused() {
-        dataCollectionButtonContainer().assertHasFocus(true)
-    }
-
     class Transition {
         fun clearAllDataToOverlay(interact: NavigationOverlayRobot.() -> Unit): NavigationOverlayRobot.Transition {
-            clearDataButton().click()
-            dialogOkButton().click() // TODO: This fails. I think it's because we restart the activity so assertions fail.
+            clearDataButton().click() // TODO: This fails. I think it's because we restart the activity so assertions fail.
 
             NavigationOverlayRobot().interact()
             return NavigationOverlayRobot.Transition()
@@ -53,21 +44,5 @@ class SettingsRobot {
     }
 }
 
-/**
- * Applies [interact] to a new [SettingsRobot]
- *
- * @sample org.mozilla.tv.firefox.session.ClearSessionTest.WHEN_data_is_cleared_THEN_back_and_forward_should_be_unavailable
- */
-fun settings(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
-    SettingsRobot().interact()
-    return SettingsRobot.Transition()
-}
-
-private fun dataCollectionButton() = onView(withId(R.id.telemetryButton))
-private fun dataCollectionButtonContainer() = onView(withId(R.id.telemetryButtonContainer))
-private fun aboutButton() = onView(withId(R.id.aboutButton))
-private fun privacyButton() = onView(withId(R.id.privacyNoticeButton))
-private fun clearDataButton() = onView(withId(R.id.deleteButton))
-
-private fun dialogOkButton() = onView(withId(android.R.id.button1))
-private fun dialogCancelButton() = onView(withId(android.R.id.button2))
+private fun dataCollectionButton() = onView(withId(R.id.toggle))
+private fun clearDataButton() = onView(withId(R.id.confirm_action))
