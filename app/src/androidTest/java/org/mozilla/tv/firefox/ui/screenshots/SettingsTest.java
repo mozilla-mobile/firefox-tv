@@ -50,21 +50,17 @@ public class SettingsTest extends ScreenshotTest {
     public void showSettingsViews() {
         onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()));
 
-        // visit settings
-        onView(allOf(withId(R.id.navButtonSettings), isDisplayed()))
-                .perform(click());
-
+        // TODO: scroll down to settings channel
         // current settings list view
         onView(allOf(withId(R.id.container_web_render), isDisplayed()));
-
-        ViewInteraction clearButton = onView(
-                allOf(withId(R.id.deleteButton), isDisplayed()));
 
         // capture a screenshot of the default settings list
         Screengrab.screenshot("settings");
 
+        // TODO: Open Telemetry section
+        // TODO: Open Clear Data section
         // capture a screenshot of the clear data dialog
-        clearButton.perform(click());
+//        clearButton.perform(click());
 
         onView(allOf(withText(R.string.settings_cookies_dialog_content2), isDisplayed())).inRoot(isDialog());
 
@@ -72,8 +68,9 @@ public class SettingsTest extends ScreenshotTest {
 
         mDevice.pressBack();
 
-        onView(allOf(withId(R.id.aboutButton), isDisplayed()))
-                .perform(click());
+        // TODO: Open About section
+//        onView(allOf(withId(R.id.aboutButton), isDisplayed()))
+//                .perform(click());
 
         onView(allOf(withId(R.id.engineView), isDisplayed()));
         onView(allOf(withId(R.string.your_rights), isDisplayed()));

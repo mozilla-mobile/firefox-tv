@@ -50,6 +50,20 @@ class NavigationOverlayRobot {
     fun remoteUp() = device.pressDPadUp()
     fun remoteRight(x: Int = 1) = repeat(x) { device.pressDPadRight() }
     fun remoteCenter() = device.pressDPadCenter()
+    /*
+     * Navigate to the settings channel using keypresses
+     */
+    fun linearNavigateToSettings() {
+        // We hard-code this navigiation pattern because making a generic way to linearly navigate
+        // is very difficult within Espresso. Espresso supports asserting view state, but not
+        // querying it. Because of this, we can't write conditional logic based on the currently
+        // focused view.
+        device.apply {
+            // This will need to change if the button layout changes. However, such layout
+            // changes are infrequent, and updating this will be easy.
+            repeat(4) { pressDPadDown() }
+        }
+    }
 
     // The implementation of this method is arbitrary. We could run this check
     // against any of its views
@@ -159,34 +173,6 @@ class NavigationOverlayRobot {
             return BrowserRobot.Transition()
         }
 
-        fun openSettings(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
-            settingsButton().click()
-
-            SettingsRobot().interact()
-            return SettingsRobot.Transition()
-        }
-
-        /*
-         * Navigate to the settings button using keypresses and open, and maintain focus.
-         * Using click() to select buttons removes focus, so this is an alternative way to open
-         * Settings.
-         */
-        fun linearNavigateToSettingsAndOpen(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
-            // We hard-code this navigiation pattern because making a generic way to linearly navigate
-            // is very difficult within Espresso. Espresso supports asserting view state, but not
-            // querying it. Because of this, we can't write conditional logic based on the currently
-            // focused view.
-            device.apply {
-                // This will need to change if the button layout changes. However, such layout
-                // changes are infrequent, and updating this will be easy.
-                pressDPadUp()
-                repeat(5) { pressDPadRight() }
-                pressDPadCenter()
-            }
-
-            SettingsRobot().interact()
-            return SettingsRobot.Transition()
-        }
 
         private fun assertCanTurnDesktopModeOn(canTurnDesktopModeOn: Boolean) = desktopModeButton().assertIsChecked(!canTurnDesktopModeOn)
 
@@ -269,7 +255,6 @@ private fun forwardButton() = onView(withId(R.id.navButtonForward))
 private fun reloadButton() = onView(withId(R.id.navButtonReload))
 private fun pinButton() = onView(withId(R.id.pinButton))
 private fun turboButton() = onView(withId(R.id.turboButton))
-private fun settingsButton() = onView(withId(R.id.navButtonSettings))
 private fun urlBar() = onView(withId(R.id.navUrlInput))
 private fun homeTiles() = onView(withId(R.id.tileContainer))
 private fun overlay() = onView(withId(R.layout.fragment_navigation_overlay))
