@@ -10,6 +10,7 @@ import android.util.Log
 import java.util.Locale
 import mozilla.components.browser.search.SearchEngine
 import mozilla.components.browser.search.provider.AssetsSearchEngineProvider
+import mozilla.components.browser.search.provider.SearchEngineList
 import mozilla.components.browser.search.provider.SearchEngineProvider
 import mozilla.components.browser.search.provider.localization.SearchLocalizationProvider
 
@@ -39,16 +40,17 @@ class SearchEngineProviderWrapper(private val replacements: Map<String, String>)
         additionalIdentifiers = replacements.values.toList()
     )
 
-    override suspend fun loadSearchEngines(context: Context): List<SearchEngine> {
+    override suspend fun loadSearchEngines(context: Context): SearchEngineList {
         val searchEngines = inner.loadSearchEngines(context)
 
         return updateSearchEngines(searchEngines, replacements)
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun updateSearchEngines(searchEngines: List<SearchEngine>, replacements: Map<String, String>): List<SearchEngine> {
+    fun updateSearchEngines(searchEngines: SearchEngineList, replacements: Map<String, String>): SearchEngineList {
+        val defaultSearch = searchEngines.default
         @Suppress("NAME_SHADOWING") // Defensive copy & mutable
-        val searchEngines = mutableListOf<SearchEngine>().apply { addAll(searchEngines) }
+        val searchEngines = mutableListOf<SearchEngine>().apply { addAll(searchEngines.list) }
 
         replacements.forEach { (old, new) ->
             val newIndex = searchEngines.indexOfFirst { it.identifier == new }
@@ -66,6 +68,6 @@ class SearchEngineProviderWrapper(private val replacements: Map<String, String>)
                 Log.d(LOGTAG, "Failed to replace plugin $old with $new")
             }
         }
-        return searchEngines
+        return SearchEngineList(searchEngines, defaultSearch)
     }
 }
