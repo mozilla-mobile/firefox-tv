@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.home_tile.view.*
+import kotlinx.android.synthetic.main.settings_tile.view.*
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.utils.URLs
 
@@ -19,7 +20,7 @@ class SettingsChannelAdapter(
     private val settingsItems = arrayOf(
         SettingsItem(
             SettingsType.DATA_COLLECTION,
-            R.drawable.lb_ic_sad_cloud,
+            R.drawable.ic_data_collection,
             R.string.preference_mozilla_telemetry2),
         SettingsItem(
             SettingsType.CLEAR_COOKIES,
@@ -31,7 +32,7 @@ class SettingsChannelAdapter(
             R.string.menu_about),
         SettingsItem(
             SettingsType.PRIVACY_POLICY,
-            R.drawable.mozac_ic_lock,
+            R.drawable.mozac_ic_globe,
             R.string.preference_privacy_notice)
     )
 
@@ -44,22 +45,24 @@ class SettingsChannelAdapter(
     }
 
     override fun onBindViewHolder(holder: SettingsTileHolder, position: Int) = with(holder) {
-        iconView.setImageResource(settingsItems[position].imgRes)
-        titleView.setText(settingsItems[position].titleRes)
-        itemView.setOnClickListener {
-            when (val type = settingsItems[position].type) {
+        val itemData = settingsItems[position]
+        iconView.setImageResource(itemData.imgRes)
+        titleView.setText(itemData.titleRes)
+        itemView.settings_cardview.setOnClickListener {
+            when (val type = itemData.type) {
                 SettingsType.DATA_COLLECTION -> showSettings(type)
                 SettingsType.CLEAR_COOKIES -> showSettings(type)
                 SettingsType.ABOUT -> loadUrl(URLs.URL_ABOUT)
                 SettingsType.PRIVACY_POLICY -> loadUrl(URLs.PRIVACY_NOTICE_URL)
             }
         }
+        itemView.settings_cardview.contentDescription = itemView.context.getString(itemData.titleRes)
     }
 }
 
 class SettingsTileHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val iconView = itemView.tile_icon
-    val titleView = itemView.tile_title
+    val iconView = itemView.settings_icon
+    val titleView = itemView.settings_title
 }
 
 enum class SettingsType {
