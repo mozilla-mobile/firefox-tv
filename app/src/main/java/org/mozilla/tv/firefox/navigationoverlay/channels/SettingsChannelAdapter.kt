@@ -56,7 +56,7 @@ class SettingsChannelAdapter(
                 SettingsType.PRIVACY_POLICY -> loadUrl(URLs.PRIVACY_NOTICE_URL)
             }
         }
-        itemView.settings_cardview.contentDescription = itemView.context.getString(itemData.titleRes)
+        itemView.contentDescription = itemView.context.getString(itemData.titleRes)
     }
 }
 
