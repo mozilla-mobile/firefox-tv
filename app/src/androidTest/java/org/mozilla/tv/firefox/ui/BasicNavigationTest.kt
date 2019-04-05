@@ -159,10 +159,9 @@ class BasicNavigationTest {
         navigationOverlay {
         }.enterUrlAndEnterToBrowser(Uri.parse("firefox:about")) {
         }.openOverlay {
-        // Navigate to settings via keypresses, to maintain focus.
-            // TODO: Open data collection screen and verify focus
-//        }.linearNavigateToSettingsAndOpen {
-//            assertDataCollectionButtonFocused()
+        }.linearNavigateToTelemtryTileAndOpen {
+            // Navigate to settings via keypresses, to maintain focus.
+            assertDataCollectionButtonFocused()
         }
     }
 }

@@ -173,6 +173,18 @@ class NavigationOverlayRobot {
             return BrowserRobot.Transition()
         }
 
+        fun linearNavigateToTelemtryTileAndOpen(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
+            device.apply {
+                // This will need to change if the button layout changes. However, such layout
+                // changes are infrequent, and updating this will be easy.
+                repeat(4) { pressDPadDown() }
+                pressDPadCenter()
+            }
+
+            SettingsRobot().interact()
+            return SettingsRobot.Transition()
+        }
+
         fun openSettingsTelemetryTile(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
             settingsTelemetryTile().click()
 
