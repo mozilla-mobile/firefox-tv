@@ -46,7 +46,6 @@ open class FirefoxApplication : LocaleAwareApplication() {
         // a GeckoView child process or the crash handling process. Most importantly we never want to end up in a
         // situation where we create a GeckoRuntime from the Gecko child process
         applicationContext.runOnlyInMainProcess {
-            PreferenceManager.setDefaultValues(this, R.xml.settings, false)
             serviceLocator = createServiceLocator()
 
             // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.
