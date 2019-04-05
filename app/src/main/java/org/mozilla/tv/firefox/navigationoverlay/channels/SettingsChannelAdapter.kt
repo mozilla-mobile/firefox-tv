@@ -21,19 +21,23 @@ class SettingsChannelAdapter(
         SettingsItem(
             SettingsType.DATA_COLLECTION,
             R.drawable.ic_data_collection,
-            R.string.preference_mozilla_telemetry2),
+            R.string.preference_mozilla_telemetry2,
+            R.id.settings_tile_telemetry),
         SettingsItem(
             SettingsType.CLEAR_COOKIES,
             R.drawable.mozac_ic_delete,
-            R.string.settings_cookies_dialog_title),
+            R.string.settings_cookies_dialog_title,
+            R.id.settings_tile_cleardata),
         SettingsItem(
             SettingsType.ABOUT,
             R.drawable.mozac_ic_info,
-            R.string.menu_about),
+            R.string.menu_about,
+            R.id.settings_tile_about),
         SettingsItem(
             SettingsType.PRIVACY_POLICY,
             R.drawable.mozac_ic_globe,
-            R.string.preference_privacy_notice)
+            R.string.preference_privacy_notice,
+            R.id.settings_tile_privacypolicy)
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = SettingsTileHolder(
@@ -57,6 +61,7 @@ class SettingsChannelAdapter(
             }
         }
         itemView.contentDescription = itemView.context.getString(itemData.titleRes)
+        itemView.id = itemData.viewId // Add ids for testing
     }
 }
 
@@ -69,4 +74,4 @@ enum class SettingsType {
     DATA_COLLECTION, CLEAR_COOKIES, ABOUT, PRIVACY_POLICY
 }
 
-private data class SettingsItem(val type: SettingsType, val imgRes: Int, val titleRes: Int)
+private data class SettingsItem(val type: SettingsType, val imgRes: Int, val titleRes: Int, val viewId: Int)

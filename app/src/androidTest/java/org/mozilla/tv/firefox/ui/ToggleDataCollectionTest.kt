@@ -30,8 +30,7 @@ class ToggleDataCollectionTest {
     fun WHEN_data_collection_button_is_toggled_THEN_data_collection_matches_button_state() {
         navigationOverlay {
             linearNavigateToSettings()
-            // TODO Open settings
-            /*
+        }.openSettingsTelemetryTile {
             assertDataCollectionButtonState(IS_TELEMETRY_ENABLED_DEFAULT)
 
             toggleDataCollectionButton()
@@ -41,24 +40,22 @@ class ToggleDataCollectionTest {
             toggleDataCollectionButton()
             assertNotNull(settingsRepo.dataCollectionEnabled.value)
             assertDataCollectionButtonState(settingsRepo.dataCollectionEnabled.value ?: false)
-            */
         }
     }
 
     @Test
     fun WHEN_data_collection_button_is_toggled_THEN_button_state_persists_when_returning_to_settings() {
-//        var cachedDataCollectionButtonIsChecked = IS_TELEMETRY_ENABLED_DEFAULT
+        var cachedDataCollectionButtonIsChecked = IS_TELEMETRY_ENABLED_DEFAULT
 
         navigationOverlay {
-            // TODO Open data collection
-            /*
+            linearNavigateToSettings()
+        }.openSettingsTelemetryTile {
             assertDataCollectionButtonState(cachedDataCollectionButtonIsChecked)
             toggleDataCollectionButton()
             cachedDataCollectionButtonIsChecked = !cachedDataCollectionButtonIsChecked
         }.exitToOverlay {
-            // TODO Open data collection
+        }.openSettingsTelemetryTile {
             assertDataCollectionButtonState(cachedDataCollectionButtonIsChecked)
-            */
         }
     }
 }
