@@ -24,24 +24,26 @@
     <TextView
         android:id="@+id/title"
         style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="@dimen/button_size"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:gravity="center_vertical"
         android:maxWidth="400dp"
         android:text="@string/settings_cookies_dialog_title"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/back_button"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/description"
-        style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:paddingRight="300dp"
         android:text="@string/settings_cookies_dialog_content2"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/title"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 

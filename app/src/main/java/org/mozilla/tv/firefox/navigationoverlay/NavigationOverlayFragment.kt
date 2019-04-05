@@ -34,7 +34,6 @@ import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.*
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.exitButton
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.navButtonForward
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.navButtonReload
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.navButtonSettings
 import kotlinx.android.synthetic.main.hint_bar.hintBarContainer
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.megaTileTryAgainButton
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.pocketErrorContainer
@@ -369,7 +368,7 @@ class NavigationOverlayFragment : Fragment() {
     }
 
     private fun initSettingsChannel() {
-        settingsContainer.gridView.adapter = SettingsChannelAdapter(
+        settingsTileContainer.gridView.adapter = SettingsChannelAdapter(
                 loadUrl = { urlStr ->
                     serviceLocator.screenController.showBrowserScreenForUrl(fragmentManager!!, urlStr)
                 },

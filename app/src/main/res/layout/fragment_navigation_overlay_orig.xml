@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!-- This Source Code Form is subject to the terms of the Mozilla Public
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
@@ -6,12 +7,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@color/browser_overlay_background"
+    android:orientation="vertical"
+    android:paddingTop="27dp">
 
     <org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlayScrollView
         android:id="@+id/overlayScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginEnd="57dp"
         android:layout_weight="1"
         android:fillViewport="true"
         android:focusable="false"
@@ -25,18 +30,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/browser_overlay_background"
+                android:layout_marginBottom="27dp"
                 android:descendantFocusability="afterDescendants"
-                android:orientation="vertical"
-                android:paddingTop="27dp"
-                android:paddingBottom="0dp">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:id="@+id/topNavContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="57dp"
-                    android:layout_marginEnd="57dp"
+                    android:layout_marginStart="12dp"
                     android:layout_marginBottom="27dp"
                     android:descendantFocusability="afterDescendants"
                     android:focusable="true"
@@ -54,7 +56,7 @@
                     android:id="@+id/navUrlInput"
                     android:layout_width="498dp"
                     android:layout_height="@dimen/urlbar_height"
-                    android:layout_marginStart="57dp"
+                    android:layout_marginStart="12dp"
                     android:layout_marginBottom="48dp"
                     android:background="@drawable/nav_urlbar_background"
                     android:cursorVisible="false"
@@ -79,8 +81,6 @@
                     android:id="@+id/pocketVideoMegaTileView"
                     android:layout_width="match_parent"
                     android:layout_height="108dp"
-                    android:layout_marginStart="45dp"
-                    android:layout_marginEnd="45dp"
                     android:layout_marginBottom="24dp"
                     android:background="@drawable/pocket_video_mega_tile_background"
                     android:focusable="true"
@@ -90,16 +90,23 @@
                     android:id="@+id/tileContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="45dp"
-                    android:layout_marginEnd="45dp"
                     android:background="@android:color/transparent"
                     android:clipChildren="false"
                     android:clipToPadding="false" />
 
-                <androidx.leanback.widget.ListRowView
-                    android:id="@+id/settingsContainer"
+                <TextView
+                    style="@style/TextAppearance.AppCompat.Medium"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="12dp"
+                    android:text="@string/menu_settings" />
+
+                <androidx.leanback.widget.ListRowView
+                    android:id="@+id/settingsTileContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

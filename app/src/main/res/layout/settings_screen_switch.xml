@@ -24,12 +24,14 @@
     <TextView
         android:id="@+id/title"
         style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="@dimen/button_size"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:gravity="center_vertical"
         android:text="@string/preference_mozilla_telemetry2"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/back_button"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,9 +40,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="140dp"
+        android:contentDescription="@string/preference_mozilla_telemetry2"
         android:thumbTint="@color/preferences_switch_selector"
         android:trackTint="@color/preferences_switch_selector"
-        android:contentDescription="@string/preference_mozilla_telemetry2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/description">
 
@@ -49,11 +51,11 @@
 
     <TextView
         android:id="@+id/description"
-        style="@style/TextAppearance.AppCompat.Medium"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
         android:text="@string/settings_telemetry_description"
+        android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@id/toggle"
         app:layout_constraintStart_toStartOf="@+id/title"
         app:layout_constraintTop_toBottomOf="@+id/title" />
