@@ -27,6 +27,10 @@ class SettingsRobot {
         dataCollectionButton().assertIsChecked(isChecked)
     }
 
+    fun assertDataCollectionButtonFocused() {
+        dataCollectionButton().assertHasFocus(true)
+    }
+
     class Transition {
         fun clearAllDataToOverlay(interact: NavigationOverlayRobot.() -> Unit): NavigationOverlayRobot.Transition {
             clearDataButton().click() // TODO: This fails. I think it's because we restart the activity so assertions fail.
