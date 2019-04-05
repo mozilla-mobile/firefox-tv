@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<resources>
+    <item name="settings_tile_telemetry" type="id"/>
+    <item name="settings_tile_cleardata" type="id"/>
+    <item name="settings_tile_about" type="id"/>
+    <item name="settings_tile_privacypolicy" type="id"/>
+</resources>

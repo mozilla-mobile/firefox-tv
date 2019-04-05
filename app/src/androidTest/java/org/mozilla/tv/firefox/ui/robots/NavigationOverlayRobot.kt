@@ -173,6 +173,12 @@ class NavigationOverlayRobot {
             return BrowserRobot.Transition()
         }
 
+        fun openSettingsTelemetryTile(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
+            settingsTelemetryTile().click()
+
+            SettingsRobot().interact()
+            return SettingsRobot.Transition()
+        }
 
         private fun assertCanTurnDesktopModeOn(canTurnDesktopModeOn: Boolean) = desktopModeButton().assertIsChecked(!canTurnDesktopModeOn)
 
@@ -262,3 +268,7 @@ private fun desktopModeButton() = onView(withId(R.id.desktopModeButton))
 private fun pocketMegaTile() = onView(withId(R.id.pocketVideosContainer))
 private fun tooltip() = onView(withId(R.id.tooltip)).inRoot(isPlatformPopup())
 private fun tooltip_nonPlatformPopup() = onView(withId(R.id.tooltip)).inRoot(withDecorView(withId(R.id.tooltip)))
+private fun settingsTelemetryTile() = onView(withId(R.id.settings_tile_telemetry))
+private fun settingsCleardataTile() = onView(withId(R.id.settings_tile_cleardata))
+private fun settingsAboutTile() = onView(withId(R.id.settings_tile_about))
+private fun settingsPrivacypolicyTile() = onView(withId(R.id.settings_tile_privacypolicy))
