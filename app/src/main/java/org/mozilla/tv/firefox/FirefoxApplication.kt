@@ -5,7 +5,6 @@
 package org.mozilla.tv.firefox
 
 import android.os.StrictMode
-import android.preference.PreferenceManager
 import androidx.annotation.VisibleForTesting
 import android.webkit.WebSettings
 import mozilla.components.support.ktx.android.content.runOnlyInMainProcess

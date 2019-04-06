@@ -199,6 +199,13 @@ class NavigationOverlayRobot {
             return SettingsRobot.Transition()
         }
 
+        fun openSettingsAboutTile(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
+            settingsAboutTile().click()
+
+            SettingsRobot().interact()
+            return SettingsRobot.Transition()
+        }
+
         private fun assertCanTurnDesktopModeOn(canTurnDesktopModeOn: Boolean) = desktopModeButton().assertIsChecked(!canTurnDesktopModeOn)
 
         fun turnDesktopModeOn(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
