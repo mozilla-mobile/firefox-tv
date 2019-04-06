@@ -35,7 +35,6 @@ class ClearDataTest {
 
         navigationOverlay {
             assertCanGoBackForward(false, false)
-
         }.enterUrlAndEnterToBrowser(endpoints[0]) {
         }.openOverlay {
             assertCanGoBackForward(false, false)
@@ -54,10 +53,9 @@ class ClearDataTest {
                 addCookie()
                 assertCookieExists()
             }
-
             linearNavigateToSettings()
-            // TODO open Clear data overlay & clear data
-//        }.clearAllDataToOverlay {
+        }.openSettingsCleardataTile {
+        }.clearAllDataToOverlay {
             assertCanGoBackForward(false, false)
 
             engineInternals {

@@ -33,7 +33,8 @@ class SettingsRobot {
 
     class Transition {
         fun clearAllDataToOverlay(interact: NavigationOverlayRobot.() -> Unit): NavigationOverlayRobot.Transition {
-            clearDataButton().click() // TODO: This fails. I think it's because we restart the activity so assertions fail.
+            clearDataButton().click()
+            // TODO: After this, the app hangs. I think it's because we restart the activity so assertions fail.
 
             NavigationOverlayRobot().interact()
             return NavigationOverlayRobot.Transition()
