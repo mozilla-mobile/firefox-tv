@@ -19,9 +19,6 @@
     <string name="action_cancel">Cancel</string>
     <!-- Label used for buttons, e.g. in dialogs -->
     <string name="action_ok">OK</string>
-    <!-- Label shown in tooltip hints to indicate the checked status of buttons in the navigation toolbar. -->
-    <string name="button_state_on">ON</string>
-    <string name="button_state_off">OFF</string>>
 
     <!-- This text is shown in the URL bar when it's empty -->
     <string name="urlbar_hint">Search or enter address</string>
