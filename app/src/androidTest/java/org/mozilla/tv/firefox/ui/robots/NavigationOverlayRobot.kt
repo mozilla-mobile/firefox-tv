@@ -12,6 +12,7 @@ import androidx.test.espresso.action.ViewActions.pressImeActionButton
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -39,10 +40,14 @@ class NavigationOverlayRobot {
     private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
     fun goBack() = backButton().click()
-    fun remoteBack() = device.pressBack()
     fun goForward() = forwardButton().click()
     fun reload() = reloadButton().click()
     fun toggleTurbo() = turboButton().click()
+
+    fun remoteBack() = device.pressBack()
+    fun remoteUp() = device.pressDPadUp()
+    fun remoteRight(x: Int = 1) = repeat(x) { device.pressDPadRight() }
+    fun remoteCenter() = device.pressDPadCenter()
 
     // The implementation of this method is arbitrary. We could run this check
     // against any of its views
@@ -96,6 +101,8 @@ class NavigationOverlayRobot {
     // which requires opening the overlay before loading has completed.
     fun disableSessionIdling(activityTestRule: MainActivityTestRule) { activityTestRule.loadingIdlingResource.ignoreLoading = true }
     fun enableSessionIdling(activityTestRule: MainActivityTestRule) { activityTestRule.loadingIdlingResource.ignoreLoading = false }
+
+    fun assertTooltipText(text: String) = tooltip().check(matches(withText(text)))
 
     class Transition {
         private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -254,3 +261,4 @@ private fun homeTiles() = onView(withId(R.id.tileContainer))
 private fun overlay() = onView(withId(R.layout.fragment_navigation_overlay))
 private fun desktopModeButton() = onView(withId(R.id.desktopModeButton))
 private fun pocketMegaTile() = onView(withId(R.id.pocketVideosContainer))
+private fun tooltip() = onView(withId(R.id.tooltip)).inRoot(isPlatformPopup())
