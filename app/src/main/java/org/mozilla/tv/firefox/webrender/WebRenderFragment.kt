@@ -8,7 +8,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.PointF
 import android.os.Bundle
-import android.view.Gravity
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +29,7 @@ import mozilla.components.concept.engine.EngineView
 import mozilla.components.concept.engine.permission.Permission
 import mozilla.components.concept.engine.permission.PermissionRequest
 import mozilla.components.feature.session.SessionFeature
+import mozilla.components.support.ktx.android.content.res.pxToDp
 import mozilla.components.support.ktx.android.view.use
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.MediaSessionHolder
@@ -197,14 +197,14 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         cursorView.setup(context!!.serviceLocator.cursorModel)
                 .addTo(startStopCompositeDisposable)
 
-        val (hintViewModel, progressBarGravity) = if (serviceLocator!!.experimentsProvider.shouldShowHintBar()) {
+        val (hintViewModel, progressBarBottomMargin) = if (serviceLocator!!.experimentsProvider.shouldShowHintBar()) {
             FirefoxViewModelProviders.of(this).get(WebRenderHintViewModel::class.java) to
-                    (Gravity.END or Gravity.BOTTOM)
+                    resources.pxToDp(64)
         } else {
-            InactiveHintViewModel() to (Gravity.START or Gravity.BOTTOM)
+            InactiveHintViewModel() to 0
         }
 
-        (progressBar.layoutParams as? FrameLayout.LayoutParams)?.gravity = progressBarGravity
+        (progressBar.layoutParams as? FrameLayout.LayoutParams)?.bottomMargin = progressBarBottomMargin
 
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = true)
                 .forEach { startStopCompositeDisposable.add(it) }
