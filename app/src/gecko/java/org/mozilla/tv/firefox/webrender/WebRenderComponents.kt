@@ -10,11 +10,11 @@ import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.DefaultSettings
 import mozilla.components.concept.engine.Engine
 import mozilla.components.feature.session.SessionUseCases
+import mozilla.components.support.utils.SafeIntent
 import org.mozilla.geckoview.GeckoRuntime
 import org.mozilla.geckoview.GeckoRuntimeSettings
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.utils.BuildConstants
-import org.mozilla.tv.firefox.utils.SafeIntent
 import org.mozilla.tv.firefox.utils.Settings
 
 /**

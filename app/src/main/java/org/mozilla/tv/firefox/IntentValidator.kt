@@ -10,8 +10,8 @@ import android.os.Bundle
 import androidx.annotation.VisibleForTesting
 import android.text.TextUtils
 import mozilla.components.browser.session.Session
+import mozilla.components.support.utils.SafeIntent
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
-import org.mozilla.tv.firefox.utils.SafeIntent
 import org.mozilla.tv.firefox.utils.UrlUtils
 
 data class ValidatedIntentData(val url: String, val source: Session.Source)
@@ -61,7 +61,7 @@ object IntentValidator {
                 }
             }
             Intent.ACTION_VIEW -> {
-                val dataString = intent.dataString
+                val dataString = intent.dataString ?: ""
                 if (TextUtils.isEmpty(dataString)) {
                     return null // We can't create a session from an Intent without a URL.
                 }
@@ -69,7 +69,7 @@ object IntentValidator {
                 return ValidatedIntentData(dataString, Session.Source.ACTION_VIEW)
             }
             Intent.ACTION_SEND -> {
-                val dataString = intent.getStringExtra(Intent.EXTRA_TEXT)
+                val dataString = intent.getStringExtra(Intent.EXTRA_TEXT) ?: ""
                 if (TextUtils.isEmpty(dataString)) {
                     return null
                 }

@@ -20,11 +20,11 @@ import kotlinx.android.synthetic.main.overlay_debug.debugLog
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
 import mozilla.components.support.base.observer.Consumable
+import mozilla.components.support.utils.toSafeIntent
 import org.mozilla.tv.firefox.components.locale.LocaleAwareAppCompatActivity
 import org.mozilla.tv.firefox.ext.resetView
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.setupForApp
-import org.mozilla.tv.firefox.ext.toSafeIntent
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
 import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity
