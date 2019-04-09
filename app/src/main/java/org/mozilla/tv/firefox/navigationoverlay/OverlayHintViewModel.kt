@@ -6,17 +6,10 @@ package org.mozilla.tv.firefox.navigationoverlay
 
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
-import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.hint.HintContent
 import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.webrender.WebRenderHintViewModel
-
-private val CLOSE_MENU_HINT = HintContent(
-        R.string.hint_press_back_to_close_overlay,
-        R.string.hint_press_back_to_close_overlay_a11y,
-        R.drawable.hardware_remote_back
-)
 
 /**
  * Contains business logic for, and exposes data to the hint bar.
@@ -26,7 +19,10 @@ private val CLOSE_MENU_HINT = HintContent(
  * the exposed data is the most trivial part of the implementation, these were
  * broken into two classes.
  */
-class OverlayHintViewModel(sessionRepo: SessionRepo) : ViewModel(), HintViewModel {
+class OverlayHintViewModel(
+    sessionRepo: SessionRepo,
+    closeMenuHint: HintContent
+) : ViewModel(), HintViewModel {
     // TODO this will require an additional dependency when overlay hint is updated
     // to change contextually according to the currently focused view
 
@@ -35,5 +31,5 @@ class OverlayHintViewModel(sessionRepo: SessionRepo) : ViewModel(), HintViewMode
             .distinctUntilChanged()
             .replay(1)
             .autoConnect(0)
-    override val hints: Observable<List<HintContent>> = Observable.just(listOf(CLOSE_MENU_HINT))
+    override val hints: Observable<List<HintContent>> = Observable.just(listOf(closeMenuHint))
 }

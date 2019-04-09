@@ -12,7 +12,6 @@ import io.reactivex.subjects.Subject
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.hint.HintContent
@@ -26,6 +25,7 @@ class WebRenderHintViewModelTest {
     @MockK private lateinit var sessionRepo: SessionRepo
     @MockK private lateinit var cursorEventRepo: CursorEventRepo
     @MockK private lateinit var screenController: ScreenController
+    @MockK private lateinit var openMenuHint: HintContent
     private lateinit var hintVM: WebRenderHintViewModel
     private lateinit var sessionRepoState: Subject<SessionRepo.State>
     private lateinit var webRenderDirectionEvents: Subject<CursorEventRepo.CursorEvent>
@@ -41,12 +41,12 @@ class WebRenderHintViewModelTest {
         currentActiveScreen = PublishSubject.create()
         every { screenController.currentActiveScreen } answers { currentActiveScreen }
 
-        hintVM = WebRenderHintViewModel(sessionRepo, cursorEventRepo, screenController)
+        hintVM = WebRenderHintViewModel(sessionRepo, cursorEventRepo, screenController, openMenuHint)
     }
 
     @Test
     fun `WHEN always THEN hint should be open menu`() {
-        val expectedHints = listOf(HintContent(R.string.hint_press_menu_to_open_overlay, R.string.hint_press_menu_to_open_overlay_a11y, R.drawable.hardware_remote_menu))
+        val expectedHints = listOf(openMenuHint)
         val hints = hintVM.hints.test()
 
         sessionRepoState.onNext(fakeSessionState("https://www.mozilla.org"))

@@ -8,6 +8,7 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import org.mozilla.tv.firefox.hint.HintContentFactory
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayViewModel
 import org.mozilla.tv.firefox.navigationoverlay.OverlayHintViewModel
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
@@ -31,6 +32,8 @@ class ViewModelFactory(
     private val serviceLocator: ServiceLocator,
     private val app: Application
 ) : ViewModelProvider.Factory {
+
+    val hintContentFactory = HintContentFactory(app.resources)
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -64,13 +67,15 @@ class ViewModelFactory(
             ) as T
 
             OverlayHintViewModel::class.java -> OverlayHintViewModel(
-                    serviceLocator.sessionRepo
+                    serviceLocator.sessionRepo,
+                    hintContentFactory.getCloseMenuHint()
             ) as T
 
             WebRenderHintViewModel::class.java -> WebRenderHintViewModel(
                     serviceLocator.sessionRepo,
                     serviceLocator.cursorEventRepo,
-                    serviceLocator.screenController
+                    serviceLocator.screenController,
+                    hintContentFactory.getOpenMenuHint()
             ) as T
 
         // This class needs to either return a ViewModel or throw, so we have no good way of silently handling

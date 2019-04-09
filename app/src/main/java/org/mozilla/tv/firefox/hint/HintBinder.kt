@@ -15,7 +15,7 @@ import kotlinx.android.synthetic.main.hint_bar.view.hintBarText
 import mozilla.components.support.ktx.android.content.res.pxToDp
 import java.util.concurrent.TimeUnit
 
-private const val IMAGE = "%IMAGE"
+private const val IMAGE = "\$IMAGE"
 private const val IMAGE_SIZE_DP = 24
 
 /**
@@ -56,13 +56,12 @@ object HintBinder {
         val hintDisposable = vm.hints.subscribe {
             val hint = it.firstOrNull() ?: return@subscribe // For the first version, only one hint is shown
             val resources = hintContainer.context.resources
-            val rawText = resources.getString(hint.text)
-            val contentDescription = resources.getString(hint.contentDescription)
-            val styledText = if (!rawText.contains(IMAGE)) {
-                rawText
+
+            val styledText = if (!hint.text.contains(IMAGE)) {
+                hint.text
             } else {
-                val spannableBuilder = SpannableStringBuilder(rawText)
-                val imageStart = rawText.indexOf(IMAGE)
+                val spannableBuilder = SpannableStringBuilder(hint.text)
+                val imageStart = hint.text.indexOf(IMAGE)
                 val imageEnd = imageStart + IMAGE.length
                 val image = hintContainer.context.getDrawable(hint.icon)!!
                 val imageSize = resources.pxToDp(IMAGE_SIZE_DP)
@@ -73,7 +72,7 @@ object HintBinder {
             }
 
             hintContainer.hintBarText.text = styledText
-            hintContainer.hintBarText.contentDescription = contentDescription
+            hintContainer.hintBarText.contentDescription = hint.contentDescription
         }
 
         return listOf(displayedDisposable, hintDisposable)
