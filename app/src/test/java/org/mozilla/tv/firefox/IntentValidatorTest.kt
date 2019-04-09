@@ -12,6 +12,7 @@ import android.os.Bundle
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.test.core.app.ApplicationProvider
 import mozilla.components.browser.session.Session
+import mozilla.components.support.utils.toSafeIntent
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
@@ -19,7 +20,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mozilla.tv.firefox.ext.toSafeIntent
 import org.robolectric.RobolectricTestRunner
 
 private const val TEST_URL = "https://github.com/mozilla-mobile/focus-android"
