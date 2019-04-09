@@ -184,6 +184,10 @@
      %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
      When this button is pressed, the overlay will open and the browser will be hidden underneath it -->
     <string name="hint_press_menu_to_open_overlay">Press $IMAGE for %1$s Home, search, settings, and more</string>
-    <string name="hint_press_menu_to_open_overlay_a11y">Press the menu button for %1$s Home, search, settings, and more</string>
+
+     <!-- Hint text displayed when the browser is open.
+     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+     When this button is pressed, the overlay will open and the browser will be hidden underneath it -->
+   <string name="hint_press_menu_to_open_overlay_a11y">Press the menu button for %1$s Home, search, settings, and more</string>
 
 </resources>
