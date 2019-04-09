@@ -50,10 +50,6 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setupSettingsViewModel(parentView: View, settingsViewModel: SettingsViewModel) {
-        settingsViewModel.isVoiceViewEnabled.observe(viewLifecycleOwner, Observer<Boolean> {
-            updateForAccessibility(it!!)
-        })
-
         settingsViewModel.dataCollectionEnabled.observe(viewLifecycleOwner, Observer<Boolean> { state ->
             parentView.telemetryButton.isChecked = state ?: return@Observer
         })
@@ -69,16 +65,10 @@ class SettingsFragment : Fragment() {
             }
         })
 
-        // Due to accessibility hack for #293, where we want to focus a different (visible) element
-        // for accessibility, either of these views could be unfocusable, so we need to set the
-        // click listener on both.
         parentView.telemetryButtonContainer.setOnClickListener {
             // Manually toggle the telemetry button from the container click
             telemetryButton.isChecked = !telemetryButton.isChecked
             settingsViewModel.setDataCollectionEnabled((telemetryButton.isChecked))
-        }
-        parentView.telemetryButton.setOnClickListener {
-            settingsViewModel.setDataCollectionEnabled(telemetryButton.isChecked)
         }
 
         parentView.deleteButton.setOnClickListener { _ ->
@@ -95,28 +85,6 @@ class SettingsFragment : Fragment() {
                     .setNegativeButton(
                             getString(R.string.action_cancel)) { dialog, _ -> dialog.cancel() }
                     .create().show()
-        }
-    }
-
-    /**
-     * Updates the views in this fragment based on Accessibility status.
-     * See the comment at the declaration of these views in XML for more details.
-     */
-    private fun updateForAccessibility(isVoiceViewEnabled: Boolean) {
-        // In order to read Accessibility text for the Telemetry checkbox WITH checked state,
-        // we need to focus the checkbox in VoiceView instead of the containing view.
-        //
-        // When we change VoiceView from enabled -> disabled and this setting is focused, focus is
-        // cleared from this setting and nothing is selected. This is fine: the user can press
-        // left-right to focus something else and it's an edge case that I don't think it is worth
-        // adding code to fix.
-        val shouldFocusButton = isVoiceViewEnabled
-        if (shouldFocusButton) {
-            // Clear focus so that focus passes to child telemetryButton view.
-            telemetryButtonContainer.isFocusable = false
-            telemetryButtonContainer.clearFocus()
-        } else {
-            telemetryButtonContainer.isFocusable = true
         }
     }
 
