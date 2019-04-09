@@ -230,7 +230,7 @@ class ScreenController(private val sessionRepo: SessionRepo) {
                     .commit()
             }
             Transition.REMOVE_SETTINGS -> {
-               _currentActiveScreen.onNext(ActiveScreen.NAVIGATION_OVERLAY)
+                _currentActiveScreen.onNext(ActiveScreen.NAVIGATION_OVERLAY)
                 fragmentManager.findFragmentByTag(SettingsFragment.FRAGMENT_TAG).let {
                     fragmentManager.beginTransaction()
                         .remove(it!!)
