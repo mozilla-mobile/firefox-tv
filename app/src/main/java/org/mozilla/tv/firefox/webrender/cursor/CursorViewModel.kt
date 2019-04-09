@@ -16,12 +16,12 @@ import android.view.ViewConfiguration
 import androidx.lifecycle.LiveDataReactiveStreams
 import io.reactivex.BackpressureStrategy
 import mozilla.components.support.base.observer.Consumable
+import mozilla.components.support.ktx.android.view.use
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
 import org.mozilla.tv.firefox.ext.LiveDataCombiners
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isUriYouTubeTV
-import org.mozilla.tv.firefox.ext.use
 import org.mozilla.tv.firefox.framework.FrameworkRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 
