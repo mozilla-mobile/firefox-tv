@@ -14,7 +14,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import org.mozilla.tv.firefox.ext.arePixelsAllTheSame
+import mozilla.components.support.ktx.android.graphics.arePixelsAllTheSame
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileScreenshotStore.DIR
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileScreenshotStore.uuidToFileSystemMutex
 import java.io.File
