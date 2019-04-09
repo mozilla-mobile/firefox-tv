@@ -12,7 +12,6 @@ import io.reactivex.subjects.Subject
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.hint.HintContent
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.URLs
@@ -20,6 +19,7 @@ import org.mozilla.tv.firefox.utils.URLs
 class OverlayHintViewModelTest {
 
     @MockK private lateinit var sessionRepo: SessionRepo
+    @MockK private lateinit var closeMenuHint: HintContent
     private lateinit var hintVM: OverlayHintViewModel
     private lateinit var sessionRepoState: Subject<SessionRepo.State>
 
@@ -28,7 +28,7 @@ class OverlayHintViewModelTest {
         MockKAnnotations.init(this)
         sessionRepoState = PublishSubject.create()
         every { sessionRepo.state } answers { sessionRepoState }
-        hintVM = OverlayHintViewModel(sessionRepo)
+        hintVM = OverlayHintViewModel(sessionRepo, closeMenuHint)
     }
 
     @Test
@@ -43,7 +43,7 @@ class OverlayHintViewModelTest {
 
     @Test
     fun `WHEN always THEN hint should be close overlay`() {
-        val expectedHints = listOf(HintContent(R.string.hint_press_back_to_close_overlay, R.string.hint_press_back_to_close_overlay_a11y, R.drawable.hardware_remote_back))
+        val expectedHints = listOf(closeMenuHint)
         val hints = hintVM.hints.test()
 
         sessionRepoState.onNext(fakeSessionState(url = "https://www.mozilla.org"))

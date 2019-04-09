@@ -5,13 +5,12 @@
 package org.mozilla.tv.firefox.hint
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 
 /**
  * Backing data for hint to be displayed on the bottom hint bar
  */
 data class HintContent(
-    @StringRes val text: Int,
-    @StringRes val contentDescription: Int,
+    val text: String,
+    val contentDescription: String,
     @DrawableRes val icon: Int
 )
