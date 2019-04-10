@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.fragment_browser.view.cursorView
 import kotlinx.android.synthetic.main.fragment_browser.view.engineView
 import kotlinx.android.synthetic.main.fragment_browser.view.progressBar
 import kotlinx.android.synthetic.main.hint_bar.hintBarContainer
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.EngineView
@@ -40,6 +41,7 @@ import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
 import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isYoutubeTV
+import org.mozilla.tv.firefox.ext.logPageEvents
 import org.mozilla.tv.firefox.ext.pauseAllVideoPlaybacks
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.resetView
@@ -175,6 +177,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         }
     }
 
+    @ExperimentalCoroutinesApi
     override fun onStart() {
         super.onStart()
         sessionFeature?.start()

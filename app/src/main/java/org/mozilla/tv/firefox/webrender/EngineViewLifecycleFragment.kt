@@ -10,10 +10,12 @@ import android.webkit.WebView
 import androidx.annotation.UiThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.components.locale.LocaleAwareFragment
 import org.mozilla.tv.firefox.components.locale.LocaleManager
+import org.mozilla.tv.firefox.ext.logPageEvents
 import org.mozilla.tv.firefox.ext.onPauseIfNotNull
 import org.mozilla.tv.firefox.ext.onResumeIfNotNull
 import java.util.Locale
@@ -65,6 +67,7 @@ abstract class EngineViewLifecycleFragment : LocaleAwareFragment() {
         engineView!!.onPauseIfNotNull() // internally calls EngineView.onPause: see impl for details.
     }
 
+    @ExperimentalCoroutinesApi
     override fun onStart() {
         super.onStart()
 
@@ -74,6 +77,7 @@ abstract class EngineViewLifecycleFragment : LocaleAwareFragment() {
 
             // NB: onStart unexpectedly calls onResume: see onStop for details.
             onResumeIfNotNull()
+            this.logPageEvents()
         }
     }
 

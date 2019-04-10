@@ -12,9 +12,15 @@ import android.webkit.ValueCallback
 import android.webkit.WebBackForwardList
 import android.webkit.WebView
 import androidx.annotation.VisibleForTesting
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import mozilla.components.browser.engine.system.SystemEngineSession
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
+import mozilla.components.support.ktx.android.content.isMainProcess
 import org.mozilla.tv.firefox.ext.Js.BODY_ELEMENT_FOCUSED
 import org.mozilla.tv.firefox.ext.Js.CACHE_JS
 import org.mozilla.tv.firefox.ext.Js.JS_OBSERVE_PLAYBACK_STATE
@@ -66,6 +72,26 @@ fun EngineView.setupForApp() {
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun EngineView.evalJS(javascript: String, callback: ValueCallback<String>? = null) {
     webView?.evaluateJavascript(javascript, callback)
+}
+
+@ExperimentalCoroutinesApi
+fun EngineView.logPageEvents() {
+    GlobalScope.launch {
+        while (true) {
+            delay(500)
+            MainScope().launch {
+                evalJS("""
+window.onload = (event) => {
+  console.log("SEVTEST: href: " + document.location.href + ", Page is fully loaded");
+};
+
+document.onreadystatechange = function () {
+    console.log("SEVTEST: href: " + document.location.href + ", Ready State: " + document.readyState)
+}
+    """.trimIndent())
+            }
+        }
+    }
 }
 
 fun EngineView.pauseAllVideoPlaybacks() {
