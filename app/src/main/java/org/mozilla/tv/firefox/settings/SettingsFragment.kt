@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
+import io.sentry.Sentry
 import kotlinx.android.synthetic.main.settings_screen_buttons.view.*
 import kotlinx.android.synthetic.main.settings_screen_switch.*
 import kotlinx.android.synthetic.main.settings_screen_switch.view.*
@@ -18,8 +19,10 @@ import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.serviceLocator
-import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsType
+import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
+import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsTile
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
+import java.lang.IllegalStateException
 
 const val KEY_SETTINGS_TYPE = "KEY_SETTINGS_TYPE"
 
@@ -31,11 +34,14 @@ class SettingsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val settingsVM = FirefoxViewModelProviders.of(this@SettingsFragment).get(SettingsViewModel::class.java)
-        val type: SettingsType = SettingsType.valueOf(arguments!!.getString(KEY_SETTINGS_TYPE)!!)
+        val type: SettingsTile = SettingsScreen.valueOf(arguments!!.getString(KEY_SETTINGS_TYPE)!!)
         val view = when (type) {
-            SettingsType.DATA_COLLECTION -> setupDataCollectionScreen(inflater, container, settingsVM)
-            SettingsType.CLEAR_COOKIES -> setupClearCookiesScreen(inflater, container, settingsVM)
-            else -> return container!!
+            SettingsScreen.DATA_COLLECTION -> setupDataCollectionScreen(inflater, container, settingsVM)
+            SettingsScreen.CLEAR_COOKIES -> setupClearCookiesScreen(inflater, container, settingsVM)
+            else -> {
+                Sentry.capture(IllegalStateException("Unexpected Settings type received: $type"))
+                return container!!
+            }
         }
         view.findViewById<ImageButton>(R.id.back_button).setOnClickListener {
             serviceLocator!!.screenController.handleBack(fragmentManager!!)
@@ -90,7 +96,7 @@ class SettingsFragment : Fragment() {
     companion object {
         const val FRAGMENT_TAG = "settings"
 
-        fun newInstance(type: SettingsType): SettingsFragment {
+        fun newInstance(type: SettingsScreen): SettingsFragment {
             return SettingsFragment().apply {
                 arguments = Bundle().apply {
                     putString(KEY_SETTINGS_TYPE, type.toString())
