@@ -8,33 +8,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.home_tile.view.*
 import kotlinx.android.synthetic.main.settings_tile.view.*
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.utils.URLs
 
 class SettingsChannelAdapter(
     private val loadUrl: (String) -> Unit,
-    private val showSettings: (SettingsType) -> Unit
+    private val showSettings: (SettingsTile) -> Unit
 ) : RecyclerView.Adapter<SettingsTileHolder>() {
     private val settingsItems = arrayOf(
         SettingsItem(
-            SettingsType.DATA_COLLECTION,
+            SettingsScreen.DATA_COLLECTION,
             R.drawable.ic_data_collection,
             R.string.preference_mozilla_telemetry2,
             R.id.settings_tile_telemetry),
         SettingsItem(
-            SettingsType.CLEAR_COOKIES,
+            SettingsScreen.CLEAR_COOKIES,
             R.drawable.mozac_ic_delete,
             R.string.settings_cookies_dialog_title,
             R.id.settings_tile_cleardata),
         SettingsItem(
-            SettingsType.ABOUT,
+            SettingsButton.ABOUT,
             R.drawable.mozac_ic_info,
             R.string.menu_about,
             R.id.settings_tile_about),
         SettingsItem(
-            SettingsType.PRIVACY_POLICY,
+            SettingsButton.PRIVACY_POLICY,
             R.drawable.mozac_ic_globe,
             R.string.preference_privacy_notice,
             R.id.settings_tile_privacypolicy)
@@ -54,10 +53,10 @@ class SettingsChannelAdapter(
         titleView.setText(itemData.titleRes)
         itemView.settings_cardview.setOnClickListener {
             when (val type = itemData.type) {
-                SettingsType.DATA_COLLECTION -> showSettings(type)
-                SettingsType.CLEAR_COOKIES -> showSettings(type)
-                SettingsType.ABOUT -> loadUrl(URLs.URL_ABOUT)
-                SettingsType.PRIVACY_POLICY -> loadUrl(URLs.PRIVACY_NOTICE_URL)
+                SettingsScreen.DATA_COLLECTION -> showSettings(type)
+                SettingsScreen.CLEAR_COOKIES -> showSettings(type)
+                SettingsButton.ABOUT -> loadUrl(URLs.URL_ABOUT)
+                SettingsButton.PRIVACY_POLICY -> loadUrl(URLs.PRIVACY_NOTICE_URL)
             }
         }
         itemView.contentDescription = itemView.context.getString(itemData.titleRes)
@@ -70,8 +69,13 @@ class SettingsTileHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val titleView = itemView.settings_title
 }
 
-enum class SettingsType {
-    DATA_COLLECTION, CLEAR_COOKIES, ABOUT, PRIVACY_POLICY
+// We differentiate between Settings tiles that lead to other Settings screens, or are just buttons
+interface SettingsTile
+enum class SettingsScreen : SettingsTile {
+    DATA_COLLECTION, CLEAR_COOKIES
+}
+enum class SettingsButton: SettingsTile {
+        ABOUT, PRIVACY_POLICY
 }
 
-private data class SettingsItem(val type: SettingsType, val imgRes: Int, val titleRes: Int, val viewId: Int)
+private data class SettingsItem(val type: SettingsTile, val imgRes: Int, val titleRes: Int, val viewId: Int)

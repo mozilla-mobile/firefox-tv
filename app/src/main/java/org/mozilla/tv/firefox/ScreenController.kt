@@ -17,7 +17,8 @@ import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
-import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsType
+import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
+import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsTile
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.settings.SettingsFragment
@@ -92,10 +93,10 @@ class ScreenController(private val sessionRepo: SessionRepo) {
         }
     }
 
-    fun showSettingsScreen(fragmentManager: FragmentManager, settingsType: SettingsType) {
+    fun showSettingsScreen(fragmentManager: FragmentManager, settingsType: SettingsTile) {
         val transition = when (settingsType) {
-            SettingsType.DATA_COLLECTION -> Transition.ADD_SETTINGS_DATA
-            SettingsType.CLEAR_COOKIES -> Transition.ADD_SETTINGS_COOKIES
+            SettingsScreen.DATA_COLLECTION -> Transition.ADD_SETTINGS_DATA
+            SettingsScreen.CLEAR_COOKIES -> Transition.ADD_SETTINGS_COOKIES
             else -> return
         }
         handleTransitionAndUpdateActiveScreen(fragmentManager, transition)
@@ -219,14 +220,14 @@ class ScreenController(private val sessionRepo: SessionRepo) {
                 _currentActiveScreen.onNext(ActiveScreen.SETTINGS)
                 fragmentManager.beginTransaction()
                     .hide(fragmentManager.navigationOverlayFragment())
-                    .add(R.id.container_settings, SettingsFragment.newInstance(SettingsType.DATA_COLLECTION), SettingsFragment.FRAGMENT_TAG)
+                    .add(R.id.container_settings, SettingsFragment.newInstance(SettingsScreen.DATA_COLLECTION), SettingsFragment.FRAGMENT_TAG)
                     .commit()
             }
             Transition.ADD_SETTINGS_COOKIES -> {
                 _currentActiveScreen.onNext(ActiveScreen.SETTINGS)
                 fragmentManager.beginTransaction()
                     .hide(fragmentManager.navigationOverlayFragment())
-                    .add(R.id.container_settings, SettingsFragment.newInstance(SettingsType.CLEAR_COOKIES), SettingsFragment.FRAGMENT_TAG)
+                    .add(R.id.container_settings, SettingsFragment.newInstance(SettingsScreen.CLEAR_COOKIES), SettingsFragment.FRAGMENT_TAG)
                     .commit()
             }
             Transition.REMOVE_SETTINGS -> {
