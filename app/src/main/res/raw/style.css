@@ -1,12 +1,12 @@
 body, html {
     background-color: #38383d;
     color: #f9f9fa;
-    font-family: sans-serif;
+    font-family: amazon-ember-display-regular;
     line-height: 24px;
     font-size: 14px;
 }
 
-body{
+body {
     padding-left: 24px;
     padding-right: 24px;
     margin-left: 0px;

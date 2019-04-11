@@ -14,4 +14,5 @@
     android:text="@null"
     android:textSize="14sp"
     android:textColor="@color/photonGrey10_a80p"
-    android:gravity="center"/>
+    android:gravity="center"
+    android:fontFamily="@string/font_ember_regular"/>

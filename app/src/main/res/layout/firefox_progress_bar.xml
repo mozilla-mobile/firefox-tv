@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:textColor="@color/tv_gray2"
-        android:fontFamily="sans-serif"
+        android:fontFamily="@string/font_ember_regular"
         android:maxLines="1"
         android:layout_marginEnd="8dp"/>
 

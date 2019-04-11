@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="start"
-            android:fontFamily="sans-serif-medium"
+            android:fontFamily="@string/font_ember_regular"
             android:gravity="center_horizontal"
             android:paddingBottom="6dp"
             android:paddingEnd="6dp"
