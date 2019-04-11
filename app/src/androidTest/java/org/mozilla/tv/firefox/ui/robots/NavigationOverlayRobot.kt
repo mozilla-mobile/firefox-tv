@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.ui.robots
 
 import android.net.Uri
+import android.os.Build
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.clearText
 import androidx.test.espresso.action.ViewActions.click
@@ -13,6 +14,7 @@ import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
+import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -102,7 +104,19 @@ class NavigationOverlayRobot {
     fun disableSessionIdling(activityTestRule: MainActivityTestRule) { activityTestRule.loadingIdlingResource.ignoreLoading = true }
     fun enableSessionIdling(activityTestRule: MainActivityTestRule) { activityTestRule.loadingIdlingResource.ignoreLoading = false }
 
-    fun assertTooltipText(text: String) = tooltip().check(matches(withText(text)))
+    fun assertTooltipText(text: String) {
+        // This wait is to ensure the check does not happen when UI paint is not completed
+        device.wait(Until.findObject(By.res(R.id.tooltip.toString())), 5000)
+
+        // The tooltip popup locator differs by the Android OS Version, and we need to accommodate for both 4K stick and Gen 2
+        // Gen 2 Stick = 22
+        // 4K Stick = 25 (N_MR1)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            tooltip().check(matches(withText(text)))
+        } else {
+            tooltip_nonPlatformPopup().check(matches(withText(text)))
+        }
+    }
 
     class Transition {
         private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -262,3 +276,4 @@ private fun overlay() = onView(withId(R.layout.fragment_navigation_overlay))
 private fun desktopModeButton() = onView(withId(R.id.desktopModeButton))
 private fun pocketMegaTile() = onView(withId(R.id.pocketVideosContainer))
 private fun tooltip() = onView(withId(R.id.tooltip)).inRoot(isPlatformPopup())
+private fun tooltip_nonPlatformPopup() = onView(withId(R.id.tooltip)).inRoot(withDecorView(withId(R.id.tooltip)))
