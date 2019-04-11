@@ -56,6 +56,7 @@ import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.hint.InactiveHintViewModel
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsChannelAdapter
+import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketVideoFragment
@@ -73,7 +74,8 @@ private const val COL_COUNT = 5
 private val uiHandler = Handler(Looper.getMainLooper())
 
 enum class NavigationEvent {
-    BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION, POCKET, DESKTOP_MODE, EXIT_FIREFOX;
+    BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION, POCKET, DESKTOP_MODE, EXIT_FIREFOX,
+    SETTINGS_DATA_COLLECTION, SETTINGS_CLEAR_COOKIES;
 
     companion object {
         fun fromViewClick(viewId: Int?) = when (viewId) {
@@ -125,6 +127,12 @@ class NavigationOverlayFragment : Fragment() {
                 if (fragmentManager != null && activity != null) {
                     serviceLocator.screenController.showPocketScreen(fragmentManager)
                 }
+            }
+            NavigationEvent.SETTINGS_DATA_COLLECTION -> {
+                serviceLocator.screenController.showSettingsScreen(fragmentManager!!, SettingsScreen.DATA_COLLECTION)
+            }
+            NavigationEvent.SETTINGS_CLEAR_COOKIES -> {
+                serviceLocator.screenController.showSettingsScreen(fragmentManager!!, SettingsScreen.CLEAR_COOKIES)
             }
             NavigationEvent.TURBO, NavigationEvent.PIN_ACTION, NavigationEvent.DESKTOP_MODE, NavigationEvent.BACK,
             NavigationEvent.FORWARD, NavigationEvent.RELOAD, NavigationEvent.EXIT_FIREFOX -> { /* not handled by this object */ }
@@ -373,10 +381,14 @@ class NavigationOverlayFragment : Fragment() {
     private fun initSettingsChannel() {
         settingsTileContainer.gridView.adapter = SettingsChannelAdapter(
                 loadUrl = { urlStr ->
-                    serviceLocator.screenController.showBrowserScreenForUrl(fragmentManager!!, urlStr)
+                    onNavigationEvent.invoke(NavigationEvent.LOAD_TILE, urlStr, null)
                 },
                 showSettings = { type ->
-                    serviceLocator.screenController.showSettingsScreen(fragmentManager!!, type)
+                    val navigationEvent = when (type) {
+                        SettingsScreen.DATA_COLLECTION -> NavigationEvent.SETTINGS_DATA_COLLECTION
+                        SettingsScreen.CLEAR_COOKIES -> NavigationEvent.SETTINGS_CLEAR_COOKIES
+                    }
+                    onNavigationEvent.invoke(navigationEvent, null, null)
                 }
         )
     }
