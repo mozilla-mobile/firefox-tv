@@ -96,4 +96,9 @@
         <item name="android:paddingEnd">10dp</item>
     </style>
 
+    <style name="SwitchCompatStyle">
+        <item name="thumbTint">@color/preferences_switch_selector</item>
+        <item name="trackTint">@color/preferences_switch_selector</item>
+    </style>
+
 </resources>

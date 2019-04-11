@@ -17,7 +17,7 @@
         android:layout_marginStart="64dp"
         android:layout_marginTop="32dp"
         android:src="@drawable/mozac_ic_back"
-        android:text="@string/content_description_back"
+        android:contentDescription="@string/content_description_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,19 +35,18 @@
         app:layout_constraintStart_toEndOf="@+id/back_button"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/toggle"
+        style="@style/SwitchCompatStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="140dp"
         android:contentDescription="@string/preference_mozilla_telemetry2"
-        android:thumbTint="@color/preferences_switch_selector"
-        android:trackTint="@color/preferences_switch_selector"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/description">
 
         <requestFocus />
-    </Switch>
+    </androidx.appcompat.widget.SwitchCompat>
 
     <TextView
         android:id="@+id/description"

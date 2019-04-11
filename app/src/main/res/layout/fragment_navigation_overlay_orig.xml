@@ -9,7 +9,10 @@
     android:layout_height="match_parent"
     android:background="@color/browser_overlay_background"
     android:orientation="vertical"
-    android:paddingTop="27dp">
+    android:paddingTop="27dp"
+    tools:ignore="Overdraw">
+    <!-- This background color is necessary otherwise the browser shows through -->
+
 
     <org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlayScrollView
         android:id="@+id/overlayScrollView"

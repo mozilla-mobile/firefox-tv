@@ -17,7 +17,7 @@
         android:layout_marginStart="64dp"
         android:layout_marginTop="32dp"
         android:src="@drawable/mozac_ic_back"
-        android:text="@string/content_description_back"
+        android:contentDescription="@string/content_description_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,7 +41,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:paddingRight="300dp"
+        android:paddingStart="0dp"
+        android:paddingEnd="300dp"
         android:text="@string/settings_cookies_dialog_content2"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/title"

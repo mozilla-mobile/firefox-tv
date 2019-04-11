@@ -74,7 +74,7 @@ interface SettingsTile
 enum class SettingsScreen : SettingsTile {
     DATA_COLLECTION, CLEAR_COOKIES
 }
-enum class SettingsButton: SettingsTile {
+enum class SettingsButton : SettingsTile {
         ABOUT, PRIVACY_POLICY
 }
 
