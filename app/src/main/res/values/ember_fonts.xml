@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- This file aliases Ember fonts, similar to Android Components
+    https://github.com/mozilla-mobile/android-components/blob/master/components/ui/fonts/src/main/res/values/roboto_fonts.xml -->
+    <string name="font_ember_light" translatable="false" tools:keep="@string/font_ember_light">amazon-ember-display-light</string>
+    <string name="font_ember_regular" translatable="false" tools:keep="@string/font_ember_regular">amazon-ember-display-regular</string>
+    <string name="font_ember_medium" translatable="false" tools:keep="@string/font_ember_medium">amazon-ember-display-medium</string>
+    <string name="font_ember_bold" translatable="false" tools:keep="@string/font_ember_bold">amazon-ember-display-bold</string>
+    <string name="font_ember_heavy" translatable="false" tools:keep="@string/font_ember_heavy">amazon-ember-display-heavy</string>
+</resources>
