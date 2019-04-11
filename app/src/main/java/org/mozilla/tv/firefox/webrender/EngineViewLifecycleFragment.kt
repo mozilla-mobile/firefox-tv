@@ -5,17 +5,20 @@
 
 package org.mozilla.tv.firefox.webrender
 
+import android.os.Bundle
 import android.view.View
 import android.webkit.WebView
 import androidx.annotation.UiThread
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import mozilla.components.concept.engine.EngineView
+import mozilla.components.feature.session.SessionFeature
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.components.locale.LocaleAwareFragment
 import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.ext.onPauseIfNotNull
 import org.mozilla.tv.firefox.ext.onResumeIfNotNull
+import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import java.util.Locale
 
 /**
@@ -42,10 +45,29 @@ abstract class EngineViewLifecycleFragment : LocaleAwareFragment() {
         @UiThread get // On a background thread, it may have been removed from the view hierarchy.
         private set
 
+    private lateinit var sessionFeature: SessionFeature
+
     abstract fun onEngineViewCreated(engineView: EngineView): Disposable?
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // The SessionFeature implementation will take care of making sure that we always render the currently selected
+        // session in our engine view.
+        // It's important to initialize SessionFeature instance to respect its associated fragment's
+        // lifecycle and the EngineView instance (to avoid accidentally having multiple sessionFeature
+        // instances)
+        engineView = (view.findViewById<View>(R.id.engineView) as EngineView).apply {
+            sessionFeature = SessionFeature(
+                    requireWebRenderComponents.sessionManager,
+                    requireWebRenderComponents.sessionUseCases,
+                    this)
+        }
+    }
 
     override fun onStop() {
         super.onStop()
+        sessionFeature.stop()
 
         compositeDisposable.clear()
 
@@ -67,8 +89,9 @@ abstract class EngineViewLifecycleFragment : LocaleAwareFragment() {
 
     override fun onStart() {
         super.onStart()
+        sessionFeature.start()
 
-        engineView = (view!!.findViewById<View>(R.id.engineView) as EngineView).apply {
+        engineView?.apply {
             val disposable = onEngineViewCreated(this)
             disposable?.let { compositeDisposable.add(it) }
 

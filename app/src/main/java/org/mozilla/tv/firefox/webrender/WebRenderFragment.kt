@@ -80,7 +80,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     var cursor: CursorController? = null
         @UiThread get set // Set from the UI thread so serial access is required for simplicity.
 
-    var sessionFeature: SessionFeature? = null
     // If YouTubeBackHandler is instantiated without an EngineView, YouTube won't
     // work properly, so we !!
     private val youtubeBackHandler by lazy { YouTubeBackHandler(engineView!!, activity as MainActivity) }
@@ -155,13 +154,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     }
 
     override fun onEngineViewCreated(engineView: EngineView): Disposable? {
-        // The SessionFeature implementation will take care of making sure that we always render the currently selected
-        // session in our engine view.
-        sessionFeature = SessionFeature(
-            requireWebRenderComponents.sessionManager,
-            requireWebRenderComponents.sessionUseCases,
-            engineView)
-
         return serviceLocator?.screenController?.currentActiveScreen?.subscribe {
             if (it == ActiveScreen.WEB_RENDER) {
                 // Cache focused DOM element just before WebView gains focus. See comment in
@@ -177,7 +169,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     override fun onStart() {
         super.onStart()
-        sessionFeature?.start()
 
         /**
          * When calling getOrCreateEngineSession(), [SessionManager] lazily creates an [EngineSession]
@@ -221,7 +212,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         super.onStop()
 
         serviceLocator!!.sessionRepo.exitFullScreenIfPossible()
-        sessionFeature?.stop()
         compositeDisposable.clear()
     }
 
@@ -232,8 +222,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         lifecycle.removeObserver(cursor!!)
         cursor = null
-
-        sessionFeature = null
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
