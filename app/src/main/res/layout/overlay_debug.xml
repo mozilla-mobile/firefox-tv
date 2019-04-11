@@ -11,4 +11,5 @@
     android:visibility="gone"
     android:padding="5dp"
     android:background="#80000000"
-    android:textSize="14sp" />
+    android:textSize="14sp"
+    android:fontFamily="@string/font_ember_regular"/>

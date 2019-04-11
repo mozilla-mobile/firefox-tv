@@ -77,6 +77,7 @@
                     android:textColor="@color/photonGrey10"
                     android:textColorHint="@color/photonGrey10_a80p"
                     android:textIsSelectable="false"
+                    android:fontFamily="@string/font_ember_regular"
                     tools:ignore="UnusedAttribute" />
 
                 <!-- Content description added in code. -->

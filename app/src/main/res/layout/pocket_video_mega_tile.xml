@@ -76,7 +76,7 @@
                 android:layout_marginTop="@dimen/pocket_video_mega_tile_error_margin"
                 android:textSize="16sp"
                 android:textColor="@color/photonGrey10"
-                android:fontFamily="@string/font_roboto_regular"
+                android:fontFamily="@string/font_ember_regular"
                 />
 
             <Button

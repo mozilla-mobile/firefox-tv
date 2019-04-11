@@ -19,7 +19,7 @@
         android:layout_marginTop="74dp"
         android:text="@string/pocket_home_tutorial_title"
         android:textSize="34sp"
-        android:fontFamily="@string/font_roboto_light"
+        android:fontFamily="@string/font_ember_light"
         android:textColor="#FFF9F9FA"
         android:textAlignment="center"/>
 
@@ -41,7 +41,7 @@
         android:text="@string/pocket_home_tutorial_description"
         android:textSize="16sp"
         android:textColor="#CCF9F9FA"
-        android:fontFamily="@string/font_roboto_regular"
+        android:fontFamily="@string/font_ember_regular"
         android:textAlignment="center"/>
 
     <Button
