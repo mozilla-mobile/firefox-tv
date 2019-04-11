@@ -10,11 +10,13 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
+import org.mozilla.tv.firefox.R;
 import androidx.core.view.ViewCompat;
-
 import java.lang.ref.WeakReference;
 
 public class ViewUtils {
@@ -114,7 +116,13 @@ public class ViewUtils {
     }
 
     private static void showToast(Context context, int resId, String toastLocation) {
-        Toast toast = Toast.makeText(context, resId, Toast.LENGTH_SHORT);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.custom_toast, null);
+        TextView text = layout.findViewById(R.id.toast_text);
+        text.setText(resId);
+        Toast toast = new Toast(context);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setView(layout);
 
         if (toastLocation.equals("top")) {
             toast.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, 200);

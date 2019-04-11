@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toast_layout_root"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/custom_toast_background"
+    android:elevation="1dp">
+
+    <TextView
+        android:id="@+id/toast_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/font_ember_regular"
+        android:textSize="@dimen/custom_toast_font_size"
+        android:textColor="@color/photonGrey10"
+        android:paddingStart="@dimen/custom_toast_padding_start_end"
+        android:paddingEnd="@dimen/custom_toast_padding_start_end"
+        android:paddingTop="@dimen/custom_toast_padding_top_bottom"
+        android:paddingBottom="@dimen/custom_toast_padding_top_bottom" />
+</LinearLayout>
