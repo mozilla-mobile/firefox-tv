@@ -53,8 +53,12 @@ class SettingsTest : ScreenshotTest() {
     }
 
     companion object {
-        @JvmStatic
-        @ClassRule
-        val localeTestRule = LocaleTestRule()
+        // TODO 'lazy' as a workaround due to an incompatibility between
+        // Fastlane and AndroidX. Remove lazy delegate when this
+        // incompatibility has been fixed
+        // FFTV issue: #1741
+        // Fastlane issue: https://github.com/fastlane/fastlane/issues/13810
+        @get:ClassRule
+        val localeTestRule by lazy { LocaleTestRule() }
     }
 }
