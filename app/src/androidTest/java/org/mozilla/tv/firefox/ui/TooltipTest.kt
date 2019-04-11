@@ -16,7 +16,6 @@ private const val RELOAD_TEXT = "Reload website"
 private const val PIN_TEXT = "Pin to homescreen"
 private const val DESKTOP_MODE_TEXT = "Request desktop version of this site"
 private const val EXIT_TEXT = "Exit Firefox"
-private const val SETTINGS_TEXT = "Settings"
 
 /**
  * A test for the nav bar tooltips including:
@@ -75,9 +74,6 @@ class TooltipTest {
             // Focus exit button
             remoteRight()
             assertTooltipText(EXIT_TEXT)
-            // Focus settings button
-            remoteRight()
-            assertTooltipText(SETTINGS_TEXT)
         }
     }
 }
