@@ -47,6 +47,7 @@ abstract class EngineViewLifecycleFragment : LocaleAwareFragment() {
 
     private lateinit var sessionFeature: SessionFeature
 
+    // TODO: https://github.com/mozilla-mobile/firefox-tv/issues/2053
     abstract fun onEngineViewCreated(engineView: EngineView): Disposable?
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
