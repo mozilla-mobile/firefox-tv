@@ -14,7 +14,7 @@ import org.mozilla.tv.firefox.utils.URLs
 
 class SettingsChannelAdapter(
     private val loadUrl: (String) -> Unit,
-    private val showSettings: (SettingsTile) -> Unit
+    private val showSettings: (SettingsScreen) -> Unit
 ) : RecyclerView.Adapter<SettingsTileHolder>() {
     private val settingsItems = arrayOf(
         SettingsItem(
@@ -53,8 +53,8 @@ class SettingsChannelAdapter(
         titleView.setText(itemData.titleRes)
         itemView.settings_cardview.setOnClickListener {
             when (val type = itemData.type) {
-                SettingsScreen.DATA_COLLECTION -> showSettings(type)
-                SettingsScreen.CLEAR_COOKIES -> showSettings(type)
+                SettingsScreen.DATA_COLLECTION -> showSettings(type as SettingsScreen)
+                SettingsScreen.CLEAR_COOKIES -> showSettings(type as SettingsScreen)
                 SettingsButton.ABOUT -> loadUrl(URLs.URL_ABOUT)
                 SettingsButton.PRIVACY_POLICY -> loadUrl(URLs.PRIVACY_NOTICE_URL)
             }
