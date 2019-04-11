@@ -46,4 +46,11 @@
 
     <dimen name="onboarding_button_height">36dp</dimen>
     <dimen name="onboarding_button_width">192dp</dimen>
+
+    <!-- Values for toasts -->
+    <dimen name="custom_toast_corner_radius">24dp</dimen>
+    <dimen name="custom_toast_padding_top_bottom">12dp</dimen>
+    <dimen name="custom_toast_padding_start_end">31dp</dimen>
+    <dimen name="custom_toast_font_size">16sp</dimen>
+
 </resources>
