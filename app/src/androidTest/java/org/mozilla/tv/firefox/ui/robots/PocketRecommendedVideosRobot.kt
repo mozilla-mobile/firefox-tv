@@ -8,6 +8,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import org.mozilla.tv.firefox.R
@@ -38,4 +39,4 @@ class PocketRecommendedVideosRobot {
     }
 }
 
-private fun rowContent() = onView(withId(R.id.row_content))
+private fun rowContent() = onView(withParent(withId(R.id.videoFeed)))
