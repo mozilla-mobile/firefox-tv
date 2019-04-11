@@ -6,13 +6,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
-- Tooltips on toolbar buttons
-
-- Hint bar on home and browser screens (#1907)
 
 ### Changed
 
 ### Fixed
+
+
+## [3.7-RO] 2019-04-16
+*Released to Fire TV 4K, staged roll-out*
+### Added
+- Tooltips on toolbar buttons (#1908)
+- Hint bar on home and browser screens (#1907)
+
+## 3.6-A - 2019-04-16
+*Staged rollout of 3.5, no change from v3.5-RO. Released to all devices except Fire TV 4K*
 
 ## [3.6-RO] 2019-03-26
 *Released to Fire TV 4K, staged roll-out*
@@ -209,7 +216,8 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 ## [1.0] - 2017-12-20
 *Initial release! A browser including home tile shortcuts.*
 
-[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.6-RO...HEAD
+[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.7-RO...HEAD
+[3.7-RO]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.6-RO...v3.7-RO
 [3.6-RO]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.5-RO...v3.6-RO
 [3.5-RO]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.4-A...v3.5-RO
 [3.4-A]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.3.1...v3.4-A
