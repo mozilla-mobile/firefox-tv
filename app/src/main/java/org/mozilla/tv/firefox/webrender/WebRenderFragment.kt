@@ -159,6 +159,13 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 // Cache focused DOM element just before WebView gains focus. See comment in
                 // FocusedDOMElementCacheInterface for details
                 engineView.focusedDOMElement.cache()
+
+                // EngineView focus may be lost after waking up from sleep & screen saver.
+                // Forcibly request focus onStart(), after DOMElement cache, IFF webRenderFragment
+                // is the current ActiveScreen
+                // TODO: move this when focus repo is in place (#1395)
+                // TODO: this method needs to be renamed (#2053); preliminary onStart() setup
+                engineView.asView().requestFocus()
             } else {
                 // Pause all the videos when transitioning out of [WebRenderFragment] to mitigate possible
                 // memory leak while clearing data. See [WebViewCache.clear] as well as #1720
