@@ -10,7 +10,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 ### Fixed
-- Fixed Youtube loading screen stuck issue (#2031)
 
 
 ## [3.7-RO] 2019-04-16
@@ -18,6 +17,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Tooltips on toolbar buttons (#1908)
 - Hint bar on home and browser screens (#1907)
+
+### Fixed
+- Fixed Youtube loading screen stuck issue (#2031)
 
 ## 3.6-A - 2019-04-16
 *Staged rollout of 3.5, no change from v3.5-RO. Released to all devices except Fire TV 4K*
