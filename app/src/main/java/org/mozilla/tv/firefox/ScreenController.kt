@@ -54,7 +54,6 @@ class ScreenController(private val sessionRepo: SessionRepo) {
             .add(R.id.container_web_render, renderFragment, WebRenderFragment.FRAGMENT_TAG)
             // We add NavigationOverlayFragment last so that it takes focus
             .add(R.id.container_navigation_overlay, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
-            .hide(renderFragment) // TODO note that this will need to be changed in order to display WebRenderFragment under a split overlay
             .hide(pocketFragment)
             .hide(settingsFragment)
             .commitNow()
@@ -230,7 +229,6 @@ class ScreenController(private val sessionRepo: SessionRepo) {
             Transition.SHOW_BROWSER -> {
                 _currentActiveScreen.onNext(ActiveScreen.WEB_RENDER)
                 fragmentManager.beginTransaction()
-                    .show(fragmentManager.webRenderFragment())
                     .hide(fragmentManager.navigationOverlayFragment())
                     .hide(fragmentManager.pocketFragment())
                     .hide(fragmentManager.settingsFragment())
