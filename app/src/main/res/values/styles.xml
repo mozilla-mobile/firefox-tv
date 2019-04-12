@@ -34,10 +34,12 @@
         <item name="colorAccent">#FF00A4DC</item>
         <item name="android:windowTitleStyle">@style/DialogTitleStyle</item>
         <item name="dialogPreferredPadding">24dp</item>
+        <item name="android:fontFamily">@string/font_ember_regular</item>
     </style>
 
     <style name="PopupMenu" parent="@style/Widget.AppCompat.Light.PopupMenu">
         <item name="overlapAnchor">true</item>
+        <item name="android:fontFamily">@string/font_ember_regular</item>
     </style>
 
     <style name="NavigationButton" parent="Widget.AppCompat.ImageButton">
