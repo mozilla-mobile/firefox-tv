@@ -7,13 +7,17 @@ package org.mozilla.tv.firefox.webrender.cursor
 import android.graphics.PointF
 import android.view.KeyEvent
 import android.view.View
+import android.view.accessibility.AccessibilityEvent
+import android.view.accessibility.AccessibilityNodeInfo
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
 import androidx.lifecycle.OnLifecycleEvent
 import kotlinx.coroutines.Job
+import org.mozilla.tv.firefox.ext.LiveDataCombiners
 import org.mozilla.tv.firefox.ext.couldScrollInDirection
 import org.mozilla.tv.firefox.ext.scrollByClamped
+import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.utils.Direction
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 
@@ -44,6 +48,14 @@ class CursorController private constructor(
         scrollWebView(percentMaxScrollVel, framesPassed)
     })
 
+    private val rootAccessibilityDelegate = object : View.AccessibilityDelegate() {
+        override fun onInitializeAccessibilityNodeInfo(host: View?, info: AccessibilityNodeInfo?) {
+            super.onInitializeAccessibilityNodeInfo(host, info)
+            info?.extras?.putString("com.amazon.accessibility.navigationMode", "1")
+            info?.isEnabled = host!!.isEnabled
+        }
+    }
+
     // Initial value does not matter: it will be reactively replaced during start-up.
     lateinit var keyDispatcher: CursorKeyDispatcher
 
@@ -63,18 +75,16 @@ class CursorController private constructor(
             view.updateCursorPressedState(event)
         })
 
-        viewModel.isEnabled.observe(webRenderFragment.viewLifecycleOwner, Observer { isEnabled ->
-            isEnabled ?: return@Observer
-            keyDispatcher.isEnabled = isEnabled
-            view.visibility = if (isEnabled) View.VISIBLE else View.GONE
-        })
-
-        viewModel.touchSimulationLiveData.observe(webRenderFragment.viewLifecycleOwner, Observer {
-            it?.consume {
-                webRenderFragment.activity?.dispatchTouchEvent(it)
-                true
-            }
-        })
+        LiveDataCombiners.combineLatest(
+                webRenderFragment.serviceLocator!!.frameworkRepo.isVoiceViewEnabled,
+                viewModel.isEnabled
+        ) { isVoiceViewEnabled, isEnabled -> Pair(isVoiceViewEnabled, isEnabled)}
+                .observe(webRenderFragment.viewLifecycleOwner, Observer { (isVoiceViewEnabled, isEnabled) ->
+                    keyDispatcher.isEnabled = isEnabled && !isVoiceViewEnabled
+                    view.visibility = if (isEnabled && !isVoiceViewEnabled) View.VISIBLE else View.GONE
+                    view.rootView?.setAccessibilityDelegate(if (isEnabled) { rootAccessibilityDelegate } else { null })
+                    view.rootView?.sendAccessibilityEvent(AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED)
+                })
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)

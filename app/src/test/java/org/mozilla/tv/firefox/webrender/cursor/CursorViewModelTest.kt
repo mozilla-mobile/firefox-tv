@@ -83,7 +83,7 @@ class CursorViewModelTest {
             `when`(it.legacyState).thenReturn(sessionState)
         }
 
-        viewModel = CursorViewModel(frameworkRepo, screenController, sessionRepo)
+        viewModel = CursorViewModel(screenController, sessionRepo)
     }
 
     // This method pattern is duplicated but it's significantly more readable this way.

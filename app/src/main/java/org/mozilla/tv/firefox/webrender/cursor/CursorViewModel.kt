@@ -37,7 +37,6 @@ const val DPAD_TAP_TIMEOUT = 300 // ViewConfiguration.TAP_TIMEOUT * 3
  * A [ViewModel] representing the spatial, d-pad cursor used to navigate web pages.
  */
 class CursorViewModel(
-    frameworkRepo: FrameworkRepo,
     screenController: ScreenController,
     sessionRepo: SessionRepo
 ) : ViewModel() {
@@ -49,21 +48,12 @@ class CursorViewModel(
             .fromPublisher(screenController.currentActiveScreen.toFlowable(BackpressureStrategy.LATEST))
 
     @Suppress("DEPRECATION")
-    private val isConfigurationWithOwnNavControls: LiveData<Boolean> = LiveDataCombiners.combineLatest(
-        frameworkRepo.isVoiceViewEnabled,
-        sessionRepo.legacyState
-    ) { isVoiceViewEnabled, sessionState ->
-        val isYouTubeTV = sessionState.currentUrl.isUriYouTubeTV
-        isYouTubeTV || isVoiceViewEnabled
-    }
-
-    // TODO: this complexly combines 3 streams by calling combineLatest twice: consider using a library instead #1783
     val isEnabled: LiveData<Boolean> = LiveDataCombiners.combineLatest(
-        isConfigurationWithOwnNavControls,
+        sessionRepo.legacyState,
         currentActiveScreen
-    ) { isConfigurationWithOwnNavControls, activeScreen ->
+    ) { sessionState, activeScreen ->
         val isWebRenderActive = activeScreen == WEB_RENDER
-        isWebRenderActive && !isConfigurationWithOwnNavControls
+        isWebRenderActive && !sessionState.currentUrl.isUriYouTubeTV
     }
 
     /**

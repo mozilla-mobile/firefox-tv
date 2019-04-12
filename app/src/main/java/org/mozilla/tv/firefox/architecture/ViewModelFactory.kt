@@ -57,7 +57,6 @@ class ViewModelFactory(
             ) as T
 
             CursorViewModel::class.java -> CursorViewModel(
-                serviceLocator.frameworkRepo,
                 serviceLocator.screenController,
                 serviceLocator.sessionRepo
             ) as T
