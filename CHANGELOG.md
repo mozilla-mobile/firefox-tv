@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 - Fixed Youtube loading screen stuck issue (#2031)
+- Fixed bug that could cause websites to show up as blank, grey screens when resuming Firefox (#1940)
 
 ## 3.6-A - 2019-04-16
 *Staged rollout of 3.5, no change from v3.5-RO. Released to all devices except Fire TV 4K*
