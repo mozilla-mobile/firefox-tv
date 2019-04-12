@@ -5,9 +5,9 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="@dimen/home_tile_width"
-    android:layout_height="@dimen/home_tile_height"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/home_tile_width"
+    android:layout_height="150dp"
     android:layout_margin="12dp"
     android:orientation="vertical">
 
@@ -15,9 +15,9 @@
         android:id="@+id/settings_cardview"
         android:layout_width="match_parent"
         android:layout_height="84dp"
-        app:cardBackgroundColor="@color/photonGrey50"
         android:focusable="true"
         android:foreground="@drawable/settings_item_selector"
+        app:cardBackgroundColor="@color/photonGrey50"
         app:cardCornerRadius="4dp">
 
         <ImageView
@@ -25,7 +25,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_gravity="center"
-            tools:ignore="ContentDescription"/>
+            tools:ignore="ContentDescription" />
 
     </androidx.cardview.widget.CardView>
 

@@ -109,7 +109,7 @@
                 <androidx.leanback.widget.ListRowView
                     android:id="@+id/settingsTileContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp" />
+                    android:layout_height="wrap_content" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
