@@ -29,8 +29,7 @@ class ToggleDataCollectionTest {
     @Test
     fun WHEN_data_collection_button_is_toggled_THEN_data_collection_matches_button_state() {
         navigationOverlay {
-            linearNavigateToSettings()
-        }.openSettingsTelemetryTile {
+        }.linearNavigateToTelemtryTileAndOpen {
             assertDataCollectionButtonState(IS_TELEMETRY_ENABLED_DEFAULT)
 
             toggleDataCollectionButton()
@@ -48,8 +47,7 @@ class ToggleDataCollectionTest {
         var cachedDataCollectionButtonIsChecked = IS_TELEMETRY_ENABLED_DEFAULT
 
         navigationOverlay {
-            linearNavigateToSettings()
-        }.openSettingsTelemetryTile {
+        }.linearNavigateToTelemtryTileAndOpen {
             assertDataCollectionButtonState(cachedDataCollectionButtonIsChecked)
             toggleDataCollectionButton()
             cachedDataCollectionButtonIsChecked = !cachedDataCollectionButtonIsChecked
