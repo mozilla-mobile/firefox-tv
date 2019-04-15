@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 *Released to Fire TV 4K, staged roll-out*
 ### Added
 - Tooltips on toolbar buttons (#1908)
-- Hint bar on home and browser screens (#1907)
+- Hint bar on home and browser screens (#1907) (off)
 
 ### Fixed
 - Fixed Youtube loading screen stuck issue (#2031)
