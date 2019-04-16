@@ -31,6 +31,7 @@ import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.BuildConstants
+import org.mozilla.tv.firefox.utils.DIRECTION_KEY_CODES
 import org.mozilla.tv.firefox.utils.OnUrlEnteredListener
 import org.mozilla.tv.firefox.utils.Settings
 import org.mozilla.tv.firefox.utils.URLs
@@ -249,6 +250,11 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         if (event.keyCode == KeyEvent.KEYCODE_BACK ||
                 event.keyCode == KeyEvent.KEYCODE_DEL) return super.dispatchKeyEvent(event)
         serviceLocator.cursorEventRepo.pushKeyEvent(event)
+        if (DIRECTION_KEY_CODES.contains(event.keyCode) &&
+                serviceLocator.screenController.currentActiveScreen.blockingFirst() == ScreenControllerStateMachine.ActiveScreen.WEB_RENDER) {
+            serviceLocator.cursorController.lastDirectionKeyPressed = event
+            return true
+        }
 
         val fragmentManager = supportFragmentManager
 
