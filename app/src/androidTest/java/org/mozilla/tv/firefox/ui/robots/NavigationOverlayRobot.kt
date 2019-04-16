@@ -139,6 +139,7 @@ class NavigationOverlayRobot {
             urlBar().perform(clearText(),
                     typeText(url.toString()),
                     pressImeActionButton())
+            waitUntilSiteLoaded()
 
             BrowserRobot().interact()
             return BrowserRobot.Transition()
@@ -161,6 +162,7 @@ class NavigationOverlayRobot {
 
         fun openTileToBrowser(index: Int, interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
             homeTiles().perform(RecyclerViewActions.actionOnItemAtPosition<TileViewHolder>(index, click()))
+            waitUntilSiteLoaded()
 
             BrowserRobot().interact()
             return BrowserRobot.Transition()
@@ -168,6 +170,7 @@ class NavigationOverlayRobot {
 
         fun openTileToBrowser(title: String, interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
             homeTiles().perform(RecyclerViewActions.actionOnItem<TileViewHolder>(hasDescendant(withText(title)), click()))
+            waitUntilSiteLoaded()
 
             BrowserRobot().interact()
             return BrowserRobot.Transition()
@@ -226,21 +229,21 @@ class NavigationOverlayRobot {
 
         fun goBack(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
             backButton().click()
-
+            waitUntilSiteLoaded()
             BrowserRobot().interact()
             return BrowserRobot.Transition()
         }
 
         fun goForward(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
             forwardButton().click()
-
+            waitUntilSiteLoaded()
             BrowserRobot().interact()
             return BrowserRobot.Transition()
         }
 
         fun reload(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
             reloadButton().click()
-
+            waitUntilSiteLoaded()
             BrowserRobot().interact()
             return BrowserRobot.Transition()
         }
@@ -266,6 +269,11 @@ class NavigationOverlayRobot {
 
             BrowserRobot().interact()
             return BrowserRobot.Transition()
+        }
+
+        private fun waitUntilSiteLoaded() {
+            device.wait(Until.findObject(By.res(R.id.progressAnimation.toString())), 2000)
+            device.wait(Until.gone(By.res(R.id.progressAnimation.toString())), 5000)
         }
     }
 }
