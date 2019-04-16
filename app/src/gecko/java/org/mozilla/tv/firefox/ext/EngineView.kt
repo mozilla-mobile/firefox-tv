@@ -135,15 +135,8 @@ fun EngineView.seekTargetVideoToPosition(absolutePositionSeconds: Long) {
 }
 
 fun EngineView.checkYoutubeBack(callback: ValueCallback<String>) {
-    val shouldWeExitPage = """
-               (function () {
-                    return $NO_ELEMENT_FOCUSED ||
-                        $BODY_ELEMENT_FOCUSED ||
-                        $SIDEBAR_FOCUSED;
-                })();
-        """.trimIndent()
-
-    evalJS(shouldWeExitPage, callback)
+    // TODO: handle YT back for gecko variant
+    callback.onReceiveValue("false")
 }
 
 /**
