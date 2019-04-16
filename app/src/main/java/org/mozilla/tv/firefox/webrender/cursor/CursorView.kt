@@ -10,24 +10,34 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.PointF
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.util.AttributeSet
 import android.view.View
 import mozilla.components.support.ktx.android.graphics.drawable.toBitmap
 import org.mozilla.tv.firefox.R
+import java.lang.ref.WeakReference
+import java.util.concurrent.TimeUnit
+
+private const val HIDE_MESSAGE_ID = 0
+private const val HIDE_ANIMATION_DURATION_MILLIS = 250L
+private val HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3)
 
 /**
  * TODO
  */
 class CursorView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
-    private var cursorController: NewCursorController? = null
-
-    private lateinit var bitmap: Bitmap
+    private val hideHandler = CursorHideHandler(this)
     private val paint = Paint()
     private val position = PointF(x, y)
 
+    private var cursorController: NewCursorController? = null
+    private lateinit var bitmap: Bitmap
     private var width = 0f
     private var height = 0f
+    private var isDisplayed = false
 
     fun setup(cursorController: NewCursorController) { //TODO rename
         this.cursorController = cursorController
@@ -64,6 +74,45 @@ class CursorView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
         canvas?.drawBitmap(bitmap, 0f, 0f, paint)
 
+        if (cursorController?.shouldDisplay != isDisplayed) handleVisibility()
+
+
         invalidate()
+    }
+
+    private fun handleVisibility() {
+
+    }
+
+    private fun animateToInvisible() {
+        animate()
+                ?.setDuration(HIDE_ANIMATION_DURATION_MILLIS)
+                ?.alpha(0f)
+                ?.start()
+    }
+
+    private fun setMaxVisibility() {
+        animate().cancel()
+        alpha = 1f
+    }
+
+    /**
+     * Hides the cursor when it receives a message.
+     *
+     * We use a [Handler], with [Message]s, because they make no allocations, unlike
+     * more modern/readable approaches:
+     * - coroutines
+     * - Animators with start delays (and cancelling them as necessary)
+     */
+    private class CursorHideHandler(view: CursorView) : Handler(Looper.getMainLooper()) {
+        private val viewWeakReference = WeakReference<CursorView>(view)
+
+        override fun handleMessage(msg: Message?) {
+            viewWeakReference.get()
+                    ?.animate()
+                    ?.setDuration(HIDE_ANIMATION_DURATION_MILLIS)
+                    ?.alpha(0f)
+                    ?.start()
+        }
     }
 }
