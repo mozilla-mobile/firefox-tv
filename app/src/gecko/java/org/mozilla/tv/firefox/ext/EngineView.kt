@@ -159,6 +159,7 @@ fun EngineView.removeJavascriptInterface(interfaceName: String) {
 
 @Synchronized
 fun EngineView.scrollByClamped(vx: Int, vy: Int) {
+    // TODO: to be addressed #1912; PanZoomController does not update asynchronously
     geckoView?.apply {
         val screenLengthX = ScreenLength.fromPixels((vx * 17).toDouble())
         val screenLengthY = ScreenLength.fromPixels((vy * 17).toDouble())
