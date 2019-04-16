@@ -5,89 +5,65 @@
 package org.mozilla.tv.firefox.webrender.cursor
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
-import androidx.annotation.UiThread
-import androidx.appcompat.widget.AppCompatImageView
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Matrix
+import android.graphics.Paint
+import android.graphics.PointF
 import android.util.AttributeSet
-import android.view.KeyEvent
+import android.view.View
+import mozilla.components.support.ktx.android.graphics.drawable.toBitmap
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.utils.RemoteKey
-import java.lang.ref.WeakReference
-import java.util.concurrent.TimeUnit
-
-private const val HIDE_MESSAGE_ID = 0
-private const val HIDE_ANIMATION_DURATION_MILLIS = 250L
-private val HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3)
 
 /**
- * A drawn Cursor: see [LegacyCursorViewModel] for responding to keys and setting position.
- * The cursor will hide itself when it hasn't received a location update recently.
+ * TODO
  */
-class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(context, attrs) {
+class CursorView(context: Context, attrs: AttributeSet) : View(context, attrs) {
 
-    private val hideHandler = CursorHideHandler(this)
+    private var cursorController: NewCursorController? = null
 
-    @UiThread
-    fun updatePosition(x: Float, y: Float) {
-        // translation* sets the top-left corner so we offset it in order to center the asset.
-        translationX = x - width / 2
-        translationY = y - height / 2
+    private lateinit var bitmap: Bitmap
+    private val paint = Paint()
+    private val position = PointF(x, y)
 
-        setMaxVisibility()
-        resetCountdown()
+    private var width = 0f
+    private var height = 0f
+
+    fun setup(cursorController: NewCursorController) { //TODO rename
+        this.cursorController = cursorController
     }
 
-    fun updateCursorPressedState(event: KeyEvent) {
-        // Enter for keyboard and emulator use.
-        val remoteKey = RemoteKey.fromKeyEvent(event)
-        if (remoteKey == RemoteKey.CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER) {
-            if (event.action == KeyEvent.ACTION_DOWN) {
-                setImageResource(R.drawable.cursor_full_active)
-            } else if (event.action == KeyEvent.ACTION_UP) {
-                setImageResource(R.drawable.cursor_full)
-            }
-        }
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        this.width = w.toFloat()
+        this.height = h.toFloat()
+
+        val bm = context.resources.getDrawable(R.drawable.cursor_full, null).toBitmap()
+
+        val scaleWidth = w.toFloat() / bm.width
+        val scaleHeight = h.toFloat() / bm.height
+
+        val matrix = Matrix()
+        matrix.postScale(scaleWidth, scaleHeight)
+        bitmap = Bitmap.createBitmap(bm, 0, 0, bm.width, bm.height, matrix, false)
+        bm.recycle()
     }
 
-    fun cancelUpdates() {
-        animate().cancel()
-        hideHandler.removeMessages(HIDE_MESSAGE_ID)
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+        position.x = x
+        position.y = y
     }
 
-    fun startUpdates() {
-        setMaxVisibility()
-        resetCountdown()
-    }
+    override fun onDraw(canvas: Canvas?) {
+        super.onDraw(canvas)
 
-    private fun setMaxVisibility() {
-        animate().cancel()
-        alpha = 1f
-    }
+        cursorController?.mutatePosition(position)
+        x = position.x - (width / 2)
+        y = position.y - (height / 2)
 
-    private fun resetCountdown() {
-        hideHandler.removeMessages(HIDE_MESSAGE_ID)
-        hideHandler.sendEmptyMessageDelayed(HIDE_MESSAGE_ID, HIDE_AFTER_MILLIS)
-    }
-}
+        canvas?.drawBitmap(bitmap, 0f, 0f, paint)
 
-/**
- * Hides the cursor when it receives a message.
- *
- * We use a [Handler], with [Message]s, because they make no allocations, unlike
- * more modern/readable approaches:
- * - coroutines
- * - Animators with start delays (and cancelling them as necessary)
- */
-private class CursorHideHandler(view: CursorView) : Handler(Looper.getMainLooper()) {
-    private val viewWeakReference = WeakReference<CursorView>(view)
-
-    override fun handleMessage(msg: Message?) {
-        viewWeakReference.get()
-                ?.animate()
-                ?.setDuration(HIDE_ANIMATION_DURATION_MILLIS)
-                ?.alpha(0f)
-                ?.start()
+        invalidate()
     }
 }

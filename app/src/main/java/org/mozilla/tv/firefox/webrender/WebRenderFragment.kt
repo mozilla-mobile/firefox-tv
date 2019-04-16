@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.webrender
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.graphics.PointF
 import android.os.Bundle
 import android.view.Gravity
 import android.view.KeyEvent
@@ -147,6 +148,10 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             lifecycle.addObserver(controller)
             context.serviceLocator.cursorEventRepo.setCursorController(controller)
         }
+        layout.browserFragmentRoot.addOnLayoutChangeListener { _, _, _, right, bottom, _, _, _, _ ->
+            context.serviceLocator.cursorController.screenBounds = PointF(right.toFloat(), bottom.toFloat())
+        }
+        layout.cursorView.setup(context.serviceLocator.cursorController)
 
         layout.progressBar.initialize(this)
 

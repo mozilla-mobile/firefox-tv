@@ -42,7 +42,7 @@ class CursorController private constructor(
 
     @Suppress("DEPRECATION") // We are transitioning to CursorViewModel
     private val legacyViewModel = LegacyCursorViewModel(uiLifecycleCancelJob, onUpdate = { x, y, percentMaxScrollVel, framesPassed ->
-        view.updatePosition(x, y)
+//        view.updatePosition(x, y)
         scrollWebView(percentMaxScrollVel, framesPassed)
     })
 
@@ -62,15 +62,12 @@ class CursorController private constructor(
                 else -> Unit
             }
         }, onSelectKey = { event ->
-            val motionEvent = event.toMotionEvent(legacyViewModel.pos)
-            webRenderFragment.activity?.dispatchTouchEvent(motionEvent)
-            motionEvent.recycle()
-            view.updateCursorPressedState(event)
+            println(event)
         })
 
         val disposable = viewModel.isEnabled.subscribe { isEnabled ->
             keyDispatcher.isEnabled = isEnabled
-            view.visibility = if (isEnabled) View.VISIBLE else View.GONE
+//            view.visibility = if (isEnabled) View.VISIBLE else View.GONE
         }
 
         return disposable
@@ -78,13 +75,13 @@ class CursorController private constructor(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     fun onPause() {
-        view.cancelUpdates()
-        legacyViewModel.cancelUpdates()
+//        view.cancelUpdates()
+//        legacyViewModel.cancelUpdates()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onResume() {
-        view.startUpdates()
+//        view.startUpdates()
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
