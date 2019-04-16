@@ -11,8 +11,11 @@ import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.DriverAtoms.getText
 import androidx.test.espresso.web.webdriver.Locator
+import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.Until
 import org.hamcrest.CoreMatchers.equalTo
+import org.mozilla.tv.firefox.R
 
 class BrowserRobot {
     private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -71,6 +74,7 @@ class BrowserRobot {
             device.pressBack()
 
             NavigationOverlayRobot().apply {
+                device.wait(Until.findObject(By.res(R.id.navUrlInput.toString())), 2000)
                 assertOverlayIsOpen()
                 interact()
             }
