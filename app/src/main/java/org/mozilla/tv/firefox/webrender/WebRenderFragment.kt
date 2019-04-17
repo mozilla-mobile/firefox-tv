@@ -71,7 +71,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     lateinit var session: Session
 
     private val mediaSessionHolder get() = activity as MediaSessionHolder? // null when not attached.
-    private val compositeDisposable = CompositeDisposable()
+    private val startStopCompositeDisposable = CompositeDisposable()
 
     /**
      * Encapsulates the cursor's components. If this value is null, the Cursor is not attached
@@ -200,7 +200,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 // Rx will never emit a null, but the compiler doesn't believe me
                 null -> return@subscribe
             }.forceExhaustive
-        }.addTo(compositeDisposable)
+        }.addTo(startStopCompositeDisposable)
 
         val (hintViewModel, progressBarGravity) = if (serviceLocator!!.experimentsProvider.shouldShowHintBar()) {
             FirefoxViewModelProviders.of(this).get(WebRenderHintViewModel::class.java) to
@@ -212,14 +212,14 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         (progressBar.layoutParams as? FrameLayout.LayoutParams)?.gravity = progressBarGravity
 
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = true)
-                .forEach { compositeDisposable.add(it) }
+                .forEach { startStopCompositeDisposable.add(it) }
     }
 
     override fun onStop() {
         super.onStop()
 
         serviceLocator!!.sessionRepo.exitFullScreenIfPossible()
-        compositeDisposable.clear()
+        startStopCompositeDisposable.clear()
     }
 
     override fun onDestroyView() {
