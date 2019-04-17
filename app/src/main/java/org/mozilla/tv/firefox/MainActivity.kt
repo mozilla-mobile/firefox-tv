@@ -33,6 +33,7 @@ import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.BuildConstants
 import org.mozilla.tv.firefox.utils.DIRECTION_KEY_CODES
 import org.mozilla.tv.firefox.utils.OnUrlEnteredListener
+import org.mozilla.tv.firefox.utils.RemoteKey
 import org.mozilla.tv.firefox.utils.Settings
 import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.utils.ViewUtils
@@ -256,13 +257,13 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
                 serviceLocator.cursorController.directionKeyPress(event)) {
             return true
         }
-
-        println("SEVTEST: button: ${event.keyCode}")
-
-        // TODO make an ext method for this
-        if (event.keyCode == KeyEvent.KEYCODE_BUTTON_SELECT || event.keyCode == KeyEvent.KEYCODE_ENTER &&
-                serviceLocator.cursorController.selectKeyPress(event)) {
-            return true
+        val remoteKey = RemoteKey.fromKeyEvent(event)
+        if (remoteKey == RemoteKey.CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER) {
+            val motionEvent = serviceLocator.cursorController.selectKeyPress(event)
+            if (motionEvent != null) {
+                dispatchTouchEvent(motionEvent)
+                return true
+            }
         }
 
         val fragmentManager = supportFragmentManager
