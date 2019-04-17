@@ -34,7 +34,9 @@ class ScreenController(private val sessionRepo: SessionRepo) {
     /**
      * Observers will be notified just before the fragment transaction is committed
      */
-    val currentActiveScreen: Observable<ActiveScreen> = _currentActiveScreen.hide()
+    val currentActiveScreen: Observable<ActiveScreen> = _currentActiveScreen
+            .distinctUntilChanged()
+            .hide()
 
     /**
      * To keep things simple, we add all the fragments at start instead of creating them when needed
