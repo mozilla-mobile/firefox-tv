@@ -66,4 +66,8 @@
   <string name="notification_request_non_desktop_site">デスクトップ版でない表示に戻しました</string>
   <string name="youtube_casting_onboarding_toast">YouTube 動画をスマートフォンやタブレットからキャスト配信します。開始するには、端末で YouTube を開き、%s をタップしてください。</string>
   <string name="exit_firefox_a11y">%1$s を終了</string>
+  <string name="hint_press_back_to_close_overlay">戻るには $IMAGE を押してください</string>
+  <string name="hint_press_back_to_close_overlay_a11y">戻るボタンを押すとブラウザーに戻ります</string>
+  <string name="hint_press_menu_to_open_overlay">$IMAGE を押すと %1$s のホーム画面 (検索、設定など) に戻ります</string>
+  <string name="hint_press_menu_to_open_overlay_a11y">メニューボタンを押すと %1$s のホーム画面 (検索、設定など) に戻ります</string>
 </resources>
