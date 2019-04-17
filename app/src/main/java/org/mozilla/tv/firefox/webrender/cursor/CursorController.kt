@@ -42,6 +42,7 @@ class CursorController private constructor(
 
     @Suppress("DEPRECATION") // We are transitioning to CursorViewModel
     private val legacyViewModel = LegacyCursorViewModel(uiLifecycleCancelJob, onUpdate = { x, y, percentMaxScrollVel, framesPassed ->
+        println(x + y)
 //        view.updatePosition(x, y)
         scrollWebView(percentMaxScrollVel, framesPassed)
     })

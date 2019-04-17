@@ -249,9 +249,19 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         // code paths consistent between the two.
         if (event.keyCode == KeyEvent.KEYCODE_BACK ||
                 event.keyCode == KeyEvent.KEYCODE_DEL) return super.dispatchKeyEvent(event)
+
         serviceLocator.cursorEventRepo.pushKeyEvent(event)
+
         if (DIRECTION_KEY_CODES.contains(event.keyCode) &&
                 serviceLocator.cursorController.directionKeyPress(event)) {
+            return true
+        }
+
+        println("SEVTEST: button: ${event.keyCode}")
+
+        // TODO make an ext method for this
+        if (event.keyCode == KeyEvent.KEYCODE_BUTTON_SELECT || event.keyCode == KeyEvent.KEYCODE_ENTER &&
+                serviceLocator.cursorController.selectKeyPress(event)) {
             return true
         }
 

@@ -12,10 +12,15 @@ import android.graphics.Paint
 import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.View
+import android.widget.ImageView
 import androidx.annotation.CheckResult
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.isVisible
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.addTo
 import mozilla.components.support.ktx.android.graphics.drawable.toBitmap
 import org.mozilla.tv.firefox.R
@@ -26,16 +31,20 @@ private val HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3)
 
 /**
  * TODO
+ *
+ * Should only be used with Bitmaps, not Drawables
  */
-class CursorView(context: Context, attrs: AttributeSet) : View(context, attrs) {
+class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(context, attrs) {
 
-    private val paint = Paint()
     private val position = PointF(x, y)
 
     private var cursorController: NewCursorController? = null
-    private lateinit var bitmap: Bitmap
     private var width = 0f
     private var height = 0f
+
+    init {
+        setImageResource(R.drawable.cursor_full)
+    }
 
     @CheckResult(suggest = "Dispose me, please. 🥰")
     fun setup(cursorController: NewCursorController): Disposable {
@@ -50,10 +59,13 @@ class CursorView(context: Context, attrs: AttributeSet) : View(context, attrs) {
             }
         }.addTo(compositeDisposable)
 
-        cursorController.isCursorMoving
+        Observables.combineLatest(cursorController.isCursorMoving, cursorController.isSelectPressed) {
+            // Only emit false if we are both stationary and not pressed
+            moving, pressed -> moving || pressed
+        }
                 .distinctUntilChanged()
-                .subscribe { isCursorMoving ->
-                    if (isCursorMoving) {
+                .subscribe { cursorIsMovingOrPressed ->
+                    if (cursorIsMovingOrPressed) {
                         animate().cancel()
                         alpha = 1f
                     } else {
@@ -65,6 +77,15 @@ class CursorView(context: Context, attrs: AttributeSet) : View(context, attrs) {
                     }
                 }.addTo(compositeDisposable)
 
+        cursorController.isSelectPressed
+                .distinctUntilChanged()
+                .subscribe {  pressed ->
+                    when (pressed) {
+                        true -> setImageResource(R.drawable.cursor_full_active)
+                        false -> setImageResource(R.drawable.cursor_full)
+                    }
+                }.addTo(compositeDisposable)
+
         return compositeDisposable
     }
 
@@ -72,16 +93,6 @@ class CursorView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         super.onSizeChanged(w, h, oldw, oldh)
         this.width = w.toFloat()
         this.height = h.toFloat()
-
-        val bm = context.resources.getDrawable(R.drawable.cursor_full, null).toBitmap()
-
-        val scaleWidth = w.toFloat() / bm.width
-        val scaleHeight = h.toFloat() / bm.height
-
-        val matrix = Matrix()
-        matrix.postScale(scaleWidth, scaleHeight)
-        bitmap = Bitmap.createBitmap(bm, 0, 0, bm.width, bm.height, matrix, false)
-        bm.recycle()
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
@@ -96,11 +107,6 @@ class CursorView(context: Context, attrs: AttributeSet) : View(context, attrs) {
         cursorController?.mutatePosition(position)
         x = position.x - (width / 2)
         y = position.y - (height / 2)
-
-        canvas?.drawBitmap(bitmap, 0f, 0f, paint)
-
-//        if (cursorController?.shouldDisplay != isDisplayed) handleVisibility()
-
 
         invalidate()
     }
