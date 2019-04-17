@@ -51,7 +51,6 @@ class ViewModelFactory(
             ) as T
 
             SettingsViewModel::class.java -> SettingsViewModel(
-                serviceLocator.frameworkRepo,
                 serviceLocator.settingsRepo,
                 serviceLocator.sessionRepo
             ) as T
