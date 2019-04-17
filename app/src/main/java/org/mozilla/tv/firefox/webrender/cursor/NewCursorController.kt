@@ -4,12 +4,13 @@
 
 package org.mozilla.tv.firefox.webrender.cursor
 
+import android.annotation.SuppressLint
 import android.graphics.PointF
 import android.view.KeyEvent
+import android.view.MotionEvent
+import androidx.annotation.CheckResult
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.*
@@ -18,7 +19,6 @@ import org.mozilla.tv.firefox.framework.FrameworkRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.DIRECTION_KEY_CODES
 import org.mozilla.tv.firefox.utils.Direction
-import java.util.concurrent.TimeUnit
 
 // TODO reorganize so tweakable ones are on top
 private const val MAX_ACCELERATION = .7f
@@ -34,11 +34,16 @@ private const val MS_PER_FRAME = 16
  *  [X] Handle visibility animation
  *  [X] Hook up directionKeyPress
  *  [X] Enable/disable invalidate calls
- *  [ ] Touch simulation
+ *  [X] Touch simulation
  *  [X] View click animation
  *  [X] Cursor visible on select press
  *  [ ] Tweak values to make them feel good
  *  [ ] Fix {what were we writing here?}
+ *  [ ] General cleanup
+ *  [ ] Commit cleanup
+ *  [ ] MainActivity shouldn't decide what this class handles, this class should. Update that
+ *  [ ] Make cursor start in center of screen
+ *  [ ] Hook up scrolling
  */
 
 class NewCursorController(
@@ -51,6 +56,7 @@ class NewCursorController(
     private val directionKeysPressed = mutableSetOf<Direction>()
     private var lastVelocity = 0f
     private var lastUpdatedAtMS = 0L // the first value when we start drawing will be an edge case
+    private var lastKnownCursorPos = PointF(0f, 0f)
 
     private val _isCursorMoving = PublishSubject.create<Boolean>()
     val isCursorMoving: Observable<Boolean> = _isCursorMoving.hide()
@@ -104,25 +110,27 @@ class NewCursorController(
 
     /**
      * TODO
-     * @return returns true if the event is consumed
+     * @return returns a MotionEvent if the event is consumed, null otherwise
      */
-    fun selectKeyPress(event: KeyEvent): Boolean {
-        println("SEVTEST: selectKeyPress: event: $event")
+    @SuppressLint("Recycle")
+    @CheckResult(suggest = "Recycle MotionEvent after use")
+    fun selectKeyPress(event: KeyEvent): MotionEvent? {
         if (!isCursorActive.blockingFirst()) { // todo: do I hang on startup?
-            return false
+            return null
         }
         require(event.keyCode == KeyEvent.KEYCODE_BUTTON_SELECT || event.keyCode == KeyEvent.KEYCODE_ENTER) { "Invalid key event passed to CursorController#selectKeyPress: $event" }
 
+        val motionEvent = MotionEvent.obtain(event.downTime, event.eventTime, event.action, lastKnownCursorPos.x, lastKnownCursorPos.y, 0)
         return when (event.action) {
             KeyEvent.ACTION_UP -> {
                 _isSelectPressed.onNext(false)
-                true
+                motionEvent
             }
             KeyEvent.ACTION_DOWN -> {
                 _isSelectPressed.onNext(true)
-                true
+                motionEvent
             }
-            else -> false
+            else -> null
         }
     }
 
@@ -132,6 +140,7 @@ class NewCursorController(
      * @return whether or not the view should continue to invalidate itself
      */
     fun mutatePosition(oldPos: PointF): Boolean {
+        lastKnownCursorPos = oldPos
         // Grab old and new times
         if (directionKeysPressed.isEmpty()) {
             resetCursor()
