@@ -62,7 +62,7 @@ class CursorController private constructor(
                 else -> Unit
             }
         }, onSelectKey = { event ->
-            viewModel.onSelectKeyEvent(event.action, legacyViewModel.pos)
+            viewModel.onSelectKeyEvent(event, legacyViewModel.pos)
             view.updateCursorPressedState(event)
         })
 
