@@ -4,12 +4,12 @@
 
 package org.mozilla.tv.firefox.framework
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import android.view.accessibility.AccessibilityManager
 import androidx.annotation.UiThread
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.PRIVATE
-import android.view.accessibility.AccessibilityManager
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
 
 /**
  * A model to hold state related to the Android framework.
@@ -18,8 +18,9 @@ class FrameworkRepo @VisibleForTesting(otherwise = PRIVATE) constructor() {
 
     private var wasInitCalled = false
 
-    private val _isVoiceViewEnabled = MutableLiveData<Boolean>()
-    val isVoiceViewEnabled: LiveData<Boolean> = _isVoiceViewEnabled
+    private val _isVoiceViewEnabled = BehaviorSubject.createDefault<Boolean>(false)
+    val isVoiceViewEnabled: Observable<Boolean> = _isVoiceViewEnabled.hide()
+        .distinctUntilChanged()
 
     /**
      * Initializes this repository.
@@ -38,7 +39,7 @@ class FrameworkRepo @VisibleForTesting(otherwise = PRIVATE) constructor() {
     private inner class TouchExplorationStateChangeListener : AccessibilityManager.TouchExplorationStateChangeListener {
         @UiThread // for simplicity: listener should be called from UI thread anyway.
         override fun onTouchExplorationStateChanged(isEnabled: Boolean) {
-            _isVoiceViewEnabled.value = isEnabled // Touch exploration state == VoiceView.
+            _isVoiceViewEnabled.onNext(isEnabled) // Touch exploration state == VoiceView.
         }
     }
 

@@ -4,24 +4,21 @@
 
 package org.mozilla.tv.firefox.framework
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import android.view.accessibility.AccessibilityManager
 import android.view.accessibility.AccessibilityManager.TouchExplorationStateChangeListener
+import io.reactivex.observers.TestObserver
+import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.any
 import org.mockito.Mockito.mock
-import org.mozilla.tv.firefox.helpers.ext.assertValues
-import java.lang.IllegalStateException
 import kotlin.properties.Delegates
 
 class FrameworkRepoTest {
 
-    @get:Rule val instantTaskRule = InstantTaskExecutorRule() // necessary for LiveData tests.
-
     private lateinit var repo: FrameworkRepo
+    private lateinit var isVoiceViewEnabledTestObs: TestObserver<Boolean>
 
     // Different variants for different tests.
     private lateinit var accessibilityManager: AccessibilityManager
@@ -29,7 +26,9 @@ class FrameworkRepoTest {
 
     @Before
     fun setUp() {
-        repo = FrameworkRepo()
+        repo = FrameworkRepo().also {
+            isVoiceViewEnabledTestObs = it.isVoiceViewEnabled.test()
+        }
 
         accessibilityManager = mock(AccessibilityManager::class.java)
         touchExplorationA11yManagerWrapper = MockTouchExplorationA11yManagerWrapper()
@@ -41,9 +40,8 @@ class FrameworkRepoTest {
             `when`(it.isTouchExplorationEnabled).thenReturn(false)
         }
 
-        repo.isVoiceViewEnabled.assertValues(false) {
-            repo.init(accessibilityManager)
-        }
+        repo.init(accessibilityManager)
+        isVoiceViewEnabledTestObs.assertValue(false)
     }
 
     @Test
@@ -52,9 +50,8 @@ class FrameworkRepoTest {
             `when`(it.isTouchExplorationEnabled).thenReturn(true)
         }
 
-        repo.isVoiceViewEnabled.assertValues(true) {
-            repo.init(accessibilityManager)
-        }
+        repo.init(accessibilityManager)
+        assertEquals(true, isVoiceViewEnabledTestObs.values().last())
     }
 
     @Test
@@ -64,12 +61,11 @@ class FrameworkRepoTest {
         // To ensure the emission change logic is working, we make sure to test
         // in both directions irrespective of the initial value.
         val defaultValue = touchExplorationA11yManagerWrapper.isTouchExplorationStateEnabled
-        repo.isVoiceViewEnabled.assertValues(defaultValue, false, true, false) {
-            with(touchExplorationA11yManagerWrapper) {
-                isTouchExplorationStateEnabled = false
-                isTouchExplorationStateEnabled = true
-                isTouchExplorationStateEnabled = false
-            }
+        isVoiceViewEnabledTestObs.assertValue(defaultValue)
+
+        arrayOf(false, true, false).forEachIndexed { index, expected ->
+            touchExplorationA11yManagerWrapper.isTouchExplorationStateEnabled = expected
+            assertEquals("index: $index", expected, isVoiceViewEnabledTestObs.values().last())
         }
     }
 
