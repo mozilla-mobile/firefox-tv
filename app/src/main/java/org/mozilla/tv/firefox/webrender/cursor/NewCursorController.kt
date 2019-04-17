@@ -8,13 +8,17 @@ import android.graphics.PointF
 import android.view.KeyEvent
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.*
 import org.mozilla.tv.firefox.ext.isUriYouTubeTV
 import org.mozilla.tv.firefox.framework.FrameworkRepo
 import org.mozilla.tv.firefox.session.SessionRepo
+import org.mozilla.tv.firefox.utils.DIRECTION_KEY_CODES
 import org.mozilla.tv.firefox.utils.Direction
+import java.util.concurrent.TimeUnit
 
 // TODO reorganize so tweakable ones are on top
 private const val MAX_ACCELERATION = .7f
@@ -25,14 +29,14 @@ private const val MS_PER_FRAME = 16
 
 /**
  *  TODO
- *  [ ] Remove old Rx implementation cruft
- *  [ ] Pipe events up to repo (Maybe unnecessary?  cursorEventRepo is already dipping into key events.  Check to see if this implementation needs to be changed)
+ *  [X] Remove old Rx implementation cruft
+ *  [ ] Pipe events up to repo (CursorEventRepo is already dipping into key events.  Choose one of these approaches and get rid of the other)
  *  [X] Handle visibility animation
- *  [ ] Touch simulation
  *  [X] Hook up directionKeyPress
  *  [X] Enable/disable invalidate calls
- *  [ ] View click animation
- *  [ ] Click actions
+ *  [ ] Touch simulation
+ *  [X] View click animation
+ *  [X] Cursor visible on select press
  *  [ ] Tweak values to make them feel good
  *  [ ] Fix {what were we writing here?}
  */
@@ -47,6 +51,12 @@ class NewCursorController(
     private val directionKeysPressed = mutableSetOf<Direction>()
     private var lastVelocity = 0f
     private var lastUpdatedAtMS = 0L // the first value when we start drawing will be an edge case
+
+    private val _isCursorMoving = PublishSubject.create<Boolean>()
+    val isCursorMoving: Observable<Boolean> = _isCursorMoving.hide()
+
+    private val _isSelectPressed = PublishSubject.create<Boolean>()
+    val isSelectPressed: Observable<Boolean> = _isSelectPressed.hide()
 
     val isCursorActive: Observable<Boolean> = Observables.combineLatest(
             activeScreen,
@@ -64,13 +74,15 @@ class NewCursorController(
         }
     }
 
-    private val _isCursorMoving = PublishSubject.create<Boolean>()
-    val isCursorMoving: Observable<Boolean> = _isCursorMoving.hide()
-
+    /**
+     * TODO
+     * @return returns true if the event is consumed
+     */
     fun directionKeyPress(event: KeyEvent): Boolean {
         if (!isCursorActive.blockingFirst()) { // todo: do I hang on startup?
             return false
         }
+        require(DIRECTION_KEY_CODES.contains(event.keyCode)) { "Invalid key event passed to CursorController#directionKeyPress: $event" }
 
         val direction = when (event.keyCode) {
             KeyEvent.KEYCODE_DPAD_UP -> Direction.UP
@@ -88,6 +100,30 @@ class NewCursorController(
         _isCursorMoving.onNext(!directionKeysPressed.isEmpty())
 
         return true
+    }
+
+    /**
+     * TODO
+     * @return returns true if the event is consumed
+     */
+    fun selectKeyPress(event: KeyEvent): Boolean {
+        println("SEVTEST: selectKeyPress: event: $event")
+        if (!isCursorActive.blockingFirst()) { // todo: do I hang on startup?
+            return false
+        }
+        require(event.keyCode == KeyEvent.KEYCODE_BUTTON_SELECT || event.keyCode == KeyEvent.KEYCODE_ENTER) { "Invalid key event passed to CursorController#selectKeyPress: $event" }
+
+        return when (event.action) {
+            KeyEvent.ACTION_UP -> {
+                _isSelectPressed.onNext(false)
+                true
+            }
+            KeyEvent.ACTION_DOWN -> {
+                _isSelectPressed.onNext(true)
+                true
+            }
+            else -> false
+        }
     }
 
     /**
