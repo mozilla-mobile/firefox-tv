@@ -71,7 +71,10 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     lateinit var session: Session
 
     private val mediaSessionHolder get() = activity as MediaSessionHolder? // null when not attached.
+
+    // TODO: We should consolidate to a single Disposable lifecycle (#1912).
     private val startStopCompositeDisposable = CompositeDisposable()
+    private val onCreateViewCompositeDisposable = CompositeDisposable()
 
     /**
      * Encapsulates the cursor's components. If this value is null, the Cursor is not attached
@@ -133,14 +136,16 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         val layout = inflater.inflate(R.layout.fragment_browser, container, false)
 
         val viewModelFactory = context.serviceLocator.viewModelFactory
-        cursor = CursorController.newInstanceOnCreateView(
+        CursorController.newInstanceOnCreateView(
             this,
             cursorParent = layout.browserFragmentRoot,
             view = layout.cursorView,
             viewModel = ViewModelProviders.of(this, viewModelFactory).get(CursorViewModel::class.java)
-        ).also {
-            lifecycle.addObserver(it)
-            context.serviceLocator.cursorEventRepo.setCursorController(it)
+        ).also { (controller, disposable) ->
+            this.cursor = controller
+            onCreateViewCompositeDisposable.add(disposable)
+            lifecycle.addObserver(controller)
+            context.serviceLocator.cursorEventRepo.setCursorController(controller)
         }
 
         layout.progressBar.initialize(this)
@@ -227,6 +232,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         super.onDestroyView()
 
+        onCreateViewCompositeDisposable.clear()
         lifecycle.removeObserver(cursor!!)
         cursor = null
     }

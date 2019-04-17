@@ -7,10 +7,12 @@ package org.mozilla.tv.firefox.webrender.cursor
 import android.graphics.PointF
 import android.view.KeyEvent
 import android.view.View
+import androidx.annotation.CheckResult
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.Observer
 import androidx.lifecycle.OnLifecycleEvent
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.ext.couldScrollInDirection
 import org.mozilla.tv.firefox.ext.scrollByClamped
@@ -47,7 +49,8 @@ class CursorController private constructor(
     // Initial value does not matter: it will be reactively replaced during start-up.
     lateinit var keyDispatcher: CursorKeyDispatcher
 
-    fun initOnCreateView(viewModel: CursorViewModel, cursorParent: View) {
+    @CheckResult(suggest = "Dispose me, please. 🥰")
+    fun initOnCreateView(viewModel: CursorViewModel, cursorParent: View): Disposable {
         cursorParent.addOnLayoutChangeListener { _, _, _, right, bottom, _, _, _, _ ->
             legacyViewModel.maxBounds = PointF(right.toFloat(), bottom.toFloat())
         }
@@ -63,11 +66,10 @@ class CursorController private constructor(
             view.updateCursorPressedState(event)
         })
 
-        viewModel.isEnabled.observe(webRenderFragment.viewLifecycleOwner, Observer { isEnabled ->
-            isEnabled ?: return@Observer
+        val disposable = viewModel.isEnabled.subscribe { isEnabled ->
             keyDispatcher.isEnabled = isEnabled
             view.visibility = if (isEnabled) View.VISIBLE else View.GONE
-        })
+        }
 
         viewModel.touchSimulationLiveData.observe(webRenderFragment.viewLifecycleOwner, Observer {
             it?.consume {
@@ -75,6 +77,8 @@ class CursorController private constructor(
                 true
             }
         })
+
+        return disposable
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
@@ -111,15 +115,17 @@ class CursorController private constructor(
             webRenderFragment.engineView?.couldScrollInDirection(direction)
 
     companion object {
+
+        @CheckResult(suggest = "Dispose of Disposable, please. 🥰")
         fun newInstanceOnCreateView(
             webRenderFragment: WebRenderFragment,
             cursorParent: View,
             view: CursorView,
             viewModel: CursorViewModel
-        ): CursorController {
-            return CursorController(webRenderFragment, view).apply {
-                initOnCreateView(viewModel, cursorParent)
-            }
+        ): Pair<CursorController, Disposable> {
+            val controller = CursorController(webRenderFragment, view)
+            val disposable = controller.initOnCreateView(viewModel, cursorParent)
+            return Pair(controller, disposable)
         }
     }
 }
