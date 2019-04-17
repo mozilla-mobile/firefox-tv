@@ -4,16 +4,10 @@
 
 package org.mozilla.tv.firefox.webrender.cursor
 
-import android.graphics.PointF
-import android.view.KeyEvent
 import io.reactivex.observers.TestObserver
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -161,73 +155,6 @@ class CursorViewModelTest {
         restUrls.forEach { sessionState.onNext(newStateWithUrl(it)) }
 
         isEnabledTestObs.assertValues(*Array(emittedEventCount) { true })
-    }
-
-    @Test
-    fun `GIVEN intended Click event THEN ACTION_UP MotionEvent returns same event_time as ACTION_DOWN`() {
-        val pos = PointF(0f, 0f)
-        val downTime = 1000L
-        val upTime = downTime + DPAD_TAP_TIMEOUT - 1
-
-        val downEvent = viewModel.validateMotionEvent(KeyEvent.ACTION_DOWN, downTime, pos)
-
-        assertNotNull(downEvent)
-        assertEquals(downEvent!!.eventTime, downTime)
-
-        val upEvent = viewModel.validateMotionEvent(KeyEvent.ACTION_UP, upTime, pos)
-
-        assertNotNull(upEvent)
-        assertEquals(upEvent!!.eventTime, downEvent.eventTime)
-    }
-
-    @Test
-    fun `GIVEN intended LongPress event THEN ACTION_UP MotionEvent returns different event_time as ACTION_DOWN`() {
-        val pos = PointF(0f, 0f)
-        val downTimeInitial = 1000L
-        val upTime = downTimeInitial + DPAD_LONG_PRESS_TIMEOUT - 1
-
-        val downEvent = viewModel.validateMotionEvent(KeyEvent.ACTION_DOWN, downTimeInitial, pos)
-
-        assertNotNull(downEvent)
-        assertEquals(downEvent!!.eventTime, downTimeInitial)
-
-        // Simulate spammed consecutive down events
-        for (i in 1..5) {
-            val currDownTime = downTimeInitial + i
-            val consecutiveDown = viewModel.validateMotionEvent(KeyEvent.ACTION_DOWN, currDownTime, pos)
-            assertNull(consecutiveDown)
-        }
-
-        val upEvent = viewModel.validateMotionEvent(KeyEvent.ACTION_UP, upTime, pos)
-
-        assertNotNull(upEvent)
-        assertNotEquals(upEvent!!.eventTime, downEvent.eventTime)
-        assertEquals(upEvent.eventTime, upTime)
-    }
-
-    @Test
-    fun `GIVEN down event exceeding LongPressTimeout THEN MotionEvents reset and register new down event`() {
-        val pos = PointF(0f, 0f)
-        val downTimeInitial = 1000L
-
-        val downEvent = viewModel.validateMotionEvent(KeyEvent.ACTION_DOWN, downTimeInitial, pos)
-
-        assertNotNull(downEvent)
-        assertEquals(downEvent!!.eventTime, downTimeInitial)
-
-        // Simulate spammed consecutive down events
-        for (i in 1..5) {
-            val currDownTime = downTimeInitial + i
-            val consecutiveDown = viewModel.validateMotionEvent(KeyEvent.ACTION_DOWN, currDownTime, pos)
-            assertNull(consecutiveDown)
-        }
-
-        // Down event comes when neither a long press or tab => everything should reset
-        val downTimeNew = downTimeInitial + DPAD_LONG_PRESS_TIMEOUT + 1
-        val downEventNew = viewModel.validateMotionEvent(KeyEvent.ACTION_DOWN, downTimeNew, pos)
-
-        assertNotNull(downEventNew)
-        assertEquals(downEventNew!!.eventTime, downTimeNew)
     }
 
     private fun newStateWithUrl(url: String): SessionRepo.State {
