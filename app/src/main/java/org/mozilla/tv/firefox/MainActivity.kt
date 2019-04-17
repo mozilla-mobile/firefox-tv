@@ -251,8 +251,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
                 event.keyCode == KeyEvent.KEYCODE_DEL) return super.dispatchKeyEvent(event)
         serviceLocator.cursorEventRepo.pushKeyEvent(event)
         if (DIRECTION_KEY_CODES.contains(event.keyCode) &&
-                serviceLocator.screenController.currentActiveScreen.blockingFirst() == ScreenControllerStateMachine.ActiveScreen.WEB_RENDER) {
-            serviceLocator.cursorController.lastDirectionKeyPressed = event
+                serviceLocator.cursorController.directionKeyPress(event)) {
             return true
         }
 

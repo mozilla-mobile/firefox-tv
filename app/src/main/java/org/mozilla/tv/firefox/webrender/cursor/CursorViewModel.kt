@@ -16,6 +16,7 @@ import org.mozilla.tv.firefox.session.SessionRepo
 /**
  * A [ViewModel] representing the spatial, d-pad cursor used to navigate web pages.
  */
+@Suppress("UNUSED_PARAMETER")
 class CursorViewModel(
     frameworkRepo: FrameworkRepo,
     screenController: ScreenController,

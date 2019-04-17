@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProviders
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
+import kotlinx.android.synthetic.main.fragment_browser.cursorView
 import kotlinx.android.synthetic.main.fragment_browser.progressBar
 import kotlinx.android.synthetic.main.fragment_browser.view.browserFragmentRoot
 import kotlinx.android.synthetic.main.fragment_browser.view.cursorView
@@ -151,7 +152,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         layout.browserFragmentRoot.addOnLayoutChangeListener { _, _, _, right, bottom, _, _, _, _ ->
             context.serviceLocator.cursorController.screenBounds = PointF(right.toFloat(), bottom.toFloat())
         }
-        layout.cursorView.setup(context.serviceLocator.cursorController)
 
         layout.progressBar.initialize(this)
 
@@ -223,6 +223,9 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = true)
                 .forEach { startStopCompositeDisposable.add(it) }
+
+        cursorView.setup(context!!.serviceLocator.cursorController)
+                .addTo(startStopCompositeDisposable)
     }
 
     override fun onStop() {
