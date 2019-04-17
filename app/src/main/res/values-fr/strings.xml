@@ -66,4 +66,8 @@
   <string name="notification_request_non_desktop_site">Retour à la version par défaut</string>
   <string name="youtube_casting_onboarding_toast">Diffusez des vidéos YouTube à partir de votre téléphone ou de votre tablette. Ouvrez YouTube sur votre appareil et appuyez sur %s pour commencer.</string>
   <string name="exit_firefox_a11y">Quitter %1$s</string>
+  <string name="hint_press_back_to_close_overlay">Appuyez sur $IMAGE pour revenir</string>
+  <string name="hint_press_back_to_close_overlay_a11y">Appuyez sur le bouton retour pour revenir</string>
+  <string name="hint_press_menu_to_open_overlay">Appuyez sur $IMAGE pour atteindre l’accueil, la recherche, les paramètres de %1$s et plus encore</string>
+  <string name="hint_press_menu_to_open_overlay_a11y">Appuyez sur le bouton de menu pour atteindre l’accueil, la recherche, les paramètres de %1$s et plus encore</string>
 </resources>
