@@ -4,22 +4,21 @@
 
 package org.mozilla.tv.firefox.webrender.cursor
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import android.graphics.PointF
 import android.os.SystemClock
-import androidx.annotation.VisibleForTesting
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.ViewConfiguration
-import androidx.lifecycle.LiveDataReactiveStreams
-import io.reactivex.BackpressureStrategy
+import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.Observables
 import mozilla.components.support.base.observer.Consumable
 import mozilla.components.support.ktx.android.view.use
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
-import org.mozilla.tv.firefox.ext.LiveDataCombiners
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isUriYouTubeTV
 import org.mozilla.tv.firefox.framework.FrameworkRepo
@@ -45,25 +44,16 @@ class CursorViewModel(
     private val _touchSimulationLiveData = MutableLiveData<Consumable<MotionEvent>>()
     val touchSimulationLiveData: LiveData<Consumable<MotionEvent>> = _touchSimulationLiveData
     private var prevDownMotionEvent: MotionEvent? = null
-    private val currentActiveScreen = LiveDataReactiveStreams
-            .fromPublisher(screenController.currentActiveScreen.toFlowable(BackpressureStrategy.LATEST))
 
-    @Suppress("DEPRECATION")
-    private val isConfigurationWithOwnNavControls: LiveData<Boolean> = LiveDataCombiners.combineLatest(
+    val isEnabled: Observable<Boolean> = Observables.combineLatest(
+        screenController.currentActiveScreen,
         frameworkRepo.isVoiceViewEnabled,
-        sessionRepo.legacyState
-    ) { isVoiceViewEnabled, sessionState ->
-        val isYouTubeTV = sessionState.currentUrl.isUriYouTubeTV
-        isYouTubeTV || isVoiceViewEnabled
-    }
+        sessionRepo.state
+    ) { activeScreen, isVoiceViewEnabled, sessionState ->
+        val isWebRenderActive = activeScreen == WEB_RENDER // no need to show cursor when engineView is not active.
+        val doesWebpageHaveOwnNavControls = sessionState.currentUrl.isUriYouTubeTV || isVoiceViewEnabled
 
-    // TODO: this complexly combines 3 streams by calling combineLatest twice: consider using a library instead #1783
-    val isEnabled: LiveData<Boolean> = LiveDataCombiners.combineLatest(
-        isConfigurationWithOwnNavControls,
-        currentActiveScreen
-    ) { isConfigurationWithOwnNavControls, activeScreen ->
-        val isWebRenderActive = activeScreen == WEB_RENDER
-        isWebRenderActive && !isConfigurationWithOwnNavControls
+        isWebRenderActive && !doesWebpageHaveOwnNavControls
     }
 
     /**

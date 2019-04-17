@@ -4,10 +4,10 @@
 
 package org.mozilla.tv.firefox.webrender.cursor
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import android.graphics.PointF
 import android.view.KeyEvent
+import io.reactivex.observers.TestObserver
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import org.junit.Assert.assertEquals
@@ -15,7 +15,6 @@ import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
@@ -24,9 +23,7 @@ import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
 import org.mozilla.tv.firefox.framework.FrameworkRepo
-import org.mozilla.tv.firefox.helpers.ext.assertValues
 import org.mozilla.tv.firefox.session.SessionRepo
-import org.mozilla.tv.firefox.utils.PreventLiveDataMainLooperCrashRule
 import org.robolectric.RobolectricTestRunner
 
 /** A list of test URLs that span different "categories".  */
@@ -51,24 +48,22 @@ private val POSSIBLE_URLS = listOf(
 @RunWith(RobolectricTestRunner::class) // Required to mock MotionEvent.obtain() tests
 class CursorViewModelTest {
 
-    @get:Rule
-    val preventLiveDataMainLooperCrashRule = PreventLiveDataMainLooperCrashRule()
-
     private lateinit var viewModel: CursorViewModel
+    private lateinit var isEnabledTestObs: TestObserver<Boolean>
 
     private lateinit var frameworkRepo: FrameworkRepo
-    private lateinit var isVoiceViewEnabled: MutableLiveData<Boolean>
+    private lateinit var isVoiceViewEnabled: BehaviorSubject<Boolean>
 
     private lateinit var screenController: ScreenController
     private lateinit var activeScreen: Subject<ActiveScreen>
 
     private lateinit var sessionRepo: SessionRepo
-    private lateinit var sessionState: MutableLiveData<SessionRepo.State>
+    private lateinit var sessionState: BehaviorSubject<SessionRepo.State>
 
     @Before
     fun setUp() {
         frameworkRepo = mock(FrameworkRepo::class.java).also {
-            isVoiceViewEnabled = MutableLiveData()
+            isVoiceViewEnabled = BehaviorSubject.create()
             `when`(it.isVoiceViewEnabled).thenReturn(isVoiceViewEnabled)
         }
 
@@ -78,12 +73,13 @@ class CursorViewModelTest {
         }
 
         sessionRepo = mock(SessionRepo::class.java).also {
-            sessionState = MutableLiveData()
-            @Suppress("DEPRECATION")
-            `when`(it.legacyState).thenReturn(sessionState)
+            sessionState = BehaviorSubject.create()
+            `when`(it.state).thenReturn(sessionState)
         }
 
-        viewModel = CursorViewModel(frameworkRepo, screenController, sessionRepo)
+        viewModel = CursorViewModel(frameworkRepo, screenController, sessionRepo).also {
+            isEnabledTestObs = it.isEnabled.test()
+        }
     }
 
     // This method pattern is duplicated but it's significantly more readable this way.
@@ -95,16 +91,16 @@ class CursorViewModelTest {
         // 1 event is emitted across all initial values: no events are emitted until all initial values are set.
         val emittedEventCount = 1 + restScreens.size + restUrls.size
 
-        viewModel.isEnabled.assertValueForEmissionCount(false, emittedEventCount) {
-            isVoiceViewEnabled.value = true
+        isVoiceViewEnabled.onNext(true)
 
-            activeScreen.onNext(initialScreen)
-            sessionState.value = newStateWithUrl(initialUrl)
+        activeScreen.onNext(initialScreen)
+        sessionState.onNext(newStateWithUrl(initialUrl))
 
-            // Now that initial value is set, iterate over remaining states. Ideally this would be all permutations.
-            restScreens.forEach { activeScreen.onNext(it) }
-            restUrls.forEach { sessionState.value = newStateWithUrl(it) }
-        }
+        // Now that initial value is set, iterate over remaining states. Ideally this would be all permutations.
+        restScreens.forEach { activeScreen.onNext(it) }
+        restUrls.forEach { sessionState.onNext(newStateWithUrl(it)) }
+
+        isEnabledTestObs.assertValues(*Array(emittedEventCount) { false })
     }
 
     @Test
@@ -114,16 +110,16 @@ class CursorViewModelTest {
         // 1 event is emitted across all initial values: no events are emitted until all initial values are set.
         val emittedEventCount = 1 + 1 /* isVoiceViewEnabled bool */ + restScreens.size
 
-        viewModel.isEnabled.assertValueForEmissionCount(false, emittedEventCount) {
-            sessionState.value = newStateWithUrl("https://youtube.com/tv/")
+        sessionState.onNext(newStateWithUrl("https://youtube.com/tv/"))
 
-            activeScreen.onNext(initialScreen)
-            isVoiceViewEnabled.value = false
+        activeScreen.onNext(initialScreen)
+        isVoiceViewEnabled.onNext(false)
 
-            // Now that initial value is set, iterate over remaining states. Ideally this would be all permutations.
-            restScreens.forEach { activeScreen.onNext(it) }
-            isVoiceViewEnabled.value = true
-        }
+        // Now that initial value is set, iterate over remaining states. Ideally this would be all permutations.
+        restScreens.forEach { activeScreen.onNext(it) }
+        isVoiceViewEnabled.onNext(true)
+
+        isEnabledTestObs.assertValues(*Array(emittedEventCount) { false })
     }
 
     @Test
@@ -136,16 +132,16 @@ class CursorViewModelTest {
         // 1 event is emitted across all initial values: no events are emitted until all initial values are set.
         val emittedEventCount = 1 + 1 /* isVoiceViewEnabled bool */ + restUrls.size + restScreens.size
 
-        viewModel.isEnabled.assertValueForEmissionCount(false, emittedEventCount) {
-            isVoiceViewEnabled.value = false
-            sessionState.value = newStateWithUrl(initialUrl)
-            activeScreen.onNext(initialScreen)
+        isVoiceViewEnabled.onNext(false)
+        sessionState.onNext(newStateWithUrl(initialUrl))
+        activeScreen.onNext(initialScreen)
 
-            // Now that initial value is set, iterate over remaining states. Ideally this would be all permutations.
-            restScreens.forEach { activeScreen.onNext(it) }
-            restUrls.forEach { sessionState.value = newStateWithUrl(it) }
-            isVoiceViewEnabled.value = true
-        }
+        // Now that initial value is set, iterate over remaining states. Ideally this would be all permutations.
+        restScreens.forEach { activeScreen.onNext(it) }
+        restUrls.forEach { sessionState.onNext(newStateWithUrl(it)) }
+        isVoiceViewEnabled.onNext(true)
+
+        isEnabledTestObs.assertValues(*Array(emittedEventCount) { false })
     }
 
     @Test
@@ -157,14 +153,14 @@ class CursorViewModelTest {
         // 1 event is emitted across all initial values: no events are emitted until all initial values are set.
         val emittedEventCount = 1 + restUrls.size
 
-        viewModel.isEnabled.assertValueForEmissionCount(true, emittedEventCount) {
-            isVoiceViewEnabled.value = false
-            activeScreen.onNext(WEB_RENDER)
-            sessionState.value = newStateWithUrl(initialUrl)
+        isVoiceViewEnabled.onNext(false)
+        activeScreen.onNext(WEB_RENDER)
+        sessionState.onNext(newStateWithUrl(initialUrl))
 
-            // Now that initial value is set, iterate over remaining states.
-            restUrls.forEach { sessionState.value = newStateWithUrl(it) }
-        }
+        // Now that initial value is set, iterate over remaining states.
+        restUrls.forEach { sessionState.onNext(newStateWithUrl(it)) }
+
+        isEnabledTestObs.assertValues(*Array(emittedEventCount) { true })
     }
 
     @Test
@@ -244,11 +240,6 @@ class CursorViewModelTest {
 
     private fun firstAndRestUrls(): Pair<String, List<String>> {
         return POSSIBLE_URLS.firstAndRest()
-    }
-
-    private fun LiveData<Boolean>.assertValueForEmissionCount(expected: Boolean, emissionCount: Int, pushValues: () -> Unit) {
-        val expectedEmissions = Array(emissionCount) { expected }
-        assertValues(*expectedEmissions) { pushValues() }
     }
 }
 
