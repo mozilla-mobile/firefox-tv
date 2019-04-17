@@ -45,7 +45,7 @@ class CursorEventRepo(screenController: ScreenController) {
     }
 
     private var cursorController: CursorController? = null
-    private val keyEvents: Subject<KeyEvent> = PublishSubject.create()
+    private val keyEvents: Subject<KeyEvent> = PublishSubject.create() // TODO note that these come FAST. throttle it
 
     fun setCursorController(cursorController: CursorController) {
         this.cursorController = cursorController
