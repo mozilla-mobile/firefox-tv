@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
+## [3.7.1] 2019-04-18
+### Fixed
+- Fixed frozen youtube after opening overlay (#2072)
+
 ## [3.7-RO] 2019-04-16
 *Released to Fire TV 4K, staged roll-out*
 ### Added
