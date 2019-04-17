@@ -12,12 +12,9 @@ import androidx.annotation.VisibleForTesting
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.geckoview.GeckoView
 import org.mozilla.tv.firefox.ext.Js.CACHE_JS
-import org.mozilla.tv.firefox.ext.Js.BODY_ELEMENT_FOCUSED
 import org.mozilla.tv.firefox.ext.Js.JS_OBSERVE_PLAYBACK_STATE
-import org.mozilla.tv.firefox.ext.Js.NO_ELEMENT_FOCUSED
 import org.mozilla.tv.firefox.ext.Js.PAUSE_VIDEO
 import org.mozilla.tv.firefox.ext.Js.RESTORE_JS
-import org.mozilla.tv.firefox.ext.Js.SIDEBAR_FOCUSED
 import org.mozilla.tv.firefox.utils.Direction
 import org.mozilla.tv.firefox.webrender.FocusedDOMElementCache
 import java.util.WeakHashMap
