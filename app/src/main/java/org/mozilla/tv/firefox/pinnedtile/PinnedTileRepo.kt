@@ -14,6 +14,7 @@ import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
 import androidx.lifecycle.LiveDataReactiveStreams
 import io.reactivex.BackpressureStrategy
+import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import org.json.JSONArray
 import java.util.UUID
@@ -35,6 +36,7 @@ private const val HOME_TILES_JSON_PATH = "$BUNDLED_HOME_TILES_DIR/bundled_tiles.
 class PinnedTileRepo(private val applicationContext: Application) {
     private val _pinnedTiles: BehaviorSubject<LinkedHashMap<String, PinnedTile>> =
             BehaviorSubject.create()
+    val pinnedTiles: Observable<LinkedHashMap<String, PinnedTile>> = _pinnedTiles.hide()
 
     // Persist custom & bundled tiles size for telemetry
     var customTilesSize = 0
@@ -55,10 +57,10 @@ class PinnedTileRepo(private val applicationContext: Application) {
         _pinnedTiles.onNext(pinnedTiles)
     }
 
-    @Deprecated(message = "Use Rx in ViewModels (i.e. ToolbarVM and PinnedTilesVM)")
+    @Deprecated(message = "Use PinnedTileRepo.pinnedTiles for new code")
     fun getPinnedTiles(): LiveData<LinkedHashMap<String, PinnedTile>> {
         return LiveDataReactiveStreams
-                .fromPublisher(_pinnedTiles.toFlowable(BackpressureStrategy.LATEST))
+                .fromPublisher(pinnedTiles.toFlowable(BackpressureStrategy.LATEST))
     }
 
     fun addPinnedTile(url: String, screenshot: Bitmap?) {
