@@ -10,12 +10,12 @@ import android.view.View
 import androidx.annotation.CheckResult
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.Observer
 import androidx.lifecycle.OnLifecycleEvent
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.ext.couldScrollInDirection
 import org.mozilla.tv.firefox.ext.scrollByClamped
+import org.mozilla.tv.firefox.ext.toMotionEvent
 import org.mozilla.tv.firefox.utils.Direction
 import org.mozilla.tv.firefox.webrender.WebRenderFragment
 
@@ -62,7 +62,9 @@ class CursorController private constructor(
                 else -> Unit
             }
         }, onSelectKey = { event ->
-            viewModel.onSelectKeyEvent(event, legacyViewModel.pos)
+            val motionEvent = event.toMotionEvent(legacyViewModel.pos)
+            webRenderFragment.activity?.dispatchTouchEvent(motionEvent)
+            motionEvent.recycle()
             view.updateCursorPressedState(event)
         })
 
@@ -70,13 +72,6 @@ class CursorController private constructor(
             keyDispatcher.isEnabled = isEnabled
             view.visibility = if (isEnabled) View.VISIBLE else View.GONE
         }
-
-        viewModel.touchSimulationLiveData.observe(webRenderFragment.viewLifecycleOwner, Observer {
-            it?.consume {
-                webRenderFragment.activity?.dispatchTouchEvent(it)
-                true
-            }
-        })
 
         return disposable
     }
