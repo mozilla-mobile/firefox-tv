@@ -30,7 +30,7 @@ private val DIRECTION_KEYS = listOf(
  * This class exposes low level cursor movement events.
  *
  * This is usually not the class you want to use. These are unprocessed, and for
- * most use cases you will want to use a more abstract class.
+ * most use cases you will want to use a class at a higher level of abstraction.
  */
 class CursorEventRepo(screenController: ScreenController) {
 

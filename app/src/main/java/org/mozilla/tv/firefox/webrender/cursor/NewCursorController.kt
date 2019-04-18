@@ -15,7 +15,6 @@ import io.reactivex.subjects.PublishSubject
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.*
 import org.mozilla.tv.firefox.ext.isUriYouTubeTV
-import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.framework.FrameworkRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.DIRECTION_KEY_CODES
@@ -34,7 +33,7 @@ data class HandleKeyEventResponse(val wasHandled: Boolean, val forwardedMotionEv
 /**
  *  TODO
  *  [X] Remove old Rx implementation cruft
- *  [ ] Pipe events up to repo (CursorEventRepo is already dipping into key events.  Choose one of these approaches and get rid of the other)
+ *  [-] ~Pipe events up to repo (CursorEventRepo is already dipping into key events.  Choose one of these approaches and get rid of the other)~ We cut this as out of scope
  *  [X] Handle visibility animation
  *  [X] Hook up directionKeyPress
  *  [X] Enable/disable invalidate calls
@@ -42,12 +41,12 @@ data class HandleKeyEventResponse(val wasHandled: Boolean, val forwardedMotionEv
  *  [X] View click animation
  *  [X] Cursor visible on select press
  *  [ ] Tweak values to make them feel good
- *  [ ] Fix {what were we writing here?}
  *  [ ] General cleanup
  *  [ ] Commit cleanup
  *  [X] MainActivity shouldn't decide what this class handles, this class should. Update that
- *  [ ] Make cursor start in center of screen
+ *  [X] Make cursor start in center of screen
  *  [ ] Hook up scrolling
+ *  [ ] Make sure hint bar still works
  */
 class NewCursorController(
         activeScreen: Observable<ScreenControllerStateMachine.ActiveScreen>,
@@ -55,11 +54,16 @@ class NewCursorController(
         sessionRepo: SessionRepo
 ) {
     var screenBounds: PointF? = null
+        set(value) {
+            screenBoundsWereSet = true
+            field = value
+        }
 
     private val directionKeysPressed = mutableSetOf<Direction>()
     private var lastVelocity = 0f
     private var lastUpdatedAtMS = 0L // the first value when we start drawing will be an edge case
     private var lastKnownCursorPos = PointF(0f, 0f)
+    private var screenBoundsWereSet = false
 
     private val _isCursorMoving = PublishSubject.create<Boolean>()
     val isCursorMoving: Observable<Boolean> = _isCursorMoving.hide()
@@ -79,7 +83,7 @@ class NewCursorController(
     }.also {
         // No need to dispose: this survives for the duration of the app.
         it.subscribe { isCursorActive ->
-            if (!isCursorActive) resetCursor()
+            if (!isCursorActive) resetCursorSpeed()
         }
     }
 
@@ -162,26 +166,35 @@ class NewCursorController(
      */
     fun mutatePosition(oldPos: PointF): Boolean {
         lastKnownCursorPos = oldPos
-        // Grab old and new times
-        if (directionKeysPressed.isEmpty()) {
-            resetCursor()
-            return false
-        } else {
-            val currTime = System.currentTimeMillis()
-            if (lastUpdatedAtMS == -1L) lastUpdatedAtMS = currTime - MS_PER_FRAME // TODO comment about why we do this
-            lastVelocity = internalMutatePositionAndReturnVelocity(
-                    oldPos,
-                    lastUpdatedAtMS,
-                    currTime,
-                    lastVelocity,
-                    directionKeysPressed
-            )
-            lastUpdatedAtMS = currTime
-            return true
+        when {
+            screenBoundsWereSet -> {
+                oldPos.x = screenBounds!!.x / 2
+                oldPos.y = screenBounds!!.y / 2
+                screenBoundsWereSet = false
+                return true
+            }
+            directionKeysPressed.isEmpty() -> {
+                // Grab old and new times
+                resetCursorSpeed()
+                return false
+            }
+            else -> {
+                val currTime = System.currentTimeMillis()
+                if (lastUpdatedAtMS == -1L) lastUpdatedAtMS = currTime - MS_PER_FRAME // TODO comment about why we do this
+                lastVelocity = internalMutatePositionAndReturnVelocity(
+                        oldPos,
+                        lastUpdatedAtMS,
+                        currTime,
+                        lastVelocity,
+                        directionKeysPressed
+                )
+                lastUpdatedAtMS = currTime
+                return true
+            }
         }
     }
 
-    private fun resetCursor() { // todo: name
+    private fun resetCursorSpeed() { // todo: name
         lastVelocity = 0f
         lastUpdatedAtMS = -1
         directionKeysPressed.clear()
