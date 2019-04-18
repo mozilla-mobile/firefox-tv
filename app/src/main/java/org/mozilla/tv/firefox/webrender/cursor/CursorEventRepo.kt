@@ -32,7 +32,10 @@ private val DIRECTION_KEYS = listOf(
  * This is usually not the class you want to use. These are unprocessed, and for
  * most use cases you will want to use a class at a higher level of abstraction.
  */
-class CursorEventRepo(screenController: ScreenController) {
+class CursorEventRepo(
+        private val cursorController: NewCursorController,
+        screenController: ScreenController
+) {
 
     sealed class CursorEvent {
         /**
@@ -44,11 +47,12 @@ class CursorEventRepo(screenController: ScreenController) {
         data class CursorMoved(val direction: Direction) : CursorEvent()
     }
 
-    private var cursorController: CursorController? = null
     private val keyEvents: Subject<KeyEvent> = PublishSubject.create() // TODO note that these come FAST. throttle it
 
-    fun setCursorController(cursorController: CursorController) {
-        this.cursorController = cursorController
+    private var webViewCouldScrollInDirection: (Direction) -> Boolean = { false }
+
+    fun setWebViewCouldScrollInDirection(couldScroll: (Direction) -> Boolean) {
+        webViewCouldScrollInDirection = couldScroll
     }
 
     fun pushKeyEvent(keyEvent: KeyEvent) {
@@ -86,8 +90,8 @@ class CursorEventRepo(screenController: ScreenController) {
 
         fun Observable<Direction>.mapToCursorEvent() =
                 this.map { cursorDirection ->
-                    val edgeNearCursor = cursorController?.getEdgeOfScreenNearCursor()
-                    val couldScroll = edgeNearCursor?.let { cursorController?.webViewCouldScrollInDirection(it) }
+                    val edgeNearCursor = cursorController.getEdgeOfScreenNearCursor()
+                    val couldScroll = edgeNearCursor?.let { webViewCouldScrollInDirection(it) }
 
                     val cursorMovedToEdgeOfScreen = edgeNearCursor == cursorDirection
                     val endOfDomContentReached = couldScroll == false
