@@ -11,15 +11,14 @@ import android.view.MotionEvent
 import androidx.annotation.CheckResult
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.BehaviorSubject
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
-import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.*
+import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
 import org.mozilla.tv.firefox.ext.isUriYouTubeTV
 import org.mozilla.tv.firefox.framework.FrameworkRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.DIRECTION_KEY_CODES
 import org.mozilla.tv.firefox.utils.Direction
-import org.mozilla.tv.firefox.utils.RemoteKey
 
 private const val BASE_SPEED = 5f
 private const val MAX_VELOCITY = 25f
@@ -39,8 +38,8 @@ data class HandleKeyEventResponse(val wasHandled: Boolean, val forwardedMotionEv
  *  [X] Enable/disable invalidate calls
  *  [X] Touch simulation
  *  [X] View click animation
- *  [X] Cursor visible on select press // TODO this broke
  *  [X] Tweak values to make them feel good
+ *  [X] Cursor visible on select press
  *  [ ] General cleanup
  *  [ ] Commit cleanup
  *  [X] MainActivity shouldn't decide what this class handles, this class should. Update that
@@ -65,10 +64,10 @@ class NewCursorController(
     private var lastKnownCursorPos = PointF(0f, 0f)
     private var screenBoundsWereSet = false
 
-    private val _isCursorMoving = PublishSubject.create<Boolean>()
+    private val _isCursorMoving = BehaviorSubject.createDefault<Boolean>(false)
     val isCursorMoving: Observable<Boolean> = _isCursorMoving.hide()
 
-    private val _isSelectPressed = PublishSubject.create<Boolean>()
+    private val _isSelectPressed = BehaviorSubject.createDefault<Boolean>(false)
     val isSelectPressed: Observable<Boolean> = _isSelectPressed.hide()
 
     val isCursorActive: Observable<Boolean> = Observables.combineLatest(
