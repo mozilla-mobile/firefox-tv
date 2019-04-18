@@ -17,7 +17,6 @@ import org.mozilla.tv.firefox.navigationoverlay.ToolbarViewModel
 import org.mozilla.tv.firefox.settings.SettingsViewModel
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.webrender.WebRenderHintViewModel
-import org.mozilla.tv.firefox.webrender.cursor.CursorViewModel
 
 /**
  * Used by [ViewModelProviders] to instantiate [ViewModel]s with constructor arguments.
@@ -52,12 +51,6 @@ class ViewModelFactory(
 
             SettingsViewModel::class.java -> SettingsViewModel(
                 serviceLocator.settingsRepo,
-                serviceLocator.sessionRepo
-            ) as T
-
-            CursorViewModel::class.java -> CursorViewModel(
-                serviceLocator.frameworkRepo,
-                serviceLocator.screenController,
                 serviceLocator.sessionRepo
             ) as T
 
