@@ -253,18 +253,9 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         serviceLocator.cursorEventRepo.pushKeyEvent(event)
 
-        if (DIRECTION_KEY_CODES.contains(event.keyCode) &&
-                serviceLocator.cursorController.directionKeyPress(event)) {
-            return true
-        }
-        val remoteKey = RemoteKey.fromKeyEvent(event)
-        if (remoteKey == RemoteKey.CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER) {
-            val motionEvent = serviceLocator.cursorController.selectKeyPress(event)
-            if (motionEvent != null) {
-                dispatchTouchEvent(motionEvent)
-                return true
-            }
-        }
+        val cursorHandleResponse = serviceLocator.cursorController.handleKeyEvent(event)
+        cursorHandleResponse.forwardedMotionEvent?.let { dispatchTouchEvent(it) }
+        if (cursorHandleResponse.wasHandled) return true
 
         val fragmentManager = supportFragmentManager
 

@@ -15,10 +15,12 @@ import io.reactivex.subjects.PublishSubject
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.*
 import org.mozilla.tv.firefox.ext.isUriYouTubeTV
+import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.framework.FrameworkRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.DIRECTION_KEY_CODES
 import org.mozilla.tv.firefox.utils.Direction
+import org.mozilla.tv.firefox.utils.RemoteKey
 
 // TODO reorganize so tweakable ones are on top
 private const val MAX_ACCELERATION = .7f
@@ -26,6 +28,8 @@ private const val MAX_VELOCITY = 40f
 private const val MS_TO_MAX_ACCELERATION = 200
 private const val ACCELERATION_PER_MS = MAX_ACCELERATION / MS_TO_MAX_ACCELERATION
 private const val MS_PER_FRAME = 16
+
+data class HandleKeyEventResponse(val wasHandled: Boolean, val forwardedMotionEvent: MotionEvent?)
 
 /**
  *  TODO
@@ -41,11 +45,10 @@ private const val MS_PER_FRAME = 16
  *  [ ] Fix {what were we writing here?}
  *  [ ] General cleanup
  *  [ ] Commit cleanup
- *  [ ] MainActivity shouldn't decide what this class handles, this class should. Update that
+ *  [X] MainActivity shouldn't decide what this class handles, this class should. Update that
  *  [ ] Make cursor start in center of screen
  *  [ ] Hook up scrolling
  */
-
 class NewCursorController(
         activeScreen: Observable<ScreenControllerStateMachine.ActiveScreen>,
         frameworkRepo: FrameworkRepo,
@@ -80,11 +83,29 @@ class NewCursorController(
         }
     }
 
+    fun handleKeyEvent(event: KeyEvent): HandleKeyEventResponse {
+        val remoteKey = RemoteKey.fromKeyEvent(event)
+        return when {
+            DIRECTION_KEY_CODES.contains(event.keyCode) -> {
+                HandleKeyEventResponse(
+                        wasHandled = directionKeyPress(event),
+                        forwardedMotionEvent = null
+                )
+            }
+            // Center key is used on device, Enter key is used on emulator
+            remoteKey == RemoteKey.CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER -> {
+                val motionEvent = selectKeyPress(event)
+                HandleKeyEventResponse(motionEvent != null, motionEvent)
+            }
+            else -> HandleKeyEventResponse(false, null)
+        }
+    }
+
     /**
      * TODO
      * @return returns true if the event is consumed
      */
-    fun directionKeyPress(event: KeyEvent): Boolean {
+    private fun directionKeyPress(event: KeyEvent): Boolean {
         if (!isCursorActive.blockingFirst()) { // todo: do I hang on startup?
             return false
         }
@@ -114,7 +135,7 @@ class NewCursorController(
      */
     @SuppressLint("Recycle")
     @CheckResult(suggest = "Recycle MotionEvent after use")
-    fun selectKeyPress(event: KeyEvent): MotionEvent? {
+    private fun selectKeyPress(event: KeyEvent): MotionEvent? {
         if (!isCursorActive.blockingFirst()) { // todo: do I hang on startup?
             return null
         }
