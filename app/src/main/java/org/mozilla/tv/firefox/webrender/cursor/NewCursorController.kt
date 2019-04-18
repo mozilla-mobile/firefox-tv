@@ -53,16 +53,12 @@ class NewCursorController(
         sessionRepo: SessionRepo
 ) {
     var screenBounds: PointF? = null
-        set(value) {
-            screenBoundsWereSet = true // TODO this is being called too often, fix it
-            field = value
-        }
 
     private val directionKeysPressed = mutableSetOf<Direction>()
     private var lastVelocity = 0f
     private var lastUpdatedAtMS = 0L // the first value when we start drawing will be an edge case
     private var lastKnownCursorPos = PointF(0f, 0f)
-    private var screenBoundsWereSet = false
+    private var cursorHasBeenCentered = false
 
     private val _isCursorMoving = BehaviorSubject.createDefault<Boolean>(false)
     val isCursorMoving: Observable<Boolean> = _isCursorMoving.hide()
@@ -108,7 +104,7 @@ class NewCursorController(
      * @return returns true if the event is consumed
      */
     private fun directionKeyPress(event: KeyEvent): Boolean {
-        if (!isCursorActive.blockingFirst()) { // todo: do I hang on startup?
+        if (!isCursorActive.blockingFirst()) {
             return false
         }
         require(DIRECTION_KEY_CODES.contains(event.keyCode)) { "Invalid key event passed to CursorController#directionKeyPress: $event" }
@@ -138,7 +134,7 @@ class NewCursorController(
     @SuppressLint("Recycle")
     @CheckResult(suggest = "Recycle MotionEvent after use")
     private fun selectKeyPress(event: KeyEvent): MotionEvent? {
-        if (!isCursorActive.blockingFirst()) { // todo: do I hang on startup?
+        if (!isCursorActive.blockingFirst()) {
             return null
         }
         require(event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER) { "Invalid key event passed to CursorController#selectKeyPress: $event" }
@@ -165,10 +161,10 @@ class NewCursorController(
     fun mutatePosition(oldPos: PointF): Boolean {
         lastKnownCursorPos = oldPos
         when {
-            screenBoundsWereSet -> {
+            !cursorHasBeenCentered && screenBounds != null -> {
                 oldPos.x = screenBounds!!.x / 2
                 oldPos.y = screenBounds!!.y / 2
-                screenBoundsWereSet = false
+                cursorHasBeenCentered = true
                 return true
             }
             directionKeysPressed.isEmpty() -> {
