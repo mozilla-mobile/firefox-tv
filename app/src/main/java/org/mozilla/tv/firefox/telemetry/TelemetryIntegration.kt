@@ -115,6 +115,7 @@ open class TelemetryIntegration protected constructor(
         // We need this second source key because we use SOURCE when using this key.
         // For the value, "autocomplete_source" exceeds max extra key length.
         val AUTOCOMPLETE_SOURCE = "autocompl_src"
+        val TILE_ID = "tile_id"
     }
 
     // Available on any thread: we synchronize.
@@ -251,8 +252,15 @@ open class TelemetryIntegration protected constructor(
             TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE,
                     Value.YOUTUBE_TILE).queue()
         }
-        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE,
-                getTileTypeAsStringValue(tile)).queue()
+        // Add an extra that contains the tileId for bundled tiles only
+        val tileType = getTileTypeAsStringValue(tile)
+        if (tileType == Value.TILE_BUNDLED) {
+            TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE, tileType)
+                .extra(Extra.TILE_ID, tile.idToString())
+                .queue()
+        } else {
+            TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE, tileType).queue()
+        }
         TelemetryHomeTileUniqueClickPerSessionCounter.countTile(context, tile)
     }
 
