@@ -23,7 +23,7 @@ class PinnedTileViewModel(private val pinnedTileRepo: PinnedTileRepo) : ViewMode
 
     init {
         @Suppress("DEPRECATION")
-        _tilesList.addSource(pinnedTileRepo.getPinnedTiles()) { pinnedTileMap ->
+        _tilesList.addSource(pinnedTileRepo.legacyPinnedTiles) { pinnedTileMap ->
             val feedTileList: List<PinnedTile>? = pinnedTileMap?.values?.toList()
             if ((feedTileList) != null) {
                 _tilesList.value = feedTileList
