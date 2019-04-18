@@ -6,13 +6,15 @@ package org.mozilla.tv.firefox.pinnedtile
 
 import android.app.Application
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
+import androidx.lifecycle.LiveDataReactiveStreams
+import io.reactivex.BackpressureStrategy
+import io.reactivex.subjects.BehaviorSubject
 import org.json.JSONArray
 import java.util.UUID
 import java.util.Collections
@@ -31,7 +33,8 @@ private const val HOME_TILES_JSON_PATH = "$BUNDLED_HOME_TILES_DIR/bundled_tiles.
  * @constructor loads the initial [_pinnedTiles] (a combination of custom and bundled tiles)
  */
 class PinnedTileRepo(private val applicationContext: Application) {
-    private val _pinnedTiles = MutableLiveData<LinkedHashMap<String, PinnedTile>>()
+    private val _pinnedTiles: BehaviorSubject<LinkedHashMap<String, PinnedTile>> =
+            BehaviorSubject.create()
 
     // Persist custom & bundled tiles size for telemetry
     var customTilesSize = 0
@@ -49,17 +52,19 @@ class PinnedTileRepo(private val applicationContext: Application) {
             putAll(loadCustomTilesCache())
         }
 
-        _pinnedTiles.value = pinnedTiles
+        _pinnedTiles.onNext(pinnedTiles)
     }
 
+    @Deprecated(message = "Use Rx in ViewModels (i.e. ToolbarVM and PinnedTilesVM)")
     fun getPinnedTiles(): LiveData<LinkedHashMap<String, PinnedTile>> {
-        return _pinnedTiles
+        return LiveDataReactiveStreams
+                .fromPublisher(_pinnedTiles.toFlowable(BackpressureStrategy.LATEST))
     }
 
     fun addPinnedTile(url: String, screenshot: Bitmap?) {
         val newPinnedTile = CustomPinnedTile(url, "custom", UUID.randomUUID()) // TODO: titles
         if (_pinnedTiles.value?.put(url, newPinnedTile) != null) return
-        _pinnedTiles.value = _pinnedTiles.value
+        _pinnedTiles.onNext(_pinnedTiles.value!!)
         persistCustomTiles()
 
         if (screenshot != null) {
@@ -75,7 +80,7 @@ class PinnedTileRepo(private val applicationContext: Application) {
     @UiThread
     fun removePinnedTile(url: String): String? {
         val tileToRemove = _pinnedTiles.value?.remove(url) ?: return null
-        _pinnedTiles.value = _pinnedTiles.value
+        _pinnedTiles.onNext(_pinnedTiles.value!!)
 
         when (tileToRemove) {
             is BundledPinnedTile -> {
