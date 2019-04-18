@@ -5,7 +5,6 @@
 package org.mozilla.tv.firefox.pinnedtile
 
 import android.app.Application
-import androidx.lifecycle.LiveData
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
@@ -38,6 +37,10 @@ class PinnedTileRepo(private val applicationContext: Application) {
             BehaviorSubject.create()
     val pinnedTiles: Observable<LinkedHashMap<String, PinnedTile>> = _pinnedTiles.hide()
 
+    @Deprecated(message = "Use PinnedTileRepo.pinnedTiles for new code")
+    val legacyPinnedTiles = LiveDataReactiveStreams
+            .fromPublisher(pinnedTiles.toFlowable(BackpressureStrategy.LATEST))
+
     // Persist custom & bundled tiles size for telemetry
     var customTilesSize = 0
     var bundledTilesSize = 0
@@ -55,12 +58,6 @@ class PinnedTileRepo(private val applicationContext: Application) {
         }
 
         _pinnedTiles.onNext(pinnedTiles)
-    }
-
-    @Deprecated(message = "Use PinnedTileRepo.pinnedTiles for new code")
-    fun getPinnedTiles(): LiveData<LinkedHashMap<String, PinnedTile>> {
-        return LiveDataReactiveStreams
-                .fromPublisher(pinnedTiles.toFlowable(BackpressureStrategy.LATEST))
     }
 
     fun addPinnedTile(url: String, screenshot: Bitmap?) {

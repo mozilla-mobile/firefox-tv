@@ -41,7 +41,7 @@ class PinnedTileRepoTest {
         })
 
         @Suppress("DEPRECATION")
-        pinnedTileRepo.getPinnedTiles().observeForever(observerSpy)
+        pinnedTileRepo.legacyPinnedTiles.observeForever(observerSpy)
         verify(observerSpy, times(1)).onChanged(any())
     }
 
@@ -53,7 +53,7 @@ class PinnedTileRepoTest {
         })
 
         @Suppress("DEPRECATION")
-        pinnedTileRepo.getPinnedTiles().observeForever(observerSpy)
+        pinnedTileRepo.legacyPinnedTiles.observeForever(observerSpy)
         assertEquals(0, pinnedTileRepo.customTilesSize)
         pinnedTileRepo.addPinnedTile("https://example.com", null)
         assertEquals(1, pinnedTileRepo.customTilesSize)
@@ -69,7 +69,7 @@ class PinnedTileRepoTest {
         })
 
         @Suppress("DEPRECATION")
-        pinnedTileRepo.getPinnedTiles().observeForever(observerSpy)
+        pinnedTileRepo.legacyPinnedTiles.observeForever(observerSpy)
         assertEquals(10, pinnedTileRepo.bundledTilesSize)
         pinnedTileRepo.removePinnedTile("https://www.pinterest.com/")
         assertEquals(9, pinnedTileRepo.bundledTilesSize)
@@ -85,7 +85,7 @@ class PinnedTileRepoTest {
         })
 
         @Suppress("DEPRECATION")
-        pinnedTileRepo.getPinnedTiles().observeForever(observerSpy)
+        pinnedTileRepo.legacyPinnedTiles.observeForever(observerSpy)
         assertEquals(10, pinnedTileRepo.bundledTilesSize)
         pinnedTileRepo.removePinnedTile("https://example.com/")
         assertEquals(10, pinnedTileRepo.bundledTilesSize)
@@ -101,7 +101,7 @@ class PinnedTileRepoTest {
         })
 
         @Suppress("DEPRECATION")
-        pinnedTileRepo.getPinnedTiles().observeForever(observerSpy)
+        pinnedTileRepo.legacyPinnedTiles.observeForever(observerSpy)
         assertEquals(0, pinnedTileRepo.customTilesSize)
         pinnedTileRepo.addPinnedTile("https://example.com", null)
         assertEquals(1, pinnedTileRepo.customTilesSize)

@@ -52,7 +52,7 @@ class ToolbarViewModel(
 
     @Suppress("DEPRECATION")
     val state: LiveData<ToolbarViewModel.State> =
-        LiveDataCombiners.combineLatest(sessionRepo.legacyState, pinnedTileRepo.getPinnedTiles()) { sessionState, pinnedTiles ->
+        LiveDataCombiners.combineLatest(sessionRepo.legacyState, pinnedTileRepo.legacyPinnedTiles) { sessionState, pinnedTiles ->
 
             fun isCurrentURLPinned() = pinnedTiles.containsKey(sessionState.currentUrl)
 
