@@ -39,6 +39,7 @@ import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
+import org.mozilla.tv.firefox.ext.couldScrollInDirection
 import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isYoutubeTV
@@ -147,11 +148,11 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             this.cursor = controller
             onCreateViewCompositeDisposable.add(disposable)
             lifecycle.addObserver(controller)
-            context.serviceLocator.cursorEventRepo.setCursorController(controller)
         }
         layout.browserFragmentRoot.addOnLayoutChangeListener { _, _, _, right, bottom, _, _, _, _ ->
             context.serviceLocator.cursorController.screenBounds = PointF(right.toFloat(), bottom.toFloat())
         }
+        context.serviceLocator.cursorEventRepo.setWebViewCouldScrollInDirection { layout.engineView.couldScrollInDirection(it) }
 
         layout.progressBar.initialize(this)
 

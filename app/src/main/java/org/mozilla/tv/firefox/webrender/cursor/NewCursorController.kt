@@ -26,6 +26,7 @@ private const val MS_TO_MAX_ACCELERATION = 200
 private const val MAX_ACCELERATION = MAX_VELOCITY - BASE_SPEED
 private const val ACCELERATION_PER_MS = MAX_ACCELERATION / MS_TO_MAX_ACCELERATION
 private const val MS_PER_FRAME = 16
+private const val EDGE_OF_SCREEN_MARGIN = 1
 
 data class HandleKeyEventResponse(val wasHandled: Boolean, val forwardedMotionEvent: MotionEvent?)
 
@@ -45,7 +46,7 @@ data class HandleKeyEventResponse(val wasHandled: Boolean, val forwardedMotionEv
  *  [X] MainActivity shouldn't decide what this class handles, this class should. Update that
  *  [X] Make cursor start in center of screen
  *  [ ] Hook up scrolling
- *  [ ] Make sure hint bar still works
+ *  [X] Make sure hint bar still works
  */
 class NewCursorController(
         activeScreen: Observable<ScreenControllerStateMachine.ActiveScreen>,
@@ -185,6 +186,23 @@ class NewCursorController(
                 lastUpdatedAtMS = currTime
                 return true
             }
+        }
+    }
+
+    /**
+     * If the cursor is near the edge of the screen, this will return that
+     * direction.  If not, it will return null.
+     *
+     * When in a corner, only UP or DOWN will be returned.
+     */
+    fun getEdgeOfScreenNearCursor(): Direction? {
+        val screenBounds = screenBounds ?: return null
+        return when {
+            lastKnownCursorPos.y < EDGE_OF_SCREEN_MARGIN -> Direction.UP
+            lastKnownCursorPos.y > screenBounds.y - EDGE_OF_SCREEN_MARGIN -> Direction.DOWN
+            lastKnownCursorPos.x < EDGE_OF_SCREEN_MARGIN -> Direction.LEFT
+            lastKnownCursorPos.x > screenBounds.x - EDGE_OF_SCREEN_MARGIN -> Direction.RIGHT
+            else -> null
         }
     }
 
