@@ -40,6 +40,7 @@ class PinnedTileRepoTest {
             assertEquals(BUNDLED_TILE_COUNT, (it as LinkedHashMap<String, PinnedTile>).size)
         })
 
+        @Suppress("DEPRECATION")
         pinnedTileRepo.getPinnedTiles().observeForever(observerSpy)
         verify(observerSpy, times(1)).onChanged(any())
     }
@@ -51,6 +52,7 @@ class PinnedTileRepoTest {
             assert((it as LinkedHashMap<String, PinnedTile>).size == BUNDLED_TILE_COUNT || it.size == BUNDLED_TILE_COUNT + 1)
         })
 
+        @Suppress("DEPRECATION")
         pinnedTileRepo.getPinnedTiles().observeForever(observerSpy)
         assertEquals(0, pinnedTileRepo.customTilesSize)
         pinnedTileRepo.addPinnedTile("https://example.com", null)
@@ -66,6 +68,7 @@ class PinnedTileRepoTest {
             assert((it as LinkedHashMap<String, PinnedTile>).size == BUNDLED_TILE_COUNT || it.size == BUNDLED_TILE_COUNT - 1)
         })
 
+        @Suppress("DEPRECATION")
         pinnedTileRepo.getPinnedTiles().observeForever(observerSpy)
         assertEquals(10, pinnedTileRepo.bundledTilesSize)
         pinnedTileRepo.removePinnedTile("https://www.pinterest.com/")
@@ -81,6 +84,7 @@ class PinnedTileRepoTest {
             assert((it as LinkedHashMap<String, PinnedTile>).size == BUNDLED_TILE_COUNT)
         })
 
+        @Suppress("DEPRECATION")
         pinnedTileRepo.getPinnedTiles().observeForever(observerSpy)
         assertEquals(10, pinnedTileRepo.bundledTilesSize)
         pinnedTileRepo.removePinnedTile("https://example.com/")
@@ -96,6 +100,7 @@ class PinnedTileRepoTest {
             assert((it as LinkedHashMap<String, PinnedTile>).size == BUNDLED_TILE_COUNT || it.size == BUNDLED_TILE_COUNT + 1)
         })
 
+        @Suppress("DEPRECATION")
         pinnedTileRepo.getPinnedTiles().observeForever(observerSpy)
         assertEquals(0, pinnedTileRepo.customTilesSize)
         pinnedTileRepo.addPinnedTile("https://example.com", null)

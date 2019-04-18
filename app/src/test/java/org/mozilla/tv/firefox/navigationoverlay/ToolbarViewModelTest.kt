@@ -43,6 +43,7 @@ class ToolbarViewModelTest {
         `when`(sessionRepo.legacyState).thenReturn(sessionState)
         pinnedTileRepo = spy(mock(PinnedTileRepo::class.java))
         pinnedTiles = MutableLiveData()
+        @Suppress("DEPRECATION")
         `when`(pinnedTileRepo.getPinnedTiles()).thenReturn(pinnedTiles)
         telemetryIntegration = spy(mock(TelemetryIntegration::class.java))
         toolbarVm = ToolbarViewModel(sessionRepo, pinnedTileRepo, telemetryIntegration)
