@@ -53,8 +53,6 @@ import org.mozilla.tv.firefox.hint.InactiveHintViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.utils.URLs
-import org.mozilla.tv.firefox.webrender.cursor.CursorController
-import org.mozilla.tv.firefox.webrender.cursor.CursorViewModel
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 
@@ -77,14 +75,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     // TODO: We should consolidate to a single Disposable lifecycle (#1912).
     private val startStopCompositeDisposable = CompositeDisposable()
-    private val onCreateViewCompositeDisposable = CompositeDisposable()
-
-    /**
-     * Encapsulates the cursor's components. If this value is null, the Cursor is not attached
-     * to the view hierarchy.
-     */
-    var cursor: CursorController? = null
-        @UiThread get set // Set from the UI thread so serial access is required for simplicity.
 
     // If YouTubeBackHandler is instantiated without an EngineView, YouTube won't
     // work properly, so we !!
@@ -138,17 +128,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         val context = inflater.context
         val layout = inflater.inflate(R.layout.fragment_browser, container, false)
 
-        val viewModelFactory = context.serviceLocator.viewModelFactory
-        CursorController.newInstanceOnCreateView(
-            this,
-            cursorParent = layout.browserFragmentRoot,
-            view = layout.cursorView,
-            viewModel = ViewModelProviders.of(this, viewModelFactory).get(CursorViewModel::class.java)
-        ).also { (controller, disposable) ->
-            this.cursor = controller
-            onCreateViewCompositeDisposable.add(disposable)
-            lifecycle.addObserver(controller)
-        }
         layout.browserFragmentRoot.addOnLayoutChangeListener { _, _, _, right, bottom, _, _, _, _ ->
             context.serviceLocator.cursorController.screenBounds = PointF(right.toFloat(), bottom.toFloat())
         }
@@ -240,10 +219,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         mediaSessionHolder?.videoVoiceCommandMediaSession?.onDestroyEngineView(engineView!!, session)
 
         super.onDestroyView()
-
-        onCreateViewCompositeDisposable.clear()
-        lifecycle.removeObserver(cursor!!)
-        cursor = null
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -274,8 +249,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
          * - Cursor
          * - Return false, as unhandled
          */
-        return handleSpecialKeyEvent(event) ||
-                (cursor?.keyDispatcher?.dispatchKeyEvent(event) ?: false)
+        return handleSpecialKeyEvent(event)
     }
 
     private fun handleSpecialKeyEvent(event: KeyEvent): Boolean {
