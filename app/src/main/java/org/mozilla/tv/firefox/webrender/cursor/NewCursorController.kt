@@ -21,10 +21,10 @@ import org.mozilla.tv.firefox.utils.DIRECTION_KEY_CODES
 import org.mozilla.tv.firefox.utils.Direction
 import org.mozilla.tv.firefox.utils.RemoteKey
 
-// TODO reorganize so tweakable ones are on top
-private const val MAX_ACCELERATION = .7f
-private const val MAX_VELOCITY = 40f
+private const val BASE_SPEED = 5f
+private const val MAX_VELOCITY = 25f
 private const val MS_TO_MAX_ACCELERATION = 200
+private const val MAX_ACCELERATION = MAX_VELOCITY - BASE_SPEED
 private const val ACCELERATION_PER_MS = MAX_ACCELERATION / MS_TO_MAX_ACCELERATION
 private const val MS_PER_FRAME = 16
 
@@ -39,8 +39,8 @@ data class HandleKeyEventResponse(val wasHandled: Boolean, val forwardedMotionEv
  *  [X] Enable/disable invalidate calls
  *  [X] Touch simulation
  *  [X] View click animation
- *  [X] Cursor visible on select press
- *  [ ] Tweak values to make them feel good
+ *  [X] Cursor visible on select press // TODO this broke
+ *  [X] Tweak values to make them feel good
  *  [ ] General cleanup
  *  [ ] Commit cleanup
  *  [X] MainActivity shouldn't decide what this class handles, this class should. Update that
@@ -55,7 +55,7 @@ class NewCursorController(
 ) {
     var screenBounds: PointF? = null
         set(value) {
-            screenBoundsWereSet = true
+            screenBoundsWereSet = true // TODO this is being called too often, fix it
             field = value
         }
 
@@ -88,7 +88,6 @@ class NewCursorController(
     }
 
     fun handleKeyEvent(event: KeyEvent): HandleKeyEventResponse {
-        val remoteKey = RemoteKey.fromKeyEvent(event)
         return when {
             DIRECTION_KEY_CODES.contains(event.keyCode) -> {
                 HandleKeyEventResponse(
@@ -97,7 +96,7 @@ class NewCursorController(
                 )
             }
             // Center key is used on device, Enter key is used on emulator
-            remoteKey == RemoteKey.CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER -> {
+            event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER -> {
                 val motionEvent = selectKeyPress(event)
                 HandleKeyEventResponse(motionEvent != null, motionEvent)
             }
@@ -143,7 +142,7 @@ class NewCursorController(
         if (!isCursorActive.blockingFirst()) { // todo: do I hang on startup?
             return null
         }
-        require(event.keyCode == KeyEvent.KEYCODE_BUTTON_SELECT || event.keyCode == KeyEvent.KEYCODE_ENTER) { "Invalid key event passed to CursorController#selectKeyPress: $event" }
+        require(event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER) { "Invalid key event passed to CursorController#selectKeyPress: $event" }
 
         val motionEvent = MotionEvent.obtain(event.downTime, event.eventTime, event.action, lastKnownCursorPos.x, lastKnownCursorPos.y, 0)
         return when (event.action) {
@@ -195,7 +194,7 @@ class NewCursorController(
     }
 
     private fun resetCursorSpeed() { // todo: name
-        lastVelocity = 0f
+        lastVelocity = BASE_SPEED
         lastUpdatedAtMS = -1
         directionKeysPressed.clear()
     }
@@ -224,6 +223,7 @@ class NewCursorController(
         oldPos.x += horizontalVelocity
         oldPos.x = oldPos.x.coerceIn(0f, screenBounds?.x) // TODO Comment about screenbounds nullability
         oldPos.y = oldPos.y.coerceIn(0f, screenBounds?.y)
+        println("SEVTEST: pos.x: ${oldPos.x}, pos.y: ${oldPos.y}")
         return velocity
     }
 }
