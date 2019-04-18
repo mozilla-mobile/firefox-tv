@@ -70,7 +70,7 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 | Turbo mode switch clicked              | action   | change                | turbo_mode   | on/off (the new value)   |               |
 | Pin site switch clicked                | action   | change                | pin_page     | on/off (the new value)   | desktop_mode* |
 | Desktop mode switch clicked            | action   | change                | desktop_mode | on/off (the new value)   |               |
-| Tile clicked                           | action   | click                 | home_tile    | bundled/custom/youtube** |               |
+| Tile clicked                           | action   | click                 | home_tile    | bundled/custom/youtube** | tile_id***    |
 | Tile removed                           | action   | remove                | home_tile    | bundled/custom           |               |
 | Unique tiles clicked per session       | aggregate| click                 | home_tile    | `<int>`                  |               |
 | Menu shown by user                     | action   | user_show             | menu         |                          |               |
@@ -81,6 +81,9 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 (*)When the pin site switch is clicked, the state (on/off) of the desktop mode switch is also sent.
 
 (**)YouTube tile clicks are a sub-category of bundled tile clicks- each click will count towards both values.
+This value existed from v3.2 to v3.8. For versions after v3.8, the tile_id is included as an extra, not as a value.
+
+(***)The tile_id is only collected for bundled tiles.
 
 ### Browsing
 
