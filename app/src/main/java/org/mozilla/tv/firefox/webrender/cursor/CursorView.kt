@@ -62,6 +62,7 @@ class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(con
                     if (cursorIsMovingOrPressed) {
                         animate().cancel()
                         alpha = 1f
+                        invalidate()
                     } else {
                         animate()
                                 .setStartDelay(HIDE_AFTER_MILLIS)
@@ -98,10 +99,10 @@ class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(con
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        cursorModel?.mutatePosition(position)
+        val shouldInvalidate = cursorModel?.mutatePosition(position) ?: true
         x = position.x - (width / 2)
         y = position.y - (height / 2)
 
-        invalidate()
+        if (shouldInvalidate) invalidate()
     }
 }
