@@ -253,9 +253,12 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         serviceLocator.cursorEventRepo.pushKeyEvent(event)
 
-        val cursorHandleResponse = serviceLocator.cursorController.handleKeyEvent(event)
-        cursorHandleResponse.forwardedMotionEvent?.let { dispatchTouchEvent(it) }
-        if (cursorHandleResponse.wasHandled) return true
+        serviceLocator.cursorController.maybeToMotionEvent(event)?.let {
+            dispatchTouchEvent(it)
+            it.recycle()
+        }
+
+        if (serviceLocator.cursorController.handleKeyEvent(event)) return true
 
         val fragmentManager = supportFragmentManager
 

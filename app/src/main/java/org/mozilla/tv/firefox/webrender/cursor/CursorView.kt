@@ -5,24 +5,16 @@
 package org.mozilla.tv.firefox.webrender.cursor
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Matrix
-import android.graphics.Paint
 import android.graphics.PointF
 import android.util.AttributeSet
-import android.view.View
-import android.widget.ImageView
 import androidx.annotation.CheckResult
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.isVisible
-import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.addTo
-import mozilla.components.support.ktx.android.graphics.drawable.toBitmap
 import org.mozilla.tv.firefox.R
 import java.util.concurrent.TimeUnit
 
@@ -30,15 +22,17 @@ private const val HIDE_ANIMATION_DURATION_MILLIS = 250L
 private val HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3)
 
 /**
- * TODO
+ * Renders the cursor visible on top of the browser.
  *
- * Should only be used with Bitmaps, not Drawables
+ * Most behavior is controlled by [CursorModel]
+ *
+ * Any images set must be Bitmaps, not Drawables
  */
 class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(context, attrs) {
 
     private val position = PointF(x, y)
 
-    private var cursorController: NewCursorController? = null
+    private var cursorModel: CursorModel? = null
     private var width = 0f
     private var height = 0f
 
@@ -47,19 +41,19 @@ class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(con
     }
 
     @CheckResult(suggest = "Dispose me, please. 🥰")
-    fun setup(cursorController: NewCursorController): Disposable {
-        this.cursorController = cursorController
+    fun setup(cursorModel: CursorModel): Disposable {
+        this.cursorModel = cursorModel
 
         val compositeDisposable = CompositeDisposable()
 
-        cursorController.isCursorActive.subscribe { isCursorActive ->
+        cursorModel.isCursorActive.subscribe { isCursorActive ->
             isVisible = isCursorActive
             if (!isCursorActive) {
                 animate().cancel()
             }
         }.addTo(compositeDisposable)
 
-        Observables.combineLatest(cursorController.isCursorMoving, cursorController.isSelectPressed) {
+        Observables.combineLatest(cursorModel.isCursorMoving, cursorModel.isSelectPressed) {
             // Only emit false if we are both stationary and not pressed
             moving, pressed -> moving || pressed
         }
@@ -77,7 +71,7 @@ class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(con
                     }
                 }.addTo(compositeDisposable)
 
-        cursorController.isSelectPressed
+        cursorModel.isSelectPressed
                 .distinctUntilChanged()
                 .subscribe {  pressed ->
                     when (pressed) {
@@ -104,7 +98,7 @@ class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(con
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        cursorController?.mutatePosition(position)
+        cursorModel?.mutatePosition(position)
         x = position.x - (width / 2)
         y = position.y - (height / 2)
 
