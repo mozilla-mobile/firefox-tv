@@ -126,9 +126,9 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         val layout = inflater.inflate(R.layout.fragment_browser, container, false)
 
         layout.browserFragmentRoot.addOnLayoutChangeListener { _, _, _, right, bottom, _, _, _, _ ->
-            context.serviceLocator.cursorController.screenBounds = PointF(right.toFloat(), bottom.toFloat())
+            context.serviceLocator.cursorModel.screenBounds = PointF(right.toFloat(), bottom.toFloat())
         }
-        context.serviceLocator.cursorEventRepo.setWebViewCouldScrollInDirection { layout.engineView.couldScrollInDirection(it) }
+        context.serviceLocator.cursorEventRepo.webViewCouldScrollInDirectionProvider = layout.engineView::couldScrollInDirection
 
         layout.progressBar.initialize(this)
 
@@ -189,7 +189,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             }.forceExhaustive
         }.addTo(startStopCompositeDisposable)
 
-        serviceLocator!!.scrollBus.scrollRequests
+        serviceLocator!!.cursorModel.scrollRequests
                 .subscribe { engineView!!.scrollByClamped(it.first, it.second) }
                 .addTo(startStopCompositeDisposable)
 
@@ -205,7 +205,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = true)
                 .forEach { startStopCompositeDisposable.add(it) }
 
-        cursorView.setup(context!!.serviceLocator.cursorController)
+        cursorView.setup(context!!.serviceLocator.cursorModel)
                 .addTo(startStopCompositeDisposable)
     }
 
@@ -243,14 +243,17 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     }
 
     fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        /**
-         * Key handling order:
-         * - Menu to control overlay
-         * - Youtube remap of BACK to ESC
-         * - Cursor
-         * - Return false, as unhandled
-         */
-        return handleSpecialKeyEvent(event)
+        serviceLocator?.cursorEventRepo?.pushKeyEvent(event)
+
+        val handledCursorEvent = serviceLocator?.cursorModel?.handleKeyEvent(event)
+
+        handledCursorEvent?.simulatedTouch?.let {
+            activity?.dispatchTouchEvent(it)
+            it.recycle()
+        }
+
+        return handleSpecialKeyEvent(event) ||
+                handledCursorEvent?.wasConsumed == true
     }
 
     private fun handleSpecialKeyEvent(event: KeyEvent): Boolean {

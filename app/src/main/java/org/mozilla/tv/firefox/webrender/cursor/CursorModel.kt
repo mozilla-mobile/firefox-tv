@@ -12,13 +12,14 @@ import androidx.annotation.CheckResult
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
 import org.mozilla.tv.firefox.ext.isUriYouTubeTV
 import org.mozilla.tv.firefox.framework.FrameworkRepo
 import org.mozilla.tv.firefox.session.SessionRepo
-import org.mozilla.tv.firefox.utils.DIRECTION_KEY_CODES
 import org.mozilla.tv.firefox.utils.Direction
+import org.mozilla.tv.firefox.utils.DirectionHelper
 
 private const val BASE_SPEED = 5f
 private const val MAX_VELOCITY = 25f
@@ -31,6 +32,8 @@ private const val MAX_SCROLL_VELOCITY = 13
 
 private const val NOT_RECENTLY_UPDATED = -1L
 
+data class HandledKeypress(val wasConsumed: Boolean, val simulatedTouch: MotionEvent?)
+
 /**
  * Calculates cursor movements.
  *
@@ -39,7 +42,6 @@ private const val NOT_RECENTLY_UPDATED = -1L
  * see the comment on [mutatePosition] for more details.
  */
 class CursorModel(
-    private val scrollBus: ScrollBus,
     activeScreen: Observable<ScreenControllerStateMachine.ActiveScreen>,
     frameworkRepo: FrameworkRepo,
     sessionRepo: SessionRepo
@@ -52,6 +54,13 @@ class CursorModel(
     private var lastUpdatedAtMS = NOT_RECENTLY_UPDATED
     private var lastKnownCursorPos = PointF(0f, 0f)
     private var cursorHasBeenCentered = false
+    // scrollX and Y are declared here as a micro-optimization to prevent alloc / dealloc
+    // costs during our onDraw loop
+    private var scrollX = 0
+    private var scrollY = 0
+
+    private val _scrollRequests = PublishSubject.create<Pair<Int, Int>>()
+    val scrollRequests = _scrollRequests.hide()
 
     private val _isCursorMoving = BehaviorSubject.createDefault<Boolean>(false)
     val isCursorMoving: Observable<Boolean> = _isCursorMoving.hide()
@@ -77,16 +86,16 @@ class CursorModel(
     /**
      * @returns true if event was handled
      */
-    fun handleKeyEvent(event: KeyEvent): Boolean {
+    fun handleKeyEvent(event: KeyEvent): HandledKeypress {
         return when {
-            DIRECTION_KEY_CODES.contains(event.keyCode) -> directionKeyPress(event)
+            DirectionHelper.KEY_CODES.contains(event.keyCode) ->
+            HandledKeypress(wasConsumed = directionKeyPress(event), simulatedTouch = null)
             // Center key is used on device, Enter key is used on emulator
             event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER -> {
                 val motionEvent = maybeToMotionEvent(event)
-                return (motionEvent != null)
-                        .also { motionEvent?.recycle() }
+                HandledKeypress(wasConsumed = motionEvent != null, simulatedTouch = motionEvent)
             }
-            else -> false
+            else -> HandledKeypress(wasConsumed = false, simulatedTouch = null)
         }
     }
 
@@ -97,7 +106,9 @@ class CursorModel(
         if (!isCursorActive.blockingFirst()) {
             return false
         }
-        require(DIRECTION_KEY_CODES.contains(event.keyCode)) { "Invalid key event passed to CursorController#directionKeyPress: $event" }
+        require(DirectionHelper.KEY_CODES.contains(event.keyCode)) {
+            "Invalid key event passed to CursorController#directionKeyPress: $event"
+        }
 
         val direction = when (event.keyCode) {
             KeyEvent.KEYCODE_DPAD_UP -> Direction.UP
@@ -122,7 +133,7 @@ class CursorModel(
      */
     @SuppressLint("Recycle")
     @CheckResult(suggest = "Recycle MotionEvent after use")
-    fun maybeToMotionEvent(event: KeyEvent): MotionEvent? {
+    private fun maybeToMotionEvent(event: KeyEvent): MotionEvent? {
         if (!isCursorActive.blockingFirst()) {
             return null
         }
@@ -182,17 +193,28 @@ class CursorModel(
                 // Otherwise, the cursor would shoot across the page the first time it was
                 // touched
                 if (lastUpdatedAtMS == NOT_RECENTLY_UPDATED) lastUpdatedAtMS = currTime - MS_PER_FRAME
+                val timePassedSinceLastMutation = currTime - lastUpdatedAtMS
+
                 lastVelocity = internalMutatePositionAndReturnVelocity(
                         oldPos,
-                        lastUpdatedAtMS,
-                        currTime,
+                        timePassedSinceLastMutation,
                         lastVelocity,
                         directionKeysPressed
                 )
+
+                calculateAndSendScrollEvent(timePassedSinceLastMutation, lastVelocity, oldPos)
                 lastUpdatedAtMS = currTime
                 return true
             }
         }
+    }
+
+    private fun calculateAndSendScrollEvent(timePassed: Long, velocity: Float, oldPos: PointF) {
+        // This should not live inside internalMutatePositionAndReturnVelocity.
+        // Move it if you can find a better solution
+        val approxFramesPassed = (timePassed / 16).toInt()
+        val shouldScroll = getScrollDistance(velocity, oldPos, approxFramesPassed)
+        shouldScroll?.let { _scrollRequests.onNext(it) }
     }
 
     /**
@@ -205,8 +227,7 @@ class CursorModel(
      */
     private fun internalMutatePositionAndReturnVelocity(
         oldPos: PointF,
-        oldTimeMS: Long,
-        newTimeMS: Long,
+        timePassedSinceLastMutation: Long,
         oldVelocity: Float,
         directionsPressed: Set<Direction>
     ): Float {
@@ -214,8 +235,7 @@ class CursorModel(
         require(directionsPressed.isNotEmpty())
         val screenBounds = screenBounds ?: return 0f
 
-        val timePassed = newTimeMS - oldTimeMS
-        val accelerateBy = ACCELERATION_PER_MS * timePassed
+        val accelerateBy = ACCELERATION_PER_MS * timePassedSinceLastMutation
         val velocity = (oldVelocity + accelerateBy).coerceIn(0f, MAX_VELOCITY)
 
         fun updatePosition() {
@@ -231,16 +251,7 @@ class CursorModel(
             oldPos.y = oldPos.y.coerceIn(0f, screenBounds.y)
         }
 
-        fun calculateAndSendScrollEvent() {
-            // This should not live inside internalMutatePositionAndReturnVelocity.
-            // Move it if you can find a better solution
-            val approxFramesPassed = (timePassed / 16).toInt()
-            val shouldScroll = getScrollDistance(velocity, oldPos, approxFramesPassed)
-            shouldScroll?.let { scrollBus.scrollRequests.onNext(it) }
-        }
-
         updatePosition()
-        calculateAndSendScrollEvent()
 
         return velocity
     }
@@ -288,10 +299,11 @@ class CursorModel(
             }
         }
 
-        val scrollX = Math.round(scrollVelReturnVal.x * MAX_SCROLL_VELOCITY * framesPassed)
-        val scrollY = Math.round(scrollVelReturnVal.y * MAX_SCROLL_VELOCITY * framesPassed)
-        return if (scrollX != 0 || scrollY != 0) scrollX to scrollY
-        else null
+        scrollX = (scrollVelReturnVal.x * MAX_SCROLL_VELOCITY * framesPassed).toInt()
+        scrollY = (scrollVelReturnVal.y * MAX_SCROLL_VELOCITY * framesPassed).toInt()
+        return if (scrollX != 0 || scrollY != 0) {
+            scrollX to scrollY
+        } else null
     }
 
     @SuppressLint("CheckResult") // Does not need to be disposed as this survives for the duration of the app

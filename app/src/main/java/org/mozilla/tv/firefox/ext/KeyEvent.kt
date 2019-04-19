@@ -7,6 +7,8 @@ package org.mozilla.tv.firefox.ext
 import android.graphics.PointF
 import android.view.KeyEvent
 import android.view.MotionEvent
+import androidx.annotation.CheckResult
 
+@CheckResult(suggest = "Recycle the MotionEvent after use")
 fun KeyEvent.toMotionEvent(pos: PointF): MotionEvent =
     MotionEvent.obtain(this.downTime, this.eventTime, this.action, pos.x, pos.y, 0)

@@ -54,7 +54,7 @@ class SettingsFragment : Fragment() {
         parentView: ViewGroup?,
         settingsViewModel: SettingsViewModel
     ): View {
-    val view = inflater.inflate(R.layout.settings_screen_switch, parentView, false)
+        val view = inflater.inflate(R.layout.settings_screen_switch, parentView, false)
         settingsViewModel.dataCollectionEnabled.observe(viewLifecycleOwner, Observer<Boolean> { state ->
             view.toggle.isChecked = state ?: return@Observer
         })

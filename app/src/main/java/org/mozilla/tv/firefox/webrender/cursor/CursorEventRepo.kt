@@ -17,14 +17,8 @@ import io.reactivex.subjects.Subject
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.utils.Direction
+import org.mozilla.tv.firefox.utils.DirectionHelper
 import java.util.concurrent.TimeUnit
-
-private val DIRECTION_KEYS = listOf(
-        KEYCODE_DPAD_UP,
-        KEYCODE_DPAD_DOWN,
-        KEYCODE_DPAD_LEFT,
-        KEYCODE_DPAD_RIGHT
-)
 
 /**
  * This class exposes low level cursor movement events.
@@ -33,7 +27,7 @@ private val DIRECTION_KEYS = listOf(
  * most use cases you will want to use a class at a higher level of abstraction.
  */
 class CursorEventRepo(
-    private val cursorModel: CursorModel,
+    private val cursorModel: CursorModel, // Cyclical dependency
     screenController: ScreenController
 ) {
 
@@ -47,14 +41,10 @@ class CursorEventRepo(
         data class CursorMoved(val direction: Direction) : CursorEvent()
     }
 
+    var webViewCouldScrollInDirectionProvider: (Direction) -> Boolean = { false }
+
     // Note that these events are emitted very quickly. Consumers should usually throttle them
     private val keyEvents: Subject<KeyEvent> = PublishSubject.create()
-
-    private var webViewCouldScrollInDirection: (Direction) -> Boolean = { false }
-
-    fun setWebViewCouldScrollInDirection(couldScroll: (Direction) -> Boolean) {
-        webViewCouldScrollInDirection = couldScroll
-    }
 
     fun pushKeyEvent(keyEvent: KeyEvent) {
         keyEvents.onNext(keyEvent)
@@ -72,7 +62,7 @@ class CursorEventRepo(
                 this.map { (value, _) -> value }
 
         fun Observable<KeyEvent>.filterIsDirectionKey() =
-                this.filter { DIRECTION_KEYS.contains(it.keyCode) }
+                this.filter { DirectionHelper.KEY_CODES.contains(it.keyCode) }
 
         fun Observable<KeyEvent>.filterIsKeyDown() =
                 // i.e., key is pressed, not released
@@ -92,7 +82,7 @@ class CursorEventRepo(
         fun Observable<Direction>.mapToCursorEvent() =
                 this.map { cursorDirection ->
                     val edgeNearCursor = cursorModel.getEdgeOfScreenNearCursor()
-                    val couldScroll = edgeNearCursor?.let { webViewCouldScrollInDirection(it) }
+                    val couldScroll = edgeNearCursor?.let { webViewCouldScrollInDirectionProvider(it) }
 
                     val cursorMovedToEdgeOfScreen = edgeNearCursor == cursorDirection
                     val endOfDomContentReached = couldScroll == false
