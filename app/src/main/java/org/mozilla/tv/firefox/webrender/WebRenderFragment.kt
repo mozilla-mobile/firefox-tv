@@ -46,6 +46,7 @@ import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.pauseAllVideoPlaybacks
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.resetView
+import org.mozilla.tv.firefox.ext.scrollByClamped
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.hint.HintBinder
@@ -191,6 +192,10 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 null -> return@subscribe
             }.forceExhaustive
         }.addTo(startStopCompositeDisposable)
+
+        serviceLocator!!.scrollBus.scrollRequests
+                .subscribe { engineView!!.scrollByClamped(it.first, it.second) }
+                .addTo(startStopCompositeDisposable)
 
         val (hintViewModel, progressBarGravity) = if (serviceLocator!!.experimentsProvider.shouldShowHintBar()) {
             FirefoxViewModelProviders.of(this).get(WebRenderHintViewModel::class.java) to
