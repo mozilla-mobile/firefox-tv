@@ -249,15 +249,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         if (event.keyCode == KeyEvent.KEYCODE_BACK ||
                 event.keyCode == KeyEvent.KEYCODE_DEL) return super.dispatchKeyEvent(event)
 
-        serviceLocator.cursorEventRepo.pushKeyEvent(event)
-
-        serviceLocator.cursorController.maybeToMotionEvent(event)?.let {
-            dispatchTouchEvent(it)
-            it.recycle()
-        }
-
-        if (serviceLocator.cursorController.handleKeyEvent(event)) return true
-
         val fragmentManager = supportFragmentManager
 
         TelemetryIntegration.INSTANCE.saveRemoteControlInformation(applicationContext, event)

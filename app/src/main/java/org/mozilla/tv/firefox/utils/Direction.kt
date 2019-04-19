@@ -6,12 +6,14 @@ package org.mozilla.tv.firefox.utils
 
 import android.view.KeyEvent
 
-val DIRECTION_KEY_CODES = listOf(
-        KeyEvent.KEYCODE_DPAD_UP,
-        KeyEvent.KEYCODE_DPAD_DOWN,
-        KeyEvent.KEYCODE_DPAD_LEFT,
-        KeyEvent.KEYCODE_DPAD_RIGHT
-)
+object DirectionHelper {
+    val KEY_CODES = listOf(
+            KeyEvent.KEYCODE_DPAD_UP,
+            KeyEvent.KEYCODE_DPAD_DOWN,
+            KeyEvent.KEYCODE_DPAD_LEFT,
+            KeyEvent.KEYCODE_DPAD_RIGHT
+    )
+}
 
 enum class Direction {
     DOWN, LEFT, RIGHT, UP

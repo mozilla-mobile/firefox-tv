@@ -18,6 +18,8 @@ import io.reactivex.rxkotlin.addTo
 import org.mozilla.tv.firefox.R
 import java.util.concurrent.TimeUnit
 
+private const val BITMAP_PRESSED = R.drawable.cursor_full_active
+private const val BITMAP_UNPRESSED = R.drawable.cursor_full
 private const val HIDE_ANIMATION_DURATION_MILLIS = 250L
 private val HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3)
 
@@ -30,14 +32,12 @@ private val HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3)
  */
 class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(context, attrs) {
 
-    private val position = PointF(x, y)
+    private val onDrawMutablePositionCache = PointF(x, y)
 
     private var cursorModel: CursorModel? = null
-    private var width = 0f
-    private var height = 0f
 
     init {
-        setImageResource(R.drawable.cursor_full)
+        setImageResource(BITMAP_UNPRESSED)
     }
 
     @CheckResult(suggest = "Dispose me, please. 🥰")
@@ -74,34 +74,21 @@ class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(con
 
         cursorModel.isSelectPressed
                 .distinctUntilChanged()
-                .subscribe { pressed ->
-                    when (pressed) {
-                        true -> setImageResource(R.drawable.cursor_full_active)
-                        false -> setImageResource(R.drawable.cursor_full)
-                    }
-                }.addTo(compositeDisposable)
+                .subscribe { pressed -> when (pressed) {
+                        true -> setImageResource(BITMAP_PRESSED)
+                        false -> setImageResource(BITMAP_UNPRESSED)
+                    } }.addTo(compositeDisposable)
 
         return compositeDisposable
     }
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-        this.width = w.toFloat()
-        this.height = h.toFloat()
-    }
-
-    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        super.onLayout(changed, left, top, right, bottom)
-        position.x = x
-        position.y = y
-    }
-
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
+        onDrawMutablePositionCache.set(x, y)
 
-        val shouldInvalidate = cursorModel?.mutatePosition(position) ?: true
-        x = position.x - (width / 2)
-        y = position.y - (height / 2)
+        val shouldInvalidate = cursorModel?.mutatePosition(onDrawMutablePositionCache) ?: false
+        x = onDrawMutablePositionCache.x - (width / 2)
+        y = onDrawMutablePositionCache.y - (height / 2)
 
         if (shouldInvalidate) invalidate()
     }
