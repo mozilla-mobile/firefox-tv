@@ -22,7 +22,7 @@
   <string name="preference_category_performance">Desempenho</string>
   <string name="preference_performance_block_webfonts">Bloquear fontes web</string>
   <string name="preference_performance_block_webfonts_summary">Pode resultar em falta de ícones ou imagens</string>
-  <string name="preference_mozilla_telemetry2">Enviar dados de utilização</string>
+  <string name="preference_mozilla_telemetry2">Enviar dados de uso</string>
   <string name="preference_privacy_notice">Aviso de Privacidade</string>
   <string name="content_description_forward">Navegar para a frente</string>
   <string name="content_description_reload">Recarregar o site</string>
