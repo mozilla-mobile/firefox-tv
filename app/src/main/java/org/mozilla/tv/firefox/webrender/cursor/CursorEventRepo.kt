@@ -33,7 +33,7 @@ private val DIRECTION_KEYS = listOf(
  * most use cases you will want to use a class at a higher level of abstraction.
  */
 class CursorEventRepo(
-        private val cursorController: NewCursorController,
+        private val cursorModel: CursorModel,
         screenController: ScreenController
 ) {
 
@@ -47,7 +47,8 @@ class CursorEventRepo(
         data class CursorMoved(val direction: Direction) : CursorEvent()
     }
 
-    private val keyEvents: Subject<KeyEvent> = PublishSubject.create() // TODO note that these come FAST. throttle it
+    // Note that these events are emitted very quickly. Consumers should usually throttle them
+    private val keyEvents: Subject<KeyEvent> = PublishSubject.create()
 
     private var webViewCouldScrollInDirection: (Direction) -> Boolean = { false }
 
@@ -90,7 +91,7 @@ class CursorEventRepo(
 
         fun Observable<Direction>.mapToCursorEvent() =
                 this.map { cursorDirection ->
-                    val edgeNearCursor = cursorController.getEdgeOfScreenNearCursor()
+                    val edgeNearCursor = cursorModel.getEdgeOfScreenNearCursor()
                     val couldScroll = edgeNearCursor?.let { webViewCouldScrollInDirection(it) }
 
                     val cursorMovedToEdgeOfScreen = edgeNearCursor == cursorDirection

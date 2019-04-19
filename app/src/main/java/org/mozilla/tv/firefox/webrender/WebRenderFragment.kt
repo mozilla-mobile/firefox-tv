@@ -74,7 +74,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     private val mediaSessionHolder get() = activity as MediaSessionHolder? // null when not attached.
 
-    // TODO: We should consolidate to a single Disposable lifecycle (#1912).
     private val startStopCompositeDisposable = CompositeDisposable()
 
     // If YouTubeBackHandler is instantiated without an EngineView, YouTube won't

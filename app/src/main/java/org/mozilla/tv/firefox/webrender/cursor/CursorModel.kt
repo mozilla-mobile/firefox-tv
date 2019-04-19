@@ -29,37 +29,27 @@ private const val MS_PER_FRAME = 16
 private const val EDGE_OF_SCREEN_MARGIN = 1
 private const val MAX_SCROLL_VELOCITY = 13
 
-data class HandleKeyEventResponse(val wasHandled: Boolean, val forwardedMotionEvent: MotionEvent?)
+private const val NOT_RECENTLY_UPDATED = -1L
 
 /**
- *  TODO
- *  [X] Remove old Rx implementation cruft
- *  [-] ~Pipe events up to repo (CursorEventRepo is already dipping into key events.  Choose one of these approaches and get rid of the other)~ We cut this as out of scope
- *  [X] Handle visibility animation
- *  [X] Hook up directionKeyPress
- *  [X] Enable/disable invalidate calls
- *  [X] Touch simulation
- *  [X] View click animation
- *  [X] Tweak values to make them feel good
- *  [X] Cursor visible on select press
- *  [ ] General cleanup
- *  [ ] Commit cleanup
- *  [X] MainActivity shouldn't decide what this class handles, this class should. Update that
- *  [X] Make cursor start in center of screen
- *  [X] Hook up scrolling
- *  [X] Make sure hint bar still works
+ * Calculates cursor movements.
+ *
+ * Remote key events are pushed here from the rest of the app. Actual cursor position changes are
+ * made when this class is called by [CursorView.onDraw]. This was done for performance reasons;
+ * see the comment on [mutatePosition] for more details.
  */
-class NewCursorController(
-        val scrollBus: ScrollBus,
+class CursorModel(
+        private val scrollBus: ScrollBus,
         activeScreen: Observable<ScreenControllerStateMachine.ActiveScreen>,
         frameworkRepo: FrameworkRepo,
         sessionRepo: SessionRepo
 ) {
+    // This is set early in the class lifecycle. Most methods short if it is not available
     var screenBounds: PointF? = null
 
     private val directionKeysPressed = mutableSetOf<Direction>()
     private var lastVelocity = 0f
-    private var lastUpdatedAtMS = 0L // the first value when we start drawing will be an edge case
+    private var lastUpdatedAtMS = NOT_RECENTLY_UPDATED
     private var lastKnownCursorPos = PointF(0f, 0f)
     private var cursorHasBeenCentered = false
 
@@ -78,33 +68,30 @@ class NewCursorController(
         val isWebRenderActive = activeScreen == WEB_RENDER
         val doesWebpageHaveOwnNavControls = sessionState.currentUrl.isUriYouTubeTV || isVoiceViewEnabled
         isWebRenderActive && !doesWebpageHaveOwnNavControls
-    }.also {
-        // No need to dispose: this survives for the duration of the app.
-        it.subscribe { isCursorActive ->
-            if (!isCursorActive) resetCursorSpeed()
-        }
     }
 
-    fun handleKeyEvent(event: KeyEvent): HandleKeyEventResponse {
+    init {
+        resetSpeedWhenCursorIsInactive()
+    }
+
+    /**
+     * @returns true if event was handled
+     */
+    fun handleKeyEvent(event: KeyEvent): Boolean {
         return when {
-            DIRECTION_KEY_CODES.contains(event.keyCode) -> {
-                HandleKeyEventResponse(
-                        wasHandled = directionKeyPress(event),
-                        forwardedMotionEvent = null
-                )
-            }
+            DIRECTION_KEY_CODES.contains(event.keyCode) -> directionKeyPress(event)
             // Center key is used on device, Enter key is used on emulator
             event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER -> {
-                val motionEvent = selectKeyPress(event)
-                HandleKeyEventResponse(motionEvent != null, motionEvent)
+                val motionEvent = maybeToMotionEvent(event)
+                return (motionEvent != null)
+                        .also { motionEvent?.recycle() }
             }
-            else -> HandleKeyEventResponse(false, null)
+            else -> false
         }
     }
 
     /**
-     * TODO
-     * @return returns true if the event is consumed
+     * @returns true if the event is consumed
      */
     private fun directionKeyPress(event: KeyEvent): Boolean {
         if (!isCursorActive.blockingFirst()) {
@@ -131,18 +118,20 @@ class NewCursorController(
     }
 
     /**
-     * TODO
      * @return returns a MotionEvent if the event is consumed, null otherwise
      */
     @SuppressLint("Recycle")
     @CheckResult(suggest = "Recycle MotionEvent after use")
-    private fun selectKeyPress(event: KeyEvent): MotionEvent? {
+    fun maybeToMotionEvent(event: KeyEvent): MotionEvent? {
         if (!isCursorActive.blockingFirst()) {
             return null
         }
-        require(event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER) { "Invalid key event passed to CursorController#selectKeyPress: $event" }
+        if (event.keyCode != KeyEvent.KEYCODE_DPAD_CENTER && event.keyCode != KeyEvent.KEYCODE_ENTER) {
+            return null
+        }
 
-        val motionEvent = MotionEvent.obtain(event.downTime, event.eventTime, event.action, lastKnownCursorPos.x, lastKnownCursorPos.y, 0)
+        val motionEvent = MotionEvent.obtain(event.downTime, event.eventTime, event.action,
+                lastKnownCursorPos.x, lastKnownCursorPos.y, 0)
         return when (event.action) {
             KeyEvent.ACTION_UP -> {
                 _isSelectPressed.onNext(false)
@@ -157,7 +146,20 @@ class NewCursorController(
     }
 
     /**
-     * TODO describe this
+     * Called by CursorView in order to drive cursor movement.
+     *
+     * Performance:
+     * Previous code updated cursor VM position every 16MS (1_000 MS / 60 frames == 16.66). This
+     * led to minor jitter because we were not tied exactly to the actual framerate. This new
+     * implementation is harder to understand, but is noticeably more performant.
+     *
+     * Architecture:
+     * Having a View#onDraw call VM updates does not mesh well with our architecture, but we found
+     * no way to achieve desired performance with any other approach. Instead, we contained this
+     * architectural aberration to this class, and as much as possible it should be left here.
+     *
+     * STRONGLY avoid accessing this state outside of this class, and think very carefully about
+     * how you do if it is unavoidable.
      *
      * @return whether or not the view should continue to invalidate itself
      */
@@ -171,13 +173,15 @@ class NewCursorController(
                 return true
             }
             directionKeysPressed.isEmpty() -> {
-                // Grab old and new times
                 resetCursorSpeed()
                 return false
             }
             else -> {
                 val currTime = System.currentTimeMillis()
-                if (lastUpdatedAtMS == -1L) lastUpdatedAtMS = currTime - MS_PER_FRAME // TODO comment about why we do this
+                // If the cursor pos has not recently been updated, reset to current time.
+                // Otherwise, the cursor would shoot across the page the first time it was
+                // touched
+                if (lastUpdatedAtMS == NOT_RECENTLY_UPDATED) lastUpdatedAtMS = currTime - MS_PER_FRAME
                 lastVelocity = internalMutatePositionAndReturnVelocity(
                         oldPos,
                         lastUpdatedAtMS,
@@ -189,6 +193,56 @@ class NewCursorController(
                 return true
             }
         }
+    }
+
+    /**
+     * Mutates [oldPos] to its new position. This position is calculated based on the time passed
+     * since the last update, in order to avoid miscalculations when dropping frames.
+     *
+     * Calculates necessary scrolling, if any, and sends out a request to handle it.
+     *
+     * @returns the new cursor velocity
+     */
+    private fun internalMutatePositionAndReturnVelocity(
+            oldPos: PointF,
+            oldTimeMS: Long,
+            newTimeMS: Long,
+            oldVelocity: Float,
+            directionsPressed: Set<Direction>
+    ): Float {
+        // directionsPressed empty case is handled in `mutatePosition`
+        require(directionsPressed.isNotEmpty())
+        val screenBounds = screenBounds ?: return 0f
+
+        val timePassed = newTimeMS - oldTimeMS
+        val accelerateBy = ACCELERATION_PER_MS * timePassed
+        val velocity = (oldVelocity + accelerateBy).coerceIn(0f, MAX_VELOCITY)
+
+        fun updatePosition() {
+            var verticalVelocity = 0f
+            if (directionKeysPressed.contains(Direction.UP)) verticalVelocity -= velocity
+            if (directionKeysPressed.contains(Direction.DOWN)) verticalVelocity += velocity
+            var horizontalVelocity = 0f
+            if (directionKeysPressed.contains(Direction.LEFT)) horizontalVelocity -= velocity
+            if (directionKeysPressed.contains(Direction.RIGHT)) horizontalVelocity += velocity
+            oldPos.x += horizontalVelocity
+            oldPos.y += verticalVelocity
+            oldPos.x = oldPos.x.coerceIn(0f, screenBounds.x)
+            oldPos.y = oldPos.y.coerceIn(0f, screenBounds.y)
+        }
+
+        fun calculateAndSendScrollEvent() {
+            // This should not live inside internalMutatePositionAndReturnVelocity.
+            // Move it if you can find a better solution
+            val approxFramesPassed = (timePassed / 16).toInt()
+            val shouldScroll = getScrollDistance(velocity, oldPos, approxFramesPassed)
+            shouldScroll?.let { scrollBus.scrollRequests.onNext(it) }
+        }
+
+        updatePosition()
+        calculateAndSendScrollEvent()
+
+        return velocity
     }
 
     /**
@@ -208,46 +262,14 @@ class NewCursorController(
         }
     }
 
-    private fun resetCursorSpeed() { // todo: name
+    private fun resetCursorSpeed() {
         lastVelocity = BASE_SPEED
-        lastUpdatedAtMS = -1
+        lastUpdatedAtMS = NOT_RECENTLY_UPDATED
         directionKeysPressed.clear()
     }
 
-    private fun internalMutatePositionAndReturnVelocity(
-            oldPos: PointF,
-            oldTimeMS: Long,
-            newTimeMS: Long,
-            oldVelocity: Float,
-            directionsPressed: Set<Direction>
-    ): Float {
-        // directionsPressed empty case is handled in `mutatePosition`
-        require(directionsPressed.isNotEmpty())
-
-        val timePassed = newTimeMS - oldTimeMS
-        val accelerateBy = ACCELERATION_PER_MS * timePassed
-        val velocity = (oldVelocity + accelerateBy).coerceIn(0f, MAX_VELOCITY)
-
-        var verticalVelocity = 0f
-        if (directionKeysPressed.contains(Direction.UP)) verticalVelocity -= velocity
-        if (directionKeysPressed.contains(Direction.DOWN)) verticalVelocity += velocity
-        var horizontalVelocity = 0f
-        if (directionKeysPressed.contains(Direction.LEFT)) horizontalVelocity -= velocity
-        if (directionKeysPressed.contains(Direction.RIGHT)) horizontalVelocity += velocity
-        oldPos.x += horizontalVelocity
-        oldPos.y += verticalVelocity
-        oldPos.x = oldPos.x.coerceIn(0f, screenBounds?.x) // TODO Comment about screenbounds nullability
-        oldPos.y = oldPos.y.coerceIn(0f, screenBounds?.y)
-
-        val approxFramesPassed = (timePassed / 16).toInt()
-        val shouldScroll = getScrollDistance(velocity, oldPos, approxFramesPassed)
-        scrollBus.scrollRequests.onNext(shouldScroll)
-
-        return velocity
-    }
-
     // This is taken from older code.  Crufty, but it works
-    private fun getScrollDistance(vel: Float, pos: PointF, framesPassed: Int): Pair<Int, Int> {
+    private fun getScrollDistance(vel: Float, pos: PointF, framesPassed: Int): Pair<Int, Int>? {
         val scrollVelReturnVal = PointF(0f, 0f)
         val screenBounds = screenBounds ?: return 0 to 0
 
@@ -268,6 +290,14 @@ class NewCursorController(
 
         val scrollX = Math.round(scrollVelReturnVal.x * MAX_SCROLL_VELOCITY * framesPassed)
         val scrollY = Math.round(scrollVelReturnVal.y * MAX_SCROLL_VELOCITY * framesPassed)
-        return scrollX to scrollY
+        return if (scrollX != 0 || scrollY != 0) scrollX to scrollY
+        else null
+    }
+
+    @SuppressLint("CheckResult") // Does not need to be disposed as this survives for the duration of the app
+    private fun resetSpeedWhenCursorIsInactive() {
+        isCursorActive.subscribe { isCursorActive ->
+            if (!isCursorActive) resetCursorSpeed()
+        }
     }
 }
