@@ -9,6 +9,7 @@ import android.os.Build
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.clearText
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.pressImeActionButton
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -138,6 +139,7 @@ class NavigationOverlayRobot {
         fun enterUrlAndEnterToBrowser(url: Uri, interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
             urlBar().perform(clearText(),
                     typeText(url.toString()),
+                    closeSoftKeyboard(),
                     pressImeActionButton())
             waitUntilSiteLoaded()
 

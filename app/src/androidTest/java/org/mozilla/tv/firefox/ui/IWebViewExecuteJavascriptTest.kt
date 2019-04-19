@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.ui
 
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
 import androidx.test.espresso.action.ViewActions.pressImeActionButton
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -44,7 +45,7 @@ class IWebViewExecuteJavascriptTest {
 
         // Load the mock page.
         onView(withId(R.id.navUrlInput))
-                .perform(typeText(url), pressImeActionButton())
+                .perform(typeText(url), closeSoftKeyboard(), pressImeActionButton())
 
         // Assert loaded.
         assertBodyText(expectedLoadedText)
