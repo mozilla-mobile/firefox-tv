@@ -53,7 +53,7 @@ class CursorEventRepoTest {
         every { screenController.currentActiveScreen } answers { currentActiveScreen }
         repo = CursorEventRepo(cursorModel, screenController)
 
-        repo.setWebViewCouldScrollInDirection { true }
+        repo.webViewCouldScrollInDirectionProvider = { true }
         every { cursorModel.getEdgeOfScreenNearCursor() } answers { null }
     }
 
@@ -78,14 +78,14 @@ class CursorEventRepoTest {
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_UP)
 
-        repo.setWebViewCouldScrollInDirection { it == Direction.UP }
+        repo.webViewCouldScrollInDirectionProvider = { it == Direction.UP }
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_UP)
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_DOWN)
 
-        repo.setWebViewCouldScrollInDirection { it == Direction.UP }
-        repo.setWebViewCouldScrollInDirection { it == Direction.DOWN }
+        repo.webViewCouldScrollInDirectionProvider = { it == Direction.UP }
+        repo.webViewCouldScrollInDirectionProvider = { it == Direction.DOWN }
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_DOWN)
 
@@ -94,7 +94,7 @@ class CursorEventRepoTest {
 
     @Test
     fun `GIVEN webpage cannot scroll up or down WHEN cursor reaches top or bottom of screen THEN scroll events should be emitted`() {
-        repo.setWebViewCouldScrollInDirection { false }
+        repo.webViewCouldScrollInDirectionProvider = { false }
 
         val events = repo.webRenderDirectionEvents.test()
 
