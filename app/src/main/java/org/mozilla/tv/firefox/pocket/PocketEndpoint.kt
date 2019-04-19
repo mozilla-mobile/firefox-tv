@@ -20,6 +20,7 @@ import org.mozilla.tv.firefox.utils.Endpoint
 import org.mozilla.tv.firefox.utils.OkHttpWrapper
 import org.mozilla.tv.firefox.utils.Response
 import java.io.IOException
+import java.util.concurrent.TimeoutException
 
 private const val LOGTAG = "PocketEndpoint"
 
@@ -94,6 +95,10 @@ private object PocketEndpointRaw {
             OkHttpWrapper.client.newCall(req).executeAndAwait()
         } catch (e: IOException) {
             Log.w(LOGTAG, "getGlobalVideoRecommendations: network error")
+            Log.w(LOGTAG, e)
+            return null
+        } catch (e: TimeoutException) {
+            Log.w(LOGTAG, "getGlobalVideoRecommendations: timed out")
             Log.w(LOGTAG, e)
             return null
         }
