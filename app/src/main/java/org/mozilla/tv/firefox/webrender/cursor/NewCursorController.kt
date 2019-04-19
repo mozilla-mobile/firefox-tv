@@ -27,6 +27,7 @@ private const val MAX_ACCELERATION = MAX_VELOCITY - BASE_SPEED
 private const val ACCELERATION_PER_MS = MAX_ACCELERATION / MS_TO_MAX_ACCELERATION
 private const val MS_PER_FRAME = 16
 private const val EDGE_OF_SCREEN_MARGIN = 1
+private const val MAX_SCROLL_VELOCITY = 13
 
 data class HandleKeyEventResponse(val wasHandled: Boolean, val forwardedMotionEvent: MotionEvent?)
 
@@ -45,10 +46,11 @@ data class HandleKeyEventResponse(val wasHandled: Boolean, val forwardedMotionEv
  *  [ ] Commit cleanup
  *  [X] MainActivity shouldn't decide what this class handles, this class should. Update that
  *  [X] Make cursor start in center of screen
- *  [ ] Hook up scrolling
+ *  [X] Hook up scrolling
  *  [X] Make sure hint bar still works
  */
 class NewCursorController(
+        val scrollBus: ScrollBus,
         activeScreen: Observable<ScreenControllerStateMachine.ActiveScreen>,
         frameworkRepo: FrameworkRepo,
         sessionRepo: SessionRepo
@@ -232,11 +234,40 @@ class NewCursorController(
         var horizontalVelocity = 0f
         if (directionKeysPressed.contains(Direction.LEFT)) horizontalVelocity -= velocity
         if (directionKeysPressed.contains(Direction.RIGHT)) horizontalVelocity += velocity
-        oldPos.y += verticalVelocity
         oldPos.x += horizontalVelocity
+        oldPos.y += verticalVelocity
         oldPos.x = oldPos.x.coerceIn(0f, screenBounds?.x) // TODO Comment about screenbounds nullability
         oldPos.y = oldPos.y.coerceIn(0f, screenBounds?.y)
-        println("SEVTEST: pos.x: ${oldPos.x}, pos.y: ${oldPos.y}")
+
+        val approxFramesPassed = (timePassed / 16).toInt()
+        val shouldScroll = getScrollDistance(velocity, oldPos, approxFramesPassed)
+        scrollBus.scrollRequests.onNext(shouldScroll)
+
         return velocity
+    }
+
+    // This is taken from older code.  Crufty, but it works
+    private fun getScrollDistance(vel: Float, pos: PointF, framesPassed: Int): Pair<Int, Int> {
+        val scrollVelReturnVal = PointF(0f, 0f)
+        val screenBounds = screenBounds ?: return 0 to 0
+
+        if (vel > 0f) {
+            val percentMaxVel = vel / MAX_VELOCITY
+            if (pos.x == 0f && directionKeysPressed.contains(Direction.LEFT)) {
+                scrollVelReturnVal.x = -percentMaxVel
+            } else if (pos.x == screenBounds.x && directionKeysPressed.contains(Direction.RIGHT)) {
+                scrollVelReturnVal.x = percentMaxVel
+            }
+
+            if (pos.y == 0f && directionKeysPressed.contains(Direction.UP)) {
+                scrollVelReturnVal.y = -percentMaxVel
+            } else if (pos.y == screenBounds.y && directionKeysPressed.contains(Direction.DOWN)) {
+                scrollVelReturnVal.y = percentMaxVel
+            }
+        }
+
+        val scrollX = Math.round(scrollVelReturnVal.x * MAX_SCROLL_VELOCITY * framesPassed)
+        val scrollY = Math.round(scrollVelReturnVal.y * MAX_SCROLL_VELOCITY * framesPassed)
+        return scrollX to scrollY
     }
 }

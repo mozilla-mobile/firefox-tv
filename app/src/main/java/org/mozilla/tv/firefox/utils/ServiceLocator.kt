@@ -27,6 +27,7 @@ import org.mozilla.tv.firefox.settings.SettingsRepo
 import org.mozilla.tv.firefox.webrender.EngineViewCache
 import org.mozilla.tv.firefox.webrender.cursor.CursorEventRepo
 import org.mozilla.tv.firefox.webrender.cursor.NewCursorController
+import org.mozilla.tv.firefox.webrender.cursor.ScrollBus
 
 /**
  * Implementation of the Service Locator pattern. Use this class to provide dependencies without
@@ -78,7 +79,8 @@ open class ServiceLocator(val app: Application) {
     val sessionUseCases get() = app.webRenderComponents.sessionUseCases
     val searchEngineManager by lazy { SearchEngineManagerFactory.create(app) }
     val cursorEventRepo by lazy { CursorEventRepo(cursorController, screenController) }
-    val cursorController by lazy { NewCursorController(screenController.currentActiveScreen, frameworkRepo, sessionRepo) }
+    val cursorController by lazy { NewCursorController(scrollBus, screenController.currentActiveScreen, frameworkRepo, sessionRepo) }
+    val scrollBus by lazy { ScrollBus() }
 
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())
     open val pinnedTileRepo by lazy { PinnedTileRepo(app) }
