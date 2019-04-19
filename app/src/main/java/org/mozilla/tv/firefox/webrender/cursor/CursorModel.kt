@@ -39,10 +39,10 @@ private const val NOT_RECENTLY_UPDATED = -1L
  * see the comment on [mutatePosition] for more details.
  */
 class CursorModel(
-        private val scrollBus: ScrollBus,
-        activeScreen: Observable<ScreenControllerStateMachine.ActiveScreen>,
-        frameworkRepo: FrameworkRepo,
-        sessionRepo: SessionRepo
+    private val scrollBus: ScrollBus,
+    activeScreen: Observable<ScreenControllerStateMachine.ActiveScreen>,
+    frameworkRepo: FrameworkRepo,
+    sessionRepo: SessionRepo
 ) {
     // This is set early in the class lifecycle. Most methods short if it is not available
     var screenBounds: PointF? = null
@@ -204,11 +204,11 @@ class CursorModel(
      * @returns the new cursor velocity
      */
     private fun internalMutatePositionAndReturnVelocity(
-            oldPos: PointF,
-            oldTimeMS: Long,
-            newTimeMS: Long,
-            oldVelocity: Float,
-            directionsPressed: Set<Direction>
+        oldPos: PointF,
+        oldTimeMS: Long,
+        newTimeMS: Long,
+        oldVelocity: Float,
+        directionsPressed: Set<Direction>
     ): Float {
         // directionsPressed empty case is handled in `mutatePosition`
         require(directionsPressed.isNotEmpty())

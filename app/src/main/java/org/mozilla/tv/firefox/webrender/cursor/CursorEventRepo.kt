@@ -33,8 +33,8 @@ private val DIRECTION_KEYS = listOf(
  * most use cases you will want to use a class at a higher level of abstraction.
  */
 class CursorEventRepo(
-        private val cursorModel: CursorModel,
-        screenController: ScreenController
+    private val cursorModel: CursorModel,
+    screenController: ScreenController
 ) {
 
     sealed class CursorEvent {

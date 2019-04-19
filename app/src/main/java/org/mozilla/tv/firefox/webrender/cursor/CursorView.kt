@@ -73,7 +73,7 @@ class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(con
 
         cursorModel.isSelectPressed
                 .distinctUntilChanged()
-                .subscribe {  pressed ->
+                .subscribe { pressed ->
                     when (pressed) {
                         true -> setImageResource(R.drawable.cursor_full_active)
                         false -> setImageResource(R.drawable.cursor_full)

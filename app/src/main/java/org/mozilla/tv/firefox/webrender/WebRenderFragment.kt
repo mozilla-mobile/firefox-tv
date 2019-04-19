@@ -15,15 +15,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
-import androidx.annotation.UiThread
-import androidx.lifecycle.ViewModelProviders
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_browser.cursorView
 import kotlinx.android.synthetic.main.fragment_browser.progressBar
 import kotlinx.android.synthetic.main.fragment_browser.view.browserFragmentRoot
-import kotlinx.android.synthetic.main.fragment_browser.view.cursorView
 import kotlinx.android.synthetic.main.fragment_browser.view.engineView
 import kotlinx.android.synthetic.main.fragment_browser.view.progressBar
 import kotlinx.android.synthetic.main.hint_bar.hintBarContainer
