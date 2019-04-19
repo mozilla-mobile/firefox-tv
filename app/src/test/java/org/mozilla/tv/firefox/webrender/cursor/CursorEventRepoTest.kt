@@ -42,7 +42,7 @@ class CursorEventRepoTest {
 
     private lateinit var repo: CursorEventRepo
     private lateinit var currentActiveScreen: Subject<ScreenControllerStateMachine.ActiveScreen>
-    @MockK private lateinit var cursorController: CursorController
+    @MockK private lateinit var cursorModel: CursorModel
     @MockK private lateinit var screenController: ScreenController
 
     @Before
@@ -51,11 +51,10 @@ class CursorEventRepoTest {
         MockKAnnotations.init(this)
         currentActiveScreen = BehaviorSubject.createDefault(ScreenControllerStateMachine.ActiveScreen.WEB_RENDER)
         every { screenController.currentActiveScreen } answers { currentActiveScreen }
-        repo = CursorEventRepo(screenController)
-        repo.setCursorController(cursorController)
+        repo = CursorEventRepo(cursorModel, screenController)
 
-        every { cursorController.webViewCouldScrollInDirection(any()) } answers { true }
-        every { cursorController.getEdgeOfScreenNearCursor() } answers { null }
+        repo.setWebViewCouldScrollInDirection { true }
+        every { cursorModel.getEdgeOfScreenNearCursor() } answers { null }
     }
 
     @Test
@@ -79,14 +78,14 @@ class CursorEventRepoTest {
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_UP)
 
-        every { cursorController.webViewCouldScrollInDirection(Direction.UP) } answers { false }
+        repo.setWebViewCouldScrollInDirection { it == Direction.UP }
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_UP)
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_DOWN)
 
-        every { cursorController.webViewCouldScrollInDirection(Direction.UP) } answers { true }
-        every { cursorController.webViewCouldScrollInDirection(Direction.DOWN) } answers { false }
+        repo.setWebViewCouldScrollInDirection { it == Direction.UP }
+        repo.setWebViewCouldScrollInDirection { it == Direction.DOWN }
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_DOWN)
 
@@ -95,18 +94,18 @@ class CursorEventRepoTest {
 
     @Test
     fun `GIVEN webpage cannot scroll up or down WHEN cursor reaches top or bottom of screen THEN scroll events should be emitted`() {
-        every { cursorController.webViewCouldScrollInDirection(any()) } answers { false }
+        repo.setWebViewCouldScrollInDirection { false }
 
         val events = repo.webRenderDirectionEvents.test()
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_UP)
 
-        every { cursorController.getEdgeOfScreenNearCursor() } answers { Direction.UP }
+        every { cursorModel.getEdgeOfScreenNearCursor() } answers { Direction.UP }
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_UP)
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_DOWN)
 
-        every { cursorController.getEdgeOfScreenNearCursor() } answers { Direction.DOWN }
+        every { cursorModel.getEdgeOfScreenNearCursor() } answers { Direction.DOWN }
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_DOWN)
 
