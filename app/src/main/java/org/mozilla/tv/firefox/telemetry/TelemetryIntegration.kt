@@ -320,14 +320,9 @@ open class TelemetryIntegration protected constructor(
                         boolToOnOff(isDesktopModeButtonChecked)).queue()
                 return
             }
-            NavigationEvent.SETTINGS_DATA_COLLECTION -> {
-                // TODO: Add telemetry #2044
-                return
-            }
-            NavigationEvent.SETTINGS_CLEAR_COOKIES -> {
-                // TODO: Add telemetry #2044
-                return
-            }
+
+            // Settings telemetry handled in a separate event
+            NavigationEvent.SETTINGS_DATA_COLLECTION, NavigationEvent.SETTINGS_CLEAR_COOKIES -> return
 
             // Load is handled in a separate event
             NavigationEvent.LOAD_URL, NavigationEvent.LOAD_TILE -> return

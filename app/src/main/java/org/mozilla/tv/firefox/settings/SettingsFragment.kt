@@ -21,7 +21,6 @@ import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsTile
-import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import java.lang.IllegalStateException
 
 const val KEY_SETTINGS_TYPE = "KEY_SETTINGS_TYPE"
@@ -75,7 +74,6 @@ class SettingsFragment : Fragment() {
                 when (event) {
                     Action.SESSION_CLEARED -> {
                         activity?.recreate()
-                        TelemetryIntegration.INSTANCE.clearDataEvent()
                     }
                 }.forceExhaustive
                 true
