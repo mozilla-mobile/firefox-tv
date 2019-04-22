@@ -17,8 +17,8 @@
 
 REPO="https://github.com/mozilla-mobile/firefox-tv.git"
 CLONE_DIR="$HOME/Desktop/firefox-tv"
-SCREENSHOTS_DIR="$CLONE_DIR/fastlane"
-CONFIG="$CLONE_DIR/Screengrabfile"
+SCREENSHOTS_DIR="fastlane"
+CONFIG="Screengrabfile"
 
 # optional – location used to upload screenshots
 DROPBOX_DIR="$HOME/Dropbox"
@@ -38,26 +38,14 @@ adb -s $ANDROID_SERIAL shell settings put global window_animation_scale 0
 adb -s $ANDROID_SERIAL shell settings put global transition_animation_scale 0
 adb -s $ANDROID_SERIAL shell settings put global animatior_duration_scale 0
 
-# clone repository
-if [ -d "$CLONE_DIR" ]; then
- cd "$CLONE_DIR"
- git pull origin master
-else
- git clone "$REPO" "$CLONE_DIR"
- cd "$CLONE_DIR"
-fi
-
 # build debug app
-./gradlew clean app:assembleDebug
+./gradlew clean app:assembleSystemDebug
 
 # build test app
-./gradlew app:assembleAndroidTest
+./gradlew app:assembleSystemDebugAndroidTest
 
 # uninstall existing apps
-./gradlew uninstallDebug uninstallDebugAndroidTest
-
-# install apps
-./gradlew installDebug installDebugAndroidTest
+./gradlew uninstallSystemDebug uninstallSystemDebugAndroidTest
 
 # inject target device into Screengrabfile
 echo "specific_device '$ANDROID_SERIAL'" >> $CONFIG

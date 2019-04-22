@@ -16,6 +16,7 @@ import androidx.test.uiautomator.UiDevice;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mozilla.tv.firefox.MainActivity;
@@ -32,7 +33,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.mozilla.tv.firefox.onboarding.OnboardingActivity.ONBOARD_SHOWN_PREF;
 import static org.mozilla.tv.firefox.pocket.PocketOnboardingActivity.POCKET_ONBOARDING_SHOWN_PREF;
 
-
+// Since pocket is currently EN-US only, this should be ignored
+@Ignore
 public class PocketOnboardTest extends ScreenshotTest {
 
     private Intent intent;

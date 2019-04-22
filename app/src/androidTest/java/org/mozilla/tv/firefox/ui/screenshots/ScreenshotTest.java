@@ -68,4 +68,10 @@ public abstract class ScreenshotTest {
     String getString(@StringRes int resourceId, Object... formatArgs) {
         return targetContext.getString(resourceId, formatArgs).trim();
     }
+
+    public void takeScreenshotsAfterWait(String filename, int waitingTime) throws InterruptedException {
+
+        Thread.sleep(waitingTime);
+        Screengrab.screenshot(filename);
+    }
 }
