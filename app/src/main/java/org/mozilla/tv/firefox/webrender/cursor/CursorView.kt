@@ -35,6 +35,9 @@ class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(con
     private val onDrawMutablePositionCache = PointF(x, y)
 
     private var cursorModel: CursorModel? = null
+    // The amount that this view must be offset for it to appear centered
+    // (otherwise the PointF we set would be its top left corner)
+    private var viewOffset: Int = width / 2
 
     init {
         setImageResource(BITMAP_UNPRESSED)
@@ -84,11 +87,12 @@ class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(con
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        onDrawMutablePositionCache.set(x, y)
+        viewOffset = width / 2
+        onDrawMutablePositionCache.set(x + viewOffset, y + viewOffset)
 
         val shouldInvalidate = cursorModel?.mutatePosition(onDrawMutablePositionCache) ?: false
-        x = onDrawMutablePositionCache.x - (width / 2)
-        y = onDrawMutablePositionCache.y - (height / 2)
+        x = onDrawMutablePositionCache.x - viewOffset
+        y = onDrawMutablePositionCache.y - viewOffset
 
         if (shouldInvalidate) invalidate()
     }
