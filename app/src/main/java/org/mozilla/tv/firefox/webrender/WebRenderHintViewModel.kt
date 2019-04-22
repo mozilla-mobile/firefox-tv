@@ -31,57 +31,47 @@ class WebRenderHintViewModel(
 ) : ViewModel(), HintViewModel {
 
     override val isDisplayed by lazy {
-        Observable.merge(webRenderOpenedEvents, cursorEvents, loadCompleteEvents)
+        val showEvents = Observable.merge(
+                webRenderOpened,
+                loadComplete,
+                scrollUpOrDownToEndOfDom
+        ).map { true }
+
+        val hideEvents = cursorMovedUpOrDown
+                .map { false }
+
+        Observable.merge(
+                showEvents,
+                hideEvents
+        )
                 .distinctUntilChanged()
                 .replay(1)
                 .autoConnect(0)
     }
     override val hints: Observable<List<HintContent>> = Observable.just(listOf(openMenuHint))
 
-    /**
-     * Emits true when the hint bar should be shown, or false when it should be hidden
-     */
-    private val webRenderOpenedEvents by lazy {
-        screenController.currentActiveScreen
+    private val webRenderOpened = screenController.currentActiveScreen
                 .filter { it == ScreenControllerStateMachine.ActiveScreen.WEB_RENDER }
-                .map { true }
-    }
 
-    /**
-     * Emits true when the hint bar should be shown, or false when it should be hidden
-     */
-    private val loadCompleteEvents by lazy {
+    private val loadComplete by lazy {
         fun Observable<SessionRepo.State>.onlyEmitWhenLoadingChanges() =
                 this.map { it.loading }
-                        .distinctUntilChanged()
+                    .distinctUntilChanged()
 
         fun Observable<Boolean>.filterLoadComplete() =
                 this.filter { loading -> !loading }
-
-        fun <T> Observable<T>.setShouldDisplay() =
-                this.map { true }
 
         sessionRepo.state
                 .filter { it.currentUrl != URLs.APP_URL_HOME }
                 .onlyEmitWhenLoadingChanges()
                 .filterLoadComplete()
-                .setShouldDisplay()
     }
 
-    /**
-     * Emits true when the hint bar should be shown, or false when it should be hidden
-     */
-    private val cursorEvents: Observable<Boolean> by lazy {
-        val showOnScrollUpOrDownToEdge = cursorModel.cursorMovedEvents
-                .ofType(ScrolledToEdge::class.java)
-                .filter { it.edge == Direction.UP || it.edge == Direction.DOWN }
-                .map { true }
+    private val scrollUpOrDownToEndOfDom = cursorModel.cursorMovedEvents
+            .ofType(ScrolledToEdge::class.java)
+            .filter { it.edge == Direction.UP || it.edge == Direction.DOWN }
 
-        val hideOnOtherScrollUpOrDown = cursorModel.cursorMovedEvents
-                .ofType(CursorMoved::class.java)
-                .filter { it.direction == Direction.UP || it.direction == Direction.DOWN }
-                .map { false }
-
-        Observable.merge(showOnScrollUpOrDownToEdge, hideOnOtherScrollUpOrDown)
-    }
+    private val cursorMovedUpOrDown = cursorModel.cursorMovedEvents
+            .ofType(CursorMoved::class.java)
+            .filter { it.direction == Direction.UP || it.direction == Direction.DOWN }
 }
