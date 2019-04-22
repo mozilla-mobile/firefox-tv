@@ -65,7 +65,7 @@ class ViewModelFactory(
 
             WebRenderHintViewModel::class.java -> WebRenderHintViewModel(
                     serviceLocator.sessionRepo,
-                    serviceLocator.cursorEventRepo,
+                    serviceLocator.cursorModel,
                     serviceLocator.screenController,
                     hintContentFactory.getOpenMenuHint()
             ) as T

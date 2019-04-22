@@ -128,7 +128,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         layout.browserFragmentRoot.addOnLayoutChangeListener { _, _, _, right, bottom, _, _, _, _ ->
             context.serviceLocator.cursorModel.screenBounds = PointF(right.toFloat(), bottom.toFloat())
         }
-        context.serviceLocator.cursorEventRepo.webViewCouldScrollInDirectionProvider = layout.engineView::couldScrollInDirection
+        context.serviceLocator.cursorModel.webViewCouldScrollInDirectionProvider = layout.engineView::couldScrollInDirection
 
         layout.progressBar.initialize(this)
 
@@ -243,8 +243,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     }
 
     fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        serviceLocator?.cursorEventRepo?.pushKeyEvent(event)
-
         val handledCursorEvent = serviceLocator?.cursorModel?.handleKeyEvent(event)
 
         handledCursorEvent?.simulatedTouch?.let {

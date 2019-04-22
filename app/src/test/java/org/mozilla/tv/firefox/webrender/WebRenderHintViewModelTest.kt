@@ -18,17 +18,18 @@ import org.mozilla.tv.firefox.hint.HintContent
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.Direction
 import org.mozilla.tv.firefox.utils.URLs
-import org.mozilla.tv.firefox.webrender.cursor.CursorEventRepo
+import org.mozilla.tv.firefox.webrender.cursor.CursorEvent
+import org.mozilla.tv.firefox.webrender.cursor.CursorModel
 
 class WebRenderHintViewModelTest {
 
     @MockK private lateinit var sessionRepo: SessionRepo
-    @MockK private lateinit var cursorEventRepo: CursorEventRepo
     @MockK private lateinit var screenController: ScreenController
+    @MockK private lateinit var cursorModel: CursorModel
     @MockK private lateinit var openMenuHint: HintContent
     private lateinit var hintVM: WebRenderHintViewModel
     private lateinit var sessionRepoState: Subject<SessionRepo.State>
-    private lateinit var webRenderDirectionEvents: Subject<CursorEventRepo.CursorEvent>
+    private lateinit var webRenderDirectionEvents: Subject<CursorEvent>
     private lateinit var currentActiveScreen: Subject<ActiveScreen>
 
     @Before
@@ -37,11 +38,11 @@ class WebRenderHintViewModelTest {
         sessionRepoState = PublishSubject.create()
         every { sessionRepo.state } answers { sessionRepoState }
         webRenderDirectionEvents = PublishSubject.create()
-        every { cursorEventRepo.webRenderDirectionEvents } answers { webRenderDirectionEvents }
+        every { cursorModel.cursorMovedEvents } answers { webRenderDirectionEvents }
         currentActiveScreen = PublishSubject.create()
         every { screenController.currentActiveScreen } answers { currentActiveScreen }
 
-        hintVM = WebRenderHintViewModel(sessionRepo, cursorEventRepo, screenController, openMenuHint)
+        hintVM = WebRenderHintViewModel(sessionRepo, cursorModel, screenController, openMenuHint)
     }
 
     @Test
@@ -142,11 +143,11 @@ class WebRenderHintViewModelTest {
     }
 
     fun pushScrolledToEdge(direction: Direction) {
-        webRenderDirectionEvents.onNext(CursorEventRepo.CursorEvent.ScrolledToEdge(direction))
+        webRenderDirectionEvents.onNext(CursorEvent.ScrolledToEdge(direction))
     }
 
     fun pushCursorMove(direction: Direction) {
-        webRenderDirectionEvents.onNext(CursorEventRepo.CursorEvent.CursorMoved(direction))
+        webRenderDirectionEvents.onNext(CursorEvent.CursorMoved(direction))
     }
 }
 

@@ -14,9 +14,9 @@ import org.mozilla.tv.firefox.navigationoverlay.OverlayHintViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.Direction
 import org.mozilla.tv.firefox.utils.URLs
-import org.mozilla.tv.firefox.webrender.cursor.CursorEventRepo
-import org.mozilla.tv.firefox.webrender.cursor.CursorEventRepo.CursorEvent.CursorMoved
-import org.mozilla.tv.firefox.webrender.cursor.CursorEventRepo.CursorEvent.ScrolledToEdge
+import org.mozilla.tv.firefox.webrender.cursor.CursorEvent.CursorMoved
+import org.mozilla.tv.firefox.webrender.cursor.CursorEvent.ScrolledToEdge
+import org.mozilla.tv.firefox.webrender.cursor.CursorModel
 
 /**
  * Contains business logic for, and exposes data to the hint bar.
@@ -25,7 +25,7 @@ import org.mozilla.tv.firefox.webrender.cursor.CursorEventRepo.CursorEvent.Scrol
  */
 class WebRenderHintViewModel(
     sessionRepo: SessionRepo,
-    cursorEventRepo: CursorEventRepo,
+    cursorModel: CursorModel,
     screenController: ScreenController,
     openMenuHint: HintContent
 ) : ViewModel(), HintViewModel {
@@ -72,12 +72,12 @@ class WebRenderHintViewModel(
      * Emits true when the hint bar should be shown, or false when it should be hidden
      */
     private val cursorEvents: Observable<Boolean> by lazy {
-        val showOnScrollUpOrDownToEdge = cursorEventRepo.webRenderDirectionEvents
+        val showOnScrollUpOrDownToEdge = cursorModel.cursorMovedEvents
                 .ofType(ScrolledToEdge::class.java)
                 .filter { it.edge == Direction.UP || it.edge == Direction.DOWN }
                 .map { true }
 
-        val hideOnOtherScrollUpOrDown = cursorEventRepo.webRenderDirectionEvents
+        val hideOnOtherScrollUpOrDown = cursorModel.cursorMovedEvents
                 .ofType(CursorMoved::class.java)
                 .filter { it.direction == Direction.UP || it.direction == Direction.DOWN }
                 .map { false }
