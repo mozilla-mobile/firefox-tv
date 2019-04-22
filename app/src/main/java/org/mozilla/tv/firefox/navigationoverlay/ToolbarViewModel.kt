@@ -71,18 +71,21 @@ class ToolbarViewModel(
 
     @UiThread
     fun backButtonClicked() {
+        sendOverlayClickTelemetry(NavigationEvent.BACK)
         sessionRepo.attemptBack(forceYouTubeExit = true)
         hideOverlay()
     }
 
     @UiThread
     fun forwardButtonClicked() {
+        sendOverlayClickTelemetry(NavigationEvent.FORWARD)
         sessionRepo.goForward()
         hideOverlay()
     }
 
     @UiThread
     fun reloadButtonClicked() {
+        sendOverlayClickTelemetry(NavigationEvent.RELOAD)
         sessionRepo.reload()
         sessionRepo.pushCurrentValue()
         hideOverlay()
