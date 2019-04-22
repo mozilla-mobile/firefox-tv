@@ -37,6 +37,8 @@ class PinnedTileRepo(private val applicationContext: Application) {
             BehaviorSubject.create()
     val pinnedTiles: Observable<LinkedHashMap<String, PinnedTile>> = _pinnedTiles.hide()
 
+    val isEmpty: Observable<Boolean> = _pinnedTiles.map { it.size == 0 }.distinctUntilChanged()
+
     @Deprecated(message = "Use PinnedTileRepo.pinnedTiles for new code")
     val legacyPinnedTiles = LiveDataReactiveStreams
             .fromPublisher(pinnedTiles.toFlowable(BackpressureStrategy.LATEST))
