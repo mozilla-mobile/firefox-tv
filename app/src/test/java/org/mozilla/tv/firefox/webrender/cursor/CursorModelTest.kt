@@ -8,25 +8,27 @@ import android.view.KeyEvent
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.reactivex.Observable
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
+import org.mozilla.tv.firefox.framework.FrameworkRepo
+import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.Direction
 import org.robolectric.RobolectricTestRunner
 import java.util.concurrent.TimeUnit
 
 @RunWith(RobolectricTestRunner::class)
-class CursorEventRepoTest {
+class CursorModelTest {
 
     companion object {
         private lateinit var testScheduler: TestScheduler
@@ -40,10 +42,11 @@ class CursorEventRepoTest {
         }
     }
 
-    private lateinit var repo: CursorEventRepo
     private lateinit var currentActiveScreen: Subject<ScreenControllerStateMachine.ActiveScreen>
     @MockK private lateinit var cursorModel: CursorModel
     @MockK private lateinit var screenController: ScreenController
+    @MockK private lateinit var frameworkRepo: FrameworkRepo
+    @MockK private lateinit var sessionRepo: SessionRepo
 
     @Before
     fun setup() {
@@ -51,15 +54,23 @@ class CursorEventRepoTest {
         MockKAnnotations.init(this)
         currentActiveScreen = BehaviorSubject.createDefault(ScreenControllerStateMachine.ActiveScreen.WEB_RENDER)
         every { screenController.currentActiveScreen } answers { currentActiveScreen }
-        repo = CursorEventRepo(cursorModel, screenController)
+        every { frameworkRepo.isVoiceViewEnabled } answers { Observable.just(true) }
+        every { sessionRepo.state } answers { Observable.just(SessionRepo.State(
+                backEnabled = true,
+                forwardEnabled = true,
+                desktopModeActive = false,
+                turboModeActive = false,
+                currentUrl = "https://www.mozilla.com",
+                loading = false
+        )) }
+        cursorModel = CursorModel(currentActiveScreen, frameworkRepo, sessionRepo)
 
-        repo.webViewCouldScrollInDirectionProvider = { true }
-        every { cursorModel.getEdgeOfScreenNearCursor() } answers { null }
+        cursorModel.webViewCouldScrollInDirectionProvider = { true }
     }
 
     @Test
     fun `WHEN currentActiveScreen is not webRender THEN nothing should be emitted`() {
-        val events = repo.webRenderDirectionEvents.test()
+        val events = cursorModel.cursorMovedEvents.test()
         currentActiveScreen.onNext(ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY)
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_DOWN)
 
@@ -74,51 +85,28 @@ class CursorEventRepoTest {
 
     @Test
     fun `WHEN cursor does not reach top or bottom of screen THEN only movement events should be emitted`() {
-        val events = repo.webRenderDirectionEvents.test()
+        val events = cursorModel.cursorMovedEvents.test()
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_UP)
 
-        repo.webViewCouldScrollInDirectionProvider = { it == Direction.UP }
+        cursorModel.webViewCouldScrollInDirectionProvider = { it == Direction.UP }
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_UP)
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_DOWN)
 
-        repo.webViewCouldScrollInDirectionProvider = { it == Direction.UP }
-        repo.webViewCouldScrollInDirectionProvider = { it == Direction.DOWN }
+        cursorModel.webViewCouldScrollInDirectionProvider = { it == Direction.UP }
+        cursorModel.webViewCouldScrollInDirectionProvider = { it == Direction.DOWN }
 
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_DOWN)
 
-        assertTrue(events.values().none { it is CursorEventRepo.CursorEvent.ScrolledToEdge })
-    }
-
-    @Test
-    fun `GIVEN webpage cannot scroll up or down WHEN cursor reaches top or bottom of screen THEN scroll events should be emitted`() {
-        repo.webViewCouldScrollInDirectionProvider = { false }
-
-        val events = repo.webRenderDirectionEvents.test()
-
-        pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_UP)
-
-        every { cursorModel.getEdgeOfScreenNearCursor() } answers { Direction.UP }
-
-        pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_UP)
-        pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_DOWN)
-
-        every { cursorModel.getEdgeOfScreenNearCursor() } answers { Direction.DOWN }
-
-        pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_DOWN)
-
-        println(events.values())
-
-        assertTrue(events.values().any { it == CursorEventRepo.CursorEvent.ScrolledToEdge(Direction.UP) })
-        assertTrue(events.values().any { it == CursorEventRepo.CursorEvent.ScrolledToEdge(Direction.DOWN) })
+        assertTrue(events.values().none { it is CursorEvent.ScrolledToEdge })
     }
 
     private fun fakeKeyEvent(key: Int): KeyEvent = KeyEvent(KeyEvent.ACTION_DOWN, key)
 
     private fun pushAndAdvanceTime(key: Int) {
         testScheduler.advanceTimeBy(11, TimeUnit.MILLISECONDS)
-        repo.pushKeyEvent(fakeKeyEvent(key))
+        cursorModel.handleKeyEvent(fakeKeyEvent(key))
     }
 }
