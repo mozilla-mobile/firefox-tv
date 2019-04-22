@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.focus
 
 import android.view.View
+import android.view.ViewTreeObserver
 import androidx.annotation.VisibleForTesting
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
@@ -20,36 +21,38 @@ class FocusRepo(
     screenController: ScreenController,
     sessionRepo: SessionRepo,
     pinnedTileRepo: PinnedTileRepo,
-    pocketRepo: PocketVideoRepo) {
+    pocketRepo: PocketVideoRepo): ViewTreeObserver.OnGlobalFocusChangeListener {
 
-    val focusedView: BehaviorSubject<View> = BehaviorSubject.create() // TODO: potential for telemetry?
+    private var focusedView: BehaviorSubject<View> = BehaviorSubject.create() // TODO: potential for telemetry?
 
     private val _transition = Observables.combineLatest(
+            focusedView,
             screenController.currentActiveScreen,
             sessionRepo.state,
             pinnedTileRepo.isEmpty,
-            pocketRepo.feedState) { activeScreen, sessionState, pinnedTilesIsEmpty, pocketState ->
-        dispatchFocusUpdates(activeScreen, sessionState, pinnedTilesIsEmpty, pocketState)
+            pocketRepo.feedState) { focusedView, activeScreen, sessionState, pinnedTilesIsEmpty, pocketState ->
+        dispatchFocusUpdates(focusedView, activeScreen, sessionState, pinnedTilesIsEmpty, pocketState)
+    }
+
+    override fun onGlobalFocusChanged(oldFocus: View?, newFocus: View?) {
+        newFocus?.apply {
+            focusedView.onNext(this)
+        }
     }
 
     @VisibleForTesting
     private fun dispatchFocusUpdates(
+        focusedView: View,
         activeScreen: ScreenControllerStateMachine.ActiveScreen,
         sessionState: SessionRepo.State,
         pinnedTilesIsEmpty: Boolean,
         pocketState: PocketVideoRepo.FeedState) {
 
-        if (!focusedView.hasValue()) {
-            // TODO: handle focus lost
-        }
-
-        val currFocusedView: View = focusedView.value!!
-
         when (activeScreen) {
             ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY -> {
-                when (currFocusedView.id) {
+                when (focusedView.id) {
                     R.id.navUrlInput ->
-                        updateNavUrlInputFocus(currFocusedView, sessionState, pinnedTilesIsEmpty, pocketState)
+                        updateNavUrlInputFocus(focusedView, sessionState, pinnedTilesIsEmpty, pocketState)
                     R.id.navButtonReload -> {
 
                     }

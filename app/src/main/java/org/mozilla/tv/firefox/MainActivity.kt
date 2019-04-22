@@ -13,9 +13,10 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.ViewTreeObserver
 import androidx.lifecycle.Observer
 import io.sentry.Sentry
-import kotlinx.android.synthetic.main.activity_main.container_navigation_overlay
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.overlay_debug.debugLog
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
@@ -104,7 +105,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         serviceLocator.intentLiveData.value = Consumable.from(intentData)
 
         // Debug logging display for non public users
-        // TODO: refactor out the debug variant visibility check in #1953
+        // TODO: refactor out the debug variant visibility check in #1953\
         BuildConstants.debugLogStr?.apply {
             debugLog.visibility = View.VISIBLE
             debugLog.text = this
@@ -170,6 +171,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         super.onStart()
         // TODO when MainActivity has a VM, route this call through it
         serviceLocator.pocketRepo.startBackgroundUpdates()
+        rootView.viewTreeObserver.addOnGlobalFocusChangeListener(serviceLocator.focusRepo)
     }
 
     override fun onStop() {
@@ -177,6 +179,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         // TODO when MainActivity has a VM, route this call through it
         serviceLocator.pocketRepo.stopBackgroundUpdates()
         TelemetryIntegration.INSTANCE.stopMainActivity()
+        rootView.viewTreeObserver.removeOnGlobalFocusChangeListener(serviceLocator.focusRepo)
     }
 
     override fun onDestroy() {
