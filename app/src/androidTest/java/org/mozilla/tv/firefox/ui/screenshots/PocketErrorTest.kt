@@ -5,6 +5,11 @@
 
 package org.mozilla.tv.firefox.ui.screenshots
 
+import org.junit.Ignore
+import org.junit.ClassRule
+import org.junit.Rule
+import org.junit.After
+import org.junit.Test
 import android.app.Application
 import android.view.View
 import androidx.test.platform.app.InstrumentationRegistry
@@ -16,10 +21,6 @@ import androidx.test.rule.ActivityTestRule
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
 import org.hamcrest.Matchers.allOf
-import org.junit.After
-import org.junit.ClassRule
-import org.junit.Rule
-import org.junit.Test
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.TestDependencyFactory
@@ -30,6 +31,8 @@ import org.mozilla.tv.firefox.utils.ServiceLocator
 import tools.fastlane.screengrab.Screengrab
 import tools.fastlane.screengrab.locale.LocaleTestRule
 
+// Since pocket is currently EN-US only, this should be ignored
+@Ignore
 class PocketErrorTest : ScreenshotTest() {
 
     companion object : TestDependencyFactory {
