@@ -34,6 +34,16 @@ private const val NOT_RECENTLY_UPDATED = -1L
 
 data class HandledKeypress(val wasConsumed: Boolean, val simulatedTouch: MotionEvent?)
 
+sealed class CursorEvent {
+    /**
+     * This represents the user moving the cursor to the edge of the screen,
+     * attempting to scroll, and failing because the website has no more
+     * content in that direction.
+     */
+    data class ScrolledToEdge(val edge: Direction) : CursorEvent() // TODO how often does this happen?  Telemetry would be good
+    data class CursorMoved(val direction: Direction) : CursorEvent()
+}
+
 /**
  * Calculates cursor movements.
  *
@@ -48,6 +58,7 @@ class CursorModel(
 ) {
     // This is set early in the class lifecycle. Most methods short if it is not available
     var screenBounds: PointF? = null
+    var webViewCouldScrollInDirectionProvider: (Direction) -> Boolean = { false }
 
     private val directionKeysPressed = mutableSetOf<Direction>()
     private var lastVelocity = 0f
@@ -59,8 +70,14 @@ class CursorModel(
     private var scrollX = 0
     private var scrollY = 0
 
+    private val _cursorMovedEvents = PublishSubject.create<CursorEvent>()
+    /**
+     * These events are emitted VERY quickly. Be sure to throttle them!
+     */
+    val cursorMovedEvents: Observable<CursorEvent> = _cursorMovedEvents.hide()
+
     private val _scrollRequests = PublishSubject.create<Pair<Int, Int>>()
-    val scrollRequests = _scrollRequests.hide()
+    val scrollRequests: Observable<Pair<Int, Int>> = _scrollRequests.hide()
 
     private val _isCursorMoving = BehaviorSubject.createDefault<Boolean>(false)
     val isCursorMoving: Observable<Boolean> = _isCursorMoving.hide()
@@ -119,13 +136,32 @@ class CursorModel(
         }
         when (event.action) {
             KeyEvent.ACTION_UP -> directionKeysPressed -= direction
-            KeyEvent.ACTION_DOWN -> directionKeysPressed += direction
+            KeyEvent.ACTION_DOWN -> {
+                directionKeysPressed += direction
+                pushCursorEvent(direction)
+            }
             else -> return false
         }
 
         _isCursorMoving.onNext(!directionKeysPressed.isEmpty())
 
         return true
+    }
+
+    private fun pushCursorEvent(direction: Direction) {
+        val edgeNearCursor = getEdgeOfScreenNearCursor()
+        val couldScroll = edgeNearCursor?.let { webViewCouldScrollInDirectionProvider(it) }
+
+        val cursorMovedToEdgeOfScreen = edgeNearCursor == direction
+        val endOfDomContentReached = couldScroll == false
+
+        val event = if (cursorMovedToEdgeOfScreen && endOfDomContentReached) {
+            CursorEvent.ScrolledToEdge(direction)
+        } else {
+            CursorEvent.CursorMoved(direction)
+        }
+
+        _cursorMovedEvents.onNext(event)
     }
 
     /**
