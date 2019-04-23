@@ -26,6 +26,9 @@ import org.mozilla.telemetry.ping.TelemetryCorePingBuilder
 import org.mozilla.telemetry.ping.TelemetryMobileEventPingBuilder
 import org.mozilla.telemetry.ping.TelemetryPocketEventPingBuilder
 import org.mozilla.tv.firefox.ext.serviceLocator
+import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsButton
+import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
+import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsTile
 import java.util.Collections
 
 private const val SHARED_PREFS_KEY = "telemetryLib" // Don't call it TelemetryWrapper to avoid accidental IDE rename.
@@ -104,6 +107,10 @@ open class TelemetryIntegration protected constructor(
         val POCKET_VIDEO_MEGATILE = "pocket_video_tile"
         val YOUTUBE_TILE = "youtube_tile"
         val EXIT_FIREFOX = "exit"
+        val SETTINGS_CLEAR_DATA_TILE = "clear_data_tile"
+        val SETTINGS_SEND_DATA_TILE = "send_data_tile"
+        val SETTINGS_ABOUT_TILE = "about_tile"
+        val SETTINGS_PRIVACY_TILE = "privacy_tile"
     }
 
     private object Extra {
@@ -265,6 +272,16 @@ open class TelemetryIntegration protected constructor(
         TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.SETTING, Value.CLEAR_DATA).queue()
     }
 
+    fun settingsTileClickEvent(tile: SettingsTile) {
+        val telemetryValue = when (tile) {
+            SettingsScreen.DATA_COLLECTION -> Value.SETTINGS_SEND_DATA_TILE
+            SettingsScreen.CLEAR_COOKIES -> Value.SETTINGS_CLEAR_DATA_TILE
+            SettingsButton.ABOUT -> Value.SETTINGS_ABOUT_TILE
+            SettingsButton.PRIVACY_POLICY -> Value.SETTINGS_PRIVACY_TILE
+            else -> null
+        }
+        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.SETTING, telemetryValue).queue()
+    }
     /**
      * Should only be used when a user action directly results in this change.
      *
