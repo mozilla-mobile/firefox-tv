@@ -24,12 +24,12 @@ import org.mozilla.tv.firefox.utils.Direction
 // Constants that we expect to be tweaked in order to adjust cursor behavior
 private const val INITIAL_VELOCITY = 5f
 private const val MAX_VELOCITY = 25f
-private const val MS_TO_MAX_ACCELERATION = 200
+private const val MS_TO_MAX_VELOCITY = 200
 private const val MAX_SCROLL_VELOCITY = 13
 
 // Other constants
-private const val MAX_ACCELERATION = MAX_VELOCITY - INITIAL_VELOCITY
-private const val ACCELERATION_PER_MS = MAX_ACCELERATION / MS_TO_MAX_ACCELERATION
+private const val VELOCITY_TO_ACCELERATE = MAX_VELOCITY - INITIAL_VELOCITY
+private const val ACCELERATION_PER_MS = VELOCITY_TO_ACCELERATE / MS_TO_MAX_VELOCITY
 // 60 FPS = 16.6 repeating millis/frame.
 // This is only used to draw one frame, so it's alright that it's only an approximation
 private const val MS_PER_FRAME = 16
