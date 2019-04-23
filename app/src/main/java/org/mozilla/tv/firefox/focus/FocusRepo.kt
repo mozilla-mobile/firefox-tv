@@ -104,15 +104,15 @@ class FocusRepo(
             ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY -> {
                 when (focusNode.viewId) {
                     R.id.navUrlInput ->
-                        updateNavUrlInputFocus(focusNode, sessionState, pinnedTilesIsEmpty, pocketState)
+                        updateNavUrlInputFocusTree(focusNode, sessionState, pinnedTilesIsEmpty, pocketState)
                     R.id.navButtonReload -> {
-
+                        updateReloadButtonFocusTree(focusNode, sessionState)
                     }
                     R.id.navButtonForward -> {
-
+                        updateForwardButtonFocusTree(focusNode, sessionState)
                     }
                     R.id.pocketVideoMegaTileView -> {
-
+                        updatePocketMegaTileFocusTree(focusNode, pinnedTilesIsEmpty)
                     }
                 }
             }
@@ -123,7 +123,7 @@ class FocusRepo(
         prevScreen = activeScreen
     }
 
-    private fun updateNavUrlInputFocus(
+    private fun updateNavUrlInputFocusTree(
         focusedNavUrlInputNode: FocusNode,
         sessionState: SessionRepo.State,
         pinnedTilesIsEmpty: Boolean,
@@ -155,6 +155,67 @@ class FocusRepo(
                 focusedNavUrlInputNode.viewId,
                 nextFocusUpId,
                 nextFocusDownId),
+            defaultFocusMap = _state.value!!.defaultFocusMap)
+
+        _state.onNext(newState)
+    }
+
+    private fun updateReloadButtonFocusTree(
+        focusedReloadButtonNode: FocusNode,
+        sessionState: SessionRepo.State) {
+
+        assert(focusedReloadButtonNode.viewId == R.id.navButtonReload)
+
+        val nextFocusLeftId = when {
+            sessionState.forwardEnabled -> R.id.navButtonForward
+            sessionState.backEnabled -> R.id.navButtonBack
+            else -> R.id.navButtonReload
+        }
+
+        val newState = State(
+            focusNode = FocusNode(
+                focusedReloadButtonNode.viewId,
+                nextFocusLeftId = nextFocusLeftId),
+            defaultFocusMap = _state.value!!.defaultFocusMap)
+
+        _state.onNext(newState)
+    }
+
+    private fun updateForwardButtonFocusTree(
+        focusedForwardButtonNode: FocusNode,
+        sessionState: SessionRepo.State) {
+
+        assert(focusedForwardButtonNode.viewId == R.id.navButtonForward)
+
+        val nextFocusLeftId = when {
+            sessionState.backEnabled -> R.id.navButtonBack
+            else -> R.id.navButtonForward
+        }
+
+        val newState = State(
+            focusNode = FocusNode(
+                focusedForwardButtonNode.viewId,
+                nextFocusLeftId = nextFocusLeftId),
+            defaultFocusMap = _state.value!!.defaultFocusMap)
+
+        _state.onNext(newState)
+    }
+
+    private fun updatePocketMegaTileFocusTree(
+        focusedPocketMegatTileNode: FocusNode,
+        pinnedTilesIsEmpty: Boolean) {
+
+        assert(focusedPocketMegatTileNode.viewId == R.id.pocketVideoMegaTileView)
+
+        val nextFocusDownId = when {
+            pinnedTilesIsEmpty -> R.id.pocketVideoMegaTileView
+            else -> R.id.tileContainer
+        }
+
+        val newState = State(
+            focusNode = FocusNode(
+                focusedPocketMegatTileNode.viewId,
+                nextFocusDownId = nextFocusDownId),
             defaultFocusMap = _state.value!!.defaultFocusMap)
 
         _state.onNext(newState)
