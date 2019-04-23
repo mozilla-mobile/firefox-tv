@@ -23,21 +23,54 @@ class FocusRepo(
     pinnedTileRepo: PinnedTileRepo,
     pocketRepo: PocketVideoRepo): ViewTreeObserver.OnGlobalFocusChangeListener {
 
-    private var focusedView: BehaviorSubject<View> = BehaviorSubject.create() // TODO: potential for telemetry?
+    data class State(
+        val focusedView: View,
+        val defaultFocusMap: HashMap<ScreenControllerStateMachine.ActiveScreen, Int>
+    )
 
-    private val _transition = Observables.combineLatest(
-            focusedView,
+    private var _state: BehaviorSubject<State> = BehaviorSubject.create() // TODO: potential for telemetry?
+
+    // Keep track of prevScreen to identify screen transitions
+    private var prevScreen: ScreenControllerStateMachine.ActiveScreen =
+            ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY
+
+    private val _focusUpdate = Observables.combineLatest(
+            _state,
             screenController.currentActiveScreen,
             sessionRepo.state,
             pinnedTileRepo.isEmpty,
-            pocketRepo.feedState) { focusedView, activeScreen, sessionState, pinnedTilesIsEmpty, pocketState ->
-        dispatchFocusUpdates(focusedView, activeScreen, sessionState, pinnedTilesIsEmpty, pocketState)
+            pocketRepo.feedState) { state, activeScreen, sessionState, pinnedTilesIsEmpty, pocketState ->
+        dispatchFocusUpdates(state.focusedView, activeScreen, sessionState, pinnedTilesIsEmpty, pocketState)
+    }
+
+    val focusUpdate = _focusUpdate.hide()
+
+    init {
+        initializeDefaultFocus()
     }
 
     override fun onGlobalFocusChanged(oldFocus: View?, newFocus: View?) {
         newFocus?.apply {
-            focusedView.onNext(this)
+            val newState = State(
+                focusedView = this,
+                defaultFocusMap = _state.value!!.defaultFocusMap
+            )
+            _state.onNext(newState)
         }
+    }
+
+    private fun initializeDefaultFocus() {
+        val focusMap = HashMap<ScreenControllerStateMachine.ActiveScreen, Int>()
+        focusMap[ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY] = R.id.navUrlInput
+        focusMap[ScreenControllerStateMachine.ActiveScreen.WEB_RENDER] = R.id.engineView
+        focusMap[ScreenControllerStateMachine.ActiveScreen.POCKET] = R.id.videoFeed
+
+        val newState = State(
+            focusedView = _state.value!!.focusedView,
+            defaultFocusMap = focusMap
+        )
+
+        _state.onNext(newState)
     }
 
     @VisibleForTesting
@@ -68,7 +101,7 @@ class FocusRepo(
             ScreenControllerStateMachine.ActiveScreen.POCKET -> Unit
             ScreenControllerStateMachine.ActiveScreen.SETTINGS -> Unit
         }
-
+        prevScreen = activeScreen
     }
 
     private fun updateNavUrlInputFocus(
