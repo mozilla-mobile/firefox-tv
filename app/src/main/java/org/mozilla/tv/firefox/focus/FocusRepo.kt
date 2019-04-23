@@ -24,9 +24,29 @@ class FocusRepo(
     pocketRepo: PocketVideoRepo): ViewTreeObserver.OnGlobalFocusChangeListener {
 
     data class State(
-        val focusedView: View,
+        val focusNode: FocusNode,
         val defaultFocusMap: HashMap<ScreenControllerStateMachine.ActiveScreen, Int>
     )
+
+    /**
+     * FocusNode describes quasi-directional focusable paths given viewId
+     */
+    data class FocusNode(
+        val viewId: Int,
+        val nextFocusUpId: Int? = null,
+        val nextFocusDownId: Int? = null,
+        val nextFocusLeftId: Int? = null,
+        val nextFocusRightId: Int? = null
+    ) {
+        fun updateViewNodeTree(view: View) {
+            assert(view.id == viewId)
+
+            nextFocusUpId?.let { view.nextFocusUpId = it }
+            nextFocusDownId?.let { view.nextFocusDownId = it }
+            nextFocusLeftId?.let { view.nextFocusLeftId = it }
+            nextFocusRightId?.let { view.nextFocusRightId = it }
+        }
+    }
 
     private var _state: BehaviorSubject<State> = BehaviorSubject.create() // TODO: potential for telemetry?
 
@@ -40,7 +60,7 @@ class FocusRepo(
             sessionRepo.state,
             pinnedTileRepo.isEmpty,
             pocketRepo.feedState) { state, activeScreen, sessionState, pinnedTilesIsEmpty, pocketState ->
-        dispatchFocusUpdates(state.focusedView, activeScreen, sessionState, pinnedTilesIsEmpty, pocketState)
+        dispatchFocusUpdates(state.focusNode, activeScreen, sessionState, pinnedTilesIsEmpty, pocketState)
     }
 
     val focusUpdate = _focusUpdate.hide()
@@ -52,9 +72,9 @@ class FocusRepo(
     override fun onGlobalFocusChanged(oldFocus: View?, newFocus: View?) {
         newFocus?.apply {
             val newState = State(
-                focusedView = this,
-                defaultFocusMap = _state.value!!.defaultFocusMap
-            )
+                focusNode = FocusNode(newFocus.id),
+                defaultFocusMap = _state.value!!.defaultFocusMap)
+
             _state.onNext(newState)
         }
     }
@@ -66,16 +86,15 @@ class FocusRepo(
         focusMap[ScreenControllerStateMachine.ActiveScreen.POCKET] = R.id.videoFeed
 
         val newState = State(
-            focusedView = _state.value!!.focusedView,
-            defaultFocusMap = focusMap
-        )
+            focusNode = FocusNode(R.id.navUrlInput),
+            defaultFocusMap = focusMap)
 
         _state.onNext(newState)
     }
 
     @VisibleForTesting
     private fun dispatchFocusUpdates(
-        focusedView: View,
+        focusNode: FocusNode,
         activeScreen: ScreenControllerStateMachine.ActiveScreen,
         sessionState: SessionRepo.State,
         pinnedTilesIsEmpty: Boolean,
@@ -83,9 +102,9 @@ class FocusRepo(
 
         when (activeScreen) {
             ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY -> {
-                when (focusedView.id) {
+                when (focusNode.viewId) {
                     R.id.navUrlInput ->
-                        updateNavUrlInputFocus(focusedView, sessionState, pinnedTilesIsEmpty, pocketState)
+                        updateNavUrlInputFocus(focusNode, sessionState, pinnedTilesIsEmpty, pocketState)
                     R.id.navButtonReload -> {
 
                     }
@@ -105,14 +124,14 @@ class FocusRepo(
     }
 
     private fun updateNavUrlInputFocus(
-        focusedNavUrlInputView: View,
+        focusedNavUrlInputNode: FocusNode,
         sessionState: SessionRepo.State,
         pinnedTilesIsEmpty: Boolean,
         pocketState: PocketVideoRepo.FeedState) {
 
-        assert(focusedNavUrlInputView.id == R.id.navUrlInput)
+        assert(focusedNavUrlInputNode.viewId == R.id.navUrlInput)
 
-        focusedNavUrlInputView.nextFocusDownId = when {
+        val nextFocusDownId = when {
             pocketState is PocketVideoRepo.FeedState.FetchFailed -> R.id.megaTileTryAgainButton
             pocketState is PocketVideoRepo.FeedState.Inactive -> {
                 if (pinnedTilesIsEmpty) {
@@ -124,11 +143,20 @@ class FocusRepo(
             else -> R.id.pocketVideoMegaTileView
         }
 
-        focusedNavUrlInputView.nextFocusUpId = when {
+        val nextFocusUpId = when {
             sessionState.backEnabled -> R.id.navButtonBack
             sessionState.forwardEnabled -> R.id.navButtonForward
             sessionState.currentUrl != URLs.APP_URL_HOME -> R.id.navButtonReload
             else -> R.id.turboButton
         }
+
+        val newState = State(
+            focusNode = FocusNode(
+                focusedNavUrlInputNode.viewId,
+                nextFocusUpId,
+                nextFocusDownId),
+            defaultFocusMap = _state.value!!.defaultFocusMap)
+
+        _state.onNext(newState)
     }
 }
