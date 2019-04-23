@@ -30,6 +30,7 @@ import mozilla.components.concept.engine.EngineView
 import mozilla.components.concept.engine.permission.Permission
 import mozilla.components.concept.engine.permission.PermissionRequest
 import mozilla.components.feature.session.SessionFeature
+import mozilla.components.support.ktx.android.view.use
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.MediaSessionHolder
 import org.mozilla.tv.firefox.R
@@ -190,7 +191,10 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         }.addTo(startStopCompositeDisposable)
 
         serviceLocator!!.cursorModel.scrollRequests
-                .subscribe { engineView!!.scrollByClamped(it.first, it.second) }
+                .subscribe { engineView!!.scrollByClamped(it.x.toInt(), it.y.toInt()) }
+                .addTo(startStopCompositeDisposable)
+
+        cursorView.setup(context!!.serviceLocator.cursorModel)
                 .addTo(startStopCompositeDisposable)
 
         val (hintViewModel, progressBarGravity) = if (serviceLocator!!.experimentsProvider.shouldShowHintBar()) {
@@ -204,9 +208,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = true)
                 .forEach { startStopCompositeDisposable.add(it) }
-
-        cursorView.setup(context!!.serviceLocator.cursorModel)
-                .addTo(startStopCompositeDisposable)
     }
 
     override fun onStop() {
@@ -218,6 +219,8 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     override fun onDestroyView() {
         mediaSessionHolder?.videoVoiceCommandMediaSession?.onDestroyEngineView(engineView!!, session)
+
+        context!!.serviceLocator.cursorModel.webViewCouldScrollInDirectionProvider = null
 
         super.onDestroyView()
     }
@@ -243,15 +246,16 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     }
 
     fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        val handledCursorEvent = serviceLocator?.cursorModel?.handleKeyEvent(event)
-
-        handledCursorEvent?.simulatedTouch?.let {
-            activity?.dispatchTouchEvent(it)
-            it.recycle()
+        fun handleCursorKeyEvent(event: KeyEvent): Boolean {
+            val handledCursorEvent = serviceLocator?.cursorModel?.handleKeyEvent(event)
+            handledCursorEvent?.simulatedTouch?.use {
+                activity?.dispatchTouchEvent(it)
+            }
+            return handledCursorEvent?.wasKeyEventConsumed == true
         }
 
         return handleSpecialKeyEvent(event) ||
-                handledCursorEvent?.wasConsumed == true
+                handleCursorKeyEvent(event)
     }
 
     private fun handleSpecialKeyEvent(event: KeyEvent): Boolean {

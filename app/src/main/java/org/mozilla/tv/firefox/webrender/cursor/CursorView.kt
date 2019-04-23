@@ -32,6 +32,9 @@ private val HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3)
  */
 class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(context, attrs) {
 
+    // This is a performance micro-optimization that avoid extra allocations, and should only be
+    // called from onDraw. This is safe because it is only called from the UI thread, and so
+    // cannot be accessed concurrently
     private val onDrawMutablePositionCache = PointF(x, y)
 
     private var cursorModel: CursorModel? = null
@@ -46,18 +49,15 @@ class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(con
 
         val compositeDisposable = CompositeDisposable()
 
-        cursorModel.isCursorActive.subscribe { isCursorActive ->
-            isVisible = isCursorActive
-            if (!isCursorActive) {
-                animate().cancel()
-            }
-        }.addTo(compositeDisposable)
+        cursorModel.isCursorEnabledForAppState
+                .subscribe { isEnabled ->
+                    isVisible = isEnabled
+                    if (!isEnabled) {
+                        animate().cancel()
+                    }
+                }.addTo(compositeDisposable)
 
-        Observables.combineLatest(cursorModel.isCursorMoving, cursorModel.isSelectPressed) {
-            // Only emit false if we are both stationary and not pressed
-            moving, pressed -> moving || pressed
-        }
-                .distinctUntilChanged()
+        cursorModel.isAnyCursorKeyPressed
                 .subscribe { cursorIsMovingOrPressed ->
                     if (cursorIsMovingOrPressed) {
                         animate().cancel()
@@ -73,7 +73,6 @@ class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(con
                 }.addTo(compositeDisposable)
 
         cursorModel.isSelectPressed
-                .distinctUntilChanged()
                 .subscribe { pressed -> when (pressed) {
                         true -> setImageResource(BITMAP_PRESSED)
                         false -> setImageResource(BITMAP_UNPRESSED)
