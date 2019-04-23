@@ -43,11 +43,12 @@
         android:background="@android:color/black"
         android:visibility="gone" />
 
+    <!-- src and initial position set in code. See CursorModel -->
     <org.mozilla.tv.firefox.webrender.cursor.CursorView
         android:id="@+id/cursorView"
         android:layout_width="@dimen/remote_cursor_size"
         android:layout_height="@dimen/remote_cursor_size"
-        />
+        android:scaleType="centerInside" />
 
     <!-- Layout Gravity for the FirefoxProgressBar is set programmatically
          due to differing requirements between experiments -->

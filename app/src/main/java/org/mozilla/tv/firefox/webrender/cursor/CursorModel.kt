@@ -16,24 +16,31 @@ import io.reactivex.subjects.PublishSubject
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
 import org.mozilla.tv.firefox.ext.isUriYouTubeTV
+import org.mozilla.tv.firefox.ext.toDirection
 import org.mozilla.tv.firefox.framework.FrameworkRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.Direction
-import org.mozilla.tv.firefox.utils.DirectionHelper
 
-// Constants that can be tweaked to adjust cursor behavior
-private const val BASE_SPEED = 5f
+// Constants that we expect to be tweaked in order to adjust cursor behavior
+private const val INITIAL_VELOCITY = 5f
 private const val MAX_VELOCITY = 25f
 private const val MS_TO_MAX_ACCELERATION = 200
 private const val MAX_SCROLL_VELOCITY = 13
+
 // Other constants
-private const val MAX_ACCELERATION = MAX_VELOCITY - BASE_SPEED
+private const val MAX_ACCELERATION = MAX_VELOCITY - INITIAL_VELOCITY
 private const val ACCELERATION_PER_MS = MAX_ACCELERATION / MS_TO_MAX_ACCELERATION
+// 60 FPS = 16.6 repeating millis/frame.
+// This is only used to draw one frame, so it's alright that it's only an approximation
 private const val MS_PER_FRAME = 16
 private const val EDGE_OF_SCREEN_MARGIN = 1
-private const val NOT_RECENTLY_UPDATED = -1L
+private const val LAST_UPDATE_AT_MS_UNSET = -1L
 
-data class HandledKeypress(val wasConsumed: Boolean, val simulatedTouch: MotionEvent?)
+/**
+ * @param [wasKeyEventConsumed] represents whether or not the passed [KeyEvent] was consumed
+ * @param [simulatedTouch] a [MotionEvent]. If it is not null, this should be dispatched to an Activity
+ */
+data class HandleKeyEventResult(val wasKeyEventConsumed: Boolean, val simulatedTouch: MotionEvent?)
 
 sealed class CursorEvent {
     /**
@@ -57,19 +64,18 @@ class CursorModel(
     frameworkRepo: FrameworkRepo,
     sessionRepo: SessionRepo
 ) {
-    // This is set early in the class lifecycle. Most methods short if it is not available
+    // This is set early in the Fragment lifecycle. Most methods short if it is not available
     var screenBounds: PointF? = null
-    var webViewCouldScrollInDirectionProvider: (Direction) -> Boolean = { false }
+    var webViewCouldScrollInDirectionProvider: ((Direction) -> Boolean)? = null
 
     private val directionKeysPressed = mutableSetOf<Direction>()
     private var lastVelocity = 0f
-    private var lastUpdatedAtMS = NOT_RECENTLY_UPDATED
+    private var lastUpdatedAtMS = LAST_UPDATE_AT_MS_UNSET
     private var lastKnownCursorPos = PointF(0f, 0f)
-    private var cursorHasBeenCentered = false
-    // scrollX and Y are declared here as a micro-optimization to prevent alloc / dealloc
+    private var isInitialCursorPositionSet = false
+    // scrollDistance is declared here as a micro-optimization to prevent alloc / dealloc
     // costs during our onDraw loop
-    private var scrollX = 0
-    private var scrollY = 0
+    private val scrollDistance = PointF(0f, 0f)
 
     private val _cursorMovedEvents = PublishSubject.create<CursorEvent>()
     /**
@@ -77,16 +83,23 @@ class CursorModel(
      */
     val cursorMovedEvents: Observable<CursorEvent> = _cursorMovedEvents.hide()
 
-    private val _scrollRequests = PublishSubject.create<Pair<Int, Int>>()
-    val scrollRequests: Observable<Pair<Int, Int>> = _scrollRequests.hide()
+    private val _scrollRequests = PublishSubject.create<PointF>()
+    val scrollRequests: Observable<PointF> = _scrollRequests.hide()
 
     private val _isCursorMoving = BehaviorSubject.createDefault<Boolean>(false)
-    val isCursorMoving: Observable<Boolean> = _isCursorMoving.hide()
+    private val isCursorMoving: Observable<Boolean> = _isCursorMoving.hide()
 
     private val _isSelectPressed = BehaviorSubject.createDefault<Boolean>(false)
     val isSelectPressed: Observable<Boolean> = _isSelectPressed.hide()
+            .distinctUntilChanged()
 
-    val isCursorActive: Observable<Boolean> = Observables.combineLatest(
+    val isAnyCursorKeyPressed: Observable<Boolean> = Observables.combineLatest(isCursorMoving, isSelectPressed) {
+        // Only emit false if we are both stationary and not pressed
+        moving, pressed -> moving || pressed
+    }
+    .distinctUntilChanged()
+
+    val isCursorEnabledForAppState: Observable<Boolean> = Observables.combineLatest(
             activeScreen,
             frameworkRepo.isVoiceViewEnabled,
             sessionRepo.state
@@ -98,43 +111,37 @@ class CursorModel(
     }
 
     init {
-        resetSpeedWhenCursorIsInactive()
+        attachResetStateObserver()
     }
 
     /**
-     * @returns true if event was handled
+     * @returns a [HandleKeyEventResult]
      */
-    fun handleKeyEvent(event: KeyEvent): HandledKeypress {
+    fun handleKeyEvent(event: KeyEvent): HandleKeyEventResult {
         return when {
-            DirectionHelper.KEY_CODES.contains(event.keyCode) ->
-            HandledKeypress(wasConsumed = directionKeyPress(event), simulatedTouch = null)
+            Direction.KEY_CODES.contains(event.keyCode) ->
+                HandleKeyEventResult(wasKeyEventConsumed = handleDirectionKeyEvent(event), simulatedTouch = null)
             // Center key is used on device, Enter key is used on emulator
             event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER -> {
                 val motionEvent = maybeToMotionEvent(event)
-                HandledKeypress(wasConsumed = motionEvent != null, simulatedTouch = motionEvent)
+                HandleKeyEventResult(wasKeyEventConsumed = motionEvent != null, simulatedTouch = motionEvent)
             }
-            else -> HandledKeypress(wasConsumed = false, simulatedTouch = null)
+            else -> HandleKeyEventResult(wasKeyEventConsumed = false, simulatedTouch = null)
         }
     }
 
     /**
      * @returns true if the event is consumed
      */
-    private fun directionKeyPress(event: KeyEvent): Boolean {
-        if (!isCursorActive.blockingFirst()) {
+    private fun handleDirectionKeyEvent(event: KeyEvent): Boolean {
+        if (!isCursorEnabledForAppState.blockingFirst()) {
             return false
         }
-        require(DirectionHelper.KEY_CODES.contains(event.keyCode)) {
-            "Invalid key event passed to CursorController#directionKeyPress: $event"
+        require(Direction.KEY_CODES.contains(event.keyCode)) {
+            "Invalid key event passed to CursorController#handleDirectionKeyEvent: $event"
         }
 
-        val direction = when (event.keyCode) {
-            KeyEvent.KEYCODE_DPAD_UP -> Direction.UP
-            KeyEvent.KEYCODE_DPAD_DOWN -> Direction.DOWN
-            KeyEvent.KEYCODE_DPAD_LEFT -> Direction.LEFT
-            KeyEvent.KEYCODE_DPAD_RIGHT -> Direction.RIGHT
-            else -> return false
-        }
+        val direction = event.toDirection() ?: return false
         when (event.action) {
             KeyEvent.ACTION_UP -> directionKeysPressed -= direction
             KeyEvent.ACTION_DOWN -> {
@@ -151,7 +158,7 @@ class CursorModel(
 
     private fun pushCursorEvent(direction: Direction) {
         val edgeNearCursor = getEdgeOfScreenNearCursor()
-        val couldScroll = edgeNearCursor?.let { webViewCouldScrollInDirectionProvider(it) }
+        val couldScroll = edgeNearCursor?.let { webViewCouldScrollInDirectionProvider?.invoke(it) }
 
         val cursorMovedToEdgeOfScreen = edgeNearCursor == direction
         val endOfDomContentReached = couldScroll == false
@@ -166,28 +173,32 @@ class CursorModel(
     }
 
     /**
+     * If the cursor is enabled, and the passed [KeyEvent] was causing by pressing the select
+     * key, build a [MotionEvent] to be used by an Activity to simulate a touch event
+     *
      * @return returns a MotionEvent if the event is consumed, null otherwise
      */
     @SuppressLint("Recycle")
     @CheckResult(suggest = "Recycle MotionEvent after use")
     private fun maybeToMotionEvent(event: KeyEvent): MotionEvent? {
-        if (!isCursorActive.blockingFirst()) {
+        if (!isCursorEnabledForAppState.blockingFirst()) {
             return null
         }
         if (event.keyCode != KeyEvent.KEYCODE_DPAD_CENTER && event.keyCode != KeyEvent.KEYCODE_ENTER) {
             return null
         }
 
-        val motionEvent = MotionEvent.obtain(event.downTime, event.eventTime, event.action,
+        fun buildMotionEvent() = MotionEvent.obtain(event.downTime, event.eventTime, event.action,
                 lastKnownCursorPos.x, lastKnownCursorPos.y, 0)
+
         return when (event.action) {
             KeyEvent.ACTION_UP -> {
                 _isSelectPressed.onNext(false)
-                motionEvent
+                buildMotionEvent()
             }
             KeyEvent.ACTION_DOWN -> {
                 _isSelectPressed.onNext(true)
-                motionEvent
+                buildMotionEvent()
             }
             else -> null
         }
@@ -210,36 +221,39 @@ class CursorModel(
      * how you do if it is unavoidable.
      *
      * @return whether or not the view should continue to invalidate itself
+     * Note that in addition to returning a value, this function also mutates [oldPosAndReturnedPos]
      */
-    fun mutatePosition(oldPos: PointF): Boolean {
-        lastKnownCursorPos = oldPos
+    fun mutatePosition(oldPosAndReturnedPos: PointF): Boolean {
+        lastKnownCursorPos = oldPosAndReturnedPos
         when {
-            !cursorHasBeenCentered && screenBounds != null -> {
-                oldPos.x = screenBounds!!.x / 2
-                oldPos.y = screenBounds!!.y / 2
-                cursorHasBeenCentered = true
+            !isInitialCursorPositionSet -> {
+                if (screenBounds != null) {
+                    oldPosAndReturnedPos.x = screenBounds!!.x / 2
+                    oldPosAndReturnedPos.y = screenBounds!!.y / 2
+                    isInitialCursorPositionSet = true
+                }
                 return true
             }
             directionKeysPressed.isEmpty() -> {
-                resetCursorSpeed()
+                resetCursorState()
                 return false
             }
             else -> {
                 val currTime = System.currentTimeMillis()
                 // If the cursor pos has not recently been updated, reset to current time.
                 // Otherwise, the cursor would shoot across the page the first time it was
-                // touched
-                if (lastUpdatedAtMS == NOT_RECENTLY_UPDATED) lastUpdatedAtMS = currTime - MS_PER_FRAME
+                // touched.
+                if (lastUpdatedAtMS == LAST_UPDATE_AT_MS_UNSET) lastUpdatedAtMS = currTime - MS_PER_FRAME
                 val timePassedSinceLastMutation = currTime - lastUpdatedAtMS
 
                 lastVelocity = internalMutatePositionAndReturnVelocity(
-                        oldPos,
+                        oldPosAndReturnedPos,
                         timePassedSinceLastMutation,
                         lastVelocity,
                         directionKeysPressed
                 )
 
-                calculateAndSendScrollEvent(timePassedSinceLastMutation, lastVelocity, oldPos)
+                calculateAndSendScrollEvent(timePassedSinceLastMutation, lastVelocity, oldPosAndReturnedPos)
                 lastUpdatedAtMS = currTime
                 return true
             }
@@ -250,8 +264,10 @@ class CursorModel(
         // This should not live inside internalMutatePositionAndReturnVelocity.
         // Move it if you can find a better solution
         val approxFramesPassed = (timePassed / 16).toInt()
-        val shouldScroll = getScrollDistance(velocity, oldPos, approxFramesPassed)
-        shouldScroll?.let { _scrollRequests.onNext(it) }
+        getScrollDistance(velocity, oldPos, approxFramesPassed)
+        if (scrollDistance.x != 0f || scrollDistance.y != 0f) {
+            _scrollRequests.onNext(scrollDistance)
+        }
     }
 
     /**
@@ -310,16 +326,21 @@ class CursorModel(
         }
     }
 
-    private fun resetCursorSpeed() {
-        lastVelocity = BASE_SPEED
-        lastUpdatedAtMS = NOT_RECENTLY_UPDATED
+    private fun resetCursorState() {
+        lastVelocity = INITIAL_VELOCITY
+        lastUpdatedAtMS = LAST_UPDATE_AT_MS_UNSET
         directionKeysPressed.clear()
     }
 
     // This is taken from older code.  Crufty, but it works
-    private fun getScrollDistance(vel: Float, pos: PointF, framesPassed: Int): Pair<Int, Int>? {
+    private fun getScrollDistance(vel: Float, pos: PointF, framesPassed: Int) {
         val scrollVelReturnVal = PointF(0f, 0f)
-        val screenBounds = screenBounds ?: return 0 to 0
+        val screenBounds = screenBounds
+        if (screenBounds == null) {
+            scrollDistance.x = 0f
+            scrollDistance.y = 0f
+            return
+        }
 
         if (vel > 0f) {
             val percentMaxVel = vel / MAX_VELOCITY
@@ -336,17 +357,14 @@ class CursorModel(
             }
         }
 
-        scrollX = (scrollVelReturnVal.x * MAX_SCROLL_VELOCITY * framesPassed).toInt()
-        scrollY = (scrollVelReturnVal.y * MAX_SCROLL_VELOCITY * framesPassed).toInt()
-        return if (scrollX != 0 || scrollY != 0) {
-            scrollX to scrollY
-        } else null
+        scrollDistance.x = (scrollVelReturnVal.x * MAX_SCROLL_VELOCITY * framesPassed)
+        scrollDistance.y = (scrollVelReturnVal.y * MAX_SCROLL_VELOCITY * framesPassed)
     }
 
     @SuppressLint("CheckResult") // Does not need to be disposed as this survives for the duration of the app
-    private fun resetSpeedWhenCursorIsInactive() {
-        isCursorActive.subscribe { isCursorActive ->
-            if (!isCursorActive) resetCursorSpeed()
+    private fun attachResetStateObserver() {
+        isCursorEnabledForAppState.subscribe { isCursorActive ->
+            if (!isCursorActive) resetCursorState()
         }
     }
 }
