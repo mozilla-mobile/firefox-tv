@@ -120,6 +120,32 @@ class BasicNavigationTest {
             // particular page's title changes each time the page is reloaded so we verify the
             // current title is different.
             assertNotEquals(preReloadTitle, getPageTitle())
+        // Test opening default URLs
+        }.openOverlay {
+        }.openTileToBrowser(2){
+        }.openOverlay {
+            assertURLBarTextContains("imdb.com")
+        }.openTileToBrowser(3){
+        }.openOverlay {
+            assertURLBarTextContains("rottentomatoes.com")
+        }.openTileToBrowser(4){
+        }.openOverlay {
+            assertURLBarTextContains("metacritic.com")
+        }.openTileToBrowser(5){
+        }.openOverlay {
+            assertURLBarTextContains("fandango.com")
+        }.openTileToBrowser(6){
+        }.openOverlay {
+            assertURLBarTextContains("hollywoodreporter.com")
+        }.openTileToBrowser(7){
+        }.openOverlay {
+            assertURLBarTextContains("flickr.com")
+        }.openTileToBrowser(8){
+        }.openOverlay {
+            assertURLBarTextContains("instagram.com")
+        }.openTileToBrowser(9){
+        }.openOverlay {
+            assertURLBarTextContains("pinterest.com")
         }
     }
 
