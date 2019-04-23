@@ -1,13 +1,16 @@
 package org.mozilla.tv.firefox.navigationoverlay
 
 import androidx.lifecycle.MutableLiveData
+import mozilla.components.support.test.eq
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.anyBoolean
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.spy
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
 import org.mozilla.tv.firefox.ext.map
 import org.mozilla.tv.firefox.helpers.ext.assertValues
 import org.mozilla.tv.firefox.pinnedtile.PinnedTile
@@ -37,15 +40,15 @@ class ToolbarViewModelTest {
 
     @Before
     fun setup() {
-        sessionRepo = spy(mock(SessionRepo::class.java))
+        sessionRepo = mock(SessionRepo::class.java)
         sessionState = MutableLiveData()
         @Suppress("DEPRECATION")
         `when`(sessionRepo.legacyState).thenReturn(sessionState)
-        pinnedTileRepo = spy(mock(PinnedTileRepo::class.java))
+        pinnedTileRepo = mock(PinnedTileRepo::class.java)
         pinnedTiles = MutableLiveData()
         @Suppress("DEPRECATION")
         `when`(pinnedTileRepo.legacyPinnedTiles).thenReturn(pinnedTiles)
-        telemetryIntegration = spy(mock(TelemetryIntegration::class.java))
+        telemetryIntegration = mock(TelemetryIntegration::class.java)
         toolbarVm = ToolbarViewModel(sessionRepo, pinnedTileRepo, telemetryIntegration)
     }
 
@@ -166,5 +169,91 @@ class ToolbarViewModelTest {
                 loading = false
             )
         }
+    }
+
+    @Test
+    fun `WHEN back in toolbar is clicked THEN associated telemetry method is called`() {
+        setToolbarVmState()
+        toolbarVm.backButtonClicked()
+
+        verify(telemetryIntegration, times(1)).overlayClickEvent(eq(NavigationEvent.BACK), anyBoolean(), anyBoolean(), anyBoolean())
+    }
+
+    @Test
+    fun `WHEN forward in toolbar is clicked THEN associated telemetry method is called`() {
+        setToolbarVmState()
+        toolbarVm.forwardButtonClicked()
+
+        verify(telemetryIntegration, times(1)).overlayClickEvent(
+            eq(NavigationEvent.FORWARD), anyBoolean(), anyBoolean(), anyBoolean()
+        )
+    }
+
+    @Test
+    fun `WHEN reload in toolbar is clicked THEN associated telemetry method is called`() {
+        setToolbarVmState()
+        toolbarVm.reloadButtonClicked()
+
+        verify(telemetryIntegration, times(1)).overlayClickEvent(
+            eq(NavigationEvent.RELOAD), anyBoolean(), anyBoolean(), anyBoolean()
+        )
+    }
+
+    @Test
+    fun `WHEN pin button in toolbar is clicked THEN associated telemetry method is called`() {
+        setToolbarVmState()
+        toolbarVm.pinButtonClicked()
+
+        verify(telemetryIntegration, times(1)).overlayClickEvent(
+            eq(NavigationEvent.PIN_ACTION), anyBoolean(), anyBoolean(), anyBoolean()
+        )
+    }
+
+    @Test
+    fun `WHEN turbo mode in toolbar is clicked THEN associated telemetry method is called`() {
+        setToolbarVmState()
+        toolbarVm.turboButtonClicked()
+
+        verify(telemetryIntegration, times(1)).overlayClickEvent(
+            eq(NavigationEvent.TURBO), anyBoolean(), anyBoolean(), anyBoolean()
+        )
+    }
+
+    @Test
+    fun `WHEN desktop mode in toolbar is clicked THEN associated telemetry method is called`() {
+        setToolbarVmState()
+        toolbarVm.desktopModeButtonClicked()
+
+        verify(telemetryIntegration, times(1)).overlayClickEvent(
+            eq(NavigationEvent.DESKTOP_MODE), anyBoolean(), anyBoolean(), anyBoolean()
+        )
+    }
+
+    @Test
+    fun `WHEN exit in toolbar is clicked THEN associated telemetry method is called`() {
+        setToolbarVmState()
+        toolbarVm.exitFirefoxButtonClicked()
+
+        verify(telemetryIntegration, times(1)).overlayClickEvent(
+            eq(NavigationEvent.EXIT_FIREFOX), anyBoolean(), anyBoolean(), anyBoolean()
+        )
+    }
+
+    /**
+     * This method will set the state of the pinnedTiles and sessionState LiveData.
+     * This is needed because overlayClickEvent will not be called if state is null.
+     * The toolbarVm state needs an observer before it will update, because it is a MediatorLiveData.
+     */
+    private fun setToolbarVmState() {
+        toolbarVm.state.observeForever { }
+        pinnedTiles.value = linkedMapOf()
+        sessionState.value = SessionRepo.State(
+            backEnabled = false,
+            forwardEnabled = false,
+            turboModeActive = true,
+            desktopModeActive = false,
+            currentUrl = "www.google.com",
+            loading = false
+        )
     }
 }
