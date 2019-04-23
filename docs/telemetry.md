@@ -53,7 +53,6 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 
 | Event                                                | category   | method                  | object            | value      | extras.    |
 |------------------------------------------------------|------------|-------------------------|-------------------|------------|------------|
-| Settings: confirms clear data dialog                 | action     | change                  | setting           | clear_data |            |
 | Pocket video feed: unique videos clicked per session | aggregate  | click                   | pocket_video      | `<int>`    |            |
 | App opened from view intent                          | action     | view_intent             | app               |            |            |
 | Opening the overlay forced a video out of fullscreen | action     | programmatically_closed | full_screen_video |            |            |
@@ -142,9 +141,19 @@ To elaborate on these events:
 | Event                                      | category | method         | object        | value          |
 |--------------------------------------------|----------|----------------|---------------|----------------|
 | PocketFeed: video click                    | action   | click          | video_id      | `<int>`        |
-| POcketFeed: video impression*              | action   | impression     | video_id      | `<int>`        |
+| PocketFeed: video impression*              | action   | impression     | video_id      | `<int>`        |
 
 (*) Video impressions are aggregated by the user initiating focus on the videos in the Pocket feed
+
+### Settings Channel
+
+| Event                                       | category   | method      | object        | value          |
+|---------------------------------------------|------------|-------------|---------------|----------------|
+| Confirms clear data dialog                  | action     | change      | setting       | clear_data     |
+| Clear cookies and data tile clicked         | action     | click       | setting       | clear_data_tile|
+| Send usage data tile clicked                | action     | click       | setting       | send_data_tile |
+| About tile clicked                          | action     | click       | setting       | about_tile     |
+| Privacy Notice tile clicked                 | action     | click       | setting       | privacy_tile   |
 
 ## Limits
 
