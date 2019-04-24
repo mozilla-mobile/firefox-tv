@@ -81,3 +81,7 @@ fun String?.toJavaURI(): URI? = if (this == null) {
 val String.isUriYouTubeTV: Boolean
     get() = toLowerCase().contains("youtube.com/tv") ||
             toLowerCase().contains("ftv.cdn.mozilla.net/ytht")
+
+val String.isUriYouTubeTvVideo: Boolean // TODO test this on device
+    get() = this.isUriYouTubeTV &&
+            this.contains("/watch/")
