@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox.webrender
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.reactivex.observers.TestObserver
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import org.junit.Assert.assertEquals
@@ -31,6 +32,7 @@ class WebRenderHintViewModelTest {
     private lateinit var sessionRepoState: Subject<SessionRepo.State>
     private lateinit var webRenderDirectionEvents: Subject<CursorEvent>
     private lateinit var currentActiveScreen: Subject<ActiveScreen>
+    private lateinit var displayed: TestObserver<Boolean>
 
     @Before
     fun setup() {
@@ -43,10 +45,13 @@ class WebRenderHintViewModelTest {
         every { screenController.currentActiveScreen } answers { currentActiveScreen }
 
         hintVM = WebRenderHintViewModel(sessionRepo, cursorModel, screenController, openMenuHint)
+        displayed = hintVM.isDisplayed.test()
+
+        sessionRepoState.onNext(fakeSessionState())
     }
 
     @Test
-    fun `WHEN always THEN hint should be open menu`() {
+    fun `GIVEN current url is not a YouTube TV video WHEN always THEN hint should be open menu`() {
         val expectedHints = listOf(openMenuHint)
         val hints = hintVM.hints.test()
 
@@ -67,8 +72,7 @@ class WebRenderHintViewModelTest {
     }
 
     @Test
-    fun `WHEN active screen changes to web render THEN hints should be displayed`() {
-        val displayed = hintVM.isDisplayed.test()
+    fun `GIVEN current url is not a YouTube TV video WHEN active screen changes to web render THEN hints should be displayed`() {
 
         currentActiveScreen.onNext(ActiveScreen.SETTINGS)
         assertEquals(0, displayed.valueCount())
@@ -82,8 +86,7 @@ class WebRenderHintViewModelTest {
     }
 
     @Test
-    fun `WHEN cursor up and down events are received THEN hints should be hidden`() {
-        val displayed = hintVM.isDisplayed.test()
+    fun `GIVEN current url is not a YouTube TV video WHEN cursor up and down events are received THEN hints should be hidden`() {
 
         pushCursorMove(Direction.UP)
         assertEquals(1, displayed.valueCount())
@@ -105,8 +108,7 @@ class WebRenderHintViewModelTest {
     }
 
     @Test
-    fun `WHEN cursor scrolls past top or bottom of page THEN hints should be displayed`() {
-        val displayed = hintVM.isDisplayed.test()
+    fun `GIVEN current url is not a YouTube TV video WHEN cursor scrolls past top or bottom of page THEN hints should be displayed`() {
 
         pushScrolledToEdge(Direction.UP)
         assertEquals(1, displayed.valueCount())
@@ -128,8 +130,7 @@ class WebRenderHintViewModelTest {
     }
 
     @Test
-    fun `WHEN loading completes THEN hints should be displayed`() {
-        val displayed = hintVM.isDisplayed.test()
+    fun `GIVEN current url is not a YouTube TV video WHEN loading completes THEN hints should be displayed`() {
 
         sessionRepoState.onNext(fakeSessionState(loading = true))
         assertEquals(0, displayed.valueCount())
@@ -140,6 +141,36 @@ class WebRenderHintViewModelTest {
 
         sessionRepoState.onNext(fakeSessionState(loading = true))
         assertEquals(1, displayed.valueCount())
+    }
+
+    @Test
+    fun `WHEN current url is a YouTube TV video THEN hints should not be displayed`() {
+        val youTubeVideo = "https://www.youtube.com/tv#/watch/video/control?v=TgWKutWMT-o&resume"
+
+        fun assertDisplayedIsFalse() {
+            assertEquals(false, displayed.values().last())
+        }
+
+        sessionRepoState.onNext(fakeSessionState(url = youTubeVideo))
+        assertDisplayedIsFalse()
+
+        pushCursorMove(Direction.UP)
+        assertDisplayedIsFalse()
+
+        pushCursorMove(Direction.LEFT)
+        assertDisplayedIsFalse()
+
+        pushScrolledToEdge(Direction.DOWN)
+        assertDisplayedIsFalse()
+
+        pushScrolledToEdge(Direction.RIGHT)
+        assertDisplayedIsFalse()
+
+        sessionRepoState.onNext(fakeSessionState(url = youTubeVideo, loading = true))
+        assertDisplayedIsFalse()
+
+        sessionRepoState.onNext(fakeSessionState(url = youTubeVideo, loading = false))
+        assertDisplayedIsFalse()
     }
 
     fun pushScrolledToEdge(direction: Direction) {
