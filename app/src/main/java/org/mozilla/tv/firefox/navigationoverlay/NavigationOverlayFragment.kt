@@ -141,9 +141,6 @@ class NavigationOverlayFragment : Fragment() {
         Unit
     }
 
-    private var currFocus: View? = null
-        get() = activity?.currentFocus
-
     private lateinit var serviceLocator: ServiceLocator
     private lateinit var navigationOverlayViewModel: NavigationOverlayViewModel
     private lateinit var toolbarViewModel: ToolbarViewModel
@@ -255,8 +252,9 @@ class NavigationOverlayFragment : Fragment() {
     private fun observeFocusState(): Disposable {
         return navigationOverlayViewModel.focusUpdate
             .subscribe { focusNode ->
-                val focusedView = rootView.findViewById<View>(focusNode.viewId)
-                focusNode.updateViewNodeTree(focusedView)
+                rootView.findViewById<View>(focusNode.viewId)?.let { focusedView ->
+                    focusNode.updateViewNodeTree(focusedView)
+                }
             }
     }
 
@@ -344,6 +342,11 @@ class NavigationOverlayFragment : Fragment() {
 
         pinnedTileViewModel.getTileList().observe(viewLifecycleOwner, Observer {
             if (it != null) {
+                if (it.isEmpty()) {
+                    tileContainer.visibility = View.GONE
+                } else {
+                    tileContainer.visibility = View.VISIBLE
+                }
                 tileAdapter.setTiles(it)
             }
         })
