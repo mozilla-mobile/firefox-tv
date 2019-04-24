@@ -6,7 +6,6 @@ package org.mozilla.tv.firefox.pinnedtile
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 
 /**
@@ -19,7 +18,7 @@ import androidx.lifecycle.ViewModel
 class PinnedTileViewModel(private val pinnedTileRepo: PinnedTileRepo) : ViewModel() {
 
     private val _tilesList = MediatorLiveData<List<PinnedTile>>()
-    val isEmpty: LiveData<Boolean> = Transformations.map(_tilesList) { input -> input.isEmpty() }
+    val isEmpty = pinnedTileRepo.isEmpty
 
     init {
         @Suppress("DEPRECATION")

@@ -25,6 +25,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
@@ -223,6 +224,8 @@ class NavigationOverlayFragment : Fragment() {
         super.onStart()
         observeFocusState()
                 .addTo(compositeDisposable)
+        observeTilesContainer()
+                .addTo(compositeDisposable)
         observePocketState()
             .addTo(compositeDisposable)
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = false)
@@ -250,6 +253,16 @@ class NavigationOverlayFragment : Fragment() {
                     focusNode.updateViewNodeTree(focusedView)
                 }
             }
+    }
+
+    private fun observeTilesContainer(): Disposable {
+        return pinnedTileViewModel.isEmpty.subscribe { isEmpty ->
+            if (isEmpty) {
+                tileContainer.visibility = View.GONE
+            } else {
+                tileContainer.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun observePocketState(): Disposable {
@@ -342,16 +355,13 @@ class NavigationOverlayFragment : Fragment() {
 
         pinnedTileViewModel.getTileList().observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                if (it.isEmpty()) {
-                    tileContainer.visibility = View.GONE
-                } else {
-                    tileContainer.visibility = View.VISIBLE
-                }
                 tileAdapter.setTiles(it)
             }
         })
 
         adapter = tileAdapter
+
+        layoutManager = GridLayoutManager(context, COL_COUNT)
 
         setHasFixedSize(true)
 
