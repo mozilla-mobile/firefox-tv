@@ -153,6 +153,8 @@ class NavigationOverlayFragment : Fragment() {
 
     private lateinit var tileAdapter: PinnedTileAdapter
 
+    private lateinit var rootView: View
+
     // TODO: remove this when FocusRepo is in place #1395
     private var defaultFocusTag = NavigationOverlayFragment.FRAGMENT_TAG
     @Deprecated(message = "VM state should be used reactively, not imperatively. See #1395, which will fix this")
@@ -184,6 +186,8 @@ class NavigationOverlayFragment : Fragment() {
             ::exitFirefox,
             onNavigationEvent
         ).onCreateView(view, viewLifecycleOwner, fragmentManager!!)
+
+        rootView = view
 
         // TODO: Add back in once #1666 is ready to land.
         /*
@@ -222,13 +226,12 @@ class NavigationOverlayFragment : Fragment() {
         }
 
         registerForContextMenu(tileContainer)
-
-        observeFocusState()
-                .addTo(compositeDisposable)
     }
 
     override fun onStart() {
         super.onStart()
+        observeFocusState()
+                .addTo(compositeDisposable)
         observePocketState()
             .addTo(compositeDisposable)
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = false)
