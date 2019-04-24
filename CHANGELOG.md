@@ -6,11 +6,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
-- Move Settings into channel on the homescreen (#689)
 
 ### Changed
 
 ### Fixed
+
+
+## [3.8] 2019-04-30
+### Added
+- Move Settings into channel on the homescreen (#689)
+
+### Fixed
+- Fix Pocket timeout exceptions (#2095)
 
 ## [3.7-RO] 2019-04-16
 *Released to Fire TV 4K, staged roll-out*
@@ -220,7 +227,8 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 ## [1.0] - 2017-12-20
 *Initial release! A browser including home tile shortcuts.*
 
-[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.7-RO...HEAD
+[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.8...HEAD
+[3.8]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.7-RO...v3.8
 [3.7-RO]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.6-RO...v3.7-RO
 [3.6-RO]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.5-RO...v3.6-RO
 [3.5-RO]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.4-A...v3.5-RO
