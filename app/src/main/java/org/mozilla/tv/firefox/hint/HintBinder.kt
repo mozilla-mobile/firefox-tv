@@ -13,7 +13,6 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.hint_bar.view.hintBarText
 import mozilla.components.support.ktx.android.content.res.pxToDp
-import java.util.concurrent.TimeUnit
 
 private const val IMAGE = "\$IMAGE"
 private const val IMAGE_SIZE_DP = 24
