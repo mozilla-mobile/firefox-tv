@@ -243,9 +243,8 @@ class CursorModel(
             }
             else -> {
                 val currTime = System.currentTimeMillis()
-                // If the cursor pos has not recently been updated, reset to current time.
-                // Otherwise, the cursor would shoot across the page the first time it was
-                // touched.
+                // If we're starting a new update loop, we don't have a previous update value. Instead,
+                // we assume an average amount of time has passed (one frame).
                 if (lastUpdatedAtMS == LAST_UPDATE_AT_MS_UNSET) lastUpdatedAtMS = currTime - MS_PER_FRAME
                 val millisSinceLastMutation = currTime - lastUpdatedAtMS
 
