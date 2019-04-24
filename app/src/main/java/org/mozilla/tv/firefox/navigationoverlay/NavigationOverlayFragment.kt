@@ -25,19 +25,14 @@ import androidx.core.view.updateLayoutParams
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.navUrlInput
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.pocketVideoMegaTileView
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.settingsTileContainer
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.tileContainer
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.exitButton
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.navButtonForward
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.navButtonReload
 import kotlinx.android.synthetic.main.hint_bar.hintBarContainer
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.megaTileTryAgainButton
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.pocketErrorContainer
@@ -50,7 +45,6 @@ import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
 import org.mozilla.tv.firefox.experiments.ExperimentConfig
 import org.mozilla.tv.firefox.ext.forceExhaustive
-import org.mozilla.tv.firefox.ext.isEffectivelyVisible
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.hint.HintBinder
@@ -286,6 +280,9 @@ class NavigationOverlayFragment : Fragment() {
         pocketVideosContainer.visibility = View.GONE
         pocketErrorContainer.visibility = View.VISIBLE
 
+        // View.focusable = INT only available Android API > 26 :(
+        pocketVideoMegaTileView.setFocusable(false)
+
         pocketMegaTileLoadError.text = resources.getString(R.string.pocket_video_feed_failed_to_load,
                 resources.getString(R.string.pocket_brand_name))
         megaTileTryAgainButton.contentDescription = resources.getString(R.string.pocket_video_feed_failed_to_load,
@@ -301,6 +298,9 @@ class NavigationOverlayFragment : Fragment() {
     private fun hideMegaTileError() {
         pocketVideosContainer.visibility = View.VISIBLE
         pocketErrorContainer.visibility = View.GONE
+
+        // View.focusable = INT only available Android API > 26 :(
+        pocketVideoMegaTileView.setFocusable(true)
     }
 
     private fun initMegaTile() {
@@ -352,8 +352,6 @@ class NavigationOverlayFragment : Fragment() {
         })
 
         adapter = tileAdapter
-
-        layoutManager = HomeTileManager(context, COL_COUNT)
 
         setHasFixedSize(true)
 
@@ -427,28 +425,6 @@ class NavigationOverlayFragment : Fragment() {
         // there's no good way to pass in the uiLifecycleJob. We could consider other solutions
         // but it'll add complexity that I don't think is probably worth it.
         uiLifecycleCancelJob.cancel()
-    }
-
-    inner class HomeTileManager(
-        context: Context,
-        colCount: Int
-    ) : GridLayoutManager(context, colCount) {
-        override fun onRequestChildFocus(parent: RecyclerView, state: RecyclerView.State, child: View, focused: View?): Boolean {
-            var position = spanCount
-            if (focused != null) {
-                position = getPosition(focused)
-            }
-
-            // if position is less than spanCount, implies first row
-            if (position < spanCount) {
-                focused?.nextFocusUpId = when {
-                    pocketVideosContainer.isEffectivelyVisible -> R.id.pocketVideoMegaTileView
-                    megaTileTryAgainButton.isEffectivelyVisible -> R.id.megaTileTryAgainButton
-                    else -> R.id.navUrlInput
-                }
-            }
-            return super.onRequestChildFocus(parent, state, child, focused)
-        }
     }
 }
 

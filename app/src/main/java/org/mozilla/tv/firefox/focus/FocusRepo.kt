@@ -22,7 +22,8 @@ class FocusRepo(
     screenController: ScreenController,
     sessionRepo: SessionRepo,
     pinnedTileRepo: PinnedTileRepo,
-    pocketRepo: PocketVideoRepo): ViewTreeObserver.OnGlobalFocusChangeListener {
+    pocketRepo: PocketVideoRepo
+) : ViewTreeObserver.OnGlobalFocusChangeListener {
 
     data class State(
         val focusNode: FocusNode,
@@ -51,7 +52,7 @@ class FocusRepo(
 
     // TODO: potential for telemetry?
     private val _state: BehaviorSubject<State> = BehaviorSubject.create()
-    
+
     // Keep track of prevScreen to identify screen transitions
     private var prevScreen: ScreenControllerStateMachine.ActiveScreen =
             ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY
@@ -100,7 +101,8 @@ class FocusRepo(
         activeScreen: ScreenControllerStateMachine.ActiveScreen,
         sessionState: SessionRepo.State,
         pinnedTilesIsEmpty: Boolean,
-        pocketState: PocketVideoRepo.FeedState): State {
+        pocketState: PocketVideoRepo.FeedState
+    ): State {
 
         var newState = _state.value!!
         when (activeScreen) {
@@ -117,6 +119,9 @@ class FocusRepo(
                     R.id.pocketVideoMegaTileView -> {
                         newState = updatePocketMegaTileFocusTree(focusNode, pinnedTilesIsEmpty)
                     }
+                    R.id.megaTileTryAgainButton -> {
+                        newState = updatePocketMegaTileFocusTree(focusNode, pinnedTilesIsEmpty)
+                    }
                 }
             }
             ScreenControllerStateMachine.ActiveScreen.WEB_RENDER -> Unit
@@ -131,7 +136,8 @@ class FocusRepo(
         focusedNavUrlInputNode: FocusNode,
         sessionState: SessionRepo.State,
         pinnedTilesIsEmpty: Boolean,
-        pocketState: PocketVideoRepo.FeedState): State {
+        pocketState: PocketVideoRepo.FeedState
+    ): State {
 
         assert(focusedNavUrlInputNode.viewId == R.id.navUrlInput)
 
@@ -139,7 +145,7 @@ class FocusRepo(
             pocketState is PocketVideoRepo.FeedState.FetchFailed -> R.id.megaTileTryAgainButton
             pocketState is PocketVideoRepo.FeedState.Inactive -> {
                 if (pinnedTilesIsEmpty) {
-                    R.id.navUrlInput // if
+                    R.id.navUrlInput
                 } else {
                     R.id.tileContainer
                 }
@@ -164,7 +170,8 @@ class FocusRepo(
 
     private fun updateReloadButtonFocusTree(
         focusedReloadButtonNode: FocusNode,
-        sessionState: SessionRepo.State): State {
+        sessionState: SessionRepo.State
+    ): State {
 
         assert(focusedReloadButtonNode.viewId == R.id.navButtonReload)
 
@@ -183,7 +190,8 @@ class FocusRepo(
 
     private fun updateForwardButtonFocusTree(
         focusedForwardButtonNode: FocusNode,
-        sessionState: SessionRepo.State): State {
+        sessionState: SessionRepo.State
+    ): State {
 
         assert(focusedForwardButtonNode.viewId == R.id.navButtonForward)
 
@@ -201,16 +209,18 @@ class FocusRepo(
 
     private fun updatePocketMegaTileFocusTree(
         focusedPocketMegatTileNode: FocusNode,
-        pinnedTilesIsEmpty: Boolean): State {
+        pinnedTilesIsEmpty: Boolean
+    ): State {
 
-        assert(focusedPocketMegatTileNode.viewId == R.id.pocketVideoMegaTileView)
+        assert(focusedPocketMegatTileNode.viewId == R.id.pocketVideoMegaTileView ||
+            focusedPocketMegatTileNode.viewId == R.id.megaTileTryAgainButton)
 
         val nextFocusDownId = when {
             pinnedTilesIsEmpty -> R.id.settingsTileContainer
             else -> R.id.tileContainer
         }
 
-       return State(
+        return State(
             focusNode = FocusNode(
                 focusedPocketMegatTileNode.viewId,
                 nextFocusDownId = nextFocusDownId),
