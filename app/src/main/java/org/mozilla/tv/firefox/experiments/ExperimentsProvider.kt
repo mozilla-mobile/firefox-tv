@@ -46,24 +46,17 @@ class ExperimentsProvider(private val fretboard: Fretboard, private val context:
     }
 
     fun shouldShowHintBar(): Boolean {
-// TODO before enabling this code:
-// - Get UX approval for hint bar UI
-// - Get localizations for all hint bar strings (hint_press_menu_to_close_overlay,
-//   hint_press_menu_to_open_overlay, hardware_button_a11y_menu, hardware_button_a11y_back)
-// TODO after enabling this code:
-// - Set up Fretboard for 'HintBar-2011' experiment so this actually works
-        return false
-//        val expDescriptor = checkBranchVariants(ExperimentConfig.HINT_BAR_TEST)
-//        return when {
-//            // The user is currently not part of the experiment
-//            expDescriptor == null -> false
-//            expDescriptor.name.endsWith(ExperimentSuffix.A.value) -> true
-//            expDescriptor.name.endsWith(ExperimentSuffix.B.value) -> false
-//            else -> {
-//                Sentry.capture(ExperimentIllegalStateException("Hint Bar Illegal Branch Name"))
-//                false
-//            }
-//        }
+        val expDescriptor = checkBranchVariants(ExperimentConfig.HINT_BAR_TEST)
+        return when {
+            // The user is currently not part of the experiment
+            expDescriptor == null -> false
+            expDescriptor.name.endsWith(ExperimentSuffix.A.value) -> true
+            expDescriptor.name.endsWith(ExperimentSuffix.B.value) -> false
+            else -> {
+                Sentry.capture(ExperimentIllegalStateException("Hint Bar Illegal Branch Name"))
+                false
+            }
+        }
     }
 
     /**
