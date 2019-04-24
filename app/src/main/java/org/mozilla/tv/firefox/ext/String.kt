@@ -82,6 +82,6 @@ val String.isUriYouTubeTV: Boolean
     get() = toLowerCase().contains("youtube.com/tv") ||
             toLowerCase().contains("ftv.cdn.mozilla.net/ytht")
 
-val String.isUriYouTubeTvVideo: Boolean // TODO test this on device
+val String.isUriYouTubeTvVideo: Boolean
     get() = this.isUriYouTubeTV &&
             this.contains("/watch/")
