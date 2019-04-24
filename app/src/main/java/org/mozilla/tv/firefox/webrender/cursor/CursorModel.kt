@@ -73,9 +73,11 @@ class CursorModel(
     private var lastUpdatedAtMS = LAST_UPDATE_AT_MS_UNSET
     private var lastKnownCursorPos = PointF(0f, 0f)
     private var isInitialCursorPositionSet = false
-    // scrollDistance is declared here as a micro-optimization to prevent alloc / dealloc
-    // costs during our onDraw loop
-    private val scrollDistance = PointF(0f, 0f)
+
+    // This is a performance optimization to avoid allocation in the 60 FPS update loop. To prevent concurrent
+    // access, this property should only be used from calculateAndSendScrollEvent, which is safe to do because
+    // it's only called from the main thread.
+    private val scrollDistanceMutableCache = PointF(0f, 0f)
 
     private val _cursorMovedEvents = PublishSubject.create<CursorEvent>()
     /**
@@ -261,13 +263,13 @@ class CursorModel(
         }
     }
 
-    private fun calculateAndSendScrollEvent(timePassed: Long, velocity: Float, oldPos: PointF) {
+    private fun calculateAndSendScrollEvent(timePassed: Long, velocity: Float, newPos: PointF) {
         // This should not live inside internalMutatePositionAndReturnVelocity.
         // Move it if you can find a better solution
         val approxFramesPassed = (timePassed / 16).toInt()
-        getScrollDistance(velocity, oldPos, approxFramesPassed)
-        if (scrollDistance.x != 0f || scrollDistance.y != 0f) {
-            _scrollRequests.onNext(scrollDistance)
+        getScrollDistance(scrollDistanceMutableCache, velocity, newPos, approxFramesPassed) // mutates scrollDistance...
+        if (scrollDistanceMutableCache.x != 0f || scrollDistanceMutableCache.y != 0f) {
+            _scrollRequests.onNext(scrollDistanceMutableCache)
         }
     }
 
@@ -334,11 +336,11 @@ class CursorModel(
     }
 
     // This is taken from older code.  Crufty, but it works
-    private fun getScrollDistance(vel: Float, pos: PointF, framesPassed: Int) {
+    private fun getScrollDistance(scrollDistanceReturnValue: PointF, vel: Float, pos: PointF, framesPassed: Int) {
         val screenBounds = screenBounds
         if (screenBounds == null) {
-            scrollDistance.x = 0f
-            scrollDistance.y = 0f
+            scrollDistanceReturnValue.x = 0f
+            scrollDistanceReturnValue.y = 0f
             return
         }
 
@@ -359,8 +361,8 @@ class CursorModel(
             }
         }
 
-        scrollDistance.x = (scrollVelX * MAX_SCROLL_VELOCITY * framesPassed)
-        scrollDistance.y = (scrollVelY * MAX_SCROLL_VELOCITY * framesPassed)
+        scrollDistanceReturnValue.x = (scrollVelX * MAX_SCROLL_VELOCITY * framesPassed)
+        scrollDistanceReturnValue.y = (scrollVelY * MAX_SCROLL_VELOCITY * framesPassed)
     }
 
     @SuppressLint("CheckResult") // Does not need to be disposed as this survives for the duration of the app
