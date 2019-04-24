@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
-import org.mozilla.tv.firefox.ext.isUriYouTubeTV
 import org.mozilla.tv.firefox.ext.isUriYouTubeTvVideo
 import org.mozilla.tv.firefox.hint.HintContent
 import org.mozilla.tv.firefox.hint.HintViewModel
