@@ -39,7 +39,6 @@ private const val WRAP_CONTENT = LinearLayout.LayoutParams.WRAP_CONTENT
 class ToolbarUiController(
     private val toolbarViewModel: ToolbarViewModel,
     private val exitFirefox: () -> Unit,
-    private val updateFocusableViews: () -> Unit,
     private val onNavigationEvent: (NavigationEvent, String?, InlineAutocompleteEditText.AutocompleteResult?) -> Unit
 ) {
 
@@ -141,8 +140,6 @@ class ToolbarUiController(
             updateOverlayButtonState(it.pinEnabled, layout.pinButton)
             updateOverlayButtonState(it.refreshEnabled, layout.navButtonReload)
             updateOverlayButtonState(it.desktopModeEnabled, layout.desktopModeButton)
-
-            updateFocusableViews()
 
             layout.pinButton.isChecked = it.pinChecked
             layout.desktopModeButton.isChecked = it.desktopModeChecked

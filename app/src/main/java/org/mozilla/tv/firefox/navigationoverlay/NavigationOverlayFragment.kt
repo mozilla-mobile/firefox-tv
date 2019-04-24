@@ -182,7 +182,6 @@ class NavigationOverlayFragment : Fragment() {
         ToolbarUiController(
             toolbarViewModel,
             ::exitFirefox,
-            { updateFocusableViews() },
             onNavigationEvent
         ).onCreateView(view, viewLifecycleOwner, fragmentManager!!)
 
@@ -224,7 +223,6 @@ class NavigationOverlayFragment : Fragment() {
 
         registerForContextMenu(tileContainer)
 
-        updateFocusableViews()
         observeFocusState()
                 .addTo(compositeDisposable)
     }
@@ -295,16 +293,13 @@ class NavigationOverlayFragment : Fragment() {
         megaTileTryAgainButton.setOnClickListener { _ ->
             pocketViewModel.update()
             initMegaTile()
-            updateFocusableViews()
             pocketVideoMegaTileView.requestFocus()
         }
-        updateFocusableViews()
     }
 
     private fun hideMegaTileError() {
         pocketVideosContainer.visibility = View.VISIBLE
         pocketErrorContainer.visibility = View.GONE
-        updateFocusableViews()
     }
 
     private fun initMegaTile() {
@@ -347,7 +342,6 @@ class NavigationOverlayFragment : Fragment() {
         pinnedTileViewModel.getTileList().observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 tileAdapter.setTiles(it)
-                updateFocusableViews()
             }
         })
 
@@ -406,52 +400,6 @@ class NavigationOverlayFragment : Fragment() {
         )
     }
 
-    private fun updateFocusableViews(focusedView: View? = currFocus) { // TODO this will be replaced when FocusRepo is introduced
-        val toolbarState = toolbarViewModel.state.value
-
-        // Prevent the focus from looping to the bottom row when reaching the last
-        // focusable element in the top row
-        navButtonReload.nextFocusLeftId = when {
-            toolbarState?.forwardEnabled == true -> R.id.navButtonForward
-            toolbarState?.backEnabled == true -> R.id.navButtonBack
-            else -> R.id.navButtonReload
-        }
-        navButtonForward.nextFocusLeftId = when {
-            toolbarState?.backEnabled == true -> R.id.navButtonBack
-            else -> R.id.navButtonForward
-        }
-
-        navUrlInput.nextFocusDownId = when {
-            @Suppress("DEPRECATION")
-            lastPocketState is PocketViewModel.State.Feed -> R.id.pocketVideoMegaTileView
-            @Suppress("DEPRECATION")
-            lastPocketState === PocketViewModel.State.Error -> R.id.megaTileTryAgainButton
-            tileAdapter.itemCount == 0 -> R.id.navUrlInput
-            else -> R.id.tileContainer
-        }
-
-        navUrlInput.nextFocusUpId = when {
-            toolbarState?.backEnabled == true -> R.id.navButtonBack
-            toolbarState?.forwardEnabled == true -> R.id.navButtonForward
-            toolbarState?.refreshEnabled == true -> R.id.navButtonReload
-            toolbarState?.pinEnabled == true -> R.id.pinButton
-            else -> R.id.turboButton
-        }
-
-        pocketVideoMegaTileView.nextFocusDownId = when {
-            tileAdapter.itemCount == 0 -> R.id.pocketVideoMegaTileView
-            else -> R.id.tileContainer
-        }
-
-        // We may have lost focus when disabling the focused view above.
-        // This looks more complex than is necessary, but the simpler implementation
-        // led to problems. See the commit message for 45940fa
-        val isFocusLost = focusedView != null && currFocus == null
-        if (isFocusLost) {
-            navUrlInput.requestFocus()
-        }
-    }
-
     /**
      * Focus may be lost if all pinned items are removed via onContextItemSelected()
      * FIXME: requires OverlayFragment (LifecycleOwner) -> OverlayVM -> FocusRepo
@@ -464,7 +412,6 @@ class NavigationOverlayFragment : Fragment() {
                 megaTileTryAgainButton.requestFocus()
             }
         }
-        updateFocusableViews()
     }
 
     override fun onDestroyView() {
