@@ -206,7 +206,7 @@ class FocusRepo(
         assert(focusedPocketMegatTileNode.viewId == R.id.pocketVideoMegaTileView)
 
         val nextFocusDownId = when {
-            pinnedTilesIsEmpty -> R.id.pocketVideoMegaTileView
+            pinnedTilesIsEmpty -> R.id.settingsTileContainer
             else -> R.id.tileContainer
         }
 
