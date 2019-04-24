@@ -317,7 +317,7 @@ class CursorModel(
      *
      * When in a corner, only UP or DOWN will be returned.
      */
-    fun getEdgeOfScreenNearCursor(): Direction? {
+    private fun getEdgeOfScreenNearCursor(): Direction? {
         val screenBounds = screenBounds ?: return null
         return when {
             lastKnownCursorPos.y < EDGE_OF_SCREEN_MARGIN -> Direction.UP
