@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.navUrlInput
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.pocketVideoMegaTileView
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.settingsTileContainer
@@ -144,6 +145,7 @@ class NavigationOverlayFragment : Fragment() {
         get() = activity?.currentFocus
 
     private lateinit var serviceLocator: ServiceLocator
+    private lateinit var navigationOverlayViewModel: NavigationOverlayViewModel
     private lateinit var toolbarViewModel: ToolbarViewModel
     private lateinit var pinnedTileViewModel: PinnedTileViewModel
     private lateinit var pocketViewModel: PocketViewModel
@@ -161,6 +163,7 @@ class NavigationOverlayFragment : Fragment() {
 
         serviceLocator = context!!.serviceLocator
 
+        navigationOverlayViewModel = FirefoxViewModelProviders.of(this).get(NavigationOverlayViewModel::class.java)
         toolbarViewModel = FirefoxViewModelProviders.of(this).get(ToolbarViewModel::class.java)
         pinnedTileViewModel = FirefoxViewModelProviders.of(this).get(PinnedTileViewModel::class.java)
         pocketViewModel = FirefoxViewModelProviders.of(this).get(PocketViewModel::class.java)
@@ -222,6 +225,8 @@ class NavigationOverlayFragment : Fragment() {
         registerForContextMenu(tileContainer)
 
         updateFocusableViews()
+        observeFocusState()
+                .addTo(compositeDisposable)
     }
 
     override fun onStart() {
@@ -244,6 +249,14 @@ class NavigationOverlayFragment : Fragment() {
 
     private fun exitFirefox() {
         activity!!.moveTaskToBack(true)
+    }
+
+    private fun observeFocusState(): Disposable {
+        return navigationOverlayViewModel.focusUpdate
+            .subscribe { focusNode ->
+                val focusedView = rootView.findViewById<View>(focusNode.viewId)
+                focusNode.updateViewNodeTree(focusedView)
+            }
     }
 
     private fun observePocketState(): Disposable {
