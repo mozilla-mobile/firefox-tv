@@ -247,26 +247,26 @@ class CursorModel(
                 // Otherwise, the cursor would shoot across the page the first time it was
                 // touched.
                 if (lastUpdatedAtMS == LAST_UPDATE_AT_MS_UNSET) lastUpdatedAtMS = currTime - MS_PER_FRAME
-                val timePassedSinceLastMutation = currTime - lastUpdatedAtMS
+                val millisSinceLastMutation = currTime - lastUpdatedAtMS
 
                 lastVelocity = internalMutatePositionAndReturnVelocity(
                         oldPosAndReturnedPos,
-                        timePassedSinceLastMutation,
+                        millisSinceLastMutation,
                         lastVelocity,
                         directionKeysPressed
                 )
 
-                calculateAndSendScrollEvent(timePassedSinceLastMutation, lastVelocity, oldPosAndReturnedPos)
+                calculateAndSendScrollEvent(millisSinceLastMutation, lastVelocity, oldPosAndReturnedPos)
                 lastUpdatedAtMS = currTime
                 return true
             }
         }
     }
 
-    private fun calculateAndSendScrollEvent(timePassed: Long, velocity: Float, newPos: PointF) {
+    private fun calculateAndSendScrollEvent(millisPassed: Long, velocity: Float, newPos: PointF) {
         // This should not live inside internalMutatePositionAndReturnVelocity.
         // Move it if you can find a better solution
-        val approxFramesPassed = (timePassed / 16).toInt()
+        val approxFramesPassed = (millisPassed / MS_PER_FRAME).toInt()
         getScrollDistance(scrollDistanceMutableCache, velocity, newPos, approxFramesPassed) // mutates scrollDistance...
         if (scrollDistanceMutableCache.x != 0f || scrollDistanceMutableCache.y != 0f) {
             _scrollRequests.onNext(scrollDistanceMutableCache)
@@ -283,7 +283,7 @@ class CursorModel(
      */
     private fun internalMutatePositionAndReturnVelocity(
         oldPos: PointF,
-        timePassedSinceLastMutation: Long,
+        millisSinceLastMutation: Long,
         oldVelocity: Float,
         directionsPressed: Set<Direction>
     ): Float {
@@ -291,7 +291,7 @@ class CursorModel(
         require(directionsPressed.isNotEmpty())
         val screenBounds = screenBounds ?: return 0f
 
-        val accelerateBy = ACCELERATION_PER_MS * timePassedSinceLastMutation
+        val accelerateBy = ACCELERATION_PER_MS * millisSinceLastMutation
         val velocity = (oldVelocity + accelerateBy).coerceIn(0f, MAX_VELOCITY)
 
         fun updatePosition() {
