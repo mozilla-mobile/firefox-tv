@@ -184,8 +184,9 @@ class CursorModel(
         if (!isCursorEnabledForAppState.blockingFirst()) {
             return null
         }
-        if (event.keyCode != KeyEvent.KEYCODE_DPAD_CENTER && event.keyCode != KeyEvent.KEYCODE_ENTER) {
-            return null
+
+        require(event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER) {
+            "Expected DPAD_CENTER or ENTER. Instead: $event"
         }
 
         fun buildMotionEvent() = MotionEvent.obtain(event.downTime, event.eventTime, event.action,
