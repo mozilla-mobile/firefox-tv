@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
+import org.mozilla.tv.firefox.ext.isUriYouTubeTV
+import org.mozilla.tv.firefox.ext.isUriYouTubeTvVideo
 import org.mozilla.tv.firefox.hint.HintContent
 import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.navigationoverlay.OverlayHintViewModel
@@ -30,7 +32,36 @@ class WebRenderHintViewModel(
     openMenuHint: HintContent
 ) : ViewModel(), HintViewModel {
 
-    override val isDisplayed by lazy {
+    override val isDisplayed: Observable<Boolean> by lazy {
+        sessionRepo.state
+                .map { it.currentUrl }
+                .distinctUntilChanged()
+                .switchMap { url ->
+                    return@switchMap when {
+                        url.isUriYouTubeTvVideo -> isDisplayedYouTubeVideo
+                        else -> isDisplayedOther
+                    }
+                }
+                .distinctUntilChanged()
+                .replay(1)
+                .autoConnect(0)
+    }
+    override val hints: Observable<List<HintContent>> = Observable.just(listOf(openMenuHint))
+
+    /**
+     * Whether or not the hint bar should be displayed when the user is on a YouTube TV video
+     *
+     * The hint bar is annoying on YouTube videos, where we have no good way to close it. We hide
+     * the hint bar here completely
+     */
+    private val isDisplayedYouTubeVideo: Observable<Boolean> =
+            Observable.just(false)
+
+    /**
+     * Whether or not the hint bar should be displayed when the user is on any site other than
+     * a YouTube TV video
+     */
+    private val isDisplayedOther: Observable<Boolean> by lazy {
         val showEvents = Observable.merge(
                 webRenderOpened,
                 loadComplete,
@@ -40,15 +71,8 @@ class WebRenderHintViewModel(
         val hideEvents = cursorMovedUpOrDown
                 .map { false }
 
-        Observable.merge(
-                showEvents,
-                hideEvents
-        )
-                .distinctUntilChanged()
-                .replay(1)
-                .autoConnect(0)
+        Observable.merge(showEvents, hideEvents)
     }
-    override val hints: Observable<List<HintContent>> = Observable.just(listOf(openMenuHint))
 
     private val webRenderOpened = screenController.currentActiveScreen
                 .filter { it == ScreenControllerStateMachine.ActiveScreen.WEB_RENDER }
