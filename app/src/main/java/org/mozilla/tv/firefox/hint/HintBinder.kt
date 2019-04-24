@@ -30,7 +30,6 @@ object HintBinder {
                     .subscribe { hintContainer.isVisible = it }
         } else {
             vm.isDisplayed
-                    .throttleFirst(300, TimeUnit.MILLISECONDS)
                     .doOnDispose { hintContainer.isVisible = false }
                     .doOnSubscribe {
                         hintContainer.animate()
