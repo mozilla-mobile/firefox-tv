@@ -334,7 +334,6 @@ class CursorModel(
 
     // This is taken from older code.  Crufty, but it works
     private fun getScrollDistance(vel: Float, pos: PointF, framesPassed: Int) {
-        val scrollVelReturnVal = PointF(0f, 0f)
         val screenBounds = screenBounds
         if (screenBounds == null) {
             scrollDistance.x = 0f
@@ -342,23 +341,25 @@ class CursorModel(
             return
         }
 
+        var scrollVelX = 0f
+        var scrollVelY = 0f
         if (vel > 0f) {
             val percentMaxVel = vel / MAX_VELOCITY
             if (pos.x == 0f && directionKeysPressed.contains(Direction.LEFT)) {
-                scrollVelReturnVal.x = -percentMaxVel
+                scrollVelX = -percentMaxVel
             } else if (pos.x == screenBounds.x && directionKeysPressed.contains(Direction.RIGHT)) {
-                scrollVelReturnVal.x = percentMaxVel
+                scrollVelX = percentMaxVel
             }
 
             if (pos.y == 0f && directionKeysPressed.contains(Direction.UP)) {
-                scrollVelReturnVal.y = -percentMaxVel
+                scrollVelY = -percentMaxVel
             } else if (pos.y == screenBounds.y && directionKeysPressed.contains(Direction.DOWN)) {
-                scrollVelReturnVal.y = percentMaxVel
+                scrollVelY = percentMaxVel
             }
         }
 
-        scrollDistance.x = (scrollVelReturnVal.x * MAX_SCROLL_VELOCITY * framesPassed)
-        scrollDistance.y = (scrollVelReturnVal.y * MAX_SCROLL_VELOCITY * framesPassed)
+        scrollDistance.x = (scrollVelX * MAX_SCROLL_VELOCITY * framesPassed)
+        scrollDistance.y = (scrollVelY * MAX_SCROLL_VELOCITY * framesPassed)
     }
 
     @SuppressLint("CheckResult") // Does not need to be disposed as this survives for the duration of the app
