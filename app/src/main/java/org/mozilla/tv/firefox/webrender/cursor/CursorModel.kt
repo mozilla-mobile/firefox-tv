@@ -120,44 +120,38 @@ class CursorModel(
         attachResetStateObserver()
     }
 
-    /**
-     * @returns a [HandleKeyEventResult]
-     */
+    @CheckResult(suggest = "Recycle any MotionEvents after use") // via handleSelectKeyEvent.
     fun handleKeyEvent(event: KeyEvent): HandleKeyEventResult {
         return when {
-            Direction.KEY_CODES.contains(event.keyCode) ->
-                HandleKeyEventResult(wasKeyEventConsumed = handleDirectionKeyEvent(event), simulatedTouch = null)
             // Center key is used on device, Enter key is used on emulator
-            event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER -> {
-                val motionEvent = maybeToMotionEvent(event)
-                HandleKeyEventResult(wasKeyEventConsumed = motionEvent != null, simulatedTouch = motionEvent)
-            }
+            event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER -> handleSelectKeyEvent(event)
+            Direction.KEY_CODES.contains(event.keyCode) -> handleDirectionKeyEvent(event)
             else -> HandleKeyEventResult(wasKeyEventConsumed = false, simulatedTouch = null)
         }
     }
 
-    /**
-     * @returns true if the event is consumed
-     */
-    private fun handleDirectionKeyEvent(event: KeyEvent): Boolean {
+    private fun handleDirectionKeyEvent(event: KeyEvent): HandleKeyEventResult {
+        fun getResult(wasKeyEventConsumed: Boolean) =
+            HandleKeyEventResult(wasKeyEventConsumed, simulatedTouch = null)
+
         if (!isCursorEnabledForAppState.blockingFirst()) {
-            return false
+            return getResult(false)
         }
         require(Direction.KEY_CODES.contains(event.keyCode)) {
             "Invalid key event passed to CursorController#handleDirectionKeyEvent: $event"
         }
 
-        val direction = event.toDirection() ?: return false
+        val direction = event.toDirection() ?: return getResult(false)
         when (event.action) {
             KeyEvent.ACTION_UP -> directionKeysPressed -= direction
             KeyEvent.ACTION_DOWN -> {
                 directionKeysPressed += direction
                 pushCursorEvent(direction)
             }
-            else -> return false
+            else -> return getResult(false)
         }
 
-        return true
+        return getResult(true)
     }
 
     private fun pushCursorEvent(direction: Direction) {
@@ -176,17 +170,14 @@ class CursorModel(
         _cursorMovedEvents.onNext(event)
     }
 
-    /**
-     * If the cursor is enabled, and the passed [KeyEvent] was causing by pressing the select
-     * key, build a [MotionEvent] to be used by an Activity to simulate a touch event
-     *
-     * @return returns a MotionEvent if the event is consumed, null otherwise
-     */
-    @SuppressLint("Recycle")
+    @SuppressLint("Recycle") // Caller is expected to recycle the MotionEvent.
     @CheckResult(suggest = "Recycle MotionEvent after use")
-    private fun maybeToMotionEvent(event: KeyEvent): MotionEvent? {
+    private fun handleSelectKeyEvent(event: KeyEvent): HandleKeyEventResult {
+        fun getResult(motionEvent: MotionEvent?) =
+            HandleKeyEventResult(wasKeyEventConsumed = motionEvent != null, simulatedTouch = motionEvent)
+
         if (!isCursorEnabledForAppState.blockingFirst()) {
-            return null
+            return getResult(null)
         }
 
         require(event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER) {
@@ -196,7 +187,7 @@ class CursorModel(
         fun buildMotionEvent() = MotionEvent.obtain(event.downTime, event.eventTime, event.action,
                 lastKnownCursorPos.x, lastKnownCursorPos.y, 0)
 
-        return when (event.action) {
+        val motionEvent = when (event.action) {
             KeyEvent.ACTION_UP -> {
                 _isSelectPressed.onNext(false)
                 buildMotionEvent()
@@ -207,6 +198,8 @@ class CursorModel(
             }
             else -> null
         }
+
+        return getResult(motionEvent)
     }
 
     /**
