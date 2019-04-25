@@ -121,6 +121,21 @@ class FocusRepo(
         val focusMap = _state.value!!.defaultFocusMap
         when (activeScreen) {
             ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY -> {
+
+                // Check previous screen for defaultFocusMap updates
+                when (prevScreen) {
+                    ScreenControllerStateMachine.ActiveScreen.WEB_RENDER -> {
+                        newState = updateDefaultFocusForOverlayWhenTransitioningFromWebRender(
+                                activeScreen,
+                                focusMap,
+                                sessionState)
+                    }
+                    ScreenControllerStateMachine.ActiveScreen.POCKET -> {
+                        newState = updateDefaultFocusForOverlayWhenTransitioningFromPocket(activeScreen, focusMap)
+                    }
+                    else -> Unit
+                }
+
                 when (focusNode.viewId) {
                     R.id.navUrlInput ->
                         newState = updateNavUrlInputFocusTree(
@@ -143,19 +158,8 @@ class FocusRepo(
                     }
                 }
             }
-            ScreenControllerStateMachine.ActiveScreen.WEB_RENDER -> {
-                if (prevScreen == ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY) {
-                    newState = updateDefaultFocusForOverlayWhenTransitioningToWebRender(
-                            activeScreen,
-                            focusMap,
-                            sessionState)
-                }
-            }
-            ScreenControllerStateMachine.ActiveScreen.POCKET -> {
-                if (prevScreen == ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY) {
-                    newState = updateDefaultFocusForOverlayWhenTransitioningToPocket(activeScreen, focusMap)
-                }
-            }
+            ScreenControllerStateMachine.ActiveScreen.WEB_RENDER -> {}
+            ScreenControllerStateMachine.ActiveScreen.POCKET -> {}
             ScreenControllerStateMachine.ActiveScreen.SETTINGS -> Unit
         }
 
@@ -270,7 +274,7 @@ class FocusRepo(
             defaultFocusMap = _state.value!!.defaultFocusMap)
     }
 
-    private fun updateDefaultFocusForOverlayWhenTransitioningToWebRender(
+    private fun updateDefaultFocusForOverlayWhenTransitioningFromWebRender(
         activeScreen: ScreenControllerStateMachine.ActiveScreen,
         focusMap: HashMap<ScreenControllerStateMachine.ActiveScreen, Int>,
         sessionState: SessionRepo.State
@@ -291,7 +295,7 @@ class FocusRepo(
                 defaultFocusMap = focusMap)
     }
 
-    private fun updateDefaultFocusForOverlayWhenTransitioningToPocket(
+    private fun updateDefaultFocusForOverlayWhenTransitioningFromPocket(
         activeScreen: ScreenControllerStateMachine.ActiveScreen,
         focusMap: HashMap<ScreenControllerStateMachine.ActiveScreen, Int>
     ): State {
