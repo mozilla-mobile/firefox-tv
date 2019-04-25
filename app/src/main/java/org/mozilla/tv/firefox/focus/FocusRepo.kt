@@ -20,6 +20,8 @@ import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.URLs
 
+private const val INVALID_VIEW_ID = -1
+
 class FocusRepo(
     screenController: ScreenController,
     sessionRepo: SessionRepo,
@@ -172,6 +174,18 @@ class FocusRepo(
                                     pinnedTilesIsEmpty,
                                     pocketState)
                         }
+                    }
+                    INVALID_VIEW_ID -> {
+                        // Focus is lost so default it to navUrlInput and send a [Event.RequestFocus]
+                        val newFocusNode = FocusNode(R.id.navUrlInput)
+
+                        newState = updateNavUrlInputFocusTree(
+                                activeScreen,
+                                newFocusNode,
+                                sessionState,
+                                pinnedTilesIsEmpty,
+                                pocketState)
+                        _events.onNext(Event.RequestFocus)
                     }
                 }
             }
