@@ -304,7 +304,6 @@ class NavigationOverlayFragment : Fragment() {
         megaTileTryAgainButton.setOnClickListener { _ ->
             pocketViewModel.update()
             initMegaTile()
-            pocketVideoMegaTileView.requestFocus()
         }
     }
 
