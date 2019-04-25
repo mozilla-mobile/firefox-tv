@@ -54,11 +54,33 @@ sealed class CursorEvent {
 }
 
 /**
- * Calculates cursor movements.
+ * Handles the cursor state and business logic.
  *
- * Remote key events are pushed here from the rest of the app. Actual cursor position changes are
- * made when this class is called by [CursorView.onDraw]. This was done for performance reasons;
- * see the comment on [mutatePosition] for more details.
+ * PLEASE READ BEFORE MODIFYING THIS CLASS: it operates VERY differently from the rest of
+ * the codebase. This was necessary for performance reasons.
+ *
+ * Because this class is very long, you may want to break it up: we caution against this. Any
+ * abstractions we created were unintuitive and inconsistent with the rest of the code, making the
+ * class more confusing for unfamiliar developers.
+ *
+ * This implementation is not thread safe.
+ *
+ * ## Architecture overview
+ * The cursor code is broken up into a model ([CursorModel]) and a view ([CursorView]).
+ * - [CursorModel] handles internal cursor state and business logic
+ * - [CursorView] handles view state (except for position updates)
+ *
+ * These classes are untraditional in that [CursorView] triggers position updates in the model,
+ * as opposed to the Model pushing updates to the View. This happens in [CursorView.onDraw]:
+ * when each frame is drawn, onDraw requests a position update from [CursorModel].  This ensures
+ * that we update position exactly once per frame.
+ *
+ * ## Problem this solved
+ * Our original solution pushed a new position to the View every 16 MS (approximately 60 FPS), but
+ * the view drew every 15-17 MS.  This discrepancy led to the appearance of dropped frames.
+ *
+ * Our solution is to have the View drive the interaction, ensuring exactly one update per frame.
+ * This is effective, but inconsistent with our architecture.
  */
 class CursorModel(
     activeScreen: Observable<ScreenControllerStateMachine.ActiveScreen>,
@@ -93,13 +115,12 @@ class CursorModel(
     val scrollRequests: Observable<PointF> = _scrollRequests.hide()
 
     private val _isCursorMoving = BehaviorSubject.createDefault<Boolean>(false)
-    private val isCursorMoving: Observable<Boolean> = _isCursorMoving.hide()
 
     private val _isSelectPressed = BehaviorSubject.createDefault<Boolean>(false)
     val isSelectPressed: Observable<Boolean> = _isSelectPressed.hide()
             .distinctUntilChanged()
 
-    val isAnyCursorKeyPressed: Observable<Boolean> = Observables.combineLatest(isCursorMoving, isSelectPressed) {
+    val isAnyCursorKeyPressed: Observable<Boolean> = Observables.combineLatest(_isCursorMoving, isSelectPressed) {
         // Only emit false if we are both stationary and not pressed
         moving, pressed -> moving || pressed
     }
@@ -120,6 +141,7 @@ class CursorModel(
         attachResetStateObserver()
     }
 
+    // Note: we may not get an ACTION_UP event if the cursor is disabled while a button is held down.
     @CheckResult(suggest = "Recycle any MotionEvents after use") // via handleSelectKeyEvent.
     fun handleKeyEvent(event: KeyEvent): HandleKeyEventResult {
         return when {
@@ -203,20 +225,7 @@ class CursorModel(
     }
 
     /**
-     * Called by CursorView in order to drive cursor movement.
-     *
-     * Performance:
-     * Previous code updated cursor VM position every 16MS (1_000 MS / 60 frames == 16.66). This
-     * led to minor jitter because we were not tied exactly to the actual framerate. This new
-     * implementation is harder to understand, but is noticeably more performant.
-     *
-     * Architecture:
-     * Having a View#onDraw call VM updates does not mesh well with our architecture, but we found
-     * no way to achieve desired performance with any other approach. Instead, we contained this
-     * architectural aberration to this class, and as much as possible it should be left here.
-     *
-     * STRONGLY avoid accessing this state outside of this class, and think very carefully about
-     * how you do if it is unavoidable.
+     * See [CursorModel] kdoc for details.
      *
      * @return whether or not the view should continue to invalidate itself
      * Note that in addition to returning a value, this function also mutates [oldPosAndReturnedPos]
@@ -258,8 +267,6 @@ class CursorModel(
     }
 
     private fun calculateAndSendScrollEvent(millisPassed: Long, velocity: Float, newPos: PointF) {
-        // This should not live inside internalMutatePositionAndReturnVelocity.
-        // Move it if you can find a better solution
         val approxFramesPassed = (millisPassed / MS_PER_FRAME).toInt()
         getScrollDistance(scrollDistanceMutableCache, velocity, newPos, approxFramesPassed) // mutates scrollDistance...
         if (scrollDistanceMutableCache.x != 0f || scrollDistanceMutableCache.y != 0f) {

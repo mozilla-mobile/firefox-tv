@@ -24,11 +24,11 @@ private const val HIDE_ANIMATION_DURATION_MILLIS = 250L
 private val HIDE_AFTER_MILLIS = TimeUnit.SECONDS.toMillis(3)
 
 /**
- * Renders the cursor visible on top of the browser.
+ * Handles view state (except for position updates).
  *
- * Most behavior is controlled by [CursorModel]
+ * For details on the cursor architecture, see the [CursorModel] kdoc.
  *
- * Any images set must be Bitmaps, not Drawables
+ * Any images set must be Bitmaps, not other Drawables.
  */
 class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(context, attrs) {
 
@@ -94,6 +94,7 @@ class CursorView(context: Context, attrs: AttributeSet) : AppCompatImageView(con
         x = onDrawMutablePositionCache.x - xOffset
         y = onDrawMutablePositionCache.y - yOffset
 
+        // This method will stop being called when the app is backgrounded.
         if (shouldInvalidate) invalidate()
     }
 }
