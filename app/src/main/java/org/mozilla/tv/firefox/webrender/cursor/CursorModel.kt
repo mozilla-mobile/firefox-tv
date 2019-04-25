@@ -20,6 +20,7 @@ import org.mozilla.tv.firefox.ext.toDirection
 import org.mozilla.tv.firefox.framework.FrameworkRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.Direction
+import org.mozilla.tv.firefox.utils.toObservableMutableSet
 
 // Constants that we expect to be tweaked in order to adjust cursor behavior
 private const val INITIAL_VELOCITY = 5f
@@ -68,7 +69,10 @@ class CursorModel(
     var screenBounds: PointF? = null
     var webViewCouldScrollInDirectionProvider: ((Direction) -> Boolean)? = null
 
-    private val directionKeysPressed = mutableSetOf<Direction>()
+    private val directionKeysPressed = mutableSetOf<Direction>().toObservableMutableSet().apply {
+        attachObserver { _isCursorMoving.onNext(this.isNotEmpty()) }
+    }
+
     private var lastVelocity = 0f
     private var lastUpdatedAtMS = LAST_UPDATE_AT_MS_UNSET
     private var lastKnownCursorPos = PointF(0f, 0f)
@@ -152,8 +156,6 @@ class CursorModel(
             }
             else -> return false
         }
-
-        _isCursorMoving.onNext(!directionKeysPressed.isEmpty())
 
         return true
     }
