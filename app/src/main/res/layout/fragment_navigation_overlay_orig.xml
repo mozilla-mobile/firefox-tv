@@ -78,7 +78,9 @@
                     android:textColorHint="@color/photonGrey10_a80p"
                     android:textIsSelectable="false"
                     android:fontFamily="@string/font_ember_regular"
-                    tools:ignore="UnusedAttribute" />
+                    tools:ignore="UnusedAttribute" >
+                    <requestFocus />
+                </org.mozilla.tv.firefox.widget.InlineAutocompleteEditText>
 
                 <!-- Content description added in code. -->
                 <org.mozilla.tv.firefox.pocket.PocketVideoMegaTile
