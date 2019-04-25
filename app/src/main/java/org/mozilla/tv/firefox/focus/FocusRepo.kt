@@ -156,6 +156,18 @@ class FocusRepo(
                     R.id.megaTileTryAgainButton -> {
                         newState = updatePocketMegaTileFocusTree(activeScreen, focusNode, pinnedTilesIsEmpty)
                     }
+                    R.id.home_tile -> {
+                        // If pinnedTiles is empty and current focus is on home_tile, we need to
+                        // restore lost focus (this happens when you remove all tiles in the overlay)
+                        if (pinnedTilesIsEmpty) {
+                            newState = handleEmptyTilesLostFocus(
+                                    activeScreen,
+                                    focusNode,
+                                    sessionState,
+                                    pinnedTilesIsEmpty,
+                                    pocketState)
+                        }
+                    }
                 }
             }
             ScreenControllerStateMachine.ActiveScreen.WEB_RENDER -> {}
@@ -272,6 +284,38 @@ class FocusRepo(
                 focusedPocketMegatTileNode.viewId,
                 nextFocusDownId = nextFocusDownId),
             defaultFocusMap = _state.value!!.defaultFocusMap)
+    }
+
+    /**
+     * When all the pinned tiles are removed, tilContainer no longer needs focus
+     */
+    private fun handleEmptyTilesLostFocus(
+        activeScreen: ScreenControllerStateMachine.ActiveScreen,
+        tileContainerFocusNode: FocusNode,
+        sessionState: SessionRepo.State,
+        pinnedTilesIsEmpty: Boolean,
+        pocketState: PocketVideoRepo.FeedState
+    ): State {
+
+        assert(tileContainerFocusNode.viewId == R.id.tileContainer)
+
+        val viewId = when {
+            pocketState == PocketVideoRepo.FeedState.FetchFailed -> R.id.megaTileTryAgainButton
+            pocketState == PocketVideoRepo.FeedState.Inactive -> R.id.navUrlInput
+            else -> R.id.pocketVideoMegaTileView
+        }
+
+        val newFocusNode = FocusNode(viewId)
+        val newState = if (newFocusNode.viewId == R.id.navUrlInput) {
+            updateNavUrlInputFocusTree(activeScreen, newFocusNode, sessionState, pinnedTilesIsEmpty, pocketState)
+        } else {
+            updatePocketMegaTileFocusTree(activeScreen, newFocusNode, pinnedTilesIsEmpty)
+        }
+
+        // Request focus on newState
+        _events.onNext(Event.RequestFocus)
+
+        return newState
     }
 
     private fun updateDefaultFocusForOverlayWhenTransitioningFromWebRender(
