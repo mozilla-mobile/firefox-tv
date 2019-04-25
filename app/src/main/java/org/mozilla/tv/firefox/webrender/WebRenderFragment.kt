@@ -78,9 +78,13 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     // work properly, so we !!
     private val youtubeBackHandler by lazy { YouTubeBackHandler(engineView!!, activity as MainActivity) }
 
+    private lateinit var webRenderViewModel: WebRenderViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initSession()
+
+        webRenderViewModel = FirefoxViewModelProviders.of(this).get(WebRenderViewModel::class.java)
     }
 
     @SuppressLint("RestrictedApi")
