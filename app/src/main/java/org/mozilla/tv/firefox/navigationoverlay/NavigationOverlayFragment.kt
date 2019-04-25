@@ -43,7 +43,6 @@ import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
-import org.mozilla.tv.firefox.architecture.FocusOnShowDelegate
 import org.mozilla.tv.firefox.experiments.ExperimentConfig
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
@@ -55,7 +54,6 @@ import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsChannelAdapter
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
-import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
@@ -147,8 +145,6 @@ class NavigationOverlayFragment : Fragment() {
 
     private lateinit var rootView: View
 
-    // TODO: remove this when FocusRepo is in place #1395
-    private var defaultFocusTag = NavigationOverlayFragment.FRAGMENT_TAG
     @Deprecated(message = "VM state should be used reactively, not imperatively. See #1395, which will fix this")
     private var lastPocketState: PocketViewModel.State? = null
 
@@ -209,23 +205,25 @@ class NavigationOverlayFragment : Fragment() {
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
 
         // TODO: remove this when FocusRepo is in place #1395
-        when (defaultFocusTag) {
-            PocketVideoFragment.FRAGMENT_TAG -> {
-                pocketVideoMegaTileView.requestFocus()
-                defaultFocusTag = NavigationOverlayFragment.FRAGMENT_TAG
-            }
-            NavigationOverlayFragment.FRAGMENT_TAG -> navUrlInput.requestFocus()
-        }
+//        when (defaultFocusTag) {
+//            PocketVideoFragment.FRAGMENT_TAG -> {
+//                pocketVideoMegaTileView.requestFocus()
+//                defaultFocusTag = NavigationOverlayFragment.FRAGMENT_TAG
+//            }
+//            NavigationOverlayFragment.FRAGMENT_TAG -> navUrlInput.requestFocus()
+//        }
 
         registerForContextMenu(tileContainer)
     }
 
     override fun onStart() {
         super.onStart()
+        observeRequestFocus()
+            .addTo(compositeDisposable)
         observeFocusState()
-                .addTo(compositeDisposable)
+            .addTo(compositeDisposable)
         observeTilesContainer()
-                .addTo(compositeDisposable)
+            .addTo(compositeDisposable)
         observePocketState()
             .addTo(compositeDisposable)
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = false)
@@ -237,13 +235,16 @@ class NavigationOverlayFragment : Fragment() {
         compositeDisposable.clear()
     }
 
-    override fun onHiddenChanged(hidden: Boolean) {
-        FocusOnShowDelegate().onHiddenChanged(this, hidden)
-        super.onHiddenChanged(hidden)
-    }
-
     private fun exitFirefox() {
         activity!!.moveTaskToBack(true)
+    }
+
+    private fun observeRequestFocus(): Disposable {
+        return navigationOverlayViewModel.focusRequest
+            .subscribe { viewId ->
+                val viewToFocus = rootView.findViewById<View>(viewId)
+                viewToFocus?.requestFocus()
+            }
     }
 
     private fun observeFocusState(): Disposable {
