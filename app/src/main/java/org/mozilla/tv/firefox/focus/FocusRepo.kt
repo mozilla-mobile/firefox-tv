@@ -154,13 +154,18 @@ class FocusRepo(
                         newState = updatePocketMegaTileFocusTree(activeScreen, focusNode, pinnedTilesIsEmpty)
                     }
                     R.id.megaTileTryAgainButton -> {
-                        newState = updatePocketMegaTileFocusTree(activeScreen, focusNode, pinnedTilesIsEmpty)
+                        newState = handleLostFocusInOverlay(
+                                activeScreen,
+                                focusNode,
+                                sessionState,
+                                pinnedTilesIsEmpty,
+                                pocketState)
                     }
                     R.id.home_tile -> {
                         // If pinnedTiles is empty and current focus is on home_tile, we need to
                         // restore lost focus (this happens when you remove all tiles in the overlay)
                         if (pinnedTilesIsEmpty) {
-                            newState = handleEmptyTilesLostFocus(
+                            newState = handleLostFocusInOverlay(
                                     activeScreen,
                                     focusNode,
                                     sessionState,
@@ -287,21 +292,24 @@ class FocusRepo(
     }
 
     /**
-     * When all the pinned tiles are removed, tilContainer no longer needs focus
+     * Two possible scenarios for losing focus when in overlay:
+     * 1. When all the pinned tiles are removed, tilContainer no longer needs focus
+     * 2. When click on [megaTileTryAgainButton]
      */
-    private fun handleEmptyTilesLostFocus(
+    private fun handleLostFocusInOverlay(
         activeScreen: ScreenControllerStateMachine.ActiveScreen,
-        tileContainerFocusNode: FocusNode,
+        lostFocusNode: FocusNode,
         sessionState: SessionRepo.State,
         pinnedTilesIsEmpty: Boolean,
         pocketState: PocketVideoRepo.FeedState
     ): State {
 
-        assert(tileContainerFocusNode.viewId == R.id.tileContainer)
+        assert(lostFocusNode.viewId == R.id.tileContainer ||
+                lostFocusNode.viewId == R.id.megaTileTryAgainButton)
 
-        val viewId = when {
-            pocketState == PocketVideoRepo.FeedState.FetchFailed -> R.id.megaTileTryAgainButton
-            pocketState == PocketVideoRepo.FeedState.Inactive -> R.id.navUrlInput
+        val viewId = when (pocketState) {
+            PocketVideoRepo.FeedState.FetchFailed -> R.id.megaTileTryAgainButton
+            PocketVideoRepo.FeedState.Inactive -> R.id.navUrlInput
             else -> R.id.pocketVideoMegaTileView
         }
 
@@ -313,7 +321,9 @@ class FocusRepo(
         }
 
         // Request focus on newState
-        _events.onNext(Event.RequestFocus)
+        if (newFocusNode.viewId != lostFocusNode.viewId) {
+            _events.onNext(Event.RequestFocus)
+        }
 
         return newState
     }
