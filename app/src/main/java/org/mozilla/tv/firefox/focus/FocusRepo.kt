@@ -118,6 +118,7 @@ class FocusRepo(
     ): State {
 
         var newState = _state.value!!
+        val focusMap = _state.value!!.defaultFocusMap
         when (activeScreen) {
             ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY -> {
                 when (focusNode.viewId) {
@@ -144,13 +145,14 @@ class FocusRepo(
             }
             ScreenControllerStateMachine.ActiveScreen.WEB_RENDER -> {
                 if (prevScreen == ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY) {
-                    // TODO
+                    newState = updateDefaultFocusForOverlayWhenTransitioningToWebRender(
+                            activeScreen,
+                            focusMap,
+                            sessionState)
                 }
             }
             ScreenControllerStateMachine.ActiveScreen.POCKET -> {
                 if (prevScreen == ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY) {
-                    val focusMap = _state.value!!.defaultFocusMap
-                    // FIXME: verify if a new state needs to be returned (see Event)
                     newState = updateDefaultFocusForOverlayWhenTransitioningToPocket(activeScreen, focusMap)
                 }
             }
@@ -266,6 +268,27 @@ class FocusRepo(
                 focusedPocketMegatTileNode.viewId,
                 nextFocusDownId = nextFocusDownId),
             defaultFocusMap = _state.value!!.defaultFocusMap)
+    }
+
+    private fun updateDefaultFocusForOverlayWhenTransitioningToWebRender(
+        activeScreen: ScreenControllerStateMachine.ActiveScreen,
+        focusMap: HashMap<ScreenControllerStateMachine.ActiveScreen, Int>,
+        sessionState: SessionRepo.State
+    ): State {
+
+        // It doesn't make sense to be able to transition to WebRender if currUrl == APP_URL_HOME
+        assert(sessionState.currentUrl != URLs.APP_URL_HOME)
+
+        focusMap[ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY] = when {
+            sessionState.backEnabled -> R.id.navButtonBack
+            sessionState.forwardEnabled -> R.id.navButtonForward
+            else -> R.id.navButtonReload
+        }
+
+        return State(
+                activeScreen = activeScreen,
+                focusNode = _state.value!!.focusNode,
+                defaultFocusMap = focusMap)
     }
 
     private fun updateDefaultFocusForOverlayWhenTransitioningToPocket(

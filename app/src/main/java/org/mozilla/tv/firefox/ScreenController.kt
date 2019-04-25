@@ -11,7 +11,6 @@ import android.view.KeyEvent
 import androidx.fragment.app.FragmentManager
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import kotlinx.android.synthetic.main.fragment_navigation_overlay.navUrlInput
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition
@@ -143,7 +142,6 @@ class ScreenController(private val sessionRepo: SessionRepo) {
 
             transaction.show(overlayFragment)
             MenuInteractionMonitor.menuOpened()
-            overlayFragment.navUrlInput.requestFocus()
             // TODO: Disabled until Overlay refactor is complete #1666
             // overlayFragment.navOverlayScrollView.updateOverlayForHomescreen(isOnHomeUrl(fragmentManager))
         } else {
