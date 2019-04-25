@@ -20,7 +20,6 @@ import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -392,7 +391,6 @@ class NavigationOverlayFragment : Fragment() {
                 // that the Uri is valid, so we do not do error handling here.
                 // TODO: NavigationOverlayFragment->ViewModel->Repo
                 pinnedTileViewModel.unpin(tileToRemove.url)
-                checkIfTilesFocusNeedRefresh()
                 TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileToRemove)
                 return true
             }
@@ -413,20 +411,6 @@ class NavigationOverlayFragment : Fragment() {
                     onNavigationEvent.invoke(navigationEvent, null, null)
                 }
         )
-    }
-
-    /**
-     * Focus may be lost if all pinned items are removed via onContextItemSelected()
-     * FIXME: requires OverlayFragment (LifecycleOwner) -> OverlayVM -> FocusRepo
-     */
-    private fun checkIfTilesFocusNeedRefresh() {
-        if (tileAdapter.itemCount == 0) {
-            if (pocketVideosContainer.isVisible) {
-                pocketVideoMegaTileView.requestFocus()
-            } else {
-                megaTileTryAgainButton.requestFocus()
-            }
-        }
     }
 
     override fun onDestroyView() {
