@@ -203,15 +203,6 @@ class NavigationOverlayFragment : Fragment() {
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context!!, R.color.photonGrey10_a60p)) }
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
 
-        // TODO: remove this when FocusRepo is in place #1395
-//        when (defaultFocusTag) {
-//            PocketVideoFragment.FRAGMENT_TAG -> {
-//                pocketVideoMegaTileView.requestFocus()
-//                defaultFocusTag = NavigationOverlayFragment.FRAGMENT_TAG
-//            }
-//            NavigationOverlayFragment.FRAGMENT_TAG -> navUrlInput.requestFocus()
-//        }
-
         registerForContextMenu(tileContainer)
     }
 
