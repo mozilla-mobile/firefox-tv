@@ -23,10 +23,10 @@ import org.mozilla.tv.firefox.utils.Direction
 import org.mozilla.tv.firefox.utils.toObservableMutableSet
 
 // Constants that we expect to be tweaked in order to adjust cursor behavior
-private const val INITIAL_VELOCITY = 5f
-private const val MAX_VELOCITY = 25f
-private const val MS_TO_MAX_VELOCITY = 200
-private const val MAX_SCROLL_VELOCITY = 13
+private const val INITIAL_VELOCITY = 0f
+private const val MAX_VELOCITY = 21f
+private const val MS_TO_MAX_VELOCITY = 600
+private const val MAX_SCROLL_VELOCITY = 16
 
 // Other constants
 private const val VELOCITY_TO_ACCELERATE = MAX_VELOCITY - INITIAL_VELOCITY
