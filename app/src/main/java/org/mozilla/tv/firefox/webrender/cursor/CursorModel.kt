@@ -34,7 +34,6 @@ private const val ACCELERATION_PER_MS = VELOCITY_TO_ACCELERATE / MS_TO_MAX_VELOC
 // 60 FPS = 16.6 repeating millis/frame.
 // This is only used to draw one frame, so it's alright that it's only an approximation
 private const val MS_PER_FRAME = 16
-private const val EDGE_OF_SCREEN_MARGIN = 1
 private const val LAST_UPDATE_AT_MS_UNSET = -1L
 
 /**
@@ -322,10 +321,10 @@ class CursorModel(
     private fun getEdgeOfScreenNearCursor(): Direction? {
         val screenBounds = screenBounds ?: return null
         return when {
-            lastKnownCursorPos.y < EDGE_OF_SCREEN_MARGIN -> Direction.UP
-            lastKnownCursorPos.y > screenBounds.y - EDGE_OF_SCREEN_MARGIN -> Direction.DOWN
-            lastKnownCursorPos.x < EDGE_OF_SCREEN_MARGIN -> Direction.LEFT
-            lastKnownCursorPos.x > screenBounds.x - EDGE_OF_SCREEN_MARGIN -> Direction.RIGHT
+            lastKnownCursorPos.y <= 0 -> Direction.UP
+            lastKnownCursorPos.y >= screenBounds.y -> Direction.DOWN
+            lastKnownCursorPos.x <= 0 -> Direction.LEFT
+            lastKnownCursorPos.x >= screenBounds.x -> Direction.RIGHT
             else -> null
         }
     }
