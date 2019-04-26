@@ -30,7 +30,6 @@ class FocusRepo(
 ) : ViewTreeObserver.OnGlobalFocusChangeListener {
 
     data class State(
-        val activeScreen: ScreenControllerStateMachine.ActiveScreen,
         val focusNode: FocusNode,
         val defaultFocusMap: HashMap<ScreenControllerStateMachine.ActiveScreen, Int>
     )
@@ -96,7 +95,6 @@ class FocusRepo(
 
         newFocus?.let {
             val newState = State(
-                activeScreen = _state.value!!.activeScreen,
                 focusNode = FocusNode(it.id),
                 defaultFocusMap = _state.value!!.defaultFocusMap)
 
@@ -111,7 +109,6 @@ class FocusRepo(
         focusMap[ScreenControllerStateMachine.ActiveScreen.POCKET] = R.id.videoFeed
 
         val newState = State(
-            activeScreen = ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY,
             focusNode = FocusNode(R.id.navUrlInput),
             defaultFocusMap = focusMap)
 
@@ -136,12 +133,11 @@ class FocusRepo(
                 when (prevScreen) {
                     ScreenControllerStateMachine.ActiveScreen.WEB_RENDER -> {
                         newState = updateDefaultFocusForOverlayWhenTransitioningFromWebRender(
-                                activeScreen,
                                 focusMap,
                                 sessionState)
                     }
                     ScreenControllerStateMachine.ActiveScreen.POCKET -> {
-                        newState = updateDefaultFocusForOverlayWhenTransitioningFromPocket(activeScreen, focusMap)
+                        newState = updateDefaultFocusForOverlayWhenTransitioningFromPocket(focusMap)
                     }
                     else -> Unit
                 }
@@ -149,23 +145,21 @@ class FocusRepo(
                 when (focusNode.viewId) {
                     R.id.navUrlInput ->
                         newState = updateNavUrlInputFocusTree(
-                                activeScreen,
                                 focusNode,
                                 sessionState,
                                 pinnedTilesIsEmpty,
                                 pocketState)
                     R.id.navButtonReload -> {
-                        newState = updateReloadButtonFocusTree(activeScreen, focusNode, sessionState)
+                        newState = updateReloadButtonFocusTree(focusNode, sessionState)
                     }
                     R.id.navButtonForward -> {
-                        newState = updateForwardButtonFocusTree(activeScreen, focusNode, sessionState)
+                        newState = updateForwardButtonFocusTree(focusNode, sessionState)
                     }
                     R.id.pocketVideoMegaTileView -> {
-                        newState = updatePocketMegaTileFocusTree(activeScreen, focusNode, pinnedTilesIsEmpty)
+                        newState = updatePocketMegaTileFocusTree(focusNode, pinnedTilesIsEmpty)
                     }
                     R.id.megaTileTryAgainButton -> {
                         newState = handleLostFocusInOverlay(
-                                activeScreen,
                                 focusNode,
                                 sessionState,
                                 pinnedTilesIsEmpty,
@@ -176,7 +170,6 @@ class FocusRepo(
                         // restore lost focus (this happens when you remove all tiles in the overlay)
                         if (pinnedTilesIsEmpty) {
                             newState = handleLostFocusInOverlay(
-                                    activeScreen,
                                     focusNode,
                                     sessionState,
                                     pinnedTilesIsEmpty,
@@ -188,7 +181,6 @@ class FocusRepo(
                         val newFocusNode = FocusNode(R.id.navUrlInput)
 
                         newState = updateNavUrlInputFocusTree(
-                                activeScreen,
                                 newFocusNode,
                                 sessionState,
                                 pinnedTilesIsEmpty,
@@ -211,7 +203,6 @@ class FocusRepo(
     }
 
     private fun updateNavUrlInputFocusTree(
-        activeScreen: ScreenControllerStateMachine.ActiveScreen,
         focusedNavUrlInputNode: FocusNode,
         sessionState: SessionRepo.State,
         pinnedTilesIsEmpty: Boolean,
@@ -240,7 +231,6 @@ class FocusRepo(
         }
 
         return State(
-            activeScreen = activeScreen,
             focusNode = FocusNode(
                 focusedNavUrlInputNode.viewId,
                 nextFocusUpId,
@@ -249,7 +239,6 @@ class FocusRepo(
     }
 
     private fun updateReloadButtonFocusTree(
-        activeScreen: ScreenControllerStateMachine.ActiveScreen,
         focusedReloadButtonNode: FocusNode,
         sessionState: SessionRepo.State
     ): State {
@@ -263,7 +252,6 @@ class FocusRepo(
         }
 
         return State(
-            activeScreen = activeScreen,
             focusNode = FocusNode(
                 focusedReloadButtonNode.viewId,
                 nextFocusLeftId = nextFocusLeftId),
@@ -271,7 +259,6 @@ class FocusRepo(
     }
 
     private fun updateForwardButtonFocusTree(
-        activeScreen: ScreenControllerStateMachine.ActiveScreen,
         focusedForwardButtonNode: FocusNode,
         sessionState: SessionRepo.State
     ): State {
@@ -284,7 +271,6 @@ class FocusRepo(
         }
 
         return State(
-            activeScreen = activeScreen,
             focusNode = FocusNode(
                 focusedForwardButtonNode.viewId,
                 nextFocusLeftId = nextFocusLeftId),
@@ -292,7 +278,6 @@ class FocusRepo(
     }
 
     private fun updatePocketMegaTileFocusTree(
-        activeScreen: ScreenControllerStateMachine.ActiveScreen,
         focusedPocketMegatTileNode: FocusNode,
         pinnedTilesIsEmpty: Boolean
     ): State {
@@ -306,7 +291,6 @@ class FocusRepo(
         }
 
         return State(
-            activeScreen = activeScreen,
             focusNode = FocusNode(
                 focusedPocketMegatTileNode.viewId,
                 nextFocusDownId = nextFocusDownId),
@@ -319,7 +303,6 @@ class FocusRepo(
      * 2. When click on [megaTileTryAgainButton]
      */
     private fun handleLostFocusInOverlay(
-        activeScreen: ScreenControllerStateMachine.ActiveScreen,
         lostFocusNode: FocusNode,
         sessionState: SessionRepo.State,
         pinnedTilesIsEmpty: Boolean,
@@ -337,9 +320,9 @@ class FocusRepo(
 
         val newFocusNode = FocusNode(viewId)
         val newState = if (newFocusNode.viewId == R.id.navUrlInput) {
-            updateNavUrlInputFocusTree(activeScreen, newFocusNode, sessionState, pinnedTilesIsEmpty, pocketState)
+            updateNavUrlInputFocusTree(newFocusNode, sessionState, pinnedTilesIsEmpty, pocketState)
         } else {
-            updatePocketMegaTileFocusTree(activeScreen, newFocusNode, pinnedTilesIsEmpty)
+            updatePocketMegaTileFocusTree(newFocusNode, pinnedTilesIsEmpty)
         }
 
         // Request focus on newState
@@ -351,7 +334,6 @@ class FocusRepo(
     }
 
     private fun updateDefaultFocusForOverlayWhenTransitioningFromWebRender(
-        activeScreen: ScreenControllerStateMachine.ActiveScreen,
         focusMap: HashMap<ScreenControllerStateMachine.ActiveScreen, Int>,
         sessionState: SessionRepo.State
     ): State {
@@ -366,20 +348,17 @@ class FocusRepo(
         }
 
         return State(
-                activeScreen = activeScreen,
                 focusNode = _state.value!!.focusNode,
                 defaultFocusMap = focusMap)
     }
 
     private fun updateDefaultFocusForOverlayWhenTransitioningFromPocket(
-        activeScreen: ScreenControllerStateMachine.ActiveScreen,
         focusMap: HashMap<ScreenControllerStateMachine.ActiveScreen, Int>
     ): State {
         focusMap[ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY] =
                 R.id.pocketVideoMegaTileView
 
         return State(
-            activeScreen = activeScreen,
             focusNode = _state.value!!.focusNode,
             defaultFocusMap = focusMap)
     }

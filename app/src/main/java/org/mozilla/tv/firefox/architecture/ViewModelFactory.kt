@@ -58,7 +58,8 @@ class ViewModelFactory(
 
             NavigationOverlayViewModel::class.java -> NavigationOverlayViewModel(
                 serviceLocator.sessionRepo,
-                serviceLocator.focusRepo
+                serviceLocator.focusRepo,
+                serviceLocator.screenController.currentActiveScreen
             ) as T
 
             OverlayHintViewModel::class.java -> OverlayHintViewModel(

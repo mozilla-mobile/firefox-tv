@@ -15,16 +15,20 @@ import org.mozilla.tv.firefox.focus.FocusRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.URLs
 
-class NavigationOverlayViewModel(sessionRepo: SessionRepo, focusRepo: FocusRepo) : ViewModel() {
+class NavigationOverlayViewModel(
+    sessionRepo: SessionRepo,
+    focusRepo: FocusRepo,
+    currActiveScreen: Observable<ScreenControllerStateMachine.ActiveScreen>
+) : ViewModel() {
 
-    val focusRequest: Observable<Int> = focusRepo.events.withLatestFrom(focusRepo.focusUpdate)
-        .filter { (_, state) ->
-            state.activeScreen == ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY
+    val focusRequest: Observable<Int> = focusRepo.events.withLatestFrom(focusRepo.focusUpdate, currActiveScreen)
+        .filter { (_, _, activeScreen) ->
+            activeScreen == ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY
         }
-        .map { (event, state) ->
+        .map { (event, state, activeScreen) ->
             when (event) {
                 FocusRepo.Event.ScreenChange ->
-                    state.defaultFocusMap[state.activeScreen] ?: R.id.navUrlInput
+                    state.defaultFocusMap[activeScreen] ?: R.id.navUrlInput
                 FocusRepo.Event.RequestFocus ->
                     state.focusNode.viewId
             }
