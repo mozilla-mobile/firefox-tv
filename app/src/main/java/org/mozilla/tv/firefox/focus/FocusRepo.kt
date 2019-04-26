@@ -86,13 +86,21 @@ class FocusRepo(
     }
 
     override fun onGlobalFocusChanged(oldFocus: View?, newFocus: View?) {
+        fun <T> BehaviorSubject<T>.onNextIfNew(value: T) {
+            val currState = this.value as State
+            val newState = value as State
+            if (currState.focusNode.viewId != newState.focusNode.viewId &&
+                    newState.focusNode.viewId != -1)
+                this.onNext(value)
+        }
+
         newFocus?.let {
             val newState = State(
                 activeScreen = _state.value!!.activeScreen,
                 focusNode = FocusNode(it.id),
                 defaultFocusMap = _state.value!!.defaultFocusMap)
 
-            _state.onNext(newState)
+            _state.onNextIfNew(newState)
         }
     }
 

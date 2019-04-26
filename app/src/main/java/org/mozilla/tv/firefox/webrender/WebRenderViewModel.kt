@@ -11,18 +11,12 @@ import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.focus.FocusRepo
 
-class WebRenderViewModel(focusRepo: FocusRepo) : ViewModel() {
+class WebRenderViewModel(focusRepo: FocusRepo, activeScreen: Observable<ScreenControllerStateMachine.ActiveScreen>) : ViewModel() {
 
-    val focusRequest: Observable<Int> = focusRepo.events.withLatestFrom(focusRepo.focusUpdate)
-            .filter { (_, state) ->
-                state.activeScreen == ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
-            }
-            .map { (event, state) ->
-                when (event) {
-                    FocusRepo.Event.ScreenChange ->
-                        state.defaultFocusMap[state.activeScreen] ?: R.id.navUrlInput
-                    FocusRepo.Event.RequestFocus ->
-                        state.focusNode.viewId
-                }
+    val focusRequest: Observable<Int> = focusRepo.events.withLatestFrom(activeScreen)
+            .filter { (_, activeScreen) ->
+                activeScreen == ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
+            }.map {
+                R.id.engineView
             }
 }
