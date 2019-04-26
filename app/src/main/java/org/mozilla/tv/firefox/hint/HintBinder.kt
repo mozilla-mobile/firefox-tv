@@ -40,15 +40,14 @@ object HintBinder {
                     }
                     .subscribe { shouldDisplay ->
                         hintContainer.isVisible = true
-                        val (translationY, alpha) = when (shouldDisplay) {
-                            true -> Pair(0f, 1f)
-                            false -> Pair(hintContainer.height.toFloat(), 0f)
+                        val translationY = when (shouldDisplay) {
+                            true -> 0f
+                            false -> hintContainer.height.toFloat()
                         }
                         hintContainer.animate()
                                 .setDuration(250)
                                 .setInterpolator(FastOutSlowInInterpolator())
                                 .translationY(translationY)
-                                .alpha(alpha)
                                 .start()
                     }
         }
