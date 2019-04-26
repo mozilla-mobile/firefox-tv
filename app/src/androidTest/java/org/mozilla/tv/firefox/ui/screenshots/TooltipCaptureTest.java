@@ -5,6 +5,8 @@
 
 package org.mozilla.tv.firefox.ui.screenshots;
 
+import android.os.Build;
+
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.By;
@@ -24,6 +26,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -57,7 +60,7 @@ public class TooltipCaptureTest extends ScreenshotTest {
 
         device.pressMenu();
         device.pressDPadUp();
-        onView(withId(R.id.tooltip)).inRoot(isPlatformPopup()).check(matches(isDisplayed()));
+        checkTooltipDisplayed();
         takeScreenshotsAfterWait("tooltip-backbutton", 500);
 
         onView(withId(R.id.navButtonBack)).perform(click());
@@ -67,29 +70,37 @@ public class TooltipCaptureTest extends ScreenshotTest {
         device.pressDPadRight();  // In fastlane, back button is still enabled - this might be fastlane issue
 
         // forward button
-        onView(withId(R.id.tooltip)).inRoot(isPlatformPopup()).check(matches(isDisplayed()));
+        checkTooltipDisplayed();
         takeScreenshotsAfterWait("tooltip-forwardbutton", 500);
         device.pressDPadRight();
-        onView(withId(R.id.tooltip)).inRoot(isPlatformPopup()).check(matches(isDisplayed()));
+        checkTooltipDisplayed();
         takeScreenshotsAfterWait("tooltip-reload", 500);
         device.pressDPadRight();
-        onView(withId(R.id.tooltip)).inRoot(isPlatformPopup()).check(matches(isDisplayed()));
+        checkTooltipDisplayed();
         takeScreenshotsAfterWait("tooltip-pintohs", 500);
         device.pressDPadRight();
-        onView(withId(R.id.tooltip)).inRoot(isPlatformPopup()).check(matches(isDisplayed()));
+        checkTooltipDisplayed();
         takeScreenshotsAfterWait("tooltip-turbomode", 500);
         device.pressDPadRight();
-        onView(withId(R.id.tooltip)).inRoot(isPlatformPopup()).check(matches(isDisplayed()));
+        checkTooltipDisplayed();
         takeScreenshotsAfterWait("tooltip-requestdesktop", 500);
         device.pressDPadRight();
-        onView(withId(R.id.tooltip)).inRoot(isPlatformPopup()).check(matches(isDisplayed()));
+        checkTooltipDisplayed();
         takeScreenshotsAfterWait("tooltip-exit", 500);
         device.pressDPadRight();
-        onView(withId(R.id.tooltip)).inRoot(isPlatformPopup()).check(matches(isDisplayed()));
+        checkTooltipDisplayed();
         takeScreenshotsAfterWait("tooltip-settings", 500);
         device.pressDPadLeft();
         device.pressDPadLeft();
         device.pressDPadCenter();
         takeScreenshotsAfterWait("desktoprequested", 500);
+    }
+
+    private void checkTooltipDisplayed() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            onView(withId(R.id.tooltip)).inRoot(isPlatformPopup()).check(matches(isDisplayed()));
+        } else {
+            onView(withId(R.id.tooltip)).inRoot(withDecorView(withId(R.id.tooltip))).check(matches(isDisplayed()));
+        }
     }
 }
