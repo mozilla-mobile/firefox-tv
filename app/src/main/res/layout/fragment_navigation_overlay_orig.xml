@@ -105,7 +105,8 @@
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="24dp"
                     android:layout_marginBottom="12dp"
-                    android:text="@string/menu_settings" />
+                    android:text="@string/menu_settings"
+                    android:fontFamily="@string/font_ember_regular"/>
 
                 <androidx.leanback.widget.ListRowView
                     android:id="@+id/settingsTileContainer"

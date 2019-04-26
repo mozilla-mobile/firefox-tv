@@ -35,5 +35,6 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="12dp"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:fontFamily="@string/font_ember_regular"/>
 </LinearLayout>

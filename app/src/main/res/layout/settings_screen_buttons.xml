@@ -31,6 +31,7 @@
         android:gravity="center_vertical"
         android:maxWidth="400dp"
         android:text="@string/settings_cookies_dialog_title"
+        android:fontFamily="@string/font_ember_regular"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/back_button"
@@ -44,6 +45,7 @@
         android:paddingStart="0dp"
         android:paddingEnd="300dp"
         android:text="@string/settings_cookies_dialog_content2"
+        android:fontFamily="@string/font_ember_regular"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="@+id/title"
         app:layout_constraintTop_toBottomOf="@+id/title" />
@@ -56,6 +58,7 @@
         android:layout_marginTop="24dp"
         android:text="@string/settings_cookies_confirm"
         android:textSize="14sp"
+        android:fontFamily="@string/font_ember_regular"
         app:layout_constraintStart_toStartOf="@+id/title"
         app:layout_constraintTop_toBottomOf="@+id/description">
 
@@ -70,6 +73,7 @@
         android:layout_marginStart="24dp"
         android:text="@string/action_cancel"
         android:textSize="14sp"
+        android:fontFamily="@string/font_ember_regular"
         app:layout_constraintStart_toEndOf="@+id/confirm_action"
         app:layout_constraintTop_toTopOf="@+id/confirm_action" />
 </androidx.constraintlayout.widget.ConstraintLayout>
