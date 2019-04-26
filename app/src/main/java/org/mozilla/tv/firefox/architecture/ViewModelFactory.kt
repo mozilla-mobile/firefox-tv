@@ -74,7 +74,8 @@ class ViewModelFactory(
             ) as T
 
             WebRenderViewModel::class.java -> WebRenderViewModel(
-                serviceLocator.focusRepo
+                serviceLocator.focusRepo,
+                serviceLocator.screenController.currentActiveScreen
             ) as T
 
         // This class needs to either return a ViewModel or throw, so we have no good way of silently handling
