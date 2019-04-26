@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Move Settings into channel on the homescreen (#689)
 
 ### Changed
+- Improve cursor performance and feel (#1912)
 
 ### Fixed
 
