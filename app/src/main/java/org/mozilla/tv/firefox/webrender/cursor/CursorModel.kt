@@ -81,6 +81,7 @@ sealed class CursorEvent {
  * Our solution is to have the View drive the interaction, ensuring exactly one update per frame.
  * This is effective, but inconsistent with our architecture.
  */
+@Suppress("LargeClass") // See kdoc above for details.
 class CursorModel(
     activeScreen: Observable<ScreenControllerStateMachine.ActiveScreen>,
     frameworkRepo: FrameworkRepo,
