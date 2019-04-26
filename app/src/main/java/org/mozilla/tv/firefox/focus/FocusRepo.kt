@@ -12,6 +12,7 @@ import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
+import mozilla.components.browser.engine.system.NestedWebView
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
@@ -20,7 +21,7 @@ import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.URLs
 
-private const val INVALID_VIEW_ID = -1
+private const val NESTED_WEB_VIEW_ID = 2147483646 // Int.MAX_VALUE - 1
 
 class FocusRepo(
     screenController: ScreenController,
@@ -89,13 +90,15 @@ class FocusRepo(
             val currState = this.value as State
             val newState = value as State
             if (currState.focusNode.viewId != newState.focusNode.viewId &&
-                    newState.focusNode.viewId != -1)
+                    newState.focusNode.viewId != NESTED_WEB_VIEW_ID)
                 this.onNext(value)
         }
 
-        newFocus?.let {
+        newFocus?.let { newView ->
+            val viewId = validateKnownViewById(newView)
+
             val newState = State(
-                focusNode = FocusNode(it.id),
+                focusNode = FocusNode(viewId),
                 defaultFocusMap = _state.value!!.defaultFocusMap)
 
             _state.onNextIfNew(newState)
@@ -176,7 +179,7 @@ class FocusRepo(
                                     pocketState)
                         }
                     }
-                    INVALID_VIEW_ID -> {
+                    View.NO_ID -> {
                         // Focus is lost so default it to navUrlInput and send a [Event.RequestFocus]
                         val newFocusNode = FocusNode(R.id.navUrlInput)
 
@@ -361,5 +364,22 @@ class FocusRepo(
         return State(
             focusNode = _state.value!!.focusNode,
             defaultFocusMap = focusMap)
+    }
+
+    /**
+     * When view gains focus, its child(ren) views may gain focus with undefined View_ID
+     * due to programmatic declaration
+     */
+    private fun validateKnownViewById(viewToValidate: View): Int {
+        if (viewToValidate.id == View.NO_ID) {
+            when (viewToValidate) {
+                is NestedWebView -> return NESTED_WEB_VIEW_ID
+                else -> {
+                    // TODO: need sentry/telemetry to keep track of what views without IDs get passed in
+                }
+            }
+        }
+
+        return viewToValidate.id
     }
 }
