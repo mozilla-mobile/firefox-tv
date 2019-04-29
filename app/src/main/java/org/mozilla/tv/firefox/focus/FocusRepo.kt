@@ -10,8 +10,6 @@ import androidx.annotation.VisibleForTesting
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
 import mozilla.components.browser.engine.system.NestedWebView
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
@@ -30,15 +28,12 @@ class FocusRepo(
     pocketRepo: PocketVideoRepo
 ) : ViewTreeObserver.OnGlobalFocusChangeListener {
 
+    val defaultFocusMap: HashMap<ScreenControllerStateMachine.ActiveScreen, Int> = HashMap()
+
     data class State(
         val focusNode: FocusNode,
-        val focused: Boolean = true,
-        val defaultFocusMap: HashMap<ScreenControllerStateMachine.ActiveScreen, Int>
+        val focused: Boolean = true
     )
-
-    enum class Event {
-        ScreenChange
-    }
 
     /**
      * FocusNode describes quasi-directional focusable paths given viewId
@@ -60,12 +55,20 @@ class FocusRepo(
         }
     }
 
+    init {
+        initializeDefaultFocus()
+    }
+
+    private fun initializeDefaultFocus() {
+        defaultFocusMap[ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY] = R.id.navUrlInput
+        defaultFocusMap[ScreenControllerStateMachine.ActiveScreen.WEB_RENDER] = R.id.engineView
+        defaultFocusMap[ScreenControllerStateMachine.ActiveScreen.POCKET] = R.id.videoFeed
+    }
+
     // TODO: potential for telemetry?
-    private val _state: BehaviorSubject<State> = BehaviorSubject.create()
-
-    private val _events: Subject<Event> = PublishSubject.create()
-
-    val events: Observable<Event> = _events.hide()
+    private val _state: BehaviorSubject<State> = BehaviorSubject.createDefault(
+            State(FocusNode(R.id.navUrlInput), focused = true)
+    )
 
     // Keep track of prevScreen to identify screen transitions
     private var prevScreen: ScreenControllerStateMachine.ActiveScreen =
@@ -80,11 +83,9 @@ class FocusRepo(
         dispatchFocusUpdates(state.focusNode, activeScreen, sessionState, pinnedTilesIsEmpty, pocketState)
     }
 
-    val focusUpdate: Observable<State> = _focusUpdate.hide()
-
-    init {
-        initializeDefaultFocus()
-    }
+    val focusUpdate: Observable<State> = _focusUpdate
+            .distinctUntilChanged()
+            .hide()
 
     override fun onGlobalFocusChanged(oldFocus: View?, newFocus: View?) {
         fun <T> BehaviorSubject<T>.onNextIfNew(value: T) {
@@ -100,23 +101,10 @@ class FocusRepo(
 
             val newState = State(
                 focusNode = FocusNode(viewId),
-                defaultFocusMap = _state.value!!.defaultFocusMap)
+                focused = true)
 
             _state.onNextIfNew(newState)
         }
-    }
-
-    private fun initializeDefaultFocus() {
-        val focusMap = HashMap<ScreenControllerStateMachine.ActiveScreen, Int>()
-        focusMap[ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY] = R.id.navUrlInput
-        focusMap[ScreenControllerStateMachine.ActiveScreen.WEB_RENDER] = R.id.engineView
-        focusMap[ScreenControllerStateMachine.ActiveScreen.POCKET] = R.id.videoFeed
-
-        val newState = State(
-            focusNode = FocusNode(R.id.navUrlInput),
-            defaultFocusMap = focusMap)
-
-        _state.onNext(newState)
     }
 
     @VisibleForTesting
@@ -129,19 +117,16 @@ class FocusRepo(
     ): State {
 
         var newState = _state.value!!
-        val focusMap = _state.value!!.defaultFocusMap
         when (activeScreen) {
             ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY -> {
 
                 // Check previous screen for defaultFocusMap updates
                 when (prevScreen) {
                     ScreenControllerStateMachine.ActiveScreen.WEB_RENDER -> {
-                        newState = updateDefaultFocusForOverlayWhenTransitioningFromWebRender(
-                                focusMap,
-                                sessionState)
+                        updateDefaultFocusForOverlayWhenTransitioningFromWebRender(sessionState)
                     }
                     ScreenControllerStateMachine.ActiveScreen.POCKET -> {
-                        newState = updateDefaultFocusForOverlayWhenTransitioningFromPocket(focusMap)
+                        updateDefaultFocusForOverlayWhenTransitioningFromPocket()
                     }
                     else -> Unit
                 }
@@ -199,7 +184,6 @@ class FocusRepo(
         }
 
         if (prevScreen != activeScreen) {
-            _events.onNext(Event.ScreenChange)
             prevScreen = activeScreen
         }
 
@@ -240,8 +224,7 @@ class FocusRepo(
                 focusedNavUrlInputNode.viewId,
                 nextFocusUpId,
                 nextFocusDownId),
-            focused = focused,
-            defaultFocusMap = _state.value!!.defaultFocusMap)
+            focused = focused)
     }
 
     private fun updateReloadButtonFocusTree(
@@ -260,8 +243,7 @@ class FocusRepo(
         return State(
             focusNode = FocusNode(
                 focusedReloadButtonNode.viewId,
-                nextFocusLeftId = nextFocusLeftId),
-            defaultFocusMap = _state.value!!.defaultFocusMap)
+                nextFocusLeftId = nextFocusLeftId))
     }
 
     private fun updateForwardButtonFocusTree(
@@ -279,8 +261,7 @@ class FocusRepo(
         return State(
             focusNode = FocusNode(
                 focusedForwardButtonNode.viewId,
-                nextFocusLeftId = nextFocusLeftId),
-            defaultFocusMap = _state.value!!.defaultFocusMap)
+                nextFocusLeftId = nextFocusLeftId))
     }
 
     private fun updatePocketMegaTileFocusTree(
@@ -301,8 +282,7 @@ class FocusRepo(
             focusNode = FocusNode(
                 focusedPocketMegatTileNode.viewId,
                 nextFocusDownId = nextFocusDownId),
-            focused = focused,
-            defaultFocusMap = _state.value!!.defaultFocusMap)
+            focused = focused)
     }
 
     /**
@@ -339,33 +319,18 @@ class FocusRepo(
     }
 
     private fun updateDefaultFocusForOverlayWhenTransitioningFromWebRender(
-        focusMap: HashMap<ScreenControllerStateMachine.ActiveScreen, Int>,
         sessionState: SessionRepo.State
-    ): State {
-
-        // It doesn't make sense to be able to transition to WebRender if currUrl == APP_URL_HOME
-        assert(sessionState.currentUrl != URLs.APP_URL_HOME)
-
-        focusMap[ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY] = when {
+    ) {
+        defaultFocusMap[ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY] = when {
             sessionState.backEnabled -> R.id.navButtonBack
             sessionState.forwardEnabled -> R.id.navButtonForward
             else -> R.id.navButtonReload
         }
-
-        return State(
-                focusNode = _state.value!!.focusNode,
-                defaultFocusMap = focusMap)
     }
 
-    private fun updateDefaultFocusForOverlayWhenTransitioningFromPocket(
-        focusMap: HashMap<ScreenControllerStateMachine.ActiveScreen, Int>
-    ): State {
-        focusMap[ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY] =
+    private fun updateDefaultFocusForOverlayWhenTransitioningFromPocket() {
+        defaultFocusMap[ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY] =
                 R.id.pocketVideoMegaTileView
-
-        return State(
-            focusNode = _state.value!!.focusNode,
-            defaultFocusMap = focusMap)
     }
 
     /**
