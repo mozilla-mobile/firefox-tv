@@ -28,8 +28,6 @@ class FocusRepo(
     pocketRepo: PocketVideoRepo
 ) : ViewTreeObserver.OnGlobalFocusChangeListener {
 
-    val defaultFocusMap: HashMap<ActiveScreen, Int> = HashMap()
-
     data class State(
         val focusNode: FocusNode,
         val focused: Boolean = true
@@ -55,15 +53,33 @@ class FocusRepo(
         }
     }
 
-    init {
-        initializeDefaultFocus()
-    }
+    private val NO_FOCUS_REQUEST = FocusNode(View.NO_ID)
 
-    private fun initializeDefaultFocus() {
-        defaultFocusMap[ActiveScreen.NAVIGATION_OVERLAY] = R.id.navUrlInput
-        defaultFocusMap[ActiveScreen.WEB_RENDER] = R.id.engineView
-        defaultFocusMap[ActiveScreen.POCKET] = R.id.videoFeed
-    }
+    val defaultViewAfterScreenChange: Observable<FocusNode> = screenController.currentActiveScreen
+            .startWith(ActiveScreen.NAVIGATION_OVERLAY)
+            .buffer(2, 1) // This emits a list of the previous and current screen. See RxTest.kt
+            .filter { (previousScreen, currentsScreen) ->
+                previousScreen != currentsScreen
+            }
+            .map { (previousScreen, currentScreen) ->
+                when (currentScreen) {
+                    ActiveScreen.NAVIGATION_OVERLAY -> {
+                        when (previousScreen) {
+                            ActiveScreen.WEB_RENDER -> FocusNode(R.id.navUrlInput)
+                            ActiveScreen.POCKET -> FocusNode(R.id.pocketVideoMegaTileView)
+                            ActiveScreen.SETTINGS -> FocusNode(R.id.settings_tile_telemetry)
+                            else -> NO_FOCUS_REQUEST
+                        }
+                    }
+                    ActiveScreen.WEB_RENDER -> FocusNode(R.id.engineView)
+                    ActiveScreen.POCKET -> FocusNode(R.id.videoFeed)
+                    ActiveScreen.SETTINGS -> NO_FOCUS_REQUEST
+                    else -> NO_FOCUS_REQUEST
+                }
+            }
+            .filter { it != NO_FOCUS_REQUEST }
+            .replay(1)
+            .autoConnect(0)
 
     // TODO: potential for telemetry?
     private val _state: BehaviorSubject<State> = BehaviorSubject.createDefault(
@@ -296,21 +312,6 @@ class FocusRepo(
         } else {
             updatePocketMegaTileFocusTree(newFocusNode, pinnedTilesIsEmpty, focused)
         }
-    }
-
-    private fun updateDefaultFocusForOverlayWhenTransitioningFromWebRender(
-        sessionState: SessionRepo.State
-    ) {
-        defaultFocusMap[ActiveScreen.NAVIGATION_OVERLAY] = when {
-            sessionState.backEnabled -> R.id.navButtonBack
-            sessionState.forwardEnabled -> R.id.navButtonForward
-            else -> R.id.navButtonReload
-        }
-    }
-
-    private fun updateDefaultFocusForOverlayWhenTransitioningFromPocket() {
-        defaultFocusMap[ActiveScreen.NAVIGATION_OVERLAY] =
-                R.id.pocketVideoMegaTileView
     }
 
     /**

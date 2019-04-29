@@ -16,6 +16,7 @@ class NavigationOverlayViewModel(
     focusRepo: FocusRepo
 ) : ViewModel() {
     val focusUpdate = focusRepo.focusUpdate
+    val focusRequests = focusRepo.defaultViewAfterScreenChange
 
     @Suppress("DEPRECATION")
     val viewIsSplit: LiveData<Boolean> = sessionRepo.legacyState.map {
