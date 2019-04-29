@@ -142,7 +142,7 @@ class NavigationOverlayFragment : Fragment() {
 
     private lateinit var tileAdapter: PinnedTileAdapter
 
-    private lateinit var rootView: View
+    private var rootView: View? = null
 
     @Deprecated(message = "VM state should be used reactively, not imperatively. See #1395, which will fix this")
     private var lastPocketState: PocketViewModel.State? = null
@@ -235,7 +235,7 @@ class NavigationOverlayFragment : Fragment() {
     private fun observeRequestFocus(): Disposable {
         return navigationOverlayViewModel.focusRequests
             .subscribe { viewId ->
-                val viewToFocus = rootView.findViewById<View>(viewId)
+                val viewToFocus = rootView?.findViewById<View>(viewId)
                 viewToFocus?.requestFocus()
             }
     }
@@ -243,7 +243,7 @@ class NavigationOverlayFragment : Fragment() {
     private fun observeFocusState(): Disposable {
         return navigationOverlayViewModel.focusUpdate
             .subscribe { focusState ->
-                rootView.findViewById<View>(focusState.focusNode.viewId)?.let { focusedView ->
+                rootView?.findViewById<View>(focusState.focusNode.viewId)?.let { focusedView ->
                     focusState.focusNode.updateViewNodeTree(focusedView)
                     if (!focusState.focused)
                         focusedView.requestFocus()
@@ -410,6 +410,8 @@ class NavigationOverlayFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
+        rootView = null
 
         // Since we start the async jobs in View.init and Android is inflating the view for us,
         // there's no good way to pass in the uiLifecycleJob. We could consider other solutions
