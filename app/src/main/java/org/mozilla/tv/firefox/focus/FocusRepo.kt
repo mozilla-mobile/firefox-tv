@@ -55,31 +55,33 @@ class FocusRepo(
 
     private val NO_FOCUS_REQUEST = FocusNode(View.NO_ID)
 
-    val defaultViewAfterScreenChange: Observable<FocusNode> = screenController.currentActiveScreen
-            .startWith(ActiveScreen.NAVIGATION_OVERLAY)
-            .buffer(2, 1) // This emits a list of the previous and current screen. See RxTest.kt
-            .filter { (previousScreen, currentsScreen) ->
-                previousScreen != currentsScreen
-            }
-            .map { (previousScreen, currentScreen) ->
-                when (currentScreen) {
-                    ActiveScreen.NAVIGATION_OVERLAY -> {
-                        when (previousScreen) {
-                            ActiveScreen.WEB_RENDER -> FocusNode(R.id.navUrlInput)
-                            ActiveScreen.POCKET -> FocusNode(R.id.pocketVideoMegaTileView)
-                            ActiveScreen.SETTINGS -> FocusNode(R.id.settings_tile_telemetry)
+    val defaultViewAfterScreenChange: Observable<Pair<FocusNode, ActiveScreen>> =
+            screenController.currentActiveScreen
+                    .startWith(ActiveScreen.NAVIGATION_OVERLAY)
+                    .buffer(2, 1) // This emits a list of the previous and current screen. See RxTest.kt
+                    .filter { (previousScreen, currentsScreen) ->
+                        previousScreen != currentsScreen
+                    }
+                    .map { (previousScreen, currentScreen) ->
+                        val focusRequest = when (currentScreen) {
+                            ActiveScreen.NAVIGATION_OVERLAY -> {
+                                when (previousScreen) {
+                                    ActiveScreen.WEB_RENDER -> FocusNode(R.id.navUrlInput)
+                                    ActiveScreen.POCKET -> FocusNode(R.id.pocketVideoMegaTileView)
+                                    ActiveScreen.SETTINGS -> FocusNode(R.id.settings_tile_telemetry)
+                                    else -> NO_FOCUS_REQUEST
+                                }
+                            }
+                            ActiveScreen.WEB_RENDER -> FocusNode(R.id.engineView)
+                            ActiveScreen.POCKET -> FocusNode(R.id.videoFeed)
+                            ActiveScreen.SETTINGS -> NO_FOCUS_REQUEST
                             else -> NO_FOCUS_REQUEST
                         }
+                        return@map focusRequest to currentScreen
                     }
-                    ActiveScreen.WEB_RENDER -> FocusNode(R.id.engineView)
-                    ActiveScreen.POCKET -> FocusNode(R.id.videoFeed)
-                    ActiveScreen.SETTINGS -> NO_FOCUS_REQUEST
-                    else -> NO_FOCUS_REQUEST
-                }
-            }
-            .filter { it != NO_FOCUS_REQUEST }
-            .replay(1)
-            .autoConnect(0)
+                    .filter { it.first != NO_FOCUS_REQUEST }
+                    .replay(1)
+                    .autoConnect(0)
 
     // TODO: potential for telemetry?
     private val _state: BehaviorSubject<State> = BehaviorSubject.createDefault(
