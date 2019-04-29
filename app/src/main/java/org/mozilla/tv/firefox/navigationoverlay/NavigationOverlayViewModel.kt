@@ -29,12 +29,10 @@ class NavigationOverlayViewModel(
             when (event) {
                 FocusRepo.Event.ScreenChange ->
                     state.defaultFocusMap[activeScreen] ?: R.id.navUrlInput
-                FocusRepo.Event.RequestFocus ->
-                    state.focusNode.viewId
             }
     }
 
-    val focusUpdate: Observable<FocusRepo.FocusNode> = focusRepo.focusUpdate.map { it.focusNode }
+    val focusUpdate = focusRepo.focusUpdate
 
     @Suppress("DEPRECATION")
     val viewIsSplit: LiveData<Boolean> = sessionRepo.legacyState.map {

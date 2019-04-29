@@ -239,9 +239,11 @@ class NavigationOverlayFragment : Fragment() {
 
     private fun observeFocusState(): Disposable {
         return navigationOverlayViewModel.focusUpdate
-            .subscribe { focusNode ->
-                rootView.findViewById<View>(focusNode.viewId)?.let { focusedView ->
-                    focusNode.updateViewNodeTree(focusedView)
+            .subscribe { focusState ->
+                rootView.findViewById<View>(focusState.focusNode.viewId)?.let { focusedView ->
+                    focusState.focusNode.updateViewNodeTree(focusedView)
+                    if (!focusState.focused)
+                        focusedView.requestFocus()
                 }
             }
     }
