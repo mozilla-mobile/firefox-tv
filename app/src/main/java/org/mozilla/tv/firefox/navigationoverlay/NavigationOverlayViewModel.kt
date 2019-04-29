@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox.navigationoverlay
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
+import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.ext.map
 import org.mozilla.tv.firefox.focus.FocusRepo
 import org.mozilla.tv.firefox.session.SessionRepo
@@ -17,7 +18,9 @@ class NavigationOverlayViewModel(
     focusRepo: FocusRepo
 ) : ViewModel() {
     val focusUpdate = focusRepo.focusUpdate
-    val focusRequests: Observable<Int> = focusRepo.defaultViewAfterScreenChange.map { it.viewId }
+    val focusRequests: Observable<Int> = focusRepo.defaultViewAfterScreenChange
+            .filter { it.second == ActiveScreen.NAVIGATION_OVERLAY }
+            .map { it.first.viewId }
 
     @Suppress("DEPRECATION")
     val viewIsSplit: LiveData<Boolean> = sessionRepo.legacyState.map {

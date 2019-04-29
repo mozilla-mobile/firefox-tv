@@ -6,8 +6,11 @@ package org.mozilla.tv.firefox.webrender
 
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
+import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.focus.FocusRepo
 
 class WebRenderViewModel(focusRepo: FocusRepo) : ViewModel() {
-    val focusRequests: Observable<Int> = focusRepo.defaultViewAfterScreenChange.map { it.viewId }
+    val focusRequests: Observable<Int> = focusRepo.defaultViewAfterScreenChange
+            .filter { it.second == ActiveScreen.WEB_RENDER }
+            .map { it.first.viewId }
 }
