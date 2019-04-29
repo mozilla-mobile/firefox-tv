@@ -6,10 +6,6 @@ package org.mozilla.tv.firefox.navigationoverlay
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.withLatestFrom
-import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.ext.map
 import org.mozilla.tv.firefox.focus.FocusRepo
 import org.mozilla.tv.firefox.session.SessionRepo
@@ -17,21 +13,8 @@ import org.mozilla.tv.firefox.utils.URLs
 
 class NavigationOverlayViewModel(
     sessionRepo: SessionRepo,
-    focusRepo: FocusRepo,
-    currActiveScreen: Observable<ScreenControllerStateMachine.ActiveScreen>
+    focusRepo: FocusRepo
 ) : ViewModel() {
-
-    val focusRequest: Observable<Int> = focusRepo.events.withLatestFrom(focusRepo.focusUpdate, currActiveScreen)
-        .filter { (_, _, activeScreen) ->
-            activeScreen == ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY
-        }
-        .map { (event, state, activeScreen) ->
-            when (event) {
-                FocusRepo.Event.ScreenChange ->
-                    state.defaultFocusMap[activeScreen] ?: R.id.navUrlInput
-            }
-    }
-
     val focusUpdate = focusRepo.focusUpdate
 
     @Suppress("DEPRECATION")
