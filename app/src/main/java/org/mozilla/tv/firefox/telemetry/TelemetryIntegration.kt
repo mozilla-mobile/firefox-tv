@@ -34,7 +34,6 @@ import java.util.Collections
 private const val SHARED_PREFS_KEY = "telemetryLib" // Don't call it TelemetryWrapper to avoid accidental IDE rename.
 private const val KEY_CLICKED_HOME_TILE_IDS_PER_SESSION = "clickedHomeTileIDsPerSession"
 private const val KEY_REMOTE_CONTROL_NAME = "remoteControlName"
-private const val YOUTUBE_TILE_ID = "youtube"
 
 @Suppress(
         // Yes, this a large class with a lot of functions. But it's very simple and still easy to read.
@@ -255,10 +254,6 @@ open class TelemetryIntegration protected constructor(
 
     @UiThread // via TelemetryHomeTileUniqueClickPerSessionCounter
     fun homeTileClickEvent(context: Context, tile: PinnedTile) {
-        if (tile.idToString() == YOUTUBE_TILE_ID) {
-            TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE,
-                    Value.YOUTUBE_TILE).queue()
-        }
         // Add an extra that contains the tileId for bundled tiles only
         val tileType = getTileTypeAsStringValue(tile)
         if (tileType == Value.TILE_BUNDLED) {
