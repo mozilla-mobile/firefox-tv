@@ -13,7 +13,7 @@ import io.reactivex.subjects.BehaviorSubject
 import mozilla.components.browser.engine.system.NestedWebView
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
-import org.mozilla.tv.firefox.ScreenControllerStateMachine
+import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.session.SessionRepo
@@ -28,7 +28,7 @@ class FocusRepo(
     pocketRepo: PocketVideoRepo
 ) : ViewTreeObserver.OnGlobalFocusChangeListener {
 
-    val defaultFocusMap: HashMap<ScreenControllerStateMachine.ActiveScreen, Int> = HashMap()
+    val defaultFocusMap: HashMap<ActiveScreen, Int> = HashMap()
 
     data class State(
         val focusNode: FocusNode,
@@ -60,9 +60,9 @@ class FocusRepo(
     }
 
     private fun initializeDefaultFocus() {
-        defaultFocusMap[ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY] = R.id.navUrlInput
-        defaultFocusMap[ScreenControllerStateMachine.ActiveScreen.WEB_RENDER] = R.id.engineView
-        defaultFocusMap[ScreenControllerStateMachine.ActiveScreen.POCKET] = R.id.videoFeed
+        defaultFocusMap[ActiveScreen.NAVIGATION_OVERLAY] = R.id.navUrlInput
+        defaultFocusMap[ActiveScreen.WEB_RENDER] = R.id.engineView
+        defaultFocusMap[ActiveScreen.POCKET] = R.id.videoFeed
     }
 
     // TODO: potential for telemetry?
@@ -71,8 +71,7 @@ class FocusRepo(
     )
 
     // Keep track of prevScreen to identify screen transitions
-    private var prevScreen: ScreenControllerStateMachine.ActiveScreen =
-            ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY
+    private var prevScreen: ActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
 
     private val _focusUpdate = Observables.combineLatest(
             _state,
@@ -110,7 +109,7 @@ class FocusRepo(
     @VisibleForTesting
     private fun dispatchFocusUpdates(
         focusNode: FocusNode,
-        activeScreen: ScreenControllerStateMachine.ActiveScreen,
+        activeScreen: ActiveScreen,
         sessionState: SessionRepo.State,
         pinnedTilesIsEmpty: Boolean,
         pocketState: PocketVideoRepo.FeedState
@@ -118,14 +117,14 @@ class FocusRepo(
 
         var newState = _state.value!!
         when (activeScreen) {
-            ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY -> {
+            ActiveScreen.NAVIGATION_OVERLAY -> {
 
                 // Check previous screen for defaultFocusMap updates
                 when (prevScreen) {
-                    ScreenControllerStateMachine.ActiveScreen.WEB_RENDER -> {
+                    ActiveScreen.WEB_RENDER -> {
                         updateDefaultFocusForOverlayWhenTransitioningFromWebRender(sessionState)
                     }
-                    ScreenControllerStateMachine.ActiveScreen.POCKET -> {
+                    ActiveScreen.POCKET -> {
                         updateDefaultFocusForOverlayWhenTransitioningFromPocket()
                     }
                     else -> Unit
@@ -178,9 +177,9 @@ class FocusRepo(
                     }
                 }
             }
-            ScreenControllerStateMachine.ActiveScreen.WEB_RENDER -> {}
-            ScreenControllerStateMachine.ActiveScreen.POCKET -> {}
-            ScreenControllerStateMachine.ActiveScreen.SETTINGS -> Unit
+            ActiveScreen.WEB_RENDER -> {}
+            ActiveScreen.POCKET -> {}
+            ActiveScreen.SETTINGS -> Unit
         }
 
         if (prevScreen != activeScreen) {
@@ -321,7 +320,7 @@ class FocusRepo(
     private fun updateDefaultFocusForOverlayWhenTransitioningFromWebRender(
         sessionState: SessionRepo.State
     ) {
-        defaultFocusMap[ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY] = when {
+        defaultFocusMap[ActiveScreen.NAVIGATION_OVERLAY] = when {
             sessionState.backEnabled -> R.id.navButtonBack
             sessionState.forwardEnabled -> R.id.navButtonForward
             else -> R.id.navButtonReload
@@ -329,7 +328,7 @@ class FocusRepo(
     }
 
     private fun updateDefaultFocusForOverlayWhenTransitioningFromPocket() {
-        defaultFocusMap[ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY] =
+        defaultFocusMap[ActiveScreen.NAVIGATION_OVERLAY] =
                 R.id.pocketVideoMegaTileView
     }
 
