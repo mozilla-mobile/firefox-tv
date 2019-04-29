@@ -234,10 +234,9 @@ class NavigationOverlayFragment : Fragment() {
      */
     private fun observeRequestFocus(): Disposable {
         return navigationOverlayViewModel.focusRequests
-            .subscribe { focusRequest ->
-                rootView.findViewById<View>(focusRequest.viewId)?.let { focusedView ->
-                    focusedView.requestFocus()
-                }
+            .subscribe { viewId ->
+                val viewToFocus = rootView.findViewById<View>(viewId)
+                viewToFocus?.requestFocus()
             }
     }
 

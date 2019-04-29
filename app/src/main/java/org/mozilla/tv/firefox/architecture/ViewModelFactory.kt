@@ -58,8 +58,7 @@ class ViewModelFactory(
 
             NavigationOverlayViewModel::class.java -> NavigationOverlayViewModel(
                 serviceLocator.sessionRepo,
-                serviceLocator.focusRepo,
-                serviceLocator.screenController.currentActiveScreen
+                serviceLocator.focusRepo
             ) as T
 
             OverlayHintViewModel::class.java -> OverlayHintViewModel(
@@ -75,8 +74,7 @@ class ViewModelFactory(
             ) as T
 
             WebRenderViewModel::class.java -> WebRenderViewModel(
-                serviceLocator.focusRepo,
-                serviceLocator.screenController.currentActiveScreen
+                serviceLocator.focusRepo
             ) as T
 
         // This class needs to either return a ViewModel or throw, so we have no good way of silently handling
