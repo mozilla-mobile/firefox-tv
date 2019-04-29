@@ -32,12 +32,12 @@ class FocusRepo(
 
     data class State(
         val focusNode: FocusNode,
+        val focused: Boolean = true,
         val defaultFocusMap: HashMap<ScreenControllerStateMachine.ActiveScreen, Int>
     )
 
     enum class Event {
-        ScreenChange,
-        RequestFocus // to handle lost focus
+        ScreenChange
     }
 
     /**
@@ -64,6 +64,7 @@ class FocusRepo(
     private val _state: BehaviorSubject<State> = BehaviorSubject.create()
 
     private val _events: Subject<Event> = PublishSubject.create()
+
     val events: Observable<Event> = _events.hide()
 
     // Keep track of prevScreen to identify screen transitions
@@ -180,15 +181,15 @@ class FocusRepo(
                         }
                     }
                     View.NO_ID -> {
-                        // Focus is lost so default it to navUrlInput and send a [Event.RequestFocus]
+                        // Focus is lost so default it to navUrlInput and set focused = false
                         val newFocusNode = FocusNode(R.id.navUrlInput)
 
                         newState = updateNavUrlInputFocusTree(
                                 newFocusNode,
                                 sessionState,
                                 pinnedTilesIsEmpty,
-                                pocketState)
-                        _events.onNext(Event.RequestFocus)
+                                pocketState,
+                                focused = false)
                     }
                 }
             }
@@ -209,7 +210,8 @@ class FocusRepo(
         focusedNavUrlInputNode: FocusNode,
         sessionState: SessionRepo.State,
         pinnedTilesIsEmpty: Boolean,
-        pocketState: PocketVideoRepo.FeedState
+        pocketState: PocketVideoRepo.FeedState,
+        focused: Boolean = true
     ): State {
 
         assert(focusedNavUrlInputNode.viewId == R.id.navUrlInput)
@@ -238,6 +240,7 @@ class FocusRepo(
                 focusedNavUrlInputNode.viewId,
                 nextFocusUpId,
                 nextFocusDownId),
+            focused = focused,
             defaultFocusMap = _state.value!!.defaultFocusMap)
     }
 
@@ -282,7 +285,8 @@ class FocusRepo(
 
     private fun updatePocketMegaTileFocusTree(
         focusedPocketMegatTileNode: FocusNode,
-        pinnedTilesIsEmpty: Boolean
+        pinnedTilesIsEmpty: Boolean,
+        focused: Boolean = true
     ): State {
 
         assert(focusedPocketMegatTileNode.viewId == R.id.pocketVideoMegaTileView ||
@@ -297,6 +301,7 @@ class FocusRepo(
             focusNode = FocusNode(
                 focusedPocketMegatTileNode.viewId,
                 nextFocusDownId = nextFocusDownId),
+            focused = focused,
             defaultFocusMap = _state.value!!.defaultFocusMap)
     }
 
@@ -322,18 +327,15 @@ class FocusRepo(
         }
 
         val newFocusNode = FocusNode(viewId)
-        val newState = if (newFocusNode.viewId == R.id.navUrlInput) {
-            updateNavUrlInputFocusTree(newFocusNode, sessionState, pinnedTilesIsEmpty, pocketState)
+
+        // If new focusNode is different from previous, set focused state to false
+        val focused = newFocusNode.viewId == lostFocusNode.viewId
+
+        return if (newFocusNode.viewId == R.id.navUrlInput) {
+            updateNavUrlInputFocusTree(newFocusNode, sessionState, pinnedTilesIsEmpty, pocketState, focused)
         } else {
-            updatePocketMegaTileFocusTree(newFocusNode, pinnedTilesIsEmpty)
+            updatePocketMegaTileFocusTree(newFocusNode, pinnedTilesIsEmpty, focused)
         }
-
-        // Request focus on newState
-        if (newFocusNode.viewId != lostFocusNode.viewId) {
-            _events.onNext(Event.RequestFocus)
-        }
-
-        return newState
     }
 
     private fun updateDefaultFocusForOverlayWhenTransitioningFromWebRender(
