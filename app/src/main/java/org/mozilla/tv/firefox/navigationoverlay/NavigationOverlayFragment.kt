@@ -208,8 +208,6 @@ class NavigationOverlayFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        observeRequestFocus()
-            .addTo(compositeDisposable)
         observeFocusState()
             .addTo(compositeDisposable)
         observeTilesContainer()
@@ -229,13 +227,13 @@ class NavigationOverlayFragment : Fragment() {
         activity!!.moveTaskToBack(true)
     }
 
-    private fun observeRequestFocus(): Disposable {
-        return navigationOverlayViewModel.focusRequest
-            .subscribe { viewId ->
-                val viewToFocus = rootView.findViewById<View>(viewId)
-                viewToFocus?.requestFocus()
-            }
-    }
+//    private fun observeRequestFocus(): Disposable {
+//        return navigationOverlayViewModel.focusRequest
+//            .subscribe { viewId ->
+//                val viewToFocus = rootView.findViewById<View>(viewId)
+//                viewToFocus?.requestFocus()
+//            }
+//    }
 
     private fun observeFocusState(): Disposable {
         return navigationOverlayViewModel.focusUpdate

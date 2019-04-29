@@ -70,9 +70,6 @@ class FocusRepo(
             State(FocusNode(R.id.navUrlInput), focused = true)
     )
 
-    // Keep track of prevScreen to identify screen transitions
-    private var prevScreen: ActiveScreen = ActiveScreen.NAVIGATION_OVERLAY
-
     private val _focusUpdate = Observables.combineLatest(
             _state,
             screenController.currentActiveScreen,
@@ -118,18 +115,6 @@ class FocusRepo(
         var newState = _state.value!!
         when (activeScreen) {
             ActiveScreen.NAVIGATION_OVERLAY -> {
-
-                // Check previous screen for defaultFocusMap updates
-                when (prevScreen) {
-                    ActiveScreen.WEB_RENDER -> {
-                        updateDefaultFocusForOverlayWhenTransitioningFromWebRender(sessionState)
-                    }
-                    ActiveScreen.POCKET -> {
-                        updateDefaultFocusForOverlayWhenTransitioningFromPocket()
-                    }
-                    else -> Unit
-                }
-
                 when (focusNode.viewId) {
                     R.id.navUrlInput ->
                         newState = updateNavUrlInputFocusTree(
@@ -177,13 +162,9 @@ class FocusRepo(
                     }
                 }
             }
-            ActiveScreen.WEB_RENDER -> {}
-            ActiveScreen.POCKET -> {}
+            ActiveScreen.WEB_RENDER -> Unit
+            ActiveScreen.POCKET -> Unit
             ActiveScreen.SETTINGS -> Unit
-        }
-
-        if (prevScreen != activeScreen) {
-            prevScreen = activeScreen
         }
 
         return newState
