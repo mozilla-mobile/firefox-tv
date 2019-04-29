@@ -79,7 +79,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     private val youtubeBackHandler by lazy { YouTubeBackHandler(engineView!!, activity as MainActivity) }
 
     private lateinit var webRenderViewModel: WebRenderViewModel
-    private lateinit var rootView: View
+    private var rootView: View? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -230,6 +230,8 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         context!!.serviceLocator.cursorModel.webViewCouldScrollInDirectionProvider = null
 
+        rootView = null
+
         super.onDestroyView()
     }
 
@@ -239,7 +241,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         // is the current ActiveScreen
         return webRenderViewModel.focusRequests
                 .subscribe { viewId ->
-                    val viewToFocus = rootView.findViewById<View>(viewId)
+                    val viewToFocus = rootView?.findViewById<View>(viewId)
                     viewToFocus?.requestFocus()
                 }
     }
