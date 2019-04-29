@@ -155,11 +155,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     // TODO: this method needs to be renamed (#2053); preliminary onStart() setup
     override fun onEngineViewCreated(engineView: EngineView): Disposable? {
         return serviceLocator?.screenController?.currentActiveScreen?.subscribe {
-            if (it == ActiveScreen.WEB_RENDER) {
-                // Cache focused DOM element just before WebView gains focus. See comment in
-                // FocusedDOMElementCacheInterface for details
-                engineView.focusedDOMElement.cache()
-            } else {
+            if (it != ActiveScreen.WEB_RENDER) {
                 // Pause all the videos when transitioning out of [WebRenderFragment] to mitigate possible
                 // memory leak while clearing data. See [WebViewCache.clear] as well as #1720
                 engineView.pauseAllVideoPlaybacks()
@@ -241,8 +237,12 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         // is the current ActiveScreen
         return webRenderViewModel.focusRequests
                 .subscribe { viewId ->
-                    val viewToFocus = rootView?.findViewById<View>(viewId)
-                    viewToFocus?.requestFocus()
+                    rootView?.findViewById<View>(viewId).let { viewToFocus ->
+                        // Cache focused DOM element just before WebView gains focus. See comment in
+                        // FocusedDOMElementCacheInterface for details
+                        (viewToFocus as EngineView).focusedDOMElement.cache()
+                        viewToFocus.requestFocus()
+                    }
                 }
     }
 
