@@ -82,16 +82,16 @@ class FocusRepo(
                     .autoConnect(0)
 
     // TODO: potential for telemetry?
-    private val _state: BehaviorSubject<State> = BehaviorSubject.createDefault(
+    private val _focusedView: BehaviorSubject<State> = BehaviorSubject.createDefault(
             State(FocusNode(R.id.navUrlInput), focused = true)
     )
 
-    private val state = _state
+    private val focusedView = _focusedView
             .distinctUntilChanged()
             .hide()
 
     val focusUpdate: Observable<State> = Observables.combineLatest(
-            state,
+            focusedView,
             screenController.currentActiveScreen,
             sessionRepo.state,
             pinnedTileRepo.isEmpty,
@@ -108,7 +108,7 @@ class FocusRepo(
                 focusNode = FocusNode(viewId),
                 focused = true)
 
-            _state.onNext(newState)
+            _focusedView.onNext(newState)
         }
     }
 
