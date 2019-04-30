@@ -10,16 +10,14 @@ import androidx.annotation.VisibleForTesting
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
-import mozilla.components.browser.engine.system.NestedWebView
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
+import org.mozilla.tv.firefox.ext.validateKnownViewById
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.URLs
-
-private const val NESTED_WEB_VIEW_ID = 2147483646 // Int.MAX_VALUE - 1
 
 class FocusRepo(
     screenController: ScreenController,
@@ -88,36 +86,29 @@ class FocusRepo(
             State(FocusNode(R.id.navUrlInput), focused = true)
     )
 
-    private val _focusUpdate = Observables.combineLatest(
-            _state,
+    private val state = _state
+            .distinctUntilChanged()
+            .hide()
+
+    val focusUpdate: Observable<State> = Observables.combineLatest(
+            state,
             screenController.currentActiveScreen,
             sessionRepo.state,
             pinnedTileRepo.isEmpty,
             pocketRepo.feedState) { state, activeScreen, sessionState, pinnedTilesIsEmpty, pocketState ->
         dispatchFocusUpdates(state.focusNode, activeScreen, sessionState, pinnedTilesIsEmpty, pocketState)
     }
-
-    val focusUpdate: Observable<State> = _focusUpdate
             .distinctUntilChanged()
-            .hide()
 
     override fun onGlobalFocusChanged(oldFocus: View?, newFocus: View?) {
-        fun <T> BehaviorSubject<T>.onNextIfNew(value: T) {
-            val currState = this.value as State
-            val newState = value as State
-            if (currState.focusNode.viewId != newState.focusNode.viewId &&
-                    newState.focusNode.viewId != NESTED_WEB_VIEW_ID)
-                this.onNext(value)
-        }
-
         newFocus?.let { newView ->
-            val viewId = validateKnownViewById(newView)
+            val viewId = newView.validateKnownViewById()
 
             val newState = State(
                 focusNode = FocusNode(viewId),
                 focused = true)
 
-            _state.onNextIfNew(newState)
+            _state.onNext(newState)
         }
     }
 
@@ -314,22 +305,5 @@ class FocusRepo(
         } else {
             updatePocketMegaTileFocusTree(newFocusNode, pinnedTilesIsEmpty, focused)
         }
-    }
-
-    /**
-     * When view gains focus, its child(ren) views may gain focus with undefined View_ID
-     * due to programmatic declaration
-     */
-    private fun validateKnownViewById(viewToValidate: View): Int {
-        if (viewToValidate.id == View.NO_ID) {
-            when (viewToValidate) {
-                is NestedWebView -> return NESTED_WEB_VIEW_ID
-                else -> {
-                    // TODO: need sentry/telemetry to keep track of what views without IDs get passed in
-                }
-            }
-        }
-
-        return viewToValidate.id
     }
 }

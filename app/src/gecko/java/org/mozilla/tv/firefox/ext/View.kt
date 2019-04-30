@@ -5,6 +5,26 @@
 package org.mozilla.tv.firefox.ext
 
 import android.view.View
+import org.mozilla.geckoview.GeckoView
+
+private const val GECKO_VIEW_ID = 2147483645 // Int.MAX_VALUE - 2
+
+/**
+ * When view gains focus, its child(ren) views may gain focus with undefined View_ID
+ * due to programmatic declaration
+ */
+fun View.validateKnownViewById(): Int {
+    if (this.id == View.NO_ID) {
+        when (this) {
+            is GeckoView -> return GECKO_VIEW_ID
+            else -> {
+                // TODO: need sentry/telemetry to keep track of what views without IDs get passed in
+            }
+        }
+    }
+
+    return this.id
+}
 
 /**
  * Returns false if the view or any of its ancestors are not visible
