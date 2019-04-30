@@ -4,14 +4,12 @@
 
 package org.mozilla.tv.firefox.pinnedtile
 
-import androidx.lifecycle.Observer
 import androidx.test.core.app.ApplicationProvider
-import org.junit.Assert
+import io.reactivex.observers.TestObserver
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers
-import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 
 /**
@@ -22,62 +20,42 @@ class PinnedTileViewModelTest {
 
     private lateinit var pinnedTileViewModel: PinnedTileViewModel
     private lateinit var pinnedTileRepo: PinnedTileRepo
+    private lateinit var testObserver: TestObserver<List<PinnedTile>>
 
     @Before
     fun setUp() {
         pinnedTileRepo = PinnedTileRepo(ApplicationProvider.getApplicationContext())
         pinnedTileViewModel = PinnedTileViewModel(pinnedTileRepo)
+        testObserver = pinnedTileViewModel.tileList.test()
     }
 
     @Test
     fun `WHEN repo emits a successful load THEN view model should emit a list of same number of tiles`() {
-        val observerSpy = Mockito.spy(Observer<List<PinnedTile>> {
-            Assert.assertTrue(it is List<PinnedTile>)
-            Assert.assertEquals(10, it!!.size)
-        })
-
-        pinnedTileViewModel.getTileList().observeForever(observerSpy)
-
-        Mockito.verify(observerSpy, Mockito.times(1)).onChanged(ArgumentMatchers.any())
+        assertEquals(10, testObserver.values().last().size)
+        assertEquals(1, testObserver.values().size)
     }
 
     @Test
     fun `WHEN repo emits an updated list after add THEN view model should emit an updated list`() {
-        val observerSpy = Mockito.spy(Observer<List<PinnedTile>> {
-            Assert.assertTrue(it is List<PinnedTile>)
-            assert(it!!.size == 10 || it.size == 11)
-        })
-
-        pinnedTileViewModel.getTileList().observeForever(observerSpy)
+        assertEquals(10, testObserver.values().last().size)
         pinnedTileRepo.addPinnedTile("https://example.com", null)
-
-        Mockito.verify(observerSpy, Mockito.times(2)).onChanged(ArgumentMatchers.any())
+        assertEquals(11, testObserver.values().last().size)
+        assertEquals(2, testObserver.values().size)
     }
 
     @Test
     fun `WHEN repo emits an updated list after remove THEN view model should emit an updated list`() {
-        val observerSpy = Mockito.spy(Observer<List<PinnedTile>> {
-            Assert.assertTrue(it is List<PinnedTile>)
-            assert(it!!.size == 10 || it.size == 9)
-        })
-
-        pinnedTileViewModel.getTileList().observeForever(observerSpy)
+        assertEquals(10, testObserver.values().last().size)
         pinnedTileViewModel.unpin("https://www.instagram.com/")
-
-        Mockito.verify(observerSpy, Mockito.times(2)).onChanged(ArgumentMatchers.any())
+        assertEquals(9, testObserver.values().last().size)
+        assertEquals(2, testObserver.values().size)
     }
 
     @Test
     fun `WHEN repo fails to remove an item THEN view model should emit nothing`() {
-        val observerSpy = Mockito.spy(Observer<List<PinnedTile>> {
-            Assert.assertTrue(it is List<PinnedTile>)
-            // it.size == 10 is the original load emission
-            assert(it!!.size == 10)
-        })
-
-        pinnedTileViewModel.getTileList().observeForever(observerSpy)
+        assertEquals(10, testObserver.values().last().size)
         pinnedTileViewModel.unpin("https://example.com/")
-
-        Mockito.verify(observerSpy, Mockito.times(1)).onChanged(ArgumentMatchers.any())
+        assertEquals(10, testObserver.values().last().size)
+        assertEquals(1, testObserver.values().size)
     }
 }
