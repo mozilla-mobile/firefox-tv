@@ -104,7 +104,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         serviceLocator.intentLiveData.value = Consumable.from(intentData)
 
         // Debug logging display for non public users
-        // TODO: refactor out the debug variant visibility check in #1953\
+        // TODO: refactor out the debug variant visibility check in #1953
         BuildConstants.debugLogStr?.apply {
             debugLog.visibility = View.VISIBLE
             debugLog.text = this
