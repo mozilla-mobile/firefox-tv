@@ -4,9 +4,8 @@
 
 package org.mozilla.tv.firefox.pinnedtile
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.Observable
 
 /**
  * Pinned Tile ViewModel.
@@ -17,23 +16,10 @@ import androidx.lifecycle.ViewModel
  */
 class PinnedTileViewModel(private val pinnedTileRepo: PinnedTileRepo) : ViewModel() {
 
-    private val _tilesList = MediatorLiveData<List<PinnedTile>>()
+    val tileList: Observable<List<PinnedTile>> = pinnedTileRepo.pinnedTiles
+            .map { it.values.toList() }
+
     val isEmpty = pinnedTileRepo.isEmpty
-
-    init {
-        @Suppress("DEPRECATION")
-        _tilesList.addSource(pinnedTileRepo.legacyPinnedTiles) { pinnedTileMap ->
-            val feedTileList: List<PinnedTile>? = pinnedTileMap?.values?.toList()
-            if ((feedTileList) != null) {
-                _tilesList.value = feedTileList
-            }
-        }
-    }
-
-    // For UI injection
-    fun getTileList(): LiveData<List<PinnedTile>> {
-        return _tilesList
-    }
 
     fun unpin(url: String) {
         pinnedTileRepo.removePinnedTile(url)

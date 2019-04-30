@@ -23,7 +23,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -140,7 +139,7 @@ class NavigationOverlayFragment : Fragment() {
     private lateinit var pocketViewModel: PocketViewModel
     private lateinit var hintViewModel: HintViewModel
 
-    private lateinit var tileAdapter: PinnedTileAdapter
+    private var tileAdapter: PinnedTileAdapter? = null
 
     private var rootView: View? = null
 
@@ -195,7 +194,6 @@ class NavigationOverlayFragment : Fragment() {
                 */
 
         initMegaTile()
-        initPinnedTiles()
         initSettingsChannel() // When pulling everything into channels, add this to the channel RV
 
         exitButton.contentDescription = serviceLocator.experimentsProvider.getAAExitButtonExperiment(ExperimentConfig.AA_TEST)
@@ -218,6 +216,8 @@ class NavigationOverlayFragment : Fragment() {
             .addTo(compositeDisposable)
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = false)
                 .forEach { compositeDisposable.add(it) }
+        initPinnedTiles()
+                .addTo(compositeDisposable)
     }
 
     override fun onStop() {
@@ -318,7 +318,7 @@ class NavigationOverlayFragment : Fragment() {
         }
     }
 
-    private fun initPinnedTiles() = with(tileContainer) {
+    private fun initPinnedTiles(): Disposable = with(tileContainer) {
         canShowUnpinToast = true
 
         // TODO: pass in VM live data instead of "homeTiles"
@@ -348,12 +348,6 @@ class NavigationOverlayFragment : Fragment() {
             }
         })
 
-        pinnedTileViewModel.getTileList().observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                tileAdapter.setTiles(it)
-            }
-        })
-
         adapter = tileAdapter
 
         layoutManager = GridLayoutManager(context, COL_COUNT)
@@ -369,6 +363,10 @@ class NavigationOverlayFragment : Fragment() {
                 resources.getDimensionPixelSize(R.dimen.home_tile_container_margin_bottom)
         updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin = -tileBottomMargin
+        }
+
+        return pinnedTileViewModel.tileList.subscribe {
+            tileAdapter?.setTiles(it)
         }
     }
 
