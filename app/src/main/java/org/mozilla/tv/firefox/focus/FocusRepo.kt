@@ -96,9 +96,9 @@ class FocusRepo(
             sessionRepo.state,
             pinnedTileRepo.isEmpty,
             pocketRepo.feedState) { state, activeScreen, sessionState, pinnedTilesIsEmpty, pocketState ->
-        dispatchFocusUpdates(state.focusNode, activeScreen, sessionState, pinnedTilesIsEmpty, pocketState)
+        updateFocusStateIfNew(state, activeScreen, sessionState, pinnedTilesIsEmpty, pocketState)
     }
-            .distinctUntilChanged()
+    .distinctUntilChanged()
 
     override fun onGlobalFocusChanged(oldFocus: View?, newFocus: View?) {
         newFocus?.let { newView ->
@@ -112,36 +112,40 @@ class FocusRepo(
         }
     }
 
+    /**
+     * Majority of this logic is a result of initial refactoring from NavigationOverlay (mainly
+     * to centralize the focus behavior in one place). We may be making fragile assumptions on both
+     * programmatical and UX sides, so there may be some problems to be addressed in the future.
+     */
     @VisibleForTesting
-    private fun dispatchFocusUpdates(
-        focusNode: FocusNode,
+    private fun updateFocusStateIfNew(
+        newState: State,
         activeScreen: ActiveScreen,
         sessionState: SessionRepo.State,
         pinnedTilesIsEmpty: Boolean,
         pocketState: PocketVideoRepo.FeedState
     ): State {
-
-        var newState = _state.value!!
         when (activeScreen) {
             ActiveScreen.NAVIGATION_OVERLAY -> {
+                val focusNode = newState.focusNode
                 when (focusNode.viewId) {
                     R.id.navUrlInput ->
-                        newState = updateNavUrlInputFocusTree(
+                        return getNavUrlInputFocusState(
                                 focusNode,
                                 sessionState,
                                 pinnedTilesIsEmpty,
                                 pocketState)
                     R.id.navButtonReload -> {
-                        newState = updateReloadButtonFocusTree(focusNode, sessionState)
+                        return getReloadButtonFocusState(focusNode, sessionState)
                     }
                     R.id.navButtonForward -> {
-                        newState = updateForwardButtonFocusTree(focusNode, sessionState)
+                        return getForwardButtonFocusState(focusNode, sessionState)
                     }
                     R.id.pocketVideoMegaTileView -> {
-                        newState = updatePocketMegaTileFocusTree(focusNode, pinnedTilesIsEmpty)
+                        return getPocketMegaTileFocusState(focusNode, pinnedTilesIsEmpty)
                     }
                     R.id.megaTileTryAgainButton -> {
-                        newState = handleLostFocusInOverlay(
+                        return handleLostFocusInOverlay(
                                 focusNode,
                                 sessionState,
                                 pinnedTilesIsEmpty,
@@ -151,7 +155,7 @@ class FocusRepo(
                         // If pinnedTiles is empty and current focus is on home_tile, we need to
                         // restore lost focus (this happens when you remove all tiles in the overlay)
                         if (pinnedTilesIsEmpty) {
-                            newState = handleLostFocusInOverlay(
+                            return handleLostFocusInOverlay(
                                     focusNode,
                                     sessionState,
                                     pinnedTilesIsEmpty,
@@ -162,7 +166,7 @@ class FocusRepo(
                         // Focus is lost so default it to navUrlInput and set focused = false
                         val newFocusNode = FocusNode(R.id.navUrlInput)
 
-                        newState = updateNavUrlInputFocusTree(
+                        return getNavUrlInputFocusState(
                                 newFocusNode,
                                 sessionState,
                                 pinnedTilesIsEmpty,
@@ -179,7 +183,7 @@ class FocusRepo(
         return newState
     }
 
-    private fun updateNavUrlInputFocusTree(
+    private fun getNavUrlInputFocusState(
         focusedNavUrlInputNode: FocusNode,
         sessionState: SessionRepo.State,
         pinnedTilesIsEmpty: Boolean,
@@ -189,21 +193,24 @@ class FocusRepo(
 
         assert(focusedNavUrlInputNode.viewId == R.id.navUrlInput)
 
-        val nextFocusDownId = when {
-            pocketState is PocketVideoRepo.FeedState.FetchFailed -> R.id.megaTileTryAgainButton
-            pocketState is PocketVideoRepo.FeedState.Inactive -> {
+        val nextFocusDownId = when (pocketState) {
+            PocketVideoRepo.FeedState.FetchFailed -> R.id.megaTileTryAgainButton
+            PocketVideoRepo.FeedState.Inactive -> {
                 if (pinnedTilesIsEmpty) {
-                    R.id.navUrlInput
+                    R.id.settingsTileContainer
                 } else {
                     R.id.tileContainer
                 }
             }
-            else -> R.id.pocketVideoMegaTileView
+            is PocketVideoRepo.FeedState.LoadComplete,
+            PocketVideoRepo.FeedState.Loading,
+            PocketVideoRepo.FeedState.NoAPIKey -> R.id.pocketVideoMegaTileView
         }
 
         val nextFocusUpId = when {
             sessionState.backEnabled -> R.id.navButtonBack
             sessionState.forwardEnabled -> R.id.navButtonForward
+            // TODO: this is a duplicating existing logic in the ToolbarVM, may fall out of sync
             sessionState.currentUrl != URLs.APP_URL_HOME -> R.id.navButtonReload
             else -> R.id.turboButton
         }
@@ -216,7 +223,7 @@ class FocusRepo(
             focused = focused)
     }
 
-    private fun updateReloadButtonFocusTree(
+    private fun getReloadButtonFocusState(
         focusedReloadButtonNode: FocusNode,
         sessionState: SessionRepo.State
     ): State {
@@ -235,7 +242,7 @@ class FocusRepo(
                 nextFocusLeftId = nextFocusLeftId))
     }
 
-    private fun updateForwardButtonFocusTree(
+    private fun getForwardButtonFocusState(
         focusedForwardButtonNode: FocusNode,
         sessionState: SessionRepo.State
     ): State {
@@ -253,14 +260,14 @@ class FocusRepo(
                 nextFocusLeftId = nextFocusLeftId))
     }
 
-    private fun updatePocketMegaTileFocusTree(
-        focusedPocketMegatTileNode: FocusNode,
+    private fun getPocketMegaTileFocusState(
+        focusedPocketMegaTileNode: FocusNode,
         pinnedTilesIsEmpty: Boolean,
         focused: Boolean = true
     ): State {
 
-        assert(focusedPocketMegatTileNode.viewId == R.id.pocketVideoMegaTileView ||
-            focusedPocketMegatTileNode.viewId == R.id.megaTileTryAgainButton)
+        assert(focusedPocketMegaTileNode.viewId == R.id.pocketVideoMegaTileView ||
+            focusedPocketMegaTileNode.viewId == R.id.megaTileTryAgainButton)
 
         val nextFocusDownId = when {
             pinnedTilesIsEmpty -> R.id.settingsTileContainer
@@ -269,7 +276,7 @@ class FocusRepo(
 
         return State(
             focusNode = FocusNode(
-                focusedPocketMegatTileNode.viewId,
+                focusedPocketMegaTileNode.viewId,
                 nextFocusDownId = nextFocusDownId),
             focused = focused)
     }
@@ -292,7 +299,9 @@ class FocusRepo(
         val viewId = when (pocketState) {
             PocketVideoRepo.FeedState.FetchFailed -> R.id.megaTileTryAgainButton
             PocketVideoRepo.FeedState.Inactive -> R.id.navUrlInput
-            else -> R.id.pocketVideoMegaTileView
+            is PocketVideoRepo.FeedState.LoadComplete,
+            PocketVideoRepo.FeedState.Loading,
+            PocketVideoRepo.FeedState.NoAPIKey -> R.id.pocketVideoMegaTileView
         }
 
         val newFocusNode = FocusNode(viewId)
@@ -301,9 +310,9 @@ class FocusRepo(
         val focused = newFocusNode.viewId == lostFocusNode.viewId
 
         return if (newFocusNode.viewId == R.id.navUrlInput) {
-            updateNavUrlInputFocusTree(newFocusNode, sessionState, pinnedTilesIsEmpty, pocketState, focused)
+            getNavUrlInputFocusState(newFocusNode, sessionState, pinnedTilesIsEmpty, pocketState, focused)
         } else {
-            updatePocketMegaTileFocusTree(newFocusNode, pinnedTilesIsEmpty, focused)
+            getPocketMegaTileFocusState(newFocusNode, pinnedTilesIsEmpty, focused)
         }
     }
 }

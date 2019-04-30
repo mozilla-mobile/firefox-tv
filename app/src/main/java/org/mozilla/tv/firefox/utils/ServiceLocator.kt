@@ -78,7 +78,6 @@ open class ServiceLocator(val app: Application) {
     val sessionUseCases get() = app.webRenderComponents.sessionUseCases
     val searchEngineManager by lazy { SearchEngineManagerFactory.create(app) }
     val cursorModel by lazy { CursorModel(screenController.currentActiveScreen, frameworkRepo, sessionRepo) }
-    val cursorEventRepo by lazy { CursorEventRepo(screenController) }
     val focusRepo by lazy { FocusRepo(screenController, sessionRepo, pinnedTileRepo, pocketRepo) }
 
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())
