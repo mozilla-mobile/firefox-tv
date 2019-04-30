@@ -19,7 +19,6 @@ import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.webrender.WebRenderHintViewModel
 import org.mozilla.tv.firefox.webrender.WebRenderViewModel
 
-
 /**
  * Used by [ViewModelProviders] to instantiate [ViewModel]s with constructor arguments.
  *
