@@ -5,6 +5,9 @@
 package org.mozilla.tv.firefox.pinnedtile
 
 import org.json.JSONObject
+import org.mozilla.tv.firefox.channel.ChannelTile
+import org.mozilla.tv.firefox.channel.ScreenshotStoreWrapper
+import org.mozilla.tv.firefox.utils.PicassoWrapper
 import java.util.UUID
 
 private const val KEY_URL = "url"
@@ -23,6 +26,11 @@ sealed class PinnedTile(val url: String, val title: String) {
         put(KEY_URL, url)
         put(KEY_TITLE, title)
     }
+
+
+
+    // TODO wrap PinnedTileScreenshotStore in a wrapper that has context, attach it to ServiceLocator.  Then we won't need context inside the VM
+    abstract fun toChannelTile(screenshotStoreWrapper: ScreenshotStoreWrapper): ChannelTile
 }
 
 class BundledPinnedTile(
@@ -46,6 +54,14 @@ class BundledPinnedTile(
                     jsonObject.getString(KEY_ID))
         }
     }
+
+    override fun toChannelTile(screenshotStoreWrapper: ScreenshotStoreWrapper): ChannelTile {
+        return ChannelTile(
+                url = url,
+                title = title,
+                setImage = { view -> PicassoWrapper.client.load(imagePath).into(view) } // todo: fix for assets
+        )
+    }
 }
 
 class CustomPinnedTile(
@@ -57,6 +73,14 @@ class CustomPinnedTile(
 
     public override fun toJSONObject() = super.toJSONObject().apply {
         put(KEY_ID, id.toString())
+    }
+
+    override fun toChannelTile(screenshotStoreWrapper: ScreenshotStoreWrapper): ChannelTile {
+        return ChannelTile(
+                url = url,
+                title = title,
+                setImage = { view -> PicassoWrapper.client.load(screenshotStoreWrapper.getFileForUUID(id)).into(view) } // todo: fix scope, double check this is okay.
+        )
     }
 
     companion object {
