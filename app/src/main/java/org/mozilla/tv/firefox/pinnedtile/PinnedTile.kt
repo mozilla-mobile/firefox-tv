@@ -6,7 +6,6 @@ package org.mozilla.tv.firefox.pinnedtile
 
 import org.json.JSONObject
 import org.mozilla.tv.firefox.channel.ChannelTile
-import org.mozilla.tv.firefox.channel.ScreenshotStoreWrapper
 import org.mozilla.tv.firefox.utils.PicassoWrapper
 import java.util.UUID
 
@@ -30,7 +29,7 @@ sealed class PinnedTile(val url: String, val title: String) {
 
 
     // TODO wrap PinnedTileScreenshotStore in a wrapper that has context, attach it to ServiceLocator.  Then we won't need context inside the VM
-    abstract fun toChannelTile(screenshotStoreWrapper: ScreenshotStoreWrapper): ChannelTile
+    abstract fun toChannelTile(imageUtilityWrapper: PinnedTileImageUtilWrapper): ChannelTile
 }
 
 class BundledPinnedTile(
@@ -55,18 +54,20 @@ class BundledPinnedTile(
         }
     }
 
-    override fun toChannelTile(screenshotStoreWrapper: ScreenshotStoreWrapper): ChannelTile {
+    override fun toChannelTile(imageUtilityWrapper: PinnedTileImageUtilWrapper): ChannelTile {
         return ChannelTile(
                 url = url,
                 title = title,
-                setImage = { view -> PicassoWrapper.client.load(imagePath).into(view) } // todo: fix for assets
+                setImage = { view -> PicassoWrapper.client
+                        .load("file:///android_asset/bundled/$imagePath") //TODO do this better
+                        .into(view) }
         )
     }
 }
 
 class CustomPinnedTile(
     url: String,
-    title: String,
+    title: String, // TODO: this title is always "custom". We have some relatively complex logic in PinnedTileAdapter#onBindCustomHomeTile to get the real title
     /** Used by [PinnedTileScreenshotStore] to uniquely identify tiles. */
     val id: UUID
 ) : PinnedTile(url, title) {
@@ -75,11 +76,16 @@ class CustomPinnedTile(
         put(KEY_ID, id.toString())
     }
 
-    override fun toChannelTile(screenshotStoreWrapper: ScreenshotStoreWrapper): ChannelTile {
+    override fun toChannelTile(imageUtilityWrapper: PinnedTileImageUtilWrapper): ChannelTile {
+        val backup = imageUtilityWrapper.generatePinnedTilePlaceholder(url)
+
         return ChannelTile(
                 url = url,
                 title = title,
-                setImage = { view -> PicassoWrapper.client.load(screenshotStoreWrapper.getFileForUUID(id)).into(view) } // todo: fix scope, double check this is okay.
+                setImage = { view -> PicassoWrapper.client
+                        .load(imageUtilityWrapper.getFileForUUID(id))
+                        .placeholder(backup)
+                        .into(view) } // todo: fix scope, double check this is okay.
         )
     }
 

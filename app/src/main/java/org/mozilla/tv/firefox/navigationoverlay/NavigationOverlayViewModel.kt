@@ -8,9 +8,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
-import org.mozilla.tv.firefox.channel.ScreenshotStoreWrapper
+import org.mozilla.tv.firefox.channel.ChannelDetails
 import org.mozilla.tv.firefox.ext.map
 import org.mozilla.tv.firefox.focus.FocusRepo
+import org.mozilla.tv.firefox.pinnedtile.PinnedTileImageUtilWrapper
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.URLs
@@ -19,7 +20,7 @@ class NavigationOverlayViewModel(
         sessionRepo: SessionRepo,
         focusRepo: FocusRepo,
         private val pinnedTileRepo: PinnedTileRepo,
-        screenshotStoreWrapper: ScreenshotStoreWrapper
+        private val imageUtilityWrapper: PinnedTileImageUtilWrapper
 ) : ViewModel() {
 
     val focusUpdate = focusRepo.focusUpdate
@@ -33,7 +34,8 @@ class NavigationOverlayViewModel(
     }
 
     val pinnedTiles = pinnedTileRepo.pinnedTiles
-            .map { it.values.map { it.toChannelTile(screenshotStoreWrapper) } }
+            .map { it.values.map { it.toChannelTile(imageUtilityWrapper) } }
+            .map { ChannelDetails(title = "Pinned Tiles", tiles = it) } // TODO extract string
 
     fun unpin(url: String) {
         pinnedTileRepo.removePinnedTile(url)
