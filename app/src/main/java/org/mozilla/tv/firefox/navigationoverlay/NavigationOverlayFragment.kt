@@ -28,7 +28,6 @@ import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.channelCo
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.navUrlInput
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.pocketVideoMegaTileView
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.settingsTileContainer
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.tileContainer
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.exitButton
 import kotlinx.android.synthetic.main.hint_bar.hintBarContainer
 import kotlinx.android.synthetic.main.pocket_video_mega_tile.megaTileTryAgainButton
@@ -49,10 +48,8 @@ import org.mozilla.tv.firefox.navigationoverlay.channels.Channel
 import org.mozilla.tv.firefox.navigationoverlay.channels.DefaultChannelFactory
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsChannelAdapter
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
-import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
-import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
@@ -99,7 +96,7 @@ class NavigationOverlayFragment : Fragment() {
     // instantiation of the BrowserNavigationOverlay
     private var canShowUnpinToast: Boolean = false
 
-    private val openHomeTileContextMenu: () -> Unit = { activity?.openContextMenu(tileContainer) }
+//    private val openHomeTileContextMenu: () -> Unit = { activity?.openContextMenu(tileContainer) }
 
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
                                       autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
@@ -201,9 +198,9 @@ class NavigationOverlayFragment : Fragment() {
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context!!, R.color.photonGrey10_a60p)) }
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
 
-        registerForContextMenu(tileContainer)
+//        registerForContextMenu(tileContainer)
 
-        pinnedTileChannel = DefaultChannelFactory().createChannel(context!!, view as ViewGroup)
+        pinnedTileChannel = DefaultChannelFactory().createChannel(context!!, view as ViewGroup, R.id.pinned_tiles_channel)
         channelContainer.addView(pinnedTileChannel.containerView)
 
 
@@ -217,8 +214,8 @@ class NavigationOverlayFragment : Fragment() {
             .addTo(compositeDisposable)
         observeRequestFocus()
             .addTo(compositeDisposable)
-        observeTilesContainer()
-            .addTo(compositeDisposable)
+//        observeTilesContainer()
+//            .addTo(compositeDisposable)
         observePocketState()
             .addTo(compositeDisposable)
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = false)
@@ -265,15 +262,15 @@ class NavigationOverlayFragment : Fragment() {
             }
     }
 
-    private fun observeTilesContainer(): Disposable {
-        return pinnedTileViewModel.isEmpty.subscribe { isEmpty ->
-            if (isEmpty) {
-                tileContainer.visibility = View.GONE
-            } else {
-                tileContainer.visibility = View.VISIBLE
-            }
-        }
-    }
+//    private fun observeTilesContainer(): Disposable {
+//        return pinnedTileViewModel.isEmpty.subscribe { isEmpty ->
+//            if (isEmpty) {
+//                tileContainer.visibility = View.GONE
+//            } else {
+//                tileContainer.visibility = View.VISIBLE
+//            }
+//        }
+//    }
 
     private fun observePocketState(): Disposable {
         return pocketViewModel.state
@@ -388,21 +385,22 @@ class NavigationOverlayFragment : Fragment() {
         activity?.menuInflater?.inflate(R.menu.menu_context_hometile, menu)
     }
 
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.remove -> {
-                val homeTileAdapter = tileContainer.adapter as PinnedTileAdapter
-                val tileToRemove = homeTileAdapter.lastLongClickedTile ?: return false
-
-                // This assumes that since we're deleting from a Home Tile object that we created
-                // that the Uri is valid, so we do not do error handling here.
-                // TODO: NavigationOverlayFragment->ViewModel->Repo
-                pinnedTileViewModel.unpin(tileToRemove.url)
-                TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileToRemove)
-                return true
-            }
-            else -> return false
-        }
+    override fun onContextItemSelected(item: MenuItem): Boolean { //  TODO
+        return false
+//        when (item.itemId) {
+//            R.id.remove -> {
+//                val homeTileAdapter = tileContainer.adapter as PinnedTileAdapter
+//                val tileToRemove = homeTileAdapter.lastLongClickedTile ?: return false
+//
+//                // This assumes that since we're deleting from a Home Tile object that we created
+//                // that the Uri is valid, so we do not do error handling here.
+//                // TODO: NavigationOverlayFragment->ViewModel->Repo
+//                pinnedTileViewModel.unpin(tileToRemove.url)
+//                TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileToRemove)
+//                return true
+//            }
+//            else -> return false
+//        }
     }
 
     private fun initSettingsChannel() {

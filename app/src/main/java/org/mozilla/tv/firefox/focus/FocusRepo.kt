@@ -126,9 +126,6 @@ class FocusRepo(
         pinnedTilesIsEmpty: Boolean,
         pocketState: PocketVideoRepo.FeedState
     ): State {
-        println(activeScreen.toString() + sessionState + pinnedTilesIsEmpty + pocketState)
-        return newState //TODO remove and fix this once RV changes have solidified
-
         when (activeScreen) {
             ActiveScreen.NAVIGATION_OVERLAY -> {
                 val focusNode = newState.focusNode
@@ -275,7 +272,7 @@ class FocusRepo(
 
         val nextFocusDownId = when {
             pinnedTilesIsEmpty -> R.id.settingsTileContainer
-            else -> R.id.tileContainer
+            else -> R.id.pinned_tiles_channel
         }
 
         return State(

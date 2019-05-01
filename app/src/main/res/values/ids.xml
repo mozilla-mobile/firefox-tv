@@ -7,4 +7,5 @@
     <item name="settings_tile_cleardata" type="id"/>
     <item name="settings_tile_about" type="id"/>
     <item name="settings_tile_privacypolicy" type="id"/>
+    <item name="pinned_tiles_channel" type="id"/>
 </resources>
