@@ -65,7 +65,7 @@ public class PinTileTests extends ScreenshotTest {
 
         mDevice.waitForIdle();
 
-        onView(ViewMatchers.withId(R.id.tileContainer))
+        onView(ViewMatchers.withId(R.id.pinned_tiles_channel))
                 .perform(actionOnItemAtPosition(0, longClick()));
 
         onView(withText(R.string.homescreen_tile_remove))

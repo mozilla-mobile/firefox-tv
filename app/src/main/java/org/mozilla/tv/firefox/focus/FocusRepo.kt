@@ -199,7 +199,7 @@ class FocusRepo(
                 if (pinnedTilesIsEmpty) {
                     R.id.settingsTileContainer
                 } else {
-                    R.id.tileContainer
+                    R.id.channelContainer
                 }
             }
             is PocketVideoRepo.FeedState.LoadComplete,

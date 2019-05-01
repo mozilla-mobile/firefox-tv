@@ -73,7 +73,7 @@ class NavigationOverlayRobot {
     fun assertOverlayIsOpen() = urlBar().assertIsDisplayed(true)
 
     fun assertCanGoBack(canGoBack: Boolean) {
-        device.wait(Until.findObject(By.res(R.id.tileContainer.toString())), 5000)
+        device.wait(Until.findObject(By.res(R.id.channelContainer.toString())), 5000)
         backButton().assertIsEnabled(canGoBack)
     }
     fun assertCanGoForward(canGoForward: Boolean) = forwardButton().assertIsEnabled(canGoForward)
