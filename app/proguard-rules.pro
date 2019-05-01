@@ -39,6 +39,9 @@
 # Warning: com.amazon.android.webkit.android.PreJellyBeanWebViewReflection: can't find referenced class android.webkit.WebBackForwardListClient
 -dontwarn android.webkit.WebBackForwardListClient
 
+# TODO: remove in https://github.com/mozilla-mobile/firefox-tv/issues/2153
+-dontwarn kotlinx.atomicfu.AtomicFU
+
 ####################################################################################################
 # Android architecture components
 ####################################################################################################
