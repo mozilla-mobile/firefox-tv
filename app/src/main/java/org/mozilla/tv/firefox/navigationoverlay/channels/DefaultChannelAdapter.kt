@@ -20,12 +20,14 @@ class DefaultChannelAdapter : RecyclerView.Adapter<DefaultChannelTileViewHolder>
     fun setTiles(tiles: List<ChannelTile>) {
         // todo; this
         this.tiles = tiles
+        notifyDataSetChanged()
         // todo: notify changed; Use the adapter that uses DiffUtil under the hood (in RecyclerView androidx lib?)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DefaultChannelTileViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.default_channel_tile, parent, false)
+//        val view = inflater.inflate(R.layout.default_channel_tile, parent, false)
+        val view = inflater.inflate(R.layout.home_tile, parent, false)
         return DefaultChannelTileViewHolder(view)
     }
 
@@ -34,13 +36,15 @@ class DefaultChannelAdapter : RecyclerView.Adapter<DefaultChannelTileViewHolder>
     override fun onBindViewHolder(holder: DefaultChannelTileViewHolder, position: Int) {
         with(holder) {
             // todo: fill in tile
-            tiles[position].setImage(imageView)
+            val tile = tiles[position]
+            tile.setImage(imageView)
+            titleView.text = tile.title
         }
     }
 
 }
 
 class DefaultChannelTileViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val titleView: TextView = itemView.findViewById(R.id.tileTitleView)
-    val imageView: ImageView = itemView.findViewById(R.id.tileImageView)
+    val titleView: TextView = itemView.findViewById(R.id.tile_title)
+    val imageView: ImageView = itemView.findViewById(R.id.tile_icon)
 }

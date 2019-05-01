@@ -17,6 +17,7 @@ import org.mozilla.tv.firefox.ext.getAccessibilityManager
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.focus.FocusRepo
 import org.mozilla.tv.firefox.framework.FrameworkRepo
+import org.mozilla.tv.firefox.pinnedtile.PinnedTileImageUtilWrapper
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
@@ -79,6 +80,7 @@ open class ServiceLocator(val app: Application) {
     val searchEngineManager by lazy { SearchEngineManagerFactory.create(app) }
     val cursorModel by lazy { CursorModel(screenController.currentActiveScreen, frameworkRepo, sessionRepo) }
     val focusRepo by lazy { FocusRepo(screenController, sessionRepo, pinnedTileRepo, pocketRepo) }
+    val screenshotStoreWrapper by lazy { PinnedTileImageUtilWrapper(app) }
 
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())
     open val pinnedTileRepo by lazy { PinnedTileRepo(app) }

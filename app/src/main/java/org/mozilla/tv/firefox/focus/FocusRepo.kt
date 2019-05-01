@@ -117,6 +117,7 @@ class FocusRepo(
      * to centralize the focus behavior in one place). We may be making fragile assumptions on both
      * programmatical and UX sides, so there may be some problems to be addressed in the future.
      */
+    @Suppress("UNREACHABLE_CODE")
     @VisibleForTesting
     private fun updateFocusStateIfNew(
         newState: State,
@@ -125,6 +126,9 @@ class FocusRepo(
         pinnedTilesIsEmpty: Boolean,
         pocketState: PocketVideoRepo.FeedState
     ): State {
+        println(activeScreen.toString() + sessionState + pinnedTilesIsEmpty + pocketState)
+        return newState //TODO remove and fix this once RV changes have solidified
+
         when (activeScreen) {
             ActiveScreen.NAVIGATION_OVERLAY -> {
                 val focusNode = newState.focusNode

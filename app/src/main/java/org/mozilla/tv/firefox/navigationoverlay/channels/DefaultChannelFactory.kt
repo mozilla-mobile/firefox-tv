@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.default_channel.view.channelTileContainer
 import kotlinx.android.synthetic.main.default_channel.view.channelTitle
-import kotlinx.android.synthetic.main.fragment_navigation_overlay.view.tileContainer
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.channel.ChannelTile
 
@@ -18,8 +18,9 @@ class DefaultChannelFactory {
     fun createChannel(context: Context, parent: ViewGroup): Channel {
         val channelAdapter = DefaultChannelAdapter()
 
+
         val containerView = LayoutInflater.from(context).inflate(R.layout.default_channel, parent, false) as ViewGroup
-        containerView.tileContainer.apply {
+        containerView.channelTileContainer.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             this.adapter = channelAdapter
         }
@@ -37,7 +38,7 @@ class Channel(  // todo: should be defaultChannel? b/c adapter needs access to `
         private val adapter: DefaultChannelAdapter
 ) {
 
-    fun setDetails(title: CharSequence) {
+    fun setTitle(title: CharSequence) {
         titleView.text = title
     }
 
@@ -46,5 +47,5 @@ class Channel(  // todo: should be defaultChannel? b/c adapter needs access to `
     }
 
     val titleView: TextView = containerView.channelTitle
-    val tileContainer: RecyclerView = containerView.tileContainer
+    val tileContainer: RecyclerView = containerView.channelTileContainer
 }
