@@ -37,7 +37,7 @@ class DefaultChannelAdapter : RecyclerView.Adapter<DefaultChannelTileViewHolder>
         with(holder) {
             // todo: fill in tile
             val tile = tiles[position]
-            tile.setImage(imageView)
+            tile.setImage.invoke(imageView)
             titleView.text = tile.title
         }
     }
