@@ -4,7 +4,7 @@
 
 package org.mozilla.tv.firefox.pinnedtile
 
-import android.content.Context
+import android.app.Application
 import android.graphics.drawable.Drawable
 import androidx.core.graphics.drawable.toDrawable
 import mozilla.components.support.ktx.android.graphics.withRoundedCorners
@@ -16,7 +16,7 @@ import java.util.UUID
  * TODO
  * lets us set up context then put this in the service locator.  Allows us to keep context out of VMs
  */
-class PinnedTileImageUtilWrapper(private val context: Context) {
+class PinnedTileImageUtilWrapper(private val context: Application) {
     fun getFileForUUID(id: UUID): File {
         return PinnedTileScreenshotStore.getFileForUUID(context, id)
     }

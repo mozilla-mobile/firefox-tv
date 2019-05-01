@@ -7,6 +7,8 @@ package org.mozilla.tv.firefox.navigationoverlay
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.channel.ChannelDetails
 import org.mozilla.tv.firefox.ext.map
@@ -14,13 +16,15 @@ import org.mozilla.tv.firefox.focus.FocusRepo
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileImageUtilWrapper
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
+import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
 import org.mozilla.tv.firefox.utils.URLs
 
 class NavigationOverlayViewModel(
         sessionRepo: SessionRepo,
         focusRepo: FocusRepo,
         private val pinnedTileRepo: PinnedTileRepo,
-        private val imageUtilityWrapper: PinnedTileImageUtilWrapper
+        private val imageUtilityWrapper: PinnedTileImageUtilWrapper,
+        private val formattedDomainWrapper: FormattedDomainWrapper
 ) : ViewModel() {
 
     val focusUpdate = focusRepo.focusUpdate
@@ -34,8 +38,10 @@ class NavigationOverlayViewModel(
     }
 
     val pinnedTiles = pinnedTileRepo.pinnedTiles
-            .map { it.values.map { it.toChannelTile(imageUtilityWrapper) } }
+            .observeOn(Schedulers.computation())
+            .map { it.values.map { it.toChannelTile(imageUtilityWrapper, formattedDomainWrapper) } }
             .map { ChannelDetails(title = "Pinned Tiles", tiles = it) } // TODO extract string
+            .observeOn(AndroidSchedulers.mainThread())
 
     fun unpin(url: String) {
         pinnedTileRepo.removePinnedTile(url)

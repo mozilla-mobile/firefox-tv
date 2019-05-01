@@ -4,8 +4,12 @@
 
 package org.mozilla.tv.firefox.pinnedtile
 
+import androidx.annotation.WorkerThread
 import org.json.JSONObject
 import org.mozilla.tv.firefox.channel.ChannelTile
+import org.mozilla.tv.firefox.ext.toJavaURI
+import org.mozilla.tv.firefox.utils.FormattedDomain
+import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
 import org.mozilla.tv.firefox.utils.PicassoWrapper
 import java.util.UUID
 
@@ -28,8 +32,11 @@ sealed class PinnedTile(val url: String, val title: String) {
 
 
 
-    // TODO wrap PinnedTileScreenshotStore in a wrapper that has context, attach it to ServiceLocator.  Then we won't need context inside the VM
-    abstract fun toChannelTile(imageUtilityWrapper: PinnedTileImageUtilWrapper): ChannelTile
+    @WorkerThread // This performs file access
+    abstract fun toChannelTile(
+            imageUtilityWrapper: PinnedTileImageUtilWrapper,
+            formattedDomainWrapper: FormattedDomainWrapper
+    ): ChannelTile
 }
 
 class BundledPinnedTile(
@@ -54,7 +61,10 @@ class BundledPinnedTile(
         }
     }
 
-    override fun toChannelTile(imageUtilityWrapper: PinnedTileImageUtilWrapper): ChannelTile {
+    override fun toChannelTile(
+            imageUtilityWrapper: PinnedTileImageUtilWrapper,
+            formattedDomainWrapper: FormattedDomainWrapper
+    ): ChannelTile {
         return ChannelTile(
                 url = url,
                 title = title,
@@ -65,9 +75,13 @@ class BundledPinnedTile(
     }
 }
 
+/**
+ * @param title this is always "custom", and I have no idea why. We convert to a real value
+ * in [toChannelTile]
+ */
 class CustomPinnedTile(
     url: String,
-    title: String, // TODO: this title is always "custom". We have some relatively complex logic in PinnedTileAdapter#onBindCustomHomeTile to get the real title
+    title: String,
     /** Used by [PinnedTileScreenshotStore] to uniquely identify tiles. */
     val id: UUID
 ) : PinnedTile(url, title) {
@@ -76,17 +90,28 @@ class CustomPinnedTile(
         put(KEY_ID, id.toString())
     }
 
-    override fun toChannelTile(imageUtilityWrapper: PinnedTileImageUtilWrapper): ChannelTile {
+    override fun toChannelTile(
+            imageUtilityWrapper: PinnedTileImageUtilWrapper,
+            formattedDomainWrapper: FormattedDomainWrapper
+    ): ChannelTile {
         val backup = imageUtilityWrapper.generatePinnedTilePlaceholder(url)
 
         return ChannelTile(
                 url = url,
-                title = title,
+                title = createTitle(formattedDomainWrapper),
                 setImage = { view -> PicassoWrapper.client
                         .load(imageUtilityWrapper.getFileForUUID(id))
                         .placeholder(backup)
                         .into(view) } // todo: fix scope, double check this is okay.
         )
+    }
+
+    // CustomPinnedTile titles are not accurate. See class kdoc
+    private fun createTitle(formattedDomainWrapper: FormattedDomainWrapper): String {
+        val validUri = url.toJavaURI() ?: return url
+
+        val subdomainDotDomain = formattedDomainWrapper.format(validUri, false, 1)
+        return FormattedDomain.stripCommonPrefixes(subdomainDotDomain)
     }
 
     companion object {

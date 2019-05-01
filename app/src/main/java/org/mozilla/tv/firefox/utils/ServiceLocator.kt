@@ -81,6 +81,7 @@ open class ServiceLocator(val app: Application) {
     val cursorModel by lazy { CursorModel(screenController.currentActiveScreen, frameworkRepo, sessionRepo) }
     val focusRepo by lazy { FocusRepo(screenController, sessionRepo, pinnedTileRepo, pocketRepo) }
     val screenshotStoreWrapper by lazy { PinnedTileImageUtilWrapper(app) }
+    val formattedDomainWrapper by lazy { FormattedDomainWrapper(app) }
 
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())
     open val pinnedTileRepo by lazy { PinnedTileRepo(app) }
