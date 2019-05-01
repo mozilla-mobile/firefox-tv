@@ -21,8 +21,8 @@ import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
 class DefaultChannelAdapter(
         private val loadUrl: (String) -> Unit,
-        val onTileLongClick: ((ChannelTile) -> Unit)?,
-        val onTileFocused: (() -> Unit)?
+        private val onTileLongClick: ((ChannelTile) -> Unit)?,
+        private val onTileFocused: (() -> Unit)?
 ) : RecyclerView.Adapter<DefaultChannelTileViewHolder>() {
 
     private var tiles: List<ChannelTile> = emptyList()
