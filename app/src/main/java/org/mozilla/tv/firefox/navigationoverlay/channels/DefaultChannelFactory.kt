@@ -10,9 +10,9 @@ import kotlinx.android.synthetic.main.default_channel.view.channelTileContainer
 import org.mozilla.tv.firefox.R
 
 class DefaultChannelFactory(
-        private val loadUrl: (String) -> Unit,
-        onTileLongClick: (() -> Unit),
-        val onTileFocused: (() -> Unit)
+    private val loadUrl: (String) -> Unit,
+    onTileLongClick: (() -> Unit),
+    val onTileFocused: (() -> Unit)
 ) {
     private val invokeLongClickAndSaveTile = { tile: ChannelTile ->
         lastLongClickedTile = tile
@@ -39,5 +39,4 @@ class DefaultChannelFactory(
                 adapter = channelAdapter
         )
     }
-
 }

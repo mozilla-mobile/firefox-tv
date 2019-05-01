@@ -30,12 +30,10 @@ sealed class PinnedTile(val url: String, val title: String) {
         put(KEY_TITLE, title)
     }
 
-
-
     @WorkerThread // This performs file access
     abstract fun toChannelTile(
-            imageUtilityWrapper: PinnedTileImageUtilWrapper,
-            formattedDomainWrapper: FormattedDomainWrapper
+        imageUtilityWrapper: PinnedTileImageUtilWrapper,
+        formattedDomainWrapper: FormattedDomainWrapper
     ): ChannelTile
 }
 
@@ -62,15 +60,16 @@ class BundledPinnedTile(
     }
 
     override fun toChannelTile(
-            imageUtilityWrapper: PinnedTileImageUtilWrapper,
-            formattedDomainWrapper: FormattedDomainWrapper
+        imageUtilityWrapper: PinnedTileImageUtilWrapper,
+        formattedDomainWrapper: FormattedDomainWrapper
     ): ChannelTile {
         return ChannelTile(
                 url = url,
                 title = title,
                 setImage = { view ->
                     PicassoWrapper.client
-                            .load("file:///android_asset/bundled/$imagePath") //TODO do this better
+                            // TODO find a less brittle way to retrieve this path
+                            .load("file:///android_asset/bundled/$imagePath")
                             .into(view)
                 }
         )
@@ -93,8 +92,8 @@ class CustomPinnedTile(
     }
 
     override fun toChannelTile(
-            imageUtilityWrapper: PinnedTileImageUtilWrapper,
-            formattedDomainWrapper: FormattedDomainWrapper
+        imageUtilityWrapper: PinnedTileImageUtilWrapper,
+        formattedDomainWrapper: FormattedDomainWrapper
     ): ChannelTile {
         val backup = imageUtilityWrapper.generatePinnedTilePlaceholder(url)
 

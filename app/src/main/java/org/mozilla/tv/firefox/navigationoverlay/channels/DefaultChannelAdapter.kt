@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import org.mozilla.tv.firefox.R
 
 class DefaultChannelAdapter(
-        private val loadUrl: (String) -> Unit,
-        private val onTileLongClick: ((ChannelTile) -> Unit)?,
-        private val onTileFocused: (() -> Unit)?
+    private val loadUrl: (String) -> Unit,
+    private val onTileLongClick: ((ChannelTile) -> Unit)?,
+    private val onTileFocused: (() -> Unit)?
 ) : RecyclerView.Adapter<DefaultChannelTileViewHolder>() {
 
     private var tiles: List<ChannelTile> = emptyList()
@@ -95,7 +95,9 @@ class DefaultChannelAdapter(
                 titleView.setTextColor(textColor)
             }
 
-            setIconLayoutMarginParams(imageView, R.dimen.bundled_home_tile_margin_value) // TODO bundled and custom tiles have different padding here!  Ugh!
+            // TODO bundled and custom tiles had different padding here!  Find out how
+            //  to replicate this
+            setIconLayoutMarginParams(imageView, R.dimen.bundled_home_tile_margin_value)
         }
     }
 
@@ -105,7 +107,6 @@ class DefaultChannelAdapter(
         layoutMarginParams.setMargins(marginValue, marginValue, marginValue, marginValue)
         iconView.layoutParams = layoutMarginParams
     }
-
 }
 
 class DefaultChannelTileViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
