@@ -13,7 +13,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.forceExhaustive
-import org.mozilla.tv.firefox.pinnedtile.TileViewHolder
+import org.mozilla.tv.firefox.navigationoverlay.channels.DefaultChannelTileViewHolder
 
 class PocketRecommendedVideosRobot {
 
@@ -21,7 +21,7 @@ class PocketRecommendedVideosRobot {
         private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
         fun openTileToBrowser(index: Int, interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
-            rowContent().perform(RecyclerViewActions.actionOnItemAtPosition<TileViewHolder>(index, click()))
+            rowContent().perform(RecyclerViewActions.actionOnItemAtPosition<DefaultChannelTileViewHolder>(index, click()))
 
             BrowserRobot().interact()
             return BrowserRobot.Transition()
