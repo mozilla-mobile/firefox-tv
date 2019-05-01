@@ -15,7 +15,7 @@ import org.mozilla.tv.firefox.channel.ChannelTile
 
 class DefaultChannelFactory {
 
-    fun createChannel(context: Context, parent: ViewGroup): Channel {
+    fun createChannel(context: Context, parent: ViewGroup, id: Int): Channel {
         val channelAdapter = DefaultChannelAdapter()
 
 
@@ -24,6 +24,7 @@ class DefaultChannelFactory {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             this.adapter = channelAdapter
         }
+        containerView.id = id
 
         return Channel(
                 containerView = containerView,

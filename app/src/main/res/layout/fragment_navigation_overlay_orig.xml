@@ -99,15 +99,6 @@
                     android:orientation="vertical"
                     />
 
-                <!--TODO remove me-->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/tileContainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:clipChildren="false"
-                    android:clipToPadding="false" />
-
                 <TextView
                     style="@style/TextAppearance.AppCompat.Medium"
                     android:layout_width="match_parent"
