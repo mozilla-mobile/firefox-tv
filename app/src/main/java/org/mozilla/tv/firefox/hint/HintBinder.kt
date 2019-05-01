@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.hint
 
+import android.animation.Animator
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ImageSpan
@@ -37,12 +38,29 @@ object HintBinder {
                                 .start()
                     }
                     .subscribe { shouldDisplay ->
-                        hintContainer.isVisible = true
                         val translationY = when (shouldDisplay) {
                             true -> 0f
                             false -> hintContainer.height.toFloat()
                         }
+
                         hintContainer.animate()
+                                // If the hint bar is appearing, set the hintContainer.isVisible
+                                // to true before the animation begins. If the hint bar is
+                                // disappearing, set the hintContainer.isiVisible to false after
+                                // the animation ends.
+                                .setListener(object : Animator.AnimatorListener {
+                                    override fun onAnimationStart(animation: Animator?) {
+                                        if (shouldDisplay) hintContainer.isVisible = shouldDisplay
+                                    }
+
+                                    override fun onAnimationEnd(animation: Animator?) {
+                                        if (!shouldDisplay) hintContainer.isVisible = shouldDisplay
+                                    }
+
+                                    override fun onAnimationCancel(animation: Animator?) { }
+
+                                    override fun onAnimationRepeat(animation: Animator?) { }
+                                })
                                 .setDuration(250)
                                 .setInterpolator(FastOutSlowInInterpolator())
                                 .translationY(translationY)
