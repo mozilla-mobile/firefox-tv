@@ -15,5 +15,4 @@ class FormattedDomainWrapper(private val application: Application) {
 
     fun format(uri: URI, shouldIncludePublicSuffix: Boolean, subdomainCount: Int) =
         FormattedDomain.format(application, uri, shouldIncludePublicSuffix, subdomainCount)
-
 }

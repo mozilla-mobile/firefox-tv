@@ -7,13 +7,12 @@ package org.mozilla.tv.firefox.navigationoverlay.channels
 import android.widget.ImageView
 
 data class ChannelTile(
-        val url: String,
-        val title: String,
-        val setImage: (ImageView) -> Unit
+    val url: String,
+    val title: String,
+    val setImage: (ImageView) -> Unit
 )
 
 data class ChannelDetails(
-        // todo; change names, too similar
-        val title: CharSequence,
-        val tiles: List<ChannelTile>
+    val title: CharSequence,
+    val tileList: List<ChannelTile>
 )

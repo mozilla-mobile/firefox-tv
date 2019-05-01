@@ -254,7 +254,7 @@ class NavigationOverlayFragment : Fragment() {
     private fun observePinnedTiles(): Disposable {
         return navigationOverlayViewModel.pinnedTiles.subscribe {
             pinnedTileChannel.setTitle(it.title)
-            pinnedTileChannel.setContents(it.tiles)
+            pinnedTileChannel.setContents(it.tileList)
         }
     }
 

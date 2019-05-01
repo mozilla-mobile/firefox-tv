@@ -9,8 +9,8 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.default_channel.view.channelTitle
 
 class DefaultChannel(
-        val containerView: ViewGroup,
-        private val adapter: DefaultChannelAdapter
+    val containerView: ViewGroup,
+    private val adapter: DefaultChannelAdapter
 ) {
 
     fun setTitle(title: CharSequence) {
