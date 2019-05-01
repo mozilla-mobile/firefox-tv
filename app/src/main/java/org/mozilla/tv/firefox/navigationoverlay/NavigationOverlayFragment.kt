@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.preference.PreferenceManager
 import android.util.AttributeSet
 import android.view.ContextMenu
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -39,6 +41,7 @@ import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.experiments.ExperimentConfig
 import org.mozilla.tv.firefox.ext.forceExhaustive
+import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.HintViewModel
@@ -52,6 +55,7 @@ import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
+import java.lang.ref.WeakReference
 
 private const val SHOW_UNPIN_TOAST_COUNTER_PREF = "show_upin_toast_counter"
 private const val MAX_UNPIN_TOAST_COUNT = 3
@@ -95,7 +99,8 @@ class NavigationOverlayFragment : Fragment() {
     // instantiation of the BrowserNavigationOverlay
     private var canShowUnpinToast: Boolean = false
 
-//    private val openHomeTileContextMenu: () -> Unit = { activity?.openContextMenu(tileContainer) }
+    private val openHomeTileContextMenu: () -> Unit = { activity?.openContextMenu(channelContainer) }
+    private val defaultChannelFactory = createChannelFactory()
 
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
                                       autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
@@ -189,7 +194,6 @@ class NavigationOverlayFragment : Fragment() {
                 */
 
         initMegaTile()
-//        initPinnedTiles()
         initSettingsChannel() // When pulling everything into channels, add this to the channel RV
 
         exitButton.contentDescription = serviceLocator.experimentsProvider.getAAExitButtonExperiment(ExperimentConfig.AA_TEST)
@@ -197,14 +201,10 @@ class NavigationOverlayFragment : Fragment() {
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context!!, R.color.photonGrey10_a60p)) }
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
 
-//        registerForContextMenu(tileContainer)
+        registerForContextMenu(channelContainer)
 
-        pinnedTileChannel = DefaultChannelFactory().createChannel(context!!, view as ViewGroup, R.id.pinned_tiles_channel)
+        pinnedTileChannel = defaultChannelFactory.createChannel(context!!, view as ViewGroup, R.id.pinned_tiles_channel)
         channelContainer.addView(pinnedTileChannel.containerView)
-
-
-
-        // todo: update title
     }
 
     override fun onStart() {
@@ -291,6 +291,36 @@ class NavigationOverlayFragment : Fragment() {
             }
     }
 
+    private fun createChannelFactory(): DefaultChannelFactory = DefaultChannelFactory(
+            loadUrl = { urlStr ->
+                if (urlStr.isNotEmpty()) {
+                    onNavigationEvent.invoke(NavigationEvent.LOAD_TILE, urlStr, null)
+                }
+            },
+            onTileLongClick = openHomeTileContextMenu,
+            onTileFocused = {
+                val prefInt = android.preference.PreferenceManager.getDefaultSharedPreferences(context).getInt(
+                        SHOW_UNPIN_TOAST_COUNTER_PREF, 0)
+                if (prefInt < MAX_UNPIN_TOAST_COUNT && canShowUnpinToast) {
+                    PreferenceManager.getDefaultSharedPreferences(context)
+                            .edit()
+                            .putInt(SHOW_UNPIN_TOAST_COUNTER_PREF, prefInt + 1)
+                            .apply()
+
+                    val contextReference = WeakReference(context)
+                    val showToast = showToast@{
+                        val context = contextReference.get() ?: return@showToast
+                        Toast.makeText(context, R.string.homescreen_unpin_tutorial_toast,
+                                android.widget.Toast.LENGTH_LONG).show()
+                    }
+                    if (context!!.isVoiceViewEnabled()) uiHandler.postDelayed(showToast, 1500)
+                    else showToast.invoke()
+
+                    canShowUnpinToast = false
+                }
+            }
+    )
+
     /**
      * Used to show an error screen on the Pocket megatile when Pocket does not return any videos.
      */
@@ -327,78 +357,24 @@ class NavigationOverlayFragment : Fragment() {
         }
     }
 
-//    private fun initPinnedTiles(): Disposable = with(tileContainer) {
-//        canShowUnpinToast = true
-//
-//        // TODO: pass in VM live data instead of "homeTiles"
-//        tileAdapter = PinnedTileAdapter(uiLifecycleCancelJob, loadUrl = { urlStr ->
-//            if (urlStr.isNotEmpty()) {
-//                onNavigationEvent.invoke(NavigationEvent.LOAD_TILE, urlStr, null)
-//            }
-//        }, onTileLongClick = openHomeTileContextMenu, onTileFocused = {
-//            val prefInt = android.preference.PreferenceManager.getDefaultSharedPreferences(context).getInt(
-//                    SHOW_UNPIN_TOAST_COUNTER_PREF, 0)
-//            if (prefInt < MAX_UNPIN_TOAST_COUNT && canShowUnpinToast) {
-//                PreferenceManager.getDefaultSharedPreferences(context)
-//                        .edit()
-//                        .putInt(SHOW_UNPIN_TOAST_COUNTER_PREF, prefInt + 1)
-//                        .apply()
-//
-//                val contextReference = WeakReference(context)
-//                val showToast = showToast@{
-//                    val context = contextReference.get() ?: return@showToast
-//                    Toast.makeText(context, R.string.homescreen_unpin_tutorial_toast,
-//                            android.widget.Toast.LENGTH_LONG).show()
-//                }
-//                if (context.isVoiceViewEnabled()) uiHandler.postDelayed(showToast, 1500)
-//                else showToast.invoke()
-//
-//                canShowUnpinToast = false
-//            }
-//        })
-//
-//        adapter = tileAdapter
-//
-//        layoutManager = GridLayoutManager(context, COL_COUNT)
-//
-//        setHasFixedSize(true)
-//
-//        // We add bottomMargin to each tile in order to add spacing between them: this makes the
-//        // RecyclerView slightly larger than necessary and makes the default start screen scrollable
-//        // even though it doesn't need to be. To undo this, we add negative margins on the tile container.
-//        // I tried other solutions (ItemDecoration, dynamically changing margins) but this is more
-//        // complex because we need to relayout more than the changed view when adding/removing a row.
-//        val tileBottomMargin = resources.getDimensionPixelSize(R.dimen.home_tile_margin_bottom) -
-//                resources.getDimensionPixelSize(R.dimen.home_tile_container_margin_bottom)
-//        updateLayoutParams<ViewGroup.MarginLayoutParams> {
-//            bottomMargin = -tileBottomMargin
-//        }
-//
-//        return pinnedTileViewModel.tileList.subscribe {
-//            tileAdapter?.setTiles(it)
-//        }
-//    }
-
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
         activity?.menuInflater?.inflate(R.menu.menu_context_hometile, menu)
     }
 
-    override fun onContextItemSelected(item: MenuItem): Boolean { //  TODO
-        return false
-//        when (item.itemId) {
-//            R.id.remove -> {
-//                val homeTileAdapter = tileContainer.adapter as PinnedTileAdapter
-//                val tileToRemove = homeTileAdapter.lastLongClickedTile ?: return false
-//
-//                // This assumes that since we're deleting from a Home Tile object that we created
-//                // that the Uri is valid, so we do not do error handling here.
-//                // TODO: NavigationOverlayFragment->ViewModel->Repo
-//                pinnedTileViewModel.unpin(tileToRemove.url)
-//                TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileToRemove)
-//                return true
-//            }
-//            else -> return false
-//        }
+    override fun onContextItemSelected(item: MenuItem): Boolean { // TODO this will need to work differently to function with multiple channels
+        when (item.itemId) {
+            R.id.remove -> {
+                val tileToRemove = defaultChannelFactory.lastLongClickedTile ?: return false
+
+                // This assumes that since we're deleting from a Home Tile object that we created
+                // that the Uri is valid, so we do not do error handling here.
+                // TODO: NavigationOverlayFragment->ViewModel->Repo
+                pinnedTileViewModel.unpin(tileToRemove.url) //TODO this is currently losing focus
+//                TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileToRemove) TODO telemetry
+                return true
+            }
+            else -> return false
+        }
     }
 
     private fun initSettingsChannel() {

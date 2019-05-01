@@ -8,15 +8,30 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Observable
+import io.reactivex.Observer
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.default_channel.view.channelTileContainer
 import kotlinx.android.synthetic.main.default_channel.view.channelTitle
+import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.channel.ChannelTile
 
-class DefaultChannelFactory {
+class DefaultChannelFactory(
+        private val loadUrl: (String) -> Unit,
+        onTileLongClick: (() -> Unit),
+        val onTileFocused: (() -> Unit)
+) {
+    val invokeAndSaveLongClick = { tile: ChannelTile ->
+        lastLongClickedTile = tile
+        onTileLongClick.invoke()
+    }
+
+    var lastLongClickedTile: ChannelTile? = null
+        private set
 
     fun createChannel(context: Context, parent: ViewGroup, id: Int): Channel {
-        val channelAdapter = DefaultChannelAdapter()
+        val channelAdapter = DefaultChannelAdapter(loadUrl, invokeAndSaveLongClick, onTileFocused)
 
 
         val containerView = LayoutInflater.from(context).inflate(R.layout.default_channel, parent, false) as ViewGroup
@@ -47,6 +62,6 @@ class Channel(  // todo: should be defaultChannel? b/c adapter needs access to `
         adapter.setTiles(tileData)
     }
 
-    val titleView: TextView = containerView.channelTitle
-    val tileContainer: RecyclerView = containerView.channelTileContainer
+    private val titleView: TextView = containerView.channelTitle
+//    val tileContainer: RecyclerView = containerView.channelTileContainer
 }
