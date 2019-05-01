@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox.ui.screenshots;
 
 import android.os.Build;
 
+import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.By;
@@ -30,6 +31,8 @@ import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
+import static org.hamcrest.CoreMatchers.both;
 import static org.hamcrest.Matchers.allOf;
 
 public class TooltipCaptureTest extends ScreenshotTest {
@@ -48,14 +51,17 @@ public class TooltipCaptureTest extends ScreenshotTest {
     @Test
     public void showToolTips() throws InterruptedException {
 
+        ViewInteraction pinnedTileChannel = onView(both(withId(R.id.channelTileContainer))
+                .and(withParent(withId(R.id.pinned_tiles_channel))));
+
         onView(allOf(withId(R.id.navUrlInput), hasFocus())).check(matches(isDisplayed()));
-        onView(withId(R.id.tileContainer)).check(matches(isDisplayed()));
+        pinnedTileChannel.check(matches(isDisplayed()));
 
         // open two sites to enable back and front button
-        onView(withId(R.id.tileContainer)).perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        pinnedTileChannel.perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
         device.wait(Until.findObject(By.res(Integer.toString(R.id.progressAnimation))), 2000);
         device.pressMenu();
-        onView(withId(R.id.tileContainer)).perform(RecyclerViewActions.actionOnItemAtPosition(2, click()));
+        pinnedTileChannel.perform(RecyclerViewActions.actionOnItemAtPosition(2, click()));
         device.wait(Until.findObject(By.res(Integer.toString(R.id.progressAnimation))), 2000);
 
         device.pressMenu();

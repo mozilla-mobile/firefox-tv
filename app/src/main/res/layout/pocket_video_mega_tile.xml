@@ -85,7 +85,6 @@
                 android:text="@string/pocket_video_feed_reload_button"
                 android:layout_marginTop="@dimen/pocket_video_mega_tile_error_margin"
                 android:layout_marginBottom="@dimen/pocket_video_mega_tile_error_margin"
-                android:nextFocusDown="@+id/tileContainer"
                 />
 
         </LinearLayout>
