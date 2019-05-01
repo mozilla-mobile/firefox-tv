@@ -10,6 +10,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.MainActivity
+import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayViewModel
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
@@ -31,7 +32,7 @@ class FirefoxViewModelProvidersTest {
 
     @Test
     fun `WHEN passed a valid ViewModel THEN of(FragmentActivity) returns a non-null value`() {
-        assertNotNull(FirefoxViewModelProviders.of(mainActivity).get(PinnedTileViewModel::class.java))
+        assertNotNull(FirefoxViewModelProviders.of(mainActivity).get(NavigationOverlayViewModel::class.java))
     }
 }
 
