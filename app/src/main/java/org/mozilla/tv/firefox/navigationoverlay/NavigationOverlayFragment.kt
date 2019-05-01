@@ -46,7 +46,7 @@ import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.hint.InactiveHintViewModel
-import org.mozilla.tv.firefox.navigationoverlay.channels.Channel
+import org.mozilla.tv.firefox.navigationoverlay.channels.DefaultChannel
 import org.mozilla.tv.firefox.navigationoverlay.channels.DefaultChannelFactory
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsChannelAdapter
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
@@ -137,7 +137,7 @@ class NavigationOverlayFragment : Fragment() {
     private lateinit var pinnedTileViewModel: PinnedTileViewModel
     private lateinit var pocketViewModel: PocketViewModel
     private lateinit var hintViewModel: HintViewModel
-    private lateinit var pinnedTileChannel: Channel
+    private lateinit var pinnedTileChannel: DefaultChannel
 
 //    private var tileAdapter: PinnedTileAdapter? = null
 
@@ -361,7 +361,7 @@ class NavigationOverlayFragment : Fragment() {
         activity?.menuInflater?.inflate(R.menu.menu_context_hometile, menu)
     }
 
-    override fun onContextItemSelected(item: MenuItem): Boolean { // TODO this will need to work differently to function with multiple channels
+    override fun onContextItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.remove -> {
                 val tileToRemove = defaultChannelFactory.lastLongClickedTile ?: return false
@@ -369,7 +369,7 @@ class NavigationOverlayFragment : Fragment() {
                 // This assumes that since we're deleting from a Home Tile object that we created
                 // that the Uri is valid, so we do not do error handling here.
                 // TODO: NavigationOverlayFragment->ViewModel->Repo
-                pinnedTileViewModel.unpin(tileToRemove.url) //TODO this is currently losing focus
+                pinnedTileViewModel.unpin(tileToRemove.url) // TODO this only works for pinned tiles
 //                TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileToRemove) TODO telemetry
                 return true
             }

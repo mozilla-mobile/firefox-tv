@@ -13,12 +13,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.subjects.Subject
-import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.channel.ChannelTile
-import org.mozilla.tv.firefox.pinnedtile.PinnedTile
-import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
 class DefaultChannelAdapter(
         private val loadUrl: (String) -> Unit,

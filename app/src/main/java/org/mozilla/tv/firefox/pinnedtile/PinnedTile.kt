@@ -6,7 +6,7 @@ package org.mozilla.tv.firefox.pinnedtile
 
 import androidx.annotation.WorkerThread
 import org.json.JSONObject
-import org.mozilla.tv.firefox.channel.ChannelTile
+import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelTile
 import org.mozilla.tv.firefox.ext.toJavaURI
 import org.mozilla.tv.firefox.utils.FormattedDomain
 import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
@@ -68,9 +68,11 @@ class BundledPinnedTile(
         return ChannelTile(
                 url = url,
                 title = title,
-                setImage = { view -> PicassoWrapper.client
-                        .load("file:///android_asset/bundled/$imagePath") //TODO do this better
-                        .into(view) }
+                setImage = { view ->
+                    PicassoWrapper.client
+                            .load("file:///android_asset/bundled/$imagePath") //TODO do this better
+                            .into(view)
+                }
         )
     }
 }
@@ -99,10 +101,12 @@ class CustomPinnedTile(
         return ChannelTile(
                 url = url,
                 title = createTitle(formattedDomainWrapper),
-                setImage = { view -> PicassoWrapper.client
-                        .load(imageUtilityWrapper.getFileForUUID(id))
-                        .placeholder(backup)
-                        .into(view) } // todo: fix scope, double check this is okay.
+                setImage = { view ->
+                    PicassoWrapper.client
+                            .load(imageUtilityWrapper.getFileForUUID(id))
+                            .placeholder(backup)
+                            .into(view)
+                } // todo: fix scope, double check this is okay.
         )
     }
 

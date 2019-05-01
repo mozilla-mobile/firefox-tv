@@ -13,19 +13,19 @@ import java.io.File
 import java.util.UUID
 
 /**
- * TODO
- * lets us set up context then put this in the service locator.  Allows us to keep context out of VMs
+ * Wraps an instance of [Application]. We then store this class put this in the service locator,
+ * allowing us to keep context out of ViewModels
  */
-class PinnedTileImageUtilWrapper(private val context: Application) {
+class PinnedTileImageUtilWrapper(private val application: Application) {
     fun getFileForUUID(id: UUID): File {
-        return PinnedTileScreenshotStore.getFileForUUID(context, id)
+        return PinnedTileScreenshotStore.getFileForUUID(application, id)
     }
 
     fun generatePinnedTilePlaceholder(url: String): Drawable {
-        val homeTilePlaceholderCornerRadius = context.resources.getDimension(R.dimen.home_tile_placeholder_corner_radius)
+        val homeTilePlaceholderCornerRadius = application.resources.getDimension(R.dimen.home_tile_placeholder_corner_radius)
 
-        return PinnedTilePlaceholderGenerator.generate(context, url)
+        return PinnedTilePlaceholderGenerator.generate(application, url)
                 .withRoundedCorners(homeTilePlaceholderCornerRadius)
-                .toDrawable(context.resources)
+                .toDrawable(application.resources)
     }
 }
