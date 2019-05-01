@@ -37,11 +37,14 @@ class NavigationOverlayViewModel(
         it.currentUrl != URLs.APP_URL_HOME
     }
 
-    val pinnedTiles = pinnedTileRepo.pinnedTiles
+    val pinnedTiles: Observable<ChannelDetails> = pinnedTileRepo.pinnedTiles
             .observeOn(Schedulers.computation())
             .map { it.values.map { it.toChannelTile(imageUtilityWrapper, formattedDomainWrapper) } }
             .map { ChannelDetails(title = "Pinned Tiles", tiles = it) } // TODO extract string
             .observeOn(AndroidSchedulers.mainThread())
+
+    val shouldDisplayPinnedTiles: Observable<Boolean> = pinnedTiles.map { !it.tiles.isEmpty() }
+            .distinctUntilChanged()
 
     fun unpin(url: String) {
         pinnedTileRepo.removePinnedTile(url)
