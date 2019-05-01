@@ -5,17 +5,9 @@ package org.mozilla.tv.firefox.navigationoverlay.channels
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.default_channel.view.channelTileContainer
-import kotlinx.android.synthetic.main.default_channel.view.channelTitle
-import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.channel.ChannelTile
 
 class DefaultChannelFactory(
         private val loadUrl: (String) -> Unit,
@@ -30,7 +22,7 @@ class DefaultChannelFactory(
     var lastLongClickedTile: ChannelTile? = null
         private set
 
-    fun createChannel(context: Context, parent: ViewGroup, id: Int): Channel {
+    fun createChannel(context: Context, parent: ViewGroup, id: Int): DefaultChannel {
         // If we ever have channels that don't support removal, add a shouldRemove param here.
         // When false, pass null instead of invokeLongClickAndSaveTile
         val channelAdapter = DefaultChannelAdapter(loadUrl, invokeLongClickAndSaveTile, onTileFocused)
@@ -42,27 +34,10 @@ class DefaultChannelFactory(
         }
         containerView.id = id
 
-        return Channel(
+        return DefaultChannel(
                 containerView = containerView,
                 adapter = channelAdapter
         )
     }
 
-}
-
-class Channel(  // todo: should be defaultChannel? b/c adapter needs access to `setTiles`
-        val containerView: ViewGroup,
-        private val adapter: DefaultChannelAdapter
-) {
-
-    fun setTitle(title: CharSequence) {
-        titleView.text = title
-    }
-
-    fun setContents(tileData: List<ChannelTile>) {
-        adapter.setTiles(tileData)
-    }
-
-    private val titleView: TextView = containerView.channelTitle
-//    val tileContainer: RecyclerView = containerView.channelTileContainer
 }

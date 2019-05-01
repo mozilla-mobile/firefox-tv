@@ -263,8 +263,8 @@ open class TelemetryIntegration protected constructor(
         val tileType = getTileTypeAsStringValue(tile)
         if (tileType == Value.TILE_BUNDLED) {
             TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE, tileType)
-                    .extra(Extra.TILE_ID, tile.idToString())
-                    .queue()
+                .extra(Extra.TILE_ID, tile.idToString())
+                .queue()
         } else {
             TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE, tileType).queue()
         }

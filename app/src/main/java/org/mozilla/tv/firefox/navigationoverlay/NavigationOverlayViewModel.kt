@@ -10,7 +10,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
-import org.mozilla.tv.firefox.channel.ChannelDetails
+import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelDetails
 import org.mozilla.tv.firefox.ext.map
 import org.mozilla.tv.firefox.focus.FocusRepo
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileImageUtilWrapper
@@ -20,11 +20,11 @@ import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
 import org.mozilla.tv.firefox.utils.URLs
 
 class NavigationOverlayViewModel(
-        sessionRepo: SessionRepo,
-        focusRepo: FocusRepo,
-        private val pinnedTileRepo: PinnedTileRepo,
-        private val imageUtilityWrapper: PinnedTileImageUtilWrapper,
-        private val formattedDomainWrapper: FormattedDomainWrapper
+    sessionRepo: SessionRepo,
+    focusRepo: FocusRepo,
+    imageUtilityWrapper: PinnedTileImageUtilWrapper,
+    formattedDomainWrapper: FormattedDomainWrapper,
+    private val pinnedTileRepo: PinnedTileRepo
 ) : ViewModel() {
 
     val focusUpdate = focusRepo.focusUpdate

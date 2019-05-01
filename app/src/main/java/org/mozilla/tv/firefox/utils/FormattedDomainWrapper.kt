@@ -8,7 +8,8 @@ import android.app.Application
 import java.net.URI
 
 /**
- * TODO
+ * Wraps an instance of [Application]. We then store this class put this in the service locator,
+ * allowing us to keep context out of ViewModels
  */
 class FormattedDomainWrapper(private val application: Application) {
 

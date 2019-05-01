@@ -140,7 +140,7 @@ object PinnedTileScreenshotStore {
         }
     }
 
-    @VisibleForTesting internal fun getFileForUUID(context: Context, uuid: UUID) = File(context.filesDir, getPathForUUID(uuid))
+    internal fun getFileForUUID(context: Context, uuid: UUID) = File(context.filesDir, getPathForUUID(uuid))
 
     private fun getMutex(uuid: UUID) = synchronized(uuidToFileSystemMutex) {
         uuidToFileSystemMutex.getOrPut(uuid) { Mutex() }
