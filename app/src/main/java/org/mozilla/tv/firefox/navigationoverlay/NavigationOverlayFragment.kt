@@ -20,7 +20,6 @@ import android.widget.ScrollView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
@@ -214,21 +213,14 @@ class NavigationOverlayFragment : Fragment() {
             .addTo(compositeDisposable)
         observeRequestFocus()
             .addTo(compositeDisposable)
-//        observeTilesContainer()
-//            .addTo(compositeDisposable)
+        observePinnedTiles()
+            .addTo(compositeDisposable)
+        observeShouldDisplayPinnedTiles()
+            .addTo(compositeDisposable)
         observePocketState()
             .addTo(compositeDisposable)
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = false)
                 .forEach { compositeDisposable.add(it) }
-//        initPinnedTiles()
-//                .addTo(compositeDisposable)
-
-        navigationOverlayViewModel
-                .pinnedTiles.subscribe {
-            // update the views
-            pinnedTileChannel.setTitle(it.title)
-            pinnedTileChannel.setContents(it.tiles)
-        }.addTo(compositeDisposable)
     }
 
     override fun onStop() {
@@ -262,15 +254,21 @@ class NavigationOverlayFragment : Fragment() {
             }
     }
 
-//    private fun observeTilesContainer(): Disposable {
-//        return pinnedTileViewModel.isEmpty.subscribe { isEmpty ->
-//            if (isEmpty) {
-//                tileContainer.visibility = View.GONE
-//            } else {
-//                tileContainer.visibility = View.VISIBLE
-//            }
-//        }
-//    }
+    private fun observePinnedTiles(): Disposable {
+        return navigationOverlayViewModel.pinnedTiles.subscribe {
+            pinnedTileChannel.setTitle(it.title)
+            pinnedTileChannel.setContents(it.tiles)
+        }
+    }
+
+    private fun observeShouldDisplayPinnedTiles(): Disposable {
+        return navigationOverlayViewModel.shouldDisplayPinnedTiles.subscribe { shouldDisplay ->
+            pinnedTileChannel.containerView.visibility = when (shouldDisplay) {
+                true -> View.VISIBLE
+                false -> View.GONE
+            }
+        }
+    }
 
     private fun observePocketState(): Disposable {
         return pocketViewModel.state
