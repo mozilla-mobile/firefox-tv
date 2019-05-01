@@ -11,7 +11,6 @@ import androidx.lifecycle.ViewModelProviders
 import org.mozilla.tv.firefox.hint.HintContentFactory
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayViewModel
 import org.mozilla.tv.firefox.navigationoverlay.OverlayHintViewModel
-import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.navigationoverlay.ToolbarViewModel
 import org.mozilla.tv.firefox.settings.SettingsViewModel
@@ -38,8 +37,6 @@ class ViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return when (modelClass) {
-            PinnedTileViewModel::class.java -> PinnedTileViewModel(serviceLocator.pinnedTileRepo) as T
-
             PocketViewModel::class.java -> PocketViewModel(
                 serviceLocator.pocketRepo,
                 serviceLocator.pocketRepoCache

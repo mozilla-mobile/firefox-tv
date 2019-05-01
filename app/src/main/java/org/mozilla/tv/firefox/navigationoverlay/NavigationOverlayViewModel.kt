@@ -46,7 +46,7 @@ class NavigationOverlayViewModel(
     val shouldDisplayPinnedTiles: Observable<Boolean> = pinnedTiles.map { !it.tiles.isEmpty() }
             .distinctUntilChanged()
 
-    fun unpin(url: String) {
+    fun unpinPinnedTile(url: String) {
         pinnedTileRepo.removePinnedTile(url)
     }
 }
