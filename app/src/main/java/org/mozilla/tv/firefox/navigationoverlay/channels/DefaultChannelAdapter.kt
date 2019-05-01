@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.subjects.Subject
 import kotlinx.coroutines.Job
@@ -27,11 +28,34 @@ class DefaultChannelAdapter(
 
     private var tiles: List<ChannelTile> = emptyList()
 
-    fun setTiles(tiles: List<ChannelTile>) {
-        // todo; this
-        this.tiles = tiles
-        notifyDataSetChanged()
-        // todo: notify changed; Use the adapter that uses DiffUtil under the hood (in RecyclerView androidx lib?)
+    fun setTiles(newTiles: List<ChannelTile>) {
+        if (itemCount == 0) {
+            this.tiles = newTiles
+            notifyDataSetChanged()
+            return
+        }
+
+        // DiffUtil allows diff calculation between two lists and output a list of update
+        // operations that converts the first list into the second one
+        val diff = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize(): Int = tiles.size
+
+            override fun getNewListSize(): Int = newTiles.size
+
+            override fun areItemsTheSame(oldPos: Int, newPos: Int): Boolean {
+                return tiles[oldPos].url == newTiles[newPos].url
+            }
+
+            override fun areContentsTheSame(oldPos: Int, newPos: Int): Boolean {
+                val oldTile = tiles[oldPos]
+                val newTile = newTiles[newPos]
+                return oldTile.url == newTile.url &&
+                        oldTile.title == newTile.title
+            }
+        })
+
+        tiles = newTiles
+        diff.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DefaultChannelTileViewHolder {
