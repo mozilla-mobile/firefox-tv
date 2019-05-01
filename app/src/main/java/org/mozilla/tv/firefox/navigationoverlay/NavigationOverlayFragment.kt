@@ -50,7 +50,6 @@ import org.mozilla.tv.firefox.navigationoverlay.channels.DefaultChannel
 import org.mozilla.tv.firefox.navigationoverlay.channels.DefaultChannelFactory
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsChannelAdapter
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
-import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.ServiceLocator
@@ -134,7 +133,6 @@ class NavigationOverlayFragment : Fragment() {
     private lateinit var serviceLocator: ServiceLocator
     private lateinit var navigationOverlayViewModel: NavigationOverlayViewModel
     private lateinit var toolbarViewModel: ToolbarViewModel
-    private lateinit var pinnedTileViewModel: PinnedTileViewModel
     private lateinit var pocketViewModel: PocketViewModel
     private lateinit var hintViewModel: HintViewModel
     private lateinit var pinnedTileChannel: DefaultChannel
@@ -153,7 +151,6 @@ class NavigationOverlayFragment : Fragment() {
 
         navigationOverlayViewModel = FirefoxViewModelProviders.of(this).get(NavigationOverlayViewModel::class.java)
         toolbarViewModel = FirefoxViewModelProviders.of(this).get(ToolbarViewModel::class.java)
-        pinnedTileViewModel = FirefoxViewModelProviders.of(this).get(PinnedTileViewModel::class.java)
         pocketViewModel = FirefoxViewModelProviders.of(this).get(PocketViewModel::class.java)
         hintViewModel = if (serviceLocator.experimentsProvider.shouldShowHintBar()) {
             FirefoxViewModelProviders.of(this).get(OverlayHintViewModel::class.java)
@@ -369,7 +366,7 @@ class NavigationOverlayFragment : Fragment() {
                 // This assumes that since we're deleting from a Home Tile object that we created
                 // that the Uri is valid, so we do not do error handling here.
                 // TODO: NavigationOverlayFragment->ViewModel->Repo
-                pinnedTileViewModel.unpin(tileToRemove.url) // TODO this only works for pinned tiles
+                navigationOverlayViewModel.unpinPinnedTile(tileToRemove.url) // TODO this only works for pinned tiles
 //                TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileToRemove) TODO telemetry
                 return true
             }

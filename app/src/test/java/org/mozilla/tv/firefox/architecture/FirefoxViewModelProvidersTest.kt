@@ -10,7 +10,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.MainActivity
-import org.mozilla.tv.firefox.pinnedtile.PinnedTileViewModel
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 
