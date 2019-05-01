@@ -92,6 +92,14 @@
                     android:focusable="true"
                     android:nextFocusUp="@id/navUrlInput" />
 
+                <LinearLayout
+                    android:id="@+id/channelContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    />
+
+                <!--TODO remove me-->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/tileContainer"
                     android:layout_width="match_parent"
