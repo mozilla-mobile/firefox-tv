@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.hint
 
 import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ImageSpan
@@ -43,12 +44,12 @@ object HintBinder {
                             false -> hintContainer.height.toFloat()
                         }
 
+                        // Be very careful when changing this code; the hint bar experiment stays
+                        // disabled when A/B testing is disabled (e.g. like early returning from
+                        // this binding method if [ExperimentsProvider.shouldShowHintBar]
+                        // returns false).
                         hintContainer.animate()
-                                // If the hint bar is appearing, set the hintContainer.isVisible
-                                // to true before the animation begins. If the hint bar is
-                                // disappearing, set the hintContainer.isiVisible to false after
-                                // the animation ends.
-                                .setListener(object : Animator.AnimatorListener {
+                                .setListener(object : AnimatorListenerAdapter() {
                                     override fun onAnimationStart(animation: Animator?) {
                                         if (shouldDisplay) hintContainer.isVisible = shouldDisplay
                                     }
@@ -56,10 +57,6 @@ object HintBinder {
                                     override fun onAnimationEnd(animation: Animator?) {
                                         if (!shouldDisplay) hintContainer.isVisible = shouldDisplay
                                     }
-
-                                    override fun onAnimationCancel(animation: Animator?) { }
-
-                                    override fun onAnimationRepeat(animation: Animator?) { }
                                 })
                                 .setDuration(250)
                                 .setInterpolator(FastOutSlowInInterpolator())
