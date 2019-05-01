@@ -293,7 +293,7 @@ class FocusRepo(
         pocketState: PocketVideoRepo.FeedState
     ): State {
 
-        assert(lostFocusNode.viewId == R.id.tileContainer ||
+        assert(lostFocusNode.viewId == R.id.channelContainer ||
                 lostFocusNode.viewId == R.id.megaTileTryAgainButton)
 
         val viewId = when (pocketState) {
