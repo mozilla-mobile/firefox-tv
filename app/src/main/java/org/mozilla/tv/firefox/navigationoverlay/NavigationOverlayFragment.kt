@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.channelContainer
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.navUrlInput
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.pocketVideoMegaTileView
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.settingsTileContainer
@@ -48,6 +49,8 @@ import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.hint.InactiveHintViewModel
+import org.mozilla.tv.firefox.navigationoverlay.channels.Channel
+import org.mozilla.tv.firefox.navigationoverlay.channels.DefaultChannelFactory
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsChannelAdapter
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileAdapter
@@ -139,6 +142,8 @@ class NavigationOverlayFragment : Fragment() {
     private lateinit var pocketViewModel: PocketViewModel
     private lateinit var hintViewModel: HintViewModel
 
+    private lateinit var pinnedTileChannel: Channel
+
     private var tileAdapter: PinnedTileAdapter? = null
 
     private var rootView: View? = null
@@ -202,6 +207,13 @@ class NavigationOverlayFragment : Fragment() {
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
 
         registerForContextMenu(tileContainer)
+
+        pinnedTileChannel = DefaultChannelFactory().createChannel(context!!, view as ViewGroup)
+        channelContainer.addView(pinnedTileChannel.view)
+
+
+
+        // todo: update title
     }
 
     override fun onStart() {
@@ -218,6 +230,17 @@ class NavigationOverlayFragment : Fragment() {
                 .forEach { compositeDisposable.add(it) }
         initPinnedTiles()
                 .addTo(compositeDisposable)
+<<<<<<< HEAD
+=======
+
+        FirefoxViewModelProviders.of(this@NavigationOverlayFragment)
+                .get(NavigationOverlayViewModel::class.java)
+                .pinnedTiles.subscribe {
+            // update the views
+            pinnedTileChannel.setDetails(it.details)
+            pinnedTileChannel.setContents(it)
+        }.addTo(compositeDisposable)
+>>>>>>> Issue #2110: wrote early skeletons for a lot of components
     }
 
     override fun onStop() {
