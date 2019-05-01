@@ -93,6 +93,8 @@ android {
     // See https://developer.android.com/jetpack/docs/release-notes#september_19_2018
     packagingOptions {
         exclude 'META-INF/proguard/androidx-annotations.pro'
+        // TODO: remove in https://github.com/mozilla-mobile/firefox-tv/issues/2153
+        exclude 'META-INF/atomicfu.kotlin_module'
     }
 
     // Required for GeckoARM configuration
