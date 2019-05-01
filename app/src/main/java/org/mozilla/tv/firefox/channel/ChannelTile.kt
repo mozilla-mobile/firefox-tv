@@ -12,7 +12,7 @@ import android.widget.ImageView
 data class ChannelTile(
         val url: String,
         val title: String,
-        val setImage: (ImageView) -> Unit //TODO this is kinda hard to read in practice
+        val setImage: (ImageView) -> Unit
 )
 
 data class ChannelDetails(
