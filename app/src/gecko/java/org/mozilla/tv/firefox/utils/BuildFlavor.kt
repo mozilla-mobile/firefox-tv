@@ -18,7 +18,7 @@ class BuildFlavor {
             return "DEBUG / " +
                     "FLAVOR: ${BuildConfig.FLAVOR} / " +
                     "VERSION: ${BuildConfig.VERSION_NAME} / " +
-                    "GECKO: ${BuildConfig.GECKOVIEW_VERSION}"
+                    "GECKO: " + generateGeckoVersionStr()
         }
 
         return null
@@ -28,7 +28,7 @@ class BuildFlavor {
      * SystemWebView requires context to acquire version
      */
     fun getEngineVersion(@Suppress("UNUSED_PARAMETER") context: Context): String {
-        return BuildConfig.GECKOVIEW_VERSION
+        return generateGeckoVersionStr()
     }
 
     /**
@@ -41,5 +41,9 @@ class BuildFlavor {
      */
     fun getInterceptionResponseContent(localizedContent: String): RequestInterceptor.InterceptionResponse.Content {
         return RequestInterceptor.InterceptionResponse.Content(localizedContent, "text/html", "base64")
+    }
+
+    private fun generateGeckoVersionStr(): String {
+        return "${org.mozilla.geckoview.BuildConfig.MOZ_APP_VERSION}-${org.mozilla.geckoview.BuildConfig.MOZ_APP_BUILDID}"
     }
 }
