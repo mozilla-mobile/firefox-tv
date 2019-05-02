@@ -9,10 +9,12 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelDetails
 import org.mozilla.tv.firefox.ext.map
 import org.mozilla.tv.firefox.focus.FocusRepo
+import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelTile
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileImageUtilWrapper
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
@@ -55,4 +57,38 @@ class NavigationOverlayViewModel(
     fun unpinPinnedTile(url: String) {
         pinnedTileRepo.removePinnedTile(url)
     }
+
+    val mozillaChannelData = Observable.just(
+            ChannelDetails(
+                    title = "Mozilla",
+                    tileList = listOf(
+                            ChannelTile(
+                                    "https:www.mozilla.org",
+                                    "Mozilla 1",
+                                    // Subclassing ChannelTile to simplify setting the image for your use case is encouraged.
+                                    // See BundledPinnedTile#toChannelTile and CustomPinnedTile#BundledPinnedTile for how it's
+                                    // currently handled
+                                    { imageView -> imageView.setImageResource(R.drawable.ic_pocket_and_wordmark) }
+                            ),
+                            ChannelTile(
+                                    "https:www.mozilla.org",
+                                    "Mozilla 2",
+                                    { imageView -> imageView.setImageResource(R.drawable.ic_pocket_and_wordmark) }
+                            ),
+                            ChannelTile(
+                                    "https:www.mozilla.org",
+                                    "Mozilla 3",
+                                    { imageView -> imageView.setImageResource(R.drawable.ic_pocket_and_wordmark) }
+                            ),
+                            ChannelTile(
+                                    "https:www.mozilla.org",
+                                    "Mozilla 4",
+                                    { imageView -> imageView.setImageResource(R.drawable.ic_pocket_and_wordmark) }
+                            )
+                    )
+            )
+    )
+
+    val shouldDisplayMozillaChannel = mozillaChannelData.map { it.tileList.isNotEmpty() }
+            .distinctUntilChanged()
 }
