@@ -38,7 +38,8 @@ class DefaultChannelAdapter(
             override fun getNewListSize(): Int = newTiles.size
 
             override fun areItemsTheSame(oldPos: Int, newPos: Int): Boolean {
-                return tiles[oldPos].url == newTiles[newPos].url
+                return tiles[oldPos].url == newTiles[newPos].url &&
+                        tiles[oldPos].title == newTiles[newPos].title
             }
 
             override fun areContentsTheSame(oldPos: Int, newPos: Int): Boolean {
