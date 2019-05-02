@@ -12,60 +12,37 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.mozilla.tv.firefox.R
+
+val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ChannelTile>() {
+    override fun areItemsTheSame(oldTile: ChannelTile, newTile: ChannelTile): Boolean {
+        return oldTile.url == newTile.url &&
+                oldTile.title == newTile.title
+    }
+
+    override fun areContentsTheSame(oldTile: ChannelTile, newTile: ChannelTile): Boolean {
+        return oldTile.url == newTile.url &&
+                oldTile.title == newTile.title
+    }
+}
 
 class DefaultChannelAdapter(
     private val loadUrl: (String) -> Unit,
     private val onTileLongClick: ((ChannelTile) -> Unit)?,
     private val onTileFocused: (() -> Unit)?
-) : RecyclerView.Adapter<DefaultChannelTileViewHolder>() {
-
-    private var tiles: List<ChannelTile> = emptyList()
-
-    fun setTiles(newTiles: List<ChannelTile>) {
-        if (itemCount == 0) {
-            this.tiles = newTiles
-            notifyDataSetChanged()
-            return
-        }
-
-        // DiffUtil allows diff calculation between two lists and output a list of update
-        // operations that converts the first list into the second one
-        val diff = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-            override fun getOldListSize(): Int = tiles.size
-
-            override fun getNewListSize(): Int = newTiles.size
-
-            override fun areItemsTheSame(oldPos: Int, newPos: Int): Boolean {
-                return tiles[oldPos].url == newTiles[newPos].url &&
-                        tiles[oldPos].title == newTiles[newPos].title
-            }
-
-            override fun areContentsTheSame(oldPos: Int, newPos: Int): Boolean {
-                val oldTile = tiles[oldPos]
-                val newTile = newTiles[newPos]
-                return oldTile.url == newTile.url &&
-                        oldTile.title == newTile.title
-            }
-        })
-
-        tiles = newTiles
-        diff.dispatchUpdatesTo(this)
-    }
+) : ListAdapter<ChannelTile, DefaultChannelTileViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DefaultChannelTileViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-//        val view = inflater.inflate(R.layout.default_channel_tile, parent, false)
         val view = inflater.inflate(R.layout.home_tile, parent, false)
         return DefaultChannelTileViewHolder(view)
     }
 
-    override fun getItemCount(): Int = tiles.size
-
     override fun onBindViewHolder(holder: DefaultChannelTileViewHolder, position: Int) {
         with(holder) {
-            val tile = tiles[position]
+            val tile = getItem(position)
             tile.setImage.invoke(imageView)
             titleView.text = tile.title
 
