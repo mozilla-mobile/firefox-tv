@@ -203,7 +203,7 @@ class NavigationOverlayFragment : Fragment() {
         pinnedTileChannel = defaultChannelFactory.createChannel(context!!, view as ViewGroup, R.id.pinned_tiles_channel)
         channelsContainer.addView(pinnedTileChannel.channelContainer)
 
-        mozillaChannel = defaultChannelFactory.createChannel(context!!, view as ViewGroup)
+        mozillaChannel = defaultChannelFactory.createChannel(context!!, view)
         channelsContainer.addView(mozillaChannel.channelContainer)
     }
 
@@ -219,6 +219,21 @@ class NavigationOverlayFragment : Fragment() {
             .addTo(compositeDisposable)
         observePocketState()
             .addTo(compositeDisposable)
+
+        navigationOverlayViewModel.mozillaChannelData.subscribe {
+            mozillaChannel.setTitle(it.title)
+            mozillaChannel.setContents(it.tileList)
+        }.addTo(compositeDisposable)
+
+        navigationOverlayViewModel.shouldDisplayMozillaChannel.subscribe { shouldDisplay ->
+            mozillaChannel.channelContainer.visibility = when (shouldDisplay) {
+                true -> View.VISIBLE
+                false -> View.GONE
+            }
+        }.addTo(compositeDisposable)
+
+
+
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = false)
                 .forEach { compositeDisposable.add(it) }
     }
