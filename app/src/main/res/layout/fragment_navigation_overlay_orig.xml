@@ -93,7 +93,7 @@
                     android:nextFocusUp="@id/navUrlInput" />
 
                 <LinearLayout
-                    android:id="@+id/channelContainer"
+                    android:id="@+id/channelsContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"

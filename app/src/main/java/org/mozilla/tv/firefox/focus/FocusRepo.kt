@@ -199,7 +199,7 @@ class FocusRepo(
                 if (pinnedTilesIsEmpty) {
                     R.id.settingsTileContainer
                 } else {
-                    R.id.channelContainer
+                    R.id.channelsContainer
                 }
             }
             is PocketVideoRepo.FeedState.LoadComplete,
@@ -293,7 +293,7 @@ class FocusRepo(
         pocketState: PocketVideoRepo.FeedState
     ): State {
 
-        assert(lostFocusNode.viewId == R.id.channelContainer ||
+        assert(lostFocusNode.viewId == R.id.channelsContainer ||
                 lostFocusNode.viewId == R.id.megaTileTryAgainButton)
 
         val viewId = when (pocketState) {

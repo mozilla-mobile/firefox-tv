@@ -24,6 +24,7 @@ class NavigationOverlayViewModel(
     focusRepo: FocusRepo,
     imageUtilityWrapper: PinnedTileImageUtilWrapper,
     formattedDomainWrapper: FormattedDomainWrapper,
+    pinnedChannelTitle: String,
     private val pinnedTileRepo: PinnedTileRepo
 ) : ViewModel() {
 
@@ -37,12 +38,15 @@ class NavigationOverlayViewModel(
         it.currentUrl != URLs.APP_URL_HOME
     }
 
+    // This method converts our existing pinned tiles implementation to the new channel
+    // style. When possible, we should update the repo to provide the correct type,
+    // rather than converting here
     val pinnedTiles: Observable<ChannelDetails> = pinnedTileRepo.pinnedTiles
             .observeOn(Schedulers.computation())
             // This takes place off of the main thread because PinnedTile.toChannelTile needs
             // to perform file access, and blocks to do so
             .map { it.values.map { it.toChannelTile(imageUtilityWrapper, formattedDomainWrapper) } }
-            .map { ChannelDetails(title = "Pinned Tiles", tileList = it) } // TODO extract string
+            .map { ChannelDetails(title = pinnedChannelTitle, tileList = it) } // TODO extract string
             .observeOn(AndroidSchedulers.mainThread())
 
     val shouldDisplayPinnedTiles: Observable<Boolean> = pinnedTiles.map { !it.tileList.isEmpty() }

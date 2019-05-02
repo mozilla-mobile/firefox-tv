@@ -41,7 +41,7 @@ public class DefaultHomeScreenTest extends ScreenshotTest {
     @Test
     public void showDefaultHomeScreen() {
         onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()));
-        onView(allOf(withId(R.id.channelContainer), isDisplayed()));
+        onView(allOf(withId(R.id.channelsContainer), isDisplayed()));
         Screengrab.screenshot("home-screen");
     }
 }
