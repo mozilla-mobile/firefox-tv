@@ -18,7 +18,7 @@ class DefaultChannel(
     }
 
     fun setContents(tileData: List<ChannelTile>) {
-        adapter.setTiles(tileData)
+        adapter.submitList(tileData)
     }
 
     private val titleView: TextView = containerView.channelTitle
