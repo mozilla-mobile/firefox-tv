@@ -136,6 +136,7 @@ class NavigationOverlayFragment : Fragment() {
     private lateinit var pocketViewModel: PocketViewModel
     private lateinit var hintViewModel: HintViewModel
     private lateinit var pinnedTileChannel: DefaultChannel
+    private lateinit var mozillaChannel: DefaultChannel
 
     private var rootView: View? = null
 
@@ -201,6 +202,9 @@ class NavigationOverlayFragment : Fragment() {
 
         pinnedTileChannel = defaultChannelFactory.createChannel(context!!, view as ViewGroup, R.id.pinned_tiles_channel)
         channelsContainer.addView(pinnedTileChannel.channelContainer)
+
+        mozillaChannel = defaultChannelFactory.createChannel(context!!, view as ViewGroup)
+        channelsContainer.addView(mozillaChannel.channelContainer)
     }
 
     override fun onStart() {
