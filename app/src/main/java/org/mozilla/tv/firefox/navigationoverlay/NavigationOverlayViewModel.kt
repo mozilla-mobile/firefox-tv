@@ -39,6 +39,8 @@ class NavigationOverlayViewModel(
 
     val pinnedTiles: Observable<ChannelDetails> = pinnedTileRepo.pinnedTiles
             .observeOn(Schedulers.computation())
+            // This takes place off of the main thread because PinnedTile.toChannelTile needs
+            // to perform file access, and blocks to do so
             .map { it.values.map { it.toChannelTile(imageUtilityWrapper, formattedDomainWrapper) } }
             .map { ChannelDetails(title = "Pinned Tiles", tileList = it) } // TODO extract string
             .observeOn(AndroidSchedulers.mainThread())

@@ -5,13 +5,20 @@
 package org.mozilla.tv.firefox.navigationoverlay.channels
 
 import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
 
+/**
+ * Backing data for a [RecyclerView] item in a channel
+ */
 data class ChannelTile(
     val url: String,
     val title: String,
     val setImage: (ImageView) -> Unit
 )
 
+/**
+ * Backing data for a channel as a whole
+ */
 data class ChannelDetails(
     val title: CharSequence,
     val tileList: List<ChannelTile>

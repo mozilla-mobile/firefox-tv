@@ -311,6 +311,9 @@ class NavigationOverlayFragment : Fragment() {
                         Toast.makeText(context, R.string.homescreen_unpin_tutorial_toast,
                                 android.widget.Toast.LENGTH_LONG).show()
                     }
+                    // We believe this delays in order to avoid speaking over the focus
+                    // change announcement. However this is taken legacy code, so there
+                    // may be other reasons as well
                     if (context!!.isVoiceViewEnabled()) uiHandler.postDelayed(showToast, 1500)
                     else showToast.invoke()
 
