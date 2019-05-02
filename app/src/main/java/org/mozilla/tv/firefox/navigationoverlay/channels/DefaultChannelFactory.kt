@@ -24,7 +24,7 @@ class DefaultChannelFactory(
     var lastLongClickedTile: ChannelTile? = null
         private set
 
-    fun createChannel(context: Context, parent: ViewGroup, id: Int): DefaultChannel {
+    fun createChannel(context: Context, parent: ViewGroup, id: Int? = null): DefaultChannel {
         // If we ever have channels that don't support removal, add a shouldRemove param here.
         // When false, pass null instead of invokeLongClickAndSaveTile
         val channelAdapter = DefaultChannelAdapter(loadUrl, invokeLongClickAndSaveTile, onTileFocused)
@@ -34,7 +34,7 @@ class DefaultChannelFactory(
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             this.adapter = channelAdapter
         }
-        containerView.id = id
+        if (id != null) containerView.id = id
 
         return DefaultChannel(
                 channelContainer = containerView,
