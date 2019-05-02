@@ -261,16 +261,6 @@ android.applicationVariants.all { variant ->
 }
 
 // -------------------------------------------------------------------------------------------------
-// Gecko: Put GeckoVersion into BuildConfig
-// -------------------------------------------------------------------------------------------------
-
-android.applicationVariants.all { variant ->
-    if (variant.flavorName == "gecko") {
-        buildConfigField 'String', 'GECKOVIEW_VERSION', "\"${GeckoVersions.nightly_version}\""
-    }
-}
-
-// -------------------------------------------------------------------------------------------------
 // L10N: Generate list of locales
 // Firefox TV provides its own (Android independent) locale switcher. That switcher requires a list
 // of locale codes. We generate that list here to avoid having to manually maintain a list of locales:
