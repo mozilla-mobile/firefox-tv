@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Added
+- Channel for displaying pinned tiles (replacing the previous container style) (#2110)
 
 ### Changed
 - Improve cursor performance and feel (#1912)
