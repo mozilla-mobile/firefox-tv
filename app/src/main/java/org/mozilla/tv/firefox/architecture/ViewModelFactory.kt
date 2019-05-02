@@ -8,6 +8,7 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.hint.HintContentFactory
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayViewModel
 import org.mozilla.tv.firefox.navigationoverlay.OverlayHintViewModel
@@ -57,6 +58,7 @@ class ViewModelFactory(
                 serviceLocator.focusRepo,
                 serviceLocator.screenshotStoreWrapper,
                 serviceLocator.formattedDomainWrapper,
+                app.getString(R.string.pinned_tile_channel_title),
                 serviceLocator.pinnedTileRepo
             ) as T
 

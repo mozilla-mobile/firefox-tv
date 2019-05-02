@@ -25,7 +25,7 @@ import androidx.fragment.app.Fragment
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.channelContainer
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.channelsContainer
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.navUrlInput
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.pocketVideoMegaTileView
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.settingsTileContainer
@@ -98,7 +98,7 @@ class NavigationOverlayFragment : Fragment() {
     // instantiation of the BrowserNavigationOverlay
     private var canShowUnpinToast: Boolean = false
 
-    private val openHomeTileContextMenu: () -> Unit = { activity?.openContextMenu(channelContainer) }
+    private val openHomeTileContextMenu: () -> Unit = { activity?.openContextMenu(channelsContainer) }
     private val defaultChannelFactory = createChannelFactory()
 
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
@@ -136,8 +136,6 @@ class NavigationOverlayFragment : Fragment() {
     private lateinit var pocketViewModel: PocketViewModel
     private lateinit var hintViewModel: HintViewModel
     private lateinit var pinnedTileChannel: DefaultChannel
-
-//    private var tileAdapter: PinnedTileAdapter? = null
 
     private var rootView: View? = null
 
@@ -198,11 +196,11 @@ class NavigationOverlayFragment : Fragment() {
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context!!, R.color.photonGrey10_a60p)) }
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
 
-        registerForContextMenu(channelContainer)
+        registerForContextMenu(channelsContainer)
         canShowUnpinToast = true
 
         pinnedTileChannel = defaultChannelFactory.createChannel(context!!, view as ViewGroup, R.id.pinned_tiles_channel)
-        channelContainer.addView(pinnedTileChannel.containerView)
+        channelsContainer.addView(pinnedTileChannel.channelContainer)
     }
 
     override fun onStart() {
@@ -260,8 +258,17 @@ class NavigationOverlayFragment : Fragment() {
     }
 
     private fun observeShouldDisplayPinnedTiles(): Disposable {
+        // We considered putting all common channel behavior into one reusable function (and may
+        // still in the future), but were concerned about a potential problem.
+        //
+        // Assume that we handle isEmpty visibility automatically, somewhere in Channel or
+        // DefaultChannelFactory. Then we get a requirement to set visibility some other way
+        // (maybe the user can hide the tile). We could get easy to miss, bad interactions where
+        // our viewmodel sets visibility in one way, but the view itself has other behavior. For
+        // now, we have chosen to make this visibility change explicit, and the responsibility of
+        // the dev who is adding a new channel. We may revisit this in the future.
         return navigationOverlayViewModel.shouldDisplayPinnedTiles.subscribe { shouldDisplay ->
-            pinnedTileChannel.containerView.visibility = when (shouldDisplay) {
+            pinnedTileChannel.channelContainer.visibility = when (shouldDisplay) {
                 true -> View.VISIBLE
                 false -> View.GONE
             }

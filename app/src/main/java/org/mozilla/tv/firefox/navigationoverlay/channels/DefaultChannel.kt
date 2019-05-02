@@ -9,7 +9,7 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.default_channel.view.channelTitle
 
 class DefaultChannel(
-    val containerView: ViewGroup,
+    val channelContainer: ViewGroup,
     private val adapter: DefaultChannelAdapter
 ) {
 
@@ -21,5 +21,5 @@ class DefaultChannel(
         adapter.submitList(tileData)
     }
 
-    private val titleView: TextView = containerView.channelTitle
+    private val titleView: TextView = channelContainer.channelTitle
 }

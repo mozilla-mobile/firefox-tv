@@ -27,6 +27,8 @@ import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
 import org.robolectric.RobolectricTestRunner
 
+const val DEFAULT_PINNED_TILE_COUNT = 10
+
 /**
  * Unit tests for pinned tile operations in [NavigationOverlayViewModel].
  */
@@ -67,6 +69,7 @@ class PinnedTileTest {
                 focusRepo,
                 pinnedTileImageUtilWrapper,
                 formattedDomainWrapper,
+                "Pinned Tiles",
                 pinnedTileRepo
         )
         testObserver = overlayVm.pinnedTiles.test()
@@ -75,30 +78,30 @@ class PinnedTileTest {
     @Test
     fun `WHEN repo emits a successful load THEN view model should emit a list of same number of tiles`() {
         assertEquals(1, testObserver.valueCount())
-        assertEquals(10, testObserver.values().last().tileList.size)
+        assertEquals(DEFAULT_PINNED_TILE_COUNT, testObserver.values().last().tileList.size)
     }
 
     @Test
     fun `WHEN repo emits an updated list after add THEN view model should emit an updated list`() {
-        assertEquals(10, testObserver.values().last().tileList.size)
+        assertEquals(DEFAULT_PINNED_TILE_COUNT, testObserver.values().last().tileList.size)
         pinnedTileRepo.addPinnedTile("https://example.com", null)
         assertEquals(2, testObserver.valueCount())
-        assertEquals(11, testObserver.values().last().tileList.size)
+        assertEquals(DEFAULT_PINNED_TILE_COUNT + 1, testObserver.values().last().tileList.size)
     }
 
     @Test
     fun `WHEN repo emits an updated list after remove THEN view model should emit an updated list`() {
-        assertEquals(10, testObserver.values().last().tileList.size)
+        assertEquals(DEFAULT_PINNED_TILE_COUNT, testObserver.values().last().tileList.size)
         overlayVm.unpinPinnedTile("https://www.instagram.com/")
         assertEquals(2, testObserver.valueCount())
-        assertEquals(9, testObserver.values().last().tileList.size)
+        assertEquals(DEFAULT_PINNED_TILE_COUNT - 1, testObserver.values().last().tileList.size)
     }
 
     @Test
     fun `WHEN repo fails to remove an item THEN view model should emit nothing`() {
-        assertEquals(10, testObserver.values().last().tileList.size)
+        assertEquals(DEFAULT_PINNED_TILE_COUNT, testObserver.values().last().tileList.size)
         overlayVm.unpinPinnedTile("https://example.com/")
         assertEquals(1, testObserver.valueCount())
-        assertEquals(10, testObserver.values().last().tileList.size)
+        assertEquals(DEFAULT_PINNED_TILE_COUNT, testObserver.values().last().tileList.size)
     }
 }
