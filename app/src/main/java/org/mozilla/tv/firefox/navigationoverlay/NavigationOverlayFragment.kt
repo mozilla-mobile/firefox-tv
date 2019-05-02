@@ -199,6 +199,7 @@ class NavigationOverlayFragment : Fragment() {
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
 
         registerForContextMenu(channelContainer)
+        canShowUnpinToast = true
 
         pinnedTileChannel = defaultChannelFactory.createChannel(context!!, view as ViewGroup, R.id.pinned_tiles_channel)
         channelContainer.addView(pinnedTileChannel.containerView)

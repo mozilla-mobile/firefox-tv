@@ -6,7 +6,6 @@
 package org.mozilla.tv.firefox.ui.screenshots;
 
 import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.UiDevice;
 
@@ -29,7 +28,9 @@ import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.both;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNot.not;
@@ -65,7 +66,7 @@ public class PinTileTests extends ScreenshotTest {
 
         mDevice.waitForIdle();
 
-        onView(ViewMatchers.withId(R.id.pinned_tiles_channel))
+        onView(both(withId(R.id.channelTileContainer)).and(withParent(withId(R.id.pinned_tiles_channel))))
                 .perform(actionOnItemAtPosition(0, longClick()));
 
         onView(withText(R.string.homescreen_tile_remove))
