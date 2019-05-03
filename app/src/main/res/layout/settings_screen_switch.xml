@@ -49,12 +49,12 @@
         <requestFocus />
     </androidx.appcompat.widget.SwitchCompat>
 
+    <!-- Text set programmatically in order to format string -->
     <TextView
         android:id="@+id/description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:text="@string/settings_telemetry_description"
         android:fontFamily="@string/font_ember_regular"
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@id/toggle"
