@@ -106,9 +106,16 @@
     <!-- Settings strings -->
     <string name="settings_cookies_dialog_title">Clear all cookies and site data</string>
     <string name="settings_cookies_dialog_content2">This will clear all cookies and site data. Clearing this information may sign you out of websites and delete web content that is stored offline.</string>
+    <!-- Text on a button that, when pressed, will clear all user data.
+    Mock: https://user-images.githubusercontent.com/1721875/47298531-59442f00-d618-11e8-98df-632f74e9ebc3.png -->
     <string name="settings_cookies_confirm">Clear now</string>
 
+    <!-- Title for a screen that explains the purpose of our telemetry, and contains a
+    switch that can toggle it on and off
+     Mock: https://user-images.githubusercontent.com/1721875/47298694-b809a880-d618-11e8-9e18-1d6d47d2045d.png -->
     <string name="preference_mozilla_telemetry2">Send usage data</string>
+    <!-- Description text that explains the purpose of our telemetry
+      Mock: https://user-images.githubusercontent.com/1721875/47298694-b809a880-d618-11e8-9e18-1d6d47d2045d.png -->
     <string name="settings_telemetry_description">Mozilla strives to collect only what we need to provide and improve Firefox for Fire TV for everyone</string>
 
     <string name="turbo_mode">Turbo Mode</string>
