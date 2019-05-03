@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox
 import android.os.StrictMode
 import androidx.annotation.VisibleForTesting
 import android.webkit.WebSettings
+import mozilla.components.service.glean.Glean
 import mozilla.components.support.ktx.android.content.runOnlyInMainProcess
 import org.mozilla.tv.firefox.components.locale.LocaleAwareApplication
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
@@ -49,6 +50,17 @@ open class FirefoxApplication : LocaleAwareApplication() {
 
             // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.
             SentryIntegration.init(this, serviceLocator.settingsRepo)
+
+            // Set up Glean by connecting it to the preference flag for data collection and calling
+            // the initialize() function.
+            with(serviceLocator.settingsRepo) {
+                dataCollectionEnabled.observeForever { collectionEnabled ->
+                    if (collectionEnabled != null) {
+                        Glean.setUploadEnabled(collectionEnabled)
+                    }
+                }
+            }
+            Glean.initialize(applicationContext)
 
             TelemetryIntegration.INSTANCE.init(this)
 
