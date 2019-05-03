@@ -4,24 +4,25 @@
 
 package org.mozilla.tv.firefox.settings
 
-import androidx.lifecycle.Observer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import io.sentry.Sentry
-import kotlinx.android.synthetic.main.settings_screen_buttons.view.*
-import kotlinx.android.synthetic.main.settings_screen_switch.*
-import kotlinx.android.synthetic.main.settings_screen_switch.view.*
+import kotlinx.android.synthetic.main.settings_screen_buttons.view.cancel_action
+import kotlinx.android.synthetic.main.settings_screen_buttons.view.confirm_action
+import kotlinx.android.synthetic.main.settings_screen_switch.toggle
+import kotlinx.android.synthetic.main.settings_screen_switch.view.description
+import kotlinx.android.synthetic.main.settings_screen_switch.view.toggle
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsTile
-import java.lang.IllegalStateException
 
 const val KEY_SETTINGS_TYPE = "KEY_SETTINGS_TYPE"
 
@@ -61,6 +62,8 @@ class SettingsFragment : Fragment() {
         view.toggle.setOnClickListener {
             settingsViewModel.setDataCollectionEnabled(toggle.isChecked)
         }
+        view.description.text = resources.getString(R.string.settings_telemetry_description,
+                resources.getString(R.string.firefox_tv_brand_name))
         return view
     }
 
