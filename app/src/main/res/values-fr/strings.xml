@@ -22,7 +22,6 @@
   <string name="preference_category_performance">Performances</string>
   <string name="preference_performance_block_webfonts">Bloquer les polices web</string>
   <string name="preference_performance_block_webfonts_summary">Peut empêcher certaines icônes ou images de s’afficher</string>
-  <string name="preference_mozilla_telemetry2">Envoyer des données d’utilisation</string>
   <string name="preference_privacy_notice">Politique de confidentialité</string>
   <string name="content_description_forward">Avancer dans l’historique</string>
   <string name="content_description_reload">Actualiser la page web</string>
@@ -42,6 +41,7 @@
   <string name="your_rights_content5"><![CDATA["%1$s utilise aussi des listes de blocage fournies par Disconnect Inc, en tant que créations sous la licence "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>" et qui sont disponibles "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">ici</a>.]]></string>
   <string name="settings_cookies_dialog_title">Effacer les cookies et les données de sites</string>
   <string name="settings_cookies_dialog_content2">Cette action effacera l’ensemble des cookies et des données de sites. Effacer ces données peut vous déconnecter de certains sites web et supprimer du contenu web stocké hors connexion.</string>
+  <string name="preference_mozilla_telemetry2">Envoyer des données d’utilisation</string>
   <string name="turbo_mode">Mode turbo</string>
   <string name="onboarding_turbo_mode_title">Le mode turbo vous permet de naviguer plus rapidement</string>
   <string name="onboarding_turbo_mode_body2">Le mode turbo bloque automatiquement publicités et traqueurs.\nSi un site ne fonctionne pas comme vous l’attendiez, essayez de le désactiver.</string>
