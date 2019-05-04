@@ -22,7 +22,6 @@
   <string name="preference_category_performance">Prestazioni</string>
   <string name="preference_performance_block_webfonts">Blocca web font</string>
   <string name="preference_performance_block_webfonts_summary">Alcune immagini e icone potrebbero non essere visualizzate</string>
-  <string name="preference_mozilla_telemetry2">Invia dati sull’uso</string>
   <string name="preference_privacy_notice">Informativa sulla privacy</string>
   <string name="content_description_forward">Naviga in avanti</string>
   <string name="content_description_reload">Ricarica il sito web</string>
@@ -42,6 +41,7 @@
   <string name="your_rights_content5"><![CDATA[\"%1$s utilizza un servizio di \"<em xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">blocklist</em>\" fornito da Disconnect, Inc. in qualità di opera aggiuntiva e separata, distribuita nei termini della \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>\" e disponibile \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">qui</a>.]]></string>
   <string name="settings_cookies_dialog_title">Elimina tutti i cookie e i dati dei siti web</string>
   <string name="settings_cookies_dialog_content2">Ciò eliminerà tutti i cookie e i dati raccolti. Rimuovere queste informazioni potrebbe causare la disconnessione da siti web e l\'eliminazione dei contenuti web salvati offline.</string>
+  <string name="preference_mozilla_telemetry2">Invia dati sull’uso</string>
   <string name="turbo_mode">Modalità turbo</string>
   <string name="onboarding_turbo_mode_title">La modalità turbo ti permette di navigare più velocemente</string>
   <string name="onboarding_turbo_mode_body2">La modalità turbo blocca automaticamente pubblicità ed elementi traccianti.\nSe un sito non funziona nel modo previsto, prova a disattivarla.</string>

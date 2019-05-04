@@ -22,7 +22,6 @@
   <string name="preference_category_performance">Desempenho</string>
   <string name="preference_performance_block_webfonts">Bloquear fontes web</string>
   <string name="preference_performance_block_webfonts_summary">Pode resultar em falta de ícones ou imagens</string>
-  <string name="preference_mozilla_telemetry2">Enviar dados de uso</string>
   <string name="preference_privacy_notice">Aviso de Privacidade</string>
   <string name="content_description_forward">Navegar para a frente</string>
   <string name="content_description_reload">Recarregar o site</string>
@@ -42,6 +41,7 @@
   <string name="your_rights_content5"><![CDATA["O %1$s também usa listas de bloqueio fornecidas pela Disconnect, Inc. como trabalhos separados e independentes, disponibilizados "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">aqui</a>\" sob a \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>.]]></string>
   <string name="settings_cookies_dialog_title">Limpar todos os cookies e dados do site</string>
   <string name="settings_cookies_dialog_content2">Está ação limpará todos os cookies e dados de sites. Limpar essas informações pode finalizar sessões de sites e apagar conteúdo da web armazenado localmente.</string>
+  <string name="preference_mozilla_telemetry2">Enviar dados de uso</string>
   <string name="turbo_mode">Modo Turbo</string>
   <string name="onboarding_turbo_mode_title">O modo turbo ajuda você a navegar mais rápido</string>
   <string name="onboarding_turbo_mode_body2">O modo turbo bloqueia anúncios e rastreadores automaticamente.\nSe um site não agir da forma que você espera, experimente desativar o modo turbo.</string>

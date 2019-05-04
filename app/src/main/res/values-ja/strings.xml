@@ -22,7 +22,6 @@
   <string name="preference_category_performance">パフォーマンス</string>
   <string name="preference_performance_block_webfonts">ウェブフォントをブロック</string>
   <string name="preference_performance_block_webfonts_summary">アイコンや画像が正常に表示されない場合があります</string>
-  <string name="preference_mozilla_telemetry2">使用状況データを送信</string>
   <string name="preference_privacy_notice">プライバシー通知</string>
   <string name="content_description_forward">次のページへ進む</string>
   <string name="content_description_reload">ウェブサイトを再読み込み</string>
@@ -42,6 +41,7 @@
   <string name="your_rights_content5"><![CDATA["%1$s は Disconnect, Inc. により提供されているブロックリストも "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>" の下で単独のリソースとして使用しており、それらは "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">&#12371;&#12385;&#12425;</a>" から入手可能です。"]]></string>
   <string name="settings_cookies_dialog_title">すべての Cookie とサイトデータの消去</string>
   <string name="settings_cookies_dialog_content2">これにより、すべての Cookie とサイトデータが消去され、ウェブサイトからログアウトしたり、オフライン用に保存されているコンテンツが削除されたりする可能性があります。</string>
+  <string name="preference_mozilla_telemetry2">使用状況データを送信</string>
   <string name="turbo_mode">ターボモード</string>
   <string name="onboarding_turbo_mode_title">ターボモードはより速くブラウズするのに役立ちます</string>
   <string name="onboarding_turbo_mode_body2">ターボモードは自動的に広告やトラッカーをブロックします。\nサイトが期待通りの動作をしない場合は、これをオフにしてみてください。</string>
