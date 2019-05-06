@@ -7,7 +7,6 @@ package org.mozilla.tv.firefox.navigationoverlay.channels
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.default_channel.view.channelTileContainer
 import org.mozilla.tv.firefox.R
 
@@ -31,7 +30,7 @@ class DefaultChannelFactory(
 
         val containerView = LayoutInflater.from(context).inflate(R.layout.default_channel, parent, false) as ViewGroup
         containerView.channelTileContainer.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            layoutManager = ChannelLayoutManager(context)
             this.adapter = channelAdapter
         }
         if (id != null) containerView.channelTileContainer.id = id
