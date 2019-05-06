@@ -34,7 +34,7 @@ class DefaultChannelFactory(
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             this.adapter = channelAdapter
         }
-        if (id != null) containerView.id = id
+        if (id != null) containerView.channelTileContainer.id = id
 
         return DefaultChannel(
                 channelContainer = containerView,
