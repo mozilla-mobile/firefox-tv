@@ -7,13 +7,17 @@ package org.mozilla.tv.firefox.navigationoverlay.channels
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 
+enum class TileSource { BUNDLED, CUSTOM }
+
 /**
  * Backing data for a [RecyclerView] item in a channel
  */
 data class ChannelTile(
     val url: String,
     val title: String,
-    val setImage: (ImageView) -> Unit
+    val setImage: (ImageView) -> Unit,
+    val tileSource: TileSource,
+    val id: String
 )
 
 /**

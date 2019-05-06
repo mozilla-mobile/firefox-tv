@@ -51,6 +51,7 @@ import org.mozilla.tv.firefox.navigationoverlay.channels.DefaultChannelFactory
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsChannelAdapter
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
 import org.mozilla.tv.firefox.pocket.PocketViewModel
+import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
@@ -378,7 +379,7 @@ class NavigationOverlayFragment : Fragment() {
                 // that the Uri is valid, so we do not do error handling here.
                 // TODO: NavigationOverlayFragment->ViewModel->Repo
                 navigationOverlayViewModel.unpinPinnedTile(tileToRemove.url) // TODO this only works for pinned tiles
-//                TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileToRemove) TODO telemetry
+                TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileToRemove)
                 return true
             }
             else -> return false

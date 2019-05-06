@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
 val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ChannelTile>() {
     override fun areItemsTheSame(oldTile: ChannelTile, newTile: ChannelTile): Boolean {
@@ -48,7 +49,7 @@ class DefaultChannelAdapter(
 
             itemView.setOnClickListener {
                 loadUrl(tile.url)
-                // TODO channel telemetry. See TelemetryIntegration#homeTileClickEvent
+                TelemetryIntegration.INSTANCE.homeTileClickEvent(holder.itemView.context, tile)
             }
 
             itemView.setOnLongClickListener {

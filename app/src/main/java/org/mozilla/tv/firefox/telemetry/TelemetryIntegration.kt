@@ -14,9 +14,6 @@ import android.view.InputDevice
 import android.view.KeyEvent
 import mozilla.components.support.ktx.android.os.resetAfter
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
-import org.mozilla.tv.firefox.pinnedtile.BundledPinnedTile
-import org.mozilla.tv.firefox.pinnedtile.CustomPinnedTile
-import org.mozilla.tv.firefox.pinnedtile.PinnedTile
 import org.mozilla.tv.firefox.utils.Assert
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText.AutocompleteResult
 import org.mozilla.telemetry.TelemetryHolder
@@ -26,9 +23,11 @@ import org.mozilla.telemetry.ping.TelemetryCorePingBuilder
 import org.mozilla.telemetry.ping.TelemetryMobileEventPingBuilder
 import org.mozilla.telemetry.ping.TelemetryPocketEventPingBuilder
 import org.mozilla.tv.firefox.ext.serviceLocator
+import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelTile
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsButton
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsTile
+import org.mozilla.tv.firefox.navigationoverlay.channels.TileSource
 import java.util.Collections
 
 private const val SHARED_PREFS_KEY = "telemetryLib" // Don't call it TelemetryWrapper to avoid accidental IDE rename.
@@ -254,8 +253,8 @@ open class TelemetryIntegration protected constructor(
     }
 
     @UiThread // via TelemetryHomeTileUniqueClickPerSessionCounter
-    fun homeTileClickEvent(context: Context, tile: PinnedTile) {
-        if (tile.idToString() == YOUTUBE_TILE_ID) {
+    fun homeTileClickEvent(context: Context, tile: ChannelTile) {
+        if (tile.id == YOUTUBE_TILE_ID) {
             TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE,
                     Value.YOUTUBE_TILE).queue()
         }
@@ -263,7 +262,7 @@ open class TelemetryIntegration protected constructor(
         val tileType = getTileTypeAsStringValue(tile)
         if (tileType == Value.TILE_BUNDLED) {
             TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE, tileType)
-                .extra(Extra.TILE_ID, tile.idToString())
+                .extra(Extra.TILE_ID, tile.id)
                 .queue()
         } else {
             TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE, tileType).queue()
@@ -362,7 +361,7 @@ open class TelemetryIntegration protected constructor(
                 .queue()
     }
 
-    fun homeTileRemovedEvent(removedTile: PinnedTile) {
+    fun homeTileRemovedEvent(removedTile: ChannelTile) {
         TelemetryEvent.create(Category.ACTION, Method.REMOVE, Object.HOME_TILE,
                 getTileTypeAsStringValue(removedTile)).queue()
     }
@@ -401,9 +400,9 @@ open class TelemetryIntegration protected constructor(
 
     private fun boolToOnOff(boolean: Boolean) = if (boolean) Value.ON else Value.OFF
 
-    private fun getTileTypeAsStringValue(tile: PinnedTile) = when (tile) {
-        is BundledPinnedTile -> Value.TILE_BUNDLED
-        is CustomPinnedTile -> Value.TILE_CUSTOM
+    private fun getTileTypeAsStringValue(tile: ChannelTile) = when (tile.tileSource) {
+        TileSource.BUNDLED -> Value.TILE_BUNDLED
+        TileSource.CUSTOM -> Value.TILE_CUSTOM
     }
 
     fun youtubeCastEvent() = TelemetryEvent.create(Category.ACTION, Method.YOUTUBE_CAST, Object.BROWSER).queue()
@@ -437,14 +436,14 @@ enum class UrlTextInputLocation(internal val extra: String) {
 @UiThread // We get-and-set over SharedPreferences in countTile so we need resource protection.
 private object TelemetryHomeTileUniqueClickPerSessionCounter {
 
-    fun countTile(context: Context, tile: PinnedTile) {
+    fun countTile(context: Context, tile: ChannelTile) {
         Assert.isUiThread()
         if (!TelemetryHolder.get().configuration.isCollectionEnabled) { return }
 
         val sharedPrefs = getSharedPrefs(context)
         val clickedTileIDs = (sharedPrefs.getStringSet(KEY_CLICKED_HOME_TILE_IDS_PER_SESSION, null)
                 ?: setOf()).toMutableSet() // create a copy: we can't modify a SharedPref StringSet.
-        val wasNewTileAdded = clickedTileIDs.add(tile.idToString())
+        val wasNewTileAdded = clickedTileIDs.add(tile.id)
 
         if (wasNewTileAdded) {
             sharedPrefs.edit()
