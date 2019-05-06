@@ -8,6 +8,7 @@ import androidx.annotation.WorkerThread
 import org.json.JSONObject
 import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelTile
 import org.mozilla.tv.firefox.ext.toJavaURI
+import org.mozilla.tv.firefox.navigationoverlay.channels.TileSource
 import org.mozilla.tv.firefox.utils.FormattedDomain
 import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
 import org.mozilla.tv.firefox.utils.PicassoWrapper
@@ -71,7 +72,9 @@ class BundledPinnedTile(
                             // TODO find a less brittle way to retrieve this path
                             .load("file:///android_asset/bundled/$imagePath")
                             .into(view)
-                }
+                },
+                tileSource = TileSource.BUNDLED,
+                id = idToString()
         )
     }
 }
@@ -105,7 +108,9 @@ class CustomPinnedTile(
                             .load(imageUtilityWrapper.getFileForUUID(id))
                             .placeholder(backup)
                             .into(view)
-                } // todo: fix scope, double check this is okay.
+                }, // todo: fix scope, double check this is okay.
+                tileSource = TileSource.CUSTOM,
+                id = idToString()
         )
     }
 
