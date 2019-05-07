@@ -113,20 +113,9 @@ class YouTubeNavigationTest {
 
         /**
          * First, go back to the beginning of history.
-         * YouTube from Pocket, back out of YouTube, YouTube TV, back out of YouTube
+         * YouTube TV, back out of YouTube
          * Expected: Overlay
          */
-        .closeToBrowser {
-            remoteBack()
-        }
-        navigationOverlay {
-        }.openPocketMegatile {
-        }.openTileToBrowser(0) {
-        }.openOverlay {
-            waitUntilYouTubeVideoLoads()
-        }.closeToBrowser {
-            backOutOfYouTube()
-        }
         navigationOverlay {
             waitForURLBarToDisplayHint()
             assertURLBarDisplaysHint()
