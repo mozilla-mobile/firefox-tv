@@ -15,7 +15,7 @@
         android:id="@+id/titleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="27dp"
+        android:layout_marginBottom="13dp"
         android:layout_marginTop="74dp"
         android:text="@string/pocket_home_tutorial_title"
         android:textSize="34sp"
@@ -24,12 +24,12 @@
         android:textAlignment="center"/>
 
     <ImageView
-        android:src="@drawable/pocket_mega_tile"
+        android:src="@drawable/pocket_channel"
         tools:ignore="ContentDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="27dp"
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="13dp"
         android:layout_gravity="center"
         android:scaleType="fitCenter" />
 
@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="27dp"
         android:text="@string/pocket_home_tutorial_description"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textColor="#CCF9F9FA"
         android:fontFamily="@string/font_ember_regular"
         android:textAlignment="center"/>
