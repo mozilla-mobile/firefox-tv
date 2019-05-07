@@ -66,7 +66,7 @@ private const val COL_COUNT = 5
 private val uiHandler = Handler(Looper.getMainLooper())
 
 enum class NavigationEvent {
-    BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION, POCKET, DESKTOP_MODE, EXIT_FIREFOX,
+    BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION, DESKTOP_MODE, EXIT_FIREFOX,
     SETTINGS_DATA_COLLECTION, SETTINGS_CLEAR_COOKIES;
 
     companion object {
@@ -76,7 +76,6 @@ enum class NavigationEvent {
             R.id.navButtonReload -> RELOAD
             R.id.turboButton -> TURBO
             R.id.pinButton -> PIN_ACTION
-            R.id.pocketVideoMegaTileView -> POCKET
             R.id.desktopModeButton -> DESKTOP_MODE
             R.id.exitButton -> EXIT_FIREFOX
             else -> null
@@ -113,12 +112,6 @@ class NavigationOverlayFragment : Fragment() {
             NavigationEvent.LOAD_TILE -> {
                 (activity as MainActivity).onNonTextInputUrlEntered(value!!)
                 context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
-            }
-            NavigationEvent.POCKET -> {
-                val (fragmentManager, activity) = Pair(fragmentManager, activity)
-                if (fragmentManager != null && activity != null) {
-                    serviceLocator.screenController.showPocketScreen(fragmentManager)
-                }
             }
             NavigationEvent.SETTINGS_DATA_COLLECTION -> {
                 serviceLocator.screenController.showSettingsScreen(fragmentManager!!, SettingsScreen.DATA_COLLECTION)

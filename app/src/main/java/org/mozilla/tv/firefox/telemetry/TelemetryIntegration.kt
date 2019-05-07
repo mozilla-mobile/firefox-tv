@@ -317,7 +317,6 @@ open class TelemetryIntegration protected constructor(
             NavigationEvent.BACK -> Value.BACK
             NavigationEvent.FORWARD -> Value.FORWARD
             NavigationEvent.RELOAD -> Value.RELOAD
-            NavigationEvent.POCKET -> Value.POCKET_VIDEO_MEGATILE
             NavigationEvent.EXIT_FIREFOX -> Value.EXIT_FIREFOX
 
             // For legacy reasons, turbo has different telemetry params so we special case it.
