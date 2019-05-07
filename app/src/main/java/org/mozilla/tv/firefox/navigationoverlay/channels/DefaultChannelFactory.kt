@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.default_channel.view.channelTileContainer
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.ext.MARGIN_START_OVERLAY_DP
+import org.mozilla.tv.firefox.ext.toPx
 
 class DefaultChannelFactory(
     private val loadUrl: (String) -> Unit,
@@ -30,7 +32,25 @@ class DefaultChannelFactory(
 
         val containerView = LayoutInflater.from(context).inflate(R.layout.default_channel, parent, false) as ViewGroup
         containerView.channelTileContainer.apply {
-            layoutManager = ChannelLayoutManager(context)
+            val channelLayoutManager = ChannelLayoutManager(context)
+            val layoutParams = layoutParams as ViewGroup.MarginLayoutParams
+            channelLayoutManager.state.subscribe { state ->
+                /**
+                 * If scrolling, set the start margin to 0 to accommodate carousel scrolling,
+                 * default margin [MARGIN_START_OVERLAY_DP] otherwise.
+                 * See [ChannelLayoutManager.FirstSmoothScroller.calculateDxToMakeVisible]
+                 */
+                layoutParams.marginStart = when (state) {
+                    ChannelLayoutManager.State.START -> MARGIN_START_OVERLAY_DP.toPx(context)
+                    ChannelLayoutManager.State.SCROLL -> 0
+                    null -> layoutParams.marginStart
+                }
+
+                setLayoutParams(layoutParams)
+            }
+
+            layoutManager = channelLayoutManager
+
             this.adapter = channelAdapter
         }
         if (id != null) containerView.channelTileContainer.id = id
