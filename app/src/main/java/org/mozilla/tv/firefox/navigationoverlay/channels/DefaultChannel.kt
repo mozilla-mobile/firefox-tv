@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.default_channel.view.channelTitle
 
 class DefaultChannel(
     val channelContainer: ViewGroup,
+    val focusChangeObservable: Observable<Pair<Int, Boolean>>,
     private val adapter: DefaultChannelAdapter
 ) {
 

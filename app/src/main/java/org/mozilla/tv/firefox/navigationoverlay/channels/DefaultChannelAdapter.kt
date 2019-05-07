@@ -20,6 +20,8 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.dialog_channel_tiles.*
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
@@ -43,6 +45,12 @@ class DefaultChannelAdapter(
 
     private val _removeEvents: Subject<ChannelTile> = BehaviorSubject.create<ChannelTile>()
     val removeEvents: Observable<ChannelTile> = _removeEvents.hide()
+
+    private val _focusChangeObservable = PublishSubject.create<Pair<Int, Boolean>>()
+    /**
+     * Emits upon focus change events.  Sends Pair of tile index to focusGained
+     */
+    val focusChangeObservable: Observable<Pair<Int, Boolean>> = _focusChangeObservable.hide()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DefaultChannelTileViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -99,6 +107,8 @@ class DefaultChannelAdapter(
                 }
                 titleView.setBackgroundResource(backgroundResource)
                 titleView.setTextColor(textColor)
+
+                _focusChangeObservable.onNext(position to hasFocus)
             }
 
             // TODO bundled and custom tiles had different padding here!  Find out how

@@ -39,6 +39,7 @@ class DefaultChannelFactory(
 
         return DefaultChannel(
                 channelContainer = containerView,
+                focusChangeObservable = channelAdapter.focusChangeObservable,
                 adapter = channelAdapter
         )
     }
