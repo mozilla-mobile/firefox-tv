@@ -172,6 +172,9 @@
     <string name="pocket_video_feed_failed_to_load">Hmm. We’re having trouble displaying video recommendations by %1$s.</string>
     <!-- Text displayed on a button to reload the Pocket video recommendations feed if it failed to load. -->
     <string name="pocket_video_feed_reload_button">Try again</string>
+    <!-- Title text shown above the Pocket channel
+     NOTE: Pocket is only displayed for EN-US users, so this does not need to be localized-->
+    <string name="pocket_channel_title">Pocket Editor\'s Choice</string>
 
     <!--Request desktop site strings-->
     <!-- Content description for Request desktop version button-->
