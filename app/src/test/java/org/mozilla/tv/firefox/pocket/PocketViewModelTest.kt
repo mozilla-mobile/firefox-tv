@@ -21,7 +21,6 @@ class PocketViewModelTest {
     private lateinit var repoCacheState: Subject<PocketVideoRepo.FeedState>
     private lateinit var testObserver: TestObserver<PocketViewModel.State>
 
-    private lateinit var loadingPlaceholders: List<PocketViewModel.FeedItem>
     private lateinit var noKeyPlaceholders: List<PocketViewModel.FeedItem>
 
     @Before
@@ -35,7 +34,6 @@ class PocketViewModelTest {
         }
 
         viewModel = PocketViewModel(repo, repoCache)
-        loadingPlaceholders = PocketViewModel.loadingPlaceholders
         noKeyPlaceholders = PocketViewModel.noKeyPlaceholders
         testObserver = viewModel.state.test()
     }
@@ -57,14 +55,13 @@ class PocketViewModelTest {
     }
 
     @Test
-    fun `WHEN repo cache emits loading THEN view model should emit a feed of placeholders`() {
+    fun `WHEN repo cache emits loading THEN view model should emit inactive`() {
         repoCacheState.onNext(PocketVideoRepo.FeedState.Loading)
 
         assertEquals(1, testObserver.valueCount())
 
         testObserver.values()[0].let {
-            assertTrue(it is PocketViewModel.State.Feed)
-            assertEquals(loadingPlaceholders, (it as PocketViewModel.State.Feed).feed)
+            assertEquals(PocketViewModel.State.NotDisplayed, it)
         }
     }
 

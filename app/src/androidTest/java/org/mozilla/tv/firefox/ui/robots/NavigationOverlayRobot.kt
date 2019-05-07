@@ -158,14 +158,6 @@ class NavigationOverlayRobot {
             return BrowserRobot.Transition()
         }
 
-        fun openPocketMegatile(interact: PocketRecommendedVideosRobot.() -> Unit): PocketRecommendedVideosRobot.Transition {
-            device.wait(Until.findObject(By.res(R.id.pocketVideoMegaTileView.toString())), 1000)
-            pocketMegaTile().click()
-
-            PocketRecommendedVideosRobot().interact()
-            return PocketRecommendedVideosRobot.Transition()
-        }
-
         fun openTileToBrowser(index: Int, interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
             homeTiles().perform(RecyclerViewActions.actionOnItemAtPosition<DefaultChannelTileViewHolder>(index, click()))
             waitUntilSiteLoaded()
@@ -305,7 +297,6 @@ private fun urlBar() = onView(withId(R.id.navUrlInput))
 private fun homeTiles() = onView(withId(R.id.pinned_tiles_channel))
 private fun overlay() = onView(withId(R.layout.fragment_navigation_overlay))
 private fun desktopModeButton() = onView(withId(R.id.desktopModeButton))
-private fun pocketMegaTile() = onView(withId(R.id.pocketVideosContainer))
 private fun tooltip() = onView(withId(R.id.tooltip)).inRoot(isPlatformPopup())
 private fun tooltip_nonPlatformPopup() = onView(withId(R.id.tooltip)).inRoot(withDecorView(withId(R.id.tooltip)))
 private fun settingsTelemetryTile() = onView(withId(R.id.settings_tile_telemetry))

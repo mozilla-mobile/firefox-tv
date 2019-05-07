@@ -75,9 +75,6 @@ class CursorModelTest {
         currentActiveScreen.onNext(ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY)
         pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_DOWN)
 
-        currentActiveScreen.onNext(ScreenControllerStateMachine.ActiveScreen.POCKET)
-        pushAndAdvanceTime(KeyEvent.KEYCODE_DPAD_UP)
-
         currentActiveScreen.onNext(ScreenControllerStateMachine.ActiveScreen.SETTINGS)
         pushAndAdvanceTime(KeyEvent.KEYCODE_BUTTON_SELECT)
 
