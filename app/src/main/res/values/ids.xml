@@ -8,4 +8,5 @@
     <item name="settings_tile_about" type="id"/>
     <item name="settings_tile_privacypolicy" type="id"/>
     <item name="pinned_tiles_channel" type="id"/>
+    <item name="pocket_channel" type="id"/>
 </resources>
