@@ -10,12 +10,30 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
+import org.mozilla.tv.firefox.ext.MARGIN_START_OVERLAY_DP
+import org.mozilla.tv.firefox.ext.toPx
 
 const val MILLISECONDS_PER_INCH = 50f // For smooth scrolling speed
 
+/**
+ * [ChannelLayoutManager] manages scrolling state of the channel RecyclerView while satisfying
+ * SNAP_SCROLL behaviour
+ */
 class ChannelLayoutManager(
     private val context: Context
 ) : LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false) {
+
+    enum class State {
+        START,
+        SCROLL
+    }
+
+    private val _state = BehaviorSubject.createDefault(State.START)
+    val state: Observable<State> = _state.hide()
+            .distinctUntilChanged()
+
     override fun onRequestChildFocus(
         parent: RecyclerView,
         state: RecyclerView.State,
@@ -24,6 +42,12 @@ class ChannelLayoutManager(
     ): Boolean {
         focused?.let {
             val pos = getPosition(it)
+
+            if (pos == 0) {
+                _state.onNext(State.START)
+            } else {
+                _state.onNext(State.SCROLL)
+            }
 
             smoothScrollToPosition(parent, state, pos)
         }
@@ -37,7 +61,12 @@ class ChannelLayoutManager(
         startSmoothScroll(smoothScroller)
     }
 
-    class FirstSmoothScroller(context: Context) : LinearSmoothScroller(context) {
+    /**
+     * [FirstSmoothScroller] is designed to support carousel scrolling and scrolling speed
+     */
+    class FirstSmoothScroller(private val context: Context) : LinearSmoothScroller(context) {
+
+        // Scrolling speed
         override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics?): Float {
             var speed = super.calculateSpeedPerPixel(displayMetrics)
             displayMetrics?.let {
@@ -46,6 +75,7 @@ class ChannelLayoutManager(
             return speed
         }
 
+        // Carousel scrolling
         override fun calculateDxToMakeVisible(view: View, snapPreference: Int): Int {
             val layoutManager = layoutManager
             if (layoutManager == null || !layoutManager.canScrollHorizontally()) {
@@ -53,7 +83,8 @@ class ChannelLayoutManager(
             }
             val params = view.layoutParams as RecyclerView.LayoutParams
             val left = layoutManager.getDecoratedLeft(view) - params.leftMargin
-            val start = layoutManager.paddingLeft
+            val start = MARGIN_START_OVERLAY_DP.toPx(context)
+
             return start - left
         }
     }
