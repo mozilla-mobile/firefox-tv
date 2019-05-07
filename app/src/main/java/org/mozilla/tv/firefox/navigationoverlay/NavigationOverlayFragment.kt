@@ -51,6 +51,8 @@ import org.mozilla.tv.firefox.navigationoverlay.channels.DefaultChannelFactory
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsChannelAdapter
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
 import org.mozilla.tv.firefox.pocket.PocketViewModel
+import org.mozilla.tv.firefox.pocket.toChannelTiles
+import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.ServiceLocator
@@ -136,6 +138,7 @@ class NavigationOverlayFragment : Fragment() {
     private lateinit var pocketViewModel: PocketViewModel
     private lateinit var hintViewModel: HintViewModel
     private lateinit var pinnedTileChannel: DefaultChannel
+    private lateinit var pocketChannel: DefaultChannel
 
     private var rootView: View? = null
 
@@ -201,9 +204,11 @@ class NavigationOverlayFragment : Fragment() {
 
         defaultChannelFactory = createChannelFactory().apply {
             pinnedTileChannel = createChannel(context!!, view as ViewGroup, R.id.pinned_tiles_channel)
+            pocketChannel = createChannel(context!!, view)
         }
 
         channelsContainer.addView(pinnedTileChannel.channelContainer)
+        channelsContainer.addView(pocketChannel.channelContainer)
     }
 
     override fun onStart() {
@@ -218,8 +223,10 @@ class NavigationOverlayFragment : Fragment() {
             .addTo(compositeDisposable)
         observeShouldDisplayPinnedTiles()
             .addTo(compositeDisposable)
-        observePocketState()
+        observePocketState() // TODO remove
             .addTo(compositeDisposable)
+        observePocket()
+            .forEach { compositeDisposable.add(it) }
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = false)
                 .forEach { compositeDisposable.add(it) }
     }
@@ -316,6 +323,26 @@ class NavigationOverlayFragment : Fragment() {
                     null -> return@subscribe
                 }.forceExhaustive
             }
+    }
+
+    private fun observePocket(): List<Disposable> {
+        val disposables = mutableListOf<Disposable>()
+
+        disposables += pocketViewModel.state
+                .subscribe { when (it) {
+                    is PocketViewModel.State.Feed -> pocketChannel.channelContainer.visibility = View.VISIBLE
+                    else -> pocketChannel.channelContainer.visibility = View.GONE
+                } }
+
+        disposables += pocketViewModel.state
+                .ofType(PocketViewModel.State.Feed::class.java)
+                .map { it.feed.toChannelTiles() }
+                .subscribe {
+                    pocketChannel.setTitle("Pocket") // TODO extract. can we reuse an existing string?
+                    pocketChannel.setContents(it)
+                }
+
+        return disposables
     }
 
     private fun createChannelFactory(): DefaultChannelFactory = DefaultChannelFactory(
