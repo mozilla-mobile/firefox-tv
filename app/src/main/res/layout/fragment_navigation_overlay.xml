@@ -87,18 +87,6 @@
                 android:orientation="vertical"
                 android:paddingTop="32dp"
                 android:background="@color/browser_overlay_background">
-            <!-- Content description added in code. -->
-            <org.mozilla.tv.firefox.pocket.PocketVideoMegaTile
-                android:id="@+id/pocketVideoMegaTileView"
-                android:layout_width="match_parent"
-                android:layout_height="108dp"
-                android:layout_marginStart="45dp"
-                android:layout_marginEnd="45dp"
-                android:layout_marginBottom="24dp"
-                android:background="@drawable/pocket_video_mega_tile_background"
-                android:focusable="true"
-                android:nextFocusUp="@id/navUrlInput" />
-
             </LinearLayout>
 
         </LinearLayout>
