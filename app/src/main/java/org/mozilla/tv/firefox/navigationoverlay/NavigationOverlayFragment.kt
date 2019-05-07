@@ -101,7 +101,7 @@ class NavigationOverlayFragment : Fragment() {
     // instantiation of the BrowserNavigationOverlay
     private var canShowUnpinToast: Boolean = false
 
-    private val defaultChannelFactory = createChannelFactory()
+    private var defaultChannelFactory: DefaultChannelFactory? = null
 
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
                                       autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
@@ -198,9 +198,13 @@ class NavigationOverlayFragment : Fragment() {
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context!!, R.color.photonGrey10_a60p)) }
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
 
+        registerForContextMenu(channelsContainer)
         canShowUnpinToast = true
 
-        pinnedTileChannel = defaultChannelFactory.createChannel(context!!, view as ViewGroup, R.id.pinned_tiles_channel)
+        defaultChannelFactory = createChannelFactory().apply {
+            pinnedTileChannel = createChannel(context!!, view as ViewGroup, R.id.pinned_tiles_channel)
+        }
+
         channelsContainer.addView(pinnedTileChannel.channelContainer)
     }
 
@@ -411,6 +415,7 @@ class NavigationOverlayFragment : Fragment() {
         // there's no good way to pass in the uiLifecycleJob. We could consider other solutions
         // but it'll add complexity that I don't think is probably worth it.
         uiLifecycleCancelJob.cancel()
+        defaultChannelFactory = null
     }
 }
 
