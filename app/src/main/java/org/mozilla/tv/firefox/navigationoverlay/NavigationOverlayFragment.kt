@@ -21,9 +21,13 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
+import io.reactivex.rxkotlin.withLatestFrom
+import kotlinx.android.synthetic.main.default_channel.view.channelBelowText1
+import kotlinx.android.synthetic.main.default_channel.view.channelBelowText2
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.channelsContainer
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.navUrlInput
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.pocketVideoMegaTileView
@@ -58,6 +62,7 @@ import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 import java.lang.ref.WeakReference
+import java.util.concurrent.TimeUnit
 
 private const val SHOW_UNPIN_TOAST_COUNTER_PREF = "show_upin_toast_counter"
 private const val MAX_UNPIN_TOAST_COUNT = 3
@@ -326,24 +331,79 @@ class NavigationOverlayFragment : Fragment() {
     }
 
     private fun observePocket(): List<Disposable> {
+        setPocketTextVisibility()
+
         val disposables = mutableListOf<Disposable>()
-
-        disposables += pocketViewModel.state
-                .subscribe { when (it) {
-                    is PocketViewModel.State.Feed -> pocketChannel.channelContainer.visibility = View.VISIBLE
-                    else -> pocketChannel.channelContainer.visibility = View.GONE
-                } }
-
-        disposables += pocketViewModel.state
-                .ofType(PocketViewModel.State.Feed::class.java)
-                .map { it.feed.toChannelTiles() }
-                .subscribe {
-                    pocketChannel.setTitle("Pocket") // TODO extract. can we reuse an existing string?
-                    pocketChannel.setContents(it)
-                }
+        disposables += observePocketVisibility()
+        disposables += observePocketTiles()
+        disposables += observePocketDescriptions()
+        disposables += observePocketFocusLoss()
 
         return disposables
     }
+
+    private fun setPocketTextVisibility() {
+        pocketChannel.channelContainer.channelBelowText1.visibility = View.VISIBLE
+        pocketChannel.channelContainer.channelBelowText2.visibility = View.VISIBLE
+    }
+
+    private fun observePocketVisibility(): Disposable = pocketViewModel.state
+            .subscribe { when (it) {
+                is PocketViewModel.State.Feed -> pocketChannel.channelContainer.visibility = View.VISIBLE
+                else -> pocketChannel.channelContainer.visibility = View.GONE
+            } }
+
+    private fun observePocketTiles(): Disposable = pocketViewModel.state
+            .ofType(PocketViewModel.State.Feed::class.java)
+            .map { it.feed.toChannelTiles() }
+            .subscribe {
+                pocketChannel.setTitle("Pocket") // TODO extract. can we reuse an existing string?
+                pocketChannel.setContents(it)
+            }
+
+    /**
+     * Sets description text beneath the Pocket channel based on the currently focused tile
+     */
+    private fun observePocketDescriptions(): Disposable = pocketChannel.focusChangeObservable
+            .filter { (_, focusGained) -> focusGained }
+            .map { (id, _) -> id }
+            .withLatestFrom(pocketViewModel.state)
+            .subscribe { (index, pocketState) ->
+                val data = pocketState as? PocketViewModel.State.Feed ?: return@subscribe
+                val focusedData = data.feed[index] as? PocketViewModel.FeedItem.Video
+                        ?: return@subscribe
+                val topText = pocketChannel.channelContainer.channelBelowText1
+                val bottomText = pocketChannel.channelContainer.channelBelowText2
+
+                topText.text = focusedData.authors
+                bottomText.text = focusedData.title
+
+                listOf(topText, bottomText).forEach {
+                    it.animate().cancel()
+                    it.animate().alpha(1f).setDuration(0L).start()
+                }
+            }
+
+    /**
+     * Hides Pocket description text when the channel loses focus
+     */
+    private fun observePocketFocusLoss(): Disposable = pocketChannel.focusChangeObservable
+            // Focus is lost every time a new tile is focused. To isolate events where focus
+            // leaves the channel, we debounce to accept focus loss events not immediately
+            // followed by focus gain events
+            .debounce(10, TimeUnit.MILLISECONDS)
+            .filter { (_, focusGained) -> !focusGained }
+            .observeOn(AndroidSchedulers.mainThread()) // Debounce operates on computation
+            .subscribe {
+                val topText = pocketChannel.channelContainer.channelBelowText1
+                val bottomText = pocketChannel.channelContainer.channelBelowText2
+
+                listOf(topText, bottomText)
+                        .forEach {
+                            it.animate().cancel()
+                            it.animate().alpha(0f).setDuration(150L).start()
+                        }
+            }
 
     private fun createChannelFactory(): DefaultChannelFactory = DefaultChannelFactory(
             loadUrl = { urlStr ->
