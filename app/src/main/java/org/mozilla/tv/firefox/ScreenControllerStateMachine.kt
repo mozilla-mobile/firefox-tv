@@ -10,11 +10,11 @@ package org.mozilla.tv.firefox
 object ScreenControllerStateMachine {
 
     enum class ActiveScreen {
-        NAVIGATION_OVERLAY, WEB_RENDER, POCKET, SETTINGS
+        NAVIGATION_OVERLAY, WEB_RENDER, SETTINGS
     }
 
     enum class Transition {
-        ADD_OVERLAY, REMOVE_OVERLAY, ADD_POCKET, REMOVE_POCKET, ADD_SETTINGS_DATA,
+        ADD_OVERLAY, REMOVE_OVERLAY, ADD_SETTINGS_DATA,
         ADD_SETTINGS_COOKIES, REMOVE_SETTINGS, SHOW_BROWSER, EXIT_APP, NO_OP
     }
 
@@ -30,7 +30,6 @@ object ScreenControllerStateMachine {
             ActiveScreen.WEB_RENDER -> {
                 Transition.ADD_OVERLAY
             }
-            ActiveScreen.POCKET -> Transition.REMOVE_POCKET
             ActiveScreen.SETTINGS -> Transition.REMOVE_SETTINGS
         }
     }
@@ -46,9 +45,6 @@ object ScreenControllerStateMachine {
             }
             ActiveScreen.WEB_RENDER -> { // The browser handles webview back presses first
                 Transition.ADD_OVERLAY
-            }
-            ActiveScreen.POCKET -> {
-                Transition.REMOVE_POCKET
             }
             ActiveScreen.SETTINGS -> {
                 Transition.REMOVE_SETTINGS

@@ -18,7 +18,6 @@ import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
-import org.mozilla.tv.firefox.pocket.PocketVideoFragment
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
@@ -48,14 +47,11 @@ class ScreenController(private val sessionRepo: SessionRepo) {
      */
     fun setUpFragmentsForNewSession(fragmentManager: FragmentManager, session: Session) {
         val renderFragment = WebRenderFragment.createForSession(session)
-        val pocketFragment = PocketVideoFragment()
         fragmentManager
             .beginTransaction()
-            .add(R.id.container_pocket, pocketFragment, PocketVideoFragment.FRAGMENT_TAG)
             .add(R.id.container_web_render, renderFragment, WebRenderFragment.FRAGMENT_TAG)
             // We add NavigationOverlayFragment last so that it takes focus
             .add(R.id.container_navigation_overlay, NavigationOverlayFragment(), NavigationOverlayFragment.FRAGMENT_TAG)
-            .hide(pocketFragment)
             .commitNow()
 
         _currentActiveScreen.onNext(ActiveScreen.NAVIGATION_OVERLAY)
@@ -100,10 +96,6 @@ class ScreenController(private val sessionRepo: SessionRepo) {
             SettingsScreen.CLEAR_COOKIES -> Transition.ADD_SETTINGS_COOKIES
         }
         handleTransitionAndUpdateActiveScreen(fragmentManager, transition)
-    }
-
-    fun showPocketScreen(fragmentManager: FragmentManager) {
-        handleTransitionAndUpdateActiveScreen(fragmentManager, Transition.ADD_POCKET)
     }
 
     fun showBrowserScreenForCurrentSession(fragmentManager: FragmentManager, session: Session) {
@@ -215,20 +207,6 @@ class ScreenController(private val sessionRepo: SessionRepo) {
                 _currentActiveScreen.onNext(ActiveScreen.WEB_RENDER)
                 showNavigationOverlay(fragmentManager, false)
             }
-            Transition.ADD_POCKET -> {
-                _currentActiveScreen.onNext(ActiveScreen.POCKET)
-                fragmentManager.beginTransaction()
-                    .show(fragmentManager.pocketFragment())
-                    .hide(fragmentManager.navigationOverlayFragment())
-                    .commit()
-            }
-            Transition.REMOVE_POCKET -> {
-                _currentActiveScreen.onNext(ActiveScreen.NAVIGATION_OVERLAY)
-                fragmentManager.beginTransaction()
-                    .show(fragmentManager.navigationOverlayFragment())
-                    .hide(fragmentManager.pocketFragment())
-                    .commit()
-            }
             Transition.ADD_SETTINGS_DATA -> {
                 _currentActiveScreen.onNext(ActiveScreen.SETTINGS)
                 fragmentManager.beginTransaction()
@@ -258,7 +236,6 @@ class ScreenController(private val sessionRepo: SessionRepo) {
                 _currentActiveScreen.onNext(ActiveScreen.WEB_RENDER)
                 fragmentManager.beginTransaction()
                     .hide(fragmentManager.navigationOverlayFragment())
-                    .hide(fragmentManager.pocketFragment())
                     .commitNow()
             }
             Transition.EXIT_APP -> { return false }
@@ -273,6 +250,3 @@ private fun FragmentManager.webRenderFragment(): WebRenderFragment =
 
 private fun FragmentManager.navigationOverlayFragment(): NavigationOverlayFragment =
     this.findFragmentByTag(NavigationOverlayFragment.FRAGMENT_TAG) as NavigationOverlayFragment
-
-private fun FragmentManager.pocketFragment(): PocketVideoFragment =
-    this.findFragmentByTag(PocketVideoFragment.FRAGMENT_TAG) as PocketVideoFragment
