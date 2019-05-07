@@ -215,7 +215,7 @@ class NavigationOverlayFragment : Fragment() {
             .addTo(compositeDisposable)
         observeShouldDisplayPinnedTiles()
             .addTo(compositeDisposable)
-        observePocket() // TODO verify that this works as expected on non EN-US locales
+        observePocket()
             .forEach { compositeDisposable.add(it) }
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = false)
                 .forEach { compositeDisposable.add(it) }

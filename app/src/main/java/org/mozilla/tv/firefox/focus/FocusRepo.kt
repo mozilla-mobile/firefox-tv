@@ -257,7 +257,7 @@ class FocusRepo(
             PocketVideoRepo.FeedState.FetchFailed,
             PocketVideoRepo.FeedState.Inactive,
             PocketVideoRepo.FeedState.Loading,
-            PocketVideoRepo.FeedState.NoAPIKey-> R.id.navUrlInput
+            PocketVideoRepo.FeedState.NoAPIKey -> R.id.navUrlInput
             is PocketVideoRepo.FeedState.LoadComplete -> R.id.pocket_channel
         }
 
