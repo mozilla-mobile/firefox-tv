@@ -119,17 +119,8 @@ private class PocketVideoAdapter(
         setHorizontalMargins(holder, position)
 
         when (item) {
-            is PocketViewModel.FeedItem.Loading -> holder.bindPlaceholder()
             is PocketViewModel.FeedItem.Video -> holder.bindPocketVideo(item)
         }.forceExhaustive
-    }
-
-    private fun PocketVideoViewHolder.bindPlaceholder() {
-        itemView.setOnClickListener(null)
-        itemView.onFocusChangeListener = null
-        titleView.text = ""
-        domainView.text = ""
-        videoThumbnailView.setImageResource(R.color.photonGrey50)
     }
 
     private fun PocketVideoViewHolder.bindPocketVideo(item: PocketViewModel.FeedItem.Video) {
