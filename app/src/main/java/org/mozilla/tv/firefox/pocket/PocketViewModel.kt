@@ -8,7 +8,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import org.json.JSONObject
-import org.mozilla.tv.firefox.R
 
 const val POCKET_VIDEO_COUNT = 20
 
@@ -32,7 +31,6 @@ class PocketViewModel(
     }
 
     sealed class FeedItem {
-        data class Loading(val thumbnailResource: Int) : FeedItem()
         data class Video(
             val id: Int,
             val title: String,
@@ -61,10 +59,6 @@ class PocketViewModel(
         .autoConnect(0)
 
     companion object {
-        @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-        val loadingPlaceholders: List<FeedItem.Loading> =
-            List(POCKET_VIDEO_COUNT) { FeedItem.Loading(R.color.photonGrey50) }
-
         @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
         val noKeyPlaceholders: List<FeedItem.Video> by lazy {
             List(POCKET_VIDEO_COUNT) {
