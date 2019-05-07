@@ -50,7 +50,7 @@ class PocketViewModel(
     val state: Observable<State> = pocketRepoCache.feedState
         .map { repoState ->
             when (repoState) {
-                is PocketVideoRepo.FeedState.Loading -> State.Feed(loadingPlaceholders)
+                is PocketVideoRepo.FeedState.Loading -> State.NotDisplayed
                 is PocketVideoRepo.FeedState.LoadComplete -> State.Feed(repoState.videos)
                 is PocketVideoRepo.FeedState.NoAPIKey -> State.Feed(noKeyPlaceholders)
                 is PocketVideoRepo.FeedState.FetchFailed -> State.Error
