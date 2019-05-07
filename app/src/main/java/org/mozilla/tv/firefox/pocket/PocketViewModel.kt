@@ -8,6 +8,8 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import org.json.JSONObject
+import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelTile
+import org.mozilla.tv.firefox.utils.PicassoWrapper
 
 const val POCKET_VIDEO_COUNT = 20
 
@@ -76,3 +78,9 @@ class PocketViewModel(
 
     fun update() = pocketVideoRepo.update()
 }
+
+fun List<PocketViewModel.FeedItem>.toChannelTiles() = this.map { when(it) {
+    // Pocket titles are displayed beneath the channel and not on the tiles themselves
+    is PocketViewModel.FeedItem.Video -> ChannelTile(it.url, "")
+    { imageView -> PicassoWrapper.client.load(it.thumbnailURL).into(imageView) }
+} }
