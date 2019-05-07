@@ -198,7 +198,7 @@ class NavigationOverlayFragment : Fragment() {
 
         defaultChannelFactory = createChannelFactory().apply {
             pinnedTileChannel = createChannel(context!!, view as ViewGroup, R.id.pinned_tiles_channel)
-            pocketChannel = createChannel(context!!, view)
+            pocketChannel = createChannel(context!!, view, R.id.pocket_channel)
         }
 
         channelsContainer.addView(pinnedTileChannel.channelContainer)

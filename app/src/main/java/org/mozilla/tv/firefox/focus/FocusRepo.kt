@@ -65,13 +65,11 @@ class FocusRepo(
                             ActiveScreen.NAVIGATION_OVERLAY -> {
                                 when (previousScreen) {
                                     ActiveScreen.WEB_RENDER -> FocusNode(R.id.navUrlInput)
-                                    ActiveScreen.POCKET -> FocusNode(R.id.pocketVideoMegaTileView)
                                     ActiveScreen.SETTINGS -> FocusNode(R.id.settings_tile_telemetry)
                                     else -> NO_FOCUS_REQUEST
                                 }
                             }
                             ActiveScreen.WEB_RENDER -> FocusNode(R.id.engineView)
-                            ActiveScreen.POCKET -> FocusNode(R.id.videoFeed)
                             ActiveScreen.SETTINGS -> NO_FOCUS_REQUEST
                             else -> NO_FOCUS_REQUEST
                         }
@@ -141,16 +139,6 @@ class FocusRepo(
                     R.id.navButtonForward -> {
                         return getForwardButtonFocusState(focusNode, sessionState)
                     }
-                    R.id.pocketVideoMegaTileView -> {
-                        return getPocketMegaTileFocusState(focusNode, pinnedTilesIsEmpty)
-                    }
-                    R.id.megaTileTryAgainButton -> {
-                        return handleLostFocusInOverlay(
-                                focusNode,
-                                sessionState,
-                                pinnedTilesIsEmpty,
-                                pocketState)
-                    }
                     R.id.home_tile -> {
                         // If pinnedTiles is empty and current focus is on home_tile, we need to
                         // restore lost focus (this happens when you remove all tiles in the overlay)
@@ -176,7 +164,6 @@ class FocusRepo(
                 }
             }
             ActiveScreen.WEB_RENDER -> Unit
-            ActiveScreen.POCKET -> Unit
             ActiveScreen.SETTINGS -> Unit
         }
 
@@ -193,18 +180,10 @@ class FocusRepo(
 
         assert(focusedNavUrlInputNode.viewId == R.id.navUrlInput)
 
-        val nextFocusDownId = when (pocketState) {
-            PocketVideoRepo.FeedState.FetchFailed -> R.id.megaTileTryAgainButton
-            PocketVideoRepo.FeedState.Inactive -> {
-                if (pinnedTilesIsEmpty) {
-                    R.id.settingsTileContainer
-                } else {
-                    R.id.channelsContainer
-                }
-            }
-            is PocketVideoRepo.FeedState.LoadComplete,
-            PocketVideoRepo.FeedState.Loading,
-            PocketVideoRepo.FeedState.NoAPIKey -> R.id.pocketVideoMegaTileView
+        val nextFocusDownId = when {
+            pocketState is PocketVideoRepo.FeedState.LoadComplete -> R.id.pocket_channel
+            !pinnedTilesIsEmpty -> R.id.pinned_tiles_channel
+            else -> R.id.settingsTileContainer
         }
 
         val nextFocusUpId = when {
@@ -262,31 +241,9 @@ class FocusRepo(
                 nextFocusLeftId = nextFocusLeftId))
     }
 
-    private fun getPocketMegaTileFocusState(
-        focusedPocketMegaTileNode: FocusNode,
-        pinnedTilesIsEmpty: Boolean,
-        focused: Boolean = true
-    ): State {
-
-        assert(focusedPocketMegaTileNode.viewId == R.id.pocketVideoMegaTileView ||
-            focusedPocketMegaTileNode.viewId == R.id.megaTileTryAgainButton)
-
-        val nextFocusDownId = when {
-            pinnedTilesIsEmpty -> R.id.settingsTileContainer
-            else -> R.id.pinned_tiles_channel
-        }
-
-        return State(
-            focusNode = FocusNode(
-                focusedPocketMegaTileNode.viewId,
-                nextFocusDownId = nextFocusDownId),
-            focused = focused)
-    }
-
     /**
-     * Two possible scenarios for losing focus when in overlay:
+     * Focus can be lost from the overlay under the following conditions:
      * 1. When all the pinned tiles are removed, tilContainer no longer needs focus
-     * 2. When click on [megaTileTryAgainButton]
      */
     private fun handleLostFocusInOverlay(
         lostFocusNode: FocusNode,
@@ -294,16 +251,14 @@ class FocusRepo(
         pinnedTilesIsEmpty: Boolean,
         pocketState: PocketVideoRepo.FeedState
     ): State {
-
-        assert(lostFocusNode.viewId == R.id.channelsContainer ||
-                lostFocusNode.viewId == R.id.megaTileTryAgainButton)
+        assert(lostFocusNode.viewId == R.id.channelsContainer)
 
         val viewId = when (pocketState) {
-            PocketVideoRepo.FeedState.FetchFailed -> R.id.megaTileTryAgainButton
-            PocketVideoRepo.FeedState.Inactive -> R.id.navUrlInput
-            is PocketVideoRepo.FeedState.LoadComplete,
+            PocketVideoRepo.FeedState.FetchFailed,
+            PocketVideoRepo.FeedState.Inactive,
             PocketVideoRepo.FeedState.Loading,
-            PocketVideoRepo.FeedState.NoAPIKey -> R.id.pocketVideoMegaTileView
+            PocketVideoRepo.FeedState.NoAPIKey-> R.id.navUrlInput
+            is PocketVideoRepo.FeedState.LoadComplete -> R.id.pocket_channel
         }
 
         val newFocusNode = FocusNode(viewId)
@@ -311,10 +266,6 @@ class FocusRepo(
         // If new focusNode is different from previous, set focused state to false
         val focused = newFocusNode.viewId == lostFocusNode.viewId
 
-        return if (newFocusNode.viewId == R.id.navUrlInput) {
-            getNavUrlInputFocusState(newFocusNode, sessionState, pinnedTilesIsEmpty, pocketState, focused)
-        } else {
-            getPocketMegaTileFocusState(newFocusNode, pinnedTilesIsEmpty, focused)
-        }
+        return getNavUrlInputFocusState(newFocusNode, sessionState, pinnedTilesIsEmpty, pocketState, focused)
     }
 }
