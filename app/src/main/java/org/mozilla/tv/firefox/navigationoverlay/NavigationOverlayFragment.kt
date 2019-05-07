@@ -197,12 +197,12 @@ class NavigationOverlayFragment : Fragment() {
         canShowUnpinToast = true
 
         defaultChannelFactory = createChannelFactory().apply {
-            pinnedTileChannel = createChannel(context!!, view as ViewGroup, R.id.pinned_tiles_channel)
-            pocketChannel = createChannel(context!!, view, R.id.pocket_channel)
+            pocketChannel = createChannel(context!!, view as ViewGroup, R.id.pocket_channel)
+            pinnedTileChannel = createChannel(context!!, view, R.id.pinned_tiles_channel)
         }
 
-        channelsContainer.addView(pinnedTileChannel.channelContainer)
         channelsContainer.addView(pocketChannel.channelContainer)
+        channelsContainer.addView(pinnedTileChannel.channelContainer)
     }
 
     override fun onStart() {
