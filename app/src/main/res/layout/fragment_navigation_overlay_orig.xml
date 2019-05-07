@@ -82,17 +82,6 @@
                     <requestFocus />
                 </org.mozilla.tv.firefox.widget.InlineAutocompleteEditText>
 
-                <!-- Content description added in code. -->
-                <org.mozilla.tv.firefox.pocket.PocketVideoMegaTile
-                    android:id="@+id/pocketVideoMegaTileView"
-                    android:layout_width="match_parent"
-                    android:layout_height="108dp"
-                    android:layout_marginStart="@dimen/overlay_margin_channel_start"
-                    android:layout_marginEnd="@dimen/overlay_margin_end"
-                    android:background="@drawable/pocket_video_mega_tile_background"
-                    android:focusable="true"
-                    android:nextFocusUp="@id/navUrlInput" />
-
                 <LinearLayout
                     android:id="@+id/channelsContainer"
                     android:layout_width="match_parent"

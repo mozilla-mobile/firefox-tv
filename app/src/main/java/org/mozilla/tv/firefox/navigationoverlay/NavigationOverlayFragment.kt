@@ -30,14 +30,9 @@ import kotlinx.android.synthetic.main.default_channel.view.channelBelowText1
 import kotlinx.android.synthetic.main.default_channel.view.channelBelowText2
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.channelsContainer
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.navUrlInput
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.pocketVideoMegaTileView
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.settingsTileContainer
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.exitButton
 import kotlinx.android.synthetic.main.hint_bar.hintBarContainer
-import kotlinx.android.synthetic.main.pocket_video_mega_tile.megaTileTryAgainButton
-import kotlinx.android.synthetic.main.pocket_video_mega_tile.pocketErrorContainer
-import kotlinx.android.synthetic.main.pocket_video_mega_tile.pocketMegaTileLoadError
-import kotlinx.android.synthetic.main.pocket_video_mega_tile.pocketVideosContainer
 import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
@@ -196,7 +191,6 @@ class NavigationOverlayFragment : Fragment() {
                 }
                 */
 
-        initMegaTile()
         initSettingsChannel() // When pulling everything into channels, add this to the channel RV
 
         exitButton.contentDescription = serviceLocator.experimentsProvider.getAAExitButtonExperiment(ExperimentConfig.AA_TEST)
@@ -224,13 +218,9 @@ class NavigationOverlayFragment : Fragment() {
             .addTo(compositeDisposable)
         observePinnedTiles()
             .addTo(compositeDisposable)
-        observePinnedTileRemoval()
-            .addTo(compositeDisposable)
         observeShouldDisplayPinnedTiles()
             .addTo(compositeDisposable)
-        observePocketState() // TODO remove
-            .addTo(compositeDisposable)
-        observePocket()
+        observePocket() // TODO verify that this works as expected on non EN-US locales
             .forEach { compositeDisposable.add(it) }
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = false)
                 .forEach { compositeDisposable.add(it) }
@@ -307,27 +297,6 @@ class NavigationOverlayFragment : Fragment() {
                 false -> View.GONE
             }
         }
-    }
-
-    private fun observePocketState(): Disposable {
-        return pocketViewModel.state
-            .subscribe { state ->
-                @Suppress("DEPRECATION")
-                lastPocketState = state
-                when (state) {
-                    is PocketViewModel.State.Error -> {
-                        pocketVideoMegaTileView.visibility = View.VISIBLE
-                        showMegaTileError()
-                    }
-                    is PocketViewModel.State.Feed -> {
-                        pocketVideoMegaTileView.visibility = View.VISIBLE
-                        pocketVideoMegaTileView.setContent(state.feed)
-                        hideMegaTileError()
-                    }
-                    is PocketViewModel.State.NotDisplayed -> pocketVideoMegaTileView.visibility = View.GONE
-                    null -> return@subscribe
-                }.forceExhaustive
-            }
     }
 
     private fun observePocket(): List<Disposable> {
@@ -436,42 +405,6 @@ class NavigationOverlayFragment : Fragment() {
                 }
             }
     )
-
-    /**
-     * Used to show an error screen on the Pocket megatile when Pocket does not return any videos.
-     */
-    private fun showMegaTileError() {
-        pocketVideosContainer.visibility = View.GONE
-        pocketErrorContainer.visibility = View.VISIBLE
-
-        // View.focusable = INT only available Android API > 26 :(
-        pocketVideoMegaTileView.setFocusable(false)
-
-        pocketMegaTileLoadError.text = resources.getString(R.string.pocket_video_feed_failed_to_load,
-                resources.getString(R.string.pocket_brand_name))
-        megaTileTryAgainButton.contentDescription = resources.getString(R.string.pocket_video_feed_failed_to_load,
-                resources.getString(R.string.pocket_brand_name)) + " " + resources.getString(R.string.pocket_video_feed_reload_button)
-
-        megaTileTryAgainButton.setOnClickListener { _ ->
-            pocketViewModel.update()
-            initMegaTile()
-        }
-    }
-
-    private fun hideMegaTileError() {
-        pocketVideosContainer.visibility = View.VISIBLE
-        pocketErrorContainer.visibility = View.GONE
-
-        // View.focusable = INT only available Android API > 26 :(
-        pocketVideoMegaTileView.setFocusable(true)
-    }
-
-    private fun initMegaTile() {
-        pocketVideoMegaTileView.setOnClickListener { view ->
-            val event = NavigationEvent.fromViewClick(view.id) ?: return@setOnClickListener
-            onNavigationEvent.invoke(event, null, null)
-        }
-    }
 
     private fun initSettingsChannel() {
         settingsTileContainer.gridView.adapter = SettingsChannelAdapter(
