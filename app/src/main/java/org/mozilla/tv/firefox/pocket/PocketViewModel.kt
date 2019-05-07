@@ -79,8 +79,9 @@ class PocketViewModel(
     fun update() = pocketVideoRepo.update()
 }
 
-fun List<PocketViewModel.FeedItem>.toChannelTiles() = this.map { when(it) {
+fun List<PocketViewModel.FeedItem>.toChannelTiles() = this.map { when (it) {
     // Pocket titles are displayed beneath the channel and not on the tiles themselves
-    is PocketViewModel.FeedItem.Video -> ChannelTile(it.url, "")
-    { imageView -> PicassoWrapper.client.load(it.thumbnailURL).into(imageView) }
+    is PocketViewModel.FeedItem.Video -> ChannelTile(it.url, "") {
+        imageView -> PicassoWrapper.client.load(it.thumbnailURL).into(imageView)
+    }
 } }
