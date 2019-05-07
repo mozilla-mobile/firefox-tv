@@ -362,7 +362,7 @@ class NavigationOverlayFragment : Fragment() {
             .ofType(PocketViewModel.State.Feed::class.java)
             .map { it.feed.toChannelTiles() }
             .subscribe {
-                pocketChannel.setTitle("Pocket") // TODO extract. can we reuse an existing string?
+                pocketChannel.setTitle(context!!.resources.getString(R.string.pocket_channel_title))
                 pocketChannel.setContents(it)
             }
 
