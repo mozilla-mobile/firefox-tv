@@ -53,4 +53,9 @@
     <dimen name="custom_toast_padding_start_end">31dp</dimen>
     <dimen name="custom_toast_font_size">16sp</dimen>
 
+    <!-- Values for margins -->
+    <dimen name="overlay_margin_channel_start">45dp</dimen>
+    <dimen name="overlay_margin_start">57dp</dimen>
+    <dimen name="overlay_margin_end">57dp</dimen>
+
 </resources>
