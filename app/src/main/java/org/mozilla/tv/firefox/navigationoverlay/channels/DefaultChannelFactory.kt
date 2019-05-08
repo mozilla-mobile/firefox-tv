@@ -41,8 +41,9 @@ class DefaultChannelFactory(
                  * See [ChannelLayoutManager.FirstSmoothScroller.calculateDxToMakeVisible]
                  */
                 layoutParams.marginStart = when (state) {
-                    ChannelLayoutManager.State.START -> MARGIN_START_OVERLAY_DP.toPx(context)
-                    ChannelLayoutManager.State.SCROLL -> 0
+                    ChannelLayoutManager.State.START,
+                    ChannelLayoutManager.State.END -> MARGIN_START_OVERLAY_DP.toPx(context)
+                    ChannelLayoutManager.State.OVERFLOW -> 0
                     null -> layoutParams.marginStart
                 }
 
