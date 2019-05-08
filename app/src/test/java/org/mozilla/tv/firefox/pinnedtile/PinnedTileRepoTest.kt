@@ -171,4 +171,14 @@ class PinnedTileRepoTest {
         }
         assertEquals(expected, actual)
     }
+
+    @Test
+    fun `GIVEN the default bundled tiles WHEN a tile is added THEN it is added after the important tiles`() {
+        val addedTileURL = "https://what-a-crazy-added-pinned-tile-eh.com"
+        pinnedTileRepo.addPinnedTile(addedTileURL, screenshot = null)
+        val actualTiles = pinnedTileRepo.pinnedTiles.test().values().last()
+        val expectedAddedIndex = importantBundled.size // index of first custom tile
+        val actualAddedIndex = actualTiles.keys.indexOf(addedTileURL)
+        assertEquals(expectedAddedIndex, actualAddedIndex)
+    }
 }
