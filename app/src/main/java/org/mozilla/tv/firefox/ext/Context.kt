@@ -17,6 +17,8 @@ fun Context.getAccessibilityManager() = getSystemService(Context.ACCESSIBILITY_S
 // VoiceView, we only need to check this one field; via comments on https://stackoverflow.com/a/12362545/582004.
 fun Context.isVoiceViewEnabled() = getAccessibilityManager().isTouchExplorationEnabled
 
+fun Context.getDimenPixelSize(dimen: Int) = resources.getDimensionPixelSize(dimen)
+
 /**
  * Get the FirefoxApplication object from a context.
  */
