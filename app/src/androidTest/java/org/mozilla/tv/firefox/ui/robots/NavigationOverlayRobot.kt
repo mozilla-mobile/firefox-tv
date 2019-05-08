@@ -19,7 +19,6 @@ import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
@@ -30,7 +29,6 @@ import mozilla.components.support.android.test.espresso.assertIsDisplayed
 import mozilla.components.support.android.test.espresso.assertIsEnabled
 import mozilla.components.support.android.test.espresso.assertIsSelected
 import mozilla.components.support.android.test.espresso.click
-import org.hamcrest.CoreMatchers.both
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert.assertTrue
 import org.mozilla.tv.firefox.R
@@ -304,7 +302,7 @@ private fun reloadButton() = onView(withId(R.id.navButtonReload))
 private fun pinButton() = onView(withId(R.id.pinButton))
 private fun turboButton() = onView(withId(R.id.turboButton))
 private fun urlBar() = onView(withId(R.id.navUrlInput))
-private fun homeTiles() = onView(both(withId(R.id.channelTileContainer)).and(withParent(withId(R.id.pinned_tiles_channel))))
+private fun homeTiles() = onView(withId(R.id.pinned_tiles_channel))
 private fun overlay() = onView(withId(R.layout.fragment_navigation_overlay))
 private fun desktopModeButton() = onView(withId(R.id.desktopModeButton))
 private fun pocketMegaTile() = onView(withId(R.id.pocketVideosContainer))
