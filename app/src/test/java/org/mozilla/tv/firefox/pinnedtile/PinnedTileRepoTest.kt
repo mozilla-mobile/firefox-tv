@@ -16,6 +16,7 @@ import org.mockito.Mockito.spy
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import org.robolectric.RobolectricTestRunner
+import java.util.UUID
 
 private const val BUNDLED_TILE_COUNT = 10
 
@@ -27,6 +28,22 @@ private const val BUNDLED_TILE_COUNT = 10
 class PinnedTileRepoTest {
 
     private lateinit var pinnedTileRepo: PinnedTileRepo
+    private val importantBundled = linkedMapOf(
+            "https://ftv.cdn.mozilla.net/ytht" to BundledPinnedTile(url = "https://ftv.cdn.mozilla.net/ytht", title = "YouTube", imagePath = "tile_youtube.png", id = "youtube"),
+            "https://www.google.com/webhp?tbm=vid" to BundledPinnedTile(url = "https://www.google.com/webhp?tbm=vid", title = "Video Search", imagePath = "tile_google.png", id = "googleVideo")
+    )
+    private val unimportantBundled = linkedMapOf(
+            "https://m.imdb.com/" to BundledPinnedTile(url = "https://m.imdb.com/", title = "IMDB", imagePath = "tile_imdb.png", id = "imdb"),
+            "https://www.rottentomatoes.com/" to BundledPinnedTile(url = "https://www.rottentomatoes.com/", title = "Rotten Tomatoes", imagePath = "tile_rotten_tomatoes.png", id = "rottenTomatoes")
+    )
+    private val bundledTiles = linkedMapOf<String, BundledPinnedTile>().apply {
+        putAll(importantBundled)
+        putAll(unimportantBundled)
+    }
+    private val customTiles = linkedMapOf(
+            "" to CustomPinnedTile(url = "https://www.mozilla.com", title = "Mozilla", id = UUID.randomUUID()),
+            "" to CustomPinnedTile(url = "https://www.amazon.com", title = "Amazon", id = UUID.randomUUID())
+    )
 
     @Before
     fun setUp() {
@@ -109,5 +126,49 @@ class PinnedTileRepoTest {
         assertEquals(0, pinnedTileRepo.customTilesSize)
 
         verify(observerSpy, times(3)).onChanged(any())
+    }
+
+    @Test
+    fun `GIVEN no bundled tiles have been removed AND no custom tiles have been added THEN loadTilesCache should match base bundled tiles `() {
+        val actual = pinnedTileRepo.loadTilesCache(bundledTiles, linkedMapOf())
+        assertEquals(bundledTiles, actual)
+    }
+
+    @Test
+    fun `GIVEN no bundled tiles have been removed AND custom tiles have been added THEN loadTilesCache should show youtube and google then custom then other bundled`() {
+        val actual = pinnedTileRepo.loadTilesCache(bundledTiles, customTiles)
+        val expected = linkedMapOf<String, PinnedTile>().apply {
+            putAll(importantBundled)
+            putAll(customTiles)
+            putAll(unimportantBundled)
+        }
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `GIVEN all important tiles have been removed AND custom tiles have been added THEN loadTilesCache should show custom tiles then unimportant bundled`() {
+        val actual = pinnedTileRepo.loadTilesCache(unimportantBundled, customTiles)
+        val expected = linkedMapOf<String, PinnedTile>().apply {
+            putAll(customTiles)
+            putAll(unimportantBundled)
+        }
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `GIVEN one important value remains AND one bundled value remains AND custom tiles have been pinned THEN loadTilesCache should show the important value then custom tiles then unimpotant bundled tiles`() {
+        val firstImportant = importantBundled.entries.first()
+        val lastUnimportant = importantBundled.entries.last()
+        val modifiedBundledTiles = linkedMapOf<String, BundledPinnedTile>().apply {
+            put(firstImportant.key, firstImportant.value)
+            put(lastUnimportant.key, lastUnimportant.value)
+        }
+        val actual = pinnedTileRepo.loadTilesCache(modifiedBundledTiles, customTiles)
+        val expected = linkedMapOf<String, PinnedTile>().apply {
+            put(firstImportant.key, firstImportant.value)
+            putAll(customTiles)
+            put(lastUnimportant.key, lastUnimportant.value)
+        }
+        assertEquals(expected, actual)
     }
 }

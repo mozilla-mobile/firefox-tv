@@ -11,6 +11,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveDataReactiveStreams
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
@@ -51,13 +52,14 @@ class PinnedTileRepo(private val applicationContext: Application) {
     private val _sharedPreferences: SharedPreferences = applicationContext.getSharedPreferences(PREF_HOME_TILES, Context.MODE_PRIVATE)
 
     init {
-        loadTilesCache()
+        _pinnedTiles.onNext(loadTilesCache())
     }
 
-    private fun loadTilesCache() {
-        val bundledTiles = loadBundledTilesCache()
-        val customTiles = loadCustomTilesCache()
-
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun loadTilesCache(
+            bundledTiles: LinkedHashMap<String, BundledPinnedTile> = loadBundledTilesCache(),
+            customTiles: LinkedHashMap<String, CustomPinnedTile> = loadCustomTilesCache()
+    ): LinkedHashMap<String, PinnedTile> {
         val importantBundled = bundledTiles.filter { it.value.id == "youtube" || it.value.id == "googleVideo" }
         val unimportantBundled = bundledTiles.filter { it.value.id != "youtube" && it.value.id != "googleVideo" }
 
@@ -67,10 +69,11 @@ class PinnedTileRepo(private val applicationContext: Application) {
             putAll(unimportantBundled)
         }
 
-        _pinnedTiles.onNext(pinnedTiles)
+
+        return pinnedTiles
     }
 
-    fun addPinnedTile(url: String, screenshot: Bitmap?) {
+    fun addPinnedTile(url: String, screenshot: Bitmap?) {  // TODO add custom tiles in teh correct position
         val newPinnedTile = CustomPinnedTile(url, "custom", UUID.randomUUID()) // TODO: titles
         if (_pinnedTiles.value?.put(url, newPinnedTile) != null) return
         _pinnedTiles.onNext(_pinnedTiles.value!!)
