@@ -23,14 +23,12 @@ import tools.fastlane.screengrab.locale.LocaleTestRule;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.both;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNot.not;
@@ -66,8 +64,8 @@ public class PinTileTests extends ScreenshotTest {
 
         mDevice.waitForIdle();
 
-        onView(both(withId(R.id.channelTileContainer)).and(withParent(withId(R.id.pinned_tiles_channel))))
-                .perform(actionOnItemAtPosition(0, longClick()));
+        onView(withId(R.id.pinned_tiles_channel))
+                .perform(scrollToPosition(0), longClick());
 
         onView(withText(R.string.homescreen_tile_remove))
                 .check(matches(isDisplayed()));
