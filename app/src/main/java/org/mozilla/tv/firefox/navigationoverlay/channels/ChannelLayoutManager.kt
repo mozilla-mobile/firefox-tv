@@ -85,11 +85,11 @@ class ChannelLayoutManager(
     }
 
     /**
-     * [FirstSmoothScroller] is designed to support carousel scrolling and scrolling speed
+     * [FirstSmoothScroller] is designed to support carousel scrolling and scrolling speed.
+     * A majority of its logic are derived from its super methods.
      */
     class FirstSmoothScroller(private val context: Context) : LinearSmoothScroller(context) {
-
-        // Scrolling speed
+        // Scrolling speed; changeable with [MILLISECONDS_PER_INCH]
         override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics?): Float {
             var speed = super.calculateSpeedPerPixel(displayMetrics)
             displayMetrics?.let {
@@ -98,14 +98,23 @@ class ChannelLayoutManager(
             return speed
         }
 
-        // Carousel scrolling
-        override fun calculateDxToMakeVisible(view: View, snapPreference: Int): Int {
+        /**
+         * Carousel scrolling - see [LinearSmoothScroller.calculateDxToMakeVisible] and
+         * [LinearSmoothScroller.calculateDtToFit] with [LinearSmoothScroller.SNAP_TO_START]
+         * preference for the original implementation / reference.
+         *
+         * If scrolling to an index > 0 and RV is scrollable, set the RecyclerView's marginStart
+         * to 0 with [state] (so that the drawable margin increases) and shift the [targetView]
+         * by [R.dimen.overlay_margin_channel_start] margin (resulting in partially visible view
+         * to the left).
+         */
+        override fun calculateDxToMakeVisible(targetView: View, snapPreference: Int): Int {
             val layoutManager = layoutManager
             if (layoutManager == null || !layoutManager.canScrollHorizontally()) {
                 return 0
             }
-            val params = view.layoutParams as RecyclerView.LayoutParams
-            val left = layoutManager.getDecoratedLeft(view) - params.leftMargin
+            val params = targetView.layoutParams as RecyclerView.LayoutParams
+            val left = layoutManager.getDecoratedLeft(targetView) - params.leftMargin
             val start = context.getDimenPixelSize(R.dimen.overlay_margin_channel_start)
 
             return start - left
