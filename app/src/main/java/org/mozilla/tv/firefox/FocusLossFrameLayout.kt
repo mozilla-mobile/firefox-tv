@@ -25,7 +25,8 @@ class FocusLossFrameLayout @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr, defStyleRes) {
 
     override fun clearFocus() {
-        if (this.parent != null)
+        if (this.parent != null) {
             super.clearFocus()
+        }
     }
 }
