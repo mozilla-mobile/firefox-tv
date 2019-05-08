@@ -9,8 +9,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.default_channel.view.channelTileContainer
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.ext.MARGIN_START_OVERLAY_DP
-import org.mozilla.tv.firefox.ext.toPx
+import org.mozilla.tv.firefox.ext.getDimenPixelSize
 
 class DefaultChannelFactory(
     private val loadUrl: (String) -> Unit,
@@ -42,7 +41,7 @@ class DefaultChannelFactory(
                  */
                 layoutParams.marginStart = when (state) {
                     ChannelLayoutManager.State.START,
-                    ChannelLayoutManager.State.END -> MARGIN_START_OVERLAY_DP.toPx(context)
+                    ChannelLayoutManager.State.END -> context.getDimenPixelSize(R.dimen.overlay_margin_channel_start)
                     ChannelLayoutManager.State.OVERFLOW -> 0
                     null -> layoutParams.marginStart
                 }

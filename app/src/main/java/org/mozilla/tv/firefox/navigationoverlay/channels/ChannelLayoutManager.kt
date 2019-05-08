@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import org.mozilla.tv.firefox.ext.MARGIN_START_OVERLAY_DP
-import org.mozilla.tv.firefox.ext.toPx
+import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.ext.getDimenPixelSize
 
 const val MILLISECONDS_PER_INCH = 50f // For smooth scrolling speed
 
@@ -106,7 +106,7 @@ class ChannelLayoutManager(
             }
             val params = view.layoutParams as RecyclerView.LayoutParams
             val left = layoutManager.getDecoratedLeft(view) - params.leftMargin
-            val start = MARGIN_START_OVERLAY_DP.toPx(context)
+            val start = context.getDimenPixelSize(R.dimen.overlay_margin_channel_start)
 
             return start - left
         }
