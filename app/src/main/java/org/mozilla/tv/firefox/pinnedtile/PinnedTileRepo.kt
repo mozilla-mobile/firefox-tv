@@ -73,16 +73,20 @@ class PinnedTileRepo(private val applicationContext: Application) {
         return pinnedTiles
     }
 
-    fun addPinnedTile(url: String, screenshot: Bitmap?) {  // TODO add custom tiles in teh correct position
+    fun addPinnedTile(url: String, screenshot: Bitmap?) {
         val newPinnedTile = CustomPinnedTile(url, "custom", UUID.randomUUID()) // TODO: titles
+        // This method does some dangerous mutation in place.  Be careful when making changes, and
+        // if you have the time, please clean this up
         if (_pinnedTiles.value?.put(url, newPinnedTile) != null) return
-        _pinnedTiles.onNext(_pinnedTiles.value!!)
         persistCustomTiles()
 
         if (screenshot != null) {
             PinnedTileScreenshotStore.saveAsync(applicationContext, newPinnedTile.id, screenshot)
         }
         ++customTilesSize
+
+        // We reload tiles from the DB in order to avoid duplicating ordering logic in loadTilesCache
+        _pinnedTiles.onNext(loadTilesCache())
     }
 
     /**
