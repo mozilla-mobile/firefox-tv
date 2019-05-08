@@ -28,17 +28,17 @@ private const val BUNDLED_TILE_COUNT = 10
 class PinnedTileRepoTest {
 
     private lateinit var pinnedTileRepo: PinnedTileRepo
-    private val importantBundled = linkedMapOf(
+    private val featuredBundled = linkedMapOf(
             "https://ftv.cdn.mozilla.net/ytht" to BundledPinnedTile(url = "https://ftv.cdn.mozilla.net/ytht", title = "YouTube", imagePath = "tile_youtube.png", id = "youtube"),
             "https://www.google.com/webhp?tbm=vid" to BundledPinnedTile(url = "https://www.google.com/webhp?tbm=vid", title = "Video Search", imagePath = "tile_google.png", id = "googleVideo")
     )
-    private val unimportantBundled = linkedMapOf(
+    private val unfeaturedBundled = linkedMapOf(
             "https://m.imdb.com/" to BundledPinnedTile(url = "https://m.imdb.com/", title = "IMDB", imagePath = "tile_imdb.png", id = "imdb"),
             "https://www.rottentomatoes.com/" to BundledPinnedTile(url = "https://www.rottentomatoes.com/", title = "Rotten Tomatoes", imagePath = "tile_rotten_tomatoes.png", id = "rottenTomatoes")
     )
     private val bundledTiles = linkedMapOf<String, BundledPinnedTile>().apply {
-        putAll(importantBundled)
-        putAll(unimportantBundled)
+        putAll(featuredBundled)
+        putAll(unfeaturedBundled)
     }
     private val customTiles = linkedMapOf(
             "" to CustomPinnedTile(url = "https://www.mozilla.com", title = "Mozilla", id = UUID.randomUUID()),
@@ -138,46 +138,46 @@ class PinnedTileRepoTest {
     fun `GIVEN no bundled tiles have been removed AND custom tiles have been added THEN loadTilesCache should show youtube and google then custom then other bundled`() {
         val actual = pinnedTileRepo.loadTilesCache(bundledTiles, customTiles)
         val expected = linkedMapOf<String, PinnedTile>().apply {
-            putAll(importantBundled)
+            putAll(featuredBundled)
             putAll(customTiles)
-            putAll(unimportantBundled)
+            putAll(unfeaturedBundled)
         }
         assertEquals(expected, actual)
     }
 
     @Test
-    fun `GIVEN all important tiles have been removed AND custom tiles have been added THEN loadTilesCache should show custom tiles then unimportant bundled`() {
-        val actual = pinnedTileRepo.loadTilesCache(unimportantBundled, customTiles)
+    fun `GIVEN all featured tiles have been removed AND custom tiles have been added THEN loadTilesCache should show custom tiles then unfeatured bundled`() {
+        val actual = pinnedTileRepo.loadTilesCache(unfeaturedBundled, customTiles)
         val expected = linkedMapOf<String, PinnedTile>().apply {
             putAll(customTiles)
-            putAll(unimportantBundled)
+            putAll(unfeaturedBundled)
         }
         assertEquals(expected, actual)
     }
 
     @Test
-    fun `GIVEN one important value remains AND one bundled value remains AND custom tiles have been pinned THEN loadTilesCache should show the important value then custom tiles then unimpotant bundled tiles`() {
-        val firstImportant = importantBundled.entries.first()
-        val lastUnimportant = importantBundled.entries.last()
+    fun `GIVEN one featured value remains AND one bundled value remains AND custom tiles have been pinned THEN loadTilesCache should show the featured value then custom tiles then unimpotant bundled tiles`() {
+        val firstFeatured = featuredBundled.entries.first()
+        val lastUnfeatured = featuredBundled.entries.last()
         val modifiedBundledTiles = linkedMapOf<String, BundledPinnedTile>().apply {
-            put(firstImportant.key, firstImportant.value)
-            put(lastUnimportant.key, lastUnimportant.value)
+            put(firstFeatured.key, firstFeatured.value)
+            put(lastUnfeatured.key, lastUnfeatured.value)
         }
         val actual = pinnedTileRepo.loadTilesCache(modifiedBundledTiles, customTiles)
         val expected = linkedMapOf<String, PinnedTile>().apply {
-            put(firstImportant.key, firstImportant.value)
+            put(firstFeatured.key, firstFeatured.value)
             putAll(customTiles)
-            put(lastUnimportant.key, lastUnimportant.value)
+            put(lastUnfeatured.key, lastUnfeatured.value)
         }
         assertEquals(expected, actual)
     }
 
     @Test
-    fun `GIVEN the default bundled tiles WHEN a tile is added THEN it is added after the important tiles`() {
+    fun `GIVEN the default bundled tiles WHEN a tile is added THEN it is added after the featured tiles`() {
         val addedTileURL = "https://what-a-crazy-added-pinned-tile-eh.com"
         pinnedTileRepo.addPinnedTile(addedTileURL, screenshot = null)
         val actualTiles = pinnedTileRepo.pinnedTiles.test().values().last()
-        val expectedAddedIndex = importantBundled.size // index of first custom tile
+        val expectedAddedIndex = featuredBundled.size // index of first custom tile
         val actualAddedIndex = actualTiles.keys.indexOf(addedTileURL)
         assertEquals(expectedAddedIndex, actualAddedIndex)
     }
