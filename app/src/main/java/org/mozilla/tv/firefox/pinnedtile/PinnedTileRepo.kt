@@ -60,13 +60,15 @@ class PinnedTileRepo(private val applicationContext: Application) {
         bundledTiles: LinkedHashMap<String, BundledPinnedTile> = loadBundledTilesCache(),
         customTiles: LinkedHashMap<String, CustomPinnedTile> = loadCustomTilesCache()
     ): LinkedHashMap<String, PinnedTile> {
-        val importantBundled = bundledTiles.filter { it.value.id == "youtube" || it.value.id == "googleVideo" }
-        val unimportantBundled = bundledTiles.filter { it.value.id != "youtube" && it.value.id != "googleVideo" }
+        val featuredIds = setOf("youtube", "googleVideo")
+
+        val featuredBundledTiles = bundledTiles.filter { it.value.id in featuredIds }
+        val unfeaturedBundledTiles = bundledTiles.filter { it.value.id !in featuredIds }
 
         val pinnedTiles = linkedMapOf<String, PinnedTile>().apply {
-            putAll(importantBundled)
+            putAll(featuredBundledTiles)
             putAll(customTiles)
-            putAll(unimportantBundled)
+            putAll(unfeaturedBundledTiles)
         }
 
         return pinnedTiles
