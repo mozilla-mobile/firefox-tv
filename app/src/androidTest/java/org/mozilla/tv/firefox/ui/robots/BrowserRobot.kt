@@ -84,7 +84,7 @@ class BrowserRobot {
 }
 
 fun browser(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
-    BrowserRobot().interact()
+                BrowserRobot().interact()
     return BrowserRobot.Transition()
 }
 

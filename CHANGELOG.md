@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed
 - Improve cursor performance and feel (#1912)
+- Moved Pocket content into a Channel (#2111)
 
 
 ## [3.8] - 2019-04-30
