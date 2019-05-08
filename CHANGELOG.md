@@ -4,24 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [3.9] - 2019-05-13
 ### Added
 - Channel for displaying pinned tiles (replacing the previous container style) (#2110)
 
 ### Changed
 - Improve cursor performance and feel (#1912)
 
-### Fixed
 
-
-## [3.8] 2019-04-30
+## [3.8] - 2019-04-30
 ### Added
 - Move Settings into channel on the homescreen (#689)
 
 ### Fixed
 - Fix Pocket timeout exceptions (#2095)
 
-## [3.7-RO] 2019-04-16
+## [3.7-RO] - 2019-04-16
 *Released to Fire TV 4K, staged roll-out*
 ### Added
 - Tooltips on toolbar buttons (#1908)
@@ -34,7 +32,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## 3.5-B - 2019-04-16
 *Version bump only, no change from v3.5-A. Released to all devices except Fire TV 4K*
 
-## [3.6-RO] 2019-03-26
+## [3.6-RO] - 2019-03-26
 *Released to Fire TV 4K, staged roll-out*
 ### Fixed
 - Bug that prevented the toolbar back button from working on YouTube (#1927)
@@ -42,7 +40,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## 3.5-A - 2019-03-26
 *Staged rollout of 3.5, no change from v3.5-RO. Released to all devices except Fire TV 4K*
 
-## [3.5-RO] 2019-03-12
+## [3.5-RO] - 2019-03-12
 *Released to Fire TV 4K, staged roll-out*
 
 ### Changed
@@ -229,7 +227,8 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 ## [1.0] - 2017-12-20
 *Initial release! A browser including home tile shortcuts.*
 
-[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.8...HEAD
+[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.9...HEAD
+[3.9]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.8...v3.9
 [3.8]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.7-RO...v3.8
 [3.7-RO]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.6-RO...v3.7-RO
 [3.6-RO]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.5-RO...v3.6-RO
