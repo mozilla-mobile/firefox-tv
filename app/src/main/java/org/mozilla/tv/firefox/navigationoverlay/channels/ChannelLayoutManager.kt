@@ -34,6 +34,17 @@ class ChannelLayoutManager(
     val state: Observable<State> = _state.hide()
             .distinctUntilChanged()
 
+    /**
+     * Android by default, when SNAP_TO_START, attempts to focus the leftmost partially visible
+     * descendant (See [findFirstVisibleChildClosestToStart]). Due to carousel scroll, there is
+     * a bleeding drawable (partially visible) to the left (to indicate scrollability).
+     *
+     * [requestDefaultFocus] requests focus on the leftmost "completely" visible item
+     */
+    fun requestDefaultFocus() {
+        findViewByPosition(findFirstCompletelyVisibleItemPosition())?.requestFocus()
+    }
+
     override fun onRequestChildFocus(
         parent: RecyclerView,
         state: RecyclerView.State,

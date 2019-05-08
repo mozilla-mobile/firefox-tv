@@ -52,6 +52,15 @@ class DefaultChannelFactory(
             layoutManager = channelLayoutManager
 
             this.adapter = channelAdapter
+
+            // This blocks Android handle request ViewGroup descendant focus allowing us to handle
+            // default childFocus logic; see more in [ChannelLayoutManager.requestDefaultFocus]
+            descendantFocusability = ViewGroup.FOCUS_BEFORE_DESCENDANTS
+            setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    channelLayoutManager.requestDefaultFocus()
+                }
+            }
         }
         if (id != null) containerView.channelTileContainer.id = id
 
