@@ -54,10 +54,11 @@ class ChannelLayoutManager(
         focused?.let {
             val pos = getPosition(it)
 
-            if (pos == 0) {
-                _state.onNext(State.START)
-            } else {
-                _state.onNext(State.SCROLL)
+            when (pos) {
+                // Removing first element, don't call smoothScrollToPosition
+                RecyclerView.NO_POSITION -> return false
+                0 -> _state.onNext(State.START)
+                else -> _state.onNext(State.SCROLL)
             }
 
             smoothScrollToPosition(parent, state, pos)
