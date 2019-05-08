@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="57dp"
+        android:layout_marginEnd="57dp"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp"
         android:fontFamily="@string/font_ember_regular"
@@ -20,7 +21,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/channelTileContainer"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="57dp">
 
     </androidx.recyclerview.widget.RecyclerView>
 

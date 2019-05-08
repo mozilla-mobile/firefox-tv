@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox.navigationoverlay.channels
 import android.content.Context
 import android.util.DisplayMetrics
 import android.view.View
+import androidx.core.view.marginEnd
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +28,8 @@ class ChannelLayoutManager(
 
     enum class State {
         START,
-        SCROLL
+        OVERFLOW,
+        END
     }
 
     private val _state = BehaviorSubject.createDefault(State.START)
@@ -51,6 +53,8 @@ class ChannelLayoutManager(
         child: View,
         focused: View?
     ): Boolean {
+        if (state.isMeasuring) return false
+
         focused?.let {
             val pos = getPosition(it)
 
@@ -58,7 +62,14 @@ class ChannelLayoutManager(
                 // Removing first element, don't call smoothScrollToPosition
                 RecyclerView.NO_POSITION -> return false
                 0 -> _state.onNext(State.START)
-                else -> _state.onNext(State.SCROLL)
+                else -> {
+                    if (parent.canScroll()) {
+                        _state.onNext(State.OVERFLOW)
+                    } else {
+                        _state.onNext(State.END)
+                        return@let
+                    }
+                }
             }
 
             smoothScrollToPosition(parent, state, pos)
@@ -100,4 +111,11 @@ class ChannelLayoutManager(
             return start - left
         }
     }
+}
+
+/**
+ * Calculate visible scrollable range with [View.marginEnd] and [View.getWidth]
+ */
+private fun RecyclerView.canScroll(): Boolean {
+    return computeHorizontalScrollRange() - marginEnd > width
 }
