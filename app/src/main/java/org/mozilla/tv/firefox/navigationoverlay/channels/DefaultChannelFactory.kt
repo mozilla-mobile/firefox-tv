@@ -36,7 +36,7 @@ class DefaultChannelFactory(
             channelLayoutManager.state.subscribe { state ->
                 /**
                  * If scrolling, set the start margin to 0 to accommodate carousel scrolling,
-                 * default margin [MARGIN_START_OVERLAY_DP] otherwise.
+                 * default margin [R.dimen.overlay_margin_channel_start] otherwise.
                  * See [ChannelLayoutManager.FirstSmoothScroller.calculateDxToMakeVisible]
                  */
                 layoutParams.marginStart = when (state) {
