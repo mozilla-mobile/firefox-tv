@@ -57,8 +57,8 @@ class PinnedTileRepo(private val applicationContext: Application) {
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun loadTilesCache(
-            bundledTiles: LinkedHashMap<String, BundledPinnedTile> = loadBundledTilesCache(),
-            customTiles: LinkedHashMap<String, CustomPinnedTile> = loadCustomTilesCache()
+        bundledTiles: LinkedHashMap<String, BundledPinnedTile> = loadBundledTilesCache(),
+        customTiles: LinkedHashMap<String, CustomPinnedTile> = loadCustomTilesCache()
     ): LinkedHashMap<String, PinnedTile> {
         val importantBundled = bundledTiles.filter { it.value.id == "youtube" || it.value.id == "googleVideo" }
         val unimportantBundled = bundledTiles.filter { it.value.id != "youtube" && it.value.id != "googleVideo" }
@@ -68,7 +68,6 @@ class PinnedTileRepo(private val applicationContext: Application) {
             putAll(customTiles)
             putAll(unimportantBundled)
         }
-
 
         return pinnedTiles
     }
