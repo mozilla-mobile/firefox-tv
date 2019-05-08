@@ -55,9 +55,16 @@ class PinnedTileRepo(private val applicationContext: Application) {
     }
 
     private fun loadTilesCache() {
+        val bundledTiles = loadBundledTilesCache()
+        val customTiles = loadCustomTilesCache()
+
+        val importantBundled = bundledTiles.filter { it.value.id == "youtube" || it.value.id == "googleVideo" }
+        val unimportantBundled = bundledTiles.filter { it.value.id != "youtube" && it.value.id != "googleVideo" }
+
         val pinnedTiles = linkedMapOf<String, PinnedTile>().apply {
-            putAll(loadBundledTilesCache())
-            putAll(loadCustomTilesCache())
+            putAll(importantBundled)
+            putAll(customTiles)
+            putAll(unimportantBundled)
         }
 
         _pinnedTiles.onNext(pinnedTiles)
