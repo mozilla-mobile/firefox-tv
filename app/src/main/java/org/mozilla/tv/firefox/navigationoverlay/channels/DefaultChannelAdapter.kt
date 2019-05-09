@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.ext.setHorizontalMargins
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
 val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ChannelTile>() {
@@ -49,7 +48,7 @@ class DefaultChannelAdapter(
             // For carousel scrolling margin updates; For the initial pre-focus state. This
             // doesn't unfortunately handle tile removal - which is handled in
             // [ChannelLayoutManager.onRequestChildFocus()]
-            holder.itemView.setHorizontalMargins(context, position, itemCount)
+            ChannelTile.setChannelMarginByPosition(holder.itemView, context, position, itemCount)
             val tile = getItem(position)
             tile.setImage.invoke(imageView)
             titleView.text = tile.title
