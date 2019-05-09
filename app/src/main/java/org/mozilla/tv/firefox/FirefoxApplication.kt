@@ -51,15 +51,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
             // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.
             SentryIntegration.init(this, serviceLocator.settingsRepo)
 
-            serviceLocator.settingsRepo.dataCollectionEnabled.observeForever { collectionEnabled ->
-                if (collectionEnabled != null) {
-                    // This needs to be called before Glean.initialize, or we risk 1) not
-                    // sending startup data, or 2) sending even when the user has toggled
-                    // off data collection
-                }
-                    Glean.setUploadEnabled(collectionEnabled)
-            }
-            Glean.initialize(applicationContext)
+            initGlean()
 
             TelemetryIntegration.INSTANCE.init(this)
 
@@ -74,6 +66,18 @@ open class FirefoxApplication : LocaleAwareApplication() {
                 registerActivityLifecycleCallbacks(it)
             }
         }
+    }
+
+    private fun initGlean() {
+        serviceLocator.settingsRepo.dataCollectionEnabled.observeForever { collectionEnabled ->
+            if (collectionEnabled != null) {
+                // This needs to be called before Glean.initialize, or we risk 1) not
+                // sending startup data, or 2) sending even when the user has toggled
+                // off data collection
+                Glean.setUploadEnabled(collectionEnabled)
+            }
+        }
+        Glean.initialize(applicationContext)
     }
 
     // ServiceLocator needs to be created in onCreate in order to accept Application
