@@ -8,13 +8,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/home_tile_width"
     android:layout_height="150dp"
-    android:layout_margin="12dp"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/settings_cardview"
         android:layout_width="match_parent"
-        android:layout_height="84dp"
+        android:layout_height="@dimen/home_tile_height"
         android:focusable="true"
         android:foreground="@drawable/settings_item_selector"
         app:cardBackgroundColor="@color/photonGrey50"
