@@ -26,7 +26,7 @@ class DefaultChannelFactory(
     fun createChannel(context: Context, parent: ViewGroup, id: Int? = null): DefaultChannel {
         // If we ever have channels that don't support removal, add a shouldRemove param here.
         // When false, pass null instead of invokeLongClickAndSaveTile
-        val channelAdapter = DefaultChannelAdapter(loadUrl, invokeLongClickAndSaveTile, onTileFocused)
+        val channelAdapter = DefaultChannelAdapter(context, loadUrl, invokeLongClickAndSaveTile, onTileFocused)
 
         val containerView = LayoutInflater.from(context).inflate(R.layout.default_channel, parent, false) as ViewGroup
         containerView.channelTileContainer.apply {
