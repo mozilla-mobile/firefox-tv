@@ -7,12 +7,9 @@ package org.mozilla.tv.firefox.navigationoverlay.channels
 import android.content.Context
 import android.util.DisplayMetrics
 import android.view.View
-import androidx.core.view.marginEnd
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.getDimenPixelSize
 
@@ -25,16 +22,6 @@ const val MILLISECONDS_PER_INCH = 50f // For smooth scrolling speed
 class ChannelLayoutManager(
     private val context: Context
 ) : LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false) {
-
-    enum class State {
-        START,
-        OVERFLOW,
-        END
-    }
-
-    private val _state = BehaviorSubject.createDefault(State.START)
-    val state: Observable<State> = _state.hide()
-            .distinctUntilChanged()
 
     /**
      * Android by default, when SNAP_TO_START, attempts to focus the leftmost partially visible
@@ -58,19 +45,9 @@ class ChannelLayoutManager(
         focused?.let {
             val pos = getPosition(it)
 
-            when (pos) {
-                // Removing first element, don't call smoothScrollToPosition
-                RecyclerView.NO_POSITION -> return false
-                0 -> _state.onNext(State.START)
-                else -> {
-                    if (parent.canScroll()) {
-                        _state.onNext(State.OVERFLOW)
-                    } else {
-                        _state.onNext(State.END)
-                        return@let
-                    }
-                }
-            }
+            // If removing first item, position can be -1; in which case, don't smoothScro
+            if (pos == RecyclerView.NO_POSITION)
+                return false
 
             smoothScrollToPosition(parent, state, pos)
         }
@@ -120,11 +97,4 @@ class ChannelLayoutManager(
             return start - left
         }
     }
-}
-
-/**
- * Calculate visible scrollable range with [View.marginEnd] and [View.getWidth]
- */
-private fun RecyclerView.canScroll(): Boolean {
-    return computeHorizontalScrollRange() - marginEnd > width
 }
