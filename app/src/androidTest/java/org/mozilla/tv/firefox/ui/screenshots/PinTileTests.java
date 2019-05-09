@@ -5,10 +5,19 @@
 
 package org.mozilla.tv.firefox.ui.screenshots;
 
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.Until;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -26,6 +35,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
@@ -58,21 +68,43 @@ public class PinTileTests extends ScreenshotTest {
         onView(withText(R.string.homescreen_unpin_tutorial_toast))
                 .inRoot(withDecorView(not(is(mActivityTestRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
+        mDevice.waitForIdle();
 
         Screengrab.screenshot("unpin-toast");
 
-        mDevice.waitForIdle();
+        onView(allOf(withId(R.id.home_tile),
+                childAtPosition(allOf(withId(R.id.pinned_tiles_channel),
+                        childAtPosition(
+                                withClassName(is("android.widget.LinearLayout")),
+                                1)),
+                        0),
+                isDisplayed())).perform(longClick());
 
-        onView(withId(R.id.pinned_tiles_channel))
-                .perform(longClick());
-
-        mDevice.waitForIdle();
-
+        device.wait(Until.findObject(By.text(getString(R.string.homescreen_tile_remove))), 1000);
         onView(withText(R.string.homescreen_tile_remove))
                 .check(matches(isDisplayed()));
 
         Screengrab.screenshot("menu-remove-tile");
 
         mDevice.pressBack();
+    }
+
+    private static Matcher<View> childAtPosition(
+            final Matcher<View> parentMatcher, final int position) {
+
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Child at position " + position + " in parent ");
+                parentMatcher.describeTo(description);
+            }
+
+            @Override
+            public boolean matchesSafely(View view) {
+                ViewParent parent = view.getParent();
+                return parent instanceof ViewGroup && parentMatcher.matches(parent)
+                        && view.equals(((ViewGroup) parent).getChildAt(position));
+            }
+        };
     }
 }

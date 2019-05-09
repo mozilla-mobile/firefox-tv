@@ -94,9 +94,18 @@ public class TooltipCaptureTest extends ScreenshotTest {
         checkTooltipDisplayed();
         takeScreenshotsAfterWait("tooltip-settings", 500);
         device.pressDPadLeft();
-        device.pressDPadLeft();
         device.pressDPadCenter();
-        takeScreenshotsAfterWait("desktoprequested", 500);
+
+        device.wait(Until.findObject(By.text(getString(R.string.notification_request_desktop_site))), 1000);
+        takeScreenshotsAfterWait("desktoprequested", 0);
+        device.pressMenu();
+        device.pressDPadUp();
+        device.pressDPadRight();
+        device.pressDPadRight();
+        device.pressDPadRight();
+        device.pressDPadCenter();
+        device.wait(Until.findObject(By.text(getString(R.string.notification_request_non_desktop_site))), 1000);
+        takeScreenshotsAfterWait("nondesktoprequested", 0);
     }
 
     private void checkTooltipDisplayed() {
