@@ -28,6 +28,7 @@ import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsButton
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsTile
 import org.mozilla.tv.firefox.navigationoverlay.channels.TileSource
+import java.lang.AssertionError
 import java.util.Collections
 
 private const val SHARED_PREFS_KEY = "telemetryLib" // Don't call it TelemetryWrapper to avoid accidental IDE rename.
@@ -102,6 +103,7 @@ open class TelemetryIntegration protected constructor(
         val OFF = "off"
         val TILE_BUNDLED = "bundled"
         val TILE_CUSTOM = "custom"
+        val TILE_POCKET = "pocket"
         val POCKET_VIDEO_MEGATILE = "pocket_video_tile"
         val YOUTUBE_TILE = "youtube_tile"
         val EXIT_FIREFOX = "exit"
@@ -395,6 +397,7 @@ open class TelemetryIntegration protected constructor(
     private fun getTileTypeAsStringValue(tile: ChannelTile) = when (tile.tileSource) {
         TileSource.BUNDLED -> Value.TILE_BUNDLED
         TileSource.CUSTOM -> Value.TILE_CUSTOM
+        TileSource.POCKET -> Value.TILE_POCKET
     }
 
     fun youtubeCastEvent() = TelemetryEvent.create(Category.ACTION, Method.YOUTUBE_CAST, Object.BROWSER).queue()
