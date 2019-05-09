@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.getDimenPixelSize
 
-enum class TileSource { BUNDLED, CUSTOM }
+enum class TileSource { BUNDLED, CUSTOM, POCKET }
 
 /**
  * Backing data for a [RecyclerView] item in a channel
@@ -22,6 +22,8 @@ data class ChannelTile(
     val url: String,
     val title: String,
     val setImage: (ImageView) -> Unit,
+    // tileSource should not be used to change UI, which should be generic. It
+    // is currently only used for telemetry
     val tileSource: TileSource,
     val id: String
 ) {
