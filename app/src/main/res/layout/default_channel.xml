@@ -21,9 +21,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/channelTileContainer"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/overlay_margin_end">
-
-    </androidx.recyclerview.widget.RecyclerView>
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
