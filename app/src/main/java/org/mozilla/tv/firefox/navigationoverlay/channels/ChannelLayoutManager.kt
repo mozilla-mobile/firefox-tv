@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.getDimenPixelSize
+import org.mozilla.tv.firefox.ext.setHorizontalMargins
 
 const val MILLISECONDS_PER_INCH = 50f // For smooth scrolling speed
 
@@ -44,6 +45,11 @@ class ChannelLayoutManager(
 
         focused?.let {
             val pos = getPosition(it)
+
+            // For carousel scrolling margin updates. Precondition here is that the channel
+            // RecyclerView has gained focus. Mainly for handling remove tiles (the adjacent tile
+            // gains focus upon removal)
+            it.setHorizontalMargins(context, pos, itemCount)
 
             // If removing first item, position can be -1; in which case, don't smoothScro
             if (pos == RecyclerView.NO_POSITION)

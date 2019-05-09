@@ -12,12 +12,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.ext.getDimenPixelSize
+import org.mozilla.tv.firefox.ext.setHorizontalMargins
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
 val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ChannelTile>() {
@@ -33,15 +32,11 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ChannelTile>() {
 }
 
 class DefaultChannelAdapter(
-    context: Context,
+    private val context: Context,
     private val loadUrl: (String) -> Unit,
     private val onTileLongClick: ((ChannelTile) -> Unit)?,
     private val onTileFocused: (() -> Unit)?
 ) : ListAdapter<ChannelTile, DefaultChannelTileViewHolder>(DIFF_CALLBACK) {
-
-    private val defaultItemHorizontalMargin = context.getDimenPixelSize(R.dimen.pocket_video_item_horizontal_margin)
-    private val overlayMarginStart = context.getDimenPixelSize(R.dimen.overlay_margin_channel_start)
-    private val overlayMarginEnd = context.getDimenPixelSize(R.dimen.overlay_margin_end)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DefaultChannelTileViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -51,7 +46,10 @@ class DefaultChannelAdapter(
 
     override fun onBindViewHolder(holder: DefaultChannelTileViewHolder, position: Int) {
         with(holder) {
-            setHorizontalMargins(this, position)
+            // For carousel scrolling margin updates; For the initial pre-focus state. This
+            // doesn't unfortunately handle tile removal - which is handled in
+            // [ChannelLayoutManager.onRequestChildFocus()]
+            holder.itemView.setHorizontalMargins(context, position, itemCount)
             val tile = getItem(position)
             tile.setImage.invoke(imageView)
             titleView.text = tile.title
@@ -95,20 +93,6 @@ class DefaultChannelAdapter(
         layoutMarginParams.setMargins(marginValue, marginValue, marginValue, marginValue)
         iconView.layoutParams = layoutMarginParams
     }
-
-    /**
-     * Set the horizontal margins on the given view.
-     *
-     * We want to add padding to the beginning and end of the RecyclerView: ideally we'd just add
-     * paddingStart/End. Unfortunately, this causes a visual glitch as each card scrolls offscreen.
-     * Instead, we set the margins for the first and last card.
-     */
-    private fun setHorizontalMargins(holder: DefaultChannelTileViewHolder, position: Int) =
-            holder.itemView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                // We need to reset margins on every view, not just first/last, because the View instance can be re-used.
-                marginStart = if (position == 0) overlayMarginStart else defaultItemHorizontalMargin
-                marginEnd = if (position == itemCount - 1) overlayMarginEnd else defaultItemHorizontalMargin
-            }
 }
 
 class DefaultChannelTileViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
