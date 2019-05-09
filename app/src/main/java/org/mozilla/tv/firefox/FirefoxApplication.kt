@@ -51,11 +51,12 @@ open class FirefoxApplication : LocaleAwareApplication() {
             // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.
             SentryIntegration.init(this, serviceLocator.settingsRepo)
 
-            // Set up Glean by connecting it to the preference flag for data collection and calling
-            // the initialize() function.
             with(serviceLocator.settingsRepo) {
                 dataCollectionEnabled.observeForever { collectionEnabled ->
                     if (collectionEnabled != null) {
+                        // This needs to be called before Glean.initialize, or we risk 1) not
+                        // sending startup data, or 2) sending even when the user has toggled
+                        // off data collection
                         Glean.setUploadEnabled(collectionEnabled)
                     }
                 }
