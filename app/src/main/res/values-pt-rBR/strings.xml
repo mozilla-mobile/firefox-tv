@@ -23,13 +23,13 @@
   <string name="preference_performance_block_webfonts">Bloquear fontes web</string>
   <string name="preference_performance_block_webfonts_summary">Pode resultar em falta de ícones ou imagens</string>
   <string name="preference_privacy_notice">Aviso de Privacidade</string>
-  <string name="content_description_forward">Navegar para a frente</string>
+  <string name="content_description_forward">Ir para a próxima página</string>
   <string name="content_description_reload">Recarregar o site</string>
   <string name="content_description_back">Voltar à página anterior</string>
-  <string name="external_app_prompt_title">Abrir link em um outro app</string>
+  <string name="external_app_prompt_title">Abrir link em outro app</string>
   <string name="external_app_prompt">Você pode sair do %1$s para abrir este link no %2$s.</string>
-  <string name="external_app_prompt_no_app_title">Encontrar um app que pode abrir o link</string>
-  <string name="external_app_prompt_no_app">Nenhum aplicativo do seu dispositivo consegue abrir este link. Você pode sair do %1$s para pesquisar no %2$s por um aplicativo compatível.</string>
+  <string name="external_app_prompt_no_app_title">Encontrar um app que consegue abrir o link</string>
+  <string name="external_app_prompt_no_app">Nenhum aplicativo instalado no seu dispositivo consegue abrir este link. Você pode sair do %1$s para procurar um aplicativo compatível no %2$s.</string>
   <string name="external_multiple_apps_matched_exit">Sair da navegação privativa?</string>
   <string name="errorpage_title">Problemas ao carregar a página</string>
   <string name="errorpage_refresh">Tentar novamente</string>
@@ -41,7 +41,9 @@
   <string name="your_rights_content5"><![CDATA["O %1$s também usa listas de bloqueio fornecidas pela Disconnect, Inc. como trabalhos separados e independentes, disponibilizados "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">aqui</a>\" sob a \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>.]]></string>
   <string name="settings_cookies_dialog_title">Limpar todos os cookies e dados do site</string>
   <string name="settings_cookies_dialog_content2">Está ação limpará todos os cookies e dados de sites. Limpar essas informações pode finalizar sessões de sites e apagar conteúdo da web armazenado localmente.</string>
+  <string name="settings_cookies_confirm">Limpar agora</string>
   <string name="preference_mozilla_telemetry2">Enviar dados de uso</string>
+  <string name="settings_telemetry_description">A Mozilla se empenha em coletar somente o necessário para fornecer e melhorar o %1$s para todos.</string>
   <string name="turbo_mode">Modo Turbo</string>
   <string name="onboarding_turbo_mode_title">O modo turbo ajuda você a navegar mais rápido</string>
   <string name="onboarding_turbo_mode_body2">O modo turbo bloqueia anúncios e rastreadores automaticamente.\nSe um site não agir da forma que você espera, experimente desativar o modo turbo.</string>
@@ -50,6 +52,7 @@
   <string name="turbo_mode_image_a11y">Exemplo de modo turbo ativado</string>
   <string name="homescreen_unpin_tutorial_toast">Pressione e segure o SELECT para desafixar da tela inicial</string>
   <string name="homescreen_tile_remove">Remover</string>
+  <string name="pinned_tile_channel_title">Quadros fixados</string>
   <string name="pin_label">Fixar na tela inicial</string>
   <string name="notification_pinned_site">Fixado à tela inicial do Firefox TV</string>
   <string name="notification_unpinned_site">Removido da tela inicial do Firefox TV</string>

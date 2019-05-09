@@ -41,7 +41,9 @@
   <string name="your_rights_content5"><![CDATA[\"%1$s también utiliza las listas de bloqueo de DIsconnect, Inc. como trabajos separados e independientes bajo la \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Licencia P&amp;#250;blica General de GNU v3</a>\" y que puedes encontrar \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">aqu&amp;#237;</a>.]]></string>
   <string name="settings_cookies_dialog_title">Limpiar todas las cookies y datos del sitio</string>
   <string name="settings_cookies_dialog_content2">Esta acción eliminará todas las cookies y los datos de sitios. Eliminar esta información puede cerrar tu sesión de algunos sitios web y borrar el contenido web almacenado sin conexión.</string>
+  <string name="settings_cookies_confirm">Limpiar ahora</string>
   <string name="preference_mozilla_telemetry2">Enviar datos de consumo</string>
+  <string name="settings_telemetry_description">Mozilla se esfuerza por recopilar solo lo que necesitamos para proporcionar y mejorar %1$s para todos</string>
   <string name="turbo_mode">Modo turbo</string>
   <string name="onboarding_turbo_mode_title">El modo turbo te ayuda a navegar más rápido</string>
   <string name="onboarding_turbo_mode_body2">El modo turbo bloquea automáticamente anuncios y rastreadores.\nSi un sitio no funciona como esperas, prueba a desactivarlo.</string>
@@ -50,6 +52,7 @@
   <string name="turbo_mode_image_a11y">Ejemplo con el modo turbo activado</string>
   <string name="homescreen_unpin_tutorial_toast">Mantén presionado SELECT para desanclarlo de la pantalla de inicio</string>
   <string name="homescreen_tile_remove">Eliminar</string>
+  <string name="pinned_tile_channel_title">Miniaturas fijadas</string>
   <string name="pin_label">Fijar a la pantalla inicio</string>
   <string name="notification_pinned_site">FIjar a la pantalla de inicio de Firefox TV</string>
   <string name="notification_unpinned_site">Eliminar de la pantalla de inicio de Firefox TV</string>

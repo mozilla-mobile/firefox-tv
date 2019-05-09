@@ -41,7 +41,9 @@
   <string name="your_rights_content5"><![CDATA["%1$s utilise aussi des listes de blocage fournies par Disconnect Inc, en tant que créations sous la licence "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>" et qui sont disponibles "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">ici</a>.]]></string>
   <string name="settings_cookies_dialog_title">Effacer les cookies et les données de sites</string>
   <string name="settings_cookies_dialog_content2">Cette action effacera l’ensemble des cookies et des données de sites. Effacer ces données peut vous déconnecter de certains sites web et supprimer du contenu web stocké hors connexion.</string>
+  <string name="settings_cookies_confirm">Effacer maintenant</string>
   <string name="preference_mozilla_telemetry2">Envoyer des données d’utilisation</string>
+  <string name="settings_telemetry_description">Mozilla veille à collecter uniquement les données nécessaires afin d’offrir et d’améliorer %1$s pour tout le monde</string>
   <string name="turbo_mode">Mode turbo</string>
   <string name="onboarding_turbo_mode_title">Le mode turbo vous permet de naviguer plus rapidement</string>
   <string name="onboarding_turbo_mode_body2">Le mode turbo bloque automatiquement publicités et traqueurs.\nSi un site ne fonctionne pas comme vous l’attendiez, essayez de le désactiver.</string>
@@ -50,6 +52,7 @@
   <string name="turbo_mode_image_a11y">Exemple avec le mode turbo activé</string>
   <string name="homescreen_unpin_tutorial_toast">Effectuez un appui long sur SELECT pour détacher cet élément de l’écran d’accueil</string>
   <string name="homescreen_tile_remove">Retirer</string>
+  <string name="pinned_tile_channel_title">Sites épinglés</string>
   <string name="pin_label">Épingler à l’écran d’accueil</string>
   <string name="notification_pinned_site">Épinglé à l’écran d’accueil Firefox TV</string>
   <string name="notification_unpinned_site">Retiré de l’écran d’accueil Firefox TV</string>
