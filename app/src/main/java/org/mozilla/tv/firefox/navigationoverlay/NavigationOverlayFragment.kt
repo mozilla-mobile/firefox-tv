@@ -271,7 +271,7 @@ class NavigationOverlayFragment : Fragment() {
 
     private fun observePinnedTileRemoval(): Disposable {
         return pinnedTileChannel.removeTileEvents.subscribe { tileToRemove ->
-            pinnedTileChannel.removeContent(tileToRemove)
+            serviceLocator.channelRepo.removeChannelContent(tileToRemove)
         }
     }
 

@@ -23,8 +23,7 @@ data class ChannelTile(
     val title: String,
     val setImage: (ImageView) -> Unit,
     val tileSource: TileSource,
-    val id: String,
-    val type: TileType
+    val id: String
 ) {
     companion object {
         /**
