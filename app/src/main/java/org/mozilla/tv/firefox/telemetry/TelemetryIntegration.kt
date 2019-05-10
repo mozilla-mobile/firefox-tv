@@ -125,8 +125,8 @@ open class TelemetryIntegration protected constructor(
     }
 
     // Available on any thread: we synchronize.
-    private val pocketUniqueClickedVideoIDs = Collections.synchronizedSet(mutableSetOf<Int>())
-    private val pocketUniqueImpressedVideoIDs = Collections.synchronizedSet(mutableSetOf<Int>())
+    private val pocketUniqueClickedVideoIDs = Collections.synchronizedSet(mutableSetOf<String>())
+    private val pocketUniqueImpressedVideoIDs = Collections.synchronizedSet(mutableSetOf<String>())
 
     fun init(context: Context) {
         // When initializing the telemetry library it will make sure that all directories exist and
@@ -360,19 +360,19 @@ open class TelemetryIntegration protected constructor(
     }
 
     @AnyThread // pocketUniqueClickedVideoIDs is synchronized.
-    fun pocketVideoClickEvent(id: Int) {
+    fun pocketVideoClickEvent(id: String) {
         pocketUniqueClickedVideoIDs.add(id)
     }
 
     @AnyThread // pocketUniqueImpressVideoIDs is synchronized.
-    fun pocketVideoImpressionEvent(id: Int) {
+    fun pocketVideoImpressionEvent(id: String) {
         pocketUniqueImpressedVideoIDs.add(id)
     }
 
     private fun queuePocketVideoImpressionEvent() {
         for (videoId in pocketUniqueImpressedVideoIDs) {
             TelemetryEvent.create(Category.POCKET, Method.IMPRESSION, Object.VIDEO_ID,
-                    videoId.toString()).queueInPocketPing()
+                    videoId).queueInPocketPing()
         }
     }
 
