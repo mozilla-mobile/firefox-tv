@@ -23,7 +23,7 @@ class DefaultChannel(
     }
 
     fun removeContent(tileData: ChannelTile) {
-        // TODO
+        channelRepo.removeChannelContent(tileData)
     }
 
     private val titleView: TextView = channelContainer.channelTitle

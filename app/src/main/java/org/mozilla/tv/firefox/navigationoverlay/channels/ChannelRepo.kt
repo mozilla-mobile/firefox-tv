@@ -17,7 +17,9 @@ enum class TileType { PINNED_TILE }
 class ChannelRepo(
     private val pinnedTileRepo: PinnedTileRepo
 ) {
-    fun removeChannelContent() {
-        // TODO
+    fun removeChannelContent(tileData: ChannelTile) {
+        when (tileData.type) {
+            TileType.PINNED_TILE -> pinnedTileRepo.removePinnedTile(tileData.url)
+        }
     }
 }
