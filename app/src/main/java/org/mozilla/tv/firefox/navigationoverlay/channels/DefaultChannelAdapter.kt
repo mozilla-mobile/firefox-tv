@@ -15,6 +15,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import io.reactivex.Observable
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.Subject
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
@@ -36,6 +39,9 @@ class DefaultChannelAdapter(
     private val onTileLongClick: ((ChannelTile) -> Unit)?,
     private val onTileFocused: (() -> Unit)?
 ) : ListAdapter<ChannelTile, DefaultChannelTileViewHolder>(DIFF_CALLBACK) {
+
+    private val _removeEvents: Subject<ChannelTile> = BehaviorSubject.create<ChannelTile>()
+    val removeEvents: Observable<ChannelTile> = _removeEvents.hide()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DefaultChannelTileViewHolder {
         val inflater = LayoutInflater.from(parent.context)

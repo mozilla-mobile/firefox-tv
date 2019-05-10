@@ -215,6 +215,8 @@ class NavigationOverlayFragment : Fragment() {
             .addTo(compositeDisposable)
         observePinnedTiles()
             .addTo(compositeDisposable)
+        observePinnedTileRemoval()
+            .addTo(compositeDisposable)
         observeShouldDisplayPinnedTiles()
             .addTo(compositeDisposable)
         observePocketState()
@@ -269,6 +271,12 @@ class NavigationOverlayFragment : Fragment() {
         return navigationOverlayViewModel.pinnedTiles.subscribe {
             pinnedTileChannel.setTitle(it.title)
             pinnedTileChannel.setContents(it.tileList)
+        }
+    }
+
+    private fun observePinnedTileRemoval(): Disposable {
+        return pinnedTileChannel.removeTileEvents.subscribe { tileToRemove ->
+            pinnedTileChannel.removeContent(tileToRemove)
         }
     }
 

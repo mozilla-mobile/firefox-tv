@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.navigationoverlay.channels
 
 import android.view.ViewGroup
 import android.widget.TextView
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.default_channel.view.channelTitle
 
 class DefaultChannel(
@@ -13,6 +14,8 @@ class DefaultChannel(
     private val channelRepo: ChannelRepo,
     private val adapter: DefaultChannelAdapter
 ) {
+
+    val removeTileEvents: Observable<ChannelTile> = adapter.removeEvents
 
     fun setTitle(title: CharSequence) {
         titleView.text = title
