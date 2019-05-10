@@ -69,6 +69,7 @@ class DefaultChannelAdapter(
 
                 val removeStr = context.resources.getString(R.string.homescreen_tile_remove)
 
+                // FIXME: We need to localize this, but are waiting until we hear back from UX
                 val title = removeStr + " " + tile.title + "?"
                 builder.setTitle(title)
 
