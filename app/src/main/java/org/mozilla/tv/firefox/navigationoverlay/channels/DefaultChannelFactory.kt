@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.default_channel.view.channelTileContainer
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.ext.serviceLocator
 
 class DefaultChannelFactory(
     private val loadUrl: (String) -> Unit,
@@ -48,6 +49,7 @@ class DefaultChannelFactory(
 
         return DefaultChannel(
                 channelContainer = containerView,
+                channelRepo = context.serviceLocator.channelRepo,
                 adapter = channelAdapter
         )
     }
