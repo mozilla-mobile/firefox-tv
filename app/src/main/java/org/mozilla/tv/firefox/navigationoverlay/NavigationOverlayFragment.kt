@@ -12,10 +12,8 @@ import android.os.Handler
 import android.os.Looper
 import android.preference.PreferenceManager
 import android.util.AttributeSet
-import android.view.ContextMenu
 import android.view.KeyEvent
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
@@ -54,7 +52,6 @@ import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsChannelAdapter
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
-import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
@@ -102,7 +99,6 @@ class NavigationOverlayFragment : Fragment() {
     // instantiation of the BrowserNavigationOverlay
     private var canShowUnpinToast: Boolean = false
 
-    private val openHomeTileContextMenu: () -> Unit = { activity?.openContextMenu(channelsContainer) }
     private val defaultChannelFactory = createChannelFactory()
 
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
@@ -200,7 +196,6 @@ class NavigationOverlayFragment : Fragment() {
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context!!, R.color.photonGrey10_a60p)) }
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
 
-        registerForContextMenu(channelsContainer)
         canShowUnpinToast = true
 
         pinnedTileChannel = defaultChannelFactory.createChannel(context!!, view as ViewGroup, R.id.pinned_tiles_channel)
@@ -325,7 +320,6 @@ class NavigationOverlayFragment : Fragment() {
                     onNavigationEvent.invoke(NavigationEvent.LOAD_TILE, urlStr, null)
                 }
             },
-            onTileLongClick = openHomeTileContextMenu,
             onTileFocused = {
                 val prefInt = android.preference.PreferenceManager.getDefaultSharedPreferences(context).getInt(
                         SHOW_UNPIN_TOAST_COUNTER_PREF, 0)
@@ -385,26 +379,6 @@ class NavigationOverlayFragment : Fragment() {
         pocketVideoMegaTileView.setOnClickListener { view ->
             val event = NavigationEvent.fromViewClick(view.id) ?: return@setOnClickListener
             onNavigationEvent.invoke(event, null, null)
-        }
-    }
-
-    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
-        activity?.menuInflater?.inflate(R.menu.menu_context_hometile, menu)
-    }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.remove -> {
-                val tileToRemove = defaultChannelFactory.lastLongClickedTile ?: return false
-
-                // This assumes that since we're deleting from a Home Tile object that we created
-                // that the Uri is valid, so we do not do error handling here.
-                // TODO: NavigationOverlayFragment->ViewModel->Repo
-                navigationOverlayViewModel.unpinPinnedTile(tileToRemove.url) // TODO this only works for pinned tiles
-                TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileToRemove)
-                return true
-            }
-            else -> return false
         }
     }
 

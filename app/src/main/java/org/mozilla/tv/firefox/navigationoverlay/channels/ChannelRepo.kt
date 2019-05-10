@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.navigationoverlay.channels
 
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
+import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
 enum class TileType { PINNED_TILE }
 
@@ -19,7 +20,10 @@ class ChannelRepo(
 ) {
     fun removeChannelContent(tileData: ChannelTile) {
         when (tileData.type) {
-            TileType.PINNED_TILE -> pinnedTileRepo.removePinnedTile(tileData.url)
+            TileType.PINNED_TILE -> {
+                TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileData)
+                pinnedTileRepo.removePinnedTile(tileData.url)
+            }
         }
     }
 }
