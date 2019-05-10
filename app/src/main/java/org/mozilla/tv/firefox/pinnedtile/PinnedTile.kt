@@ -9,6 +9,7 @@ import org.json.JSONObject
 import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelTile
 import org.mozilla.tv.firefox.ext.toJavaURI
 import org.mozilla.tv.firefox.navigationoverlay.channels.TileSource
+import org.mozilla.tv.firefox.navigationoverlay.channels.TileType
 import org.mozilla.tv.firefox.utils.FormattedDomain
 import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
 import org.mozilla.tv.firefox.utils.PicassoWrapper
@@ -74,7 +75,8 @@ class BundledPinnedTile(
                             .into(view)
                 },
                 tileSource = TileSource.BUNDLED,
-                id = idToString()
+                id = idToString(),
+                type = TileType.PINNED_TILE
         )
     }
 }
@@ -110,7 +112,8 @@ class CustomPinnedTile(
                             .into(view)
                 }, // todo: fix scope, double check this is okay.
                 tileSource = TileSource.CUSTOM,
-                id = idToString()
+                id = idToString(),
+                type = TileType.PINNED_TILE
         )
     }
 

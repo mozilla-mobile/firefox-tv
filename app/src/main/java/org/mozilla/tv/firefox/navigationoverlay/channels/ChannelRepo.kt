@@ -6,8 +6,18 @@ package org.mozilla.tv.firefox.navigationoverlay.channels
 
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 
+enum class TileType { PINNED_TILE }
+
+/**
+ * ChannelRepo abstracts app logic that requires exposures to other repos (e.g. removing a pinned
+ * tile channel would require a reference to [PinnedTileRepo].
+ *
+ * [TileType] is used to determine which Repo is responsible to handle requested operations
+ */
 class ChannelRepo(
     private val pinnedTileRepo: PinnedTileRepo
 ) {
-    
+    fun removeChannelContent() {
+        // TODO
+    }
 }

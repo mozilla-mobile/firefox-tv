@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.default_channel.view.channelTitle
 
 class DefaultChannel(
     val channelContainer: ViewGroup,
+    private val channelRepo: ChannelRepo,
     private val adapter: DefaultChannelAdapter
 ) {
 
@@ -19,6 +20,10 @@ class DefaultChannel(
 
     fun setContents(tileData: List<ChannelTile>) {
         adapter.submitList(tileData)
+    }
+
+    fun removeContent(tileData: ChannelTile) {
+        // TODO
     }
 
     private val titleView: TextView = channelContainer.channelTitle
