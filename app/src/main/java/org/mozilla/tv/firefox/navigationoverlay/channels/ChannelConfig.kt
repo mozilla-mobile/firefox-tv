@@ -13,14 +13,16 @@ private val TELEMETRY = TelemetryIntegration.INSTANCE
  * Data object that delivers custom configuration details to new channels
  */
 data class ChannelConfig(
-        val onClickTelemetry: ((ChannelTile) -> Unit)? = null,
-        val onLongClickTelemetry: ((ChannelTile) -> Unit)? = null,
-        val onFocusTelemetry: ((ChannelTile, Boolean) -> Unit)? = null
+    val onClickTelemetry: ((ChannelTile) -> Unit)? = null,
+    val onLongClickTelemetry: ((ChannelTile) -> Unit)? = null,
+    val onFocusTelemetry: ((ChannelTile, Boolean) -> Unit)? = null
 ) {
     companion object {
         fun getPocketConfig(): ChannelConfig = ChannelConfig(
-                onClickTelemetry = {tile -> TELEMETRY.pocketVideoClickEvent(tile.id) },
-                onFocusTelemetry = { tile, focusGained -> TELEMETRY.pocketVideoImpressionEvent(tile.id) }
+                onClickTelemetry = { tile -> TELEMETRY.pocketVideoClickEvent(tile.id) },
+                // TODO focus telemetry should probably only be sent on focus gain, but this is
+                //  how our previous implementation worked. Keeping this to maintain data consistency
+                onFocusTelemetry = { tile, _ -> TELEMETRY.pocketVideoImpressionEvent(tile.id) }
         )
 
         fun getPinnedTileConfig(context: Context): ChannelConfig = ChannelConfig(
