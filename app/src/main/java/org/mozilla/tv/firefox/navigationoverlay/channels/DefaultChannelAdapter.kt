@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.navigationoverlay.channels
 
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -65,7 +66,18 @@ class DefaultChannelAdapter(
             }
 
             itemView.setOnLongClickListener {
-                onTileLongClick?.invoke(tile)
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle(tile.url)
+
+                builder.setCancelable(true)
+                builder.setPositiveButton(
+                        context.resources.getString(R.string.homescreen_tile_remove)
+                ) { dialog, _ ->
+                    _removeEvents.onNext(tile)
+                    dialog.dismiss()
+                }
+
+                builder.create().show()
 
                 true
             }
