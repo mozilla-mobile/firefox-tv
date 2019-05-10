@@ -14,6 +14,13 @@ class DefaultChannelFactory(
     private val loadUrl: (String) -> Unit,
     val onTileFocused: (() -> Unit)
 ) {
+    private val invokeLongClickAndSaveTile = { tile: ChannelTile ->
+        lastLongClickedTile = tile
+    }
+
+    var lastLongClickedTile: ChannelTile? = null
+        private set
+
     fun createChannel(context: Context, parent: ViewGroup, id: Int? = null): DefaultChannel {
         // If we ever have channels that don't support removal, add a shouldRemove param here.
         // When false, pass null instead of invokeLongClickAndSaveTile

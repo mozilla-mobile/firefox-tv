@@ -28,7 +28,6 @@ import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsButton
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsTile
 import org.mozilla.tv.firefox.navigationoverlay.channels.TileSource
-import java.lang.AssertionError
 import java.util.Collections
 
 private const val SHARED_PREFS_KEY = "telemetryLib" // Don't call it TelemetryWrapper to avoid accidental IDE rename.
