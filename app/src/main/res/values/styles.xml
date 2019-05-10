@@ -26,6 +26,14 @@
         <item name="android:fontFamily">@string/font_ember_medium</item>
     </style>
 
+    <style name="NegativeButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
     <!-- Setting this via alertDialogStyle in AppTheme results in crashes. You need to
          explicitly select this via "new AlertDialog.Builder(activity, R.style.DialogStyle)"
          We need this style because the accent colour for the MainActivity is purple,
@@ -35,6 +43,10 @@
         <item name="android:windowTitleStyle">@style/DialogTitleStyle</item>
         <item name="dialogPreferredPadding">24dp</item>
         <item name="android:fontFamily">@string/font_ember_regular</item>
+        <!-- Default Material cards/dialog background colour -->
+        <item name="android:background">#424242</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
     </style>
 
     <style name="PopupMenu" parent="@style/Widget.AppCompat.Light.PopupMenu">
