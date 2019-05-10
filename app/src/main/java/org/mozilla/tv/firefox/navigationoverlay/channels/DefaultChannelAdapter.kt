@@ -20,10 +20,8 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.dialog_channel_tiles.*
-import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
 val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ChannelTile>() {
     override fun areItemsTheSame(oldTile: ChannelTile, newTile: ChannelTile): Boolean {
@@ -40,7 +38,8 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ChannelTile>() {
 class DefaultChannelAdapter(
     private val context: Context,
     private val loadUrl: (String) -> Unit,
-    private val onTileFocused: (() -> Unit)?
+    private val onTileFocused: (() -> Unit)?,
+    private val channelConfig: ChannelConfig
 ) : ListAdapter<ChannelTile, DefaultChannelTileViewHolder>(DIFF_CALLBACK) {
 
     private val _removeEvents: Subject<ChannelTile> = BehaviorSubject.create<ChannelTile>()
@@ -70,10 +69,12 @@ class DefaultChannelAdapter(
 
             itemView.setOnClickListener {
                 loadUrl(tile.url)
-                TelemetryIntegration.INSTANCE.homeTileClickEvent(holder.itemView.context, tile)
+//                TelemetryIntegration.INSTANCE.homeTileClickEvent(holder.itemView.context, tile) // TODO move to pinnedTile channel setup
+                channelConfig.onClickTelemetry?.invoke(tile)
             }
 
             itemView.setOnLongClickListener {
+                channelConfig.onLongClickTelemetry?.invoke(tile)
                 val dialog = Dialog(context, R.style.DialogStyle)
                 dialog.setContentView(R.layout.dialog_channel_tiles)
                 dialog.window?.setDimAmount(0.85f)
@@ -109,10 +110,9 @@ class DefaultChannelAdapter(
                 titleView.setTextColor(textColor)
 
                 _focusChangeObservable.onNext(position to hasFocus)
+                channelConfig.onFocusTelemetry?.invoke(tile, hasFocus)
             }
 
-            // TODO bundled and custom tiles had different padding here!  Find out how
-            //  to replicate this
             setIconLayoutMarginParams(imageView, R.dimen.bundled_home_tile_margin_value)
         }
     }
