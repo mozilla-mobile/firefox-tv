@@ -22,6 +22,7 @@ class DefaultChannelFactory(
         private set
 
     fun createChannel(
+            // TODO move params from here into ChannelConfig where appropriate
             context: Context,
             parent: ViewGroup,
             id: Int? = null,

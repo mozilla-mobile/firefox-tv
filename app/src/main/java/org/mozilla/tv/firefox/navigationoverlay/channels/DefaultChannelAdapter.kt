@@ -69,7 +69,6 @@ class DefaultChannelAdapter(
 
             itemView.setOnClickListener {
                 loadUrl(tile.url)
-//                TelemetryIntegration.INSTANCE.homeTileClickEvent(holder.itemView.context, tile) // TODO move to pinnedTile channel setup
                 channelConfig.onClickTelemetry?.invoke(tile)
             }
 

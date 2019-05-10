@@ -45,6 +45,7 @@ import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.hint.InactiveHintViewModel
+import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelConfig
 import org.mozilla.tv.firefox.navigationoverlay.channels.DefaultChannel
 import org.mozilla.tv.firefox.navigationoverlay.channels.DefaultChannelFactory
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsChannelAdapter
@@ -195,8 +196,19 @@ class NavigationOverlayFragment : Fragment() {
         canShowUnpinToast = true
 
         defaultChannelFactory = createChannelFactory().apply {
-            pocketChannel = createChannel(context!!, view as ViewGroup, R.id.pocket_channel)
-            pinnedTileChannel = createChannel(context!!, view, R.id.pinned_tiles_channel, true)
+            pocketChannel = createChannel(
+                    context = context!!,
+                    parent = view as ViewGroup,
+                    id = R.id.pocket_channel,
+                    channelConfig = ChannelConfig.getPocketConfig()
+            )
+            pinnedTileChannel = createChannel(
+                    context = context!!,
+                    parent = view,
+                    id = R.id.pinned_tiles_channel,
+                    isPinnedTile = true,
+                    channelConfig = ChannelConfig.getPinnedTileConfig(context!!)
+            )
         }
 
         channelsContainer.addView(pocketChannel.channelContainer)
