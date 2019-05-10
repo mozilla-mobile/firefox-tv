@@ -22,11 +22,10 @@ class DefaultChannelFactory(
         private set
 
     fun createChannel(
-            // TODO move params from here into ChannelConfig where appropriate
-            context: Context,
-            parent: ViewGroup,
-            id: Int? = null,
-            channelConfig: ChannelConfig = ChannelConfig()
+        context: Context,
+        parent: ViewGroup,
+        id: Int? = null,
+        channelConfig: ChannelConfig = ChannelConfig()
     ): DefaultChannel {
         val channelAdapter = DefaultChannelAdapter(context, loadUrl, onTileFocused, channelConfig)
 
