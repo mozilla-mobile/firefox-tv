@@ -37,7 +37,6 @@ val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ChannelTile>() {
 class DefaultChannelAdapter(
     private val context: Context,
     private val loadUrl: (String) -> Unit,
-    private val onTileLongClick: ((ChannelTile) -> Unit)?,
     private val onTileFocused: (() -> Unit)?
 ) : ListAdapter<ChannelTile, DefaultChannelTileViewHolder>(DIFF_CALLBACK) {
 
