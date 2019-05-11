@@ -13,6 +13,7 @@ import android.os.Looper
 import android.preference.PreferenceManager
 import android.util.AttributeSet
 import android.view.ContextMenu
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -51,6 +52,7 @@ import org.mozilla.tv.firefox.navigationoverlay.channels.DefaultChannelFactory
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsChannelAdapter
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
 import org.mozilla.tv.firefox.pocket.PocketViewModel
+import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.ServiceLocator
@@ -223,6 +225,16 @@ class NavigationOverlayFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         compositeDisposable.clear()
+    }
+
+    fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        if ((event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
+                        event.keyCode == KeyEvent.KEYCODE_ENTER) &&
+                event.action == KeyEvent.ACTION_DOWN) {
+            MenuInteractionMonitor.selectPressed()
+        }
+
+        return false
     }
 
     private fun exitFirefox() {

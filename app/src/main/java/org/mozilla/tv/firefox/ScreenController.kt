@@ -149,20 +149,28 @@ class ScreenController(private val sessionRepo: SessionRepo) {
             MenuInteractionMonitor.menuClosed()
         }
 
+        TelemetryIntegration.INSTANCE.userShowsHidesDrawerEvent(toShow)
         transaction.commit()
     }
 
     fun dispatchKeyEvent(keyEvent: KeyEvent, fragmentManager: FragmentManager): Boolean {
+        // todo: fix menu up
         val keyMenuDown = keyEvent.keyCode == KeyEvent.KEYCODE_MENU && keyEvent.action == KeyEvent.ACTION_DOWN
         if (keyMenuDown) {
             return handleMenu(fragmentManager)
         }
 
-        val webRenderIsActive = _currentActiveScreen.value == ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
-        if (webRenderIsActive) {
-            if (fragmentManager.webRenderFragment().dispatchKeyEvent(keyEvent)) return true
+        return when (_currentActiveScreen.value) {
+            ScreenControllerStateMachine.ActiveScreen.WEB_RENDER -> {
+                fragmentManager.webRenderFragment().dispatchKeyEvent(keyEvent)
+            }
+
+            ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY -> {
+                fragmentManager.navigationOverlayFragment().dispatchKeyEvent(keyEvent)
+            }
+
+            else -> false
         }
-        return false
     }
 
     fun handleBack(fragmentManager: FragmentManager): Boolean {

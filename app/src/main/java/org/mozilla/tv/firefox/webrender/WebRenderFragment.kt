@@ -49,7 +49,6 @@ import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.InactiveHintViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
-import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.utils.URLs
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
@@ -269,16 +268,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             return handledCursorEvent?.wasKeyEventConsumed == true
         }
 
-        return handleSpecialKeyEvent(event) ||
-                handleCursorKeyEvent(event)
-    }
-
-    private fun handleSpecialKeyEvent(event: KeyEvent): Boolean {
-        val actionIsDown = event.action == KeyEvent.ACTION_DOWN
-
-        // TODO move this (into NavigationOverlayFragment?)
-        if (event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER && actionIsDown) MenuInteractionMonitor.selectPressed()
-
-        return false
+        return handleCursorKeyEvent(event)
     }
 }
