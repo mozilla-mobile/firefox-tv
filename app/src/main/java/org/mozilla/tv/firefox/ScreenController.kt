@@ -158,11 +158,14 @@ class ScreenController(private val sessionRepo: SessionRepo) {
             return handleMenu(fragmentManager)
         }
 
-        val webRenderIsActive = _currentActiveScreen.value == ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
-        if (webRenderIsActive) {
-            if (fragmentManager.webRenderFragment().dispatchKeyEvent(keyEvent)) return true
+        return when (_currentActiveScreen.value) {
+            ScreenControllerStateMachine.ActiveScreen.WEB_RENDER ->
+                fragmentManager.webRenderFragment().dispatchKeyEvent(keyEvent)
+            ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY ->
+                fragmentManager.navigationOverlayFragment().dispatchKeyEvent(keyEvent)
+
+            else -> false
         }
-        return false
     }
 
     fun handleBack(fragmentManager: FragmentManager): Boolean {
