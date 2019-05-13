@@ -15,6 +15,7 @@ import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
+import org.mozilla.tv.firefox.ext.isKeyCodeSelect
 import org.mozilla.tv.firefox.ext.isUriYouTubeTV
 import org.mozilla.tv.firefox.ext.toDirection
 import org.mozilla.tv.firefox.framework.FrameworkRepo
@@ -145,8 +146,7 @@ class CursorModel(
     @CheckResult(suggest = "Recycle any MotionEvents after use") // via handleSelectKeyEvent.
     fun handleKeyEvent(event: KeyEvent): HandleKeyEventResult {
         return when {
-            // Center key is used on device, Enter key is used on emulator
-            event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER -> handleSelectKeyEvent(event)
+            event.isKeyCodeSelect -> handleSelectKeyEvent(event)
             Direction.KEY_CODES.contains(event.keyCode) -> handleDirectionKeyEvent(event)
             else -> HandleKeyEventResult(wasKeyEventConsumed = false, simulatedTouch = null)
         }
@@ -202,7 +202,7 @@ class CursorModel(
             return getResult(null)
         }
 
-        require(event.keyCode == KeyEvent.KEYCODE_DPAD_CENTER || event.keyCode == KeyEvent.KEYCODE_ENTER) {
+        require(event.isKeyCodeSelect) {
             "Expected DPAD_CENTER or ENTER. Instead: $event"
         }
 
