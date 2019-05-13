@@ -178,6 +178,11 @@ class ScreenController(private val sessionRepo: SessionRepo) {
 
     fun handleMenu(fragmentManager: FragmentManager): Boolean {
         val transition = ScreenControllerStateMachine.getNewStateMenuPress(_currentActiveScreen.value!!, isOnHomeUrl())
+
+        if (transition == Transition.ADD_OVERLAY) {
+            TelemetryIntegration.INSTANCE.menuOpenedFromMenuButton()
+        }
+
         return handleTransitionAndUpdateActiveScreen(fragmentManager, transition)
     }
 
