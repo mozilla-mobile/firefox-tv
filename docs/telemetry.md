@@ -72,9 +72,9 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 | Tile clicked                           | action   | click                 | home_tile    | bundled/custom/youtube** | tile_id***    |
 | Tile removed                           | action   | remove                | home_tile    | bundled/custom           |               |
 | Unique tiles clicked per session       | aggregate| click                 | home_tile    | `<int>`                  |               |
-| Menu shown by user                     | action   | user_show             | menu         |                          |               |
-| Menu hidden by user                    | action   | user_hide             | menu         |                          |               |
-| No menu action taken                   | aggregate| no_action_taken       | menu         |                          |               |
+| Menu opened by menu key †              | action   | user_show             | menu         |                          |               |
+| ~~Menu hidden by user~~ †              |~~action~~| ~~user_hide~~         | ~~menu~~     |                          |               |
+| No menu action taken ††                | aggregate| no_action_taken       | menu         |                          |               |
 | Exit Firefox clicked                   | action   | click                 | menu         | exit                     |               |
 
 (*)When the pin site switch is clicked, the state (on/off) of the desktop mode switch is also sent.
@@ -83,6 +83,13 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 This value existed from v3.2 to v3.8. For versions after v3.8, the tile_id is included as an extra, not as a value.
 
 (***)The tile_id is only collected for bundled tiles.
+
+(†) This probe was broken starting in the v3.6 release. It was fixed in the v3.9 release. At this time, it was determined
+the "No menu action taken" probe was redundant to the "Menu hidden by user" probe so the latter was removed. This probe
+does not count if the overlay is opened by the user pressing "back" through their history stack.
+
+(††) This probe was broken in an unknown release; it was fixed in v3.9. This probe does not count if the users exit the
+overlay (without taking an action) _and the app_ by pressing the back button when the overlay is opened.
 
 ### Browsing
 
