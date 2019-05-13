@@ -229,8 +229,9 @@ class NavigationOverlayFragment : Fragment() {
     }
 
     fun dispatchKeyEvent(event: KeyEvent): Boolean {
-        // This broke, which went unnoticed for several releases, when it was refactored into a different Fragment:
-        // it might be safer to model this reactively, in our architecture, which abstracts away such framework constructs.
+        // MenuInteractionMonitor broke, which went unnoticed for several releases, when the overlay was refactored into
+        // a different Fragment: it might be safer to model this reactively, in our architecture, which abstracts away
+        // such framework constructs.
         if (event.isKeyCodeSelect && event.action == KeyEvent.ACTION_DOWN) {
             MenuInteractionMonitor.selectPressed()
         }
