@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.navigationoverlay.channels
 
+import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -11,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
+import kotlinx.android.synthetic.main.dialog_channel_tiles.*
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
@@ -65,21 +66,24 @@ class DefaultChannelAdapter(
             }
 
             itemView.setOnLongClickListener {
-                val builder = AlertDialog.Builder(context, R.style.DialogStyle)
+                val dialog = Dialog(context, R.style.DialogStyle)
+                dialog.setContentView(R.layout.dialog_channel_tiles)
+                dialog.window?.setDimAmount(0.85f)
 
                 val removeStr = context.resources.getString(R.string.homescreen_tile_remove)
+                val title = removeStr + " " + tile.title + " from Pinned sites?" // FIXME: needs string
 
-                // FIXME: We need to localize this, but are waiting until we hear back from UX
-                val title = removeStr + " " + tile.title + "?"
-                builder.setTitle(title)
-
-                builder.setCancelable(true)
-                builder.setPositiveButton(removeStr) { dialog, _ ->
+                dialog.titleText.text = title
+                dialog.removeTileButton.setOnClickListener {
                     _removeEvents.onNext(tile)
                     dialog.dismiss()
                 }
 
-                builder.create().show()
+                dialog.cancelButton.setOnClickListener {
+                    dialog.dismiss()
+                }
+
+                dialog.show()
 
                 true
             }
