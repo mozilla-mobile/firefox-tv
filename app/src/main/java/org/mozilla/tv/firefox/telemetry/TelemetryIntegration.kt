@@ -64,7 +64,6 @@ open class TelemetryIntegration protected constructor(
         val FOREGROUND = "foreground"
         val BACKGROUND = "background"
         val USER_SHOW = "user_show"
-        val USER_HIDE = "user_hide"
         val PAGE = "page"
         val RESOURCE = "resource"
         val REMOVE = "remove"
@@ -289,19 +288,13 @@ open class TelemetryIntegration protected constructor(
         }
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.SETTING, telemetryValue).queue()
     }
+
     /**
-     * Should only be used when a user action directly results in this change.
-     *
-     * Example:
-     *
-     * User hits the 'open menu' button -> send event
-     * User selects a tile (implicitly hiding the overlay) -> do not send event
-     *
-     * @param isOpening true if the drawer is opening, close otherwise.
+     * User presses menu button to open overlay (i.e. if menu closes overlay, this isn't counted).
      */
-    fun userShowsHidesDrawerEvent(isOpening: Boolean) {
-        val method = if (isOpening) Method.USER_SHOW else Method.USER_HIDE
-        TelemetryEvent.create(Category.ACTION, method, Object.MENU).queue()
+    fun menuOpenedFromMenuButton() {
+        // Note: Method.USER_HIDE is no longer used and replaced by NO_ACTION_TAKEN (see telemetry docs).
+        TelemetryEvent.create(Category.ACTION, Method.USER_SHOW, Object.MENU).queue()
     }
 
     /**
