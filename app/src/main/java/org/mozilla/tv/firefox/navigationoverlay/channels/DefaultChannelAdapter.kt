@@ -70,10 +70,7 @@ class DefaultChannelAdapter(
                 dialog.setContentView(R.layout.dialog_channel_tiles)
                 dialog.window?.setDimAmount(0.85f)
 
-                val removeStr = context.resources.getString(R.string.homescreen_tile_remove)
-                val title = removeStr + " " + tile.title + " from Pinned sites?" // FIXME: needs string
-
-                dialog.titleText.text = title
+                dialog.titleText.text = tile.generateRemoveTileTitleStr(context)
                 dialog.removeTileButton.setOnClickListener {
                     _removeEvents.onNext(tile)
                     dialog.dismiss()
