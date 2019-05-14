@@ -30,12 +30,10 @@ data class ChannelTile(
      * See usage in [DefaultChannelAdapter.onBindViewHolder]
      */
     fun generateRemoveTileTitleStr(context: Context): String {
-        val removeStr = context.resources.getString(R.string.homescreen_tile_remove)
-        val typeStr = when (tileSource) {
-            TileSource.BUNDLED, TileSource.CUSTOM -> context.resources.getString(R.string.pinned_tile_channel_title)
+        when (tileSource) {
+            TileSource.BUNDLED, TileSource.CUSTOM ->
+                return context.resources.getString(R.string.pinned_tiles_channel_remove_title, title)
         }
-
-        return "$removeStr $title from $typeStr?" // FIXME: needs strings?
     }
 
     companion object {

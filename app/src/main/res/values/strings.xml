@@ -134,6 +134,10 @@
     <string name="homescreen_unpin_tutorial_toast">Press and hold SELECT to unpin from homescreen</string>
     <string name="homescreen_tile_remove">Remove</string>
 
+    <!-- The title of channel remove modal.
+    %1$s will be replaced by the title of tiles (website titles or url). -->
+    <string name="pinned_tiles_channel_remove_title">Remove %1$s from Pinned sites</string>
+
     <!-- Title text displayed above the pinned tile channel. Pinned tiles are a collection of links
     to commonly used sites (bundled with the app), as well as custom pinnned ones (added by the user)
     See https://github.com/mozilla-mobile/firefox-tv/issues/1630 for channel mocks -->
