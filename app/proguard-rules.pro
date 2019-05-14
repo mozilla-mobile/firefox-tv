@@ -40,7 +40,7 @@
 -dontwarn android.webkit.WebBackForwardListClient
 
 # TODO: remove in https://github.com/mozilla-mobile/firefox-tv/issues/2153
--dontwarn kotlinx.atomicfu.AtomicFU
+-dontwarn kotlinx.atomicfu.*
 
 ####################################################################################################
 # Android architecture components
