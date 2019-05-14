@@ -25,6 +25,19 @@ data class ChannelTile(
     val tileSource: TileSource,
     val id: String
 ) {
+    /**
+     * Generate localized modal title. Check against [tileSource] for channel type
+     * See usage in [DefaultChannelAdapter.onBindViewHolder]
+     */
+    fun generateRemoveTileTitleStr(context: Context): String {
+        val removeStr = context.resources.getString(R.string.homescreen_tile_remove)
+        val typeStr = when (tileSource) {
+            TileSource.BUNDLED, TileSource.CUSTOM -> context.resources.getString(R.string.pinned_tile_channel_title)
+        }
+
+        return "$removeStr $title from $typeStr?" // FIXME: needs strings?
+    }
+
     companion object {
         /**
          * Set the horizontal margins on the given view.
