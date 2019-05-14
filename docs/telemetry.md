@@ -5,12 +5,6 @@ For clients that have "send anonymous usage data" enabled Firefox for Fire TV se
 
 Firefox for Fire TV creates and tries to send a "baseline" ping when the app goes to the background. This baseline ping is defined by the [Glean](https://github.com/mozilla-mobile/android-components/tree/master/components/service/glean) component and [documented in the Android Components repository](https://github.com/mozilla-mobile/android-components/blob/master/components/service/glean/docs/baseline.md).
 
-## Events
-
-| Event     | Glean Key | Leanplum Key | extras |
-|-----------|-----------|--------------|--------|
-| OpenedApp |           | E_Opened_App |        |
-
 # Core ping
 
 Firefox for Fire TV creates and tries to send a "core" ping whenever the app goes to the background. This core ping uses the same format as Firefox for Android and is [documented on firefox-source-docs.mozilla.org](https://firefox-source-docs.mozilla.org/toolkit/components/telemetry/telemetry/data/core-ping.html).
