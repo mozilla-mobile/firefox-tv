@@ -218,8 +218,10 @@ class FocusRepo(
         return State(
             focusNode = FocusNode(
                 focusedNavUrlInputNode.viewId,
-                nextFocusUpId,
-                nextFocusDownId),
+                nextFocusUpId = nextFocusUpId,
+                nextFocusDownId = nextFocusDownId,
+                nextFocusLeftId = R.id.navUrlInput,
+                nextFocusRightId = R.id.navUrlInput),
             focused = focused)
     }
 
