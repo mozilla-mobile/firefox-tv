@@ -143,6 +143,9 @@
     See https://github.com/mozilla-mobile/firefox-tv/issues/1630 for channel mocks -->
     <string name="pinned_tile_channel_title">Pinned Tiles</string>
     <string name="pin_label">Pin to homescreen</string>
+    <!-- Label shown underneath Pin icon in toolbar when a site is already pinned, to hint to users that
+         they can unpin the site to remove it-->
+    <string name="unpin_label">Unpin from homescreen</string>
     <string name="notification_pinned_site">Pinned to Firefox TV homescreen</string>
     <string name="notification_unpinned_site">Removed from Firefox TV homescreen</string>
 
