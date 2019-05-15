@@ -61,7 +61,6 @@ import java.util.concurrent.TimeUnit
 private const val SHOW_UNPIN_TOAST_COUNTER_PREF = "show_upin_toast_counter"
 private const val MAX_UNPIN_TOAST_COUNT = 3
 
-private const val COL_COUNT = 5
 private val uiHandler = Handler(Looper.getMainLooper())
 
 enum class NavigationEvent {
@@ -133,9 +132,6 @@ class NavigationOverlayFragment : Fragment() {
     private lateinit var pocketChannel: DefaultChannel
 
     private var rootView: View? = null
-
-    @Deprecated(message = "VM state should be used reactively, not imperatively. See #1395, which will fix this")
-    private var lastPocketState: PocketViewModel.State? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
