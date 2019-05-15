@@ -68,7 +68,10 @@ open class FirefoxApplication : LocaleAwareApplication() {
         }
     }
 
-    private fun initGlean() {
+    // This method is used to call Glean.setUploadEnabled. During the tests, this is
+    // overridden to disable ping upload.
+    @VisibleForTesting
+    protected open fun setGleanUpload() {
         serviceLocator.settingsRepo.dataCollectionEnabled.observeForever { collectionEnabled ->
             if (collectionEnabled != null) {
                 // This needs to be called before Glean.initialize, or we risk 1) not
@@ -77,6 +80,10 @@ open class FirefoxApplication : LocaleAwareApplication() {
                 Glean.setUploadEnabled(collectionEnabled)
             }
         }
+    }
+
+    private fun initGlean() {
+        setGleanUpload()
         Glean.initialize(applicationContext)
     }
 

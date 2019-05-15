@@ -4,6 +4,9 @@
 
 package org.mozilla.tv.firefox
 
+import mozilla.components.service.glean.Glean
+import androidx.work.testing.WorkManagerTestInitHelper
+
 /**
  * The application class used by the robolectric test runner. This class may be used to add
  * additional test setup code.
@@ -17,4 +20,12 @@ class TestFirefoxApplication : FirefoxApplication() {
      */
     override fun getSystemUserAgent(): String =
             "Mozilla/5.0 (Linux; Android 7.1.2) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Focus/2.2.0.2 Chrome/59.0.3071.125 Mobile Safari/537.36"
+
+    /**
+     * This is used to disable ping upload when running tests.
+     */
+    override fun setGleanUpload() {
+        WorkManagerTestInitHelper.initializeTestWorkManager(applicationContext)
+        Glean.setUploadEnabled(false)
+    }
 }
