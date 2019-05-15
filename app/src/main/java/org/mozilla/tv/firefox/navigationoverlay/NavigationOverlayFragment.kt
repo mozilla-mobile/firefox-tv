@@ -18,6 +18,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.Toast
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.NONE
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -225,12 +227,15 @@ class NavigationOverlayFragment : Fragment() {
         compositeDisposable.clear()
     }
 
-    fun dispatchKeyEvent(event: KeyEvent): Boolean {
+    fun dispatchKeyEvent(
+        event: KeyEvent,
+        @VisibleForTesting(otherwise = NONE) menuInteractionMonitor: MenuInteractionMonitor = MenuInteractionMonitor
+    ): Boolean {
         // MenuInteractionMonitor broke, which went unnoticed for several releases, when the overlay was refactored into
         // a different Fragment: it might be safer to model this reactively, in our architecture, which abstracts away
         // such framework constructs.
         if (event.isKeyCodeSelect && event.action == KeyEvent.ACTION_DOWN) {
-            MenuInteractionMonitor.selectPressed()
+            menuInteractionMonitor.selectPressed()
         }
 
         return false
