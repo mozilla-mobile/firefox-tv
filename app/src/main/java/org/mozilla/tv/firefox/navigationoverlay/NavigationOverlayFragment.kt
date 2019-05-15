@@ -206,7 +206,6 @@ class NavigationOverlayFragment : Fragment() {
                     context = context!!,
                     parent = view,
                     id = R.id.pinned_tiles_channel,
-                    isPinnedTile = true,
                     channelConfig = ChannelConfig.getPinnedTileConfig(context!!)
             )
         }
