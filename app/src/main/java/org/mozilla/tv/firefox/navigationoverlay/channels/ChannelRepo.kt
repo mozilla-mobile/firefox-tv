@@ -22,6 +22,7 @@ class ChannelRepo(
                 TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileData)
                 pinnedTileRepo.removePinnedTile(tileData.url)
             }
+            TileSource.POCKET -> throw NotImplementedError("pocket shouldn't be able to remove tiles")
         }
     }
 }
