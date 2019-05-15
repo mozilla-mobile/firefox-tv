@@ -32,9 +32,10 @@ data class ChannelTile(
      * See usage in [DefaultChannelAdapter.onBindViewHolder]
      */
     fun generateRemoveTileTitleStr(context: Context): String {
-        when (tileSource) {
+        return when (tileSource) {
             TileSource.BUNDLED, TileSource.CUSTOM ->
-                return context.resources.getString(R.string.pinned_tiles_channel_remove_title, title)
+                context.resources.getString(R.string.pinned_tiles_channel_remove_title, title)
+            TileSource.POCKET -> throw NotImplementedError("pocket shouldn't be able to remove tiles")
         }
     }
 
