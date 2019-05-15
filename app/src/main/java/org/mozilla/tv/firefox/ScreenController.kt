@@ -7,6 +7,8 @@ package org.mozilla.tv.firefox
 import android.content.Context
 import android.text.TextUtils
 import android.view.KeyEvent
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.NONE
 import androidx.fragment.app.FragmentManager
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -151,13 +153,19 @@ class ScreenController(private val sessionRepo: SessionRepo) {
         transaction.commit()
     }
 
-    fun dispatchKeyEvent(keyEvent: KeyEvent, fragmentManager: FragmentManager): Boolean {
-        val keyMenuDown = keyEvent.keyCode == KeyEvent.KEYCODE_MENU && keyEvent.action == KeyEvent.ACTION_DOWN
-        if (keyMenuDown) {
-            return handleMenu(fragmentManager)
+    fun dispatchKeyEvent(
+        keyEvent: KeyEvent,
+        fragmentManager: FragmentManager,
+        @VisibleForTesting(otherwise = NONE) currentActiveScreen: ActiveScreen? = _currentActiveScreen.value
+    ): Boolean {
+        if (keyEvent.keyCode == KeyEvent.KEYCODE_MENU) {
+            return when (keyEvent.action) {
+                KeyEvent.ACTION_DOWN -> handleMenu(fragmentManager)
+                else -> true // We swallow ACTION_UP to only handle the key event once.
+            }
         }
 
-        return when (_currentActiveScreen.value) {
+        return when (currentActiveScreen) {
             ScreenControllerStateMachine.ActiveScreen.WEB_RENDER ->
                 fragmentManager.webRenderFragment().dispatchKeyEvent(keyEvent)
             ScreenControllerStateMachine.ActiveScreen.NAVIGATION_OVERLAY ->
