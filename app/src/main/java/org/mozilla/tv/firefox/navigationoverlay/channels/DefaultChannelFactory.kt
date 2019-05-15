@@ -14,12 +14,6 @@ class DefaultChannelFactory(
     private val loadUrl: (String) -> Unit,
     val onTileFocused: (() -> Unit)
 ) {
-    private val invokeLongClickAndSaveTile = { tile: ChannelTile ->
-        lastLongClickedTile = tile
-    }
-
-    var lastLongClickedTile: ChannelTile? = null
-        private set
 
     fun createChannel(
         context: Context,
