@@ -52,8 +52,10 @@
   <string name="turbo_mode_image_a11y">Exemplo de modo turbo ativado</string>
   <string name="homescreen_unpin_tutorial_toast">Pressione e segure o SELECT para desafixar da tela inicial</string>
   <string name="homescreen_tile_remove">Remover</string>
+  <string name="pinned_tiles_channel_remove_title">Remover %1$s de sites fixados</string>
   <string name="pinned_tile_channel_title">Quadros fixados</string>
   <string name="pin_label">Fixar na tela inicial</string>
+  <string name="unpin_label">Desafixar da tela inicial</string>
   <string name="notification_pinned_site">Fixado à tela inicial do Firefox TV</string>
   <string name="notification_unpinned_site">Removido da tela inicial do Firefox TV</string>
   <string name="pocket_home_tutorial_title">Apresentação de vídeos recomendados pelo %1$s</string>

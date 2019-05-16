@@ -50,11 +50,13 @@
   <string name="button_turbo_mode_keep_enabled2">Mantieni modalità turbo</string>
   <string name="button_turbo_mode_turn_off2">Disattiva modalità turbo</string>
   <string name="turbo_mode_image_a11y">Esempio con la modalità turbo attiva</string>
-  <string name="homescreen_unpin_tutorial_toast">Per sbloccare un elemento nella pagina principale tieni premuto SELECT</string>
+  <string name="homescreen_unpin_tutorial_toast">Per rilasciare un elemento nella pagina principale tieni premuto SELECT</string>
   <string name="homescreen_tile_remove">Rimuovi</string>
-  <string name="pinned_tile_channel_title">Elementi fissati</string>
-  <string name="pin_label">Fissa alla schermata principale</string>
-  <string name="notification_pinned_site">Fissato alla schermata principale di Firefox TV</string>
+  <string name="pinned_tiles_channel_remove_title">Rimuovi %1$s dai siti appuntati</string>
+  <string name="pinned_tile_channel_title">Elementi appuntati</string>
+  <string name="pin_label">Appunta alla schermata principale</string>
+  <string name="unpin_label">Rilascia dalla schermata principale</string>
+  <string name="notification_pinned_site">Appuntato alla schermata principale di Firefox TV</string>
   <string name="notification_unpinned_site">Rimosso dalla schermata principale di Firefox TV</string>
   <string name="pocket_home_tutorial_title">Ti presentiamo i video consigliati da %1$s</string>
   <string name="pocket_home_tutorial_description">I video più interessanti del Web. Consigliati da %1$s, ora parte integrante di Mozilla.</string>
