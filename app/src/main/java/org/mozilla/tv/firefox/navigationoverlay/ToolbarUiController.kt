@@ -142,6 +142,12 @@ class ToolbarUiController(
             updateOverlayButtonState(it.desktopModeEnabled, layout.desktopModeButton)
 
             layout.pinButton.isChecked = it.pinChecked
+            layout.pinButton.contentDescription =
+                if (it.pinChecked)
+                    context.resources.getString(R.string.unpin_label)
+                else
+                    context.resources.getString(R.string.pin_label)
+
             layout.desktopModeButton.isChecked = it.desktopModeChecked
             layout.turboButton.isChecked = it.turboChecked
 
