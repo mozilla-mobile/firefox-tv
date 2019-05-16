@@ -52,8 +52,10 @@
   <string name="turbo_mode_image_a11y">加速模式启用范例</string>
   <string name="homescreen_unpin_tutorial_toast">长按 SELECT 键从主屏幕取消固定</string>
   <string name="homescreen_tile_remove">移除</string>
+  <string name="pinned_tiles_channel_remove_title">从已固定网站中删除 %1$s</string>
   <string name="pinned_tile_channel_title">已固定的磁贴</string>
   <string name="pin_label">固定到主屏幕</string>
+  <string name="unpin_label">取消固定到主屏幕</string>
   <string name="notification_pinned_site">已固定到 Firefox TV 主屏幕</string>
   <string name="notification_unpinned_site">已从 Firefox TV 主屏幕移除</string>
   <string name="pocket_home_tutorial_title">介绍由“%1$s”推荐的视频</string>
