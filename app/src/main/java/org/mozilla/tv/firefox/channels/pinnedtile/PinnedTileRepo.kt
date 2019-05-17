@@ -4,7 +4,6 @@
 
 package org.mozilla.tv.firefox.channels.pinnedtile
 
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
@@ -30,7 +29,7 @@ private const val PREF_HOME_TILES = "homeTiles"
  * @constructor loads the initial [_pinnedTiles] (a combination of custom and bundled tiles)
  */
 class PinnedTileRepo(
-    private val applicationContext: Application,
+    private val applicationContext: Context,
     private val bundleTilesStore: BundleTilesStore
 ) {
     private val _pinnedTiles: BehaviorSubject<LinkedHashMap<String, PinnedTile>> =

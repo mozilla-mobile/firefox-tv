@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.channels.pinnedtile
 
+import android.content.Context
 import androidx.lifecycle.Observer
 import androidx.test.core.app.ApplicationProvider
 import org.junit.Assert.assertEquals
@@ -15,6 +16,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.spy
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
+import org.mozilla.tv.firefox.channels.BundleTilesStore
 import org.robolectric.RobolectricTestRunner
 import java.util.UUID
 
@@ -47,7 +49,8 @@ class PinnedTileRepoTest {
 
     @Before
     fun setUp() {
-        pinnedTileRepo = PinnedTileRepo(ApplicationProvider.getApplicationContext())
+        val appContext: Context = ApplicationProvider.getApplicationContext()
+        pinnedTileRepo = PinnedTileRepo(appContext, BundleTilesStore(appContext))
     }
 
     @Test

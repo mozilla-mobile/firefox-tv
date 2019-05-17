@@ -4,7 +4,6 @@
 
 package org.mozilla.tv.firefox.channels
 
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import org.json.JSONArray
@@ -25,7 +24,7 @@ enum class BundleType {
  * [BundleTilesStore] is responsible for fetching bundled tiles data from /assets/ with
  * [BundleType]
  */
-class BundleTilesStore(private val applicationContext: Application) {
+class BundleTilesStore(private val applicationContext: Context) {
 
     private val _sharedPreferences: SharedPreferences = applicationContext.getSharedPreferences(PREF_BUNDLE_TILES, Context.MODE_PRIVATE)
 
