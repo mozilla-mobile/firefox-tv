@@ -10,6 +10,7 @@ import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ValidatedIntentData
 import org.mozilla.tv.firefox.architecture.ViewModelFactory
+import org.mozilla.tv.firefox.channels.BundleTilesStore
 import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.experiments.ExperimentsProvider
 import org.mozilla.tv.firefox.experiments.FretboardProvider
@@ -67,6 +68,7 @@ open class ServiceLocator(val app: Application) {
     private val buildConfigDerivables get() = BuildConfigDerivables(getIsEnglishLocale)
     private val pocketFeedStateMachine get() = PocketFeedStateMachine()
     private val getIsEnglishLocale = { LocaleManager.getInstance().currentLanguageIsEnglish(app) }
+    private val bundleTileStore by lazy { BundleTilesStore(app) }
 
     val intentLiveData by lazy { MutableLiveData<Consumable<ValidatedIntentData?>>() }
     val fretboardProvider: FretboardProvider by lazy { FretboardProvider(app) }
@@ -86,7 +88,7 @@ open class ServiceLocator(val app: Application) {
     val channelRepo by lazy { ChannelRepo(pinnedTileRepo) }
 
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())
-    open val pinnedTileRepo by lazy { PinnedTileRepo(app) }
+    open val pinnedTileRepo by lazy { PinnedTileRepo(app, bundleTileStore) }
     open val pocketRepo = PocketVideoRepo(pocketEndpoint, pocketFeedStateMachine, buildConfigDerivables.initialPocketRepoState)
     open val sessionRepo by lazy { SessionRepo(sessionManager, sessionUseCases, turboMode).apply { observeSources() } }
     open val settingsRepo by lazy { SettingsRepo(app) }
