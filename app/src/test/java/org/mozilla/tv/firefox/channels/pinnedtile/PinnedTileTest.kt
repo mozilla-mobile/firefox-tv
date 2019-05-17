@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.channels.pinnedtile
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
@@ -20,6 +21,7 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mozilla.tv.firefox.channels.BundleTilesStore
 import org.mozilla.tv.firefox.focus.FocusRepo
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayViewModel
 import org.mozilla.tv.firefox.channels.ChannelDetails
@@ -63,7 +65,8 @@ class PinnedTileTest {
         every { pinnedTileImageUtilWrapper.generatePinnedTilePlaceholder(any()) } answers { drawable }
         every { formattedDomainWrapper.format(any(), any(), any()) } answers { "" }
 
-        pinnedTileRepo = PinnedTileRepo(ApplicationProvider.getApplicationContext())
+        val appContext: Context = ApplicationProvider.getApplicationContext()
+        pinnedTileRepo = PinnedTileRepo(appContext, BundleTilesStore(appContext))
         overlayVm = NavigationOverlayViewModel(
                 sessionRepo,
                 focusRepo,
