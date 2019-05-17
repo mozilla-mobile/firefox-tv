@@ -9,6 +9,10 @@ import android.widget.TextView
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.default_channel.view.channelTitle
 
+/**
+ * A data container representing a standard channel on the homescreen. This class references a Context and must
+ * be nulled when its lifecycle ends.
+ */
 class DefaultChannel(
     val channelContainer: ViewGroup,
     val focusChangeObservable: Observable<Pair<Int, Boolean>>,

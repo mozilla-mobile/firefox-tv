@@ -26,8 +26,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.withLatestFrom
-import kotlinx.android.synthetic.main.default_channel.view.channelBelowText1
-import kotlinx.android.synthetic.main.default_channel.view.channelBelowText2
+import kotlinx.android.synthetic.main.default_channel.view.*
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.channelsContainer
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.navUrlInput
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.settingsTileContainer
@@ -98,8 +97,6 @@ class NavigationOverlayFragment : Fragment() {
     // instantiation of the BrowserNavigationOverlay
     private var canShowUnpinToast: Boolean = false
 
-    private var defaultChannelFactory: DefaultChannelFactory? = null
-
     private val onNavigationEvent = { event: NavigationEvent, value: String?,
                                       autocompleteResult: InlineAutocompleteEditText.AutocompleteResult? ->
         when (event) {
@@ -128,8 +125,10 @@ class NavigationOverlayFragment : Fragment() {
     private lateinit var toolbarViewModel: ToolbarViewModel
     private lateinit var pocketViewModel: PocketViewModel
     private lateinit var hintViewModel: HintViewModel
-    private lateinit var pinnedTileChannel: DefaultChannel
-    private lateinit var pocketChannel: DefaultChannel
+
+    private var channelReferenceContainer: ChannelReferenceContainer? = null // references a Context, must be nulled.
+    private val pinnedTileChannel: DefaultChannel get() = channelReferenceContainer!!.pinnedTileChannel
+    private val pocketChannel: DefaultChannel get() = channelReferenceContainer!!.pocketChannel
 
     private var rootView: View? = null
 
@@ -189,23 +188,10 @@ class NavigationOverlayFragment : Fragment() {
         registerForContextMenu(channelsContainer)
         canShowUnpinToast = true
 
-        defaultChannelFactory = createChannelFactory().apply {
-            pocketChannel = createChannel(
-                    context = context!!,
-                    parent = view as ViewGroup,
-                    id = R.id.pocket_channel,
-                    channelConfig = ChannelConfig.getPocketConfig()
-            )
-            pinnedTileChannel = createChannel(
-                    context = context!!,
-                    parent = view,
-                    id = R.id.pinned_tiles_channel,
-                    channelConfig = ChannelConfig.getPinnedTileConfig(context!!)
-            )
+        channelReferenceContainer = ChannelReferenceContainer(channelsContainer, createChannelFactory()).also {
+            channelsContainer.addView(it.pocketChannel.channelContainer)
+            channelsContainer.addView(it.pinnedTileChannel.channelContainer)
         }
-
-        channelsContainer.addView(pocketChannel.channelContainer)
-        channelsContainer.addView(pinnedTileChannel.channelContainer)
     }
 
     override fun onStart() {
@@ -428,7 +414,7 @@ class NavigationOverlayFragment : Fragment() {
         // there's no good way to pass in the uiLifecycleJob. We could consider other solutions
         // but it'll add complexity that I don't think is probably worth it.
         uiLifecycleCancelJob.cancel()
-        defaultChannelFactory = null
+        channelReferenceContainer = null
     }
 }
 
@@ -457,4 +443,29 @@ class BrowserNavigationOverlayScrollView(
         val deltaScrollForOnScreen = super.computeScrollDeltaToGetChildRectOnScreen(rect)
         return deltaScrollForOnScreen + deltaScrollPadding * Integer.signum(deltaScrollForOnScreen)
     }
+}
+
+/**
+ * A data container for references to home channels. This object references a Context: it must be nulled when its
+ * lifecycle ends.
+ *
+ * This class exists to group together all of the [DefaultChannel]s - which reference a [Context] - so that we can
+ * null all of them in one statement and not need to remember to null references to newly added [DefaultChannel]s.
+ */
+private class ChannelReferenceContainer(
+    channelContainerView: ViewGroup,
+    channelFactory: DefaultChannelFactory
+) {
+
+    val pocketChannel = channelFactory.createChannel(
+        parent = channelContainerView,
+        id = R.id.pocket_channel,
+        channelConfig = ChannelConfig.getPocketConfig()
+    )
+
+    val pinnedTileChannel = channelFactory.createChannel(
+        parent = channelContainerView,
+        id = R.id.pinned_tiles_channel,
+        channelConfig = ChannelConfig.getPinnedTileConfig(channelContainerView.context)
+    )
 }
