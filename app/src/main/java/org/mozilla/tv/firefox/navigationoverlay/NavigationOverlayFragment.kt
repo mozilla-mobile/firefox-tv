@@ -319,7 +319,7 @@ class NavigationOverlayFragment : Fragment() {
      */
     private fun observePocketDescriptions(): Disposable = pocketChannel.focusChangeObservable
             .filter { (_, focusGained) -> focusGained }
-            .map { (id, _) -> id }
+            .map { (index, _) -> index }
             .withLatestFrom(pocketViewModel.state)
             .subscribe { (index, pocketState) ->
                 val data = pocketState as? PocketViewModel.State.Feed ?: return@subscribe
