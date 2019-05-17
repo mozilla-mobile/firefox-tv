@@ -8,8 +8,6 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveDataReactiveStreams
@@ -17,14 +15,14 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import org.json.JSONArray
+import org.mozilla.tv.firefox.channels.BundleType
+import org.mozilla.tv.firefox.channels.BundleTilesStore
 import java.util.UUID
 import java.util.Collections
 
 private const val BUNDLED_SITES_ID_BLACKLIST = "blacklist"
 private const val CUSTOM_SITES_LIST = "customSitesList"
 private const val PREF_HOME_TILES = "homeTiles"
-private const val BUNDLED_HOME_TILES_DIR = "bundled"
-private const val HOME_TILES_JSON_PATH = "$BUNDLED_HOME_TILES_DIR/bundled_tiles.json"
 
 /**
  * Pinned Tile Repository.
@@ -33,7 +31,10 @@ private const val HOME_TILES_JSON_PATH = "$BUNDLED_HOME_TILES_DIR/bundled_tiles.
  * @property applicationContext used to access [SharedPreferences] and [assets] for bundled tiles
  * @constructor loads the initial [_pinnedTiles] (a combination of custom and bundled tiles)
  */
-class PinnedTileRepo(private val applicationContext: Application) {
+class PinnedTileRepo(
+    private val applicationContext: Application,
+    private val bundleTilesStore: BundleTilesStore
+) {
     private val _pinnedTiles: BehaviorSubject<LinkedHashMap<String, PinnedTile>> =
             BehaviorSubject.create()
     val pinnedTiles: Observable<LinkedHashMap<String, PinnedTile>> = _pinnedTiles.hide()
@@ -134,8 +135,7 @@ class PinnedTileRepo(private val applicationContext: Application) {
     }
 
     private fun loadBundledTilesCache(): LinkedHashMap<String, BundledPinnedTile> {
-        val tilesJSONString = applicationContext.assets.open(HOME_TILES_JSON_PATH).bufferedReader().use { it.readText() }
-        val tilesJSONArray = JSONArray(tilesJSONString)
+        val tilesJSONArray = bundleTilesStore.getBundledTiles(BundleType.PINNED_TILES)
         val lhm = LinkedHashMap<String, BundledPinnedTile>(tilesJSONArray.length())
         val blacklist = loadBlacklist()
         for (i in 0 until tilesJSONArray.length()) {
@@ -160,11 +160,5 @@ class PinnedTileRepo(private val applicationContext: Application) {
         customTilesSize = lhm.size
 
         return lhm
-    }
-
-    @AnyThread
-    fun loadImageFromPath(path: String) = applicationContext.assets.open(
-            "$BUNDLED_HOME_TILES_DIR/$path").use {
-        BitmapFactory.decodeStream(it)
     }
 }
