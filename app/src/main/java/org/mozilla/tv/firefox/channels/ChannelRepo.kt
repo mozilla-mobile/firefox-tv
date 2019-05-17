@@ -4,7 +4,7 @@
 
 package org.mozilla.tv.firefox.channels
 
-import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
+import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
 /**

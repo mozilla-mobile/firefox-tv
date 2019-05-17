@@ -10,7 +10,7 @@ import androidx.annotation.StringRes
 import androidx.annotation.UiThread
 import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
+import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.ext.LiveDataCombiners
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration

@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-package org.mozilla.tv.firefox.pinnedtile
+package org.mozilla.tv.firefox.channels.pinnedtile
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -15,8 +15,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import mozilla.components.support.ktx.android.graphics.arePixelsAllTheSame
-import org.mozilla.tv.firefox.pinnedtile.PinnedTileScreenshotStore.DIR
-import org.mozilla.tv.firefox.pinnedtile.PinnedTileScreenshotStore.uuidToFileSystemMutex
+import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileScreenshotStore.DIR
+import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileScreenshotStore.uuidToFileSystemMutex
 import java.io.File
 import java.util.UUID
 
