@@ -23,11 +23,11 @@ import org.mozilla.telemetry.ping.TelemetryCorePingBuilder
 import org.mozilla.telemetry.ping.TelemetryMobileEventPingBuilder
 import org.mozilla.telemetry.ping.TelemetryPocketEventPingBuilder
 import org.mozilla.tv.firefox.ext.serviceLocator
-import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelTile
-import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsButton
-import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
-import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsTile
-import org.mozilla.tv.firefox.navigationoverlay.channels.TileSource
+import org.mozilla.tv.firefox.channels.ChannelTile
+import org.mozilla.tv.firefox.channels.SettingsButton
+import org.mozilla.tv.firefox.channels.SettingsScreen
+import org.mozilla.tv.firefox.channels.SettingsTile
+import org.mozilla.tv.firefox.channels.TileSource
 import java.util.Collections
 
 private const val SHARED_PREFS_KEY = "telemetryLib" // Don't call it TelemetryWrapper to avoid accidental IDE rename.

@@ -17,7 +17,7 @@ import org.mozilla.tv.firefox.ext.getAccessibilityManager
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.focus.FocusRepo
 import org.mozilla.tv.firefox.framework.FrameworkRepo
-import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelRepo
+import org.mozilla.tv.firefox.channels.ChannelRepo
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileImageUtilWrapper
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.pocket.PocketEndpoint

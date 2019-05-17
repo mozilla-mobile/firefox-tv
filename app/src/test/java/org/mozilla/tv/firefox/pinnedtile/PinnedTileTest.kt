@@ -22,7 +22,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.focus.FocusRepo
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayViewModel
-import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelDetails
+import org.mozilla.tv.firefox.channels.ChannelDetails
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
 import org.robolectric.RobolectricTestRunner

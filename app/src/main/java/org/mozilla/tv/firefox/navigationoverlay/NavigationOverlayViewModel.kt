@@ -10,7 +10,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
-import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelDetails
+import org.mozilla.tv.firefox.channels.ChannelDetails
 import org.mozilla.tv.firefox.ext.map
 import org.mozilla.tv.firefox.focus.FocusRepo
 import org.mozilla.tv.firefox.pinnedtile.PinnedTileImageUtilWrapper

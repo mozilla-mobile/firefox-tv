@@ -35,7 +35,7 @@ import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.helpers.NestedScrollToAction
 import org.mozilla.tv.firefox.helpers.RecyclerViewHelpers
-import org.mozilla.tv.firefox.navigationoverlay.channels.DefaultChannelTileViewHolder
+import org.mozilla.tv.firefox.channels.DefaultChannelTileViewHolder
 
 /**
  * Implementation of Robot Pattern for the navigation overlay menu.
