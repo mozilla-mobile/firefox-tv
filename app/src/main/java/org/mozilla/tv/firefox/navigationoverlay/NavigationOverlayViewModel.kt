@@ -13,8 +13,8 @@ import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.channels.ChannelDetails
 import org.mozilla.tv.firefox.ext.map
 import org.mozilla.tv.firefox.focus.FocusRepo
-import org.mozilla.tv.firefox.pinnedtile.PinnedTileImageUtilWrapper
-import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
+import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileImageUtilWrapper
+import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
 import org.mozilla.tv.firefox.utils.URLs

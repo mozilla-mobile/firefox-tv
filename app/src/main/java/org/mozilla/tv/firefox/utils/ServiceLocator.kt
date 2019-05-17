@@ -18,8 +18,8 @@ import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.focus.FocusRepo
 import org.mozilla.tv.firefox.framework.FrameworkRepo
 import org.mozilla.tv.firefox.channels.ChannelRepo
-import org.mozilla.tv.firefox.pinnedtile.PinnedTileImageUtilWrapper
-import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
+import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileImageUtilWrapper
+import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
 import org.mozilla.tv.firefox.pocket.PocketRepoCache

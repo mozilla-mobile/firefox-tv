@@ -13,7 +13,7 @@ import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 import org.mozilla.tv.firefox.helpers.assertEqualsWithDelta
-import org.mozilla.tv.firefox.pinnedtile.PinnedTileScreenshotStore
+import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileScreenshotStore
 import java.util.UUID
 
 private const val DIMEN = 140 // should be divisible by 4.

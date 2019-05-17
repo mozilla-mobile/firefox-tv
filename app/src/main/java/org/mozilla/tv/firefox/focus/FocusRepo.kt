@@ -14,7 +14,7 @@ import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.ext.validateKnownViewById
-import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
+import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.URLs

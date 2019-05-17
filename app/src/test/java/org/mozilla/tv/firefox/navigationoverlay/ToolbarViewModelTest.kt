@@ -13,8 +13,8 @@ import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
 import org.mozilla.tv.firefox.ext.map
 import org.mozilla.tv.firefox.helpers.ext.assertValues
-import org.mozilla.tv.firefox.pinnedtile.PinnedTile
-import org.mozilla.tv.firefox.pinnedtile.PinnedTileRepo
+import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTile
+import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.PreventLiveDataMainLooperCrashRule
