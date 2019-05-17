@@ -46,10 +46,10 @@ import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.hint.InactiveHintViewModel
 import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelConfig
-import org.mozilla.tv.firefox.navigationoverlay.channels.DefaultChannel
-import org.mozilla.tv.firefox.navigationoverlay.channels.DefaultChannelFactory
-import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsChannelAdapter
-import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
+import org.mozilla.tv.firefox.channels.DefaultChannel
+import org.mozilla.tv.firefox.channels.DefaultChannelFactory
+import org.mozilla.tv.firefox.channels.SettingsChannelAdapter
+import org.mozilla.tv.firefox.channels.SettingsScreen
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.pocket.toChannelTiles
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor

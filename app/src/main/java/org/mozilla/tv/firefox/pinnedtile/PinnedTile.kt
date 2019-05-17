@@ -6,9 +6,9 @@ package org.mozilla.tv.firefox.pinnedtile
 
 import androidx.annotation.WorkerThread
 import org.json.JSONObject
-import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelTile
+import org.mozilla.tv.firefox.channels.ChannelTile
 import org.mozilla.tv.firefox.ext.toJavaURI
-import org.mozilla.tv.firefox.navigationoverlay.channels.TileSource
+import org.mozilla.tv.firefox.channels.TileSource
 import org.mozilla.tv.firefox.utils.FormattedDomain
 import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
 import org.mozilla.tv.firefox.utils.PicassoWrapper

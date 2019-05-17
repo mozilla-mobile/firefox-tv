@@ -17,7 +17,7 @@ import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
-import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
+import org.mozilla.tv.firefox.channels.SettingsScreen
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
