@@ -18,9 +18,7 @@ import org.json.JSONArray
 import org.mozilla.tv.firefox.channels.BundleType
 import org.mozilla.tv.firefox.channels.BundleTilesStore
 import java.util.UUID
-import java.util.Collections
 
-private const val BUNDLED_SITES_ID_BLACKLIST = "blacklist"
 private const val CUSTOM_SITES_LIST = "customSitesList"
 private const val PREF_HOME_TILES = "homeTiles"
 
@@ -102,9 +100,7 @@ class PinnedTileRepo(
 
         when (tileToRemove) {
             is BundledPinnedTile -> {
-                val blackList = loadBlacklist().toMutableSet()
-                blackList.add(tileToRemove.id)
-                saveBlackList(blackList)
+                bundleTilesStore.addBundleTileToBlackList(BundleType.PINNED_TILES, tileToRemove.id)
                 --bundledTilesSize
             }
             is CustomPinnedTile -> {
@@ -115,14 +111,6 @@ class PinnedTileRepo(
         }
 
         return tileToRemove.idToString()
-    }
-
-    private fun loadBlacklist(): Set<String> {
-        return _sharedPreferences.getStringSet(BUNDLED_SITES_ID_BLACKLIST, Collections.emptySet())!!
-    }
-
-    private fun saveBlackList(blackList: Set<String>) {
-        _sharedPreferences.edit().putStringSet(BUNDLED_SITES_ID_BLACKLIST, blackList).apply()
     }
 
     private fun persistCustomTiles() {
@@ -137,12 +125,9 @@ class PinnedTileRepo(
     private fun loadBundledTilesCache(): LinkedHashMap<String, BundledPinnedTile> {
         val tilesJSONArray = bundleTilesStore.getBundledTiles(BundleType.PINNED_TILES)
         val lhm = LinkedHashMap<String, BundledPinnedTile>(tilesJSONArray.length())
-        val blacklist = loadBlacklist()
         for (i in 0 until tilesJSONArray.length()) {
             val tile = BundledPinnedTile.fromJSONObject(tilesJSONArray.getJSONObject(i))
-            if (!blacklist.contains(tile.id)) {
-                lhm.put(tile.url, tile)
-            }
+            lhm[tile.url] = tile
         }
         bundledTilesSize = lhm.size
 
