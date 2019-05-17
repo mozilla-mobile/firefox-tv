@@ -333,7 +333,7 @@ class NavigationOverlayFragment : Fragment() {
 
                 listOf(topText, bottomText).forEach {
                     it.animate().cancel()
-                    it.animate().alpha(1f).setDuration(0L).start()
+                    it.alpha = 1f
                 }
             }
 
