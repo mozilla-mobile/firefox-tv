@@ -4,23 +4,23 @@
 
 package org.mozilla.tv.firefox.navigationoverlay.channels
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.default_channel.view.channelTileContainer
 import org.mozilla.tv.firefox.R
 
+// todo: kdoc
 class DefaultChannelFactory(
     private val loadUrl: (String) -> Unit,
     val onTileFocused: (() -> Unit)
 ) {
 
     fun createChannel(
-        context: Context,
         parent: ViewGroup,
         id: Int? = null,
         channelConfig: ChannelConfig = ChannelConfig()
     ): DefaultChannel {
+        val context = parent.context
         val channelAdapter = DefaultChannelAdapter(context, loadUrl, onTileFocused, channelConfig)
 
         val containerView = LayoutInflater.from(context).inflate(R.layout.default_channel, parent, false) as ViewGroup
