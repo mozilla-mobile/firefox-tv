@@ -48,6 +48,7 @@ class PocketViewModel(
         }
     }
 
+    // #2297: the PocketRepoCache is broken and will not stop videos from updating when the user is looking at them.
     val state: Observable<State> = pocketRepoCache.feedState
         .map { repoState ->
             when (repoState) {
