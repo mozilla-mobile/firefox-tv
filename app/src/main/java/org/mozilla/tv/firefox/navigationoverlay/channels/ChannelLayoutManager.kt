@@ -60,6 +60,21 @@ class ChannelLayoutManager(
         return super.onRequestChildFocus(parent, state, child, focused)
     }
 
+    // By default, moving left when the first element is focused or right when the last element
+    // is focused will move focus up or down. This prevents the focus from moving in either case.
+    // Code taken from: https://stackoverflow.com/a/51645806/9307461
+    override fun onInterceptFocusSearch(focused: View, direction: Int): View? {
+        val position = getPosition(focused)
+        val firstItemAndLeft = position == 0 && direction == View.FOCUS_LEFT
+        val lastItemAndRight = position == itemCount - 1 && direction == View.FOCUS_RIGHT
+
+        return when {
+            firstItemAndLeft -> focused
+            lastItemAndRight -> focused
+            else -> super.onInterceptFocusSearch(focused, direction)
+        }
+    }
+
     override fun smoothScrollToPosition(recyclerView: RecyclerView?, state: RecyclerView.State?, position: Int) {
         val smoothScroller = FirstSmoothScroller(context)
         smoothScroller.targetPosition = position
