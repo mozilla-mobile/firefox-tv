@@ -53,6 +53,7 @@ public class TooltipCaptureTest extends ScreenshotTest {
         ViewInteraction pinnedTileChannel = onView(withId(R.id.pinned_tiles_channel));
 
         onView(allOf(withId(R.id.navUrlInput), hasFocus())).check(matches(isDisplayed()));
+        pinnedTileChannel.perform(new NestedScrollToAction());
         pinnedTileChannel.check(matches(isDisplayed()));
 
         // open two sites to enable back and front button
