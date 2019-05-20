@@ -46,9 +46,8 @@ fun EngineView.setupForApp() {
 }
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-fun EngineView.evalJS(javascript: String, callback: ValueCallback<String>? = null) {
+fun EngineView.evalJS(javascript: String) {
     geckoView?.session?.loadUri("javascript:$javascript")
-    callback.forceExhaustive
 }
 
 fun EngineView.pauseAllVideoPlaybacks() {
