@@ -122,10 +122,10 @@ class PinnedTileRepo(
     }
 
     private fun loadBundledTilesCache(): LinkedHashMap<String, BundledPinnedTile> {
-        val tilesJSONArray = bundleTilesStore.getBundledTiles(BundleType.PINNED_TILES)
-        val lhm = LinkedHashMap<String, BundledPinnedTile>(tilesJSONArray.length())
-        for (i in 0 until tilesJSONArray.length()) {
-            val tile = BundledPinnedTile.fromJSONObject(tilesJSONArray.getJSONObject(i))
+        val tilesJSONList = bundleTilesStore.getBundledTiles(BundleType.PINNED_TILES)
+        val lhm = LinkedHashMap<String, BundledPinnedTile>(tilesJSONList.size)
+        for (jsonObject in tilesJSONList) {
+            val tile = BundledPinnedTile.fromJSONObject(jsonObject)
             lhm[tile.url] = tile
         }
         bundledTilesSize = lhm.size
