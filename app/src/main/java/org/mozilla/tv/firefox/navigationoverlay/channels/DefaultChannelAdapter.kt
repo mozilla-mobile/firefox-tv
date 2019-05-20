@@ -72,26 +72,7 @@ class DefaultChannelAdapter(
             }
 
             if (channelConfig.itemsMayBeRemoved) {
-                itemView.setOnLongClickListener {
-                    channelConfig.onLongClickTelemetry?.invoke(tile)
-                    val dialog = Dialog(context, R.style.DialogStyle)
-                    dialog.setContentView(R.layout.dialog_channel_tiles)
-                    dialog.window?.setDimAmount(0.85f)
-
-                    dialog.titleText.text = tile.generateRemoveTileTitleStr(context)
-                    dialog.removeTileButton.setOnClickListener {
-                        _removeEvents.onNext(tile)
-                        dialog.dismiss()
-                    }
-
-                    dialog.cancelButton.setOnClickListener {
-                        dialog.dismiss()
-                    }
-
-                    dialog.show()
-
-                    true
-                }
+                setRemoveOnLongClickListener(itemView, tile)
             }
 
             val tvWhiteColor = ContextCompat.getColor(holder.itemView.context, R.color.tv_white)
@@ -122,6 +103,29 @@ class DefaultChannelAdapter(
         val marginValue = iconView.resources.getDimensionPixelSize(tileMarginValue)
         layoutMarginParams.setMargins(marginValue, marginValue, marginValue, marginValue)
         iconView.layoutParams = layoutMarginParams
+    }
+
+    private fun setRemoveOnLongClickListener(itemView: View, tile: ChannelTile) {
+        itemView.setOnLongClickListener {
+            channelConfig.onLongClickTelemetry?.invoke(tile)
+            val dialog = Dialog(context, R.style.DialogStyle)
+            dialog.setContentView(R.layout.dialog_channel_tiles)
+            dialog.window?.setDimAmount(0.85f)
+
+            dialog.titleText.text = tile.generateRemoveTileTitleStr(context)
+            dialog.removeTileButton.setOnClickListener {
+                _removeEvents.onNext(tile)
+                dialog.dismiss()
+            }
+
+            dialog.cancelButton.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.show()
+
+            true
+        }
     }
 }
 
