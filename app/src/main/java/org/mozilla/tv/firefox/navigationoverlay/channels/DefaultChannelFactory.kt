@@ -18,7 +18,7 @@ class DefaultChannelFactory(
     fun createChannel(
         parent: ViewGroup,
         id: Int? = null,
-        channelConfig: ChannelConfig = ChannelConfig()
+        channelConfig: ChannelConfig
     ): DefaultChannel {
         val context = parent.context
         val channelAdapter = DefaultChannelAdapter(context, loadUrl, onTileFocused, channelConfig)
