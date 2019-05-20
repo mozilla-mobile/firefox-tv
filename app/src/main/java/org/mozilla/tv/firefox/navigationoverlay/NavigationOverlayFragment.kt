@@ -204,6 +204,8 @@ class NavigationOverlayFragment : Fragment() {
             .addTo(compositeDisposable)
         observePinnedTiles()
             .addTo(compositeDisposable)
+        observePinnedTileRemoval()
+            .addTo(compositeDisposable)
         observeShouldDisplayPinnedTiles()
             .addTo(compositeDisposable)
         observePocket()
