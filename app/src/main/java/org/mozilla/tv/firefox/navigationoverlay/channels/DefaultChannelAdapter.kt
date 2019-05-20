@@ -72,25 +72,27 @@ class DefaultChannelAdapter(
                 channelConfig.onClickTelemetry?.invoke(tile)
             }
 
-            itemView.setOnLongClickListener {
-                channelConfig.onLongClickTelemetry?.invoke(tile)
-                val dialog = Dialog(context, R.style.DialogStyle)
-                dialog.setContentView(R.layout.dialog_channel_tiles)
-                dialog.window?.setDimAmount(0.85f)
+            if (channelConfig.itemsMayBeRemoved) {
+                itemView.setOnLongClickListener {
+                    channelConfig.onLongClickTelemetry?.invoke(tile)
+                    val dialog = Dialog(context, R.style.DialogStyle)
+                    dialog.setContentView(R.layout.dialog_channel_tiles)
+                    dialog.window?.setDimAmount(0.85f)
 
-                dialog.titleText.text = tile.generateRemoveTileTitleStr(context)
-                dialog.removeTileButton.setOnClickListener {
-                    _removeEvents.onNext(tile)
-                    dialog.dismiss()
+                    dialog.titleText.text = tile.generateRemoveTileTitleStr(context)
+                    dialog.removeTileButton.setOnClickListener {
+                        _removeEvents.onNext(tile)
+                        dialog.dismiss()
+                    }
+
+                    dialog.cancelButton.setOnClickListener {
+                        dialog.dismiss()
+                    }
+
+                    dialog.show()
+
+                    true
                 }
-
-                dialog.cancelButton.setOnClickListener {
-                    dialog.dismiss()
-                }
-
-                dialog.show()
-
-                true
             }
 
             val tvWhiteColor = ContextCompat.getColor(holder.itemView.context, R.color.tv_white)

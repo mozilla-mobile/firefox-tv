@@ -15,7 +15,8 @@ private val TELEMETRY = TelemetryIntegration.INSTANCE
 data class ChannelConfig(
     val onClickTelemetry: ((ChannelTile) -> Unit)? = null,
     val onLongClickTelemetry: ((ChannelTile) -> Unit)? = null,
-    val onFocusTelemetry: ((ChannelTile, Boolean) -> Unit)? = null
+    val onFocusTelemetry: ((ChannelTile, Boolean) -> Unit)? = null,
+    val itemsMayBeRemoved: Boolean = false
 ) {
     companion object {
         fun getPocketConfig(): ChannelConfig = ChannelConfig(
@@ -26,7 +27,8 @@ data class ChannelConfig(
         )
 
         fun getPinnedTileConfig(context: Context): ChannelConfig = ChannelConfig(
-                onClickTelemetry = { tile -> TELEMETRY.homeTileClickEvent(context, tile) }
+                onClickTelemetry = { tile -> TELEMETRY.homeTileClickEvent(context, tile) },
+                itemsMayBeRemoved = true
         )
     }
 }
