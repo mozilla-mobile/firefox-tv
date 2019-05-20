@@ -8,7 +8,6 @@ package org.mozilla.tv.firefox.ui.screenshots;
 import android.os.Build;
 
 import androidx.test.espresso.ViewInteraction;
-import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.Until;
@@ -18,6 +17,7 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mozilla.tv.firefox.MainActivity;
+import org.mozilla.tv.firefox.helpers.NestedScrollToAction;
 import org.mozilla.tv.firefox.R;
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule;
 
@@ -26,6 +26,7 @@ import tools.fastlane.screengrab.locale.LocaleTestRule;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
@@ -55,10 +56,11 @@ public class TooltipCaptureTest extends ScreenshotTest {
         pinnedTileChannel.check(matches(isDisplayed()));
 
         // open two sites to enable back and front button
-        pinnedTileChannel.perform(RecyclerViewActions.actionOnItemAtPosition(1, click()));
+        pinnedTileChannel.perform(new NestedScrollToAction(), actionOnItemAtPosition(1, click()));
         device.wait(Until.findObject(By.res(Integer.toString(R.id.progressAnimation))), 2000);
         device.pressMenu();
-        pinnedTileChannel.perform(RecyclerViewActions.actionOnItemAtPosition(2, click()));
+
+        pinnedTileChannel.perform(new NestedScrollToAction(), actionOnItemAtPosition(2, click()));
         device.wait(Until.findObject(By.res(Integer.toString(R.id.progressAnimation))), 2000);
 
         device.pressMenu();
