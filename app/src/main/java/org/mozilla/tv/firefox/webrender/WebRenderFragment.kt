@@ -38,7 +38,6 @@ import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.ext.couldScrollInDirection
 import org.mozilla.tv.firefox.ext.focusedDOMElement
-import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.pauseAllVideoPlaybacks
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
@@ -189,7 +188,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 SessionRepo.Event.ExitYouTube -> youtubeBackHandler.goBackBeforeYouTube()
                 // Rx will never emit a null, but the compiler doesn't believe me
                 null -> return@subscribe
-            }.forceExhaustive
+            }
         }.addTo(startStopCompositeDisposable)
 
         serviceLocator!!.cursorModel.scrollRequests
