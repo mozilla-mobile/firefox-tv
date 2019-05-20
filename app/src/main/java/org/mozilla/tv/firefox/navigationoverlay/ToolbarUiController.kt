@@ -21,7 +21,6 @@ import mozilla.components.support.ktx.android.content.systemService
 import mozilla.components.support.ktx.android.view.forEach
 import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.utils.ViewUtils
@@ -176,7 +175,7 @@ class ToolbarUiController(
                     is ToolbarViewModel.Action.SetOverlayVisible -> serviceLocator.screenController
                             .showNavigationOverlay(fragmentManager, it.visible)
                     ToolbarViewModel.Action.ExitFirefox -> exitFirefox()
-                }.forceExhaustive
+                }
                 true
             }
         })

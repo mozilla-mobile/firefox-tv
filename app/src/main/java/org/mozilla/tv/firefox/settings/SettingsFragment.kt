@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.settings_screen_switch.view.description
 import kotlinx.android.synthetic.main.settings_screen_switch.view.toggle
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
-import org.mozilla.tv.firefox.ext.forceExhaustive
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsScreen
 import org.mozilla.tv.firefox.navigationoverlay.channels.SettingsTile
@@ -78,7 +77,7 @@ class SettingsFragment : Fragment() {
                     Action.SESSION_CLEARED -> {
                         activity?.recreate()
                     }
-                }.forceExhaustive
+                }
                 true
             }
         })
