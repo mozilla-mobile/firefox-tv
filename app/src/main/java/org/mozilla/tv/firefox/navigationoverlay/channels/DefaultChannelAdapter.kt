@@ -42,7 +42,7 @@ class DefaultChannelAdapter(
     private val channelConfig: ChannelConfig
 ) : ListAdapter<ChannelTile, DefaultChannelTileViewHolder>(DIFF_CALLBACK) {
 
-    private val _removeEvents: Subject<ChannelTile> = BehaviorSubject.create<ChannelTile>()
+    private val _removeEvents: Subject<ChannelTile> = PublishSubject.create<ChannelTile>()
     val removeEvents: Observable<ChannelTile> = _removeEvents.hide()
 
     private val _focusChangeObservable = PublishSubject.create<Pair<Int, Boolean>>()
