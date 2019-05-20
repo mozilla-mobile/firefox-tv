@@ -6,5 +6,5 @@
     <!-- A collection of strings that do not need to be translated (e.g. brand names, features that are en-US only, etc.) -->
 
     <!-- Title text shown above the Pocket channel -->
-    <string name="pocket_channel_title" translatable="false">Pocket Editor\'s Choice</string>
+    <string name="pocket_channel_title" translatable="false">Recommended by Pocket</string>
 </resources>
