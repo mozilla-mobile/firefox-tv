@@ -57,7 +57,7 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 
 | Event                                                | category   | method                  | object            | value      | extras.    |
 |------------------------------------------------------|------------|-------------------------|-------------------|------------|------------|
-| Pocket video feed: unique videos clicked per session | aggregate  | click                   | pocket_video      | `<int>`    |            |
+| Pocket channel: unique videos clicked per session    | aggregate  | click                   | pocket_video      | `<int>`    |            |
 | App opened from view intent                          | action     | view_intent             | app               |            |            |
 | Opening the overlay forced a video out of fullscreen | action     | programmatically_closed | full_screen_video |            |            |
 
@@ -69,7 +69,6 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 | Browser: back clicked                  | action   | click                 | menu         | back                     |               |
 | Browser: forward clicked               | action   | click                 | menu         | forward                  |               |
 | Browser: refresh clicked               | action   | click                 | menu         | refresh                  |               |
-| Pocket: tile clicked                   | action   | click                 | menu         | pocket_video_tile        |               |
 | Turbo mode switch clicked              | action   | change                | turbo_mode   | on/off (the new value)   |               |
 | Pin site switch clicked                | action   | change                | pin_page     | on/off (the new value)   | desktop_mode* |
 | Desktop mode switch clicked            | action   | change                | desktop_mode | on/off (the new value)   |               |
@@ -151,13 +150,13 @@ To elaborate on these events:
 - "Next/previous item" is intended to go to the next video/song in a playlist. We send the corresponding key event to the page which must support this functionality (it works on YouTube).
 - "Seek" aggregates the "fast-forward", "rewind", and "restart" commands ([#988](https://github.com/mozilla-mobile/firefox-tv/issues/988) is to split up this telemetry)
 
-### Pocket Feed
+### Pocket Channel
 | Event                                      | category | method         | object        | value          |
 |--------------------------------------------|----------|----------------|---------------|----------------|
-| PocketFeed: video click                    | action   | click          | video_id      | `<int>`        |
-| PocketFeed: video impression*              | action   | impression     | video_id      | `<int>`        |
+| Pocket video click                         | action   | click          | video_id      | `<int>`        |
+| Pocket video impression*                   | action   | impression     | video_id      | `<int>`        |
 
-(*) Video impressions are aggregated by the user initiating focus on the videos in the Pocket feed
+(*) Video impressions are aggregated by the user initiating focus on the videos in the Pocket feed and do not represent "impression" in the traditional sense: see #2251 for further discussion.
 
 ### Settings Channel
 
