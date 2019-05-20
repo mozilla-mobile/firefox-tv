@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox.channels
 import android.content.Context
 import android.content.SharedPreferences
 import org.json.JSONArray
+import org.json.JSONObject
 import java.util.Collections
 
 private const val PREF_BUNDLE_TILES = "bundleTiles"
@@ -44,7 +45,7 @@ class BundleTilesStore(private val applicationContext: Context) {
         _sharedPreferences.edit().putStringSet(sharedPrefKey, blackList).apply()
     }
 
-    fun getBundledTiles(type: BundleType): JSONArray {
+    fun getBundledTiles(type: BundleType): List<JSONObject> {
         val jsonPath = when (type) {
             BundleType.PINNED_TILES -> PINNED_TILES_JSON_PATH
         }
@@ -52,15 +53,16 @@ class BundleTilesStore(private val applicationContext: Context) {
         val blacklist = loadBlackList(type)
         val tilesJSONString = applicationContext.assets.open(jsonPath).bufferedReader().use { it.readText() }
         val tilesJSONArray = JSONArray(tilesJSONString)
+        val jsonList = ArrayList<JSONObject>()
 
         for (i in 0 until tilesJSONArray.length()) {
             val jsonObject = tilesJSONArray.getJSONObject(i)
             if (!blacklist.contains(jsonObject.getString("id"))) {
-                tilesJSONArray.remove(i)
+                jsonList.add(jsonObject)
             }
         }
 
-        return tilesJSONArray
+        return jsonList
     }
 
     /**
