@@ -71,8 +71,6 @@ open class TelemetryIntegration protected constructor(
         val YOUTUBE_CAST = "youtube_cast"
         val VIEW_INTENT = "view_intent"
         val IMPRESSION = "impression"
-        val VIEW = "view"
-        val FINISH = "finish"
         val PROGRAMMATICALLY_CLOSED = "programmatically_closed"
     }
 
@@ -103,7 +101,6 @@ open class TelemetryIntegration protected constructor(
         val TILE_BUNDLED = "bundled"
         val TILE_CUSTOM = "custom"
         val TILE_POCKET = "pocket"
-        val POCKET_VIDEO_MEGATILE = "pocket_video_tile"
         val YOUTUBE_TILE = "youtube_tile"
         val EXIT_FIREFOX = "exit"
         val SETTINGS_CLEAR_DATA_TILE = "clear_data_tile"
