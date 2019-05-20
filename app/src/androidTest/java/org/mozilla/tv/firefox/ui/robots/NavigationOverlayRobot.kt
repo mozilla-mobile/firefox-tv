@@ -33,6 +33,7 @@ import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert.assertTrue
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
+import org.mozilla.tv.firefox.helpers.NestedScrollToAction
 import org.mozilla.tv.firefox.helpers.RecyclerViewHelpers
 import org.mozilla.tv.firefox.navigationoverlay.channels.DefaultChannelTileViewHolder
 
@@ -159,15 +160,10 @@ class NavigationOverlayRobot {
         }
 
         fun openTileToBrowser(index: Int, interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
-            homeTiles().perform(RecyclerViewActions.actionOnItemAtPosition<DefaultChannelTileViewHolder>(index, click()))
-            waitUntilSiteLoaded()
-
-            BrowserRobot().interact()
-            return BrowserRobot.Transition()
-        }
-
-        fun openTileToBrowser(title: String, interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
-            homeTiles().perform(RecyclerViewActions.actionOnItem<DefaultChannelTileViewHolder>(hasDescendant(withText(title)), click()))
+            homeTiles().perform(
+                    NestedScrollToAction(),
+                    RecyclerViewActions.actionOnItemAtPosition<DefaultChannelTileViewHolder>(index, click())
+            )
             waitUntilSiteLoaded()
 
             BrowserRobot().interact()
