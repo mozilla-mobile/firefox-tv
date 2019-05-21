@@ -4,7 +4,6 @@
 
 package org.mozilla.tv.firefox.pocket
 
-import android.net.Uri
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -18,7 +17,6 @@ import org.mozilla.tv.firefox.TestResource
 import org.robolectric.RobolectricTestRunner
 
 private const val KEY_INNER = "recommendations"
-private const val VERSION = "VERSION"
 
 @RunWith(RobolectricTestRunner::class)
 class PocketEndpointTest {
@@ -27,7 +25,7 @@ class PocketEndpointTest {
 
     @Before
     fun setup() {
-        pocketEndpoint = PocketEndpoint(VERSION, mock(Uri::class.java)) { true }
+        pocketEndpoint = PocketEndpoint(mock(PocketEndpointRaw::class.java)) { true }
     }
 
     @Test

@@ -33,8 +33,7 @@ typealias PocketData = List<PocketViewModel.FeedItem.Video>
  * outside of the network layer (e.g. with OkHttp).
  */
 open class PocketEndpoint(
-    private val appVersion: String,
-    private val pocketEndpoint: Uri?,
+    private val endpointRaw: PocketEndpointRaw,
     private val getIsEnglishLocale: () -> Boolean
 ) : Endpoint<PocketData> {
 
@@ -62,8 +61,7 @@ open class PocketEndpoint(
     @AnyThread // via PocketEndpointRaw.
     open suspend fun getRecommendedVideos(): List<PocketViewModel.FeedItem.Video>? {
         if (!getIsEnglishLocale.invoke()) return null
-        pocketEndpoint ?: return null
-        val jsonResponse = PocketEndpointRaw.getGlobalVideoRecommendations(appVersion, pocketEndpoint) ?: return null
+        val jsonResponse = endpointRaw.getGlobalVideoRecommendations() ?: return null
         return convertVideosJSON(jsonResponse)
     }
 
@@ -81,14 +79,19 @@ open class PocketEndpoint(
 }
 
 /** Make requests to the Pocket endpoint and returns raw data: see [PocketEndpoint] for more. */
-private object PocketEndpointRaw {
+class PocketEndpointRaw(
+    private val appVersion: String,
+    private val pocketGlobalVideoEndpoint: Uri?
+) {
 
     /** @return The global video recommendations as a raw JSON str or null on error. */
     @AnyThread // executeAndAwait hands off the request to the OkHttp dispatcher.
-    suspend fun getGlobalVideoRecommendations(version: String, pocketEndpoint: Uri): String? {
+    suspend fun getGlobalVideoRecommendations(): String? {
+        pocketGlobalVideoEndpoint ?: return null
+
         val req = Request.Builder()
-            .url(pocketEndpoint.toString())
-            .header("User-Agent", "FirefoxTV-$version-${BuildConfig.BUILD_TYPE}")
+            .url(pocketGlobalVideoEndpoint.toString())
+            .header("User-Agent", "FirefoxTV-$appVersion-${BuildConfig.BUILD_TYPE}")
             .build()
 
         val res = try {

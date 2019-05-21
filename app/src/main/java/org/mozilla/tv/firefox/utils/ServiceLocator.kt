@@ -22,6 +22,7 @@ import org.mozilla.tv.firefox.channels.ChannelRepo
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileImageUtilWrapper
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.pocket.PocketEndpoint
+import org.mozilla.tv.firefox.pocket.PocketEndpointRaw
 import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
 import org.mozilla.tv.firefox.pocket.PocketRepoCache
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
@@ -64,11 +65,11 @@ import org.mozilla.tv.firefox.webrender.cursor.CursorModel
  */
 open class ServiceLocator(val app: Application) {
     private val appVersion = app.packageManager.getPackageInfo(app.packageName, 0).versionName
-    private val pocketEndpoint get() = PocketEndpoint(appVersion, buildConfigDerivables.globalPocketVideoEndpoint, getIsEnglishLocale)
     private val buildConfigDerivables get() = BuildConfigDerivables(getIsEnglishLocale)
     private val pocketFeedStateMachine get() = PocketFeedStateMachine()
     private val getIsEnglishLocale = { LocaleManager.getInstance().currentLanguageIsEnglish(app) }
     private val bundleTileStore by lazy { BundleTilesStore(app) }
+    private val pocketEndpoint by lazy { PocketEndpoint(pocketEndpointRaw, getIsEnglishLocale) }
 
     val intentLiveData by lazy { MutableLiveData<Consumable<ValidatedIntentData?>>() }
     val fretboardProvider: FretboardProvider by lazy { FretboardProvider(app) }
@@ -86,7 +87,9 @@ open class ServiceLocator(val app: Application) {
     val screenshotStoreWrapper by lazy { PinnedTileImageUtilWrapper(app) }
     val formattedDomainWrapper by lazy { FormattedDomainWrapper(app) }
     val channelRepo by lazy { ChannelRepo(pinnedTileRepo) }
+    val pocketEndpointRaw by lazy { PocketEndpointRaw(appVersion, buildConfigDerivables.globalPocketVideoEndpoint) }
 
+    // These open vals are overridden in testing
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())
     open val pinnedTileRepo by lazy { PinnedTileRepo(app, bundleTileStore) }
     open val pocketRepo = PocketVideoRepo(pocketEndpoint, pocketFeedStateMachine, buildConfigDerivables.initialPocketRepoState)
