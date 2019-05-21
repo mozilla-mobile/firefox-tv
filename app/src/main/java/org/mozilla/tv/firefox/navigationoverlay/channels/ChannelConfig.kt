@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.navigationoverlay.channels
 
 import android.content.Context
+import org.mozilla.tv.firefox.channels.ChannelTile
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
 private val TELEMETRY = TelemetryIntegration.INSTANCE
