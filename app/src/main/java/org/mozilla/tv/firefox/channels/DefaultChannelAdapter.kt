@@ -93,16 +93,7 @@ class DefaultChannelAdapter(
                 _focusChangeObservable.onNext(position to hasFocus)
                 channelConfig.onFocusTelemetry?.invoke(tile, hasFocus)
             }
-
-            setIconLayoutMarginParams(imageView, R.dimen.bundled_home_tile_margin_value)
         }
-    }
-
-    private fun setIconLayoutMarginParams(iconView: View, tileMarginValue: Int) {
-        val layoutMarginParams = iconView.layoutParams as ViewGroup.MarginLayoutParams
-        val marginValue = iconView.resources.getDimensionPixelSize(tileMarginValue)
-        layoutMarginParams.setMargins(marginValue, marginValue, marginValue, marginValue)
-        iconView.layoutParams = layoutMarginParams
     }
 
     private fun setRemoveOnLongClickListener(itemView: View, tile: ChannelTile) {
