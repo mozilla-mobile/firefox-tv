@@ -23,8 +23,6 @@
         android:layout_height="150dp"
         android:orientation="vertical">
 
-        <!-- margins are defined in HomeTileRecyclerView.setLayoutMarginParams -->
-
         <androidx.cardview.widget.CardView
             android:id="@+id/settings_cardview"
             android:layout_width="match_parent"
