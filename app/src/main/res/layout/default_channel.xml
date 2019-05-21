@@ -18,7 +18,7 @@
 
     <!-- Note that, for any items in this RV, parent layouts should be FocusLossFrameLayout.
     This corrects a bug that is described in the kdoc of that class -->
-    <androidx.recyclerview.widget.RecyclerView
+    <androidx.leanback.widget.ListRowView
         android:id="@+id/channelTileContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
