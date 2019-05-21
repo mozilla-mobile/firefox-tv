@@ -45,7 +45,7 @@ import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.hint.InactiveHintViewModel
-import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelConfig
+import org.mozilla.tv.firefox.channels.ChannelConfig
 import org.mozilla.tv.firefox.channels.DefaultChannel
 import org.mozilla.tv.firefox.channels.DefaultChannelFactory
 import org.mozilla.tv.firefox.channels.SettingsChannelAdapter

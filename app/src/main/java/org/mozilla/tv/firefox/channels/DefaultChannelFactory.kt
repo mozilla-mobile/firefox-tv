@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.default_channel.view.channelTileContainer
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelConfig
 
 // todo: kdoc
 class DefaultChannelFactory(
