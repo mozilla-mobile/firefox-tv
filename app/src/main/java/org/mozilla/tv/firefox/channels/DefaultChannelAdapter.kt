@@ -6,13 +6,12 @@ package org.mozilla.tv.firefox.channels
 
 import android.app.Dialog
 import android.content.Context
-import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +19,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.dialog_channel_tiles.*
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.home_tile.view.channel_cardview
 import org.mozilla.tv.firefox.R
 
 val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ChannelTile>() {
@@ -75,21 +75,18 @@ class DefaultChannelAdapter(
                 setRemoveOnLongClickListener(itemView, tile)
             }
 
-            val tvWhiteColor = ContextCompat.getColor(holder.itemView.context, R.color.tv_white)
             itemView.setOnFocusChangeListener { _, hasFocus ->
-                val backgroundResource: Int
-                val textColor: Int
+                // We can't use a selector for the tile cardview because we use the focused item to
+                // get the RecyclerView adapter position
+                val focusRingDrawable: Drawable?
                 if (hasFocus) {
-                    backgroundResource = R.drawable.home_tile_title_focused_background
-                    textColor = tvWhiteColor
+                    focusRingDrawable = context.getDrawable(R.drawable.tile_selected_stroke)
                     onTileFocused?.invoke()
                 } else {
-                    backgroundResource = 0
-                    textColor = Color.BLACK
+                    focusRingDrawable = null
                 }
-                titleView.setBackgroundResource(backgroundResource)
-                titleView.setTextColor(textColor)
 
+                itemView.channel_cardview.foreground = focusRingDrawable
                 _focusChangeObservable.onNext(position to hasFocus)
                 channelConfig.onFocusTelemetry?.invoke(tile, hasFocus)
             }
