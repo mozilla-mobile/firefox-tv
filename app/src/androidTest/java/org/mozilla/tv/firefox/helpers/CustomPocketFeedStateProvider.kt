@@ -7,8 +7,8 @@ package org.mozilla.tv.firefox.helpers
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
-import org.mozilla.tv.firefox.ext.toUri
 import org.mozilla.tv.firefox.pocket.PocketEndpoint
+import org.mozilla.tv.firefox.pocket.PocketEndpointRaw
 import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.pocket.PocketViewModel
@@ -23,7 +23,9 @@ class CustomPocketFeedStateProvider {
 
     private val localeIsEnglish: () -> Boolean = { true }
 
-    private val pocketEndpoint = object : PocketEndpoint("VERSION", "www.mock.com".toUri(), localeIsEnglish) {
+    // Because of the endpoint overrides, the raw endpoint is unused so the arguments don't matter.
+    private val pocketEndpointRaw = PocketEndpointRaw("001", null)
+    private val pocketEndpoint = object : PocketEndpoint(pocketEndpointRaw, localeIsEnglish) {
         override suspend fun getRecommendedVideos(): List<PocketViewModel.FeedItem.Video>? {
             return PocketViewModel.noKeyPlaceholders
         }
