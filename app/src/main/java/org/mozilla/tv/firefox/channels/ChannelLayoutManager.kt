@@ -42,7 +42,7 @@ class ChannelLayoutManager(
     ): Boolean {
         if (state.isMeasuring) return false
 
-        focused?.let {
+        child.let {
             val pos = getPosition(it)
 
             // For carousel scrolling margin updates. Precondition here is that the channel
@@ -64,6 +64,8 @@ class ChannelLayoutManager(
         // By default, moving left when the first element is focused or right when the last element
         // is focused will move focus up or down. This prevents the focus from moving in either case.
         // Code taken from: https://stackoverflow.com/a/51645806/9307461
+
+        // focused is assumed to be the itemView, and will crash if we focus on a subview
         val position = getPosition(focused)
         val firstItemAndLeft = position == 0 && direction == View.FOCUS_LEFT
         val lastItemAndRight = position == itemCount - 1 && direction == View.FOCUS_RIGHT
