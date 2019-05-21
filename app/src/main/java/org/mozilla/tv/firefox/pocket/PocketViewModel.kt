@@ -8,8 +8,8 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import org.json.JSONObject
-import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelTile
-import org.mozilla.tv.firefox.navigationoverlay.channels.TileSource
+import org.mozilla.tv.firefox.channels.ChannelTile
+import org.mozilla.tv.firefox.channels.TileSource
 import org.mozilla.tv.firefox.utils.PicassoWrapper
 
 const val POCKET_VIDEO_COUNT = 20
