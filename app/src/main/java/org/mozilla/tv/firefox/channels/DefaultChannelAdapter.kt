@@ -21,7 +21,6 @@ import io.reactivex.subjects.Subject
 import kotlinx.android.synthetic.main.dialog_channel_tiles.*
 import io.reactivex.subjects.PublishSubject
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.navigationoverlay.channels.ChannelConfig
 
 val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ChannelTile>() {
     override fun areItemsTheSame(oldTile: ChannelTile, newTile: ChannelTile): Boolean {
