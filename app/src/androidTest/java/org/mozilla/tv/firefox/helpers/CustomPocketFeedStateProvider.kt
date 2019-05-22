@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.helpers
 
+import androidx.test.platform.app.InstrumentationRegistry
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
@@ -11,6 +12,7 @@ import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketEndpointRaw
 import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
+import org.mozilla.tv.firefox.pocket.PocketVideoStore
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.utils.BuildConfigDerivables
 
@@ -30,11 +32,14 @@ class CustomPocketFeedStateProvider {
             return PocketViewModel.noKeyPlaceholders
         }
     }
+    val appContext = InstrumentationRegistry.getInstrumentation()
+        .targetContext
+        .applicationContext
 
     val fakedPocketRepoState = PublishSubject.create<PocketVideoRepo.FeedState>()
     val fakedPocketRepo = object : PocketVideoRepo(
-        pocketEndpoint,
         PocketFeedStateMachine(),
+        PocketVideoStore(appContext, appContext.assets, pocketEndpoint::convertVideosJSON),
         BuildConfigDerivables(localeIsEnglish).initialPocketRepoState
     ) {
         override val feedState: Observable<FeedState>

@@ -13,5 +13,4 @@ class PocketVideoFetchSchedulerTest {
     fun `GIVEN fetch interval constants THEN start hour is less than end hour`() {
         assertTrue(PocketVideoFetchScheduler.FETCH_START_HOUR < PocketVideoFetchScheduler.FETCH_END_HOUR)
     }
-
 }
