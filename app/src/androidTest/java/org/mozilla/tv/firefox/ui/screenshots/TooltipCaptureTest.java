@@ -32,6 +32,7 @@ import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static org.hamcrest.Matchers.allOf;
 
 public class TooltipCaptureTest extends ScreenshotTest {
@@ -50,7 +51,7 @@ public class TooltipCaptureTest extends ScreenshotTest {
     @Test
     public void showToolTips() throws InterruptedException {
 
-        ViewInteraction pinnedTileChannel = onView(withId(R.id.pinned_tiles_channel));
+        ViewInteraction pinnedTileChannel = onView(allOf(withParent(withId(R.id.pinned_tiles_channel)), withId(R.id.row_content)));
 
         onView(allOf(withId(R.id.navUrlInput), hasFocus())).check(matches(isDisplayed()));
         pinnedTileChannel.perform(new NestedScrollToAction());
