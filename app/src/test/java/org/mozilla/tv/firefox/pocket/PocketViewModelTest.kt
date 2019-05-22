@@ -33,7 +33,7 @@ class PocketViewModelTest {
                 get() = repoCacheState
         }
 
-        viewModel = PocketViewModel(repo, repoCache)
+        viewModel = PocketViewModel(repoCache)
         noKeyPlaceholders = PocketViewModel.noKeyPlaceholders
         testObserver = viewModel.state.test()
     }

@@ -172,14 +172,12 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     override fun onStart() {
         super.onStart()
         // TODO when MainActivity has a VM, route this call through it
-        serviceLocator.pocketRepo.startBackgroundUpdates()
+        serviceLocator.pocketRepo.updatePocketFromStore()
         rootView.viewTreeObserver.addOnGlobalFocusChangeListener(serviceLocator.focusRepo)
     }
 
     override fun onStop() {
         super.onStop()
-        // TODO when MainActivity has a VM, route this call through it
-        serviceLocator.pocketRepo.stopBackgroundUpdates()
         TelemetryIntegration.INSTANCE.stopMainActivity()
         rootView.viewTreeObserver.removeOnGlobalFocusChangeListener(serviceLocator.focusRepo)
     }
