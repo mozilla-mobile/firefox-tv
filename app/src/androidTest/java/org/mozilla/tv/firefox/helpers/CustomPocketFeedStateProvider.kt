@@ -10,7 +10,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
 import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketEndpointRaw
-import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.pocket.PocketVideoStore
 import org.mozilla.tv.firefox.pocket.PocketViewModel
@@ -37,7 +36,6 @@ class CustomPocketFeedStateProvider {
 
     val fakedPocketRepoState = PublishSubject.create<PocketVideoRepo.FeedState>()
     val fakedPocketRepo = object : PocketVideoRepo(
-        PocketFeedStateMachine(),
         PocketVideoStore(appContext, appContext.assets, pocketEndpoint::convertVideosJSON),
         isPocketEnabledByLocale = { true },
         isPocketKeyValid = true
