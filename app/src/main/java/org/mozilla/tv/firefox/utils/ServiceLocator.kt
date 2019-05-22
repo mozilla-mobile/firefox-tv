@@ -91,7 +91,7 @@ open class ServiceLocator(val app: Application) {
     val channelRepo by lazy { ChannelRepo(pinnedTileRepo) }
     val pocketEndpointRaw by lazy { PocketEndpointRaw(appVersion, buildConfigDerivables.globalPocketVideoEndpoint) }
     val pocketVideoStore by lazy { PocketVideoStore(app, app.assets, pocketEndpoint::convertVideosJSON) }
-    val pocketVideoFetchScheduler by lazy { PocketVideoFetchScheduler() }
+    val pocketVideoFetchScheduler by lazy { PocketVideoFetchScheduler(isPocketEnabledByLocale) }
 
     // These open vals are overridden in testing
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())

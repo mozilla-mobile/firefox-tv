@@ -23,7 +23,9 @@ private const val FETCH_UNIQUE_WORK_NAME = "PocketFetch"
 /**
  * Schedules background fetches of the Pocket video data.
  */
-class PocketVideoFetchScheduler : LifecycleObserver {
+class PocketVideoFetchScheduler(
+    private val isPocketEnabledByLocale: () -> Boolean
+) : LifecycleObserver {
 
     @OnLifecycleEvent(ON_START)
     fun onStart() {
@@ -32,6 +34,12 @@ class PocketVideoFetchScheduler : LifecycleObserver {
 
     @VisibleForTesting(otherwise = PRIVATE)
     fun schedulePocketBackgroundFetch(workManager: WorkManager) {
+        // This may not be the best place to early return based on locale - e.g. it duplicates state with the UI -
+        // but we're short on time.
+        if (!isPocketEnabledByLocale()) {
+            return
+        }
+
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
