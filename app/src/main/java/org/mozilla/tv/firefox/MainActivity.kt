@@ -203,12 +203,12 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         super.onDestroy()
     }
 
-    override fun onCreateView(parent: View, name: String, context: Context, attrs: AttributeSet): View? {
+    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
         return if (name == EngineView::class.java.name) {
             context.serviceLocator.engineViewCache.getEngineView(context, attrs) {
                 setupForApp()
             }
-        } else super.onCreateView(parent, name, context, attrs)
+        } else super.onCreateView(name, context, attrs)
     }
 
     override fun onBackPressed() {
