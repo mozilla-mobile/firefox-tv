@@ -21,6 +21,7 @@ enum class TileSource { BUNDLED, CUSTOM, POCKET }
 data class ChannelTile(
     val url: String,
     val title: String,
+    val subtitle: String?,
     val setImage: (ImageView) -> Unit,
     // tileSource should not be used to change UI, which should be generic. It
     // is currently only used for telemetry

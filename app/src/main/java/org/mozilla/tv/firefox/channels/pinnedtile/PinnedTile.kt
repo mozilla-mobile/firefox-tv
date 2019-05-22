@@ -67,6 +67,7 @@ class BundledPinnedTile(
         return ChannelTile(
                 url = url,
                 title = title,
+                subtitle = null,
                 setImage = { view ->
                     PicassoWrapper.client
                             // TODO find a less brittle way to retrieve this path
@@ -103,6 +104,7 @@ class CustomPinnedTile(
         return ChannelTile(
                 url = url,
                 title = createTitle(formattedDomainWrapper),
+                subtitle = null,
                 setImage = { view ->
                     PicassoWrapper.client
                             .load(imageUtilityWrapper.getFileForUUID(id))
