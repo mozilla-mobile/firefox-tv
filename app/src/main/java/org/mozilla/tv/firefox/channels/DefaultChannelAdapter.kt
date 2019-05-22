@@ -17,7 +17,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.Observable
 import io.reactivex.subjects.Subject
-import kotlinx.android.synthetic.main.dialog_channel_tiles.*
+import kotlinx.android.synthetic.main.dialog_channel_tiles.cancelButton
+import kotlinx.android.synthetic.main.dialog_channel_tiles.removeTileButton
+import kotlinx.android.synthetic.main.dialog_channel_tiles.titleText
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.home_tile.view.channel_cardview
 import org.mozilla.tv.firefox.R
@@ -64,7 +66,18 @@ class DefaultChannelAdapter(
             ChannelTile.setChannelMarginByPosition(holder.itemView, context, position, itemCount)
             val tile = getItem(position)
             tile.setImage.invoke(imageView)
-            titleView.text = tile.title
+
+            // We handle Pocket tiles differently.
+            if (tile.subtitle != null) {
+                titleView.visibility = View.GONE
+
+                pocketTitle.text = tile.subtitle
+                pocketTitle.visibility = View.VISIBLE
+                pocketAuthor.text = tile.title
+                pocketAuthor.visibility = View.VISIBLE
+            } else {
+                titleView.text = tile.title
+            }
 
             itemView.setOnClickListener {
                 loadUrl(tile.url)
@@ -119,5 +132,7 @@ class DefaultChannelAdapter(
 
 class DefaultChannelTileViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val titleView: TextView = itemView.findViewById(R.id.tile_title)
+    val pocketAuthor: TextView = itemView.findViewById(R.id.tile_pocket_author)
+    val pocketTitle: TextView = itemView.findViewById(R.id.tile_pocket_title)
     val imageView: ImageView = itemView.findViewById(R.id.tile_icon)
 }

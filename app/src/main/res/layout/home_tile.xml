@@ -11,13 +11,13 @@
               android:id="@+id/home_tile"
               android:orientation="vertical"
               android:layout_width="@dimen/home_tile_width"
-              android:layout_height="150dp"
+              android:layout_height="wrap_content"
               android:layout_marginStart="12dp"
               android:layout_marginEnd="12dp">
 
     <LinearLayout
         android:layout_width="@dimen/home_tile_width"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <!-- Focus selector is set in ChannelLayoutManager -->
@@ -43,8 +43,36 @@
             android:ellipsize="start"
             android:fontFamily="@string/font_ember_regular"
             android:gravity="center_horizontal"
-            android:padding="12dp"
+            android:paddingTop="8dp"
             android:textColor="@color/photonGrey10_a80p"
+            android:textSize="18sp"
             tools:text="YouTube" />
+
+        <TextView
+            android:id="@+id/tile_pocket_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@string/font_ember_regular"
+            android:gravity="start"
+            android:paddingTop="8dp"
+            android:textAllCaps="true"
+            android:textColor="@color/photonGrey10_a60p"
+            android:textSize="16sp"
+            android:visibility="gone"
+            tools:text="Kurzgesagt" />
+
+        <TextView
+            android:id="@+id/tile_pocket_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@string/font_ember_regular"
+            android:gravity="start"
+            android:maxLines="3"
+            android:textColor="@color/photonGrey10_a80p"
+            android:textSize="18sp"
+            android:visibility="gone"
+            tools:text="The Centrifuge Problem - Numberphile" />
     </LinearLayout>
 </org.mozilla.tv.firefox.FocusLossFrameLayout>
