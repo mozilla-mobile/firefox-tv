@@ -55,17 +55,6 @@ class PocketViewModelTest {
     }
 
     @Test
-    fun `WHEN repo cache emits loading THEN view model should emit inactive`() {
-        repoCacheState.onNext(PocketVideoRepo.FeedState.Loading)
-
-        assertEquals(1, testObserver.valueCount())
-
-        testObserver.values()[0].let {
-            assertEquals(PocketViewModel.State.NotDisplayed, it)
-        }
-    }
-
-    @Test
     fun `WHEN repo cache emits no key THEN view model should emit a feed of no key placeholders`() {
         repoCacheState.onNext(PocketVideoRepo.FeedState.NoAPIKey)
 
@@ -75,15 +64,6 @@ class PocketViewModelTest {
             assertTrue(it is PocketViewModel.State.Feed)
             assertEquals(noKeyPlaceholders, (it as PocketViewModel.State.Feed).feed)
         }
-    }
-
-    @Test
-    fun `WHEN repo cache emits failure THEN view model should emit an error state`() {
-        repoCacheState.onNext(PocketVideoRepo.FeedState.FetchFailed)
-
-        assertEquals(1, testObserver.valueCount())
-
-        assertTrue(testObserver.values()[0] === PocketViewModel.State.Error)
     }
 
     @Test

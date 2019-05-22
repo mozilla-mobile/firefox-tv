@@ -54,13 +54,9 @@ class PocketRepoCacheTest {
     fun `GIVEN cache is unfrozen WHEN repo emits non-load-complete values THEN cache should emit the same values`() {
         repoCache.frozen = false
 
-        repoOutput.onNext(PocketVideoRepo.FeedState.FetchFailed)
-        repoOutput.onNext(PocketVideoRepo.FeedState.Loading)
         repoOutput.onNext(PocketVideoRepo.FeedState.NoAPIKey)
 
-        testObserver.assertValues(PocketVideoRepo.FeedState.FetchFailed,
-            PocketVideoRepo.FeedState.Loading,
-            PocketVideoRepo.FeedState.NoAPIKey)
+        testObserver.assertValues(PocketVideoRepo.FeedState.NoAPIKey)
     }
 
     @Test
@@ -71,7 +67,6 @@ class PocketRepoCacheTest {
 
         repoOutput.onNext(PocketVideoRepo.FeedState.LoadComplete(firstVideos))
         repoCache.frozen = true
-        repoOutput.onNext(PocketVideoRepo.FeedState.Loading)
         repoOutput.onNext(PocketVideoRepo.FeedState.LoadComplete(secondVideos))
 
         testObserver.assertValue(PocketVideoRepo.FeedState.LoadComplete(firstVideos))
@@ -81,13 +76,9 @@ class PocketRepoCacheTest {
     fun `GIVEN cache has not received a valid value AND cache is frozen WHEN future values are emitted from the repo THEN new values should be emitted by the cache`() {
         repoCache.frozen = true
 
-        repoOutput.onNext(PocketVideoRepo.FeedState.FetchFailed)
-        repoOutput.onNext(PocketVideoRepo.FeedState.Loading)
         repoOutput.onNext(PocketVideoRepo.FeedState.NoAPIKey)
 
         testObserver.assertValues(
-            PocketVideoRepo.FeedState.FetchFailed,
-            PocketVideoRepo.FeedState.Loading,
             PocketVideoRepo.FeedState.NoAPIKey
         )
     }

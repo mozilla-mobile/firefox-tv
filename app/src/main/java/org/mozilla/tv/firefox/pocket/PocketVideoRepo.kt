@@ -20,9 +20,7 @@ open class PocketVideoRepo(
 
     sealed class FeedState {
         data class LoadComplete(val videos: List<PocketViewModel.FeedItem>) : FeedState()
-        object Loading : FeedState()
         object NoAPIKey : FeedState()
-        object FetchFailed : FeedState()
         object Inactive : FeedState()
     }
 

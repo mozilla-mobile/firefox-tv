@@ -254,9 +254,7 @@ class FocusRepo(
         assert(lostFocusNode.viewId == R.id.channelsContainer)
 
         val viewId = when (pocketState) {
-            PocketVideoRepo.FeedState.FetchFailed,
             PocketVideoRepo.FeedState.Inactive,
-            PocketVideoRepo.FeedState.Loading,
             PocketVideoRepo.FeedState.NoAPIKey -> R.id.navUrlInput
             is PocketVideoRepo.FeedState.LoadComplete -> R.id.pocket_channel
         }
