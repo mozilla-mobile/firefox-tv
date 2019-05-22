@@ -1,5 +1,8 @@
 language: android
 
+env:
+  - export PATH=/usr/local/android-sdk/tools/bin:$PATH
+
 jdk:
   - oraclejdk8
 
