@@ -37,5 +37,6 @@
         android:gravity="center"
         android:padding="12dp"
         android:singleLine="true"
+        android:textSize="18sp"
         android:fontFamily="@string/font_ember_regular"/>
 </LinearLayout>
