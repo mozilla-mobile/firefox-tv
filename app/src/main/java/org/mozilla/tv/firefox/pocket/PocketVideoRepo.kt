@@ -24,7 +24,8 @@ private const val BASE_RETRY_TIME = 1_000L
 open class PocketVideoRepo(
     private val pocketEndpoint: PocketEndpoint,
     private val pocketFeedStateMachine: PocketFeedStateMachine,
-    initialState: PocketVideoRepo.FeedState
+    private val pocketVideoStore: PocketVideoStore,
+    initialState: FeedState
 ) {
 
     sealed class FeedState {
@@ -38,6 +39,7 @@ open class PocketVideoRepo(
     private val _feedState = BehaviorSubject.createDefault(initialState)
     open val feedState = _feedState.hide()
         .observeOn(AndroidSchedulers.mainThread())
+        .distinctUntilChanged() // avoid churn because we may retrieve similar results in onStart.
 
     private val periodicRequester = PeriodicRequester(pocketEndpoint)
     private val compositeDisposable = CompositeDisposable()
@@ -51,6 +53,9 @@ open class PocketVideoRepo(
 
     @UiThread // update backgroundUpdates.
     fun startBackgroundUpdates() {
+        val videos = pocketVideoStore.load()
+        _feedState.onNext(FeedState.LoadComplete(videos))
+
         compositeDisposable.clear()
         periodicRequester.start()
             .subscribe(this::postUpdate)
