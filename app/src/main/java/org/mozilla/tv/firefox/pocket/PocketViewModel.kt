@@ -27,7 +27,6 @@ class PocketViewModel(
 ) : ViewModel() {
 
     sealed class State {
-        object Error : State()
         data class Feed(val feed: List<FeedItem>) : State()
         object NotDisplayed : State()
     }
@@ -51,10 +50,8 @@ class PocketViewModel(
     val state: Observable<State> = pocketRepoCache.feedState
         .map { repoState ->
             when (repoState) {
-                is PocketVideoRepo.FeedState.Loading -> State.NotDisplayed
                 is PocketVideoRepo.FeedState.LoadComplete -> State.Feed(repoState.videos)
                 is PocketVideoRepo.FeedState.NoAPIKey -> State.Feed(noKeyPlaceholders)
-                is PocketVideoRepo.FeedState.FetchFailed -> State.Error
                 is PocketVideoRepo.FeedState.Inactive -> State.NotDisplayed
             }
         }
