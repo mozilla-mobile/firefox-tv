@@ -33,7 +33,7 @@ typealias PocketData = List<PocketViewModel.FeedItem.Video>
  */
 open class PocketEndpoint(
     private val endpointRaw: PocketEndpointRaw,
-    private val getIsEnglishLocale: () -> Boolean
+    private val isPocketEnabledByLocale: () -> Boolean
 ) : Endpoint<PocketData> {
 
     /**
@@ -59,7 +59,7 @@ open class PocketEndpoint(
     /** @return The global video recommendations or null on error; the list will never be empty. */
     @AnyThread // via PocketEndpointRaw.
     open suspend fun getRecommendedVideos(): List<PocketViewModel.FeedItem.Video>? {
-        if (!getIsEnglishLocale.invoke()) return null
+        if (!isPocketEnabledByLocale.invoke()) return null
         val jsonResponse = endpointRaw.getGlobalVideoRecommendations() ?: return null
         return convertVideosJSON(jsonResponse)
     }

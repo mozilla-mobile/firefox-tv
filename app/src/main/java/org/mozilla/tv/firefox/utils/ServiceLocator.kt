@@ -67,11 +67,11 @@ import org.mozilla.tv.firefox.webrender.cursor.CursorModel
  */
 open class ServiceLocator(val app: Application) {
     private val appVersion = app.packageManager.getPackageInfo(app.packageName, 0).versionName
-    private val buildConfigDerivables get() = BuildConfigDerivables(getIsEnglishLocale)
+    private val buildConfigDerivables get() = BuildConfigDerivables(isPocketEnabledByLocale)
     private val pocketFeedStateMachine get() = PocketFeedStateMachine()
-    private val getIsEnglishLocale = { LocaleManager.getInstance().currentLanguageIsEnglish(app) }
+    private val isPocketEnabledByLocale = { LocaleManager.getInstance().currentLanguageIsEnglish(app) } // Pocket is en-US only.
     private val bundleTileStore by lazy { BundleTilesStore(app) }
-    private val pocketEndpoint by lazy { PocketEndpoint(pocketEndpointRaw, getIsEnglishLocale) }
+    private val pocketEndpoint by lazy { PocketEndpoint(pocketEndpointRaw, isPocketEnabledByLocale) }
 
     val intentLiveData by lazy { MutableLiveData<Consumable<ValidatedIntentData?>>() }
     val fretboardProvider: FretboardProvider by lazy { FretboardProvider(app) }
