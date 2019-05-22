@@ -26,6 +26,7 @@ import org.mozilla.tv.firefox.pocket.PocketEndpointRaw
 import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
 import org.mozilla.tv.firefox.pocket.PocketRepoCache
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
+import org.mozilla.tv.firefox.pocket.PocketVideoStore
 import org.mozilla.tv.firefox.search.SearchEngineManagerFactory
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.settings.SettingsRepo
@@ -88,6 +89,7 @@ open class ServiceLocator(val app: Application) {
     val formattedDomainWrapper by lazy { FormattedDomainWrapper(app) }
     val channelRepo by lazy { ChannelRepo(pinnedTileRepo) }
     val pocketEndpointRaw by lazy { PocketEndpointRaw(appVersion, buildConfigDerivables.globalPocketVideoEndpoint) }
+    val pocketVideoStore by lazy { PocketVideoStore(app, app.assets, pocketEndpoint::convertVideosJSON) }
 
     // These open vals are overridden in testing
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())

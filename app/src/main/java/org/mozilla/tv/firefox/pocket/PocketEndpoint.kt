@@ -5,9 +5,8 @@
 package org.mozilla.tv.firefox.pocket
 
 import android.net.Uri
-import androidx.annotation.AnyThread
-import androidx.annotation.VisibleForTesting
 import android.util.Log
+import androidx.annotation.AnyThread
 import io.reactivex.Single
 import kotlinx.coroutines.runBlocking
 import okhttp3.Request
@@ -65,8 +64,10 @@ open class PocketEndpoint(
         return convertVideosJSON(jsonResponse)
     }
 
+    // Ideally, this functionality would be in a separate class but 1) we're short on time and 2) this
+    // functionality should be handled by the a-c implementation in the long term.
     /** @return The videos or null on error; the list will never be empty. */
-    @VisibleForTesting fun convertVideosJSON(jsonStr: String): List<PocketViewModel.FeedItem.Video>? = try {
+    fun convertVideosJSON(jsonStr: String): List<PocketViewModel.FeedItem.Video>? = try {
         val rawJSON = JSONObject(jsonStr)
         val videosJSON = rawJSON.getJSONArray("recommendations")
         val videos = videosJSON.flatMapObj { PocketViewModel.FeedItem.Video.fromJSONObject(it) }
