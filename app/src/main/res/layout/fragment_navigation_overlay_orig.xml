@@ -9,7 +9,6 @@
     android:layout_height="match_parent"
     android:background="@color/browser_overlay_background"
     android:orientation="vertical"
-    android:paddingTop="27dp"
     tools:ignore="Overdraw">
     <!-- This background color is necessary otherwise the browser shows through -->
 
@@ -31,6 +30,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="27dp"
                 android:layout_marginBottom="27dp"
                 android:descendantFocusability="afterDescendants"
                 android:orientation="vertical">
@@ -60,7 +60,6 @@
                     android:layout_height="@dimen/urlbar_height"
                     android:layout_marginStart="@dimen/overlay_margin_start"
                     android:layout_marginEnd="@dimen/overlay_margin_end"
-                    android:layout_marginBottom="32dp"
                     android:background="@drawable/nav_urlbar_background"
                     android:cursorVisible="false"
                     android:drawableStart="@drawable/mozac_ic_search"
@@ -98,6 +97,7 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginBottom="16dp"
                     android:fontFamily="@string/font_ember_regular"
+                    android:textSize="24sp"
                     android:text="@string/menu_settings" />
 
                 <androidx.leanback.widget.ListRowView
