@@ -9,6 +9,7 @@ import androidx.annotation.VisibleForTesting.PRIVATE
 import androidx.lifecycle.Lifecycle.Event.ON_START
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
@@ -33,7 +34,14 @@ class PocketVideoFetchScheduler(
     }
 
     @VisibleForTesting(otherwise = PRIVATE)
-    fun schedulePocketBackgroundFetch(workManager: WorkManager) {
+    fun schedulePocketBackgroundFetch(
+        workManager: WorkManager,
+        randLong: (Long, Long) -> Long = { from, until -> Random.nextLong(from, until) }
+    ) {
+        fun getBackoffDelayMillisWithRandomness(): Long {
+            return randLong(BACKOFF_DELAY_MIN_MILLIS, BACKOFF_DELAY_MAX_MILLIS)
+        }
+
         // This may not be the best place to early return based on locale - e.g. it duplicates state with the UI -
         // but we're short on time.
         if (!isPocketEnabledByLocale()) {
@@ -53,6 +61,13 @@ class PocketVideoFetchScheduler(
         val saveRequest = OneTimeWorkRequestBuilder<PocketVideoFetchWorker>()
             .setConstraints(constraints)
             .setInitialDelay(getDelayUntilUpcomingNightFetchMillis(), TimeUnit.MILLISECONDS)
+
+            // Here exponential means the first backoff is the given delay, the second backoff is the given delay * 2,
+            // the third backoff is the given delay * 2 * 2, etc. Note that WorkManager does not introduce randomness
+            // in its backoff algorithm so we must supply our own. This prevents the case where many clients hit the
+            // server all at once, overloading the server, then they all back-off and make new requests all at the same
+            // time, again overloading the server, and repeat.
+            .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, getBackoffDelayMillisWithRandomness(), TimeUnit.MILLISECONDS)
             .build()
 
         workManager.enqueueUniqueWork(FETCH_UNIQUE_WORK_NAME, ExistingWorkPolicy.KEEP, saveRequest)
@@ -86,6 +101,10 @@ class PocketVideoFetchScheduler(
         @VisibleForTesting(otherwise = PRIVATE) const val FETCH_END_HOUR = 5L
         private val FETCH_INTERVAL_DURATION_SECONDS =
             TimeUnit.HOURS.toSeconds(FETCH_END_HOUR - FETCH_START_HOUR).toInt()
+
+        // Since this is a background job, we're in no rush and can wait a while.
+        @VisibleForTesting(otherwise = PRIVATE) val BACKOFF_DELAY_MIN_MILLIS = TimeUnit.SECONDS.toMillis(30)
+        @VisibleForTesting(otherwise = PRIVATE) val BACKOFF_DELAY_MAX_MILLIS = TimeUnit.SECONDS.toMillis(60)
     }
 }
 
