@@ -31,6 +31,7 @@
                 android:id="@+id/tile_icon"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/photonWhite"
                 android:scaleType="centerInside"
                 tools:ignore="ContentDescription"
                 tools:src="@drawable/tile_youtube" />
