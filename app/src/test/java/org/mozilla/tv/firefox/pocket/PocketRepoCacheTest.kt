@@ -31,8 +31,8 @@ class PocketRepoCacheTest {
 
         val repo = object :
             PocketVideoRepo(
-                mock(PocketEndpoint::class.java),
                 PocketFeedStateMachine(),
+                mock(PocketVideoStore::class.java),
                 PocketVideoRepo.FeedState.Loading
             ) {
             override val feedState: Observable<FeedState>

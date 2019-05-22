@@ -73,7 +73,7 @@ class PocketVideoStore(
     fun load(): List<PocketViewModel.FeedItem> {
         fun loadBundledTiles(): String = assets.open(BUNDLED_VIDEOS_PATH).bufferedReader().use { it.readText() }
 
-        val rawJSON =  sharedPrefs.getString(KEY_VIDEO_JSON, null) ?: loadBundledTiles()
+        val rawJSON = sharedPrefs.getString(KEY_VIDEO_JSON, null) ?: loadBundledTiles()
 
         val convertedVideos = convertJSONToPocketVideos(rawJSON)
         if (convertedVideos == null) {
