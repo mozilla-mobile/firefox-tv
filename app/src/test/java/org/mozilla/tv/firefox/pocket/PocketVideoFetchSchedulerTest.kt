@@ -33,6 +33,11 @@ class PocketVideoFetchSchedulerTest {
     }
 
     @Test
+    fun `GIVEN backoff interval constants THEN min is less than max`() {
+        assertTrue(PocketVideoFetchScheduler.BACKOFF_DELAY_MIN_MILLIS < PocketVideoFetchScheduler.BACKOFF_DELAY_MAX_MILLIS)
+    }
+
+    @Test
     fun `GIVEN Pocket is disabled by locale THEN WorkManager is never interacted with so a job is never queued`() {
         isPocketEnabledByLocale = false
         scheduler.schedulePocketBackgroundFetch(workManager)
