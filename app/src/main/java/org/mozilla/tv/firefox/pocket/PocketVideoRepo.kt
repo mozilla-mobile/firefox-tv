@@ -15,7 +15,8 @@ import io.reactivex.subjects.BehaviorSubject
 open class PocketVideoRepo(
     private val pocketFeedStateMachine: PocketFeedStateMachine,
     private val pocketVideoStore: PocketVideoStore,
-    initialState: FeedState
+    private val isPocketEnabledByLocale: () -> Boolean,
+    isPocketKeyValid: Boolean
 ) {
 
     sealed class FeedState {
@@ -26,13 +27,25 @@ open class PocketVideoRepo(
         object Inactive : FeedState()
     }
 
-    private val _feedState = BehaviorSubject.createDefault(initialState)
+    private val _feedState = BehaviorSubject.createDefault(if (!isPocketKeyValid) FeedState.NoAPIKey else FeedState.Inactive)
     open val feedState = _feedState.hide()
         .observeOn(AndroidSchedulers.mainThread())
         .distinctUntilChanged() // avoid churn because we may retrieve similar results in onStart.
 
-    @UiThread // not sure if this is necessary anymore.
+    @UiThread // not sure if this annotation is necessary anymore.
     fun updatePocketFromStore() {
+        // If we have no API key, this will always be the state: there is nothing to do. In theory, now that we
+        // ship with content, we could remove the NoAPIKey UI state but then it'd be less obvious if we accidentally
+        // shipped a release build without a key: we should make that decision separately from this PR.
+        if (_feedState.value == FeedState.NoAPIKey) {
+            return
+        }
+
+        if (!isPocketEnabledByLocale()) {
+            _feedState.onNext(FeedState.Inactive)
+            return
+        }
+
         val videos = pocketVideoStore.load()
         _feedState.onNext(FeedState.LoadComplete(videos))
     }

@@ -33,7 +33,8 @@ class PocketRepoCacheTest {
             PocketVideoRepo(
                 PocketFeedStateMachine(),
                 mock(PocketVideoStore::class.java),
-                PocketVideoRepo.FeedState.Loading
+                isPocketEnabledByLocale = { true },
+                isPocketKeyValid = true
             ) {
             override val feedState: Observable<FeedState>
                 get() = repoOutput

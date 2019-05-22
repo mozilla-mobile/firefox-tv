@@ -14,7 +14,6 @@ import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.pocket.PocketVideoStore
 import org.mozilla.tv.firefox.pocket.PocketViewModel
-import org.mozilla.tv.firefox.utils.BuildConfigDerivables
 
 /**
  * Provides a fake [PocketVideoRepo] implementation for testing purposes.
@@ -40,7 +39,8 @@ class CustomPocketFeedStateProvider {
     val fakedPocketRepo = object : PocketVideoRepo(
         PocketFeedStateMachine(),
         PocketVideoStore(appContext, appContext.assets, pocketEndpoint::convertVideosJSON),
-        BuildConfigDerivables(localeIsEnglish).initialPocketRepoState
+        isPocketEnabledByLocale = { true },
+        isPocketKeyValid = true
     ) {
         override val feedState: Observable<FeedState>
             get() = fakedPocketRepoState
