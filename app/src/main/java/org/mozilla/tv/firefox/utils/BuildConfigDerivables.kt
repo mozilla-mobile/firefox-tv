@@ -6,7 +6,6 @@ package org.mozilla.tv.firefox.utils
 
 import android.net.Uri
 import org.mozilla.tv.firefox.BuildConfig
-import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 
 private const val POCKET_PARAM_API_KEY = "consumer_key"
 
@@ -15,13 +14,8 @@ private const val POCKET_PARAM_API_KEY = "consumer_key"
  *
  * This logic is often simple but noisy, so pulling it out of client code improves readability.
  */
-class BuildConfigDerivables(isPocketEnabledByLocale: () -> Boolean, pocketKey: String? = BuildConfig.POCKET_KEY) {
-    @Suppress("UselessCallOnNotNull") // Values of BuildConfig can change but the compiler doesn't know that
-    val initialPocketRepoState = when {
-        pocketKey.isNullOrEmpty() -> PocketVideoRepo.FeedState.NoAPIKey
-        !isPocketEnabledByLocale.invoke() -> PocketVideoRepo.FeedState.Inactive
-        else -> PocketVideoRepo.FeedState.Loading
-    }
+class BuildConfigDerivables(pocketKey: String? = BuildConfig.POCKET_KEY) {
+    val isPocketKeyValid = !pocketKey.isNullOrBlank()
 
     // Pocket key can be null if it was not included in the build.  In this case we
     // know that any calls to Pocket will fail, and so we do not provide the

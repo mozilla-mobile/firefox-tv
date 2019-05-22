@@ -67,7 +67,7 @@ import org.mozilla.tv.firefox.webrender.cursor.CursorModel
  */
 open class ServiceLocator(val app: Application) {
     private val appVersion = app.packageManager.getPackageInfo(app.packageName, 0).versionName
-    private val buildConfigDerivables get() = BuildConfigDerivables(isPocketEnabledByLocale)
+    private val buildConfigDerivables get() = BuildConfigDerivables()
     private val pocketFeedStateMachine get() = PocketFeedStateMachine()
     private val isPocketEnabledByLocale = { LocaleManager.getInstance().currentLanguageIsEnglish(app) } // Pocket is en-US only.
     private val bundleTileStore by lazy { BundleTilesStore(app) }
@@ -96,7 +96,8 @@ open class ServiceLocator(val app: Application) {
     // These open vals are overridden in testing
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())
     open val pinnedTileRepo by lazy { PinnedTileRepo(app, bundleTileStore) }
-    open val pocketRepo = PocketVideoRepo(pocketFeedStateMachine, pocketVideoStore, buildConfigDerivables.initialPocketRepoState)
+    open val pocketRepo = PocketVideoRepo(pocketFeedStateMachine, pocketVideoStore, isPocketEnabledByLocale,
+        buildConfigDerivables.isPocketKeyValid)
     open val sessionRepo by lazy { SessionRepo(sessionManager, sessionUseCases, turboMode).apply { observeSources() } }
     open val settingsRepo by lazy { SettingsRepo(app) }
 }
