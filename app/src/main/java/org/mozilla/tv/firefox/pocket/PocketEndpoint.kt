@@ -7,23 +7,17 @@ package org.mozilla.tv.firefox.pocket
 import android.net.Uri
 import android.util.Log
 import androidx.annotation.AnyThread
-import io.reactivex.Single
-import kotlinx.coroutines.runBlocking
 import okhttp3.Request
 import org.json.JSONException
 import org.json.JSONObject
 import org.mozilla.tv.firefox.BuildConfig
 import org.mozilla.tv.firefox.ext.executeAndAwait
 import org.mozilla.tv.firefox.ext.flatMapObj
-import org.mozilla.tv.firefox.utils.Endpoint
 import org.mozilla.tv.firefox.utils.OkHttpWrapper
-import org.mozilla.tv.firefox.utils.Response
 import java.io.IOException
 import java.util.concurrent.TimeoutException
 
 private const val LOGTAG = "PocketEndpoint"
-
-typealias PocketData = List<PocketViewModel.FeedItem.Video>
 
 /**
  * Make requests to the Pocket endpoint and returns internal objects.
@@ -34,35 +28,7 @@ typealias PocketData = List<PocketViewModel.FeedItem.Video>
 open class PocketEndpoint(
     private val endpointRaw: PocketEndpointRaw,
     private val isPocketEnabledByLocale: () -> Boolean
-) : Endpoint<PocketData> {
-
-    /**
-     * Wraps the suspend function [getRecommendedVideos] in a [Single]
-     *
-     * Note that this is a blocking call
-     */
-    override fun request(): Single<Response<PocketData>> {
-        val videos = try {
-            runBlocking { getRecommendedVideos() }
-        } catch (e: InterruptedException) {
-            // RxJava disposals briefly interrupt their threads, which here will
-            // cause runBlocking to crash. We can treat this as a failed response
-            // without any additional handling.
-            null
-        }
-        return when {
-            videos == null || videos.isEmpty() -> Single.just(Response.Failure())
-            else -> Single.just(Response.Success(videos))
-        }
-    }
-
-    /** @return The global video recommendations or null on error; the list will never be empty. */
-    @AnyThread // via PocketEndpointRaw.
-    open suspend fun getRecommendedVideos(): List<PocketViewModel.FeedItem.Video>? {
-        if (!isPocketEnabledByLocale.invoke()) return null
-        val jsonResponse = endpointRaw.getGlobalVideoRecommendations() ?: return null
-        return convertVideosJSON(jsonResponse)
-    }
+) {
 
     // Ideally, this functionality would be in a separate class but 1) we're short on time and 2) this
     // functionality should be handled by the a-c implementation in the long term.
