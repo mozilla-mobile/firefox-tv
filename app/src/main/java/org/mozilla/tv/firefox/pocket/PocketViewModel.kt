@@ -23,7 +23,6 @@ const val POCKET_VIDEO_COUNT = 20
  * view should not have to perform any transformations on this data).
  */
 class PocketViewModel(
-    private val pocketVideoRepo: PocketVideoRepo,
     pocketRepoCache: PocketRepoCache
 ) : ViewModel() {
 
@@ -77,8 +76,6 @@ class PocketViewModel(
             }
         }
     }
-
-    fun update() = pocketVideoRepo.update()
 }
 
 fun List<PocketViewModel.FeedItem>.toChannelTiles() = this.map { when (it) {

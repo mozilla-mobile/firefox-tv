@@ -22,6 +22,7 @@ import io.reactivex.Observable
  * should. This lets us manually control when updates are allowed.
  */
 open class PocketRepoCache(repo: PocketVideoRepo) {
+    // TODO: no longer necessary. Be sure to explain why somewhere.
 
     // This should only be unfrozen when Pocket videos are not visible to the user.
     // See class kdoc
