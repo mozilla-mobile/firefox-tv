@@ -95,8 +95,13 @@ open class ServiceLocator(val app: Application) {
 
     // These open vals are overridden in testing
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())
+<<<<<<< HEAD
     open val pinnedTileRepo by lazy { PinnedTileRepo(app, bundleTileStore) }
     open val pocketRepo = PocketVideoRepo(pocketEndpoint, pocketFeedStateMachine, buildConfigDerivables.initialPocketRepoState)
+=======
+    open val pinnedTileRepo by lazy { PinnedTileRepo(app) }
+    open val pocketRepo = PocketVideoRepo(pocketEndpoint, pocketFeedStateMachine, pocketVideoStore, buildConfigDerivables.initialPocketRepoState)
+>>>>>>> Issue #2223: Push Pocket data into the repo in onStart.
     open val sessionRepo by lazy { SessionRepo(sessionManager, sessionUseCases, turboMode).apply { observeSources() } }
     open val settingsRepo by lazy { SettingsRepo(app) }
 }
