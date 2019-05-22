@@ -24,6 +24,7 @@ import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketEndpointRaw
 import org.mozilla.tv.firefox.pocket.PocketFeedStateMachine
+import org.mozilla.tv.firefox.pocket.PocketVideoFetchScheduler
 import org.mozilla.tv.firefox.pocket.PocketRepoCache
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.pocket.PocketVideoStore
@@ -90,6 +91,7 @@ open class ServiceLocator(val app: Application) {
     val channelRepo by lazy { ChannelRepo(pinnedTileRepo) }
     val pocketEndpointRaw by lazy { PocketEndpointRaw(appVersion, buildConfigDerivables.globalPocketVideoEndpoint) }
     val pocketVideoStore by lazy { PocketVideoStore(app, app.assets, pocketEndpoint::convertVideosJSON) }
+    val pocketVideoFetchScheduler by lazy { PocketVideoFetchScheduler() }
 
     // These open vals are overridden in testing
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())
