@@ -13,7 +13,6 @@ import io.reactivex.subjects.BehaviorSubject
  * retrieving or storing that data.
  */
 open class PocketVideoRepo(
-    private val pocketFeedStateMachine: PocketFeedStateMachine,
     private val pocketVideoStore: PocketVideoStore,
     private val isPocketEnabledByLocale: () -> Boolean,
     isPocketKeyValid: Boolean

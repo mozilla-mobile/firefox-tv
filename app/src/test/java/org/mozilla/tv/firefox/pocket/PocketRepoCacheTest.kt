@@ -31,7 +31,6 @@ class PocketRepoCacheTest {
 
         val repo = object :
             PocketVideoRepo(
-                PocketFeedStateMachine(),
                 mock(PocketVideoStore::class.java),
                 isPocketEnabledByLocale = { true },
                 isPocketKeyValid = true
