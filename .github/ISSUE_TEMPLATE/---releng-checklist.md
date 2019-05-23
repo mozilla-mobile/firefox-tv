@@ -34,6 +34,7 @@ _Think something can be automated? Add it to [this doc](https://docs.google.com/
 
 - [ ] [QA] run screenshot test and upload ([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Localization#screenshots))
 - [ ] Upgrade a-c on master
+- [ ] File new Releng checklist with next version and add to top of Backlog
 
 #### Friday # 2 (hard code freeze)
 
