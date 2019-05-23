@@ -177,7 +177,7 @@ dependencies {
     testImplementation "io.mockk:mockk:1.9.1"
 
     testImplementation "androidx.test:core:$test_core"
-    testImplementation "android.arch.work:work-testing:1.0.0" // Required by Glean testing
+    testImplementation "androidx.work:work-testing:2.0.1" // Required by Glean testing
     androidTestImplementation "androidx.test:core:$test_core"
 
     androidTestImplementation "androidx.test.uiautomator:uiautomator:$uiautomator_version"
