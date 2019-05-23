@@ -30,9 +30,14 @@ import org.mozilla.tv.firefox.utils.ServiceLocator
  */
 class YouTubeNavigationTest {
     companion object : TestDependencyFactory {
-        private val customPocketFeedStateProvider = CustomPocketFeedStateProvider()
+
+        lateinit var customPocketFeedStateProvider: CustomPocketFeedStateProvider
 
         override fun createServiceLocator(app: Application) = object : ServiceLocator(app) {
+            init {
+                customPocketFeedStateProvider = CustomPocketFeedStateProvider(app)
+            }
+
             override val pocketRepo = customPocketFeedStateProvider.fakedPocketRepo
         }
     }
@@ -62,7 +67,6 @@ class YouTubeNavigationTest {
                 authors = "Eater"
             )
         ))
-
         customPocketFeedStateProvider.fakedPocketRepoState.onNext(mockedState)
     }
 
@@ -74,6 +78,7 @@ class YouTubeNavigationTest {
          * Expected: Overlay
          */
         navigationOverlay {
+            println("+++")
         }.enterUrlAndEnterToBrowser(youtubeUrl.toUri()!!) {
         }.openOverlay {
             waitUntilYouTubeHomeLoads()

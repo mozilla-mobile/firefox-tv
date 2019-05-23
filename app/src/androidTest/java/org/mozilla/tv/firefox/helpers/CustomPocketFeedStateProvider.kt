@@ -4,7 +4,7 @@
 
 package org.mozilla.tv.firefox.helpers
 
-import androidx.test.platform.app.InstrumentationRegistry
+import android.app.Application
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
@@ -19,7 +19,7 @@ import org.mozilla.tv.firefox.pocket.PocketViewModel
  *
  * Any values pushed to [fakedPocketRepoState] will be immediately emitted.
  */
-class CustomPocketFeedStateProvider {
+class CustomPocketFeedStateProvider(private val appContext: Application) {
 
     private val localeIsEnglish: () -> Boolean = { true }
 
@@ -30,9 +30,6 @@ class CustomPocketFeedStateProvider {
             return PocketViewModel.noKeyPlaceholders
         }
     }
-    val appContext = InstrumentationRegistry.getInstrumentation()
-        .targetContext
-        .applicationContext
 
     val fakedPocketRepoState = PublishSubject.create<PocketVideoRepo.FeedState>()
     val fakedPocketRepo = object : PocketVideoRepo(
