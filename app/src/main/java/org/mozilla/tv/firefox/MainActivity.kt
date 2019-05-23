@@ -62,10 +62,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         val safeIntent = intent.toSafeIntent()
         webRenderComponents.notifyLaunchWithSafeIntent(safeIntent)
 
-        arrayOf(
-            serviceLocator.engineViewCache,
-            serviceLocator.pocketVideoFetchScheduler
-        ).forEach { lifecycle.addObserver(it) }
+        lifecycle.addObserver(serviceLocator.engineViewCache)
+        lifecycle.addObserver(serviceLocator.pocketVideoFetchScheduler)
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
