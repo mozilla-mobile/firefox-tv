@@ -10,6 +10,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_SETTLING
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.getDimenPixelSize
 
@@ -23,6 +24,8 @@ class ChannelLayoutManager(
     private val context: Context
 ) : LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false) {
 
+    @Volatile private var isScrolling: Boolean = false
+
     /**
      * Android by default, when SNAP_TO_START, attempts to focus the leftmost partially visible
      * descendant (See [findFirstVisibleChildClosestToStart]). Due to carousel scroll, there is
@@ -32,6 +35,15 @@ class ChannelLayoutManager(
      */
     fun requestDefaultFocus() {
         findViewByPosition(findFirstCompletelyVisibleItemPosition())?.requestFocus()
+    }
+
+    override fun onScrollStateChanged(state: Int) {
+            isScrolling = when (state) {
+            SCROLL_STATE_SETTLING -> true
+            else -> false
+        }
+
+        super.onScrollStateChanged(state)
     }
 
     override fun onRequestChildFocus(
@@ -54,7 +66,8 @@ class ChannelLayoutManager(
             if (pos == RecyclerView.NO_POSITION)
                 return false
 
-            smoothScrollToPosition(parent, state, pos)
+            if (!isScrolling)
+                smoothScrollToPosition(parent, state, pos)
         }
 
         return super.onRequestChildFocus(parent, state, child, focused)
@@ -112,7 +125,7 @@ class ChannelLayoutManager(
                 return 0
             }
             val params = targetView.layoutParams as RecyclerView.LayoutParams
-            val left = layoutManager.getDecoratedLeft(targetView) - params.leftMargin
+            val left = layoutManager.getDecoratedLeft(targetView) - params.marginStart
             val start = context.getDimenPixelSize(R.dimen.overlay_margin_channel_start)
 
             return start - left
