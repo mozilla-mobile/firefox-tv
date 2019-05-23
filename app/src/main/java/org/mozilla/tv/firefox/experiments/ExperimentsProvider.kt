@@ -52,6 +52,7 @@ class ExperimentsProvider(private val fretboard: Fretboard, private val context:
             expDescriptor == null -> false
             expDescriptor.name.endsWith(ExperimentSuffix.A.value) -> true
             expDescriptor.name.endsWith(ExperimentSuffix.B.value) -> false
+            expDescriptor.name.endsWith(ExperimentSuffix.C.value) -> true
             else -> {
                 Sentry.capture(ExperimentIllegalStateException("Hint Bar Illegal Branch Name"))
                 false
