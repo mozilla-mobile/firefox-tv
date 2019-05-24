@@ -5,7 +5,9 @@
 package org.mozilla.tv.firefox.channels
 
 import android.content.Context
+import org.mozilla.tv.firefox.architecture.KillswitchLocales
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
+import java.util.Locale
 
 private val TELEMETRY = TelemetryIntegration.INSTANCE
 
@@ -16,19 +18,25 @@ data class ChannelConfig(
     val onClickTelemetry: ((ChannelTile) -> Unit)? = null,
     val onLongClickTelemetry: ((ChannelTile) -> Unit)? = null,
     val onFocusTelemetry: ((ChannelTile, Boolean) -> Unit)? = null,
-    val itemsMayBeRemoved: Boolean = false
+    val itemsMayBeRemoved: Boolean = false,
+    val isEnabledInCurrentExperiment: Boolean,
+    val enabledInLocales: KillswitchLocales
 ) {
     companion object {
         fun getPocketConfig(): ChannelConfig = ChannelConfig(
                 onClickTelemetry = { tile -> TELEMETRY.pocketVideoClickEvent(tile.id) },
                 // TODO focus telemetry should probably only be sent on focus gain, but this is
                 //  how our previous implementation worked. Keeping this to maintain data consistency
-                onFocusTelemetry = { tile, _ -> TELEMETRY.pocketVideoImpressionEvent(tile.id) }
+                onFocusTelemetry = { tile, _ -> TELEMETRY.pocketVideoImpressionEvent(tile.id) },
+                isEnabledInCurrentExperiment = true,
+                enabledInLocales = KillswitchLocales.ActiveIn(Locale.US)
         )
 
         fun getPinnedTileConfig(context: Context): ChannelConfig = ChannelConfig(
                 onClickTelemetry = { tile -> TELEMETRY.homeTileClickEvent(context, tile) },
-                itemsMayBeRemoved = true
+                itemsMayBeRemoved = true,
+                isEnabledInCurrentExperiment = true,
+                enabledInLocales = KillswitchLocales.All
         )
     }
 }
