@@ -65,13 +65,16 @@ class KillswitchLinearLayout : LinearLayout {
             return super.setVisibility(View.GONE)
         }
 
-        val currentLocale = LocaleManager.getInstance().getCurrentLocale(context)
         val allAllowed = allowedInLocales == KillswitchLocales.All
         val allowedLocales = (allowedInLocales as? KillswitchLocales.ActiveIn)?.locales
-        val currentLocaleTag = currentLocale?.toLanguageTag()
+        val currentLocale = LocaleManager.getInstance().getCurrentLocale(context)
 
-        val currentLocaleIsAllowed = (allowedLocales != null && currentLocaleTag != null &&
-            allowedLocales.contains(currentLocaleTag)) //TODO fix comparison
+        val currentLocaleIsAllowed = (allowedLocales != null &&
+            allowedLocales.any { allowed ->
+                allowed.language == currentLocale.language &&
+                    (allowed.country.isEmpty() ||
+                        allowed.country == currentLocale.country)
+            })
 
         if (!allAllowed && !currentLocaleIsAllowed) {
             return super.setVisibility(View.GONE)
