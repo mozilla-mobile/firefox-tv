@@ -139,6 +139,9 @@ class FocusRepo(
                     R.id.navButtonForward -> {
                         return getForwardButtonFocusState(focusNode, sessionState)
                     }
+                    R.id.turboButton -> {
+                        return getTurboButtonFocusState(focusNode, sessionState)
+                    }
                     R.id.home_tile -> {
                         // If pinnedTiles is empty and current focus is on home_tile, we need to
                         // restore lost focus (this happens when you remove all tiles in the overlay)
@@ -238,6 +241,25 @@ class FocusRepo(
         return State(
             focusNode = FocusNode(
                 focusedForwardButtonNode.viewId,
+                nextFocusLeftId = nextFocusLeftId))
+    }
+
+    private fun getTurboButtonFocusState(
+        focusedTurboButtonNode: FocusNode,
+        sessionState: SessionRepo.State
+    ): State {
+
+        assert(focusedTurboButtonNode.viewId == R.id.turboButton)
+
+        val nextFocusLeftId = when {
+            // TODO: this is a duplicating existing logic in the ToolbarVM, may fall out of sync
+            sessionState.currentUrl == URLs.APP_URL_HOME -> R.id.turboButton
+            else -> R.id.pinButton
+        }
+
+        return State(
+            focusNode = FocusNode(
+                focusedTurboButtonNode.viewId,
                 nextFocusLeftId = nextFocusLeftId))
     }
 
