@@ -4,7 +4,6 @@
 
 package org.mozilla.tv.firefox.pocket
 
-import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
@@ -27,13 +26,9 @@ class PocketViewModelTest {
     fun setup() {
         repoCacheState = PublishSubject.create()
         val repo = mock(PocketVideoRepo::class.java)
-        `when`(repo.feedState).thenReturn(Observable.empty())
-        val repoCache = object : PocketRepoCache(repo) {
-            override val feedState
-                get() = repoCacheState
-        }
+        `when`(repo.feedState).thenReturn(repoCacheState)
 
-        viewModel = PocketViewModel(repoCache)
+        viewModel = PocketViewModel(repo)
         noKeyPlaceholders = PocketViewModel.noKeyPlaceholders
         testObserver = viewModel.state.test()
     }

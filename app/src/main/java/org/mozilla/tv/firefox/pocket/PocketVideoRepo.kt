@@ -29,6 +29,11 @@ open class PocketVideoRepo(
         .observeOn(AndroidSchedulers.mainThread())
         .distinctUntilChanged() // avoid churn because we may retrieve similar results in onStart.
 
+    /**
+     * Gets the latest Pocket videos from the store and pushes it to the UI. This is intentionally
+     * not reactive because a reactive update model might replace the content when the user is looking
+     * at it. This method is expected to be called when the user is not looking at the content (e.g. in onStart).
+     */
     @UiThread // not sure if this annotation is necessary anymore.
     fun updatePocketFromStore() {
         // If we have no API key, this will always be the state: there is nothing to do. In theory, now that we
