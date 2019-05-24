@@ -4,13 +4,31 @@
 
 package org.mozilla.tv.firefox.pocket
 
+import android.util.Log
 import org.json.JSONException
 import org.json.JSONObject
+import org.mozilla.tv.firefox.ext.flatMapObj
+
+private const val LOGTAG = "PocketVideoParser"
 
 /**
  * Handles marshalling [PocketViewModel.FeedItem.Video] objects from JSON.
  */
 object PocketVideoParser {
+
+    // Ideally, this functionality would be in a separate class but 1) we're short on time and 2) this
+    // functionality should be handled by the a-c implementation in the long term.
+    /** @return The videos or null on error; the list will never be empty. */
+    fun convertVideosJSON(jsonStr: String): List<PocketViewModel.FeedItem.Video>? = try {
+        val rawJSON = JSONObject(jsonStr)
+        val videosJSON = rawJSON.getJSONArray("recommendations")
+        val videos = videosJSON.flatMapObj { PocketViewModel.FeedItem.Video.fromJSONObject(it) }
+        if (videos.isNotEmpty()) videos else null
+    } catch (e: JSONException) {
+        Log.w(LOGTAG, "convertVideosJSON: invalid JSON from Pocket server")
+        Log.w(LOGTAG, e)
+        null
+    }
 
     fun parse(jsonObj: JSONObject): PocketViewModel.FeedItem.Video? = try {
         PocketViewModel.FeedItem.Video(

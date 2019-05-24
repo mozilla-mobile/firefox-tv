@@ -21,10 +21,10 @@ import org.mozilla.tv.firefox.framework.FrameworkRepo
 import org.mozilla.tv.firefox.channels.ChannelRepo
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileImageUtilWrapper
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
-import org.mozilla.tv.firefox.pocket.PocketEndpoint
 import org.mozilla.tv.firefox.pocket.PocketEndpointRaw
 import org.mozilla.tv.firefox.pocket.PocketVideoFetchScheduler
 import org.mozilla.tv.firefox.pocket.PocketRepoCache
+import org.mozilla.tv.firefox.pocket.PocketVideoParser
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.pocket.PocketVideoStore
 import org.mozilla.tv.firefox.search.SearchEngineManagerFactory
@@ -69,7 +69,7 @@ open class ServiceLocator(val app: Application) {
     private val buildConfigDerivables get() = BuildConfigDerivables()
     private val isPocketEnabledByLocale = { LocaleManager.getInstance().currentLanguageIsEnglish(app) } // Pocket is en-US only.
     private val bundleTileStore by lazy { BundleTilesStore(app) }
-    private val pocketEndpoint by lazy { PocketEndpoint(pocketEndpointRaw, isPocketEnabledByLocale) }
+    private val pocketVideoParser by lazy { PocketVideoParser }
 
     val intentLiveData by lazy { MutableLiveData<Consumable<ValidatedIntentData?>>() }
     val fretboardProvider: FretboardProvider by lazy { FretboardProvider(app) }
@@ -88,7 +88,7 @@ open class ServiceLocator(val app: Application) {
     val formattedDomainWrapper by lazy { FormattedDomainWrapper(app) }
     val channelRepo by lazy { ChannelRepo(pinnedTileRepo) }
     val pocketEndpointRaw by lazy { PocketEndpointRaw(appVersion, buildConfigDerivables.globalPocketVideoEndpoint) }
-    val pocketVideoStore by lazy { PocketVideoStore(app, app.assets, pocketEndpoint::convertVideosJSON) }
+    val pocketVideoStore by lazy { PocketVideoStore(app, app.assets, pocketVideoParser::convertVideosJSON) }
     val pocketVideoFetchScheduler by lazy { PocketVideoFetchScheduler(isPocketEnabledByLocale) }
 
     // These open vals are overridden in testing
