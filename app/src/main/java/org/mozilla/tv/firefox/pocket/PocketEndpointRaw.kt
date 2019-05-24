@@ -17,6 +17,7 @@ import java.util.concurrent.TimeoutException
 private const val LOGTAG = "PocketEndpointRaw"
 
 /** Make requests to the Pocket endpoint and returns raw data: see [PocketEndpoint] for more. */
+@Deprecated("Move to android-components implementation #1976")
 class PocketEndpointRaw(
     private val appVersion: String,
     private val pocketGlobalVideoEndpoint: Uri?
