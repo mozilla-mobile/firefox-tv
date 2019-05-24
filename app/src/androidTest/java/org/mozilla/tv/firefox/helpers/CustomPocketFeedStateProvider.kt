@@ -8,11 +8,9 @@ import android.app.Application
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
-import org.mozilla.tv.firefox.pocket.PocketEndpoint
-import org.mozilla.tv.firefox.pocket.PocketEndpointRaw
+import org.mozilla.tv.firefox.pocket.PocketVideoParser
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.pocket.PocketVideoStore
-import org.mozilla.tv.firefox.pocket.PocketViewModel
 
 /**
  * Provides a fake [PocketVideoRepo] implementation for testing purposes.
@@ -21,19 +19,9 @@ import org.mozilla.tv.firefox.pocket.PocketViewModel
  */
 class CustomPocketFeedStateProvider(private val appContext: Application) {
 
-    private val localeIsEnglish: () -> Boolean = { true }
-
-    // Because of the endpoint overrides, the raw endpoint is unused so the arguments don't matter.
-    private val pocketEndpointRaw = PocketEndpointRaw("001", null)
-    private val pocketEndpoint = object : PocketEndpoint(pocketEndpointRaw, localeIsEnglish) {
-        override suspend fun getRecommendedVideos(): List<PocketViewModel.FeedItem.Video>? {
-            return PocketViewModel.noKeyPlaceholders
-        }
-    }
-
     val fakedPocketRepoState = PublishSubject.create<PocketVideoRepo.FeedState>()
     val fakedPocketRepo = object : PocketVideoRepo(
-        PocketVideoStore(appContext, appContext.assets, pocketEndpoint::convertVideosJSON),
+        PocketVideoStore(appContext, appContext.assets, PocketVideoParser::convertVideosJSON),
         isPocketEnabledByLocale = { true },
         isPocketKeyValid = true
     ) {
