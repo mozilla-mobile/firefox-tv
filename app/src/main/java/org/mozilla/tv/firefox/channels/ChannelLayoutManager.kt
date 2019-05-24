@@ -38,7 +38,7 @@ class ChannelLayoutManager(
     }
 
     override fun onScrollStateChanged(state: Int) {
-            isScrolling = when (state) {
+        isScrolling = when (state) {
             SCROLL_STATE_SETTLING -> true
             else -> false
         }
@@ -52,8 +52,6 @@ class ChannelLayoutManager(
         child: View,
         focused: View?
     ): Boolean {
-        if (state.isMeasuring) return false
-
         child.let {
             val pos = getPosition(it)
 
@@ -66,7 +64,11 @@ class ChannelLayoutManager(
             if (pos == RecyclerView.NO_POSITION)
                 return false
 
-            if (!isScrolling)
+            // Don't call smoothScrollToPosition when ScrollState is in [SCROLL_STATE_SETTLING]
+            // Otherwise it causes over throttling in ViewGroup's internal logic to determine
+            // nextChildFocus. For first and last element, the updated margin seems to be only
+            // redrawn when smoothScrolled
+            if (!isScrolling || pos == 0 || pos == state.itemCount - 1)
                 smoothScrollToPosition(parent, state, pos)
         }
 
