@@ -27,7 +27,6 @@ import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileImageUtilWrapper
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.pocket.PocketEndpointRaw
 import org.mozilla.tv.firefox.pocket.PocketVideoFetchScheduler
-import org.mozilla.tv.firefox.pocket.PocketRepoCache
 import org.mozilla.tv.firefox.pocket.PocketVideoParser
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.pocket.PocketVideoStore
@@ -79,7 +78,6 @@ open class ServiceLocator(val app: Application) {
     val fretboardProvider: FretboardProvider by lazy { FretboardProvider(app) }
     val experimentsProvider by lazy { ExperimentsProvider(fretboardProvider.fretboard, app) }
     val turboMode: TurboMode by lazy { TurboMode(app) }
-    val pocketRepoCache by lazy { PocketRepoCache(pocketRepo) }
     val viewModelFactory by lazy { ViewModelFactory(this, app) }
     val screenController by lazy { ScreenController(sessionRepo) }
     val engineViewCache by lazy { EngineViewCache(sessionRepo) }

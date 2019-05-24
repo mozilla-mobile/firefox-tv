@@ -23,7 +23,7 @@ const val POCKET_VIDEO_COUNT = 20
  * view should not have to perform any transformations on this data).
  */
 class PocketViewModel(
-    pocketRepoCache: PocketRepoCache
+    pocketRepo: PocketVideoRepo
 ) : ViewModel() {
 
     sealed class State {
@@ -47,8 +47,7 @@ class PocketViewModel(
         }
     }
 
-    // #2297: the PocketRepoCache is broken and will not stop videos from updating when the user is looking at them.
-    val state: Observable<State> = pocketRepoCache.feedState
+    val state: Observable<State> = pocketRepo.feedState
         .map { repoState ->
             when (repoState) {
                 is PocketVideoRepo.FeedState.LoadComplete -> State.Feed(repoState.videos)
