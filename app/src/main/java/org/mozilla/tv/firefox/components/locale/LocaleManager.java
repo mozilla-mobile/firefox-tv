@@ -15,7 +15,6 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.util.Log;
 
 import io.sentry.Sentry;
@@ -272,38 +271,38 @@ public class LocaleManager {
         settings.edit().putString(PREF_LOCALE, localeCode).apply();
     }
 
-    @Nullable
+    @NonNull
     public Locale getCurrentLocale(@NonNull Context context) {
         if (currentLocale != null) {
             return currentLocale;
         }
 
-        final String current = getPersistedLocale(context);
-        if (current == null) {
-            return null;
+        String current = getPersistedLocale(context);
+        if (current != null) {
+            currentLocale = Locales.parseLocaleCode(current);
         }
-        return currentLocale = Locales.parseLocaleCode(current);
+
+        if (currentLocale == null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                currentLocale = context.getResources().getConfiguration().getLocales().get(0);
+            } else {
+                currentLocale = context.getResources().getConfiguration().locale;
+            }
+        }
+
+        // In a very small number of cases, this locale will still be null. Most of our
+        // userbase uses English as a primary language, so we default to that as a fallback
+        if (currentLocale == null) {
+            Sentry.capture(new AssertionError("Selected locale not available. Falling back to EN"));
+            currentLocale = Locale.US;
+        }
+
+        return currentLocale;
     }
 
     @NonNull
     public Boolean currentLanguageIsEnglish(@NonNull Context context) {
-        Locale current = getCurrentLocale(context);
-        // If locale hasn't been updated (i.e., 'current' is null), use system default
-        if (current == null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                current = context.getResources().getConfiguration().getLocales().get(0);
-            } else {
-                current = context.getResources().getConfiguration().locale;
-            }
-        }
-        // In a very small number of cases, this locale will still be null. Most of our
-        // userbase uses English as a primary language, so we default to that as a fallback
-        if (current == null) {
-            Sentry.capture(new AssertionError("Selected locale not available. Falling back to EN"));
-            return true;
-        }
-        String language = Locales.getLanguage(current);
-        return language.toLowerCase(current).startsWith("en");
+        return getCurrentLocale(context).getLanguage().equals("en");
     }
 
     /**
