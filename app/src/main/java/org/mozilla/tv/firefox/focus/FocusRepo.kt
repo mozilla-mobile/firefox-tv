@@ -253,7 +253,13 @@ class FocusRepo(
 
         val nextFocusLeftId = when {
             // TODO: this is a duplicating existing logic in the ToolbarVM, may fall out of sync
-            sessionState.currentUrl == URLs.APP_URL_HOME -> R.id.turboButton
+            sessionState.currentUrl == URLs.APP_URL_HOME -> {
+                if (sessionState.forwardEnabled) {
+                    R.id.navButtonForward
+                } else {
+                    R.id.turboButton
+                }
+            }
             else -> R.id.pinButton
         }
 
