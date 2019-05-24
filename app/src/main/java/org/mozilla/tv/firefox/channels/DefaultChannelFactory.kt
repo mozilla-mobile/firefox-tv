@@ -26,9 +26,9 @@ class DefaultChannelFactory(
         val containerView = LayoutInflater.from(context).inflate(R.layout.default_channel, parent, false) as ViewGroup
         containerView.channelTileContainer.apply {
             val channelLayoutManager = ChannelLayoutManager(context)
-            gridView.layoutManager = channelLayoutManager
+            layoutManager = channelLayoutManager
 
-            this.gridView.adapter = channelAdapter
+            adapter = channelAdapter
 
             // This blocks Android handle request ViewGroup descendant focus allowing us to handle
             // default childFocus logic; see more in [ChannelLayoutManager.requestDefaultFocus]
