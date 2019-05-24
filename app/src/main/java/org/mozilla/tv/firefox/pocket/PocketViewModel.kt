@@ -41,6 +41,7 @@ class PocketViewModel(
             val authors: String
         ) : FeedItem() {
             companion object {
+                @Suppress("DEPRECATION") // We need PocketVideoParser until we move to a-c's impl.
                 fun fromJSONObject(jsonObject: JSONObject) = PocketVideoParser.parse(jsonObject)
             }
         }

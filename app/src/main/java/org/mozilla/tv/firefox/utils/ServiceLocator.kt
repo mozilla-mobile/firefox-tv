@@ -2,6 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+// We want the Pocket code from a-c: #1976. Unfortunately, the compiler won't let
+// us suppress individual lines so we have to suppress the file.
+@file:Suppress("DEPRECATION")
+
 package org.mozilla.tv.firefox.utils
 
 import android.app.Application
@@ -87,6 +91,7 @@ open class ServiceLocator(val app: Application) {
     val screenshotStoreWrapper by lazy { PinnedTileImageUtilWrapper(app) }
     val formattedDomainWrapper by lazy { FormattedDomainWrapper(app) }
     val channelRepo by lazy { ChannelRepo(pinnedTileRepo) }
+    @Suppress("DEPRECATION") // We need PocketEndpointRaw until we move to a-c's impl.
     val pocketEndpointRaw by lazy { PocketEndpointRaw(appVersion, buildConfigDerivables.globalPocketVideoEndpoint) }
     val pocketVideoStore by lazy { PocketVideoStore(app, app.assets, pocketVideoParser::convertVideosJSON) }
     val pocketVideoFetchScheduler by lazy { PocketVideoFetchScheduler(isPocketEnabledByLocale) }

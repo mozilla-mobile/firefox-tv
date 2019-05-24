@@ -14,6 +14,7 @@ private const val LOGTAG = "PocketVideoParser"
 /**
  * Handles marshalling [PocketViewModel.FeedItem.Video] objects from JSON.
  */
+@Deprecated("Move to android-components implementation #1976")
 object PocketVideoParser {
 
     // Ideally, this functionality would be in a separate class but 1) we're short on time and 2) this
