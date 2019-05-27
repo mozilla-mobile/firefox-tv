@@ -19,7 +19,6 @@ import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withHint
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withParent
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
@@ -30,7 +29,6 @@ import mozilla.components.support.android.test.espresso.assertIsDisplayed
 import mozilla.components.support.android.test.espresso.assertIsEnabled
 import mozilla.components.support.android.test.espresso.assertIsSelected
 import mozilla.components.support.android.test.espresso.click
-import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert.assertTrue
 import org.mozilla.tv.firefox.R
