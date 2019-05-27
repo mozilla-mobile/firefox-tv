@@ -8,8 +8,6 @@ package org.mozilla.tv.firefox.ui.screenshots;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.By;
@@ -73,18 +71,13 @@ public class PinTileTests extends ScreenshotTest {
 
         Screengrab.screenshot("unpin-toast");
 
-        Matcher<View> pinnedTilesChannel = allOf(withId(R.id.pinned_tiles_channel),
-                childAtPosition(
-                        withClassName(is("android.widget.LinearLayout")), 1));
-
-        Matcher<View> pinnedRowContent = childAtPosition(pinnedTilesChannel,
-                0);
-
-        ViewInteraction homeTile = onView(allOf(withId(R.id.home_tile),
-                childAtPosition(pinnedRowContent, 0),
-                isDisplayed()));
-
-        homeTile.perform(longClick());
+        onView(allOf(withId(R.id.home_tile),
+                childAtPosition(allOf(withId(R.id.pinned_tiles_channel),
+                        childAtPosition(
+                                withClassName(is("android.widget.LinearLayout")),
+                                1)),
+                        0),
+                isDisplayed())).perform(longClick());
 
         device.wait(Until.findObject(By.text(getString(R.string.homescreen_tile_remove))), 1000);
         onView(withText(R.string.homescreen_tile_remove))
