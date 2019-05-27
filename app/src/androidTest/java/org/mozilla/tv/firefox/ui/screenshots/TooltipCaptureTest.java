@@ -51,7 +51,7 @@ public class TooltipCaptureTest extends ScreenshotTest {
     @Test
     public void showToolTips() throws InterruptedException {
 
-        ViewInteraction pinnedTileChannel = onView(allOf(withParent(withId(R.id.pinned_tiles_channel)), withId(R.id.row_content)));
+        ViewInteraction pinnedTileChannel = onView(withId(R.id.pinned_tiles_channel));
 
         onView(allOf(withId(R.id.navUrlInput), hasFocus())).check(matches(isDisplayed()));
         pinnedTileChannel.perform(new NestedScrollToAction());
