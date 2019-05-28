@@ -23,6 +23,7 @@ class ChannelRepo(
                 pinnedTileRepo.removePinnedTile(tileData.url)
             }
             TileSource.POCKET -> throw NotImplementedError("pocket shouldn't be able to remove tiles")
+            TileSource.TV_GUIDE -> Unit //TODO in #2326
         }
     }
 }
