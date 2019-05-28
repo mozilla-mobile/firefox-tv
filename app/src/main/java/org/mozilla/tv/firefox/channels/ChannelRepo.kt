@@ -43,28 +43,27 @@ class ChannelRepo(
                 pinnedTileRepo.removePinnedTile(tileData.url)
             }
             TileSource.POCKET -> throw NotImplementedError("pocket shouldn't be able to remove tiles")
-            TileSource.TV_GUIDE -> Unit //TODO in #2326
+            TileSource.TV_GUIDE -> Unit // TODO in #2326
         }
     }
 
     private val bundledNewsTiles = Observable.just(ChannelContent.getNewsChannels())
         .replay(1)
         .autoConnect(0)
-    //TODO in #2326 (replace emptyList with blacklist. Push any updates to this subject)
+    // TODO in #2326 (replace emptyList with blacklist. Push any updates to this subject)
     private val blacklistedNewsIds = BehaviorSubject.createDefault(emptyList<String>())
 
     private val bundledSportsTiles = Observable.just(ChannelContent.getSportsChannels())
         .replay(1)
         .autoConnect(0)
-    //TODO in #2326 (replace emptyList with blacklist. Push any updates to this subject)
+    // TODO in #2326 (replace emptyList with blacklist. Push any updates to this subject)
     private val blacklistedSportsIds = BehaviorSubject.createDefault(emptyList<String>())
 
     private val bundledMusicTiles = Observable.just(ChannelContent.getMusicChannels())
         .replay(1)
         .autoConnect(0)
-    //TODO in #2326 (replace emptyList with blacklist. Push any updates to this subject)
+    // TODO in #2326 (replace emptyList with blacklist. Push any updates to this subject)
     private val blacklistedMusicIds = BehaviorSubject.createDefault(emptyList<String>())
-
 }
 
 private fun Observable<List<ChannelTile>>.filterNotBlacklisted(

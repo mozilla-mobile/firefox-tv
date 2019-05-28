@@ -1,6 +1,6 @@
 package org.mozilla.tv.firefox.channels.content
 
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class ChannelContentTest {

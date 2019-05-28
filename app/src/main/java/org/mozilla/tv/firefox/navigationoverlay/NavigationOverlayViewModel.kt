@@ -62,7 +62,7 @@ class NavigationOverlayViewModel(
     val shouldDisplayPinnedTiles: Observable<Boolean> = pinnedTiles.map { !it.tileList.isEmpty() }
             .distinctUntilChanged()
 
-    //TODO this method is only used by tests. The tests should be updated, and the method removed
+    // TODO this method is only used by tests. The tests should be updated, and the method removed
     fun unpinPinnedTile(url: String) {
         pinnedTileRepo.removePinnedTile(url)
     }
