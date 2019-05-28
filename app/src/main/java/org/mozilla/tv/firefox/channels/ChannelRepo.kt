@@ -8,7 +8,9 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
 import org.mozilla.tv.firefox.channels.content.ChannelContent
+import org.mozilla.tv.firefox.channels.content.getMusicChannels
 import org.mozilla.tv.firefox.channels.content.getNewsChannels
+import org.mozilla.tv.firefox.channels.content.getSportsChannels
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
@@ -24,6 +26,12 @@ class ChannelRepo(
 
     fun getNewsTiles(): Observable<List<ChannelTile>> =
         bundledNewsTiles.filterNotBlacklisted(blacklistedNewsIds)
+
+    fun getSportsTiles(): Observable<List<ChannelTile>> =
+        bundledSportsTiles.filterNotBlacklisted(blacklistedSportsIds)
+
+    fun getMusicTiles(): Observable<List<ChannelTile>> =
+        bundledMusicTiles.filterNotBlacklisted(blacklistedMusicIds)
 
     fun removeChannelContent(tileData: ChannelTile) {
         when (tileData.tileSource) {
@@ -41,6 +49,18 @@ class ChannelRepo(
         .autoConnect(0)
     //TODO in #2326 (replace emptyList with blacklist. Push any updates to this subject)
     private val blacklistedNewsIds = BehaviorSubject.createDefault(emptyList<String>())
+
+    private val bundledSportsTiles = Observable.just(ChannelContent.getSportsChannels())
+        .replay(1)
+        .autoConnect(0)
+    //TODO in #2326 (replace emptyList with blacklist. Push any updates to this subject)
+    private val blacklistedSportsIds = BehaviorSubject.createDefault(emptyList<String>())
+
+    private val bundledMusicTiles = Observable.just(ChannelContent.getMusicChannels())
+        .replay(1)
+        .autoConnect(0)
+    //TODO in #2326 (replace emptyList with blacklist. Push any updates to this subject)
+    private val blacklistedMusicIds = BehaviorSubject.createDefault(emptyList<String>())
 
 }
 

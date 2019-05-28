@@ -23,6 +23,7 @@ import androidx.annotation.VisibleForTesting.NONE
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
@@ -43,6 +44,7 @@ import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.hint.InactiveHintViewModel
 import org.mozilla.tv.firefox.channels.ChannelConfig
+import org.mozilla.tv.firefox.channels.ChannelDetails
 import org.mozilla.tv.firefox.channels.DefaultChannel
 import org.mozilla.tv.firefox.channels.DefaultChannelFactory
 import org.mozilla.tv.firefox.channels.SettingsChannelAdapter
@@ -128,6 +130,8 @@ class NavigationOverlayFragment : Fragment() {
     private val pinnedTileChannel: DefaultChannel get() = channelReferenceContainer!!.pinnedTileChannel
     private val pocketChannel: DefaultChannel get() = channelReferenceContainer!!.pocketChannel
     private val newsChannel: DefaultChannel get() = channelReferenceContainer!!.newsChannel
+    private val sportsChannel: DefaultChannel get() = channelReferenceContainer!!.sportsChannel
+    private val musicChannel: DefaultChannel get() = channelReferenceContainer!!.musicChannel
 
     private var rootView: View? = null
 
@@ -191,6 +195,8 @@ class NavigationOverlayFragment : Fragment() {
             channelsContainer.addView(it.pocketChannel.channelContainer)
             channelsContainer.addView(it.pinnedTileChannel.channelContainer)
             channelsContainer.addView(it.newsChannel.channelContainer)
+            channelsContainer.addView(it.sportsChannel.channelContainer)
+            channelsContainer.addView(it.musicChannel.channelContainer)
         }
     }
 
@@ -208,8 +214,8 @@ class NavigationOverlayFragment : Fragment() {
             .addTo(compositeDisposable)
         observePocket()
             .forEach { compositeDisposable.add(it) }
-        observeNewsTiles()
-            .addTo(compositeDisposable)
+        observeTvGuideTiles()
+            .forEach { compositeDisposable.add(it) }
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = false)
                 .forEach { compositeDisposable.add(it) }
     }
@@ -312,13 +318,20 @@ class NavigationOverlayFragment : Fragment() {
                 pocketChannel.setContents(it)
             }
 
-    private fun observeNewsTiles(): Disposable = navigationOverlayViewModel.newsChannel
-        .subscribe {
-            newsChannel.setTitle(it.title)
-            newsChannel.setContents(it.tileList)
-        }
+    // TODO set gone when empty (animate?) when adding removal in #2326
+    private fun observeTvGuideTiles(): List<Disposable> {
+        return listOf(
+            defaultObserveChannelDetails(newsChannel, navigationOverlayViewModel.newsChannel),
+            defaultObserveChannelDetails(sportsChannel, navigationOverlayViewModel.sportsChannel),
+            defaultObserveChannelDetails(musicChannel, navigationOverlayViewModel.musicChannel)
+        )
+    }
 
-//    private fun observeNewsVisibility(): Disposable TODO
+    private fun defaultObserveChannelDetails(channel: DefaultChannel, source: Observable<ChannelDetails>) =
+        source.subscribe {
+            channel.setTitle(it.title)
+            channel.setContents(it.tileList)
+        }
 
     private fun createChannelFactory(): DefaultChannelFactory = DefaultChannelFactory(
             loadUrl = { urlStr ->
@@ -434,6 +447,18 @@ private class ChannelReferenceContainer(
     val newsChannel = channelFactory.createChannel(
         parent = channelContainerView,
         id = R.id.news_channel,
-        channelConfig = ChannelConfig.getNewsConfig(channelContainerView.context)
+        channelConfig = ChannelConfig.getTvGuideConfig(channelContainerView.context)
+    )
+
+    val sportsChannel = channelFactory.createChannel(
+        parent = channelContainerView,
+        id = R.id.sports_channel,
+        channelConfig = ChannelConfig.getTvGuideConfig(channelContainerView.context)
+    )
+
+    val musicChannel = channelFactory.createChannel(
+        parent = channelContainerView,
+        id = R.id.music_channel,
+        channelConfig = ChannelConfig.getTvGuideConfig(channelContainerView.context)
     )
 }

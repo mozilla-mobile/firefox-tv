@@ -69,4 +69,10 @@ class NavigationOverlayViewModel(
 
     val newsChannel: Observable<ChannelDetails> = channelRepo.getNewsTiles()
         .map { ChannelDetails(title = "News", tileList = it) }
+
+    val sportsChannel: Observable<ChannelDetails> = channelRepo.getSportsTiles()
+        .map { ChannelDetails(title = channelTitles.sports, tileList = it) }
+
+    val musicChannel: Observable<ChannelDetails> = channelRepo.getMusicTiles()
+        .map { ChannelDetails(title = channelTitles.music, tileList = it) }
 }

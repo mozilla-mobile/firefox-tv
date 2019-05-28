@@ -41,7 +41,7 @@ data class ChannelConfig(
             enabledInLocales = KillswitchLocales.All
         )
 
-        fun getNewsConfig(context: Context): ChannelConfig = ChannelConfig(
+        fun getTvGuideConfig(context: Context): ChannelConfig = ChannelConfig(
             onClickTelemetry = { }, // TODO
             itemsMayBeRemoved = false, // TODO in #2326
             isEnabledInCurrentExperiment =
