@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.hint.HintContentFactory
+import org.mozilla.tv.firefox.navigationoverlay.ChannelTitles
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayViewModel
 import org.mozilla.tv.firefox.navigationoverlay.OverlayHintViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
@@ -57,7 +58,13 @@ class ViewModelFactory(
                 serviceLocator.focusRepo,
                 serviceLocator.screenshotStoreWrapper,
                 serviceLocator.formattedDomainWrapper,
-                app.getString(R.string.pinned_tile_channel_title),
+                ChannelTitles(
+                    pinned = app.getString(R.string.pinned_tile_channel_title),
+                    newsAndPolitics = "News & Politics", // TODO verify and extract strings
+                    sports = "Sports",
+                    music = "Music",
+                    food = "Food"
+                ),
                 serviceLocator.pinnedTileRepo,
                 serviceLocator.channelRepo
             ) as T

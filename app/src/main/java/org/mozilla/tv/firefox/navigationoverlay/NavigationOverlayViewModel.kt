@@ -20,12 +20,20 @@ import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
 import org.mozilla.tv.firefox.utils.URLs
 
+class ChannelTitles(
+    val pinned: String,
+    val newsAndPolitics: String,
+    val sports: String,
+    val music: String,
+    val food: String
+)
+
 class NavigationOverlayViewModel(
     sessionRepo: SessionRepo,
     focusRepo: FocusRepo,
     imageUtilityWrapper: PinnedTileImageUtilWrapper,
     formattedDomainWrapper: FormattedDomainWrapper,
-    pinnedChannelTitle: String,
+    channelTitles: ChannelTitles,
     private val pinnedTileRepo: PinnedTileRepo,
     private val channelRepo: ChannelRepo
 ) : ViewModel() {
@@ -48,7 +56,7 @@ class NavigationOverlayViewModel(
             // This takes place off of the main thread because PinnedTile.toChannelTile needs
             // to perform file access, and blocks to do so
             .map { it.values.map { it.toChannelTile(imageUtilityWrapper, formattedDomainWrapper) } }
-            .map { ChannelDetails(title = pinnedChannelTitle, tileList = it) } // TODO extract string
+            .map { ChannelDetails(title = channelTitles.pinned, tileList = it) } // TODO extract string
             .observeOn(AndroidSchedulers.mainThread())
 
     val shouldDisplayPinnedTiles: Observable<Boolean> = pinnedTiles.map { !it.tileList.isEmpty() }
@@ -60,5 +68,5 @@ class NavigationOverlayViewModel(
     }
 
     val newsChannel: Observable<ChannelDetails> = channelRepo.getNewsTiles()
-        .map { ChannelDetails(title = "News", tileList = it) } // TODO verify and extract string
+        .map { ChannelDetails(title = "News", tileList = it) }
 }
