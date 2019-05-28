@@ -60,6 +60,21 @@ class ExperimentsProvider(private val fretboard: Fretboard, private val context:
         }
     }
 
+    fun shouldShowTvGuideChannels(): Boolean {
+        return true // TODO uncomment below code before merging
+//        val expDescriptor = checkBranchVariants(ExperimentConfig.TV_GUIDE_CHANNELS)
+//        return when {
+//            // The user is currently not part of the experiment
+//            expDescriptor == null -> false
+//            expDescriptor.name.endsWith(ExperimentSuffix.A.value) -> true
+//            expDescriptor.name.endsWith(ExperimentSuffix.B.value) -> false
+//            else -> {
+//                Sentry.capture(ExperimentIllegalStateException("TV Guide Channels Illegal Branch Name"))
+//                false
+//            }
+//        }
+    }
+
     /**
      * Check if [ExperimentConfig] + [ExperimentSuffix] is in the experiment and return its
      * corresponding [ExperimentDescriptor].
