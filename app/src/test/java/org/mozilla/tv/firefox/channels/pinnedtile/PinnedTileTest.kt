@@ -54,10 +54,10 @@ class PinnedTileTest {
     @MockK private lateinit var pinnedTileImageUtilWrapper: PinnedTileImageUtilWrapper
     @MockK private lateinit var formattedDomainWrapper: FormattedDomainWrapper
     @MockK private lateinit var drawable: Drawable
-    @MockK private lateinit var channelTitles: ChannelTitles
     private lateinit var overlayVm: NavigationOverlayViewModel
     private lateinit var pinnedTileRepo: PinnedTileRepo
     private lateinit var testObserver: TestObserver<ChannelDetails>
+    private lateinit var channelTitles: ChannelTitles
 
     @Suppress("DEPRECATION")
     @Before
@@ -68,6 +68,17 @@ class PinnedTileTest {
         every { sessionRepo.legacyState } answers { MutableLiveData() }
         every { pinnedTileImageUtilWrapper.generatePinnedTilePlaceholder(any()) } answers { drawable }
         every { formattedDomainWrapper.format(any(), any(), any()) } answers { "" }
+        every { channelRepo.getNewsTiles() } answers { Observable.just(listOf()) }
+        every { channelRepo.getMusicTiles() } answers { Observable.just(listOf()) }
+        every { channelRepo.getSportsTiles() } answers { Observable.just(listOf()) }
+
+        channelTitles = ChannelTitles(
+            pinned = "pinned",
+            newsAndPolitics = "news",
+            sports = "sports",
+            music = "music",
+            food = "food"
+        )
 
         val appContext: Context = ApplicationProvider.getApplicationContext()
         pinnedTileRepo = PinnedTileRepo(appContext, BundleTilesStore(appContext))
