@@ -26,6 +26,7 @@ import org.mozilla.tv.firefox.focus.FocusRepo
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayViewModel
 import org.mozilla.tv.firefox.channels.ChannelDetails
 import org.mozilla.tv.firefox.channels.ChannelRepo
+import org.mozilla.tv.firefox.navigationoverlay.ChannelTitles
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
 import org.robolectric.RobolectricTestRunner
@@ -53,6 +54,7 @@ class PinnedTileTest {
     @MockK private lateinit var pinnedTileImageUtilWrapper: PinnedTileImageUtilWrapper
     @MockK private lateinit var formattedDomainWrapper: FormattedDomainWrapper
     @MockK private lateinit var drawable: Drawable
+    @MockK private lateinit var channelTitles: ChannelTitles
     private lateinit var overlayVm: NavigationOverlayViewModel
     private lateinit var pinnedTileRepo: PinnedTileRepo
     private lateinit var testObserver: TestObserver<ChannelDetails>
@@ -74,7 +76,7 @@ class PinnedTileTest {
                 focusRepo,
                 pinnedTileImageUtilWrapper,
                 formattedDomainWrapper,
-                "Pinned Tiles",
+                channelTitles,
                 pinnedTileRepo,
                 channelRepo
         )
