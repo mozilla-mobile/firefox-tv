@@ -127,6 +127,7 @@ class NavigationOverlayFragment : Fragment() {
     private var channelReferenceContainer: ChannelReferenceContainer? = null // references a Context, must be nulled.
     private val pinnedTileChannel: DefaultChannel get() = channelReferenceContainer!!.pinnedTileChannel
     private val pocketChannel: DefaultChannel get() = channelReferenceContainer!!.pocketChannel
+    private val newsChannel: DefaultChannel get() = channelReferenceContainer!!.newsChannel
 
     private var rootView: View? = null
 
@@ -189,6 +190,7 @@ class NavigationOverlayFragment : Fragment() {
         channelReferenceContainer = ChannelReferenceContainer(channelsContainer, createChannelFactory()).also {
             channelsContainer.addView(it.pocketChannel.channelContainer)
             channelsContainer.addView(it.pinnedTileChannel.channelContainer)
+            channelsContainer.addView(it.newsChannel.channelContainer)
         }
     }
 
@@ -206,6 +208,8 @@ class NavigationOverlayFragment : Fragment() {
             .addTo(compositeDisposable)
         observePocket()
             .forEach { compositeDisposable.add(it) }
+        observeNewsTiles()
+            .addTo(compositeDisposable)
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = false)
                 .forEach { compositeDisposable.add(it) }
     }
@@ -307,6 +311,14 @@ class NavigationOverlayFragment : Fragment() {
                 pocketChannel.setTitle(context!!.resources.getString(R.string.pocket_channel_title))
                 pocketChannel.setContents(it)
             }
+
+    private fun observeNewsTiles(): Disposable = navigationOverlayViewModel.newsChannel
+        .subscribe {
+            newsChannel.setTitle(it.title)
+            newsChannel.setContents(it.tileList)
+        }
+
+//    private fun observeNewsVisibility(): Disposable TODO
 
     private fun createChannelFactory(): DefaultChannelFactory = DefaultChannelFactory(
             loadUrl = { urlStr ->
@@ -417,5 +429,11 @@ private class ChannelReferenceContainer(
         parent = channelContainerView,
         id = R.id.pinned_tiles_channel,
         channelConfig = ChannelConfig.getPinnedTileConfig(channelContainerView.context)
+    )
+
+    val newsChannel = channelFactory.createChannel(
+        parent = channelContainerView,
+        id = R.id.news_channel,
+        channelConfig = ChannelConfig.getNewsConfig(channelContainerView.context)
     )
 }

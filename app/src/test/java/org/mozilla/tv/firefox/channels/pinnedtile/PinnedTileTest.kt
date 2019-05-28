@@ -25,6 +25,7 @@ import org.mozilla.tv.firefox.channels.BundleTilesStore
 import org.mozilla.tv.firefox.focus.FocusRepo
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayViewModel
 import org.mozilla.tv.firefox.channels.ChannelDetails
+import org.mozilla.tv.firefox.channels.ChannelRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
 import org.robolectric.RobolectricTestRunner
@@ -48,6 +49,7 @@ class PinnedTileTest {
 
     @MockK private lateinit var sessionRepo: SessionRepo
     @MockK private lateinit var focusRepo: FocusRepo
+    @MockK private lateinit var channelRepo: ChannelRepo
     @MockK private lateinit var pinnedTileImageUtilWrapper: PinnedTileImageUtilWrapper
     @MockK private lateinit var formattedDomainWrapper: FormattedDomainWrapper
     @MockK private lateinit var drawable: Drawable
@@ -73,7 +75,8 @@ class PinnedTileTest {
                 pinnedTileImageUtilWrapper,
                 formattedDomainWrapper,
                 "Pinned Tiles",
-                pinnedTileRepo
+                pinnedTileRepo,
+                channelRepo
         )
         testObserver = overlayVm.pinnedTiles.test()
     }

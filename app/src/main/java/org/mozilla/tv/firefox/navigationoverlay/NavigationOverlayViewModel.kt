@@ -11,6 +11,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.channels.ChannelDetails
+import org.mozilla.tv.firefox.channels.ChannelRepo
 import org.mozilla.tv.firefox.ext.map
 import org.mozilla.tv.firefox.focus.FocusRepo
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileImageUtilWrapper
@@ -25,7 +26,8 @@ class NavigationOverlayViewModel(
     imageUtilityWrapper: PinnedTileImageUtilWrapper,
     formattedDomainWrapper: FormattedDomainWrapper,
     pinnedChannelTitle: String,
-    private val pinnedTileRepo: PinnedTileRepo
+    private val pinnedTileRepo: PinnedTileRepo,
+    private val channelRepo: ChannelRepo
 ) : ViewModel() {
 
     val focusUpdate = focusRepo.focusUpdate
@@ -52,7 +54,11 @@ class NavigationOverlayViewModel(
     val shouldDisplayPinnedTiles: Observable<Boolean> = pinnedTiles.map { !it.tileList.isEmpty() }
             .distinctUntilChanged()
 
+    //TODO this method is only used by tests. The tests should be updated, and the method removed
     fun unpinPinnedTile(url: String) {
         pinnedTileRepo.removePinnedTile(url)
     }
+
+    val newsChannel: Observable<ChannelDetails> = channelRepo.getNewsTiles()
+        .map { ChannelDetails(title = "News", tileList = it) } // TODO verify and extract string
 }
