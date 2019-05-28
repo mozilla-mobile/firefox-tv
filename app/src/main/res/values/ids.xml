@@ -10,4 +10,6 @@
     <item name="pinned_tiles_channel" type="id"/>
     <item name="pocket_channel" type="id"/>
     <item name="news_channel" type="id"/>
+    <item name="sports_channel" type="id"/>
+    <item name="music_channel" type="id"/>
 </resources>
