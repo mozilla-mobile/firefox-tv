@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.getDimenPixelSize
 
-enum class TileSource { BUNDLED, CUSTOM, POCKET }
+enum class TileSource { BUNDLED, CUSTOM, POCKET, TV_GUIDE }
 
 /**
  * Backing data for a [RecyclerView] item in a channel
@@ -37,6 +37,7 @@ data class ChannelTile(
             TileSource.BUNDLED, TileSource.CUSTOM ->
                 context.resources.getString(R.string.pinned_tiles_channel_remove_title, title)
             TileSource.POCKET -> throw NotImplementedError("pocket shouldn't be able to remove tiles")
+            TileSource.TV_GUIDE -> "" // TODO in #2326
         }
     }
 
