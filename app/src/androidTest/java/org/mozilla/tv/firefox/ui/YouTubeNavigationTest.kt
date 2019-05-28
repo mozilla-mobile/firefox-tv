@@ -78,7 +78,6 @@ class YouTubeNavigationTest {
          * Expected: Overlay
          */
         navigationOverlay {
-            println("+++")
         }.enterUrlAndEnterToBrowser(youtubeUrl.toUri()!!) {
         }.openOverlay {
             waitUntilYouTubeHomeLoads()

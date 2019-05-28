@@ -25,7 +25,7 @@ private const val REQUIRED_POCKET_VIDEO_COUNT = 4
 
 /**
  * Saves the Pocket video recommendations as a raw JSON String and loads them in data structures for the app.
- * Bad data should saved so bad data should never be returned.
+ * Bad data should not be saved so bad data should never be returned.
  *
  * This class is thread safe.
  */
