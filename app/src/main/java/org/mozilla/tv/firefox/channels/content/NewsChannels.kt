@@ -13,7 +13,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         url = "https://us.cnn.com/videos",
         title = "CNN",
         subtitle = null,
-        setImage = setImage(R.drawable.cursor_active_bg), // TODO replace with actual image
+        setImage = setImage(R.drawable.tile_news_cnn),
         tileSource = TileSource.TV_GUIDE,
         id = "cnn"
     ),
@@ -21,7 +21,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         url = "https://video.foxnews.com/",
         title = "Fox News",
         subtitle = null,
-        setImage = setImage(R.drawable.cursor_active_bg), // TODO replace with actual image
+        setImage = setImage(R.drawable.tile_news_fox_news),
         tileSource = TileSource.TV_GUIDE,
         id = "foxNews"
     ),
@@ -29,7 +29,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         url = "https://www.washingtonpost.com/video/",
         title = "Washington Post",
         subtitle = null,
-        setImage = setImage(R.drawable.cursor_active_bg), // TODO replace with actual image
+        setImage = setImage(R.drawable.tile_news_washington_post),
         tileSource = TileSource.TV_GUIDE,
         id = "washingtonPost"
     ),
@@ -37,7 +37,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         url = "https://www.usatoday.com/media/latest/videos/news/",
         title = "USA Today",
         subtitle = null,
-        setImage = setImage(R.drawable.cursor_active_bg), // TODO replace with actual image
+        setImage = setImage(R.drawable.tile_news_usa_today),
         tileSource = TileSource.TV_GUIDE,
         id = "usaToday"
     ),
@@ -45,7 +45,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         url = "https://www.wsj.com/video/",
         title = "Wall Street Journal",
         subtitle = null,
-        setImage = setImage(R.drawable.cursor_active_bg), // TODO replace with actual image
+        setImage = setImage(R.drawable.tile_news_wall_street_journal),
         tileSource = TileSource.TV_GUIDE,
         id = "wallStreetJournal"
     ),
@@ -53,7 +53,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         url = "https://www.nbcnews.com/video",
         title = "NBC News",
         subtitle = null,
-        setImage = setImage(R.drawable.cursor_active_bg), // TODO replace with actual image
+        setImage = setImage(R.drawable.tile_news_nbc_news),
         tileSource = TileSource.TV_GUIDE,
         id = "nbcNews"
     ),
@@ -61,7 +61,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         url = "https://www.cbsnews.com/video/",
         title = "CBS News",
         subtitle = null,
-        setImage = setImage(R.drawable.cursor_active_bg), // TODO replace with actual image
+        setImage = setImage(R.drawable.cursor_active_bg), // TODO ask UX for image resource
         tileSource = TileSource.TV_GUIDE,
         id = "cbsNews"
     ),
@@ -69,7 +69,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         url = "https://www.huffpost.com/section/video",
         title = "Huffington Post",
         subtitle = null,
-        setImage = setImage(R.drawable.cursor_active_bg), // TODO replace with actual image
+        setImage = setImage(R.drawable.cursor_active_bg), // TODO ask UX for image resource
         tileSource = TileSource.TV_GUIDE,
         id = "huffingtonPost"
     ),
@@ -77,7 +77,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         url = "https://video.vice.com/",
         title = "Vice",
         subtitle = null,
-        setImage = setImage(R.drawable.cursor_active_bg), // TODO replace with actual image
+        setImage = setImage(R.drawable.cursor_active_bg), // TODO ask UX for image resource
         tileSource = TileSource.TV_GUIDE,
         id = "vice"
     )
