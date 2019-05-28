@@ -42,7 +42,7 @@ data class ChannelConfig(
         )
 
         fun getTvGuideConfig(context: Context): ChannelConfig = ChannelConfig(
-            onClickTelemetry = { }, // TODO
+            onClickTelemetry = { tile -> TELEMETRY.homeTileClickEvent(context, tile) },
             itemsMayBeRemoved = false, // TODO in #2326
             isEnabledInCurrentExperiment =
                 context.serviceLocator.experimentsProvider.shouldShowTvGuideChannels(),
