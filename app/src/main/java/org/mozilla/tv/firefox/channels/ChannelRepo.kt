@@ -26,12 +26,15 @@ class ChannelRepo(
 
     fun getNewsTiles(): Observable<List<ChannelTile>> =
         bundledNewsTiles.filterNotBlacklisted(blacklistedNewsIds)
+            .map { it.padToTen() }
 
     fun getSportsTiles(): Observable<List<ChannelTile>> =
         bundledSportsTiles.filterNotBlacklisted(blacklistedSportsIds)
+            .map { it.padToTen() }
 
     fun getMusicTiles(): Observable<List<ChannelTile>> =
         bundledMusicTiles.filterNotBlacklisted(blacklistedMusicIds)
+            .map { it.padToTen() }
 
     fun removeChannelContent(tileData: ChannelTile) {
         when (tileData.tileSource) {
@@ -69,4 +72,17 @@ private fun Observable<List<ChannelTile>>.filterNotBlacklisted(
 ): Observable<List<ChannelTile>> {
     return Observables.combineLatest(this, blacklistIds)
         .map { (tiles, blacklistIds) -> tiles.filter { !blacklistIds.contains(it.id) } }
+}
+
+/**
+ * Temporary method that will be removed before shipping. This allows us to test the UX
+ * for channels that do not yet have 10 approved sites
+ *
+ * See #2195 ("For categories that don't have 10 tiles, add duplicates of approved
+ * channels so we have an idea of what they look like.")
+ */
+private fun List<ChannelTile>.padToTen(): List<ChannelTile> {
+    return (0 until 10)
+        .flatMap { this }
+        .take(10)
 }
