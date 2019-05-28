@@ -58,7 +58,8 @@ class ViewModelFactory(
                 serviceLocator.screenshotStoreWrapper,
                 serviceLocator.formattedDomainWrapper,
                 app.getString(R.string.pinned_tile_channel_title),
-                serviceLocator.pinnedTileRepo
+                serviceLocator.pinnedTileRepo,
+                serviceLocator.channelRepo
             ) as T
 
             OverlayHintViewModel::class.java -> OverlayHintViewModel(
