@@ -52,12 +52,12 @@ class PocketVideoFetchScheduler(
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        // TODO: why do we want this from a UX perspective.
-        // todo: this explanation sucks.
-        // Our fetch scheduling scheme: when the user foregrounds the app, we schedule an update for the next calendar
-        // day (i.e. if today is the 2nd, we schedule for the 3rd) at a random time inside our fetch interval.
-        // it's still "tonight" but already after midnight, we
-        // attempt to schedule one for the following night.
+        // When the user foregrounds the app, we schedule a one time update for a random time inside our fetch interval
+        // (currently overnight). This will ensure that users always see fresh content every morning and that the content
+        // is only refreshing at times when the user is most likely not using the app.
+        // The request will always be scheduled for the next night, so if the user foregrounds the app after
+        // midnight but before the fetch interval, we schedule for the following night.
+        // We only schedule a fetch if there isn't one already scheduled.
         val saveRequest = OneTimeWorkRequestBuilder<PocketVideoFetchWorker>()
             .setConstraints(constraints)
             .setInitialDelay(getDelayUntilUpcomingNightFetchMillis(), TimeUnit.MILLISECONDS)
