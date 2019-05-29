@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <org.mozilla.tv.firefox.architecture.KillswitchLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/channelTitle"
-        style="@style/TextAppearance.AppCompat.Medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/overlay_margin_start"
-        android:layout_marginEnd="@dimen/overlay_margin_end"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="16dp"
-        android:fontFamily="@string/font_ember_regular"
-        android:textSize="24sp"
-        android:text="@string/menu_settings" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/channelTitle"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/overlay_margin_start"
+            android:layout_marginEnd="@dimen/overlay_margin_end"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@string/font_ember_regular"
+            android:textSize="24sp"
+            android:text="@string/menu_settings" />
 
     <!-- Note that, for any items in this RV, parent layouts should be FocusLossFrameLayout.
     This corrects a bug that is described in the kdoc of that class -->
@@ -23,4 +27,6 @@
         android:id="@+id/channelTileContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    </LinearLayout>
 </org.mozilla.tv.firefox.architecture.KillswitchLayout>
