@@ -23,7 +23,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mozilla.tv.firefox.MainActivity;
 import org.mozilla.tv.firefox.R;
+import org.mozilla.tv.firefox.components.locale.LocaleManager;
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule;
+
+import java.util.Locale;
 
 import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.locale.LocaleTestRule;
@@ -61,8 +64,21 @@ public class PinTileTests extends ScreenshotTest {
     public void unpinTileFromContextMenu() {
         onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()));
 
-        mDevice.pressDPadDown();
-        mDevice.pressDPadDown();
+        Locale currentLocale = LocaleManager.getInstance()
+                .getCurrentLocale(mActivityTestRule.getActivity());
+
+        boolean pocketIsDisplayed = currentLocale.getLanguage().equals("en");
+        if (pocketIsDisplayed) {
+            // Navigate down to pinned tiles, to ensure that they are on screen. This
+            // is important because some of our tests are run on small devices, where
+            // not doing this can cause errors
+            mDevice.pressDPadDown();
+            mDevice.pressDPadDown();
+        } else {
+            // The pocket channel is only displayed in EN locales, so elsewhere we only
+            // need to nav down once.
+            mDevice.pressDPadDown();
+        }
 
         onView(withText(R.string.homescreen_unpin_tutorial_toast))
                 .inRoot(withDecorView(not(is(mActivityTestRule.getActivity().getWindow().getDecorView()))))
