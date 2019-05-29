@@ -7,7 +7,7 @@ package org.mozilla.tv.firefox.architecture
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.widget.LinearLayout
+import android.widget.FrameLayout
 import androidx.annotation.VisibleForTesting
 import org.mozilla.tv.firefox.components.locale.LocaleManager
 import java.util.Locale
@@ -23,10 +23,10 @@ sealed class KillswitchLocales {
  *
  * This is done to prevent bugs similar to #2133. In that bug, a view was set to visibility
  * GONE when disabled, however its animation toggled that visibility back to VISIBLE.
- * [KillswitchLinearLayout] allows us to be sure that something will not be displayed if
+ * [KillswitchLayout] allows us to be sure that something will not be displayed if
  * requirements are not set by intercepting [setVisibility] calls.
  */
-class KillswitchLinearLayout : LinearLayout {
+class KillswitchLayout : FrameLayout {
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
@@ -57,7 +57,7 @@ class KillswitchLinearLayout : LinearLayout {
      */
     override fun setVisibility(visibility: Int) {
         this.desiredVisibility = visibility
-        val context = context?: return
+        val context = context ?: return
         val isAllowedByCurrentExperiment = this.isAllowedByCurrentExperiment
         val allowedInLocales = this.allowedInLocales
 
