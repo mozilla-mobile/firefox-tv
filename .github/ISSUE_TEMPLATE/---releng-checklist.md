@@ -7,6 +7,8 @@ title: 'Releng checklist - vX.X'
 
 ##### Sprint Release Owner: _[name here]_
 
+_Think something can be automated? Add it to [this doc](https://docs.google.com/document/d/1I_pf7RhR8uC0P_jB8o5Y8teNxUuLlpKiF_FyBW9veFY/edit?ts=5cdc4d67)._
+
 #### Tuesday # 1
 
 - [ ] Upgrade a-c
