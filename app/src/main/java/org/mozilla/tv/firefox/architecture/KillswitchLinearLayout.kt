@@ -8,6 +8,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
+import androidx.annotation.VisibleForTesting
 import org.mozilla.tv.firefox.components.locale.LocaleManager
 import java.util.Locale
 
@@ -30,10 +31,15 @@ class KillswitchLinearLayout : LinearLayout {
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
+    // This is the most recent visibility that client code attempted to set on
+    // this view, whether or not it was actually applied
     private var desiredVisibility = this.visibility
 
     private var isAllowedByCurrentExperiment: Boolean? = null
     private var allowedInLocales: KillswitchLocales? = null
+
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    var localeManager = LocaleManager.getInstance()
 
     fun setRequirements(isAllowedByCurrentExperiment: Boolean, allowedInLocales: KillswitchLocales) {
         this.isAllowedByCurrentExperiment = isAllowedByCurrentExperiment
@@ -67,7 +73,7 @@ class KillswitchLinearLayout : LinearLayout {
 
         val allAllowed = allowedInLocales == KillswitchLocales.All
         val allowedLocales = (allowedInLocales as? KillswitchLocales.ActiveIn)?.locales
-        val currentLocale = LocaleManager.getInstance().getCurrentLocale(context)
+        val currentLocale = localeManager.getCurrentLocale(context)
 
         val currentLocaleIsAllowed = (allowedLocales != null &&
             allowedLocales.any { allowed ->
