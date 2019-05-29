@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.default_channel.view.channelTileContainer
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.architecture.KillswitchLinearLayout
+import org.mozilla.tv.firefox.architecture.KillswitchLayout
 
 // todo: kdoc
 class DefaultChannelFactory(
@@ -24,7 +24,7 @@ class DefaultChannelFactory(
         val context = parent.context
         val channelAdapter = DefaultChannelAdapter(context, loadUrl, onTileFocused, channelConfig)
 
-        val containerView = LayoutInflater.from(context).inflate(R.layout.default_channel, parent, false) as KillswitchLinearLayout
+        val containerView = LayoutInflater.from(context).inflate(R.layout.default_channel, parent, false) as KillswitchLayout
         containerView.channelTileContainer.apply {
             val channelLayoutManager = ChannelLayoutManager(context)
             layoutManager = channelLayoutManager

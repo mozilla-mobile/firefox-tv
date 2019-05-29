@@ -14,14 +14,14 @@ import org.robolectric.RobolectricTestRunner
 import java.util.Locale
 
 @RunWith(RobolectricTestRunner::class)
-class KillswitchLinearLayoutTest {
+class KillswitchLayoutTest {
 
-    private lateinit var killswitchLayout: KillswitchLinearLayout
+    private lateinit var killswitchLayout: KillswitchLayout
 
     @Before
     fun setup() {
         val activityController = Robolectric.buildActivity(Activity::class.java)
-        killswitchLayout = KillswitchLinearLayout(activityController.get())
+        killswitchLayout = KillswitchLayout(activityController.get())
     }
 
     @Test
