@@ -57,11 +57,9 @@ class KillswitchLinearLayout : LinearLayout {
      */
     override fun setVisibility(visibility: Int) {
         this.desiredVisibility = visibility
-        val context = context
+        val context = context?: return
         val isAllowedByCurrentExperiment = this.isAllowedByCurrentExperiment
         val allowedInLocales = this.allowedInLocales
-
-        if (context == null) return
 
         if (isAllowedByCurrentExperiment == null || allowedInLocales == null) {
             return super.setVisibility(View.GONE)
@@ -71,21 +69,38 @@ class KillswitchLinearLayout : LinearLayout {
             return super.setVisibility(View.GONE)
         }
 
-        val allAllowed = allowedInLocales == KillswitchLocales.All
+        if (allowedInLocales == KillswitchLocales.All) {
+            return super.setVisibility(visibility)
+        }
+
+
         val allowedLocales = (allowedInLocales as? KillswitchLocales.ActiveIn)?.locales
         val currentLocale = localeManager.getCurrentLocale(context)
 
-        val currentLocaleIsAllowed = (allowedLocales != null &&
-            allowedLocales.any { allowed ->
-                allowed.language == currentLocale.language &&
-                    (allowed.country.isEmpty() ||
-                        allowed.country == currentLocale.country)
-            })
+        val isCurrentLocaleAllowed = currentLocale.languageAndMaybeCountryMatch(allowedLocales)
 
-        if (!allAllowed && !currentLocaleIsAllowed) {
+        if (!isCurrentLocaleAllowed) {
             return super.setVisibility(View.GONE)
         }
 
         super.setVisibility(visibility)
+    }
+}
+
+/**
+ * Returns true if the language and country of the current locale matches any
+ * one of the allowed locales.
+ *
+ * An allowed locale with no country set (represented by an empty string, see
+ * javadoc on [Locale.getCountry]) will match with any country, so long as the
+ * language is correct.
+ */
+private fun Locale.languageAndMaybeCountryMatch(allowedLocales: Array<out Locale>?): Boolean {
+    allowedLocales ?: return false
+    return allowedLocales.any { allowed ->
+        val languageMatches = allowed.language == this.language
+        val countryMatches = allowed.country.isEmpty() ||
+            allowed.country == this.country
+        return languageMatches && countryMatches
     }
 }

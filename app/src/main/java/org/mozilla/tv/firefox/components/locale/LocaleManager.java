@@ -277,7 +277,7 @@ public class LocaleManager {
             return currentLocale;
         }
 
-        String current = getPersistedLocale(context);
+        final String current = getPersistedLocale(context);
         if (current != null) {
             currentLocale = Locales.parseLocaleCode(current);
         }
