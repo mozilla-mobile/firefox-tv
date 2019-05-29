@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.channels
 
+import androidx.annotation.VisibleForTesting
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
@@ -66,7 +67,8 @@ class ChannelRepo(
     private val blacklistedMusicIds = BehaviorSubject.createDefault(emptyList<String>())
 }
 
-private fun Observable<List<ChannelTile>>.filterNotBlacklisted(
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun Observable<List<ChannelTile>>.filterNotBlacklisted(
     blacklistIds: Observable<List<String>>
 ): Observable<List<ChannelTile>> {
     return Observables.combineLatest(this, blacklistIds)
