@@ -73,7 +73,6 @@ class KillswitchLinearLayout : LinearLayout {
             return super.setVisibility(visibility)
         }
 
-
         val allowedLocales = (allowedInLocales as? KillswitchLocales.ActiveIn)?.locales
         val currentLocale = localeManager.getCurrentLocale(context)
 
