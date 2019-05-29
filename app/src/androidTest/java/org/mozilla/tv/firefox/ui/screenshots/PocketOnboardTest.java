@@ -33,8 +33,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.mozilla.tv.firefox.onboarding.OnboardingActivity.ONBOARD_SHOWN_PREF;
 import static org.mozilla.tv.firefox.pocket.PocketOnboardingActivity.POCKET_ONBOARDING_SHOWN_PREF;
 
-// Since pocket is currently EN-US only, this should be ignored
-@Ignore
+@Ignore("Since Pocket is currently en-US only, this should be ignored")
 public class PocketOnboardTest extends ScreenshotTest {
 
     private Intent intent;
