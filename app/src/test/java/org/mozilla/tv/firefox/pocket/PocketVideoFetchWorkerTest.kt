@@ -85,6 +85,8 @@ class PocketVideoFetchWorkerTest {
     }
 
     private fun everyEndpointRawGetVideoRecsReturnsANonNullValue() {
+        // For many tests, we only need a non-null return value to advance to the next portion of the function,
+        // which is the part we want to test.
         coEvery { endpointRaw.getGlobalVideoRecommendations() } returns "{}"
     }
 }
