@@ -41,7 +41,6 @@ class PocketVideoFetchWorker(appContext: Context, workerParams: WorkerParameters
             return Result.failure()
         }
 
-        store.save(rawJSONStr)
         return Result.success()
     }
 }
