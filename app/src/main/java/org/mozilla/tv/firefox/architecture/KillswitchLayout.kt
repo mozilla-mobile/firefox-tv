@@ -41,6 +41,14 @@ class KillswitchLayout : FrameLayout {
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     var localeManager = LocaleManager.getInstance()
 
+    /**
+     * Allows visibility to be set if the language and country of the current locale
+     * matches any one of the allowed locales.
+     *
+     * An allowed locale with no country set (represented by an empty string, see
+     * javadoc on [Locale.getCountry]) will match with any country, so long as the
+     * language is correct.
+     */
     fun setRequirements(isAllowedByCurrentExperiment: Boolean, allowedInLocales: KillswitchLocales) {
         this.isAllowedByCurrentExperiment = isAllowedByCurrentExperiment
         this.allowedInLocales = allowedInLocales
@@ -86,14 +94,6 @@ class KillswitchLayout : FrameLayout {
     }
 }
 
-/**
- * Returns true if the language and country of the current locale matches any
- * one of the allowed locales.
- *
- * An allowed locale with no country set (represented by an empty string, see
- * javadoc on [Locale.getCountry]) will match with any country, so long as the
- * language is correct.
- */
 private fun Locale.languageAndMaybeCountryMatch(allowedLocales: Array<out Locale>?): Boolean {
     allowedLocales ?: return false
     return allowedLocales.any { allowed ->

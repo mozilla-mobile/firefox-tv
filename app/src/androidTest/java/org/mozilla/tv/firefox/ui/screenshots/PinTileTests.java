@@ -64,10 +64,12 @@ public class PinTileTests extends ScreenshotTest {
     public void unpinTileFromContextMenu() {
         onView(allOf(withId(R.id.navUrlInput), isDisplayed(), hasFocus()));
 
-        Locale currentLocale = LocaleManager.getInstance()
+        final Locale currentLocale = LocaleManager.getInstance()
                 .getCurrentLocale(mActivityTestRule.getActivity());
 
-        boolean pocketIsDisplayed = currentLocale.getLanguage().equals("en");
+        final boolean pocketIsDisplayed = currentLocale.getLanguage().equals("en");
+        // TODO it would be better to condition this on view visibility, but I'm not sure
+        // how to do that here.
         if (pocketIsDisplayed) {
             // Navigate down to pinned tiles, to ensure that they are on screen. This
             // is important because some of our tests are run on small devices, where
