@@ -19,9 +19,6 @@ import org.mozilla.tv.firefox.ext.serviceLocator
  */
 class PocketVideoFetchWorker(appContext: Context, workerParams: WorkerParameters) : Worker(appContext, workerParams) {
 
-    // todo: does Sentry catch crashes in here?
-    // todo: what happens to thrown exceptions?
-
     private val pocketEndpointRaw = appContext.serviceLocator.pocketEndpointRaw
     private val store = appContext.serviceLocator.pocketVideoStore
 
