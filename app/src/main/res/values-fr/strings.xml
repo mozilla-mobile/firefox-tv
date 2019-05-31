@@ -52,8 +52,10 @@
   <string name="turbo_mode_image_a11y">Exemple avec le mode turbo activé</string>
   <string name="homescreen_unpin_tutorial_toast">Effectuez un appui long sur SELECT pour détacher cet élément de l’écran d’accueil</string>
   <string name="homescreen_tile_remove">Retirer</string>
+  <string name="pinned_tiles_channel_remove_title">Retirer %1$s des sites épinglés</string>
   <string name="pinned_tile_channel_title">Sites épinglés</string>
   <string name="pin_label">Épingler à l’écran d’accueil</string>
+  <string name="unpin_label">Détacher de l’écran d’accueil</string>
   <string name="notification_pinned_site">Épinglé à l’écran d’accueil Firefox TV</string>
   <string name="notification_unpinned_site">Retiré de l’écran d’accueil Firefox TV</string>
   <string name="pocket_home_tutorial_title">Découvrez des vidéos recommandées par %1$s</string>
