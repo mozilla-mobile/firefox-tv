@@ -8,20 +8,15 @@ import android.content.Context
 import android.content.res.AssetManager
 import android.util.Log
 import androidx.annotation.AnyThread
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.PRIVATE
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
 
 private const val LOGTAG = "PocketVideoStore"
 
-private const val KEY_VIDEO_JSON = "video_json"
 private const val VIDEO_STORE_NAME = "Pocket-Global-Video-Recs"
 
 private const val BUNDLED_VIDEOS_PATH = "bundled/pocket_videos.json"
-
-/**
- * The minimum number of valid videos we must receive from the server if we want to display them.
- * This number is set to the number of videos that appear on screen at the time of writing.
- */
-private const val REQUIRED_POCKET_VIDEO_COUNT = 4
 
 /**
  * Saves the Pocket video recommendations as a raw JSON String and loads them in data structures for the app.
@@ -32,7 +27,7 @@ private const val REQUIRED_POCKET_VIDEO_COUNT = 4
 class PocketVideoStore(
     appContext: Context,
     private val assets: AssetManager,
-    private val convertJSONToPocketVideos: (String) -> List<PocketViewModel.FeedItem>?
+    private val jsonValidator: PocketVideoJSONValidator
 ) {
 
     // We use SharedPrefs because it's simple, it handles concurrency (so we don't even need to think about
@@ -44,7 +39,7 @@ class PocketVideoStore(
      */
     @AnyThread
     fun save(json: String): Boolean {
-        if (!isJSONValid(json)) {
+        if (!jsonValidator.isJSONValidForSaving(json)) {
             return false
         }
 
@@ -53,17 +48,6 @@ class PocketVideoStore(
             .apply()
 
         return true
-    }
-
-    private fun isJSONValid(rawJSON: String): Boolean {
-        // While we don't need the conversion result, this function already handles validation so we use
-        // it to validate the videos.
-        val convertedVideos = convertJSONToPocketVideos(rawJSON)
-        return convertedVideos != null &&
-
-            // Guarantee a minimum number of Pocket videos: e.g. if the server only returns one valid video,
-            // we wouldn't want to overwrite what the user already has to show only one video.
-            convertedVideos.size >= REQUIRED_POCKET_VIDEO_COUNT
     }
 
     /**
@@ -75,7 +59,7 @@ class PocketVideoStore(
 
         val rawJSON = sharedPrefs.getString(KEY_VIDEO_JSON, null) ?: loadBundledTiles()
 
-        val convertedVideos = convertJSONToPocketVideos(rawJSON)
+        val convertedVideos = jsonValidator.convertJSONToPocketVideos(rawJSON)
         if (convertedVideos == null) {
             // We don't expect the conversion to ever fail: we only save valid JSON and we fallback to the presumably
             // valid bundled content if we've never saved. We don't crash because it may cause an infinite crash loop
@@ -87,5 +71,39 @@ class PocketVideoStore(
         }
 
         return convertedVideos
+    }
+
+    companion object {
+        @VisibleForTesting(otherwise = PRIVATE) const val KEY_VIDEO_JSON = "video_json"
+    }
+}
+
+/**
+ * Validates video recommendation json from the Pocket server.
+ */
+class PocketVideoJSONValidator(
+    @Suppress("DEPRECATION") // We need PocketVideoParser until we move to a-c's impl.
+    private val pocketVideoParser: PocketVideoParser
+) {
+    fun isJSONValidForSaving(rawJSON: String): Boolean {
+        // While we don't need the conversion result, this function already handles validation so we use
+        // it to validate the videos.
+        val convertedVideos = pocketVideoParser.convertVideosJSON(rawJSON)
+        return convertedVideos != null &&
+
+            // Guarantee a minimum number of Pocket videos: e.g. if the server only returns one valid video,
+            // we wouldn't want to overwrite what the user already has to show only one video.
+            convertedVideos.size >= REQUIRED_POCKET_VIDEO_COUNT
+    }
+
+    // Using a function reference causes typing problems so we wrap this in a function call instead.
+    fun convertJSONToPocketVideos(json: String) = pocketVideoParser.convertVideosJSON(json)
+
+    companion object {
+        /**
+         * The minimum number of valid videos we must receive from the server if we want to display them.
+         * This number is set to the number of videos that appear on screen at the time of writing.
+         */
+        @VisibleForTesting(otherwise = PRIVATE) const val REQUIRED_POCKET_VIDEO_COUNT = 4
     }
 }
