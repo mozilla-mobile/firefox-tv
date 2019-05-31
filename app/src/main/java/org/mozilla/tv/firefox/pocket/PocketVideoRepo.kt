@@ -5,17 +5,22 @@
 package org.mozilla.tv.firefox.pocket
 
 import androidx.annotation.UiThread
+import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.PRIVATE
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.BehaviorSubject
+import org.mozilla.tv.firefox.pocket.PocketVideoRepo.Companion.newInstance
 
 /**
  * Manages backing state for Pocket data, as well as any logic related to
  * retrieving or storing that data.
+ *
+ * To get an instance, use [newInstance] rather than the constructor.
  */
-open class PocketVideoRepo(
+open class PocketVideoRepo @VisibleForTesting(otherwise = PRIVATE) constructor(
     private val pocketVideoStore: PocketVideoStore,
     private val isPocketEnabledByLocale: () -> Boolean,
-    isPocketKeyValid: Boolean
+    private val _feedState: BehaviorSubject<FeedState>
 ) {
 
     sealed class FeedState {
@@ -24,7 +29,6 @@ open class PocketVideoRepo(
         object Inactive : FeedState()
     }
 
-    private val _feedState = BehaviorSubject.createDefault(if (!isPocketKeyValid) FeedState.NoAPIKey else FeedState.Inactive)
     open val feedState = _feedState.hide()
         .observeOn(AndroidSchedulers.mainThread())
         .distinctUntilChanged() // avoid churn because we may retrieve similar results in onStart.
@@ -50,5 +54,19 @@ open class PocketVideoRepo(
 
         val videos = pocketVideoStore.load()
         _feedState.onNext(FeedState.LoadComplete(videos))
+    }
+
+    companion object {
+        /**
+         * Returns a new [PocketVideoRepo]: this is the preferred way to construct an instance.
+         */
+        fun newInstance(
+            videoStore: PocketVideoStore,
+            isPocketEnabledByLocale: () -> Boolean,
+            isPocketKeyValid: Boolean
+        ): PocketVideoRepo {
+            val feedState = BehaviorSubject.createDefault(if (!isPocketKeyValid) FeedState.NoAPIKey else FeedState.Inactive)
+            return PocketVideoRepo(videoStore, isPocketEnabledByLocale, feedState)
+        }
     }
 }
