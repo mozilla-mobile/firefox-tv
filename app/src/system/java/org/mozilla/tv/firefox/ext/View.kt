@@ -7,7 +7,7 @@ package org.mozilla.tv.firefox.ext
 import android.view.View
 import mozilla.components.browser.engine.system.NestedWebView
 
-private const val NESTED_WEB_VIEW_ID = 2147483646 // Int.MAX_VALUE - 1
+const val NESTED_WEB_VIEW_ID = 2147483646 // Int.MAX_VALUE - 1
 
 /**
  * When view gains focus, its child(ren) views may gain focus with undefined View_ID
