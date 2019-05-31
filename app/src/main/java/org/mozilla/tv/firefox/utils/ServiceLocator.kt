@@ -27,6 +27,7 @@ import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileImageUtilWrapper
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.pocket.PocketEndpointRaw
 import org.mozilla.tv.firefox.pocket.PocketVideoFetchScheduler
+import org.mozilla.tv.firefox.pocket.PocketVideoJSONValidator
 import org.mozilla.tv.firefox.pocket.PocketVideoParser
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.pocket.PocketVideoStore
@@ -73,6 +74,7 @@ open class ServiceLocator(val app: Application) {
     private val isPocketEnabledByLocale = { LocaleManager.getInstance().currentLanguageIsEnglish(app) } // Pocket is en-US only.
     private val bundleTileStore by lazy { BundleTilesStore(app) }
     private val pocketVideoParser by lazy { PocketVideoParser }
+    private val pocketVideoJSONValidator by lazy { PocketVideoJSONValidator(pocketVideoParser) }
 
     val intentLiveData by lazy { MutableLiveData<Consumable<ValidatedIntentData?>>() }
     val fretboardProvider: FretboardProvider by lazy { FretboardProvider(app) }
@@ -91,7 +93,7 @@ open class ServiceLocator(val app: Application) {
     val channelRepo by lazy { ChannelRepo(pinnedTileRepo) }
     @Suppress("DEPRECATION") // We need PocketEndpointRaw until we move to a-c's impl.
     val pocketEndpointRaw by lazy { PocketEndpointRaw(appVersion, buildConfigDerivables.globalPocketVideoEndpoint) }
-    val pocketVideoStore by lazy { PocketVideoStore(app, app.assets, pocketVideoParser::convertVideosJSON) }
+    val pocketVideoStore by lazy { PocketVideoStore(app, app.assets, pocketVideoJSONValidator) }
     val pocketVideoFetchScheduler by lazy { PocketVideoFetchScheduler(isPocketEnabledByLocale) }
 
     // These open vals are overridden in testing
