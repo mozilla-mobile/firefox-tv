@@ -2,17 +2,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-@file:Suppress("DEPRECATION") // PocketVideoParser.
-
 package org.mozilla.tv.firefox.helpers
 
 import android.app.Application
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.subjects.PublishSubject
-import org.mozilla.tv.firefox.pocket.PocketVideoParser
+import io.reactivex.subjects.BehaviorSubject
+import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
-import org.mozilla.tv.firefox.pocket.PocketVideoStore
 
 /**
  * Provides a fake [PocketVideoRepo] implementation for testing purposes.
@@ -21,14 +16,10 @@ import org.mozilla.tv.firefox.pocket.PocketVideoStore
  */
 class CustomPocketFeedStateProvider(private val appContext: Application) {
 
-    val fakedPocketRepoState = PublishSubject.create<PocketVideoRepo.FeedState>()
-    val fakedPocketRepo = object : PocketVideoRepo(
-        PocketVideoStore(appContext, appContext.assets, PocketVideoParser::convertVideosJSON),
+    val fakedPocketRepoState = BehaviorSubject.create<PocketVideoRepo.FeedState>()
+    val fakedPocketRepo = PocketVideoRepo(
+        appContext.serviceLocator.pocketVideoStore,
         isPocketEnabledByLocale = { true },
-        isPocketKeyValid = true
-    ) {
-        override val feedState: Observable<FeedState>
-            get() = fakedPocketRepoState
-                .observeOn(AndroidSchedulers.mainThread())
-    }
+        _feedState = fakedPocketRepoState
+    )
 }

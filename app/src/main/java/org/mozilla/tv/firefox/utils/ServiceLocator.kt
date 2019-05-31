@@ -97,7 +97,11 @@ open class ServiceLocator(val app: Application) {
     // These open vals are overridden in testing
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())
     open val pinnedTileRepo by lazy { PinnedTileRepo(app, bundleTileStore) }
-    open val pocketRepo = PocketVideoRepo(pocketVideoStore, isPocketEnabledByLocale, buildConfigDerivables.isPocketKeyValid)
+    open val pocketRepo by lazy { PocketVideoRepo.newInstance(
+        pocketVideoStore,
+        isPocketEnabledByLocale,
+        buildConfigDerivables.isPocketKeyValid
+    ) }
     open val sessionRepo by lazy { SessionRepo(sessionManager, sessionUseCases, turboMode).apply { observeSources() } }
     open val settingsRepo by lazy { SettingsRepo(app) }
 }
