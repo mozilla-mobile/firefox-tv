@@ -15,6 +15,7 @@ import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.ext.validateKnownViewById
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
+import org.mozilla.tv.firefox.ext.NESTED_WEB_VIEW_ID
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.URLs
@@ -142,18 +143,7 @@ class FocusRepo(
                     R.id.turboButton -> {
                         return getTurboButtonFocusState(focusNode, sessionState)
                     }
-                    R.id.home_tile -> {
-                        // If pinnedTiles is empty and current focus is on home_tile, we need to
-                        // restore lost focus (this happens when you remove all tiles in the overlay)
-                        if (pinnedTilesIsEmpty) {
-                            return handleLostFocusInOverlay(
-                                    focusNode,
-                                    sessionState,
-                                    pinnedTilesIsEmpty,
-                                    pocketState)
-                        }
-                    }
-                    View.NO_ID -> {
+                    View.NO_ID, NESTED_WEB_VIEW_ID -> {
                         // Focus is lost so default it to navUrlInput and set focused = false
                         val newFocusNode = FocusNode(R.id.navUrlInput)
 
