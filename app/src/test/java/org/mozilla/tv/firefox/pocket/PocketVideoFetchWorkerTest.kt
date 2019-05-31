@@ -67,7 +67,7 @@ class PocketVideoFetchWorkerTest {
     }
 
     @Test
-    fun `WHEN the store says the endpoint returned valid json THEN the job will fail`() {
+    fun `WHEN the store says the endpoint returned invalid json THEN the job will fail`() {
         // The store returns false if the JSON is invalid and refuses to be saved:
         // unfortunately, this naming is not very intuitive.
         everyEndpointRawGetVideoRecsReturnsANonNullValue()
