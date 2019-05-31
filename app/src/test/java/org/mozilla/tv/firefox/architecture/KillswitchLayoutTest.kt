@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 package org.mozilla.tv.firefox.architecture
 
 import android.app.Activity
@@ -27,21 +31,21 @@ class KillswitchLayoutTest {
     @Test
     fun `GIVEN requirements are not set WHEN visibility is set THEN visibility should always be gone`() {
         // Don't set requirements
-        visibilityIsAlwaysGone()
+        assertVisibilityIsAlwaysGone()
     }
 
     @Test
     fun `GIVEN all locales are allowed WHEN visibility is set THEN it should be applied`() {
         killswitchLayout.setRequirements(true, KillswitchLocales.All)
 
-        visibilityIsApplied()
+        assertVisibilityIsApplied()
     }
 
     @Test
     fun `GIVEN experiment is disabled WHEN visibility is set THEN visibility should always be gone`() {
         killswitchLayout.setRequirements(false, KillswitchLocales.All)
 
-        visibilityIsAlwaysGone()
+        assertVisibilityIsAlwaysGone()
     }
 
     @Test
@@ -52,7 +56,7 @@ class KillswitchLayoutTest {
         killswitchLayout.setRequirements(true, KillswitchLocales.All)
         assertEquals(View.VISIBLE, killswitchLayout.visibility)
 
-        visibilityIsApplied()
+        assertVisibilityIsApplied()
     }
 
     @Test
@@ -67,7 +71,7 @@ class KillswitchLayoutTest {
             Locale("en", "us")
         ))
 
-        visibilityIsApplied()
+        assertVisibilityIsApplied()
     }
 
     @Test
@@ -82,7 +86,7 @@ class KillswitchLayoutTest {
             Locale("en", "us")
         ))
 
-        visibilityIsAlwaysGone()
+        assertVisibilityIsAlwaysGone()
     }
 
     @Test
@@ -97,21 +101,22 @@ class KillswitchLayoutTest {
             Locale("en")
         ))
 
-        visibilityIsApplied()
+        assertVisibilityIsApplied()
     }
 
-    private fun visibilityIsAlwaysGone() {
-        killswitchLayout.visibility = View.VISIBLE
-        assertEquals(View.GONE, killswitchLayout.visibility)
-        killswitchLayout.visibility = View.INVISIBLE
-        assertEquals(View.GONE, killswitchLayout.visibility)
-        killswitchLayout.visibility = View.GONE
-        assertEquals(View.GONE, killswitchLayout.visibility)
-        killswitchLayout.visibility = View.VISIBLE
-        assertEquals(View.GONE, killswitchLayout.visibility)
+    private fun assertVisibilityIsAlwaysGone() {
+        listOf(
+            View.VISIBLE,
+            View.INVISIBLE,
+            View.GONE,
+            View.VISIBLE
+        ).forEach {
+            killswitchLayout.visibility = it
+            assertEquals(View.GONE, killswitchLayout.visibility)
+        }
     }
 
-    private fun visibilityIsApplied() {
+    private fun assertVisibilityIsApplied() {
         killswitchLayout.visibility = View.VISIBLE
         assertEquals(View.VISIBLE, killswitchLayout.visibility)
         killswitchLayout.visibility = View.INVISIBLE

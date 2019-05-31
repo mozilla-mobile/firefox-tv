@@ -30,7 +30,7 @@ data class ChannelConfig(
                 onFocusTelemetry = { tile, _ -> TELEMETRY.pocketVideoImpressionEvent(tile.id) },
                 isEnabledInCurrentExperiment = true,
                 // Pocket is enabled in all countries, for any English locale
-                enabledInLocales = KillswitchLocales.ActiveIn(Locale("en", ""))
+                enabledInLocales = KillswitchLocales.ActiveIn(Locale.ENGLISH)
         )
 
         fun getPinnedTileConfig(context: Context): ChannelConfig = ChannelConfig(
