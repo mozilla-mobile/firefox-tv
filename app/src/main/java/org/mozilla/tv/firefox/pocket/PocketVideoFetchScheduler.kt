@@ -36,6 +36,7 @@ class PocketVideoFetchScheduler(
     @VisibleForTesting(otherwise = PRIVATE)
     fun schedulePocketBackgroundFetch(
         workManager: WorkManager,
+        now: Calendar = Calendar.getInstance(),
         randLong: (Long, Long) -> Long = { from, until -> Random.nextLong(from, until) }
     ) {
         fun getBackoffDelayMillisWithRandomness(): Long {
@@ -60,7 +61,7 @@ class PocketVideoFetchScheduler(
         // We only schedule a fetch if there isn't one already scheduled.
         val saveRequest = OneTimeWorkRequestBuilder<PocketVideoFetchWorker>()
             .setConstraints(constraints)
-            .setInitialDelay(getDelayUntilUpcomingNightFetchMillis(), TimeUnit.MILLISECONDS)
+            .setInitialDelay(getDelayUntilUpcomingNightFetchMillis(now, randLong), TimeUnit.MILLISECONDS)
 
             // Here exponential means the first backoff is the given delay, the second backoff is the given delay * 2,
             // the third backoff is the given delay * 2 * 2, etc. Note that WorkManager does not introduce randomness
@@ -73,10 +74,9 @@ class PocketVideoFetchScheduler(
         workManager.enqueueUniqueWork(FETCH_UNIQUE_WORK_NAME, ExistingWorkPolicy.KEEP, saveRequest)
     }
 
-    @VisibleForTesting(otherwise = PRIVATE)
-    fun getDelayUntilUpcomingNightFetchMillis(
-        now: Calendar = Calendar.getInstance(),
-        randInt: (Int) -> Int = { Random.nextInt(it) }
+    private fun getDelayUntilUpcomingNightFetchMillis(
+        now: Calendar,
+        randLong: (Long, Long) -> Long
     ): Long {
         val nextFetchIntervalStartTime = now.cloneCalendar().apply {
             set(Calendar.HOUR_OF_DAY, FETCH_START_HOUR)
@@ -88,7 +88,7 @@ class PocketVideoFetchScheduler(
             add(Calendar.DATE, 1)
         }
 
-        val fetchOffsetSeconds = randInt(FETCH_INTERVAL_DURATION_SECONDS)
+        val fetchOffsetSeconds = randLong(0L, FETCH_INTERVAL_DURATION_SECONDS).toInt()
         val userFetchTime = nextFetchIntervalStartTime.cloneCalendar().apply {
             add(Calendar.SECOND, fetchOffsetSeconds)
         }
@@ -100,7 +100,7 @@ class PocketVideoFetchScheduler(
         @VisibleForTesting(otherwise = PRIVATE) const val FETCH_START_HOUR = 3 // am
         @VisibleForTesting(otherwise = PRIVATE) const val FETCH_END_HOUR = 5L
         private val FETCH_INTERVAL_DURATION_SECONDS =
-            TimeUnit.HOURS.toSeconds(FETCH_END_HOUR - FETCH_START_HOUR).toInt()
+            TimeUnit.HOURS.toSeconds(FETCH_END_HOUR - FETCH_START_HOUR)
 
         // Since this is a background job, we're in no rush and can wait a while.
         @VisibleForTesting(otherwise = PRIVATE) val BACKOFF_DELAY_MIN_MILLIS = TimeUnit.SECONDS.toMillis(30)
