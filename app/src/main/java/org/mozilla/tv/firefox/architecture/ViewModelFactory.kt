@@ -34,7 +34,8 @@ class ViewModelFactory(
     private val app: Application
 ) : ViewModelProvider.Factory {
 
-    val hintContentFactory = HintContentFactory(app.resources)
+    private val resources = app.resources
+    private val hintContentFactory = HintContentFactory(resources)
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -60,10 +61,10 @@ class ViewModelFactory(
                 serviceLocator.formattedDomainWrapper,
                 ChannelTitles(
                     pinned = app.getString(R.string.pinned_tile_channel_title),
-                    newsAndPolitics = "News & Politics", // TODO verify and extract strings
-                    sports = "Sports",
-                    music = "Music",
-                    food = "Food"
+                    newsAndPolitics = resources.getString(R.string.news_channel_title),
+                    sports = resources.getString(R.string.sports_channel_title),
+                    music = resources.getString(R.string.music_channel_title),
+                    food = resources.getString(R.string.food_channel_title)
                 ),
                 serviceLocator.pinnedTileRepo,
                 serviceLocator.channelRepo
