@@ -16,7 +16,10 @@ import android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry
 import androidx.test.runner.lifecycle.Stage
 
-class FirefoxTestRunner : AndroidJUnitRunner() {
+/**
+ * A JUnit test runner that initializes the test environment for our on-device tests.
+ */
+class FirefoxOnDeviceTestRunner : AndroidJUnitRunner() {
 
     private lateinit var app: Application
     private lateinit var classLoader: ClassLoader

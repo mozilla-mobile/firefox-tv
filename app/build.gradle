@@ -26,7 +26,7 @@ android {
         versionCode 11 // This versionCode is "frozen" for local builds. For "release" builds we
         // override this with a generated versionCode at build time.
         versionName "4.2-LAT1"
-        testInstrumentationRunner "org.mozilla.tv.firefox.FirefoxTestRunner"
+        testInstrumentationRunner "org.mozilla.tv.firefox.FirefoxOnDeviceTestRunner"
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
         multiDexEnabled true
