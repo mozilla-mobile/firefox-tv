@@ -6,11 +6,17 @@ package org.mozilla.tv.firefox
 
 import mozilla.components.service.glean.Glean
 import androidx.work.testing.WorkManagerTestInitHelper
+import org.robolectric.RobolectricTestRunner
 
 /**
- * The application class used by the robolectric test runner. This class may be used to add
- * additional test setup code.
+ * The application class used by the [RobolectricTestRunner]: this class may modified to run additional
+ * test setup code during off-device Robolectric tests.
+ *
+ * This class should not be confused with [FirefoxTestApplication] which is used for on-device tests.
+ * Unfortunately, this class name is hardcoded into the [RobolectricTestRunner] so we can't rename it to
+ * better distinguish it from the other test application.
  */
+@Suppress("unused") // Robolectric hardcodes this class name.
 class TestFirefoxApplication : FirefoxApplication() {
 
     /**
