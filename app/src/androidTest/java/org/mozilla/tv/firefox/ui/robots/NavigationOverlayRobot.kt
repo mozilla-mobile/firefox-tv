@@ -182,13 +182,6 @@ class NavigationOverlayRobot {
             return SettingsRobot.Transition()
         }
 
-        fun openSettingsTelemetryTile(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
-            settingsTelemetryTile().click()
-
-            SettingsRobot().interact()
-            return SettingsRobot.Transition()
-        }
-
         fun openSettingsCleardataTile(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
             settingsCleardataTile().click()
 
