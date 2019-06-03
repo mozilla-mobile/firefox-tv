@@ -11,7 +11,7 @@ import org.mozilla.tv.firefox.channels.TileSource
 fun ChannelContent.getMusicChannels(): List<ChannelTile> = listOf(
     ChannelTile(
         url = "https://www.npr.org/stations/",
-        title = "NPR Stations", // TODO different name?
+        title = "NPR",
         subtitle = null,
         setImage = setImage(R.drawable.tile_music_npr),
         tileSource = TileSource.TV_GUIDE,
