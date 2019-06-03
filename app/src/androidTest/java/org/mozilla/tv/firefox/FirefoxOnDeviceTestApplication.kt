@@ -49,12 +49,12 @@ class FirefoxOnDeviceTestApplication : FirefoxApplication() {
  *
  * Note that Application#onCreate is called by Espresso before any code in an
  * instance of any test class is run. [serviceLocator] must be provisioned from
- * [FirefoxTestRunner] for it to be used.
+ * [FirefoxOnDeviceTestRunner] for it to be used.
  *
  * *IMPORTANT NOTE:* as currently implemented, multiple tests declared within the
  * same class will share dependencies. We generally do not write more than one
  * test in each Espresso file, so this is an acceptable limitation at this time.
- * Should this requirement change, update code in [FirefoxTestRunner]. *Do not
+ * Should this requirement change, update code in [FirefoxOnDeviceTestRunner]. *Do not
  * declare multiple tests in the same class* when using [TestDependencyProvider].
  */
 object TestDependencyProvider {
