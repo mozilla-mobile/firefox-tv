@@ -62,6 +62,11 @@ class ExperimentsProvider(private val fretboard: Fretboard, private val context:
 
     fun shouldShowTvGuideChannels(): Boolean {
         return true // TODO uncomment below code before merging
+//        return false // TODO Before enabling this code:
+//        - Add final channel content (see #2322)
+//        - Make sure all tiles have images
+
+
 //        val expDescriptor = checkBranchVariants(ExperimentConfig.TV_GUIDE_CHANNELS)
 //        return when {
 //            // The user is currently not part of the experiment
