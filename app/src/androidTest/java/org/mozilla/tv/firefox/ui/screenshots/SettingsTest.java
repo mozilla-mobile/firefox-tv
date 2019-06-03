@@ -49,12 +49,7 @@ public class SettingsTest extends ScreenshotTest {
         // current settings list view
         onView(withId(R.id.container_web_render)).check(matches(isDisplayed()));
 
-        // This will need to change if the button layout changes. However, such layout
-        // changes are infrequent, and updating this will be easy.
-        device.pressDPadDown();
-        device.pressDPadDown();
-        device.pressDPadDown();
-        device.pressDPadDown();
+        linearNavigateToSettingsChannel();
 
         onView(withId(R.id.settings_tile_telemetry)).check(matches(isDisplayed()));
 
@@ -65,11 +60,22 @@ public class SettingsTest extends ScreenshotTest {
         takeScreenshotsAfterWait("send-usage-data", 5000);
         mDevice.pressBack();
 
+        linearNavigateToSettingsChannel();
         onView(withId(R.id.settings_tile_cleardata)).perform(click());
         takeScreenshotsAfterWait("clear-all-data", 5000);
         mDevice.pressBack();
+        linearNavigateToSettingsChannel();
         onView(withId(R.id.settings_tile_about)).perform(click());
         takeScreenshotsAfterWait("about-screen", 5000);
         mDevice.pressBack();
+    }
+
+    private void linearNavigateToSettingsChannel() {
+        // This will need to change if the button layout changes. However, such layout
+        // changes are infrequent, and updating this will be easy.
+        device.pressDPadDown();
+        device.pressDPadDown();
+        device.pressDPadDown();
+        device.pressDPadDown();
     }
 }

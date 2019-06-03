@@ -52,7 +52,7 @@ class ToggleDataCollectionTest {
             toggleDataCollectionButton()
             cachedDataCollectionButtonIsChecked = !cachedDataCollectionButtonIsChecked
         }.exitToOverlay {
-        }.openSettingsTelemetryTile {
+        }.linearNavigateToTelemtryTileAndOpen {
             assertDataCollectionButtonState(cachedDataCollectionButtonIsChecked)
         }
     }
