@@ -88,8 +88,8 @@ class PinnedTileTest {
                 pinnedTileImageUtilWrapper,
                 formattedDomainWrapper,
                 channelTitles,
-                pinnedTileRepo,
-                channelRepo
+                channelRepo,
+                pinnedTileRepo
         )
         testObserver = overlayVm.pinnedTiles.test()
     }
