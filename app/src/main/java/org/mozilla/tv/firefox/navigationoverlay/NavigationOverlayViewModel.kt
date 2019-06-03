@@ -34,8 +34,8 @@ class NavigationOverlayViewModel(
     imageUtilityWrapper: PinnedTileImageUtilWrapper,
     formattedDomainWrapper: FormattedDomainWrapper,
     channelTitles: ChannelTitles,
-    private val pinnedTileRepo: PinnedTileRepo,
-    private val channelRepo: ChannelRepo
+    channelRepo: ChannelRepo,
+    private val pinnedTileRepo: PinnedTileRepo
 ) : ViewModel() {
 
     val focusUpdate = focusRepo.focusUpdate
@@ -56,7 +56,7 @@ class NavigationOverlayViewModel(
             // This takes place off of the main thread because PinnedTile.toChannelTile needs
             // to perform file access, and blocks to do so
             .map { it.values.map { it.toChannelTile(imageUtilityWrapper, formattedDomainWrapper) } }
-            .map { ChannelDetails(title = channelTitles.pinned, tileList = it) } // TODO extract string
+            .map { ChannelDetails(title = channelTitles.pinned, tileList = it) }
             .observeOn(AndroidSchedulers.mainThread())
 
     val shouldDisplayPinnedTiles: Observable<Boolean> = pinnedTiles.map { !it.tileList.isEmpty() }
@@ -68,7 +68,7 @@ class NavigationOverlayViewModel(
     }
 
     val newsChannel: Observable<ChannelDetails> = channelRepo.getNewsTiles()
-        .map { ChannelDetails(title = "News", tileList = it) }
+        .map { ChannelDetails(title = channelTitles.newsAndPolitics, tileList = it) }
 
     val sportsChannel: Observable<ChannelDetails> = channelRepo.getSportsTiles()
         .map { ChannelDetails(title = channelTitles.sports, tileList = it) }

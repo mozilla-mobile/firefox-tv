@@ -21,7 +21,7 @@ fun ChannelContent.getSportsChannels(): List<ChannelTile> = listOf(
         url = "https://www.formula1.com/en/video.html",
         title = "Formula 1",
         subtitle = null,
-        setImage = setImage(R.drawable.cursor_active_bg), // TODO ask UX for image resource
+        setImage = setImage(R.drawable.cursor_active_bg), // TDOO use real image.  Assets requested in #2357
         tileSource = TileSource.TV_GUIDE,
         id = "formula1"
     )
