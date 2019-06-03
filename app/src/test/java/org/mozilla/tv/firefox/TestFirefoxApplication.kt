@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox
 
 import mozilla.components.service.glean.Glean
 import androidx.work.testing.WorkManagerTestInitHelper
+import org.mozilla.tv.firefox.helpers.EngineVariantFunctionality
 import org.robolectric.RobolectricTestRunner
 
 /**
@@ -19,10 +20,19 @@ import org.robolectric.RobolectricTestRunner
 @Suppress("unused") // Robolectric hardcodes this class name.
 class TestFirefoxApplication : FirefoxApplication() {
 
+    init {
+        EngineVariantFunctionality.preventCrashFromComponentsDefaultUserAgent(getSystemUserAgent())
+    }
+
     /**
-     * A function to retrieve the system user agent. The default implementation, used by the
-     * production app, calls a static method that throws a NullPointerException during robolectric
-     * tests. We can't mock static methods so we override the the method.
+     * Retrieves the system user agent for testing. The production implementation calls into `WebSettings` which throws
+     * an UnsupportedOperationException during Robolectric tests. We can't mock static methods so we stub the method.
+     * Note that we must also override similar behavior in android-components: see
+     * [EngineVariantFunctionality.preventCrashFromDefaultUserAgent].
+     *
+     * We have to override two implementations because the a-c user agent implementation doesn't allow us to modify the
+     * SystemEngine default user agent when using the Gecko implementation: see
+     * https://github.com/mozilla-mobile/android-components/pull/931#issuecomment-498449477 for details.
      */
     override fun getSystemUserAgent(): String =
             "Mozilla/5.0 (Linux; Android 7.1.2) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Focus/2.2.0.2 Chrome/59.0.3071.125 Mobile Safari/537.36"
