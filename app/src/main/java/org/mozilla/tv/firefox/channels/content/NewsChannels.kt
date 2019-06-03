@@ -61,7 +61,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         url = "https://www.cbsnews.com/video/",
         title = "CBS News",
         subtitle = null,
-        setImage = setImage(R.drawable.cursor_active_bg), // TODO ask UX for image resource
+        setImage = setImage(R.drawable.cursor_active_bg), // TDOO use real image.  Assets requested in #2357
         tileSource = TileSource.TV_GUIDE,
         id = "cbsNews"
     ),
@@ -69,7 +69,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         url = "https://www.huffpost.com/section/video",
         title = "Huffington Post",
         subtitle = null,
-        setImage = setImage(R.drawable.cursor_active_bg), // TODO ask UX for image resource
+        setImage = setImage(R.drawable.cursor_active_bg), // TDOO use real image.  Assets requested in #2357
         tileSource = TileSource.TV_GUIDE,
         id = "huffingtonPost"
     ),
@@ -77,7 +77,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         url = "https://video.vice.com/",
         title = "Vice",
         subtitle = null,
-        setImage = setImage(R.drawable.cursor_active_bg), // TODO ask UX for image resource
+        setImage = setImage(R.drawable.cursor_active_bg), // TDOO use real image.  Assets requested in #2357
         tileSource = TileSource.TV_GUIDE,
         id = "vice"
     )
