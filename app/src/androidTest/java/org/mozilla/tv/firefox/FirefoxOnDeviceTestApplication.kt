@@ -8,7 +8,13 @@ import android.os.StrictMode
 import org.mozilla.tv.firefox.TestDependencyProvider.serviceLocator
 import org.mozilla.tv.firefox.utils.ServiceLocator
 
-class FirefoxTestApplication : FirefoxApplication() {
+/**
+ * The application class used during on-device tests: this class may modified to run additional
+ * test setup code during on-device tests.
+ *
+ * This class should not be confused with [TestFirefoxApplication] which is used for off-device Robolectric tests.
+ */
+class FirefoxOnDeviceTestApplication : FirefoxApplication() {
 
     override fun createServiceLocator(): ServiceLocator {
         return TestDependencyProvider.serviceLocator ?: super.createServiceLocator()
@@ -36,7 +42,7 @@ class FirefoxTestApplication : FirefoxApplication() {
 /**
  * Used to provide fake dependencies to the Application at startup.
  *
- * [FirefoxTestApplication.createServiceLocator] checks here for a custom
+ * [FirefoxOnDeviceTestApplication.createServiceLocator] checks here for a custom
  * [ServiceLocator], then returns super if it is null. This allows individual
  * tests to create a service locator, thus substituting their own fakes into
  * tests.

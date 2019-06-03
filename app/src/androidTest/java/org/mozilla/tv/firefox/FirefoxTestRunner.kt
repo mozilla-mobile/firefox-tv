@@ -22,7 +22,7 @@ class FirefoxTestRunner : AndroidJUnitRunner() {
     private lateinit var classLoader: ClassLoader
 
     override fun newApplication(cl: ClassLoader?, className: String?, context: Context?): Application {
-        return super.newApplication(cl, FirefoxTestApplication::class.java.name, context).also {
+        return super.newApplication(cl, FirefoxOnDeviceTestApplication::class.java.name, context).also {
             app = it
             classLoader = cl!!
         }
