@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox
 import android.os.StrictMode
 import androidx.annotation.VisibleForTesting
 import android.webkit.WebSettings
+import androidx.annotation.VisibleForTesting.PRIVATE
 import mozilla.components.service.glean.Glean
 import mozilla.components.support.base.log.Log
 import mozilla.components.support.base.log.sink.AndroidLogSink
@@ -26,9 +27,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
     lateinit var visibilityLifeCycleCallback: VisibilityLifeCycleCallback
         private set
 
-    // TODO: Replace with components implementation, which may remove need for test workaround:
-    // https://github.com/mozilla-mobile/android-components/issues/899
-    @VisibleForTesting // See TestFocusApplication for why this method exists.
+    @VisibleForTesting(otherwise = PRIVATE) // See the TestFirefoxApplication impl for why this method exists.
     protected open fun getSystemUserAgent(): String = WebSettings.getDefaultUserAgent(this)
 
     /**
