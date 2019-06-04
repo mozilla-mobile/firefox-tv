@@ -70,8 +70,8 @@ class ExperimentsProvider(private val fretboard: Fretboard, private val context:
 //        return when {
 //            // The user is currently not part of the experiment
 //            expDescriptor == null -> false
-//            expDescriptor.name.endsWith(ExperimentSuffix.A.value) -> true
-//            expDescriptor.name.endsWith(ExperimentSuffix.B.value) -> false
+//            expDescriptor.name.endsWith(ExperimentSuffix.A.value) -> false
+//            expDescriptor.name.endsWith(ExperimentSuffix.B.value) -> true
 //            else -> {
 //                Sentry.capture(ExperimentIllegalStateException("TV Guide Channels Illegal Branch Name"))
 //                false
