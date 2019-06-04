@@ -7,12 +7,13 @@ package org.mozilla.tv.firefox
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.annotation.VisibleForTesting
 import android.text.TextUtils
+import androidx.annotation.VisibleForTesting
 import mozilla.components.browser.session.Session
 import mozilla.components.service.fretboard.ExperimentDescriptor
 import mozilla.components.support.utils.SafeIntent
 import org.mozilla.tv.firefox.ext.serviceLocator
+import org.mozilla.tv.firefox.pocket.PocketVideoFetchScheduler
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.UrlUtils
 
@@ -58,10 +59,18 @@ object IntentValidator {
 
         when (intent.action) {
             Intent.ACTION_MAIN -> {
+                val extras = intent.extras ?: return null
+
                 val dialParams = intent.extras?.getString(DIAL_PARAMS_KEY) ?: return null
                 if (dialParams.isNotEmpty()) {
                     TelemetryIntegration.INSTANCE.youtubeCastEvent()
                     return ValidatedIntentData(url = "https://www.youtube.com/tv?$dialParams", source = Session.Source.ACTION_VIEW)
+                }
+                // The fetch delay can be changed for testing purposes through an intent with custom flags
+                // isQA and fetchDelay. Where isQA is true/false and fetchDelay is the intended next fetch time
+                // in seconds.
+                else if (extras.keySet().contains(IS_QA_BUILD_KEY)) {
+                    PocketVideoFetchScheduler.setDelayForQA(extras.getLong(FETCH_DELAY_KEY))
                 }
             }
             Intent.ACTION_VIEW -> {
