@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import org.mozilla.gradle.Dependencies
+
 buildscript {
     ext.androidx_version = '1.0.0'
     ext.architecture_components_version = '2.0.0'
@@ -23,12 +25,35 @@ buildscript {
     ext.uiautomator_version = '2.2.0'
     ext.junit = "1.1.0"
 
+    // This logic is duplicated in the allprojects block: I don't know how to fix that.
     repositories {
-        google()
         maven {
             url "https://maven.mozilla.org/maven2"
+            content {
+                includeGroupByRegex Dependencies.RepoMatching.mozilla
+            }
         }
-        jcenter()
+        google() {
+            content {
+                // Improve performance: only check google maven for mozilla deps.
+                includeGroupByRegex Dependencies.RepoMatching.androidx
+                includeGroupByRegex Dependencies.RepoMatching.comGoogleAndroid
+                includeGroupByRegex Dependencies.RepoMatching.comAndroid
+
+                // Improve security: don't search deps with known repos. In theory, this is unnecessary
+                // if includeGroup is specified, but it's helpful in case includeGroup is removed.
+                excludeGroupByRegex Dependencies.RepoMatching.mozilla
+            }
+        }
+        jcenter() {
+            content {
+                // Improve security: don't search deps with known repos.
+                excludeGroupByRegex Dependencies.RepoMatching.mozilla
+                excludeGroupByRegex Dependencies.RepoMatching.androidx
+                excludeGroupByRegex Dependencies.RepoMatching.comGoogleAndroid
+                excludeGroupByRegex Dependencies.RepoMatching.comAndroid
+            }
+        }
     }
 
     dependencies {
@@ -56,12 +81,36 @@ detekt {
 }
 
 allprojects {
+    // This logic is duplicated in the buildscript block: I don't know how to fix that.
     repositories {
         maven {
             url "https://maven.mozilla.org/maven2"
+            content {
+                // Improve performance: only check moz maven for mozilla deps.
+                includeGroupByRegex Dependencies.RepoMatching.mozilla
+            }
         }
-        google()
-        jcenter()
+        google() {
+            content {
+                // Improve performance: only check google maven for google deps.
+                includeGroupByRegex Dependencies.RepoMatching.androidx
+                includeGroupByRegex Dependencies.RepoMatching.comGoogleAndroid
+                includeGroupByRegex Dependencies.RepoMatching.comAndroid
+
+                // Improve security: don't search deps with known repos. In theory, this is unnecessary
+                // if includeGroup is specified, but it's helpful in case includeGroup is removed.
+                excludeGroupByRegex Dependencies.RepoMatching.mozilla
+            }
+        }
+        jcenter() {
+            content {
+                // Improve security: don't search deps with known repos.
+                excludeGroupByRegex Dependencies.RepoMatching.mozilla
+                excludeGroupByRegex Dependencies.RepoMatching.androidx
+                excludeGroupByRegex Dependencies.RepoMatching.comGoogleAndroid
+                excludeGroupByRegex Dependencies.RepoMatching.comAndroid
+            }
+        }
     }
 }
 
