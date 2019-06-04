@@ -22,6 +22,7 @@ import mozilla.components.concept.engine.EngineView
 import mozilla.components.support.base.observer.Consumable
 import mozilla.components.support.utils.toSafeIntent
 import org.mozilla.tv.firefox.components.locale.LocaleAwareAppCompatActivity
+import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.ext.resetView
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.setupForApp
@@ -90,7 +91,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         })
 
         if (!safeIntent.hasExtra("TURBO_MODE")) {
-            if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding()) {
+            if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding(this)) {
                 val onboardingIntents =
                         Intent(this@MainActivity, PocketOnboardingActivity::class.java)
                 startActivity(onboardingIntents)
