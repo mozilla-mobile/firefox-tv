@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Various channels containing bundled links to various video-friendly websites (#2195)
 
+## Fixed
+- Fixed a bug that caused Pocket onboarding to be shown to users that don't see Pocket content (#2293)
+
 ## [3.9] - 2019-05-13
 ### Added
 - Channel for displaying pinned tiles (replacing the previous container style) (#2110)
