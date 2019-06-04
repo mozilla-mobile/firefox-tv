@@ -53,6 +53,19 @@ class PocketVideoFetchScheduler(
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
+        val delay: Long
+        val workPolicy: ExistingWorkPolicy
+
+        // This sets the custom fetch delay for testing purposes.
+        // The custom delay will only run once.
+        if (IS_QA_BUILD) {
+            delay = DELAY_TIME_FOR_QA_MILLIS
+            workPolicy = ExistingWorkPolicy.REPLACE
+            IS_QA_BUILD = false
+        } else {
+            delay = getDelayUntilUpcomingNightFetchMillis(now, randLong)
+            workPolicy = ExistingWorkPolicy.KEEP
+        }
         // When the user foregrounds the app, we schedule a one time update for a random time inside our fetch interval
         // (currently overnight). This will ensure that users always see fresh content every morning and that the content
         // is only refreshing at times when the user is most likely not using the app.
@@ -61,7 +74,7 @@ class PocketVideoFetchScheduler(
         // We only schedule a fetch if there isn't one already scheduled.
         val saveRequest = OneTimeWorkRequestBuilder<PocketVideoFetchWorker>()
             .setConstraints(constraints)
-            .setInitialDelay(getDelayUntilUpcomingNightFetchMillis(now, randLong), TimeUnit.MILLISECONDS)
+            .setInitialDelay(delay, TimeUnit.MILLISECONDS)
 
             // Here exponential means the first backoff is the given delay, the second backoff is the given delay * 2,
             // the third backoff is the given delay * 2 * 2, etc. Note that WorkManager does not introduce randomness
@@ -71,7 +84,7 @@ class PocketVideoFetchScheduler(
             .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, getBackoffDelayMillisWithRandomness(), TimeUnit.MILLISECONDS)
             .build()
 
-        workManager.enqueueUniqueWork(FETCH_UNIQUE_WORK_NAME, ExistingWorkPolicy.KEEP, saveRequest)
+        workManager.enqueueUniqueWork(FETCH_UNIQUE_WORK_NAME, workPolicy, saveRequest)
     }
 
     private fun getDelayUntilUpcomingNightFetchMillis(
@@ -105,6 +118,13 @@ class PocketVideoFetchScheduler(
         // Since this is a background job, we're in no rush and can wait a while.
         @VisibleForTesting(otherwise = PRIVATE) val BACKOFF_DELAY_MIN_MILLIS = TimeUnit.SECONDS.toMillis(30)
         @VisibleForTesting(otherwise = PRIVATE) val BACKOFF_DELAY_MAX_MILLIS = TimeUnit.SECONDS.toMillis(60)
+
+        private var DELAY_TIME_FOR_QA_MILLIS = TimeUnit.SECONDS.toMillis(5)
+        private var IS_QA_BUILD = false
+        fun setDelayForQA(seconds: Long) {
+            IS_QA_BUILD = true
+            DELAY_TIME_FOR_QA_MILLIS = TimeUnit.SECONDS.toMillis(seconds)
+        }
     }
 }
 
