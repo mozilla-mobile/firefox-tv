@@ -91,7 +91,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         })
 
         if (!safeIntent.hasExtra("TURBO_MODE")) {
-            if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding(this)) {
+            val localeManager = LocaleManager.getInstance()
+            if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding(localeManager, this)) {
                 val onboardingIntents =
                         Intent(this@MainActivity, PocketOnboardingActivity::class.java)
                 startActivity(onboardingIntents)
