@@ -39,7 +39,7 @@ class Settings private constructor(context: Context) {
         }
     }
 
-    val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    private val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     private val resources: Resources = context.resources
 
     val defaultSearchEngineName: String?
@@ -48,9 +48,9 @@ class Settings private constructor(context: Context) {
     fun shouldShowTurboModeOnboarding(): Boolean =
             !preferences.getBoolean(OnboardingActivity.ONBOARD_SHOWN_PREF, false)
 
-    fun shouldShowPocketOnboarding(context: Context): Boolean =
+    fun shouldShowPocketOnboarding(localeManager: LocaleManager, context: Context): Boolean =
             !preferences.getBoolean(PocketOnboardingActivity.POCKET_ONBOARDING_SHOWN_PREF, false) &&
-                LocaleManager.getInstance().currentLanguageIsEnglish(context)
+                localeManager.currentLanguageIsEnglish(context)
 
     fun shouldAutocompleteFromShippedDomainList() = true
 
