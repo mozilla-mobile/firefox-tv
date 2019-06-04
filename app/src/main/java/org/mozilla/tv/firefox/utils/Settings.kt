@@ -12,6 +12,7 @@ import androidx.annotation.VisibleForTesting
 import mozilla.components.concept.engine.EngineSession
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity
 
 /**
@@ -47,8 +48,9 @@ class Settings private constructor(context: Context) {
     fun shouldShowTurboModeOnboarding(): Boolean =
             !preferences.getBoolean(OnboardingActivity.ONBOARD_SHOWN_PREF, false)
 
-    fun shouldShowPocketOnboarding(): Boolean =
-            !preferences.getBoolean(PocketOnboardingActivity.POCKET_ONBOARDING_SHOWN_PREF, false)
+    fun shouldShowPocketOnboarding(context: Context): Boolean =
+            !preferences.getBoolean(PocketOnboardingActivity.POCKET_ONBOARDING_SHOWN_PREF, false) &&
+                LocaleManager.getInstance().currentLanguageIsEnglish(context)
 
     fun shouldAutocompleteFromShippedDomainList() = true
 
