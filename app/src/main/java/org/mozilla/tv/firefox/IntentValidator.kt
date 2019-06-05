@@ -10,7 +10,9 @@ import android.os.Bundle
 import androidx.annotation.VisibleForTesting
 import android.text.TextUtils
 import mozilla.components.browser.session.Session
+import mozilla.components.service.fretboard.ExperimentDescriptor
 import mozilla.components.support.utils.SafeIntent
+import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.UrlUtils
 
@@ -27,6 +29,7 @@ data class ValidatedIntentData(val url: String, val source: Session.Source)
  */
 object IntentValidator {
     @VisibleForTesting const val DIAL_PARAMS_KEY = "com.amazon.extra.DIAL_PARAM"
+    private const val ACTIVE_EXPERIMENTS_KEY = "activeExperiments"
 
     /**
      * Validate that [intent] contains all expected parameters.
@@ -50,9 +53,9 @@ object IntentValidator {
     }
 
     fun validate(context: Context, intent: SafeIntent): ValidatedIntentData? {
-        val action = intent.action
+        setExperimentOverrides(intent, context)
 
-        when (action) {
+        when (intent.action) {
             Intent.ACTION_MAIN -> {
                 val dialParams = intent.extras?.getString(DIAL_PARAMS_KEY) ?: return null
                 if (dialParams.isNotEmpty()) {
@@ -80,5 +83,16 @@ object IntentValidator {
             }
         }
         return null
+    }
+
+    private fun setExperimentOverrides(intent: SafeIntent, context: Context) {
+        intent.extras?.getStringArray(ACTIVE_EXPERIMENTS_KEY)?.let { strArray ->
+            val fretboard = context.serviceLocator.fretboardProvider.fretboard
+            fretboard.clearAllOverrides(context)
+
+            strArray.forEach {
+                fretboard.setOverride(context, ExperimentDescriptor(it), true)
+            }
+        }
     }
 }
