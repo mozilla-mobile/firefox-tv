@@ -13,13 +13,9 @@ import java.util.Collections
 private const val PREF_BUNDLE_TILES = "bundleTiles"
 
 // PinnedTiles
-private const val BUNDLED_PINNED_TILES_DIR = "bundled"
-private const val PINNED_TILES_JSON_PATH = "$BUNDLED_PINNED_TILES_DIR/bundled_tiles.json"
+
 private const val BUNDLED_PINNED_SITES_ID_BLACKLIST = "blacklist"
 
-enum class BundleType {
-    PINNED_TILES
-}
 
 /**
  * [BundleTilesStore] is responsible for fetching bundled tiles data from /assets/ with
@@ -28,49 +24,4 @@ enum class BundleType {
 class BundleTilesStore(private val applicationContext: Context) {
 
     private val _sharedPreferences: SharedPreferences = applicationContext.getSharedPreferences(PREF_BUNDLE_TILES, Context.MODE_PRIVATE)
-
-    private fun loadBlackList(type: BundleType): Set<String> {
-        val sharedPrefKey = when (type) {
-            BundleType.PINNED_TILES -> BUNDLED_PINNED_SITES_ID_BLACKLIST
-        }
-
-        return _sharedPreferences.getStringSet(sharedPrefKey, Collections.emptySet())!!
-    }
-
-    private fun saveBlackList(type: BundleType, blackList: Set<String>) {
-        val sharedPrefKey = when (type) {
-            BundleType.PINNED_TILES -> BUNDLED_PINNED_SITES_ID_BLACKLIST
-        }
-
-        _sharedPreferences.edit().putStringSet(sharedPrefKey, blackList).apply()
-    }
-
-    fun getBundledTiles(type: BundleType): List<JSONObject> {
-        val jsonPath = when (type) {
-            BundleType.PINNED_TILES -> PINNED_TILES_JSON_PATH
-        }
-
-        val blacklist = loadBlackList(type)
-        val tilesJSONString = applicationContext.assets.open(jsonPath).bufferedReader().use { it.readText() }
-        val tilesJSONArray = JSONArray(tilesJSONString)
-        val jsonList = ArrayList<JSONObject>()
-
-        for (i in 0 until tilesJSONArray.length()) {
-            val jsonObject = tilesJSONArray.getJSONObject(i)
-            if (!blacklist.contains(jsonObject.getString("id"))) {
-                jsonList.add(jsonObject)
-            }
-        }
-
-        return jsonList
-    }
-
-    /**
-     * Used to handle removing bundle tiles by adding to its [BundleType] blacklist in SharedPreferences
-     */
-    fun addBundleTileToBlackList(type: BundleType, id: String) {
-        val blackList = loadBlackList(type).toMutableSet()
-        blackList.add(id)
-        saveBlackList(type, blackList)
-    }
 }
