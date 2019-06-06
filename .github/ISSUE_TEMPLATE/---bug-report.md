@@ -15,3 +15,4 @@ labels: "bug"
 * Fire TV device: ?
 * Latest affected Firefox version: ?
 * Earliest affected Firefox version: ?
+* Turbo Mode: ?
