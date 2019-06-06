@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.channels
 
+import android.content.Context
 import androidx.annotation.VisibleForTesting
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
@@ -22,6 +23,7 @@ import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
  * [TileSource] is used to determine which Repo is responsible to handle requested operations
  */
 class ChannelRepo(
+    private val context: Context,
     private val pinnedTileRepo: PinnedTileRepo
 ) {
 
