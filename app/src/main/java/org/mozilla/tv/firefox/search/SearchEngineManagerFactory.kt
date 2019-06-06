@@ -22,7 +22,7 @@ object SearchEngineManagerFactory {
     fun create(app: Application): SearchEngineManager {
         return SearchEngineManager(listOf(engineProvider)).apply {
             GlobalScope.launch {
-                @Suppress("DeferredResultUnused")
+                @Suppress("DeferredResultUnused", "DEPRECATION") // TODO load is deprecated (#2352).
                 load(app) // Call is used only for its side effects
             }
         }
