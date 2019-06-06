@@ -15,7 +15,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import org.json.JSONArray
 import org.mozilla.tv.firefox.channels.BundleType
-import org.mozilla.tv.firefox.channels.BundleTilesStore
+import org.mozilla.tv.firefox.channels.ChannelRepo
 import java.util.UUID
 
 private const val CUSTOM_SITES_LIST = "customSitesList"
@@ -30,7 +30,7 @@ private const val PREF_HOME_TILES = "homeTiles"
  */
 class PinnedTileRepo(
     private val applicationContext: Context,
-    private val bundleTilesStore: BundleTilesStore
+    private val channelRepo: ChannelRepo
 ) {
     private val _pinnedTiles: BehaviorSubject<LinkedHashMap<String, PinnedTile>> =
             BehaviorSubject.create()
@@ -99,7 +99,7 @@ class PinnedTileRepo(
 
         when (tileToRemove) {
             is BundledPinnedTile -> {
-                bundleTilesStore.addBundleTileToBlackList(BundleType.PINNED_TILES, tileToRemove.id)
+                channelRepo.addBundleTileToBlackList(BundleType.PINNED_TILES, tileToRemove.id)
                 --bundledTilesSize
             }
             is CustomPinnedTile -> {
@@ -121,8 +121,9 @@ class PinnedTileRepo(
         _sharedPreferences.edit().putString(CUSTOM_SITES_LIST, tilesJSONArray.toString()).apply()
     }
 
+    @Suppress("Deprecation")
     private fun loadBundledTilesCache(): LinkedHashMap<String, BundledPinnedTile> {
-        val tilesJSONList = bundleTilesStore.getBundledTiles(BundleType.PINNED_TILES)
+        val tilesJSONList = channelRepo.getBundledPinnedTiles(BundleType.PINNED_TILES)
         val lhm = LinkedHashMap<String, BundledPinnedTile>(tilesJSONList.size)
         for (jsonObject in tilesJSONList) {
             val tile = BundledPinnedTile.fromJSONObject(jsonObject)
