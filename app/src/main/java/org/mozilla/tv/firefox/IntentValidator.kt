@@ -16,6 +16,8 @@ import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.UrlUtils
 
+private const val EXTRA_ACTIVE_EXPERIMENTS = "qaActiveExperiments"
+
 data class ValidatedIntentData(val url: String, val source: Session.Source)
 
 /**
@@ -29,7 +31,6 @@ data class ValidatedIntentData(val url: String, val source: Session.Source)
  */
 object IntentValidator {
     @VisibleForTesting const val DIAL_PARAMS_KEY = "com.amazon.extra.DIAL_PARAM"
-    private const val ACTIVE_EXPERIMENTS_KEY = "activeExperiments"
 
     /**
      * Validate that [intent] contains all expected parameters.
@@ -86,13 +87,12 @@ object IntentValidator {
     }
 
     private fun setExperimentOverrides(intent: SafeIntent, context: Context) {
-        intent.extras?.getStringArray(ACTIVE_EXPERIMENTS_KEY)?.let { strArray ->
-            val fretboard = context.serviceLocator.fretboardProvider.fretboard
-            fretboard.clearAllOverrides(context)
+        val experimentsArray = intent.extras?.getStringArray(EXTRA_ACTIVE_EXPERIMENTS) ?: return
+        val fretboard = context.serviceLocator.fretboardProvider.fretboard
+        fretboard.clearAllOverrides(context)
 
-            strArray.forEach {
-                fretboard.setOverride(context, ExperimentDescriptor(it), true)
-            }
+        experimentsArray.forEach {
+            fretboard.setOverride(context, ExperimentDescriptor(it), true)
         }
     }
 }
