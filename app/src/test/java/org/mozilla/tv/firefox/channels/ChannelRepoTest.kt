@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.channels
 
+import androidx.test.core.app.ApplicationProvider
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.reactivex.Observable
@@ -25,7 +26,7 @@ class ChannelRepoTest {
     fun setup() {
         MockKAnnotations.init(this)
 
-        channelRepo = ChannelRepo(pinnedTileRepo)
+        channelRepo = ChannelRepo(ApplicationProvider.getApplicationContext(), pinnedTileRepo)
     }
 
     @Test

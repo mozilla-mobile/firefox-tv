@@ -90,7 +90,7 @@ open class ServiceLocator(val app: Application) {
     val focusRepo by lazy { FocusRepo(screenController, sessionRepo, pinnedTileRepo, pocketRepo) }
     val screenshotStoreWrapper by lazy { PinnedTileImageUtilWrapper(app) }
     val formattedDomainWrapper by lazy { FormattedDomainWrapper(app) }
-    val channelRepo by lazy { ChannelRepo(pinnedTileRepo) }
+    val channelRepo by lazy { ChannelRepo(app, pinnedTileRepo) }
     @Suppress("DEPRECATION") // We need PocketEndpointRaw until we move to a-c's impl.
     val pocketEndpointRaw by lazy { PocketEndpointRaw(appVersion, buildConfigDerivables.globalPocketVideoEndpoint) }
     val pocketVideoStore by lazy { PocketVideoStore(app, app.assets, pocketVideoJSONValidator) }
