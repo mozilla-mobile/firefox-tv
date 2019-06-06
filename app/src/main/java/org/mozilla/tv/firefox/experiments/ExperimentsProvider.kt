@@ -68,8 +68,7 @@ class ExperimentsProvider(private val fretboard: Fretboard, private val context:
 
         val expDescriptor = checkBranchVariants(ExperimentConfig.TV_GUIDE_CHANNELS)
         return when {
-            // The user is currently not part of the experiment
-            expDescriptor == null -> false
+            expDescriptor == null -> false // Experiment unknown, or overridden to be false.
             expDescriptor.name.endsWith(ExperimentSuffix.A.value) -> false
             expDescriptor.name.endsWith(ExperimentSuffix.B.value) -> true
             else -> {

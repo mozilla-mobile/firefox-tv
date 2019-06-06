@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [4.0]
 ### Added
 - Various channels containing bundled links to various video-friendly websites (#2195)
+- Added options to choose experiments for QA (#2320)
 
 ## Fixed
 - Fixed a bug that caused Pocket onboarding to be shown to users that don't see Pocket content (#2293)
