@@ -10,8 +10,6 @@ import androidx.annotation.VisibleForTesting
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
-import org.json.JSONArray
-import org.json.JSONObject
 import org.mozilla.tv.firefox.channels.content.ChannelContent
 import org.mozilla.tv.firefox.channels.content.getMusicChannels
 import org.mozilla.tv.firefox.channels.content.getNewsChannels
@@ -19,7 +17,6 @@ import org.mozilla.tv.firefox.channels.content.getSportsChannels
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import java.util.Collections
-import kotlin.collections.ArrayList
 
 private const val PREF_CHANNEL_REPO = "ChannelRepo"
 
@@ -40,7 +37,7 @@ enum class BundleType {
  * [TileSource] is used to determine which Repo is responsible to handle requested operations
  */
 class ChannelRepo(
-    private val context: Context,
+    private context: Context,
     private val pinnedTileRepo: PinnedTileRepo
 ) {
     private val _sharedPreferences: SharedPreferences =
@@ -59,6 +56,7 @@ class ChannelRepo(
         when (tileData.tileSource) {
             TileSource.BUNDLED, TileSource.CUSTOM -> {
                 TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileData)
+                addBundleTileToBlackList(BundleType.PINNED_TILES, tileData.id)
                 pinnedTileRepo.removePinnedTile(tileData.url)
             }
             TileSource.POCKET -> throw NotImplementedError("pocket shouldn't be able to remove tiles")
@@ -66,29 +64,10 @@ class ChannelRepo(
         }
     }
 
-    @Deprecated("Unify PINNED_TILE logic in #2366")
-    fun getBundledPinnedTiles(type: BundleType): List<JSONObject> {
-        val bundledTilePath = "bundled/bundled_tiles.json"
-
-        val blacklist = loadBlackList(type)
-        val tilesJSONString = context.assets.open(bundledTilePath).bufferedReader().use { it.readText() }
-        val tilesJSONArray = JSONArray(tilesJSONString)
-        val jsonList = ArrayList<JSONObject>()
-
-        for (i in 0 until tilesJSONArray.length()) {
-            val jsonObject = tilesJSONArray.getJSONObject(i)
-            if (!blacklist.contains(jsonObject.getString("id"))) {
-                jsonList.add(jsonObject)
-            }
-        }
-
-        return jsonList
-    }
-
     /**
      * Used to handle removing bundle tiles by adding to its [BundleType] blacklist in SharedPreferences
      */
-    fun addBundleTileToBlackList(type: BundleType, id: String) {
+    private fun addBundleTileToBlackList(type: BundleType, id: String) {
         val blackList = loadBlackList(type).toMutableSet()
         blackList.add(id)
         saveBlackList(type, blackList)

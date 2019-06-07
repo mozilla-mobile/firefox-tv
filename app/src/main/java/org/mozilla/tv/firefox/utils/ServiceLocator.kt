@@ -14,7 +14,6 @@ import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ValidatedIntentData
 import org.mozilla.tv.firefox.architecture.ViewModelFactory
-import org.mozilla.tv.firefox.channels.BundleTilesStore
 import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.experiments.ExperimentsProvider
 import org.mozilla.tv.firefox.experiments.FretboardProvider
@@ -72,7 +71,6 @@ open class ServiceLocator(val app: Application) {
     private val appVersion = app.packageManager.getPackageInfo(app.packageName, 0).versionName
     private val buildConfigDerivables get() = BuildConfigDerivables()
     private val isPocketEnabledByLocale = { LocaleManager.getInstance().currentLanguageIsEnglish(app) } // Pocket is en-US only.
-    private val bundleTileStore by lazy { BundleTilesStore(app) }
     private val pocketVideoParser by lazy { PocketVideoParser }
     private val pocketVideoJSONValidator by lazy { PocketVideoJSONValidator(pocketVideoParser) }
 
@@ -98,7 +96,7 @@ open class ServiceLocator(val app: Application) {
 
     // These open vals are overridden in testing
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())
-    open val pinnedTileRepo by lazy { PinnedTileRepo(app, bundleTileStore) }
+    open val pinnedTileRepo by lazy { PinnedTileRepo(app) }
     open val pocketRepo by lazy { PocketVideoRepo.newInstance(
         pocketVideoStore,
         isPocketEnabledByLocale,
