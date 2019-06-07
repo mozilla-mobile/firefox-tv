@@ -66,6 +66,7 @@ class PocketVideoFetchScheduler(
             delay = getDelayUntilUpcomingNightFetchMillis(now, randLong)
             workPolicy = ExistingWorkPolicy.KEEP
         }
+
         // When the user foregrounds the app, we schedule a one time update for a random time inside our fetch interval
         // (currently overnight). This will ensure that users always see fresh content every morning and that the content
         // is only refreshing at times when the user is most likely not using the app.
