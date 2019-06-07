@@ -14,9 +14,12 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import org.json.JSONArray
+import org.json.JSONObject
 import org.mozilla.tv.firefox.channels.BundleType
 import org.mozilla.tv.firefox.channels.ChannelRepo
-import java.util.UUID
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.LinkedHashMap
 
 private const val CUSTOM_SITES_LIST = "customSitesList"
 private const val PREF_HOME_TILES = "homeTiles"
@@ -29,8 +32,7 @@ private const val PREF_HOME_TILES = "homeTiles"
  * @constructor loads the initial [_pinnedTiles] (a combination of custom and bundled tiles)
  */
 class PinnedTileRepo(
-    private val applicationContext: Context,
-    private val channelRepo: ChannelRepo
+    private val applicationContext: Context
 ) {
     private val _pinnedTiles: BehaviorSubject<LinkedHashMap<String, PinnedTile>> =
             BehaviorSubject.create()
@@ -99,7 +101,7 @@ class PinnedTileRepo(
 
         when (tileToRemove) {
             is BundledPinnedTile -> {
-                channelRepo.addBundleTileToBlackList(BundleType.PINNED_TILES, tileToRemove.id)
+
                 --bundledTilesSize
             }
             is CustomPinnedTile -> {
@@ -110,6 +112,25 @@ class PinnedTileRepo(
         }
 
         return tileToRemove.idToString()
+    }
+
+    @Deprecated("Unify PINNED_TILE logic in #2366")
+    private fun getBundledPinnedTiles(): List<JSONObject> {
+        val bundledTilePath = "bundled/bundled_tiles.json"
+
+        val blacklist = _sharedPreferences.getStringSet("blacklist_pinned_tiles", Collections.emptySet())!!
+        val tilesJSONString = applicationContext.assets.open(bundledTilePath).bufferedReader().use { it.readText() }
+        val tilesJSONArray = JSONArray(tilesJSONString)
+        val jsonList = ArrayList<JSONObject>()
+
+        for (i in 0 until tilesJSONArray.length()) {
+            val jsonObject = tilesJSONArray.getJSONObject(i)
+            if (!blacklist.contains(jsonObject.getString("id"))) {
+                jsonList.add(jsonObject)
+            }
+        }
+
+        return jsonList
     }
 
     private fun persistCustomTiles() {
@@ -123,7 +144,7 @@ class PinnedTileRepo(
 
     @Suppress("Deprecation")
     private fun loadBundledTilesCache(): LinkedHashMap<String, BundledPinnedTile> {
-        val tilesJSONList = channelRepo.getBundledPinnedTiles(BundleType.PINNED_TILES)
+        val tilesJSONList = getBundledPinnedTiles()
         val lhm = LinkedHashMap<String, BundledPinnedTile>(tilesJSONList.size)
         for (jsonObject in tilesJSONList) {
             val tile = BundledPinnedTile.fromJSONObject(jsonObject)
