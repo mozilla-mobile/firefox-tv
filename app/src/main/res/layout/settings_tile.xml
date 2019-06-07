@@ -35,7 +35,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="12dp"
+        android:paddingBottom="9dp"
+        android:paddingTop="9dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
         android:singleLine="true"
         android:textSize="18sp"
         android:fontFamily="@string/font_ember_regular"/>
