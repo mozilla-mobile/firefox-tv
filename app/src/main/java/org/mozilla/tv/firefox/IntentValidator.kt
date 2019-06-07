@@ -57,6 +57,7 @@ object IntentValidator {
 
     fun validate(context: Context, intent: SafeIntent): ValidatedIntentData? {
         setExperimentOverrides(intent, context)
+        changeFetchDelaySecondsForQA(intent)
 
         when (intent.action) {
             Intent.ACTION_MAIN -> {
@@ -66,12 +67,6 @@ object IntentValidator {
                 if (dialParams.isNotEmpty()) {
                     TelemetryIntegration.INSTANCE.youtubeCastEvent()
                     return ValidatedIntentData(url = "https://www.youtube.com/tv?$dialParams", source = Session.Source.ACTION_VIEW)
-                }
-
-                // The fetch delay can be changed for testing purposes through an intent with custom flag
-                // fetchDelay. Where fetchDelay is the intended next fetch time in seconds.
-                else if (extras.containsKey(EXTRA_FETCH_DELAY_KEY)) {
-                    PocketVideoFetchScheduler.setDelayForQA(extras.getLong(EXTRA_FETCH_DELAY_KEY))
                 }
             }
             Intent.ACTION_VIEW -> {
@@ -103,6 +98,12 @@ object IntentValidator {
 
         experimentsArray.forEach {
             fretboard.setOverride(context, ExperimentDescriptor(it), true)
+        }
+    }
+
+    private fun changeFetchDelaySecondsForQA(intent: SafeIntent) {
+        intent.extras?.getLong(EXTRA_FETCH_DELAY_KEY)?.let { delay ->
+            PocketVideoFetchScheduler.setDelayForQA(delay)
         }
     }
 }
