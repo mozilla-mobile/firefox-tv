@@ -18,6 +18,7 @@ import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.UrlUtils
 
 private const val EXTRA_ACTIVE_EXPERIMENTS = "qaActiveExperiments"
+private const val EXTRA_FETCH_DELAY_KEY = "fetchDelay"
 
 data class ValidatedIntentData(val url: String, val source: Session.Source)
 
@@ -66,11 +67,11 @@ object IntentValidator {
                     TelemetryIntegration.INSTANCE.youtubeCastEvent()
                     return ValidatedIntentData(url = "https://www.youtube.com/tv?$dialParams", source = Session.Source.ACTION_VIEW)
                 }
-                // The fetch delay can be changed for testing purposes through an intent with custom flags
-                // isQA and fetchDelay. Where isQA is true/false and fetchDelay is the intended next fetch time
-                // in seconds.
-                else if (extras.keySet().contains(IS_QA_BUILD_KEY)) {
-                    PocketVideoFetchScheduler.setDelayForQA(extras.getLong(FETCH_DELAY_KEY))
+
+                // The fetch delay can be changed for testing purposes through an intent with custom flag
+                // fetchDelay. Where fetchDelay is the intended next fetch time in seconds.
+                else if (extras.containsKey(EXTRA_FETCH_DELAY_KEY)) {
+                    PocketVideoFetchScheduler.setDelayForQA(extras.getLong(EXTRA_FETCH_DELAY_KEY))
                 }
             }
             Intent.ACTION_VIEW -> {
