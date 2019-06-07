@@ -55,7 +55,7 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 
 ### General
 
-| Event                                                | category   | method                  | object            | value      | extras.    |
+| Event                                                | category   | method                  | object            | value      | extra.    |
 |------------------------------------------------------|------------|-------------------------|-------------------|------------|------------|
 | Pocket channel: unique videos clicked per session    | aggregate  | click                   | pocket_video      | `<int>`    |            |
 | App opened from view intent                          | action     | view_intent             | app               |            |            |
@@ -64,7 +64,7 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 (*) This event is sent at the end of every session.
 
 ### Browser Overlay
-| Event                                  | category | method                | object       | value                    | extras.       |
+| Event                                  | category | method                | object       | value                    | extra.       |
 |----------------------------------------|----------|-----------------------|--------------|--------------------------|---------------|
 | Browser: back clicked                  | action   | click                 | menu         | back                     |               |
 | Browser: forward clicked               | action   | click                 | menu         | forward                  |               |
@@ -72,7 +72,7 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 | Turbo mode switch clicked              | action   | change                | turbo_mode   | on/off (the new value)   |               |
 | Pin site switch clicked                | action   | change                | pin_page     | on/off (the new value)   | desktop_mode* |
 | Desktop mode switch clicked            | action   | change                | desktop_mode | on/off (the new value)   |               |
-| Tile clicked                           | action   | click                 | home_tile    | bundled/custom/pocket/youtube** | tile_id***    |
+| Tile clicked                           | action   | click                 | home_tile    | bundled/custom/pocket/youtube_tile** | tile_id***    |
 | Tile removed                           | action   | remove                | home_tile    | bundled/custom           |               |
 | Unique tiles clicked per session       | aggregate| click                 | home_tile    | `<int>`                  |               |
 | Menu opened by menu key †              | action   | user_show             | menu         |                          |               |
@@ -83,7 +83,7 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 (*)When the pin site switch is clicked, the state (on/off) of the desktop mode switch is also sent.
 
 (**)YouTube tile clicks are a sub-category of bundled tile clicks- each click will count towards both values.
-This value existed from v3.2 to v3.8. For versions after v3.8, the tile_id is included as an extra, not as a value.
+This value existed from v3.2+, but is intended for removal. For versions after v3.8, the tile_id is included as an extra.
 
 (***)The tile_id is only collected for bundled tiles.
 
@@ -96,7 +96,7 @@ overlay (without taking an action) _and the app_ by pressing the back button whe
 
 ### Browsing
 
-| Event                                   | category | method                | object     | value  | extras.    |
+| Event                                   | category | method                | object     | value  | extra.    |
 |-----------------------------------------|----------|-----------------------|------------|--------|------------|
 | URL start loading (via url bar)         | action   | type_url              | search_bar |        | `url`*     |
 | Search query start loading (via url bar)| action   | type_query            | search_bar |        | `query`*   |
