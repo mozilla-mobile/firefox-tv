@@ -15,7 +15,6 @@ import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.ext.validateKnownViewById
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
-import org.mozilla.tv.firefox.ext.ENGINE_VIEW_ID
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.URLs
@@ -143,7 +142,7 @@ class FocusRepo(
                     R.id.turboButton -> {
                         return getTurboButtonFocusState(focusNode, sessionState)
                     }
-                    View.NO_ID, ENGINE_VIEW_ID -> {
+                    View.NO_ID -> {
                         // Focus is lost so default it to navUrlInput and set focused = false
                         val newFocusNode = FocusNode(R.id.navUrlInput)
 
