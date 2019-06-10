@@ -51,7 +51,7 @@ class ChannelRepo(
     fun removeChannelContent(tileData: ChannelTile) {
         when (tileData.tileSource) {
             TileSource.BUNDLED, TileSource.CUSTOM -> {
-                TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileData) //TODO: verify if we need news, sports and music tiles tracked
+                TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileData) // TODO: verify if we need news, sports and music tiles tracked
                 addBundleTileToBlackList(tileData.tileSource, tileData.id)
                 pinnedTileRepo.removePinnedTile(tileData.url)
             }
@@ -63,7 +63,7 @@ class ChannelRepo(
     }
 
     /**
-     * Used to handle removing bundle tiles by adding to its [BundleType] blacklist in SharedPreferences
+     * Used to handle removing bundle tiles by adding to its [BundleType] blacklist in Sha¬redPreferences
      */
     private fun addBundleTileToBlackList(source: TileSource, id: String) {
         val blackList = loadBlackList(source).toMutableList()
@@ -83,8 +83,8 @@ class ChannelRepo(
         val sharedPrefKey = when (source) {
             TileSource.BUNDLED -> BUNDLED_PINNED_SITES_ID_BLACKLIST
             TileSource.NEWS -> BUNDLED_NEWS_ID_BLACKLIST
-            TileSource.SPORTS  -> BUNDLED_SPORTS_ID_BLACKLIST
-            TileSource.MUSIC  -> BUNDLED_MUSIC_ID_BLACKLIST
+            TileSource.SPORTS -> BUNDLED_SPORTS_ID_BLACKLIST
+            TileSource.MUSIC -> BUNDLED_MUSIC_ID_BLACKLIST
             else -> throw NotImplementedError("other types shouldn't be able remove tiles")
         }
 
@@ -95,8 +95,8 @@ class ChannelRepo(
         val sharedPrefKey = when (source) {
             TileSource.BUNDLED -> BUNDLED_PINNED_SITES_ID_BLACKLIST
             TileSource.NEWS -> BUNDLED_NEWS_ID_BLACKLIST
-            TileSource.SPORTS  -> BUNDLED_SPORTS_ID_BLACKLIST
-            TileSource.MUSIC  -> BUNDLED_MUSIC_ID_BLACKLIST
+            TileSource.SPORTS -> BUNDLED_SPORTS_ID_BLACKLIST
+            TileSource.MUSIC -> BUNDLED_MUSIC_ID_BLACKLIST
             else -> throw NotImplementedError("other types shouldn't be able remove tiles")
         }
 
