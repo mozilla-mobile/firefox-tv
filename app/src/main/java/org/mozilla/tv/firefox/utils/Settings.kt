@@ -13,7 +13,6 @@ import mozilla.components.concept.engine.EngineSession
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.components.locale.LocaleManager
-import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity
 
 /**
  * A simple wrapper for SharedPreferences that makes reading preference a little bit easier.
@@ -47,10 +46,6 @@ class Settings private constructor(context: Context) {
 
     fun shouldShowTurboModeOnboarding(): Boolean =
             !preferences.getBoolean(OnboardingActivity.ONBOARD_SHOWN_PREF, false)
-
-    fun shouldShowPocketOnboarding(localeManager: LocaleManager, context: Context): Boolean =
-            !preferences.getBoolean(PocketOnboardingActivity.POCKET_ONBOARDING_SHOWN_PREF, false) &&
-                localeManager.currentLanguageIsEnglish(context)
 
     fun shouldAutocompleteFromShippedDomainList() = true
 

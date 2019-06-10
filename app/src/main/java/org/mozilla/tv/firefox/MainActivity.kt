@@ -22,13 +22,11 @@ import mozilla.components.concept.engine.EngineView
 import mozilla.components.support.base.observer.Consumable
 import mozilla.components.support.utils.toSafeIntent
 import org.mozilla.tv.firefox.components.locale.LocaleAwareAppCompatActivity
-import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.ext.resetView
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.setupForApp
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
-import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.BuildConstants
@@ -91,13 +89,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         })
 
         if (!safeIntent.hasExtra("TURBO_MODE")) {
-            val localeManager = LocaleManager.getInstance()
-            if (Settings.getInstance(this@MainActivity).shouldShowPocketOnboarding(localeManager, this)) {
-                val onboardingIntents =
-                        Intent(this@MainActivity, PocketOnboardingActivity::class.java)
-                startActivity(onboardingIntents)
-            }
-
             if (Settings.getInstance(this@MainActivity).shouldShowTurboModeOnboarding()) {
                 val onboardingIntent = Intent(this@MainActivity, OnboardingActivity::class.java)
                 startActivity(onboardingIntent)

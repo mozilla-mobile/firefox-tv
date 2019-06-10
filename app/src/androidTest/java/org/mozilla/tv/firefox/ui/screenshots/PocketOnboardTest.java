@@ -31,7 +31,6 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.mozilla.tv.firefox.onboarding.OnboardingActivity.ONBOARD_SHOWN_PREF;
-import static org.mozilla.tv.firefox.pocket.PocketOnboardingActivity.POCKET_ONBOARDING_SHOWN_PREF;
 
 @Ignore("Since Pocket is currently en-US only, this should be ignored")
 public class PocketOnboardTest extends ScreenshotTest {
@@ -60,7 +59,6 @@ public class PocketOnboardTest extends ScreenshotTest {
                 .edit()
                 .clear()
                 .putBoolean(ONBOARD_SHOWN_PREF, true)
-                .putBoolean(POCKET_ONBOARDING_SHOWN_PREF, false)
                 .apply();
     }
 

@@ -13,7 +13,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.mozilla.tv.firefox.components.locale.LocaleManager
-import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity
 
 class SettingsTest {
 
