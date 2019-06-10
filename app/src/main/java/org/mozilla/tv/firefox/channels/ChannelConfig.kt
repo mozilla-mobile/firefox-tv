@@ -24,8 +24,11 @@ data class ChannelConfig(
     val enabledInLocales: KillswitchLocales
 ) {
     companion object {
-        fun getPocketConfig(): ChannelConfig = ChannelConfig(
-                onClickTelemetry = { tile -> TELEMETRY.pocketVideoClickEvent(tile.id) },
+        fun getPocketConfig(context: Context): ChannelConfig = ChannelConfig(
+                onClickTelemetry = { tile ->
+                    TELEMETRY.pocketVideoClickEvent(tile.id)
+                    TELEMETRY.homeTileClickEvent(context, tile)
+                },
                 // TODO focus telemetry should probably only be sent on focus gain, but this is
                 //  how our previous implementation worked. Keeping this to maintain data consistency
                 onFocusTelemetry = { tile, _ -> TELEMETRY.pocketVideoImpressionEvent(tile.id) },
