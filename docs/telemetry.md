@@ -72,7 +72,7 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 | Turbo mode switch clicked              | action   | change                | turbo_mode   | on/off (the new value)   |               |
 | Pin site switch clicked                | action   | change                | pin_page     | on/off (the new value)   | desktop_mode* |
 | Desktop mode switch clicked            | action   | change                | desktop_mode | on/off (the new value)   |               |
-| Tile clicked                           | action   | click                 | home_tile    | bundled/custom/youtube** | tile_id***    |
+| Tile clicked                           | action   | click                 | home_tile    | bundled/custom/pocket/youtube** | tile_id***    |
 | Tile removed                           | action   | remove                | home_tile    | bundled/custom           |               |
 | Unique tiles clicked per session       | aggregate| click                 | home_tile    | `<int>`                  |               |
 | Menu opened by menu key †              | action   | user_show             | menu         |                          |               |
