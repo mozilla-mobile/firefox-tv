@@ -394,7 +394,9 @@ open class TelemetryIntegration protected constructor(
         TileSource.BUNDLED -> Value.TILE_BUNDLED
         TileSource.CUSTOM -> Value.TILE_CUSTOM
         TileSource.POCKET -> Value.TILE_POCKET
-        TileSource.TV_GUIDE -> Value.TILE_BUNDLED
+        TileSource.NEWS -> Value.TILE_BUNDLED
+        TileSource.SPORTS -> Value.TILE_BUNDLED
+        TileSource.MUSIC -> Value.TILE_BUNDLED
     }
 
     fun youtubeCastEvent() = TelemetryEvent.create(Category.ACTION, Method.YOUTUBE_CAST, Object.BROWSER).queue()

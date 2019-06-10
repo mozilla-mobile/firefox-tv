@@ -26,10 +26,6 @@ private const val BUNDLED_NEWS_ID_BLACKLIST = "blacklist_news"
 private const val BUNDLED_SPORTS_ID_BLACKLIST = "blacklist_sports"
 private const val BUNDLED_MUSIC_ID_BLACKLIST = "blacklist_music"
 
-enum class BundleType {
-    PINNED_TILES, NEWS_TILES, SPORTS_TILES, MUSIC_TILES
-}
-
 /**
  * ChannelRepo abstracts app logic that requires exposures to other repos (e.g. removing a pinned
  * tile channel would require a reference to [PinnedTileRepo].
@@ -56,42 +52,44 @@ class ChannelRepo(
         when (tileData.tileSource) {
             TileSource.BUNDLED, TileSource.CUSTOM -> {
                 TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileData)
-                addBundleTileToBlackList(BundleType.PINNED_TILES, tileData.id)
+                addBundleTileToBlackList(tileData.tileSource, tileData.id)
                 pinnedTileRepo.removePinnedTile(tileData.url)
             }
             TileSource.POCKET -> throw NotImplementedError("pocket shouldn't be able to remove tiles")
-            TileSource.TV_GUIDE -> {
-
-            }
+            TileSource.NEWS -> { }
+            TileSource.SPORTS -> { }
+            TileSource.MUSIC -> { }
         }
     }
 
     /**
      * Used to handle removing bundle tiles by adding to its [BundleType] blacklist in SharedPreferences
      */
-    private fun addBundleTileToBlackList(type: BundleType, id: String) {
-        val blackList = loadBlackList(type).toMutableList()
+    private fun addBundleTileToBlackList(source: TileSource, id: String) {
+        val blackList = loadBlackList(source).toMutableList()
         blackList.add(id)
-        saveBlackList(type, blackList)
+        saveBlackList(source, blackList)
     }
 
-    private fun loadBlackList(type: BundleType): List<String> {
-        val sharedPrefKey = when (type) {
-            BundleType.PINNED_TILES -> BUNDLED_PINNED_SITES_ID_BLACKLIST
-            BundleType.NEWS_TILES -> BUNDLED_NEWS_ID_BLACKLIST
-            BundleType.SPORTS_TILES -> BUNDLED_SPORTS_ID_BLACKLIST
-            BundleType.MUSIC_TILES -> BUNDLED_MUSIC_ID_BLACKLIST
+    private fun loadBlackList(source: TileSource): List<String> {
+        val sharedPrefKey = when (source) {
+            TileSource.BUNDLED -> BUNDLED_PINNED_SITES_ID_BLACKLIST
+            TileSource.NEWS -> BUNDLED_NEWS_ID_BLACKLIST
+            TileSource.SPORTS  -> BUNDLED_SPORTS_ID_BLACKLIST
+            TileSource.MUSIC  -> BUNDLED_MUSIC_ID_BLACKLIST
+            else -> throw NotImplementedError("other types shouldn't be able remove tiles")
         }
 
         return _sharedPreferences.getStringSet(sharedPrefKey, Collections.emptySet())!!.toList()
     }
 
-    private fun saveBlackList(type: BundleType, blackList: List<String>) {
-        val sharedPrefKey = when (type) {
-            BundleType.PINNED_TILES -> BUNDLED_PINNED_SITES_ID_BLACKLIST
-            BundleType.NEWS_TILES -> BUNDLED_NEWS_ID_BLACKLIST
-            BundleType.SPORTS_TILES -> BUNDLED_SPORTS_ID_BLACKLIST
-            BundleType.MUSIC_TILES -> BUNDLED_MUSIC_ID_BLACKLIST
+    private fun saveBlackList(source: TileSource, blackList: List<String>) {
+        val sharedPrefKey = when (source) {
+            TileSource.BUNDLED -> BUNDLED_PINNED_SITES_ID_BLACKLIST
+            TileSource.NEWS -> BUNDLED_NEWS_ID_BLACKLIST
+            TileSource.SPORTS  -> BUNDLED_SPORTS_ID_BLACKLIST
+            TileSource.MUSIC  -> BUNDLED_MUSIC_ID_BLACKLIST
+            else -> throw NotImplementedError("other types shouldn't be able remove tiles")
         }
 
         _sharedPreferences.edit().putStringSet(sharedPrefKey, blackList.toSet()).apply()
@@ -101,19 +99,19 @@ class ChannelRepo(
         .replay(1)
         .autoConnect(0)
     // TODO in #2326 (replace emptyList with blacklist. Push any updates to this subject)
-    private val blacklistedNewsIds = BehaviorSubject.createDefault(loadBlackList(BundleType.NEWS_TILES))
+    private val blacklistedNewsIds = BehaviorSubject.createDefault(loadBlackList(TileSource.NEWS))
 
     private val bundledSportsTiles = Observable.just(ChannelContent.getSportsChannels())
         .replay(1)
         .autoConnect(0)
     // TODO in #2326 (replace emptyList with blacklist. Push any updates to this subject)
-    private val blacklistedSportsIds = BehaviorSubject.createDefault(loadBlackList(BundleType.SPORTS_TILES))
+    private val blacklistedSportsIds = BehaviorSubject.createDefault(loadBlackList(TileSource.SPORTS))
 
     private val bundledMusicTiles = Observable.just(ChannelContent.getMusicChannels())
         .replay(1)
         .autoConnect(0)
     // TODO in #2326 (replace emptyList with blacklist. Push any updates to this subject)
-    private val blacklistedMusicIds = BehaviorSubject.createDefault(loadBlackList(BundleType.MUSIC_TILES))
+    private val blacklistedMusicIds = BehaviorSubject.createDefault(loadBlackList(TileSource.MUSIC))
 }
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)

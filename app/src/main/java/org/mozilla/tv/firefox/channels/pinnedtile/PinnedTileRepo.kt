@@ -15,8 +15,6 @@ import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import org.json.JSONArray
 import org.json.JSONObject
-import org.mozilla.tv.firefox.channels.BundleType
-import org.mozilla.tv.firefox.channels.ChannelRepo
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.LinkedHashMap

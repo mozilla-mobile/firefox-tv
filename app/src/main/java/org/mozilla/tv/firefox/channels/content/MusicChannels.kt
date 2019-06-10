@@ -14,7 +14,7 @@ fun ChannelContent.getMusicChannels(): List<ChannelTile> = listOf(
         title = "NPR",
         subtitle = null,
         setImage = setImage(R.drawable.tile_music_npr),
-        tileSource = TileSource.TV_GUIDE,
+        tileSource = TileSource.MUSIC,
         id = "nprStations"
     ),
     ChannelTile(
@@ -22,7 +22,7 @@ fun ChannelContent.getMusicChannels(): List<ChannelTile> = listOf(
         title = "Bandcamp",
         subtitle = null,
         setImage = setImage(R.drawable.tile_music_bandcamp),
-        tileSource = TileSource.TV_GUIDE,
+        tileSource = TileSource.MUSIC,
         id = "bandcamp"
     )
 )
