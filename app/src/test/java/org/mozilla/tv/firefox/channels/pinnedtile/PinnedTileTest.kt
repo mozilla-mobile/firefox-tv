@@ -21,7 +21,6 @@ import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mozilla.tv.firefox.channels.BundleTilesStore
 import org.mozilla.tv.firefox.focus.FocusRepo
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayViewModel
 import org.mozilla.tv.firefox.channels.ChannelDetails
@@ -81,7 +80,7 @@ class PinnedTileTest {
         )
 
         val appContext: Context = ApplicationProvider.getApplicationContext()
-        pinnedTileRepo = PinnedTileRepo(appContext, BundleTilesStore(appContext))
+        pinnedTileRepo = PinnedTileRepo(appContext)
         overlayVm = NavigationOverlayViewModel(
                 sessionRepo,
                 focusRepo,
