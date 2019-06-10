@@ -18,7 +18,7 @@ _Think something can be automated? Add it to [this doc](https://docs.google.com/
 - [ ] Export strings (*if applicable*) ([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Localization#exporting-strings-for-translation))
 - [ ] Create PR for bumping version (`X.X-LAT1`)
   - Merge to master
-- [ ] Cut LAT branch `releases/vX.X-LAT1`
+- [ ] Cut LAT branch `releases/vX.X-LAT1` (this must include a-c upgrade)
 - [ ] Create GitHub pre-release build `vX.X-LAT1`([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#final-builds))
 - [ ] Release LAT ([instructions](https://developer.amazon.com/docs/app-testing/live-app-testing-getting-started.html))
   - [ ] Email team announcing release ([template/instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#release-announcement-emails))
