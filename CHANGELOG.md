@@ -4,13 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [4.0]
-### Added
-- Various channels containing bundled links to various video-friendly websites (#2195)
-- Added options to choose experiments for QA (#2320)
+## [Unreleased]
 
-## Fixed
-- Fixed a bug that caused Pocket onboarding to be shown to users that don't see Pocket content (#2293)
+## [3.10] - 2019-06-10
+### Added
+- (Behind experiment flag, set to 0 at release time) Various channels containing bundled links to various video-friendly websites (#2195)
+- QA: command-line control to opt-in or out of experiments (#2320)
+- Integrate Glean SDK (#1652)
+
+### Changed
+- Move Pocket into a channel (#2111, #2280)
+  - Initially displayed Pocket video recs are bundled with the app
+  - Pocket data is updated once overnight (#2223), rather than every 45 minutes
+
+### Fixed
+- Pocket onboarding was shown to users that don't see Pocket content (#2293)
+- Crash when deleting the last pinned tile (#2354)
 
 ## [3.9] - 2019-05-13
 ### Added
@@ -237,7 +246,8 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 ## [1.0] - 2017-12-20
 *Initial release! A browser including home tile shortcuts.*
 
-[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.9...HEAD
+[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.10...HEAD
+[3.10]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.9...v3.10
 [3.9]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.8...v3.9
 [3.8]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.7-RO...v3.8
 [3.7-RO]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.6-RO...v3.7-RO
