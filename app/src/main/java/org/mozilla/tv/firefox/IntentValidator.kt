@@ -13,12 +13,11 @@ import mozilla.components.browser.session.Session
 import mozilla.components.service.fretboard.ExperimentDescriptor
 import mozilla.components.support.utils.SafeIntent
 import org.mozilla.tv.firefox.ext.serviceLocator
-import org.mozilla.tv.firefox.pocket.PocketVideoFetchScheduler
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.UrlUtils
 
 private const val EXTRA_ACTIVE_EXPERIMENTS = "qaActiveExperiments"
-private const val EXTRA_FETCH_DELAY_KEY = "fetchDelay"
+private const val EXTRA_FETCH_DELAY_KEY = "qaFetchDelaySeconds"
 
 data class ValidatedIntentData(val url: String, val source: Session.Source)
 
@@ -57,12 +56,10 @@ object IntentValidator {
 
     fun validate(context: Context, intent: SafeIntent): ValidatedIntentData? {
         setExperimentOverrides(intent, context)
-        changeFetchDelaySecondsForQA(intent)
+        changeFetchDelaySecondsForQA(intent, context)
 
         when (intent.action) {
             Intent.ACTION_MAIN -> {
-                val extras = intent.extras ?: return null
-
                 val dialParams = intent.extras?.getString(DIAL_PARAMS_KEY) ?: return null
                 if (dialParams.isNotEmpty()) {
                     TelemetryIntegration.INSTANCE.youtubeCastEvent()
@@ -101,9 +98,9 @@ object IntentValidator {
         }
     }
 
-    private fun changeFetchDelaySecondsForQA(intent: SafeIntent) {
+    private fun changeFetchDelaySecondsForQA(intent: SafeIntent, context: Context) {
         intent.extras?.getLong(EXTRA_FETCH_DELAY_KEY)?.let { delay ->
-            PocketVideoFetchScheduler.setDelayForQA(delay)
+            context.serviceLocator.pocketVideoFetchScheduler.setDelayForQA(delay)
         }
     }
 }

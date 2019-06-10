@@ -53,14 +53,15 @@ class PocketVideoFetchScheduler(
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
+        // This sets the custom fetch delay for testing purposes.
+        // The custom delay will only run once.
         val delay: Long
         val workPolicy: ExistingWorkPolicy
 
-        // This sets the custom fetch delay for testing purposes.
-        // The custom delay will only run once.
         if (IS_QA_BUILD) {
-            delay = DELAY_TIME_FOR_QA_MILLIS
+            delay = checkNotNull(DELAY_TIME_FOR_QA_MILLIS) { "Fetch delay value must be set" }
             workPolicy = ExistingWorkPolicy.REPLACE
+            // Only allow this value to be used once so we do not end up spamming the Pocket servers
             IS_QA_BUILD = false
         } else {
             delay = getDelayUntilUpcomingNightFetchMillis(now, randLong)
@@ -110,6 +111,11 @@ class PocketVideoFetchScheduler(
         return userFetchTime.timeInMillis - now.timeInMillis
     }
 
+    fun setDelayForQA(seconds: Long) {
+        IS_QA_BUILD = true
+        DELAY_TIME_FOR_QA_MILLIS = TimeUnit.SECONDS.toMillis(seconds)
+    }
+
     companion object {
         @VisibleForTesting(otherwise = PRIVATE) const val FETCH_START_HOUR = 3 // am
         @VisibleForTesting(otherwise = PRIVATE) const val FETCH_END_HOUR = 5L
@@ -120,12 +126,8 @@ class PocketVideoFetchScheduler(
         @VisibleForTesting(otherwise = PRIVATE) val BACKOFF_DELAY_MIN_MILLIS = TimeUnit.SECONDS.toMillis(30)
         @VisibleForTesting(otherwise = PRIVATE) val BACKOFF_DELAY_MAX_MILLIS = TimeUnit.SECONDS.toMillis(60)
 
-        private var DELAY_TIME_FOR_QA_MILLIS = TimeUnit.SECONDS.toMillis(5)
+        private var DELAY_TIME_FOR_QA_MILLIS: Long? = null
         private var IS_QA_BUILD = false
-        fun setDelayForQA(seconds: Long) {
-            IS_QA_BUILD = true
-            DELAY_TIME_FOR_QA_MILLIS = TimeUnit.SECONDS.toMillis(seconds)
-        }
     }
 }
 
