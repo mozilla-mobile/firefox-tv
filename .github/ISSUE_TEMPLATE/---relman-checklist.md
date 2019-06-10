@@ -23,7 +23,7 @@ _Think something can be automated? Add it to [this doc](https://docs.google.com/
 - [ ] Release LAT ([instructions](https://developer.amazon.com/docs/app-testing/live-app-testing-getting-started.html))
   - [ ] Email team announcing release ([template/instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#release-announcement-emails))
 
-#### Wednesday # 2 (soft code freeze)
+#### Wednesday # 2 (soft code freeze = noon PT)
 
 - [ ] Create PR for bumping version (`X.X-LAT2`)
   - Merge to master
