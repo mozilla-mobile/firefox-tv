@@ -37,7 +37,7 @@ enum class BundleType {
  * [TileSource] is used to determine which Repo is responsible to handle requested operations
  */
 class ChannelRepo(
-    private context: Context,
+    context: Context,
     private val pinnedTileRepo: PinnedTileRepo
 ) {
     private val _sharedPreferences: SharedPreferences =
@@ -60,7 +60,9 @@ class ChannelRepo(
                 pinnedTileRepo.removePinnedTile(tileData.url)
             }
             TileSource.POCKET -> throw NotImplementedError("pocket shouldn't be able to remove tiles")
-            TileSource.TV_GUIDE -> Unit // TODO in #2326
+            TileSource.TV_GUIDE -> {
+
+            }
         }
     }
 
@@ -68,12 +70,12 @@ class ChannelRepo(
      * Used to handle removing bundle tiles by adding to its [BundleType] blacklist in SharedPreferences
      */
     private fun addBundleTileToBlackList(type: BundleType, id: String) {
-        val blackList = loadBlackList(type).toMutableSet()
+        val blackList = loadBlackList(type).toMutableList()
         blackList.add(id)
         saveBlackList(type, blackList)
     }
 
-    private fun loadBlackList(type: BundleType): Set<String> {
+    private fun loadBlackList(type: BundleType): List<String> {
         val sharedPrefKey = when (type) {
             BundleType.PINNED_TILES -> BUNDLED_PINNED_SITES_ID_BLACKLIST
             BundleType.NEWS_TILES -> BUNDLED_NEWS_ID_BLACKLIST
@@ -81,10 +83,10 @@ class ChannelRepo(
             BundleType.MUSIC_TILES -> BUNDLED_MUSIC_ID_BLACKLIST
         }
 
-        return _sharedPreferences.getStringSet(sharedPrefKey, Collections.emptySet())!!
+        return _sharedPreferences.getStringSet(sharedPrefKey, Collections.emptySet())!!.toList()
     }
 
-    private fun saveBlackList(type: BundleType, blackList: Set<String>) {
+    private fun saveBlackList(type: BundleType, blackList: List<String>) {
         val sharedPrefKey = when (type) {
             BundleType.PINNED_TILES -> BUNDLED_PINNED_SITES_ID_BLACKLIST
             BundleType.NEWS_TILES -> BUNDLED_NEWS_ID_BLACKLIST
@@ -92,26 +94,26 @@ class ChannelRepo(
             BundleType.MUSIC_TILES -> BUNDLED_MUSIC_ID_BLACKLIST
         }
 
-        _sharedPreferences.edit().putStringSet(sharedPrefKey, blackList).apply()
+        _sharedPreferences.edit().putStringSet(sharedPrefKey, blackList.toSet()).apply()
     }
 
     private val bundledNewsTiles = Observable.just(ChannelContent.getNewsChannels())
         .replay(1)
         .autoConnect(0)
     // TODO in #2326 (replace emptyList with blacklist. Push any updates to this subject)
-    private val blacklistedNewsIds = BehaviorSubject.createDefault(emptyList<String>())
+    private val blacklistedNewsIds = BehaviorSubject.createDefault(loadBlackList(BundleType.NEWS_TILES))
 
     private val bundledSportsTiles = Observable.just(ChannelContent.getSportsChannels())
         .replay(1)
         .autoConnect(0)
     // TODO in #2326 (replace emptyList with blacklist. Push any updates to this subject)
-    private val blacklistedSportsIds = BehaviorSubject.createDefault(emptyList<String>())
+    private val blacklistedSportsIds = BehaviorSubject.createDefault(loadBlackList(BundleType.SPORTS_TILES))
 
     private val bundledMusicTiles = Observable.just(ChannelContent.getMusicChannels())
         .replay(1)
         .autoConnect(0)
     // TODO in #2326 (replace emptyList with blacklist. Push any updates to this subject)
-    private val blacklistedMusicIds = BehaviorSubject.createDefault(emptyList<String>())
+    private val blacklistedMusicIds = BehaviorSubject.createDefault(loadBlackList(BundleType.MUSIC_TILES))
 }
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
