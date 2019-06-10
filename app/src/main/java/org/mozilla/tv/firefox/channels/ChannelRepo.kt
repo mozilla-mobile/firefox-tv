@@ -68,6 +68,14 @@ class ChannelRepo(
     private fun addBundleTileToBlackList(source: TileSource, id: String) {
         val blackList = loadBlackList(source).toMutableList()
         blackList.add(id)
+
+        when (source) {
+            TileSource.NEWS -> blacklistedNewsIds.onNext(blackList)
+            TileSource.SPORTS -> blacklistedSportsIds.onNext(blackList)
+            TileSource.MUSIC -> blacklistedMusicIds.onNext(blackList)
+            else -> Unit
+        }
+
         saveBlackList(source, blackList)
     }
 
@@ -98,19 +106,16 @@ class ChannelRepo(
     private val bundledNewsTiles = Observable.just(ChannelContent.getNewsChannels())
         .replay(1)
         .autoConnect(0)
-    // TODO in #2326 (replace emptyList with blacklist. Push any updates to this subject)
     private val blacklistedNewsIds = BehaviorSubject.createDefault(loadBlackList(TileSource.NEWS))
 
     private val bundledSportsTiles = Observable.just(ChannelContent.getSportsChannels())
         .replay(1)
         .autoConnect(0)
-    // TODO in #2326 (replace emptyList with blacklist. Push any updates to this subject)
     private val blacklistedSportsIds = BehaviorSubject.createDefault(loadBlackList(TileSource.SPORTS))
 
     private val bundledMusicTiles = Observable.just(ChannelContent.getMusicChannels())
         .replay(1)
         .autoConnect(0)
-    // TODO in #2326 (replace emptyList with blacklist. Push any updates to this subject)
     private val blacklistedMusicIds = BehaviorSubject.createDefault(loadBlackList(TileSource.MUSIC))
 }
 
