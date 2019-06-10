@@ -14,7 +14,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         title = "CNN",
         subtitle = null,
         setImage = setImage(R.drawable.tile_news_cnn),
-        tileSource = TileSource.TV_GUIDE,
+        tileSource = TileSource.NEWS,
         id = "cnn"
     ),
     ChannelTile(
@@ -22,7 +22,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         title = "Fox News",
         subtitle = null,
         setImage = setImage(R.drawable.tile_news_fox_news),
-        tileSource = TileSource.TV_GUIDE,
+        tileSource = TileSource.NEWS,
         id = "foxNews"
     ),
     ChannelTile(
@@ -30,7 +30,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         title = "Washington Post",
         subtitle = null,
         setImage = setImage(R.drawable.tile_news_washington_post),
-        tileSource = TileSource.TV_GUIDE,
+        tileSource = TileSource.NEWS,
         id = "washingtonPost"
     ),
     ChannelTile(
@@ -38,7 +38,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         title = "USA Today",
         subtitle = null,
         setImage = setImage(R.drawable.tile_news_usa_today),
-        tileSource = TileSource.TV_GUIDE,
+        tileSource = TileSource.NEWS,
         id = "usaToday"
     ),
     ChannelTile(
@@ -46,7 +46,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         title = "Wall Street Journal",
         subtitle = null,
         setImage = setImage(R.drawable.tile_news_wall_street_journal),
-        tileSource = TileSource.TV_GUIDE,
+        tileSource = TileSource.NEWS,
         id = "wallStreetJournal"
     ),
     ChannelTile(
@@ -54,7 +54,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         title = "NBC News",
         subtitle = null,
         setImage = setImage(R.drawable.tile_news_nbc_news),
-        tileSource = TileSource.TV_GUIDE,
+        tileSource = TileSource.NEWS,
         id = "nbcNews"
     ),
     ChannelTile(
@@ -62,7 +62,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         title = "CBS News",
         subtitle = null,
         setImage = setImage(R.drawable.tile_news_cbs_news),
-        tileSource = TileSource.TV_GUIDE,
+        tileSource = TileSource.NEWS,
         id = "cbsNews"
     ),
     ChannelTile(
@@ -70,7 +70,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         title = "Huffington Post",
         subtitle = null,
         setImage = setImage(R.drawable.tile_news_huffington_post),
-        tileSource = TileSource.TV_GUIDE,
+        tileSource = TileSource.NEWS,
         id = "huffingtonPost"
     ),
     ChannelTile(
@@ -78,7 +78,7 @@ fun ChannelContent.getNewsChannels(): List<ChannelTile> = listOf(
         title = "Vice",
         subtitle = null,
         setImage = setImage(R.drawable.tile_news_vice),
-        tileSource = TileSource.TV_GUIDE,
+        tileSource = TileSource.NEWS,
         id = "vice"
     )
 )

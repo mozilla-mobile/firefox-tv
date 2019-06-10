@@ -14,7 +14,7 @@ fun ChannelContent.getSportsChannels(): List<ChannelTile> = listOf(
         title = "NBC Sports",
         subtitle = null,
         setImage = setImage(R.drawable.tile_sports_nbc_sports),
-        tileSource = TileSource.TV_GUIDE,
+        tileSource = TileSource.SPORTS,
         id = "nbcSports"
     ),
     ChannelTile(
@@ -22,7 +22,7 @@ fun ChannelContent.getSportsChannels(): List<ChannelTile> = listOf(
         title = "Formula 1",
         subtitle = null,
         setImage = setImage(R.drawable.tile_sports_formula_1),
-        tileSource = TileSource.TV_GUIDE,
+        tileSource = TileSource.SPORTS,
         id = "formula1"
     )
 )
