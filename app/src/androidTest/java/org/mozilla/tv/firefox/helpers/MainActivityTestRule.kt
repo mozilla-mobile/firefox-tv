@@ -10,7 +10,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity.Companion.ONBOARD_SHOWN_PREF
-import org.mozilla.tv.firefox.pocket.PocketOnboardingActivity.Companion.POCKET_ONBOARDING_SHOWN_PREF
 
 /**
  * A [org.junit.Rule] to handle shared test set up for tests on [MainActivity].
@@ -59,7 +58,6 @@ class MainActivityTestRule(
         PreferenceManager.getDefaultSharedPreferences(appContext)
                 .edit()
                 .putBoolean(ONBOARD_SHOWN_PREF, true)
-                .putBoolean(POCKET_ONBOARDING_SHOWN_PREF, true)
                 .apply()
     }
 }
