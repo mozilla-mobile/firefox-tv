@@ -435,7 +435,7 @@ private class ChannelReferenceContainer(
     val pocketChannel = channelFactory.createChannel(
         parent = channelContainerView,
         id = R.id.pocket_channel,
-        channelConfig = ChannelConfig.getPocketConfig()
+        channelConfig = ChannelConfig.getPocketConfig(channelContainerView.context)
     )
 
     val pinnedTileChannel = channelFactory.createChannel(
