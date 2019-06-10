@@ -38,6 +38,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Fix Pocket timeout exceptions (#2095)
 
+## [3.7.1] - 2019-04-17
+*Released to all Firefox TV devices*
+### Fixed
+- YouTube frozen after opening overlay (#2072)
+
 ## [3.7-RO] - 2019-04-16
 *Released to Fire TV 4K, staged roll-out*
 ### Added
@@ -249,7 +254,8 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 [Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.10...HEAD
 [3.10]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.9...v3.10
 [3.9]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.8...v3.9
-[3.8]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.7-RO...v3.8
+[3.8]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.7.1...v3.8
+[3.7.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.7-RO...v3.7.1
 [3.7-RO]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.6-RO...v3.7-RO
 [3.6-RO]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.5-RO...v3.6-RO
 [3.5-RO]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.4-A...v3.5-RO
