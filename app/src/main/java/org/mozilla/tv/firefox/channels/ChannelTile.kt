@@ -75,5 +75,6 @@ data class ChannelTile(
  */
 data class ChannelDetails(
     val title: CharSequence,
+    val subtitle: CharSequence? = null,
     val tileList: List<ChannelTile>
 )
