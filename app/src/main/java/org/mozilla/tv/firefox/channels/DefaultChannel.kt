@@ -4,9 +4,11 @@
 
 package org.mozilla.tv.firefox.channels
 
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import io.reactivex.Observable
+import kotlinx.android.synthetic.main.default_channel.view.channelSubtitle
 import kotlinx.android.synthetic.main.default_channel.view.channelTitle
 
 /**
@@ -26,9 +28,20 @@ class DefaultChannel(
         titleView.text = title
     }
 
+    fun setSubtitle(subtitle: CharSequence?) {
+        subtitleView.visibility = if (subtitle.isNullOrEmpty()) {
+            View.GONE
+        } else {
+            View.VISIBLE
+        }
+
+        subtitleView.text = subtitle
+    }
+
     fun setContents(tileData: List<ChannelTile>) {
         adapter.submitList(tileData)
     }
 
     private val titleView: TextView = channelContainer.channelTitle
+    private val subtitleView: TextView = channelContainer.channelSubtitle
 }

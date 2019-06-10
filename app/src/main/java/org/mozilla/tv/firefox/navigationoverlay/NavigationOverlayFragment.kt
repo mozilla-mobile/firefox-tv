@@ -313,8 +313,11 @@ class NavigationOverlayFragment : Fragment() {
     private fun observePocketTiles(): Disposable = pocketViewModel.state
             .ofType(PocketViewModel.State.Feed::class.java)
             .map { it.feed.toChannelTiles() }
+            // TODO do this transformation in the VM or repo instead of here
+            // TODO use defaultObserveChannelDetails
             .subscribe {
-                pocketChannel.setTitle(context!!.resources.getString(R.string.pocket_channel_title))
+                pocketChannel.setTitle("Pocket editor’s choice") // TODO use updated copy (https://github.com/mozilla-mobile/firefox-tv/issues/2179#issuecomment-500627103)
+                pocketChannel.setSubtitle("The most interesting videos on the web. Curated by Pocket, now part of Mozilla.") // TODO use updated copy (https://github.com/mozilla-mobile/firefox-tv/issues/2179#issuecomment-500627103)
                 pocketChannel.setContents(it)
             }
 
@@ -330,6 +333,7 @@ class NavigationOverlayFragment : Fragment() {
     private fun defaultObserveChannelDetails(channel: DefaultChannel, source: Observable<ChannelDetails>) =
         source.subscribe {
             channel.setTitle(it.title)
+            channel.setSubtitle(it.subtitle)
             channel.setContents(it.tileList)
         }
 

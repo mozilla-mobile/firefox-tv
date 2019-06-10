@@ -16,17 +16,27 @@
             android:layout_marginStart="@dimen/overlay_margin_start"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="@dimen/overlay_margin_end"
-            android:layout_marginBottom="16dp"
             android:fontFamily="@string/font_ember_regular"
-            android:text="@string/menu_settings"
             android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/channelSubtitle"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/overlay_margin_start"
+            android:layout_marginEnd="@dimen/overlay_margin_end"
+            android:fontFamily="@string/font_ember_regular"
+            android:textSize="18sp"
+            android:visibility="gone" />
 
         <!-- Note that, for any items in this RV, parent layouts should be FocusLossFrameLayout.
         This corrects a bug that is described in the kdoc of that class -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/channelTileContainer"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" />
 
     </LinearLayout>
 </org.mozilla.tv.firefox.architecture.KillswitchLayout>
