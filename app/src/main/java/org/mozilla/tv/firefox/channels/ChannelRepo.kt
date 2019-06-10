@@ -56,9 +56,9 @@ class ChannelRepo(
                 pinnedTileRepo.removePinnedTile(tileData.url)
             }
             TileSource.POCKET -> throw NotImplementedError("pocket shouldn't be able to remove tiles")
-            TileSource.NEWS -> { }
-            TileSource.SPORTS -> { }
-            TileSource.MUSIC -> { }
+            TileSource.NEWS, TileSource.SPORTS, TileSource.MUSIC -> {
+                addBundleTileToBlackList(tileData.tileSource, tileData.id)
+            }
         }
     }
 
