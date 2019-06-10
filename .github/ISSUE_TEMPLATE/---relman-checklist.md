@@ -21,6 +21,7 @@ _Think something can be automated? Add it to [this doc](https://docs.google.com/
 - [ ] Cut LAT branch `releases/vX.X-LAT1`
 - [ ] Create GitHub pre-release build `vX.X-LAT1`([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#final-builds))
 - [ ] Release LAT ([instructions](https://developer.amazon.com/docs/app-testing/live-app-testing-getting-started.html))
+  - [ ] Email team announcing release ([template/instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#release-announcement-emails))
 
 #### Wednesday # 2 (soft code freeze)
 
@@ -29,6 +30,7 @@ _Think something can be automated? Add it to [this doc](https://docs.google.com/
 - [ ] Cut LAT branch `releases/vX.X-LAT2`
 - [ ] Create GitHub pre-release build `vX.X-LAT2` ([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#final-builds))
 - [ ] Release LAT ([instructions](https://developer.amazon.com/docs/app-testing/live-app-testing-getting-started.html))
+  - [ ] Email team announcing release ([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#release-announcement-emails))
 
 #### Thursday # 2
 
@@ -49,13 +51,16 @@ _Think something can be automated? Add it to [this doc](https://docs.google.com/
 - [ ] Cut release branch `releases/vX.X`
 - [ ] Create GitHub release build `vX.X`([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#final-builds))
 - [ ] Submit app with staged rollout at 1% ([instructions](https://developer.amazon.com/docs/app-submission/submitting-apps-to-amazon-appstore.html))
+  - [ ] Email team announcing release ([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#release-announcement-emails))
 
 #### Tuesday # 3
 
 - [ ] [QA] sign-off
 - [ ] Bump rollout to 20%
+  - [ ] Email team announcing release ([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#release-announcement-emails))
 
 #### Wednesday # 3
 
 - [ ] [QA] sign-off
 - [ ] Bump rollout to 100%
+  - [ ] Email team announcing release ([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#release-announcement-emails))
