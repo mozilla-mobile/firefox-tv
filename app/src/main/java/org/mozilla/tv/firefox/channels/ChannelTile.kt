@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.channels
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -12,6 +13,8 @@ import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.getDimenPixelSize
+import org.mozilla.tv.firefox.utils.PicassoWrapper
+import java.io.File
 
 enum class TileSource { BUNDLED, CUSTOM, POCKET, NEWS, SPORTS, MUSIC }
 
@@ -66,6 +69,35 @@ data class ChannelTile(
                 marginStart = if (position == 0) overlayMarginStart else defaultItemHorizontalMargin
                 marginEnd = if (position == itemCount - 1) overlayMarginEnd else defaultItemHorizontalMargin
             }
+        }
+    }
+}
+
+sealed class ImageSetStrategy {
+    abstract operator fun invoke(imageView: ImageView)
+
+    data class ById(val id: Int) : ImageSetStrategy() {
+        override fun invoke(imageView: ImageView) {
+            imageView.setImageResource(id)
+        }
+    }
+
+    // Note that ByPath can be used with either local paths or URLs
+    data class ByPath(val path: String) : ImageSetStrategy() {
+        override fun invoke(imageView: ImageView) {
+            PicassoWrapper.client
+                // TODO find a less brittle way to retrieve this path
+                .load(path)
+                .into(imageView)
+        }
+    }
+
+    data class ByFile(val file: File, val backup: Drawable) : ImageSetStrategy() {
+        override fun invoke(imageView: ImageView) {
+            PicassoWrapper.client
+                .load(file)
+                .placeholder(backup)
+                .into(imageView)
         }
     }
 }
