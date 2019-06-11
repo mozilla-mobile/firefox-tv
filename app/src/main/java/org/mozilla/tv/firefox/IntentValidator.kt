@@ -13,6 +13,7 @@ import mozilla.components.browser.session.Session
 import mozilla.components.service.fretboard.ExperimentDescriptor
 import mozilla.components.support.utils.SafeIntent
 import org.mozilla.tv.firefox.ext.serviceLocator
+import org.mozilla.tv.firefox.pocket.PocketVideoFetchScheduler
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.UrlUtils
 
@@ -56,7 +57,7 @@ object IntentValidator {
 
     fun validate(context: Context, intent: SafeIntent): ValidatedIntentData? {
         setQAExperimentOverrides(intent, context)
-        setQAFetchDelayOverrides(intent, context)
+        setQAFetchDelayOverrides(intent, context.serviceLocator.pocketVideoFetchScheduler)
 
         when (intent.action) {
             Intent.ACTION_MAIN -> {
@@ -98,9 +99,9 @@ object IntentValidator {
         }
     }
 
-    private fun setQAFetchDelayOverrides(intent: SafeIntent, context: Context) {
+    private fun setQAFetchDelayOverrides(intent: SafeIntent, pocketVideoFetchScheduler: PocketVideoFetchScheduler) {
         intent.extras?.getLong(EXTRA_FETCH_DELAY_KEY)?.let { delay ->
-            context.serviceLocator.pocketVideoFetchScheduler.setQAFetchDelayOverride(delay)
+            pocketVideoFetchScheduler.setQAFetchDelayOverride(delay)
         }
     }
 }
