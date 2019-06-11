@@ -8,6 +8,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import org.json.JSONObject
+import org.mozilla.tv.firefox.channels.ChannelDetails
 import org.mozilla.tv.firefox.channels.ChannelTile
 import org.mozilla.tv.firefox.channels.TileSource
 import org.mozilla.tv.firefox.utils.PicassoWrapper
@@ -27,7 +28,7 @@ class PocketViewModel(
 ) : ViewModel() {
 
     sealed class State {
-        data class Feed(val feed: List<FeedItem>) : State()
+        data class Feed(val details: ChannelDetails) : State()
         object NotDisplayed : State()
     }
 
@@ -50,8 +51,8 @@ class PocketViewModel(
     val state: Observable<State> = pocketRepo.feedState
         .map { repoState ->
             when (repoState) {
-                is PocketVideoRepo.FeedState.LoadComplete -> State.Feed(repoState.videos)
-                is PocketVideoRepo.FeedState.NoAPIKey -> State.Feed(noKeyPlaceholders)
+                is PocketVideoRepo.FeedState.LoadComplete -> State.Feed(repoState.videos.toChannelDetails())
+                is PocketVideoRepo.FeedState.NoAPIKey -> State.Feed(noKeyPlaceholders.toChannelDetails())
                 is PocketVideoRepo.FeedState.Inactive -> State.NotDisplayed
             }
         }
@@ -75,7 +76,13 @@ class PocketViewModel(
     }
 }
 
-fun List<PocketViewModel.FeedItem>.toChannelTiles() = this.map { when (it) {
+private fun List<PocketViewModel.FeedItem>.toChannelDetails(): ChannelDetails = ChannelDetails(
+    title = "Pocket editor’s choice", // TODO use updated copy (https://github.com/mozilla-mobile/firefox-tv/issues/2179#issuecomment-500627103)
+    subtitle = "The most interesting videos on the web. Curated by Pocket, now part of Mozilla.", // TODO use updated copy (https://github.com/mozilla-mobile/firefox-tv/issues/2179#issuecomment-500627103)
+    tileList = this.toChannelTiles()
+)
+
+private fun List<PocketViewModel.FeedItem>.toChannelTiles() = this.map { when (it) {
     is PocketViewModel.FeedItem.Video -> ChannelTile(
             url = it.url,
             title = it.authors,

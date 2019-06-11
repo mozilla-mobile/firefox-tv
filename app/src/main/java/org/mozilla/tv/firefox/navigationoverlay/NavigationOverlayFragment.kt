@@ -50,7 +50,6 @@ import org.mozilla.tv.firefox.channels.DefaultChannelFactory
 import org.mozilla.tv.firefox.channels.SettingsChannelAdapter
 import org.mozilla.tv.firefox.channels.SettingsScreen
 import org.mozilla.tv.firefox.pocket.PocketViewModel
-import org.mozilla.tv.firefox.pocket.toChannelTiles
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.ServiceLocator
@@ -310,16 +309,12 @@ class NavigationOverlayFragment : Fragment() {
                 else -> pocketChannel.channelContainer.visibility = View.GONE
             } }
 
-    private fun observePocketTiles(): Disposable = pocketViewModel.state
+    private fun observePocketTiles(): Disposable {
+        val pocketDetails = pocketViewModel.state
             .ofType(PocketViewModel.State.Feed::class.java)
-            .map { it.feed.toChannelTiles() }
-            // TODO do this transformation in the VM or repo instead of here
-            // TODO use defaultObserveChannelDetails
-            .subscribe {
-                pocketChannel.setTitle("Pocket editor’s choice") // TODO use updated copy (https://github.com/mozilla-mobile/firefox-tv/issues/2179#issuecomment-500627103)
-                pocketChannel.setSubtitle("The most interesting videos on the web. Curated by Pocket, now part of Mozilla.") // TODO use updated copy (https://github.com/mozilla-mobile/firefox-tv/issues/2179#issuecomment-500627103)
-                pocketChannel.setContents(it)
-            }
+            .map { it.details }
+        return defaultObserveChannelDetails(pocketChannel, pocketDetails)
+    }
 
     // TODO set gone when empty (animate?) when adding removal in #2326
     private fun observeTvGuideTiles(): List<Disposable> {

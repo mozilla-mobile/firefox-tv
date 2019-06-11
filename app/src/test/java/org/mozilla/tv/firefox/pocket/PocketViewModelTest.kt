@@ -45,7 +45,7 @@ class PocketViewModelTest {
 
         testObserver.values()[0].let {
             assertTrue(it is PocketViewModel.State.Feed)
-            assertEquals(videos, (it as PocketViewModel.State.Feed).feed)
+            assertEquals(videos, (it as PocketViewModel.State.Feed).details.tileList)
         }
     }
 
@@ -57,7 +57,7 @@ class PocketViewModelTest {
 
         testObserver.values()[0].let {
             assertTrue(it is PocketViewModel.State.Feed)
-            assertEquals(noKeyPlaceholders, (it as PocketViewModel.State.Feed).feed)
+            assertEquals(noKeyPlaceholders, (it as PocketViewModel.State.Feed).details.tileList)
         }
     }
 
