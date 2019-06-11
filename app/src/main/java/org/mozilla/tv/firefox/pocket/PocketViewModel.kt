@@ -4,10 +4,12 @@
 
 package org.mozilla.tv.firefox.pocket
 
+import android.content.res.Resources
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import org.json.JSONObject
+import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.channels.ChannelDetails
 import org.mozilla.tv.firefox.channels.ChannelTile
 import org.mozilla.tv.firefox.channels.ImageSetStrategy
@@ -25,6 +27,7 @@ const val POCKET_VIDEO_COUNT = 20
  * view should not have to perform any transformations on this data).
  */
 class PocketViewModel(
+    private val resources: Resources,
     pocketRepo: PocketVideoRepo
 ) : ViewModel() {
 
@@ -60,6 +63,23 @@ class PocketViewModel(
         .replay(1)
         .autoConnect(0)
 
+    private fun List<PocketViewModel.FeedItem>.toChannelDetails(): ChannelDetails = ChannelDetails(
+        title = resources.getString(R.string.pocket_channel_title2),
+        subtitle = resources.getString(R.string.pocket_channel_subtitle),
+        tileList = this.toChannelTiles()
+    )
+
+    private fun List<PocketViewModel.FeedItem>.toChannelTiles() = this.map { when (it) {
+        is PocketViewModel.FeedItem.Video -> ChannelTile(
+            url = it.url,
+            title = it.authors,
+            subtitle = it.title,
+            setImage = ImageSetStrategy.ByPath(it.thumbnailURL),
+            tileSource = TileSource.POCKET,
+            id = it.id.toString()
+        )
+    } }
+
     companion object {
         @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
         val noKeyPlaceholders: List<FeedItem.Video> by lazy {
@@ -76,20 +96,3 @@ class PocketViewModel(
         }
     }
 }
-
-private fun List<PocketViewModel.FeedItem>.toChannelDetails(): ChannelDetails = ChannelDetails(
-    title = "Pocket editor’s choice", // TODO use updated copy (https://github.com/mozilla-mobile/firefox-tv/issues/2179#issuecomment-500627103)
-    subtitle = "The most interesting videos on the web. Curated by Pocket, now part of Mozilla.", // TODO use updated copy (https://github.com/mozilla-mobile/firefox-tv/issues/2179#issuecomment-500627103)
-    tileList = this.toChannelTiles()
-)
-
-private fun List<PocketViewModel.FeedItem>.toChannelTiles() = this.map { when (it) {
-    is PocketViewModel.FeedItem.Video -> ChannelTile(
-            url = it.url,
-            title = it.authors,
-            subtitle = it.title,
-            setImage = ImageSetStrategy.ByPath(it.thumbnailURL),
-            tileSource = TileSource.POCKET,
-            id = it.id.toString()
-    )
-} }
