@@ -25,7 +25,7 @@ data class ChannelTile(
     val url: String,
     val title: String,
     val subtitle: String?,
-    val setImage: (ImageView) -> Unit,
+    val setImage: ImageSetStrategy,
     // tileSource should not be used to change UI, which should be generic. It
     // is currently only used for telemetry
     val tileSource: TileSource,

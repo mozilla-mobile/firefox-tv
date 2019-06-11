@@ -10,6 +10,7 @@ import io.reactivex.Observable
 import org.json.JSONObject
 import org.mozilla.tv.firefox.channels.ChannelDetails
 import org.mozilla.tv.firefox.channels.ChannelTile
+import org.mozilla.tv.firefox.channels.ImageSetStrategy
 import org.mozilla.tv.firefox.channels.TileSource
 import org.mozilla.tv.firefox.utils.PicassoWrapper
 
@@ -87,7 +88,7 @@ private fun List<PocketViewModel.FeedItem>.toChannelTiles() = this.map { when (i
             url = it.url,
             title = it.authors,
             subtitle = it.title,
-            setImage = { imageView -> PicassoWrapper.client.load(it.thumbnailURL).into(imageView) },
+            setImage = ImageSetStrategy.ByPath(it.thumbnailURL),
             tileSource = TileSource.POCKET,
             id = it.id.toString()
     )
