@@ -29,6 +29,7 @@ import org.mozilla.tv.firefox.navigationoverlay.ChannelTitles
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
 import org.robolectric.RobolectricTestRunner
+import java.io.File
 
 const val DEFAULT_PINNED_TILE_COUNT = 10
 
@@ -53,6 +54,7 @@ class PinnedTileTest {
     @MockK private lateinit var pinnedTileImageUtilWrapper: PinnedTileImageUtilWrapper
     @MockK private lateinit var formattedDomainWrapper: FormattedDomainWrapper
     @MockK private lateinit var drawable: Drawable
+    @MockK private lateinit var file: File
     private lateinit var overlayVm: NavigationOverlayViewModel
     private lateinit var pinnedTileRepo: PinnedTileRepo
     private lateinit var testObserver: TestObserver<ChannelDetails>
@@ -66,6 +68,7 @@ class PinnedTileTest {
         every { focusRepo.defaultViewAfterScreenChange } answers { Observable.empty() }
         every { sessionRepo.legacyState } answers { MutableLiveData() }
         every { pinnedTileImageUtilWrapper.generatePinnedTilePlaceholder(any()) } answers { drawable }
+        every { pinnedTileImageUtilWrapper.getFileForUUID(any()) } answers { file }
         every { formattedDomainWrapper.format(any(), any(), any()) } answers { "" }
         every { channelRepo.getNewsTiles() } answers { Observable.just(listOf()) }
         every { channelRepo.getMusicTiles() } answers { Observable.just(listOf()) }

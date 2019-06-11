@@ -83,7 +83,7 @@ private fun fakeChannelTile(url: String) = ChannelTile(
     url = url,
     title = url,
     subtitle = null,
-    setImage = { },
+    setImage = ImageSetStrategy.ById(0),
     tileSource = TileSource.BUNDLED,
     id = url
 )

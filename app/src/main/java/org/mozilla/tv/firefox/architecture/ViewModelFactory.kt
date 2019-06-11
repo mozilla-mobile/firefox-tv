@@ -41,6 +41,7 @@ class ViewModelFactory(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return when (modelClass) {
             PocketViewModel::class.java -> PocketViewModel(
+                resources,
                 serviceLocator.pocketRepo
             ) as T
 
