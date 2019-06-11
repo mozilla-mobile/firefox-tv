@@ -27,6 +27,8 @@ private const val FETCH_UNIQUE_WORK_NAME = "PocketFetch"
 class PocketVideoFetchScheduler(
     private val isPocketEnabledByLocale: () -> Boolean
 ) : LifecycleObserver {
+    private var qaFetchDelayOverrideMillis: Long? = null
+    private var isQABuild = false
 
     @OnLifecycleEvent(ON_START)
     fun onStart() {
@@ -57,12 +59,10 @@ class PocketVideoFetchScheduler(
         // The custom delay will only run once.
         val delay: Long
         val workPolicy: ExistingWorkPolicy
-
-        if (IS_QA_BUILD) {
-            delay = checkNotNull(DELAY_TIME_FOR_QA_MILLIS) { "Fetch delay value must be set" }
+        if (isQABuild) {
+            delay = checkNotNull(qaFetchDelayOverrideMillis) { "Fetch delay value must be set" }
             workPolicy = ExistingWorkPolicy.REPLACE
-            // Only allow this value to be used once so we do not end up spamming the Pocket servers
-            IS_QA_BUILD = false
+            resetQAFetchDelayOverrides()
         } else {
             delay = getDelayUntilUpcomingNightFetchMillis(now, randLong)
             workPolicy = ExistingWorkPolicy.KEEP
@@ -111,9 +111,21 @@ class PocketVideoFetchScheduler(
         return userFetchTime.timeInMillis - now.timeInMillis
     }
 
-    fun setDelayForQA(seconds: Long) {
-        IS_QA_BUILD = true
-        DELAY_TIME_FOR_QA_MILLIS = TimeUnit.SECONDS.toMillis(seconds)
+    /**
+     * Used for QA to set the fetch delay to a specified number of seconds. This is set through
+     * a custom intent.
+     */
+    fun setQAFetchDelayOverride(seconds: Long) {
+        isQABuild = true
+        qaFetchDelayOverrideMillis = TimeUnit.SECONDS.toMillis(seconds)
+    }
+
+    /**
+     * Used to reset QA fetch delay values after each use so we do not end up spamming the Pocket servers.
+     */
+    private fun resetQAFetchDelayOverrides() {
+        isQABuild = false
+        qaFetchDelayOverrideMillis = null
     }
 
     companion object {
@@ -125,9 +137,6 @@ class PocketVideoFetchScheduler(
         // Since this is a background job, we're in no rush and can wait a while.
         @VisibleForTesting(otherwise = PRIVATE) val BACKOFF_DELAY_MIN_MILLIS = TimeUnit.SECONDS.toMillis(30)
         @VisibleForTesting(otherwise = PRIVATE) val BACKOFF_DELAY_MAX_MILLIS = TimeUnit.SECONDS.toMillis(60)
-
-        private var DELAY_TIME_FOR_QA_MILLIS: Long? = null
-        private var IS_QA_BUILD = false
     }
 }
 

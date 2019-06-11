@@ -55,8 +55,8 @@ object IntentValidator {
     }
 
     fun validate(context: Context, intent: SafeIntent): ValidatedIntentData? {
-        setExperimentOverrides(intent, context)
-        changeFetchDelaySecondsForQA(intent, context)
+        setQAExperimentOverrides(intent, context)
+        setQAFetchDelayOverrides(intent, context)
 
         when (intent.action) {
             Intent.ACTION_MAIN -> {
@@ -88,7 +88,7 @@ object IntentValidator {
         return null
     }
 
-    private fun setExperimentOverrides(intent: SafeIntent, context: Context) {
+    private fun setQAExperimentOverrides(intent: SafeIntent, context: Context) {
         val experimentsArray = intent.extras?.getStringArray(EXTRA_ACTIVE_EXPERIMENTS) ?: return
         val fretboard = context.serviceLocator.fretboardProvider.fretboard
         fretboard.clearAllOverrides(context)
@@ -98,9 +98,9 @@ object IntentValidator {
         }
     }
 
-    private fun changeFetchDelaySecondsForQA(intent: SafeIntent, context: Context) {
+    private fun setQAFetchDelayOverrides(intent: SafeIntent, context: Context) {
         intent.extras?.getLong(EXTRA_FETCH_DELAY_KEY)?.let { delay ->
-            context.serviceLocator.pocketVideoFetchScheduler.setDelayForQA(delay)
+            context.serviceLocator.pocketVideoFetchScheduler.setQAFetchDelayOverride(delay)
         }
     }
 }
