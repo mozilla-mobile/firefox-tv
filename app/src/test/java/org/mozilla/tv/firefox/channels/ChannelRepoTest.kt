@@ -1,10 +1,19 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 package org.mozilla.tv.firefox.channels
 
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.reactivex.Observable
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.mozilla.tv.firefox.channels.content.ChannelContent
+import org.mozilla.tv.firefox.channels.content.getMusicChannels
+import org.mozilla.tv.firefox.channels.content.getNewsChannels
+import org.mozilla.tv.firefox.channels.content.getSportsChannels
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
 
 class ChannelRepoTest {
@@ -44,6 +53,17 @@ class ChannelRepoTest {
 
         fakeTileObservable.filterNotBlacklisted(blacklist).test()
             .assertValue(fakeTiles)
+    }
+
+    @Test // sanity check that we're no longer adding duplicated tiles to pad channels.
+    fun `GIVEN an empty blacklist THEN the channel repo returns a number of tiles equal to the data source for each channel`() {
+        fun assertDataSourceCountEqualsRepo(dataSource: List<ChannelTile>, channelRepoTiles: Observable<List<ChannelTile>>) {
+            assertEquals(dataSource.size, channelRepoTiles.blockingFirst().size)
+        }
+
+        assertDataSourceCountEqualsRepo(ChannelContent.getNewsChannels(), channelRepo.getNewsTiles())
+        assertDataSourceCountEqualsRepo(ChannelContent.getSportsChannels(), channelRepo.getSportsTiles())
+        assertDataSourceCountEqualsRepo(ChannelContent.getMusicChannels(), channelRepo.getMusicTiles())
     }
 }
 
