@@ -29,6 +29,7 @@ class PocketVideoFetchScheduler(
 ) : LifecycleObserver {
     private var qaFetchDelayOverrideMillis: Long? = null
     private var isQABuild = false
+    init { resetQAFetchDelayOverrides() } // Replace initial values above to avoid duplication.
 
     @OnLifecycleEvent(ON_START)
     fun onStart() {
@@ -112,8 +113,7 @@ class PocketVideoFetchScheduler(
     }
 
     /**
-     * Used for QA to set the fetch delay to a specified number of seconds. This is set through
-     * a custom intent.
+     * Sets the fetch delay to a specified number of seconds. This makes it easier to manually test.
      */
     fun setQAFetchDelayOverride(seconds: Long) {
         isQABuild = true
@@ -121,7 +121,7 @@ class PocketVideoFetchScheduler(
     }
 
     /**
-     * Used to reset QA fetch delay values after each use so we do not end up spamming the Pocket servers.
+     * Resets the fetch delay values to production values. We do this so we do not spam the Pocket servers.
      */
     private fun resetQAFetchDelayOverrides() {
         isQABuild = false
