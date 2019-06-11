@@ -16,6 +16,7 @@ import org.mozilla.tv.firefox.channels.ImageSetStrategy
 import org.mozilla.tv.firefox.channels.TileSource
 
 const val POCKET_VIDEO_COUNT = 20
+const val PLACEHOLDER_IMAGE = "https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png"
 
 /**
  * Provides data that maps 1:1 to Pocket view state.
@@ -81,7 +82,7 @@ class PocketViewModel(
                     url = "https://www.mozilla.org/en-US/",
                     title = "Mozilla",
                     subtitle = "Mozilla",
-                    setImage = ImageSetStrategy.ByPath("https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png"),
+                    setImage = ImageSetStrategy.ByPath(PLACEHOLDER_IMAGE),
                     tileSource = TileSource.POCKET,
                     id = it.toString()
                 )

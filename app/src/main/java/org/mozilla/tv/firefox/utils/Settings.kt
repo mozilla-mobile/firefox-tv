@@ -12,7 +12,6 @@ import androidx.annotation.VisibleForTesting
 import mozilla.components.concept.engine.EngineSession
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.components.locale.LocaleManager
 
 /**
  * A simple wrapper for SharedPreferences that makes reading preference a little bit easier.
