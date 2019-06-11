@@ -4,7 +4,6 @@
 
 package org.mozilla.tv.firefox.navigationoverlay
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageButton
@@ -17,7 +16,6 @@ import kotlinx.android.synthetic.main.fragment_navigation_overlay.view.*
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.view.*
 import kotlinx.android.synthetic.main.tooltip.view.*
 import mozilla.components.browser.domains.autocomplete.ShippedDomainsProvider
-import mozilla.components.support.ktx.android.content.systemService
 import mozilla.components.support.ktx.android.view.forEach
 import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.tv.firefox.R
@@ -58,7 +56,7 @@ class ToolbarUiController(
             }
         }
 
-        val layoutInflater = layout.context.systemService<LayoutInflater>(Context.LAYOUT_INFLATER_SERVICE)
+        val layoutInflater = LayoutInflater.from(layout.context)
         tooltipView = layoutInflater.inflate(R.layout.tooltip, null)
         tooltip = PopupWindow(tooltipView, WRAP_CONTENT, WRAP_CONTENT, false)
 
