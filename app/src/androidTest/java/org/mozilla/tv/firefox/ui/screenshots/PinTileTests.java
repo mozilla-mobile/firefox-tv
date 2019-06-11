@@ -93,7 +93,7 @@ public class PinTileTests extends ScreenshotTest {
                 childAtPosition(allOf(withId(R.id.pinned_tiles_channel),
                         childAtPosition(
                                 withClassName(is("android.widget.LinearLayout")),
-                                1)),
+                                2)),
                         0),
                 isDisplayed())).perform(longClick());
 
