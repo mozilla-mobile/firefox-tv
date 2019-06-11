@@ -14,7 +14,6 @@ import org.mozilla.tv.firefox.channels.ChannelDetails
 import org.mozilla.tv.firefox.channels.ChannelTile
 import org.mozilla.tv.firefox.channels.ImageSetStrategy
 import org.mozilla.tv.firefox.channels.TileSource
-import org.mozilla.tv.firefox.utils.PicassoWrapper
 
 const val POCKET_VIDEO_COUNT = 20
 
@@ -27,9 +26,12 @@ const val POCKET_VIDEO_COUNT = 20
  * view should not have to perform any transformations on this data).
  */
 class PocketViewModel(
-    private val resources: Resources,
+    resources: Resources,
     pocketRepo: PocketVideoRepo
 ) : ViewModel() {
+
+    private val pocketTitle = resources.getString(R.string.pocket_channel_title2)
+    private val pocketSubtitle = resources.getString(R.string.pocket_channel_subtitle)
 
     sealed class State {
         data class Feed(val details: ChannelDetails) : State()
@@ -56,7 +58,7 @@ class PocketViewModel(
         .map { repoState ->
             when (repoState) {
                 is PocketVideoRepo.FeedState.LoadComplete -> State.Feed(repoState.videos.toChannelDetails())
-                is PocketVideoRepo.FeedState.NoAPIKey -> State.Feed(noKeyPlaceholders.toChannelDetails())
+                is PocketVideoRepo.FeedState.NoAPIKey -> State.Feed(noKeyPlaceholders)
                 is PocketVideoRepo.FeedState.Inactive -> State.NotDisplayed
             }
         }
@@ -64,35 +66,38 @@ class PocketViewModel(
         .autoConnect(0)
 
     private fun List<PocketViewModel.FeedItem>.toChannelDetails(): ChannelDetails = ChannelDetails(
-        title = resources.getString(R.string.pocket_channel_title2),
-        subtitle = resources.getString(R.string.pocket_channel_subtitle),
+        title = pocketTitle,
+        subtitle = pocketSubtitle,
         tileList = this.toChannelTiles()
     )
 
-    private fun List<PocketViewModel.FeedItem>.toChannelTiles() = this.map { when (it) {
-        is PocketViewModel.FeedItem.Video -> ChannelTile(
-            url = it.url,
-            title = it.authors,
-            subtitle = it.title,
-            setImage = ImageSetStrategy.ByPath(it.thumbnailURL),
-            tileSource = TileSource.POCKET,
-            id = it.id.toString()
-        )
-    } }
-
-    companion object {
-        @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-        val noKeyPlaceholders: List<FeedItem.Video> by lazy {
-            List(POCKET_VIDEO_COUNT) {
-                FeedItem.Video(
-                    id = it,
-                    title = "Mozilla",
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val noKeyPlaceholders: ChannelDetails by lazy {
+        ChannelDetails(
+            title = pocketTitle,
+            subtitle = pocketSubtitle,
+            tileList = List(POCKET_VIDEO_COUNT) {
+                ChannelTile(
                     url = "https://www.mozilla.org/en-US/",
-                    thumbnailURL = "https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png",
-                    popularitySortId = it,
-                    authors = "0:{'name':'Mozilla'}"
+                    title = "Mozilla",
+                    subtitle = "Mozilla",
+                    setImage = ImageSetStrategy.ByPath("https://blog.mozilla.org/firefox/files/2017/12/Screen-Shot-2017-12-18-at-2.39.25-PM.png"),
+                    tileSource = TileSource.POCKET,
+                    id = it.toString()
                 )
             }
-        }
+        )
     }
 }
+
+@VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+fun List<PocketViewModel.FeedItem>.toChannelTiles() = this.map { when (it) {
+    is PocketViewModel.FeedItem.Video -> ChannelTile(
+        url = it.url,
+        title = it.authors,
+        subtitle = it.title,
+        setImage = ImageSetStrategy.ByPath(it.thumbnailURL),
+        tileSource = TileSource.POCKET,
+        id = it.id.toString()
+    )
+} }
