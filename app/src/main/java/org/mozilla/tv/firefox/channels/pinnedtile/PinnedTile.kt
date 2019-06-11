@@ -7,11 +7,11 @@ package org.mozilla.tv.firefox.channels.pinnedtile
 import androidx.annotation.WorkerThread
 import org.json.JSONObject
 import org.mozilla.tv.firefox.channels.ChannelTile
+import org.mozilla.tv.firefox.channels.ImageSetStrategy
 import org.mozilla.tv.firefox.ext.toJavaURI
 import org.mozilla.tv.firefox.channels.TileSource
 import org.mozilla.tv.firefox.utils.FormattedDomain
 import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
-import org.mozilla.tv.firefox.utils.PicassoWrapper
 import java.util.UUID
 
 private const val KEY_URL = "url"
@@ -68,12 +68,7 @@ class BundledPinnedTile(
                 url = url,
                 title = title,
                 subtitle = null,
-                setImage = { view ->
-                    PicassoWrapper.client
-                            // TODO find a less brittle way to retrieve this path
-                            .load("file:///android_asset/bundled/$imagePath")
-                            .into(view)
-                },
+                setImage = ImageSetStrategy.ByPath("file:///android_asset/bundled/$imagePath"),
                 tileSource = TileSource.BUNDLED,
                 id = idToString()
         )
@@ -105,12 +100,8 @@ class CustomPinnedTile(
                 url = url,
                 title = createTitle(formattedDomainWrapper),
                 subtitle = null,
-                setImage = { view ->
-                    PicassoWrapper.client
-                            .load(imageUtilityWrapper.getFileForUUID(id))
-                            .placeholder(backup)
-                            .into(view)
-                }, // todo: fix scope, double check this is okay.
+                setImage = ImageSetStrategy.ByFile(imageUtilityWrapper.getFileForUUID(id), backup),
+                // todo: fix scope, double check this tileSource is okay.
                 tileSource = TileSource.CUSTOM,
                 id = idToString()
         )

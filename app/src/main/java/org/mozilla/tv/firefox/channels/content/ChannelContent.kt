@@ -4,7 +4,7 @@
 
 package org.mozilla.tv.firefox.channels.content
 
-import android.widget.ImageView
+import org.mozilla.tv.firefox.channels.ImageSetStrategy
 
 /**
  * Namespace for retrieval of data objects that back 'TV Guide'-style channel
@@ -19,7 +19,5 @@ object ChannelContent {
      * Helper function shared by various content files. See [getNewsChannels]
      * for an example.
      */
-    fun setImage(id: Int): (ImageView) -> Unit {
-        return { imageView -> imageView.setImageResource(id) }
-    }
+    fun setImage(id: Int): ImageSetStrategy = ImageSetStrategy.ById(id)
 }
