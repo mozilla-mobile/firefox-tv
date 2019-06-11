@@ -1,5 +1,7 @@
 codecov:
   max_report_age: off
+  ci:
+    - tools.taskcluster.net
 
 coverage:
   precision: 2
