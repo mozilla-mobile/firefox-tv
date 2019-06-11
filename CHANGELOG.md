@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+- Removed outdated Pocket onboarding screen (#2179)
+
 ## [3.10] - 2019-06-10
 ### Added
 - (Behind experiment flag, set to 0 at release time) Various channels containing bundled links to various video-friendly websites (#2195)
