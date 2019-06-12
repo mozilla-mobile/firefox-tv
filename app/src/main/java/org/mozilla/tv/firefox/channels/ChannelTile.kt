@@ -73,6 +73,15 @@ data class ChannelTile(
     }
 }
 
+/**
+ * Subclasses of this define strategies for loading images, allowing [ChannelTile]s to solve this
+ * problems in different ways.
+ *
+ * "Strategy" refers to the Go4 Strategy Pattern.
+ *
+ * Image setting was previously achieved using an [(ImageView) -> Unit], however these broke
+ * equality assertions in unit tests (lambdas use referential equality).
+ */
 sealed class ImageSetStrategy {
     abstract operator fun invoke(imageView: ImageView)
 
@@ -86,8 +95,8 @@ sealed class ImageSetStrategy {
     data class ByPath(val path: String) : ImageSetStrategy() {
         override fun invoke(imageView: ImageView) {
             PicassoWrapper.client
-                // TODO find a less brittle way to retrieve this path
                 .load(path)
+                // TODO this should probably have a backup placeholder
                 .into(imageView)
         }
     }

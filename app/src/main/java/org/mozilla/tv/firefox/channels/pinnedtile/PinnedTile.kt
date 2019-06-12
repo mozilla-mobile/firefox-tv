@@ -68,6 +68,7 @@ class BundledPinnedTile(
                 url = url,
                 title = title,
                 subtitle = null,
+                // TODO find a less brittle way to retrieve this path
                 setImage = ImageSetStrategy.ByPath("file:///android_asset/bundled/$imagePath"),
                 tileSource = TileSource.BUNDLED,
                 id = idToString()
