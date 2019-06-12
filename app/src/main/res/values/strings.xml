@@ -165,6 +165,8 @@
     <string name="notification_unpinned_site">Removed from Firefox TV homescreen</string>
 
     <!-- TV Guide Channel onboarding screen -->
+    <!-- This is shown as title text on an onboarding screen that describes our new ‘channels’ feature,
+         which add lists of frequently visited sites to the overlay -->
     <string name="tv_onboarding_title">Now playing: the internet</string>
     <string name="tv_onboarding_description">Watch videos from the most popular sites: news, sports, culture, music, and more. Scroll down. Select. Watch</string>
 
