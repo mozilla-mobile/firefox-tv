@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.channels
 
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.VisibleForTesting
@@ -33,11 +34,11 @@ private const val BUNDLED_MUSIC_ID_BLACKLIST = "blacklist_music"
  * [TileSource] is used to determine which Repo is responsible to handle requested operations
  */
 class ChannelRepo(
-    context: Context,
+    application: Application,
     private val pinnedTileRepo: PinnedTileRepo
 ) {
     private val _sharedPreferences: SharedPreferences =
-            context.getSharedPreferences(PREF_CHANNEL_REPO, Context.MODE_PRIVATE)
+        application.getSharedPreferences(PREF_CHANNEL_REPO, Context.MODE_PRIVATE)
 
     fun getNewsTiles(): Observable<List<ChannelTile>> =
         bundledNewsTiles.filterNotBlacklisted(blacklistedNewsIds)

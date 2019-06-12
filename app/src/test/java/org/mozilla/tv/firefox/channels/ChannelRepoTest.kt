@@ -11,14 +11,16 @@ import io.reactivex.Observable
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.channels.content.ChannelContent
 import org.mozilla.tv.firefox.channels.content.getMusicChannels
 import org.mozilla.tv.firefox.channels.content.getNewsChannels
 import org.mozilla.tv.firefox.channels.content.getSportsChannels
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
+import org.robolectric.RobolectricTestRunner
 
+@RunWith(RobolectricTestRunner::class)
 class ChannelRepoTest {
-
     @MockK private lateinit var pinnedTileRepo: PinnedTileRepo
     private lateinit var channelRepo: ChannelRepo
 
