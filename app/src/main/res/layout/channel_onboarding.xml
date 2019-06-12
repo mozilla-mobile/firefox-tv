@@ -24,7 +24,7 @@
         android:textAlignment="center"/>
 
     <ImageView
-        android:src="@drawable/homescreen_onboarding"
+        android:src="@drawable/tv_homescreen_onboarding"
         tools:ignore="ContentDescription"
         android:layout_width="808dp"
         android:layout_height="240dp"
