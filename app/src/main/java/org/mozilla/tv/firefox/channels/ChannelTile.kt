@@ -37,9 +37,12 @@ data class ChannelTile(
             TileSource.BUNDLED, TileSource.CUSTOM ->
                 context.resources.getString(R.string.pinned_tiles_channel_remove_title, title)
             TileSource.POCKET -> throw NotImplementedError("pocket shouldn't be able to remove tiles")
-            TileSource.NEWS -> "" // TODO in #2326
-            TileSource.SPORTS -> "" // TODO in #2326
-            TileSource.MUSIC -> "" // TODO in #2326
+            TileSource.NEWS ->
+                context.resources.getString(R.string.news_channel_remove_title, title)
+            TileSource.SPORTS ->
+                context.resources.getString(R.string.sports_channel_remove_title, title)
+            TileSource.MUSIC ->
+                context.resources.getString(R.string.music_channel_remove_title, title)
         }
     }
 

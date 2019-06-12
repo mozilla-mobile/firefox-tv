@@ -137,6 +137,9 @@
     <!-- The title of channel remove modal.
     %1$s will be replaced by the title of tiles (website titles or url). -->
     <string name="pinned_tiles_channel_remove_title">Remove %1$s from Pinned sites</string>
+    <string name="news_channel_remove_title">Remove %1$s from News sites</string>
+    <string name="sports_channel_remove_title">Remove %1$s from Sports sites</string>
+    <string name="music_channel_remove_title">Remove %1$s from Music sites</string>
 
     <!-- Title text displayed above the pinned tile channel. Pinned tiles are a collection of links
     to commonly used sites (bundled with the app), as well as custom pinnned ones (added by the user)
