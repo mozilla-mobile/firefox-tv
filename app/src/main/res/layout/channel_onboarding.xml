@@ -16,9 +16,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="13dp"
-        android:layout_marginTop="74dp"
+        android:layout_marginTop="60dp"
         android:text="@string/tv_onboarding_title"
-        android:textSize="34sp"
+        android:textSize="32sp"
         android:fontFamily="@string/font_ember_light"
         android:textColor="#FFF9F9FA"
         android:textAlignment="center"/>
@@ -26,12 +26,10 @@
     <ImageView
         android:src="@drawable/homescreen_onboarding"
         tools:ignore="ContentDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="27dp"
-        android:layout_marginTop="13dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginEnd="25dp"
+        android:layout_width="808dp"
+        android:layout_height="240dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="16dp"
         android:layout_gravity="center"
         android:scaleType="fitCenter" />
 
@@ -39,7 +37,7 @@
         android:id="@+id/descriptionText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="27dp"
+        android:layout_marginBottom="31dp"
         android:text="@string/tv_onboarding_description"
         android:textSize="18sp"
         android:textColor="#CCF9F9FA"
@@ -48,7 +46,8 @@
 
     <Button
         android:id="@+id/tv_onboarding_button"
-        style="@style/PocketVideoButton"
+        style="@style/TVOnboardingButton"
+        android:layout_marginBottom="60dp"
         android:text="@string/pocket_home_tutorial_dismiss_button" />
 
 </LinearLayout>
