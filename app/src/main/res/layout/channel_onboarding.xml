@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pocket_onboarding_background">
+
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
+        android:layout_marginTop="74dp"
+        android:text="@string/tv_onboarding_title"
+        android:textSize="34sp"
+        android:fontFamily="@string/font_ember_light"
+        android:textColor="#FFF9F9FA"
+        android:textAlignment="center"/>
+
+    <ImageView
+        android:src="@drawable/homescreen_onboarding"
+        tools:ignore="ContentDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="27dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter" />
+
+    <TextView
+        android:id="@+id/descriptionText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="27dp"
+        android:text="@string/tv_onboarding_description"
+        android:textSize="18sp"
+        android:textColor="#CCF9F9FA"
+        android:fontFamily="@string/font_ember_regular"
+        android:textAlignment="center"/>
+
+    <Button
+        android:id="@+id/tv_onboarding_button"
+        style="@style/PocketVideoButton"
+        android:text="@string/pocket_home_tutorial_dismiss_button" />
+
+</LinearLayout>

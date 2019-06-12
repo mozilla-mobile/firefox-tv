@@ -164,6 +164,10 @@
     <string name="notification_pinned_site">Pinned to Firefox TV homescreen</string>
     <string name="notification_unpinned_site">Removed from Firefox TV homescreen</string>
 
+    <!-- TV Guide Channel onboarding screen -->
+    <string name="tv_onboarding_title">Now playing: the internet</string>
+    <string name="tv_onboarding_description">Watch videos from the most popular sites: news, sports, culture, music, and more. Scroll down. Select. Watch</string>
+
     <!-- The title of a tutorial shown to introduce Pocket video recommendations.
     %1$s will be replaced with the Pocket brand name. -->
     <string name="pocket_home_tutorial_title">Introducing videos recommended by %1$s</string>
