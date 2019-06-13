@@ -207,8 +207,8 @@ class NavigationOverlayFragment : Fragment() {
             .addTo(compositeDisposable)
         observePinnedTiles()
             .addTo(compositeDisposable)
-        observePinnedTileRemoval()
-            .addTo(compositeDisposable)
+        observeTileRemoval()
+            .forEach { compositeDisposable.add(it) }
         observeShouldDisplayPinnedTiles()
             .addTo(compositeDisposable)
         observePocket()
@@ -271,10 +271,19 @@ class NavigationOverlayFragment : Fragment() {
         }
     }
 
-    private fun observePinnedTileRemoval(): Disposable {
-        return pinnedTileChannel.removeTileEvents.subscribe { tileToRemove ->
-            serviceLocator.channelRepo.removeChannelContent(tileToRemove)
-        }
+    private fun observeTileRemoval(): List<Disposable> {
+        fun DefaultChannel.forwardRemoveEventsToRepo(): Disposable =
+            this.removeTileEvents
+                .subscribe { tileToRemove ->
+                    serviceLocator.channelRepo.removeChannelContent(tileToRemove)
+                }
+
+        return listOf(
+            pinnedTileChannel,
+            newsChannel,
+            sportsChannel,
+            musicChannel
+        ).map { channel -> channel.forwardRemoveEventsToRepo() }
     }
 
     private fun observeShouldDisplayPinnedTiles(): Disposable {
