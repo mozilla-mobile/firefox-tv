@@ -60,7 +60,11 @@ class ChannelRepo(
 
     fun removeChannelContent(tileData: ChannelTile) {
         when (tileData.tileSource) {
-            TileSource.BUNDLED, TileSource.CUSTOM -> {
+            TileSource.CUSTOM -> {
+                TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileData)
+                pinnedTileRepo.removePinnedTile(tileData.url)
+            }
+            TileSource.BUNDLED -> {
                 TelemetryIntegration.INSTANCE.homeTileRemovedEvent(tileData) // TODO: verify if we need news, sports and music tiles tracked
                 addBundleTileToBlackList(tileData.tileSource, tileData.id)
                 pinnedTileRepo.removePinnedTile(tileData.url)
