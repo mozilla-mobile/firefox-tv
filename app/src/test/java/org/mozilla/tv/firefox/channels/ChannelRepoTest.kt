@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.channels
 
 import androidx.test.core.app.ApplicationProvider
 import io.mockk.MockKAnnotations
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.reactivex.Observable
 import org.junit.Assert.assertEquals
@@ -23,6 +24,14 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class ChannelRepoTest {
+    private val fakeTiles = listOf(
+        fakeChannelTile("www.mozilla.org"),
+        fakeChannelTile("www.google.com"),
+        fakeChannelTile("www.wikipedia.org"),
+        fakeChannelTile("www.yahoo.com")
+    )
+    private val fakeTileObservable: Observable<List<ChannelTile>> = Observable.just(fakeTiles)
+
     @MockK private lateinit var pinnedTileRepo: PinnedTileRepo
     @MockK private lateinit var imageUtilWrapper: PinnedTileImageUtilWrapper
     @MockK private lateinit var formattedDomainWrapper: FormattedDomainWrapper
@@ -31,6 +40,7 @@ class ChannelRepoTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this)
+        every { pinnedTileRepo.pinnedTiles } answers { Observable.just(LinkedHashMap()) }
 
         channelRepo = ChannelRepo(ApplicationProvider.getApplicationContext(), imageUtilWrapper, formattedDomainWrapper, pinnedTileRepo)
     }
@@ -73,15 +83,6 @@ class ChannelRepoTest {
         assertDataSourceCountEqualsRepo(ChannelContent.getMusicChannels(), channelRepo.getMusicTiles())
     }
 }
-
-private val fakeTiles = listOf(
-    fakeChannelTile("www.mozilla.org"),
-    fakeChannelTile("www.google.com"),
-    fakeChannelTile("www.wikipedia.org"),
-    fakeChannelTile("www.yahoo.com")
-)
-
-private val fakeTileObservable: Observable<List<ChannelTile>> = Observable.just(fakeTiles)
 
 private fun fakeChannelTile(url: String) = ChannelTile(
     url = url,
