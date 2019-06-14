@@ -87,8 +87,6 @@ class PinnedTileTest {
         overlayVm = NavigationOverlayViewModel(
                 sessionRepo,
                 focusRepo,
-                pinnedTileImageUtilWrapper,
-                formattedDomainWrapper,
                 channelTitles,
                 channelRepo,
                 pinnedTileRepo

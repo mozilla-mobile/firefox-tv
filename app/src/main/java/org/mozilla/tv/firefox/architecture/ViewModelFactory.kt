@@ -58,8 +58,6 @@ class ViewModelFactory(
             NavigationOverlayViewModel::class.java -> NavigationOverlayViewModel(
                 serviceLocator.sessionRepo,
                 serviceLocator.focusRepo,
-                serviceLocator.screenshotStoreWrapper,
-                serviceLocator.formattedDomainWrapper,
                 ChannelTitles(
                     pinned = app.getString(R.string.pinned_tile_channel_title),
                     newsAndPolitics = resources.getString(R.string.news_channel_title),
