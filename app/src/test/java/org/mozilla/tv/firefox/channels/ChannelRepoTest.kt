@@ -16,24 +16,28 @@ import org.mozilla.tv.firefox.channels.content.ChannelContent
 import org.mozilla.tv.firefox.channels.content.getMusicChannels
 import org.mozilla.tv.firefox.channels.content.getNewsChannels
 import org.mozilla.tv.firefox.channels.content.getSportsChannels
+import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileImageUtilWrapper
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
+import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class ChannelRepoTest {
     @MockK private lateinit var pinnedTileRepo: PinnedTileRepo
+    @MockK private lateinit var imageUtilWrapper: PinnedTileImageUtilWrapper
+    @MockK private lateinit var formattedDomainWrapper: FormattedDomainWrapper
     private lateinit var channelRepo: ChannelRepo
 
     @Before
     fun setup() {
         MockKAnnotations.init(this)
 
-        channelRepo = ChannelRepo(ApplicationProvider.getApplicationContext(), pinnedTileRepo)
+        channelRepo = ChannelRepo(ApplicationProvider.getApplicationContext(), imageUtilWrapper, formattedDomainWrapper, pinnedTileRepo)
     }
 
     @Test
     fun `WHEN blacklist is empty THEN filterNotBlacklisted should not change its input`() {
-        val blacklist = Observable.just(listOf<String>())
+        val blacklist = Observable.just(setOf<String>())
 
         fakeTileObservable.filterNotBlacklisted(blacklist)
             .test()
@@ -42,7 +46,7 @@ class ChannelRepoTest {
 
     @Test
     fun `WHEN blacklist includes values in the list THEN filterNotBlacklisted should filter out these values`() {
-        val blacklist = Observable.just(listOf("www.yahoo.com", "www.wikipedia.org"))
+        val blacklist = Observable.just(setOf("www.yahoo.com", "www.wikipedia.org"))
 
         fakeTileObservable.filterNotBlacklisted(blacklist)
             .map { tiles -> tiles.map { it.url } }
@@ -52,7 +56,7 @@ class ChannelRepoTest {
 
     @Test
     fun `WHEN blacklist includes values not found in the original list THEN hte original list should be unexpected`() {
-        val blacklist = Observable.just(listOf("www.bing.com"))
+        val blacklist = Observable.just(setOf("www.bing.com"))
 
         fakeTileObservable.filterNotBlacklisted(blacklist).test()
             .assertValue(fakeTiles)

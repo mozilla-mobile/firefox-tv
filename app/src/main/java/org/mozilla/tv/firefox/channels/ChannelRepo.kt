@@ -9,14 +9,18 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.VisibleForTesting
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import org.mozilla.tv.firefox.channels.content.ChannelContent
 import org.mozilla.tv.firefox.channels.content.getMusicChannels
 import org.mozilla.tv.firefox.channels.content.getNewsChannels
 import org.mozilla.tv.firefox.channels.content.getSportsChannels
+import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileImageUtilWrapper
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
+import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
 import java.util.Collections
 
 private const val PREF_CHANNEL_REPO = "ChannelRepo"
@@ -35,10 +39,15 @@ private const val BUNDLED_MUSIC_ID_BLACKLIST = "blacklist_music"
  */
 class ChannelRepo(
     application: Application,
+    imageUtilityWrapper: PinnedTileImageUtilWrapper,
+    formattedDomainWrapper: FormattedDomainWrapper,
     private val pinnedTileRepo: PinnedTileRepo
 ) {
     private val _sharedPreferences: SharedPreferences =
         application.getSharedPreferences(PREF_CHANNEL_REPO, Context.MODE_PRIVATE)
+
+    fun getPinnedTiles(): Observable<List<ChannelTile>> =
+        pinnedTiles.filterNotBlacklisted(blacklistedPinnedIds)
 
     fun getNewsTiles(): Observable<List<ChannelTile>> =
         bundledNewsTiles.filterNotBlacklisted(blacklistedNewsIds)
@@ -67,10 +76,11 @@ class ChannelRepo(
      * Used to handle removing bundle tiles by adding to its [BundleType] blacklist in Sha¬redPreferences
      */
     private fun addBundleTileToBlackList(source: TileSource, id: String) {
-        val blackList = loadBlackList(source).toMutableList()
+        val blackList = loadBlackList(source).toMutableSet()
         blackList.add(id)
 
         when (source) {
+            TileSource.BUNDLED -> blacklistedPinnedIds.onNext(blackList)
             TileSource.NEWS -> blacklistedNewsIds.onNext(blackList)
             TileSource.SPORTS -> blacklistedSportsIds.onNext(blackList)
             TileSource.MUSIC -> blacklistedMusicIds.onNext(blackList)
@@ -80,7 +90,7 @@ class ChannelRepo(
         saveBlackList(source, blackList)
     }
 
-    private fun loadBlackList(source: TileSource): List<String> {
+    private fun loadBlackList(source: TileSource): Set<String> {
         val sharedPrefKey = when (source) {
             TileSource.BUNDLED -> BUNDLED_PINNED_SITES_ID_BLACKLIST
             TileSource.NEWS -> BUNDLED_NEWS_ID_BLACKLIST
@@ -89,10 +99,10 @@ class ChannelRepo(
             else -> throw NotImplementedError("other types shouldn't be able remove tiles")
         }
 
-        return _sharedPreferences.getStringSet(sharedPrefKey, Collections.emptySet())!!.toList()
+        return _sharedPreferences.getStringSet(sharedPrefKey, Collections.emptySet())!!
     }
 
-    private fun saveBlackList(source: TileSource, blackList: List<String>) {
+    private fun saveBlackList(source: TileSource, blackList: Set<String>) {
         val sharedPrefKey = when (source) {
             TileSource.BUNDLED -> BUNDLED_PINNED_SITES_ID_BLACKLIST
             TileSource.NEWS -> BUNDLED_NEWS_ID_BLACKLIST
@@ -104,6 +114,13 @@ class ChannelRepo(
         _sharedPreferences.edit().putStringSet(sharedPrefKey, blackList.toSet()).apply()
     }
 
+    private val pinnedTiles = pinnedTileRepo.pinnedTiles
+        // This takes place off of the main thread because PinnedTile.toChannelTile needs
+        // to perform file access, and blocks to do so
+        .observeOn(Schedulers.io())
+        .map { it.values.map { it.toChannelTile(imageUtilityWrapper, formattedDomainWrapper) } }
+        .observeOn(AndroidSchedulers.mainThread())
+    private val blacklistedPinnedIds = BehaviorSubject.createDefault(loadBlackList(TileSource.BUNDLED))
     private val bundledNewsTiles = Observable.just(ChannelContent.getNewsChannels())
         .replay(1)
         .autoConnect(0)
@@ -122,7 +139,7 @@ class ChannelRepo(
 
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 fun Observable<List<ChannelTile>>.filterNotBlacklisted(
-    blacklistIds: Observable<List<String>>
+    blacklistIds: Observable<Set<String>>
 ): Observable<List<ChannelTile>> {
     return Observables.combineLatest(this, blacklistIds)
         .map { (tiles, blacklistIds) -> tiles.filter { !blacklistIds.contains(it.id) } }
