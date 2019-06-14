@@ -134,11 +134,17 @@
     <string name="homescreen_unpin_tutorial_toast">Press and hold SELECT to unpin from homescreen</string>
     <string name="homescreen_tile_remove">Remove</string>
 
-    <!-- The title of channel remove modal.
+    <!-- The title of Pinned channel remove modal.
     %1$s will be replaced by the title of tiles (website titles or url). -->
     <string name="pinned_tiles_channel_remove_title">Remove %1$s from Pinned sites</string>
+    <!-- The title of News Channel remove modal.
+    %1$s will be replaced by the title of tiles (website titles or url). -->
     <string name="news_channel_remove_title">Remove %1$s from News sites</string>
+    <!-- The title of Sports channel remove modal.
+    %1$s will be replaced by the title of tiles (website titles or url). -->
     <string name="sports_channel_remove_title">Remove %1$s from Sports sites</string>
+    <!-- The title of Music channel remove modal.
+    %1$s will be replaced by the title of tiles (website titles or url). -->
     <string name="music_channel_remove_title">Remove %1$s from Music sites</string>
 
     <!-- Title text displayed above the pinned tile channel. Pinned tiles are a collection of links
