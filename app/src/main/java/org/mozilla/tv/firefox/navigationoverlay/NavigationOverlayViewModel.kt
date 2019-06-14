@@ -42,11 +42,6 @@ class NavigationOverlayViewModel(
         it.currentUrl != URLs.APP_URL_HOME
     }
 
-    // TODO this method is only used by tests. The tests should be updated, and the method removed
-    fun unpinPinnedTile(url: String) {
-        pinnedTileRepo.removePinnedTile(url)
-    }
-
     val pinnedTiles: Observable<ChannelDetails> = channelRepo.getPinnedTiles()
         .map { ChannelDetails(title = channelTitles.pinned, tileList = it) }
 
