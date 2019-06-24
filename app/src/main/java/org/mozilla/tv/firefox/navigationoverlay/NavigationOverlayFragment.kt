@@ -207,6 +207,8 @@ class NavigationOverlayFragment : Fragment() {
             .addTo(compositeDisposable)
         observePinnedTiles()
             .addTo(compositeDisposable)
+        observePinnedTilesIsEmpty()
+            .addTo(compositeDisposable)
         observeTileRemoval()
             .forEach { compositeDisposable.add(it) }
         observeShouldDisplayPinnedTiles()
@@ -262,6 +264,12 @@ class NavigationOverlayFragment : Fragment() {
                         focusedView.requestFocus()
                 }
             }
+    }
+
+    private fun observePinnedTilesIsEmpty(): Disposable {
+        return navigationOverlayViewModel.pinnedTileIsEmpty.subscribe { isEmpty ->
+            if (isEmpty) navUrlInput.requestFocus()
+        }
     }
 
     private fun observePinnedTiles(): Disposable {

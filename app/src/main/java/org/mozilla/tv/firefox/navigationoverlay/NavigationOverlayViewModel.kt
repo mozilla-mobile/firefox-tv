@@ -29,7 +29,7 @@ class NavigationOverlayViewModel(
     focusRepo: FocusRepo,
     channelTitles: ChannelTitles,
     channelRepo: ChannelRepo,
-    private val pinnedTileRepo: PinnedTileRepo
+    pinnedTileRepo: PinnedTileRepo
 ) : ViewModel() {
 
     val focusUpdate = focusRepo.focusUpdate
@@ -41,6 +41,8 @@ class NavigationOverlayViewModel(
     val viewIsSplit: LiveData<Boolean> = sessionRepo.legacyState.map {
         it.currentUrl != URLs.APP_URL_HOME
     }
+
+    val pinnedTileIsEmpty = pinnedTileRepo.isEmpty
 
     val pinnedTiles: Observable<ChannelDetails> = channelRepo.getPinnedTiles()
         .map { ChannelDetails(title = channelTitles.pinned, tileList = it) }
