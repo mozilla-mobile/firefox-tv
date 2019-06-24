@@ -209,8 +209,6 @@ class NavigationOverlayFragment : Fragment() {
             .addTo(compositeDisposable)
         observeTileRemoval()
             .forEach { compositeDisposable.add(it) }
-//        observeShouldDisplayPinnedTiles()
-//            .addTo(compositeDisposable)
         observeChannelVisibility()
             .forEach { compositeDisposable.add(it) }
         observePocket()
@@ -289,6 +287,9 @@ class NavigationOverlayFragment : Fragment() {
     }
 
     private fun observeChannelVisibility(): List<Disposable> {
+        // NOTE: for unknown reasons, removing the last tile in a channel crashes if it is visible.
+        // If you change this method, please be sure to test that case.
+        //
         // We considered making channel visibility part of DefaultChannel's behavior, but were
         // concerned about a potential problem.
         //
@@ -299,7 +300,7 @@ class NavigationOverlayFragment : Fragment() {
         // now, we have chosen to make this visibility change explicit, and the responsibility of
         // the dev who is adding a new channel. We may revisit this in the future.
         fun observeVisibility(details: Observable<ChannelDetails>, channel: DefaultChannel): Disposable =
-            navigationOverlayViewModel.shouldBeDisplayed(details).subscribe {  shouldDisplay ->
+            navigationOverlayViewModel.shouldBeDisplayed(details).subscribe { shouldDisplay ->
                 channel.channelContainer.visibility = when (shouldDisplay) {
                     true -> View.VISIBLE
                     false -> View.GONE
