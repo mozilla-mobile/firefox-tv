@@ -56,4 +56,8 @@ class NavigationOverlayViewModel(
 
     val shouldDisplayPinnedTiles: Observable<Boolean> = pinnedTiles.map { !it.tileList.isEmpty() }
         .distinctUntilChanged()
+
+    fun shouldBeDisplayed(channelDetails: Observable<ChannelDetails>): Observable<Boolean> =
+        channelDetails.map { it.tileList.isNotEmpty() }
+            .distinctUntilChanged()
 }
