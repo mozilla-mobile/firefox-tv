@@ -209,8 +209,10 @@ class NavigationOverlayFragment : Fragment() {
             .addTo(compositeDisposable)
         observeTileRemoval()
             .forEach { compositeDisposable.add(it) }
-        observeShouldDisplayPinnedTiles()
-            .addTo(compositeDisposable)
+//        observeShouldDisplayPinnedTiles()
+//            .addTo(compositeDisposable)
+        observeChannelVisibility()
+            .forEach { compositeDisposable.add(it) }
         observePocket()
             .forEach { compositeDisposable.add(it) }
         observeTvGuideTiles()
@@ -286,9 +288,9 @@ class NavigationOverlayFragment : Fragment() {
         ).map { channel -> channel.forwardRemoveEventsToRepo() }
     }
 
-    private fun observeShouldDisplayPinnedTiles(): Disposable {
-        // We considered putting all common channel behavior into one reusable function (and may
-        // still in the future), but were concerned about a potential problem.
+    private fun observeChannelVisibility(): List<Disposable> {
+        // We considered making channel visibility part of DefaultChannel's behavior, but were
+        // concerned about a potential problem.
         //
         // Assume that we handle isEmpty visibility automatically, somewhere in Channel or
         // DefaultChannelFactory. Then we get a requirement to set visibility some other way
@@ -296,12 +298,20 @@ class NavigationOverlayFragment : Fragment() {
         // our viewmodel sets visibility in one way, but the view itself has other behavior. For
         // now, we have chosen to make this visibility change explicit, and the responsibility of
         // the dev who is adding a new channel. We may revisit this in the future.
-        return navigationOverlayViewModel.shouldDisplayPinnedTiles.subscribe { shouldDisplay ->
-            pinnedTileChannel.channelContainer.visibility = when (shouldDisplay) {
-                true -> View.VISIBLE
-                false -> View.GONE
+        fun observeVisibility(details: Observable<ChannelDetails>, channel: DefaultChannel): Disposable =
+            navigationOverlayViewModel.shouldBeDisplayed(details).subscribe {  shouldDisplay ->
+                channel.channelContainer.visibility = when (shouldDisplay) {
+                    true -> View.VISIBLE
+                    false -> View.GONE
+                }
             }
-        }
+
+        return listOf(
+            observeVisibility(navigationOverlayViewModel.pinnedTiles, pinnedTileChannel),
+            observeVisibility(navigationOverlayViewModel.newsChannel, newsChannel),
+            observeVisibility(navigationOverlayViewModel.sportsChannel, sportsChannel),
+            observeVisibility(navigationOverlayViewModel.musicChannel, musicChannel)
+        )
     }
 
     private fun observePocket(): List<Disposable> {
@@ -325,7 +335,6 @@ class NavigationOverlayFragment : Fragment() {
         return defaultObserveChannelDetails(pocketChannel, pocketDetails)
     }
 
-    // TODO set gone when empty (animate?) when adding removal in #2326
     private fun observeTvGuideTiles(): List<Disposable> {
         return listOf(
             defaultObserveChannelDetails(newsChannel, navigationOverlayViewModel.newsChannel),
