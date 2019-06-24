@@ -21,6 +21,7 @@ import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.NONE
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import io.reactivex.Observable
@@ -301,10 +302,7 @@ class NavigationOverlayFragment : Fragment() {
         // the dev who is adding a new channel. We may revisit this in the future.
         fun observeVisibility(details: Observable<ChannelDetails>, channel: DefaultChannel): Disposable =
             navigationOverlayViewModel.shouldBeDisplayed(details).subscribe { shouldDisplay ->
-                channel.channelContainer.visibility = when (shouldDisplay) {
-                    true -> View.VISIBLE
-                    false -> View.GONE
-                }
+                channel.channelContainer.isVisible = shouldDisplay
             }
 
         return listOf(
