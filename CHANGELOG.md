@@ -1,19 +1,22 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/).
+It diverges in the following ways:
+- Release titles do not link to the commits within the release
+- This project only strictly adheres to
+[Semantic Versioning](http://semver.org/spec/v2.0.0.html) for bug fix releases.
 
-## [Unreleased]
+## Unreleased
 
-## [3.11]
+## 3.11
 ### Added
 - TV Guide Channel Onboarding
 
 ### Changed
 - Removed outdated Pocket onboarding screen (#2179)
 
-## [3.10] - 2019-06-10
+## 3.10 - 2019-06-10
 ### Added
 - (Behind experiment flag, set to 0 at release time) Various channels containing bundled links to various video-friendly websites (#2195)
 - QA: command-line control to opt-in or out of experiments (#2320)
@@ -28,7 +31,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Pocket onboarding was shown to users that don't see Pocket content (#2293)
 - Crash when deleting the last pinned tile (#2354)
 
-## [3.9] - 2019-05-13
+## 3.9 - 2019-05-13
 ### Added
 - Channel for displaying pinned tiles (replacing the previous container style) (#2110)
 
@@ -38,19 +41,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Updated Pinned Tiles logos and styling for Channels (#2280)
 
 
-## [3.8] - 2019-04-30
+## 3.8 - 2019-04-30
 ### Added
 - Move Settings into channel on the homescreen (#689)
 
 ### Fixed
 - Fix Pocket timeout exceptions (#2095)
 
-## [3.7.1] - 2019-04-17
+## 3.7.1 - 2019-04-17
 *Released to all Firefox TV devices*
 ### Fixed
 - YouTube frozen after opening overlay (#2072)
 
-## [3.7-RO] - 2019-04-16
+## 3.7-RO - 2019-04-16
 *Released to Fire TV 4K, staged roll-out*
 ### Added
 - Tooltips on toolbar buttons (#1908)
@@ -63,7 +66,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## 3.5-B - 2019-04-16
 *Version bump only, no change from v3.5-A. Released to all devices except Fire TV 4K*
 
-## [3.6-RO] - 2019-03-26
+## 3.6-RO - 2019-03-26
 *Released to Fire TV 4K, staged roll-out*
 ### Fixed
 - Bug that prevented the toolbar back button from working on YouTube (#1927)
@@ -71,7 +74,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## 3.5-A - 2019-03-26
 *Staged rollout of 3.5, no change from v3.5-RO. Released to all devices except Fire TV 4K*
 
-## [3.5-RO] - 2019-03-12
+## 3.5-RO - 2019-03-12
 *Released to Fire TV 4K, staged roll-out*
 
 ### Changed
@@ -93,11 +96,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## 3.4-B - 2019-03-12
 *Version bump only, no change from v3.4-A. Released to all devices except Fire TV 4K*
 
-## [3.4-A] - 2019-02-12
+## 3.4-A - 2019-02-12
 *Released to all devices*
 Rollback to 3.1.3 (same as 3.2.5) due to 4k bug and other regressions. Version bump only.
 
-## [3.3.1] - 2019-02-04
+## 3.3.1 - 2019-02-04
 *Released to Fire TV 4K.*
 
 ### Added
@@ -108,12 +111,12 @@ Rollback to 3.1.3 (same as 3.2.5) due to 4k bug and other regressions. Version b
 - Crash when using unrecognized remote control (#1685)
 - Fixed mismatch between internal and display state after clearing data (#1691)
 
-## [3.3] - 2019-02-04
+## 3.3 - 2019-02-04
 *Released to all devices except Fire TV 4K.*
 
 Version-bump only - no change from v3.2.5
 
-## [3.2.5] - 2019-01-16
+## 3.2.5 - 2019-01-16
 *Rollback to v3.1.3*
 
 Several crashes were found in the previously released version, so this was rolled back to the most recent stable release (v3.1.3).
@@ -122,15 +125,15 @@ Several crashes were found in the previously released version, so this was rolle
 
 These version numbers were skipped due to build errors. They had to be re-built with a bumped version.
 
-## [3.2.2] - 2019-01-15
+## 3.2.2 - 2019-01-15
 ### Fixed 
 - Accessibility on Pocket megatile
 
-## [3.2.1] - 2019-01-14
+## 3.2.1 - 2019-01-14
 ### Fixed
 - Fixed a bug where "send usage data" could not be unchecked
 
-## [3.2] - 2019-01-11
+## 3.2 - 2019-01-11
 ### Added
 - Clicking remote menu button from Pocket feed now returns to overlay
 
@@ -138,22 +141,22 @@ These version numbers were skipped due to build errors. They had to be re-built 
 - Pocket requests are no longer made if a valid key is not found
 - Pocket requests are no longer made when the locale is not set to English
 
-## [3.1.3] - 2018-12-20
+## 3.1.3 - 2018-12-20
 ### Added
 - Ability to exit Firefox with remote back button
 
 ### Fixed
 - Issue where users were unable to exit YouTube with remote back button (#1542)
 
-## [3.1.2] - 2018-12-11
+## 3.1.2 - 2018-12-11
 ### Changed
 - Removed limited-time event tile from homescreen
 
-## [3.1.1] - 2018-12-07
+## 3.1.1 - 2018-12-07
 ### Added
 - Added limited-time event tile to homescreen
 
-## [3.1] - 2018-11-16
+## 3.1 - 2018-11-16
 ### Added
 - Ability to request desktop version of the current site
 
@@ -172,14 +175,14 @@ These version numbers were skipped due to build errors. They had to be re-built 
 - Fixed bug where clearing data would not clear state from the current session
 - Some web fonts were blocked which caused icons to be missing
 
-## [3.0.2] - 2018-10-30
+## 3.0.2 - 2018-10-30
 *Version-bump only: Released v3.0+ for the first time to Stick Gen 1 & 2 in addition to Fire TV (Gen 1, 2, 3), Cube, Element 4k (pendant), which already had v3.0+.*
 
-## [3.0.1] - RC candidate, did not release
+## 3.0.1 - RC candidate, did not release
 ### Fixed
 - Issue that would cause browsing history to be lost when navigating to device home screen (#1256)
 
-## [3.0] - 2018-10-16
+## 3.0 - 2018-10-16
 *Released to Fire TV Cube and Fire TV 4K.*
 
 ### Added
@@ -193,7 +196,7 @@ These version numbers were skipped due to build errors. They had to be re-built 
 ### Fixed
 - Startup time improvements
 
-## [2.2] - 2018-08-21
+## 2.2 - 2018-08-21
 *Released to Fire TV Cube and Fire TV 4K.*
 
 ### Added
@@ -209,10 +212,10 @@ play/pause/rewind/fast-forward/restart/next/previous"
 ## Note on releases below
 The CHANGELOG entries for the releases listed below this were added retroactively and may be incomplete.
 
-## [2.1.2] 2018-10-30
+## 2.1.2 2018-10-30
 *Version-bump only for Fire TV Stick 4k*
 
-## [2.1] - 2018-?-?
+## 2.1 - 2018-?-?
 ### Added
 - Crash reporting with Sentry (see project docs for more information; #429)
 
@@ -224,11 +227,11 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 - Made cursor behavior smoother (#472)
 - Various performance improvements
 
-## [2.0.1] - 2018-?-?
+## 2.0.1 - 2018-?-?
 ### Fixed
 - Top crasher that doesn't seem to require any specific user interaction (#694)
 
-## [2.0] - 2018-?-?
+## 2.0 - 2018-?-?
 ### Added
 - Ability to pin sites to the Firefox home screen
 - Ability to remove sites from the Firefox home screen
@@ -236,56 +239,24 @@ The CHANGELOG entries for the releases listed below this were added retroactivel
 ### Changed
 - Improve navigation controls for web browsing
 
-## [1.1.2] - 2018-02-?
+## 1.1.2 - 2018-02-?
 ### Fixed
 - Crash when leaving the app when video is fullscreened
 - Various German translations
 
-## [1.1.1] - 2018-02-?
+## 1.1.1 - 2018-02-?
 ### Changed
 - A URL to ensure users see the best formatted website
 
-## [1.1] - 2018-01-?
+## 1.1 - 2018-01-?
 ### Added
 - Turbo mode
 - Better support for VoiceView screen reader features
 
-## [1.0.1] - 2017-12-?
+## 1.0.1 - 2017-12-?
 ### Fixed
 - Icon artifacts on older versions of Android
 - Various stability issues
 
-## [1.0] - 2017-12-20
+## 1.0 - 2017-12-20
 *Initial release! A browser including home tile shortcuts.*
-
-[Unreleased]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.10...HEAD
-[3.10]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.9...v3.10
-[3.9]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.8...v3.9
-[3.8]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.7.1...v3.8
-[3.7.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.7-RO...v3.7.1
-[3.7-RO]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.6-RO...v3.7-RO
-[3.6-RO]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.5-RO...v3.6-RO
-[3.5-RO]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.4-A...v3.5-RO
-[3.4-A]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.3.1...v3.4-A
-[3.3.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.3...v3.3.1
-[3.3]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.5...v3.3
-[3.2.5]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.2...v3.2.5
-[3.2.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2.1...v3.2.2
-[3.2.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.2...v3.2.1
-[3.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.3...v3.2
-[3.1.3]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.2...v3.1.3
-[3.1.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1.1...v3.1.2
-[3.1.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.1...v3.1.1
-[3.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.0.2..v3.1
-[3.0.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.0.1...v3.0.2
-[3.0.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v3.0...v3.0.1
-[3.0]: https://github.com/mozilla-mobile/firefox-tv/compare/v2.2...v3.0
-[2.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v2.1...v2.2
-[2.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v2.0.1...v2.1
-[2.0.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v2.0...v2.0.1
-[2.0]: https://github.com/mozilla-mobile/firefox-tv/compare/v1.1.2...v2.0
-[1.1.2]: https://github.com/mozilla-mobile/firefox-tv/compare/v1.1.1...v1.1.2
-[1.1.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v1.1...v1.1.1
-[1.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v1.0.1...v1.1
-[1.0.1]: https://github.com/mozilla-mobile/firefox-tv/compare/v1.0-RC1...v1.0.1
-[1.0]: https://github.com/mozilla-mobile/firefox-tv/compare/a220db99ea9bd3c05d3750d9c52c3a2d7356698d...v1.0-RC1
