@@ -22,12 +22,6 @@
 
     <FrameLayout
         android:orientation="vertical"
-        android:id="@+id/container_pocket"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-    <FrameLayout
-        android:orientation="vertical"
         android:id="@+id/container_settings"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
