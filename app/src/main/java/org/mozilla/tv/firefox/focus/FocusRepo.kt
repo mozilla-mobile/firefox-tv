@@ -65,7 +65,7 @@ class FocusRepo(
                             ActiveScreen.NAVIGATION_OVERLAY -> {
                                 when (previousScreen) {
                                     ActiveScreen.WEB_RENDER -> FocusNode(R.id.navUrlInput)
-                                    ActiveScreen.SETTINGS -> FocusNode(R.id.settings_tile_telemetry)
+                                    ActiveScreen.SETTINGS -> FocusNode(R.id.settings_tile_turbomode)
                                     else -> NO_FOCUS_REQUEST
                                 }
                             }

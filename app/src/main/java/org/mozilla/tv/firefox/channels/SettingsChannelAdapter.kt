@@ -19,6 +19,11 @@ class SettingsChannelAdapter(
 ) : RecyclerView.Adapter<SettingsTileHolder>() {
     private val settingsItems = arrayOf(
         SettingsItem(
+            SettingsScreen.DATA_COLLECTION, // TODO: Add new screen type
+            R.drawable.mozac_ic_rocket_filled,
+            R.string.turbo_mode,
+            R.id.settings_tile_turbomode),
+        SettingsItem(
             SettingsScreen.DATA_COLLECTION,
             R.drawable.ic_data_collection,
             R.string.preference_mozilla_telemetry2,
