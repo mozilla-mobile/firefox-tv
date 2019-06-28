@@ -175,8 +175,16 @@ class NavigationOverlayRobot {
                 // This will need to change if the button layout changes. However, such layout
                 // changes are infrequent, and updating this will be easy.
                 repeat(4) { pressDPadDown() }
+                pressDPadRight()
                 pressDPadCenter()
             }
+
+            SettingsRobot().interact()
+            return SettingsRobot.Transition()
+        }
+
+        fun openSettingsTelemetryTile(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
+            settingsTelemetryTile().click()
 
             SettingsRobot().interact()
             return SettingsRobot.Transition()

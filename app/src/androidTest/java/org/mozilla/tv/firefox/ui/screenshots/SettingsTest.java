@@ -51,10 +51,14 @@ public class SettingsTest extends ScreenshotTest {
 
         linearNavigateToSettingsChannel();
 
-        onView(withId(R.id.settings_tile_telemetry)).check(matches(isDisplayed()));
+        onView(withId(R.id.settings_tile_turbomode)).check(matches(isDisplayed()));
 
         // capture a screenshot of the default settings list
         Screengrab.screenshot("settings");
+
+        onView(withId(R.id.settings_tile_turbomode)).perform(click());
+        takeScreenshotsAfterWait("turbo-mode", 5000);
+        mDevice.pressBack();
 
         onView(withId(R.id.settings_tile_telemetry)).perform(click());
         takeScreenshotsAfterWait("send-usage-data", 5000);
