@@ -92,6 +92,7 @@ class ScreenController(private val sessionRepo: SessionRepo) {
 
     fun showSettingsScreen(fragmentManager: FragmentManager, settingsScreen: SettingsScreen) {
         val transition = when (settingsScreen) {
+            SettingsScreen.TURBO_MODE -> Transition.ADD_SETTINGS_TURBO
             SettingsScreen.DATA_COLLECTION -> Transition.ADD_SETTINGS_DATA
             SettingsScreen.CLEAR_COOKIES -> Transition.ADD_SETTINGS_COOKIES
         }
@@ -206,6 +207,14 @@ class ScreenController(private val sessionRepo: SessionRepo) {
             Transition.REMOVE_OVERLAY -> {
                 _currentActiveScreen.onNext(ActiveScreen.WEB_RENDER)
                 showNavigationOverlay(fragmentManager, false)
+            }
+            Transition.ADD_SETTINGS_TURBO -> {
+                _currentActiveScreen.onNext(ActiveScreen.SETTINGS)
+                fragmentManager.beginTransaction()
+                    .hide(fragmentManager.navigationOverlayFragment())
+                    .add(R.id.container_settings, SettingsFragment.newInstance(SettingsScreen.TURBO_MODE),
+                            SettingsFragment.FRAGMENT_TAG)
+                    .commit()
             }
             Transition.ADD_SETTINGS_DATA -> {
                 _currentActiveScreen.onNext(ActiveScreen.SETTINGS)

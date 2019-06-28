@@ -19,7 +19,7 @@ class SettingsChannelAdapter(
 ) : RecyclerView.Adapter<SettingsTileHolder>() {
     private val settingsItems = arrayOf(
         SettingsItem(
-            SettingsScreen.DATA_COLLECTION, // TODO: Add new screen type
+            SettingsScreen.TURBO_MODE,
             R.drawable.mozac_ic_rocket_filled,
             R.string.turbo_mode,
             R.id.settings_tile_turbomode),
@@ -59,6 +59,7 @@ class SettingsChannelAdapter(
         titleView.setText(itemData.titleRes)
         itemView.settings_cardview.setOnClickListener {
             when (val type = itemData.type) {
+                SettingsScreen.TURBO_MODE -> showSettings(type as SettingsScreen)
                 SettingsScreen.DATA_COLLECTION -> showSettings(type as SettingsScreen)
                 SettingsScreen.CLEAR_COOKIES -> showSettings(type as SettingsScreen)
                 SettingsButton.ABOUT -> loadUrl(URLs.URL_ABOUT)
@@ -79,7 +80,7 @@ class SettingsTileHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 // We differentiate between Settings tiles that lead to other Settings screens, or are just buttons
 interface SettingsTile
 enum class SettingsScreen : SettingsTile {
-    DATA_COLLECTION, CLEAR_COOKIES
+    TURBO_MODE, DATA_COLLECTION, CLEAR_COOKIES
 }
 enum class SettingsButton : SettingsTile {
         ABOUT, PRIVACY_POLICY

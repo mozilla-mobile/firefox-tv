@@ -336,7 +336,7 @@ open class TelemetryIntegration protected constructor(
             }
 
             // Settings telemetry handled in a separate event
-            NavigationEvent.SETTINGS_DATA_COLLECTION, NavigationEvent.SETTINGS_CLEAR_COOKIES -> return
+            NavigationEvent.SETTINGS_TURBO_MODE, NavigationEvent.SETTINGS_DATA_COLLECTION, NavigationEvent.SETTINGS_CLEAR_COOKIES -> return
 
             // Load is handled in a separate event
             NavigationEvent.LOAD_URL, NavigationEvent.LOAD_TILE -> return

@@ -64,7 +64,7 @@ private val uiHandler = Handler(Looper.getMainLooper())
 
 enum class NavigationEvent {
     BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION, DESKTOP_MODE, EXIT_FIREFOX,
-    SETTINGS_DATA_COLLECTION, SETTINGS_CLEAR_COOKIES;
+    SETTINGS_TURBO_MODE, SETTINGS_DATA_COLLECTION, SETTINGS_CLEAR_COOKIES;
 
     companion object {
         fun fromViewClick(viewId: Int?) = when (viewId) {
@@ -107,6 +107,9 @@ class NavigationOverlayFragment : Fragment() {
             NavigationEvent.LOAD_TILE -> {
                 (activity as MainActivity).onNonTextInputUrlEntered(value!!)
                 context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
+            }
+            NavigationEvent.SETTINGS_TURBO_MODE -> {
+                serviceLocator.screenController.showSettingsScreen(fragmentManager!!, SettingsScreen.TURBO_MODE)
             }
             NavigationEvent.SETTINGS_DATA_COLLECTION -> {
                 serviceLocator.screenController.showSettingsScreen(fragmentManager!!, SettingsScreen.DATA_COLLECTION)
@@ -388,6 +391,7 @@ class NavigationOverlayFragment : Fragment() {
                 },
                 showSettings = { type ->
                     val navigationEvent = when (type) {
+                        SettingsScreen.TURBO_MODE -> NavigationEvent.SETTINGS_TURBO_MODE
                         SettingsScreen.DATA_COLLECTION -> NavigationEvent.SETTINGS_DATA_COLLECTION
                         SettingsScreen.CLEAR_COOKIES -> NavigationEvent.SETTINGS_CLEAR_COOKIES
                     }

@@ -14,7 +14,7 @@ object ScreenControllerStateMachine {
     }
 
     enum class Transition {
-        ADD_OVERLAY, REMOVE_OVERLAY, ADD_SETTINGS_DATA,
+        ADD_OVERLAY, REMOVE_OVERLAY, ADD_SETTINGS_TURBO, ADD_SETTINGS_DATA,
         ADD_SETTINGS_COOKIES, REMOVE_SETTINGS, SHOW_BROWSER, EXIT_APP, NO_OP
     }
 

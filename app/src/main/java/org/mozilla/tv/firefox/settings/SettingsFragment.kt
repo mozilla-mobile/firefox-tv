@@ -16,12 +16,14 @@ import kotlinx.android.synthetic.main.settings_screen_buttons.view.cancel_action
 import kotlinx.android.synthetic.main.settings_screen_buttons.view.confirm_action
 import kotlinx.android.synthetic.main.settings_screen_switch.toggle
 import kotlinx.android.synthetic.main.settings_screen_switch.view.description
+import kotlinx.android.synthetic.main.settings_screen_switch.view.title
 import kotlinx.android.synthetic.main.settings_screen_switch.view.toggle
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.channels.SettingsScreen
 import org.mozilla.tv.firefox.channels.SettingsTile
+import org.mozilla.tv.firefox.utils.TurboMode
 
 const val KEY_SETTINGS_TYPE = "KEY_SETTINGS_TYPE"
 
@@ -35,6 +37,7 @@ class SettingsFragment : Fragment() {
         val settingsVM = FirefoxViewModelProviders.of(this@SettingsFragment).get(SettingsViewModel::class.java)
         val type: SettingsTile = SettingsScreen.valueOf(arguments!!.getString(KEY_SETTINGS_TYPE)!!)
         val view = when (type) {
+            SettingsScreen.TURBO_MODE -> setupTurboModeScreen(inflater, container, serviceLocator!!.turboMode)
             SettingsScreen.DATA_COLLECTION -> setupDataCollectionScreen(inflater, container, settingsVM)
             SettingsScreen.CLEAR_COOKIES -> setupClearCookiesScreen(inflater, container, settingsVM)
             else -> {
@@ -46,6 +49,24 @@ class SettingsFragment : Fragment() {
             serviceLocator!!.screenController.handleBack(fragmentManager!!)
         }
 
+        return view
+    }
+
+    private fun setupTurboModeScreen(
+        inflater: LayoutInflater,
+        parentView: ViewGroup?,
+        turboMode: TurboMode
+    ): View {
+        val view = inflater.inflate(R.layout.settings_screen_switch, parentView, false)
+        turboMode.observable.observe(viewLifecycleOwner, Observer<Boolean> { state ->
+            view.toggle.isChecked = state ?: return@Observer
+        })
+        view.toggle.isChecked = turboMode.isEnabled
+        view.toggle.setOnClickListener {
+            turboMode.isEnabled = toggle.isChecked
+        }
+        view.title.text = resources.getString(R.string.turbo_mode)
+        view.description.text = resources.getString(R.string.onboarding_turbo_mode_body2)
         return view
     }
 
