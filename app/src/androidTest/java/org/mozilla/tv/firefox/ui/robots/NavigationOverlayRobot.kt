@@ -183,6 +183,25 @@ class NavigationOverlayRobot {
             return SettingsRobot.Transition()
         }
 
+        fun linearNavigateToTurboModeTileAndOpen(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
+            device.apply {
+                // This will need to change if the button layout changes. However, such layout
+                // changes are infrequent, and updating this will be easy.
+                repeat(4) { pressDPadDown() }
+                pressDPadCenter()
+            }
+
+            SettingsRobot().interact()
+            return SettingsRobot.Transition()
+        }
+
+        fun openSettingsTurboModeTile(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
+            settingsTurboModeTile().click()
+
+            SettingsRobot().interact()
+            return SettingsRobot.Transition()
+        }
+
         fun openSettingsTelemetryTile(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
             settingsTelemetryTile().click()
 
@@ -296,6 +315,7 @@ private fun overlay() = onView(withId(R.layout.fragment_navigation_overlay))
 private fun desktopModeButton() = onView(withId(R.id.desktopModeButton))
 private fun tooltip() = onView(withId(R.id.tooltip)).inRoot(isPlatformPopup())
 private fun tooltip_nonPlatformPopup() = onView(withId(R.id.tooltip)).inRoot(withDecorView(withId(R.id.tooltip)))
+private fun settingsTurboModeTile() = onView(withId(R.id.settings_tile_turbomode))
 private fun settingsTelemetryTile() = onView(withId(R.id.settings_tile_telemetry))
 private fun settingsCleardataTile() = onView(withId(R.id.settings_tile_cleardata))
 private fun settingsAboutTile() = onView(withId(R.id.settings_tile_about))

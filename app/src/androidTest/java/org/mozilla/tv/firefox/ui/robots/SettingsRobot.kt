@@ -19,16 +19,16 @@ import org.mozilla.tv.firefox.R
  */
 class SettingsRobot {
     private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-    fun toggleDataCollectionButton() {
-        dataCollectionButton().click()
+    fun toggleSettingsPageButton() {
+        settingsPageToggleButton().click()
     }
 
-    fun assertDataCollectionButtonState(isChecked: Boolean) {
-        dataCollectionButton().assertIsChecked(isChecked)
+    fun assertToggleButtonState(isChecked: Boolean) {
+        settingsPageToggleButton().assertIsChecked(isChecked)
     }
 
-    fun assertDataCollectionButtonFocused() {
-        dataCollectionButton().assertHasFocus(true)
+    fun assertToggleButtonFocused() {
+        settingsPageToggleButton().assertHasFocus(true)
     }
 
     class Transition {
@@ -49,5 +49,5 @@ class SettingsRobot {
     }
 }
 
-private fun dataCollectionButton() = onView(withId(R.id.toggle))
+private fun settingsPageToggleButton() = onView(withId(R.id.toggle))
 private fun clearDataButton() = onView(withId(R.id.confirm_action))

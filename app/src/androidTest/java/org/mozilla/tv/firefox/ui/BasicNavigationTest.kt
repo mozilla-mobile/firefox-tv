@@ -155,7 +155,7 @@ class BasicNavigationTest {
         }.openOverlay {
         }.linearNavigateToTelemtryTileAndOpen {
             // Navigate to settings via keypresses, to maintain focus.
-            assertDataCollectionButtonFocused()
+            assertToggleButtonFocused()
         }
     }
 }
