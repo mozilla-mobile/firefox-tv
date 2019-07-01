@@ -13,6 +13,19 @@ import androidx.annotation.UiThread
 import android.view.InputDevice
 import android.view.KeyEvent
 import mozilla.components.support.ktx.android.os.resetAfter
+// Glean
+import mozilla.components.service.glean.BuildConfig
+import mozilla.components.service.glean.Glean
+import org.mozilla.tv.firefox.GleanMetrics.App
+import org.mozilla.tv.firefox.GleanMetrics.Browser
+import org.mozilla.tv.firefox.GleanMetrics.Video
+import org.mozilla.tv.firefox.GleanMetrics.Tiles
+import org.mozilla.tv.firefox.GleanMetrics.Setting
+import org.mozilla.tv.firefox.GleanMetrics.Nav
+import org.mozilla.tv.firefox.GleanMetrics.Toggles
+import org.mozilla.tv.firefox.GleanMetrics.Pin
+import org.mozilla.tv.firefox.GleanMetrics.Pocket
+// End of glean dependencies
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
 import org.mozilla.tv.firefox.utils.Assert
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText.AutocompleteResult
@@ -22,6 +35,8 @@ import org.mozilla.telemetry.measurement.SearchesMeasurement
 import org.mozilla.telemetry.ping.TelemetryCorePingBuilder
 import org.mozilla.telemetry.ping.TelemetryMobileEventPingBuilder
 import org.mozilla.telemetry.ping.TelemetryPocketEventPingBuilder
+//import org.mozilla.telemetry.glean.Glean
+//import org.mozilla.tv.firefox.GleanMetrics
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.channels.ChannelTile
 import org.mozilla.tv.firefox.channels.SettingsButton
@@ -142,6 +157,8 @@ open class TelemetryIntegration protected constructor(
     fun startSession(context: Context) {
         TelemetryHolder.get().recordSessionStart()
         TelemetryEvent.create(Category.ACTION, Method.FOREGROUND, Object.APP).queue()
+        // Glean Probe
+        App.appForeground.record()
 
         // We call reset in both startSession and stopSession. We call it here to make sure we
         // clean up before a new session if we crashed before stopSession.
@@ -156,6 +173,8 @@ open class TelemetryIntegration protected constructor(
         }
 
         TelemetryEvent.create(Category.ACTION, Method.BACKGROUND, Object.APP).queue()
+        // Glean Probe
+        App.appBackground.record()
 
         // We call reset in both startSession and stopSession. We call it here to make sure we
         // don't persist the user's visited tile history on disk longer than strictly necessary.
@@ -245,10 +264,14 @@ open class TelemetryIntegration protected constructor(
         TelemetryEvent.create(Category.ERROR, if (fromPage) Method.PAGE else Method.RESOURCE, Object.BROWSER)
                 .extra(Extra.ERROR_CODE, primaryErrorMessage)
                 .queue()
+        // Glean Probe
+        Browser.sslError.record(mapOf(Browser.sslErrorKeys.sslErrorType to primaryErrorMessage))
     }
 
     fun fullScreenVideoProgrammaticallyClosed() {
         TelemetryEvent.create(Category.ACTION, Method.PROGRAMMATICALLY_CLOSED, Object.FULL_SCREEN_VIDEO).queue()
+        // Glean probe
+        Video.fullscreenClosed.record()
     }
 
     @UiThread // via TelemetryHomeTileUniqueClickPerSessionCounter
@@ -256,6 +279,8 @@ open class TelemetryIntegration protected constructor(
         if (tile.id == YOUTUBE_TILE_ID) {
             TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE,
                     Value.YOUTUBE_TILE).queue()
+            //Glean Probe
+            Tiles.youtubeTile.record()
         }
         // Add an extra that contains the tileId for bundled tiles only
         val tileType = getTileTypeAsStringValue(tile)
@@ -263,8 +288,12 @@ open class TelemetryIntegration protected constructor(
             TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE, tileType)
                 .extra(Extra.TILE_ID, tile.id)
                 .queue()
+            //Glean Probe
+            Tiles.homeTile.record(mapOf(Tiles.homeTileKeys.homeTileId to tile.id))
         } else {
             TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE, tileType).queue()
+            //Glean Probe
+            Tiles.homeTile.record(mapOf(Tiles.homeTileKeys.homeTileId to "Not bundled tile"))
         }
         TelemetryHomeTileUniqueClickPerSessionCounter.countTile(context, tile)
     }
@@ -276,6 +305,8 @@ open class TelemetryIntegration protected constructor(
 
     fun clearDataEvent() {
         TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.SETTING, Value.CLEAR_DATA).queue()
+        // Glean Probe
+        Setting.clearData.record()
     }
 
     fun settingsTileClickEvent(tile: SettingsTile) {
@@ -287,6 +318,8 @@ open class TelemetryIntegration protected constructor(
             else -> null
         }
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.SETTING, telemetryValue).queue()
+        // Glean Probe
+        Setting.clickSetting.record(mapOf(Setting.clickSettingKeys.settingName to (telemetryValue.toString())))
     }
 
     // TODO send different values depending on the Fxa state
@@ -300,6 +333,8 @@ open class TelemetryIntegration protected constructor(
     fun menuOpenedFromMenuButton() {
         // Note: Method.USER_HIDE is no longer used and replaced by NO_ACTION_TAKEN (see telemetry docs).
         TelemetryEvent.create(Category.ACTION, Method.USER_SHOW, Object.MENU).queue()
+        // Glean Probe
+        Nav.showOverlay.record()
     }
 
     /**
@@ -310,6 +345,8 @@ open class TelemetryIntegration protected constructor(
      */
     fun menuUnusedEvent() {
         TelemetryEvent.create(Category.AGGREGATE, Method.NO_ACTION_TAKEN, Object.MENU).queue()
+        // Glean Probe
+        Nav.unusedEvent.record()
     }
 
     fun overlayClickEvent(
@@ -328,17 +365,23 @@ open class TelemetryIntegration protected constructor(
             // Pin has a similar state change so we model it after turbo.
             NavigationEvent.TURBO -> {
                 TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.TURBO_MODE, boolToOnOff(isTurboButtonChecked)).queue()
+                //Glean Probe
+                Toggles.turboMode.set(isTurboButtonChecked)
                 return
             }
             NavigationEvent.PIN_ACTION -> {
                 TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.PIN_PAGE, boolToOnOff(isPinButtonChecked))
                         .extra(Object.DESKTOP_MODE, boolToOnOff(isDesktopModeButtonChecked))
                         .queue()
+                // Glean Probe
+                Pin.pinPage.set(isPinButtonChecked)
                 return
             }
             NavigationEvent.DESKTOP_MODE -> {
                 TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.DESKTOP_MODE,
                         boolToOnOff(isDesktopModeButtonChecked)).queue()
+                // Glean Probe
+                Toggles.desktopMode.set(isDesktopModeButtonChecked)
                 return
             }
 
@@ -351,6 +394,8 @@ open class TelemetryIntegration protected constructor(
             NavigationEvent.FXA_BUTTON -> return // TODO: #2512 add telemetry for FxA login.
         }
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.MENU, telemetryValue).queue()
+        // Glean Probe
+        Nav.browserMenu.record(mapOf(Nav.browserMenuKeys.browserClickType to telemetryValue))
     }
 
     /** The browser goes back from a controller press. */
@@ -358,11 +403,15 @@ open class TelemetryIntegration protected constructor(
         TelemetryEvent.create(Category.ACTION, Method.PAGE, Object.BROWSER, Value.BACK)
                 .extra(Extra.SOURCE, "controller")
                 .queue()
+        // Glean Probe
+        Nav.browserBackCtr.record(mapOf(Nav.browserBackCtrKeys.sourceOfClick to "controller"))
     }
 
     fun homeTileRemovedEvent(removedTile: ChannelTile) {
         TelemetryEvent.create(Category.ACTION, Method.REMOVE, Object.HOME_TILE,
                 getTileTypeAsStringValue(removedTile)).queue()
+        // Glean Probe
+        Tiles.removeTile.record(mapOf(Tiles.removeTileKeys.tileType to getTileTypeAsStringValue(removedTile)))
     }
 
     @AnyThread // pocketUniqueClickedVideoIDs is synchronized.
@@ -379,6 +428,8 @@ open class TelemetryIntegration protected constructor(
         for (videoId in pocketUniqueImpressedVideoIDs) {
             TelemetryEvent.create(Category.POCKET, Method.IMPRESSION, Object.VIDEO_ID,
                     videoId).queueInPocketPing()
+            //Glean Probe
+            Pocket.pocketImpression.record(mapOf(Pocket.pocketImpressionKeys.pocketImpressionId to videoId))
         }
     }
 
@@ -386,6 +437,8 @@ open class TelemetryIntegration protected constructor(
         for (videoId in pocketUniqueClickedVideoIDs) {
             TelemetryEvent.create(Category.POCKET, Method.CLICK, Object.VIDEO_ID,
                     videoId.toString()).queueInPocketPing()
+            //Glean Probe
+            Pocket.pocketClick.record(mapOf(Pocket.pocketClickKeys.pocketClickId to videoId))
         }
     }
 
@@ -395,6 +448,8 @@ open class TelemetryIntegration protected constructor(
             else -> Method.CLICK_OR_VOICE
         }
         TelemetryEvent.create(Category.ACTION, method, Object.MEDIA_SESSION, eventType.value).queue()
+        // Glean Probe
+        Video.mediaSessionEvent.record(mapOf(Video.mediaSessionEventKeys.mediaEventType to eventType.value))
     }
 
     private fun boolToOnOff(boolean: Boolean) = if (boolean) Value.ON else Value.OFF
@@ -408,13 +463,21 @@ open class TelemetryIntegration protected constructor(
         TileSource.MUSIC -> Value.TILE_BUNDLED
     }
 
-    fun youtubeCastEvent() = TelemetryEvent.create(Category.ACTION, Method.YOUTUBE_CAST, Object.BROWSER).queue()
+    fun youtubeCastEvent() {
+        TelemetryEvent.create(Category.ACTION, Method.YOUTUBE_CAST, Object.BROWSER).queue()
+        //Glean Probe
+        Browser.youtubeCast.record()
+    }
 
     @UiThread
     fun saveRemoteControlInformation(context: Context, keyEvent: KeyEvent) =
             TelemetryRemoteControlTracker.saveRemoteControlInformation(context, keyEvent)
 
-    fun viewIntentEvent() = TelemetryEvent.create(Category.ACTION, Method.VIEW_INTENT, Object.APP).queue()
+    fun viewIntentEvent() {
+        TelemetryEvent.create(Category.ACTION, Method.VIEW_INTENT, Object.APP).queue()
+        // Glean Probe
+        App.viewIntent.record()
+    }
 
     fun recordActiveExperiments(experimentNames: List<String>) {
         TelemetryHolder.get().recordActiveExperiments(experimentNames)

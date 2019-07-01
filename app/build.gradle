@@ -4,6 +4,10 @@
 
 import org.mozilla.gradle.tasks.ValidateAndroidAppReleaseConfiguration
 
+plugins {
+    id "com.jetbrains.python.envs" version "0.0.26"
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -446,6 +450,9 @@ if (project.hasProperty("coverage")) {
         }
     }
 }
+
+
+apply from: 'https://github.com/mozilla-mobile/android-components/raw/master/components/service/glean/scripts/sdk_generator.gradle'
 
 afterEvaluate {
     check.dependsOn 'findbugs', 'pmd', 'checkstyle'

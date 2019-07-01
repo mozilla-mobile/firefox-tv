@@ -1,0 +1,301 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+
+$schema: moz://mozilla.org/schemas/glean/metrics/1-0-0
+
+nav:
+  browser_menu:
+    type: event
+    description: >
+      Records when there is a click on the browser menu
+    extra_keys:
+      browser_click_type:
+        description:
+          Describes item clicked in the browser menu which includes Back, Forward, Reload, Exit Firefox.
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+  browser_back_ctr:
+    type: event
+    description: >
+      String of the option clicked on the hardware controller which includes: Back
+    extra_keys:
+      source_of_click:
+        description: A data point that indicates that the click has come from the controller.
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+  show_overlay:
+    type: event
+    description: >
+      Indicates that a user has opened the overlay
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+  unused_event:
+    type: event
+    description: >
+      Indicates that a user has opened the menu and closed i
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+setting:
+  click_setting:
+    type: event
+    description: >
+      Records when a setting tile was clicked
+    extra_keys:
+      setting_name:
+        description: Describes which setting was clicked- clear_data_tile, send_data_tile, about_tile, and privacy_tile
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+  clear_data:
+    type: event
+    description: >
+      Indicates that a user has opted to clear dat
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+toggles:
+  turbo_mode:
+    type: boolean
+    description: >
+      Records whether Turbo Mode is enabled on the device
+    lifetime: user
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+  desktop_mode:
+    type: boolean
+    description: >
+      Records whether Desktop Mode is enabled on the device
+    lifetime: user
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+pin:
+  pin_page:
+    type: boolean
+    description: >
+      Records whether a user has selected the pin page button
+    lifetime: user
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+tiles:
+  youtube_tile:
+    type: event
+    description: >
+      Records when a user has clicked on the YouTube tile
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+  home_tile:
+    type: event
+    description: >
+      Records when a bundled tile has been clicked
+    extra_keys:
+      home_tile_id:
+        description: Records the titleID for the clicked bundled tile
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+  remove_tile:
+    type: event
+    description: >
+      Records when a user has removed a home tile
+    extra_keys:
+      tile_type:
+        description: Records the type of tile that was removed
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+pocket:
+  pocket_impression:
+    type: event
+    description: >
+      Records when a Pocket impression has occured
+    extra_keys:
+      pocket_impression_id:
+        description: Records the Pocket video for which the impression has occured
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+  pocket_click:
+    type: event
+    description: >
+      Records when a Pocket video has been clicked
+    extra_keys:
+      pocket_click_id:
+        description: Records the Pocket video for which the click has occured
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+video:
+  fullscreen_closed:
+    type: event
+    description: >
+      Records when a user has closed the fullscreen video
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+  media_session_event:
+    type: event
+    description: >
+      Records when a media session event has occured
+    extra_keys:
+      media_event_type:
+        description: Records the type of media session event which includes clicking the Play/Pause button or the voice button
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+browser:
+  ssl_error:
+    type: event
+    description: >
+      Records when an ssl error has occured
+    extra_keys:
+      ssl_error_type:
+        description: Records the error message of the SSL error
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+  youtube_cast:
+    type: event
+    description: >
+      Records when a YouTube cast event has taken place
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+app:
+  view_intent:
+    type: event
+    description: >
+      Records when a view intent event happens
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+  app_background:
+    type: event
+    description: >
+      Records when the app has gone to the background
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+  app_foreground:
+    type: event
+    description: >
+      Records when the app has gone to the foreground
+    bugs:
+      - 2644
+    data_reviews:
+      - N/A
+    notification_emails:
+      - amazon-dev@mozilla.com
+    expires: 2020-02-01
+
+
+

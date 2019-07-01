@@ -8,6 +8,7 @@ import android.os.StrictMode
 import androidx.annotation.VisibleForTesting
 import android.webkit.WebSettings
 import mozilla.components.service.glean.Glean
+import org.mozilla.tv.firefox.GleanMetrics.Pings
 import mozilla.components.support.base.log.Log
 import mozilla.components.support.base.log.sink.AndroidLogSink
 import mozilla.components.support.ktx.android.content.runOnlyInMainProcess
