@@ -61,16 +61,12 @@ class ExperimentsProvider(private val fretboard: Fretboard, private val context:
     }
 
     fun shouldShowTvGuideChannels(): Boolean {
-// TODO before releasing to more than 0 population:
-//        - Add final channel content (list will be added to #2322)
-//        - Make sure all tiles have images (assets will be added to #2357)
-//        - Remove ChannelRepo#padToTen
-
         val expDescriptor = checkBranchVariants(ExperimentConfig.TV_GUIDE_CHANNELS)
         return when {
             expDescriptor == null -> false // Experiment unknown, or overridden to be false.
             expDescriptor.name.endsWith(ExperimentSuffix.A.value) -> false
             expDescriptor.name.endsWith(ExperimentSuffix.B.value) -> true
+            expDescriptor.name.endsWith(ExperimentSuffix.C.value) -> true
             else -> {
                 Sentry.capture(ExperimentIllegalStateException("TV Guide Channels Illegal Branch Name"))
                 false
