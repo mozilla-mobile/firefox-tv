@@ -23,6 +23,8 @@ import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.channels.SettingsScreen
 import org.mozilla.tv.firefox.channels.SettingsTile
+import org.mozilla.tv.firefox.session.SessionRepo
+import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.TurboMode
 
 const val KEY_SETTINGS_TYPE = "KEY_SETTINGS_TYPE"
@@ -37,7 +39,7 @@ class SettingsFragment : Fragment() {
         val settingsVM = FirefoxViewModelProviders.of(this@SettingsFragment).get(SettingsViewModel::class.java)
         val type: SettingsTile = SettingsScreen.valueOf(arguments!!.getString(KEY_SETTINGS_TYPE)!!)
         val view = when (type) {
-            SettingsScreen.TURBO_MODE -> setupTurboModeScreen(inflater, container, serviceLocator!!.turboMode)
+            SettingsScreen.TURBO_MODE -> setupTurboModeScreen(inflater, container, serviceLocator!!.turboMode, serviceLocator!!.sessionRepo)
             SettingsScreen.DATA_COLLECTION -> setupDataCollectionScreen(inflater, container, settingsVM)
             SettingsScreen.CLEAR_COOKIES -> setupClearCookiesScreen(inflater, container, settingsVM)
             else -> {
@@ -55,7 +57,8 @@ class SettingsFragment : Fragment() {
     private fun setupTurboModeScreen(
         inflater: LayoutInflater,
         parentView: ViewGroup?,
-        turboMode: TurboMode
+        turboMode: TurboMode,
+        sessionRepo: SessionRepo
     ): View {
         val view = inflater.inflate(R.layout.settings_screen_switch, parentView, false)
         turboMode.observable.observe(viewLifecycleOwner, Observer<Boolean> { state ->
@@ -64,6 +67,8 @@ class SettingsFragment : Fragment() {
         view.toggle.isChecked = turboMode.isEnabled
         view.toggle.setOnClickListener {
             turboMode.isEnabled = toggle.isChecked
+            sessionRepo.reload()
+            TelemetryIntegration.INSTANCE.turboModeClickedEvent(turboMode.isEnabled)
         }
         view.title.text = resources.getString(R.string.turbo_mode)
         view.description.text = resources.getString(R.string.settings_turbo_mode_body)

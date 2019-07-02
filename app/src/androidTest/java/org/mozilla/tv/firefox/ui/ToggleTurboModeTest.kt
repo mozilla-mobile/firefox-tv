@@ -12,7 +12,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
-import org.mozilla.tv.firefox.settings.IS_TELEMETRY_ENABLED_DEFAULT
 import org.mozilla.tv.firefox.ui.robots.navigationOverlay
 import org.mozilla.tv.firefox.utils.TurboMode
 
@@ -53,7 +52,7 @@ class ToggleTurboModeTest {
             cachedTurboModeButtonIsChecked = !cachedTurboModeButtonIsChecked
         }.exitToOverlay {
             linearNavigateToSettings()
-        }.openSettingsTurboModeTile{
+        }.openSettingsTurboModeTile {
             assertToggleButtonState(cachedTurboModeButtonIsChecked)
         }
     }

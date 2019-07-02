@@ -32,13 +32,14 @@ class NetworkPageLoadTest {
         val mozillaUrl = "https://mozilla.org".toUri()!!
 
         navigationOverlay {
+        }.linearNavigateToTurboModeTileAndOpen {
         // Work around for #1444: on emulators with turbo mode enabled, the url bar will display
         // any url loaded by the page in addition to the primary url. We disable turbo mode to
         // ensure we only see the primary url and can assert it correctly.
-        }.toggleTurbo {
-        }.openOverlay {
-            assertTurboIsSelected(false)
-
+            toggleSettingsPageButton()
+            assertToggleButtonState(false)
+        }.exitToOverlay {
+            linearNavigateToNavUrl()
         }.enterUrlAndEnterToBrowser(googleUrl) {
             assertDOMElementExists(Locator.ID, "hplogo") // google logo
         }.openOverlay {

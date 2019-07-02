@@ -139,9 +139,6 @@ class FocusRepo(
                     R.id.navButtonForward -> {
                         return getForwardButtonFocusState(focusNode, sessionState)
                     }
-                    R.id.turboButton -> {
-                        return getTurboButtonFocusState(focusNode, sessionState)
-                    }
                     View.NO_ID -> {
                         // Focus is lost so default it to navUrlInput and set focused = false
                         val newFocusNode = FocusNode(R.id.navUrlInput)
@@ -183,7 +180,7 @@ class FocusRepo(
             sessionState.forwardEnabled -> R.id.navButtonForward
             // TODO: this is a duplicating existing logic in the ToolbarVM, may fall out of sync
             sessionState.currentUrl != URLs.APP_URL_HOME -> R.id.navButtonReload
-            else -> R.id.turboButton
+            else -> R.id.desktopModeButton
         }
 
         return State(
@@ -230,31 +227,6 @@ class FocusRepo(
         return State(
             focusNode = FocusNode(
                 focusedForwardButtonNode.viewId,
-                nextFocusLeftId = nextFocusLeftId))
-    }
-
-    private fun getTurboButtonFocusState(
-        focusedTurboButtonNode: FocusNode,
-        sessionState: SessionRepo.State
-    ): State {
-
-        assert(focusedTurboButtonNode.viewId == R.id.turboButton)
-
-        val nextFocusLeftId = when {
-            // TODO: this is a duplicating existing logic in the ToolbarVM, may fall out of sync
-            sessionState.currentUrl == URLs.APP_URL_HOME -> {
-                if (sessionState.forwardEnabled) {
-                    R.id.navButtonForward
-                } else {
-                    R.id.turboButton
-                }
-            }
-            else -> R.id.pinButton
-        }
-
-        return State(
-            focusNode = FocusNode(
-                focusedTurboButtonNode.viewId,
                 nextFocusLeftId = nextFocusLeftId))
     }
 

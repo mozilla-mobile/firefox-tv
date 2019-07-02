@@ -27,7 +27,6 @@ import androidx.test.uiautomator.Until
 import mozilla.components.support.android.test.espresso.assertIsChecked
 import mozilla.components.support.android.test.espresso.assertIsDisplayed
 import mozilla.components.support.android.test.espresso.assertIsEnabled
-import mozilla.components.support.android.test.espresso.assertIsSelected
 import mozilla.components.support.android.test.espresso.click
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert.assertTrue
@@ -46,12 +45,22 @@ class NavigationOverlayRobot {
     fun goBack() = backButton().click()
     fun goForward() = forwardButton().click()
     fun reload() = reloadButton().click()
-    fun toggleTurbo() = turboButton().click()
 
     fun remoteBack() = device.pressBack()
     fun remoteUp() = device.pressDPadUp()
     fun remoteRight(x: Int = 1) = repeat(x) { device.pressDPadRight() }
     fun remoteCenter() = device.pressDPadCenter()
+    fun linearNavigateToNavUrl() {
+        // We hard-code this navigiation pattern because making a generic way to linearly navigate
+        // is very difficult within Espresso. Espresso supports asserting view state, but not
+        // querying it. Because of this, we can't write conditional logic based on the currently
+        // focused view.
+        device.apply {
+            // This will need to change if the button layout changes. However, such layout
+            // changes are infrequent, and updating this will be easy.
+            repeat(3) { pressDPadUp() }
+        }
+    }
     /*
      * Navigate to the settings channel using keypresses
      */
@@ -83,7 +92,6 @@ class NavigationOverlayRobot {
     }
 
     fun assertCanReload(canReload: Boolean) = reloadButton().assertIsEnabled(canReload)
-    fun assertTurboIsSelected(isEnabled: Boolean) = turboButton().assertIsSelected(isEnabled)
 
     fun assertPinButtonChecked(checked: Boolean) = innerAssertPinButtonChecked(checked)
 
@@ -262,13 +270,6 @@ class NavigationOverlayRobot {
             return BrowserRobot.Transition()
         }
 
-        fun toggleTurbo(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
-            turboButton().click()
-
-            BrowserRobot().interact()
-            return BrowserRobot.Transition()
-        }
-
         fun pinSite(interact: BrowserRobot.() -> Unit): BrowserRobot.Transition {
             innerAssertPinButtonChecked(false)
             pinButton().click()
@@ -308,7 +309,6 @@ private fun backButton() = onView(withId(R.id.navButtonBack))
 private fun forwardButton() = onView(withId(R.id.navButtonForward))
 private fun reloadButton() = onView(withId(R.id.navButtonReload))
 private fun pinButton() = onView(withId(R.id.pinButton))
-private fun turboButton() = onView(withId(R.id.turboButton))
 private fun urlBar() = onView(withId(R.id.navUrlInput))
 private fun homeTiles() = onView(withId(R.id.pinned_tiles_channel))
 private fun overlay() = onView(withId(R.layout.fragment_navigation_overlay))

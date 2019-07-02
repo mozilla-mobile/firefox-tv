@@ -147,10 +147,6 @@ class SessionRepo(
 
     fun loadURL(url: Uri) = session?.let { sessionManager.getEngineSession(it)?.loadUrl(url.toString()) }
 
-    fun setTurboModeEnabled(enabled: Boolean) {
-        turboMode.isEnabled = enabled
-    }
-
     private val session: Session? get() = sessionManager.selectedSession
 
     fun clearBrowsingData(engineViewCache: EngineViewCache) {

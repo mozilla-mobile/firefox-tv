@@ -146,7 +146,6 @@ class ToolbarUiController(
                     context.resources.getString(R.string.pin_label)
 
             layout.desktopModeButton.isChecked = it.desktopModeChecked
-            layout.turboButton.isChecked = it.turboChecked
 
             if (!hasUserChangedURLSinceEditTextFocused) {
                 // The url can get updated in the background, e.g. if a loading page is redirected. We
@@ -189,7 +188,6 @@ class ToolbarUiController(
                 NavigationEvent.FORWARD -> toolbarViewModel.forwardButtonClicked()
                 NavigationEvent.RELOAD -> toolbarViewModel.reloadButtonClicked()
                 NavigationEvent.PIN_ACTION -> toolbarViewModel.pinButtonClicked()
-                NavigationEvent.TURBO -> toolbarViewModel.turboButtonClicked()
                 NavigationEvent.DESKTOP_MODE -> toolbarViewModel.desktopModeButtonClicked()
                 NavigationEvent.EXIT_FIREFOX -> toolbarViewModel.exitFirefoxButtonClicked()
                 else -> Unit // Nothing to do.

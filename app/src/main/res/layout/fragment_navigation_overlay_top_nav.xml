@@ -32,12 +32,6 @@
         android:contentDescription="@string/pin_label"/>
 
     <org.mozilla.tv.firefox.widget.CheckableImageButton
-        android:id="@+id/turboButton"
-        style="@style/NavigationButton"
-        android:src="@drawable/turbo_selector"
-        android:contentDescription="@string/turbo_mode"/>
-
-    <org.mozilla.tv.firefox.widget.CheckableImageButton
         android:id="@+id/desktopModeButton"
         style="@style/NavigationButton"
         android:src="@drawable/mozac_ic_device_desktop"

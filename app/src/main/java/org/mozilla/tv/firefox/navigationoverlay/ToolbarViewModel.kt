@@ -110,19 +110,6 @@ class ToolbarViewModel(
     }
 
     @UiThread
-    @Suppress("DEPRECATION")
-    fun turboButtonClicked() {
-        val currentUrl = sessionRepo.legacyState.value?.currentUrl
-        val turboModeActive = sessionRepo.legacyState.value?.turboModeActive ?: true
-
-        sessionRepo.setTurboModeEnabled(!turboModeActive)
-        sessionRepo.reload()
-
-        sendOverlayClickTelemetry(NavigationEvent.TURBO, turboChecked = !turboModeActive)
-        currentUrl?.let { if (!it.isEqualToHomepage()) hideOverlay() }
-    }
-
-    @UiThread
     fun desktopModeButtonClicked() {
         val desktopModeChecked = state.value?.desktopModeChecked ?: return
 
@@ -146,14 +133,12 @@ class ToolbarViewModel(
 
     private fun sendOverlayClickTelemetry(
         event: NavigationEvent,
-        turboChecked: Boolean? = null,
         pinChecked: Boolean? = null,
         desktopModeChecked: Boolean? = null
     ) {
         state.value?.let {
             telemetryIntegration.overlayClickEvent(
                 event,
-                turboChecked ?: it.turboChecked,
                 pinChecked ?: it.pinChecked,
                 desktopModeChecked ?: it.desktopModeChecked
             )

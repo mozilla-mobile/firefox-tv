@@ -103,6 +103,7 @@ open class TelemetryIntegration protected constructor(
         val TILE_POCKET = "pocket"
         val YOUTUBE_TILE = "youtube_tile"
         val EXIT_FIREFOX = "exit"
+        val SETTINGS_TURBO_MODE = "turbo_mode_tile"
         val SETTINGS_CLEAR_DATA_TILE = "clear_data_tile"
         val SETTINGS_SEND_DATA_TILE = "send_data_tile"
         val SETTINGS_ABOUT_TILE = "about_tile"
@@ -278,6 +279,7 @@ open class TelemetryIntegration protected constructor(
 
     fun settingsTileClickEvent(tile: SettingsTile) {
         val telemetryValue = when (tile) {
+            SettingsScreen.TURBO_MODE -> Value.SETTINGS_TURBO_MODE
             SettingsScreen.DATA_COLLECTION -> Value.SETTINGS_SEND_DATA_TILE
             SettingsScreen.CLEAR_COOKIES -> Value.SETTINGS_CLEAR_DATA_TILE
             SettingsButton.ABOUT -> Value.SETTINGS_ABOUT_TILE
@@ -307,7 +309,6 @@ open class TelemetryIntegration protected constructor(
 
     fun overlayClickEvent(
         event: NavigationEvent,
-        isTurboButtonChecked: Boolean,
         isPinButtonChecked: Boolean,
         isDesktopModeButtonChecked: Boolean
     ) {
@@ -317,12 +318,6 @@ open class TelemetryIntegration protected constructor(
             NavigationEvent.RELOAD -> Value.RELOAD
             NavigationEvent.EXIT_FIREFOX -> Value.EXIT_FIREFOX
 
-            // For legacy reasons, turbo has different telemetry params so we special case it.
-            // Pin has a similar state change so we model it after turbo.
-            NavigationEvent.TURBO -> {
-                TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.TURBO_MODE, boolToOnOff(isTurboButtonChecked)).queue()
-                return
-            }
             NavigationEvent.PIN_ACTION -> {
                 TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.PIN_PAGE, boolToOnOff(isPinButtonChecked))
                         .extra(Object.DESKTOP_MODE, boolToOnOff(isDesktopModeButtonChecked))
@@ -342,6 +337,10 @@ open class TelemetryIntegration protected constructor(
             NavigationEvent.LOAD_URL, NavigationEvent.LOAD_TILE -> return
         }
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.MENU, telemetryValue).queue()
+    }
+
+    fun turboModeClickedEvent(isTurboButtonChecked: Boolean) {
+        TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.TURBO_MODE, boolToOnOff(isTurboButtonChecked)).queue()
     }
 
     /** The browser goes back from a controller press. */

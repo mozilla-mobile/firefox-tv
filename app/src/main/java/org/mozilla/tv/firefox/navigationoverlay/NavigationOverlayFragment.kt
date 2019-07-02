@@ -63,7 +63,7 @@ private const val MAX_UNPIN_TOAST_COUNT = 3
 private val uiHandler = Handler(Looper.getMainLooper())
 
 enum class NavigationEvent {
-    BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION, DESKTOP_MODE, EXIT_FIREFOX,
+    BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, PIN_ACTION, DESKTOP_MODE, EXIT_FIREFOX,
     SETTINGS_TURBO_MODE, SETTINGS_DATA_COLLECTION, SETTINGS_CLEAR_COOKIES;
 
     companion object {
@@ -71,7 +71,6 @@ enum class NavigationEvent {
             R.id.navButtonBack -> BACK
             R.id.navButtonForward -> FORWARD
             R.id.navButtonReload -> RELOAD
-            R.id.turboButton -> TURBO
             R.id.pinButton -> PIN_ACTION
             R.id.desktopModeButton -> DESKTOP_MODE
             R.id.exitButton -> EXIT_FIREFOX
@@ -117,7 +116,7 @@ class NavigationOverlayFragment : Fragment() {
             NavigationEvent.SETTINGS_CLEAR_COOKIES -> {
                 serviceLocator.screenController.showSettingsScreen(fragmentManager!!, SettingsScreen.CLEAR_COOKIES)
             }
-            NavigationEvent.TURBO, NavigationEvent.PIN_ACTION, NavigationEvent.DESKTOP_MODE, NavigationEvent.BACK,
+            NavigationEvent.PIN_ACTION, NavigationEvent.DESKTOP_MODE, NavigationEvent.BACK,
             NavigationEvent.FORWARD, NavigationEvent.RELOAD, NavigationEvent.EXIT_FIREFOX -> { /* not handled by this object */ }
         }
         Unit
