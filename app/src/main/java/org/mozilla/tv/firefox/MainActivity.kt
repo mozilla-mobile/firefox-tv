@@ -110,7 +110,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         // TODO: refactor out the debug variant visibility check in #1953
         BuildConstants.debugLogStr?.apply {
             debugLog.visibility = View.VISIBLE
-            debugLog.text = this
+            debugLog.text = "$this ${webRenderComponents.engine.version}"
         }
     }
 
