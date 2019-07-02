@@ -39,7 +39,7 @@ tasks:
           && git config advice.detachedHead false
           && git checkout {{event.head.sha}}
           && yes | sdkmanager --licenses
-          && ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
+          && ./gradlew -PisPullRequest clean assembleSystem assembleSystemDebugAndroidTest lintSystemDebug checkstyle ktlint pmd detekt testSystemDebug
           && ./gradlew -Pcoverage jacocoSystemDebugTestReport
           && ./tools/taskcluster/upload-coverage-report.sh
           && ./tools/taskcluster/download-firebase-sdk.sh
@@ -96,7 +96,7 @@ tasks:
           && git config advice.detachedHead false
           && git checkout {{event.head.sha}}
           && yes | sdkmanager --licenses
-          && ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
+          && ./gradlew -PisPullRequest clean assembleSystem assembleSystemDebugAndroidTest lintSystemDebug checkstyle ktlint pmd detekt testSystemDebug
           && python ./tools/taskcluster/get-bitbar-token.py
           && python ./tools/taskcluster/execute-bitbar-test.py system/debug app-system-debug
       artifacts:
