@@ -16,20 +16,15 @@ import mozilla.components.browser.engine.system.SystemEngineSession
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.tv.firefox.ext.Js.BODY_ELEMENT_FOCUSED
-import org.mozilla.tv.firefox.ext.Js.CACHE_JS
 import org.mozilla.tv.firefox.ext.Js.JS_OBSERVE_PLAYBACK_STATE
 import org.mozilla.tv.firefox.ext.Js.NO_ELEMENT_FOCUSED
 import org.mozilla.tv.firefox.ext.Js.PAUSE_VIDEO
-import org.mozilla.tv.firefox.ext.Js.RESTORE_JS
 import org.mozilla.tv.firefox.ext.Js.SIDEBAR_FOCUSED
 import org.mozilla.tv.firefox.utils.Direction
-import org.mozilla.tv.firefox.webrender.FocusedDOMElementCache
 import java.util.WeakHashMap
 
 // Extension methods on the EngineView class. This is used for additional features that are not part
 // of the upstream browser-engine(-system) component yet.
-
-private val uiHandler = Handler(Looper.getMainLooper())
 
 /**
  * Firefox for Fire TV needs to configure every WebView appropriately.
@@ -40,21 +35,8 @@ fun EngineView.setupForApp() {
     // TODO #33: TEXT_AUTOSIZING does not exist in AmazonWebSettings
     // webView.settings.setLayoutAlgorithm(AmazonWebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
 
-    // WebView can be null temporarily after clearData(); however, activity.recreate() would
-    // instantiate a new WebView instance
-    webView?.setOnFocusChangeListener { _, hasFocus ->
-        if (!hasFocus) {
-            // For why we're modifying the focusedDOMElement, see FocusedDOMElementCacheInterface.
-            //
-            // This will cache focus whenever the app is backgrounded or the device goes to sleep,
-            // as well as whenever another view takes focus.
-            focusedDOMElement.cache()
-        } else {
-            // Trying to restore immediately doesn't work - perhaps the WebView hasn't actually
-            // received focus yet? Posting to the end of the UI queue seems to solve the problem.
-            uiHandler.post { focusedDOMElement.restore() }
-        }
-    }
+    // TODO: explain me!
+    webView?.settings?.setNeedInitialFocus(false)
 }
 
 /**
@@ -70,14 +52,6 @@ fun EngineView.evalJS(javascript: String, callback: ValueCallback<String>? = nul
 
 fun EngineView.pauseAllVideoPlaybacks() {
     evalJS(PAUSE_VIDEO)
-}
-
-fun EngineView.cacheDomElement() {
-    evalJS(CACHE_JS)
-}
-
-fun EngineView.restoreDomElement() {
-    evalJS(RESTORE_JS)
 }
 
 fun EngineView.observePlaybackState() {
@@ -209,9 +183,6 @@ fun EngineView.handleYoutubeBack(indexToGoBackTo: Int) {
 val EngineView.backForwardList: WebBackForwardList
         get() = webView!!.copyBackForwardList()
 
-val EngineView.focusedDOMElement: FocusedDOMElementCache
-    get() = getOrPutExtension(this).domElementCache
-
 fun EngineView.saveState(): Bundle {
     val bundle = Bundle()
     getOrPutExtension(this).webView?.saveState(bundle)
@@ -255,8 +226,6 @@ private fun getOrPutExtension(engineView: EngineView): EngineViewExtension {
  * Cache of additional properties on [EngineView].
  */
 private class EngineViewExtension(private val engineView: EngineView) {
-    val domElementCache: FocusedDOMElementCache = FocusedDOMElementCache(engineView)
-
     private val sessionManager: SessionManager = engineView.asView().context.webRenderComponents.sessionManager
 
     /**

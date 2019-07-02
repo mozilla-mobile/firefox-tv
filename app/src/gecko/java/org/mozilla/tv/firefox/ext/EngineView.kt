@@ -12,10 +12,8 @@ import androidx.annotation.VisibleForTesting
 import mozilla.components.concept.engine.EngineView
 import org.mozilla.geckoview.GeckoView
 import org.mozilla.geckoview.ScreenLength
-import org.mozilla.tv.firefox.ext.Js.CACHE_JS
 import org.mozilla.tv.firefox.ext.Js.JS_OBSERVE_PLAYBACK_STATE
 import org.mozilla.tv.firefox.ext.Js.PAUSE_VIDEO
-import org.mozilla.tv.firefox.ext.Js.RESTORE_JS
 import org.mozilla.tv.firefox.utils.Direction
 import org.mozilla.tv.firefox.webrender.FocusedDOMElementCache
 import java.util.WeakHashMap
@@ -52,14 +50,6 @@ fun EngineView.evalJS(javascript: String) {
 
 fun EngineView.pauseAllVideoPlaybacks() {
     evalJS(PAUSE_VIDEO)
-}
-
-fun EngineView.cacheDomElement() {
-    evalJS(CACHE_JS)
-}
-
-fun EngineView.restoreDomElement() {
-    evalJS(RESTORE_JS)
 }
 
 fun EngineView.observePlaybackState() {

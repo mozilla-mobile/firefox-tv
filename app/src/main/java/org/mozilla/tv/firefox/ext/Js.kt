@@ -5,10 +5,6 @@
 package org.mozilla.tv.firefox.ext
 
 object Js {
-    const val CACHE_VAR = "_firefoxForFireTvPreviouslyFocusedElement"
-    const val CACHE_JS = "var $CACHE_VAR = document.activeElement;"
-    const val RESTORE_JS = "if ($CACHE_VAR) $CACHE_VAR.focus();"
-
     // This will only happen if YouTube is loading or navigation has broken
     const val NO_ELEMENT_FOCUSED = "document.activeElement === null"
     // This will only happen if YouTube is loading or navigation has broken
