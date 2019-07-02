@@ -8,6 +8,12 @@ It diverges in the following ways:
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html) for bug fix releases.
 
 ## Unreleased
+### Added
+
+### Changed
+- Moved Turbo Mode from navigation buttons to Settings (#2019)
+
+### Fixed
 
 ## 3.11
 ### Added
