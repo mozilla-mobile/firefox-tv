@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.transition.Fade
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -157,6 +158,10 @@ class NavigationOverlayFragment : Fragment() {
             FirefoxViewModelProviders.of(this).get(OverlayHintViewModel::class.java)
         } else {
             InactiveHintViewModel()
+        }
+        with(this) {
+            enterTransition = Fade()
+            exitTransition = Fade()
         }
     }
 
