@@ -176,7 +176,7 @@ class ToolbarViewModelTest {
         setToolbarVmState()
         toolbarVm.backButtonClicked()
 
-        verify(telemetryIntegration, times(1)).overlayClickEvent(eq(NavigationEvent.BACK), anyBoolean(), anyBoolean(), anyBoolean())
+        verify(telemetryIntegration, times(1)).overlayClickEvent(eq(NavigationEvent.BACK), anyBoolean(), anyBoolean())
     }
 
     @Test
@@ -185,7 +185,7 @@ class ToolbarViewModelTest {
         toolbarVm.forwardButtonClicked()
 
         verify(telemetryIntegration, times(1)).overlayClickEvent(
-            eq(NavigationEvent.FORWARD), anyBoolean(), anyBoolean(), anyBoolean()
+            eq(NavigationEvent.FORWARD), anyBoolean(), anyBoolean()
         )
     }
 
@@ -195,7 +195,7 @@ class ToolbarViewModelTest {
         toolbarVm.reloadButtonClicked()
 
         verify(telemetryIntegration, times(1)).overlayClickEvent(
-            eq(NavigationEvent.RELOAD), anyBoolean(), anyBoolean(), anyBoolean()
+            eq(NavigationEvent.RELOAD), anyBoolean(), anyBoolean()
         )
     }
 
@@ -205,17 +205,7 @@ class ToolbarViewModelTest {
         toolbarVm.pinButtonClicked()
 
         verify(telemetryIntegration, times(1)).overlayClickEvent(
-            eq(NavigationEvent.PIN_ACTION), anyBoolean(), anyBoolean(), anyBoolean()
-        )
-    }
-
-    @Test
-    fun `WHEN turbo mode in toolbar is clicked THEN associated telemetry method is called`() {
-        setToolbarVmState()
-        toolbarVm.turboButtonClicked()
-
-        verify(telemetryIntegration, times(1)).overlayClickEvent(
-            eq(NavigationEvent.TURBO), anyBoolean(), anyBoolean(), anyBoolean()
+            eq(NavigationEvent.PIN_ACTION), anyBoolean(), anyBoolean()
         )
     }
 
@@ -225,7 +215,7 @@ class ToolbarViewModelTest {
         toolbarVm.desktopModeButtonClicked()
 
         verify(telemetryIntegration, times(1)).overlayClickEvent(
-            eq(NavigationEvent.DESKTOP_MODE), anyBoolean(), anyBoolean(), anyBoolean()
+            eq(NavigationEvent.DESKTOP_MODE), anyBoolean(), anyBoolean()
         )
     }
 
@@ -235,7 +225,7 @@ class ToolbarViewModelTest {
         toolbarVm.exitFirefoxButtonClicked()
 
         verify(telemetryIntegration, times(1)).overlayClickEvent(
-            eq(NavigationEvent.EXIT_FIREFOX), anyBoolean(), anyBoolean(), anyBoolean()
+            eq(NavigationEvent.EXIT_FIREFOX), anyBoolean(), anyBoolean()
         )
     }
 
