@@ -66,7 +66,7 @@ class SettingsFragment : Fragment() {
             turboMode.isEnabled = toggle.isChecked
         }
         view.title.text = resources.getString(R.string.turbo_mode)
-        view.description.text = resources.getString(R.string.onboarding_turbo_mode_body2)
+        view.description.text = resources.getString(R.string.settings_turbo_mode_body)
         return view
     }
 

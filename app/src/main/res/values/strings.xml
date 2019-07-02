@@ -110,6 +110,9 @@
     Mock: https://user-images.githubusercontent.com/1721875/47298531-59442f00-d618-11e8-98df-632f74e9ebc3.png -->
     <string name="settings_cookies_confirm">Clear now</string>
 
+    <!-- Text shown in settings screen explaining what Turbo Mode is. The "speed bump" is part of a driving metaphor, where the goal is to emphasize the speed of Turbo Mode. -->
+    <string name="settings_turbo_mode_body">Turbo Mode automatically blocks ads and trackers to help get you where you’re going faster. If there’s a speed bump — like a site that isn’t behaving the way you expect — just turn Turbo Mode off.</string>
+
     <!-- Title for a screen that explains the purpose of our telemetry, and contains a
     switch that can toggle it on and off
      Mock: https://user-images.githubusercontent.com/1721875/47298694-b809a880-d618-11e8-9e18-1d6d47d2045d.png -->
