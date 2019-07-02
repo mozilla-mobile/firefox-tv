@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <org.mozilla.tv.firefox.architecture.KillswitchLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clipChildren="false">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:clipChildren="false">
 
         <TextView
             android:id="@+id/channelTitle"
@@ -36,7 +38,8 @@
             android:id="@+id/channelTileContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"
+            android:clipChildren="false"/>
 
     </LinearLayout>
 </org.mozilla.tv.firefox.architecture.KillswitchLayout>

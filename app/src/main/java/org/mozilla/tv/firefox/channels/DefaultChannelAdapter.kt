@@ -4,6 +4,8 @@
 
 package org.mozilla.tv.firefox.channels
 
+import android.animation.AnimatorInflater
+import android.animation.StateListAnimator
 import android.app.Dialog
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -92,13 +94,16 @@ class DefaultChannelAdapter(
                 // We can't use a selector for the tile cardview because we use the focused item to
                 // get the RecyclerView adapter position
                 val focusRingDrawable: Drawable?
+                val animation: StateListAnimator?
                 if (hasFocus) {
                     focusRingDrawable = context.getDrawable(R.drawable.tile_selected_stroke)
+                    animation = AnimatorInflater.loadStateListAnimator(context, R.animator.channel_item_animator)
                     onTileFocused?.invoke()
                 } else {
                     focusRingDrawable = null
+                    animation = AnimatorInflater.loadStateListAnimator(context, R.animator.channel_item_animator_not_focused)
                 }
-
+                itemView.channel_cardview.stateListAnimator = animation
                 itemView.channel_cardview.foreground = focusRingDrawable
                 _focusChangeObservable.onNext(position to hasFocus)
                 channelConfig.onFocusTelemetry?.invoke(tile, hasFocus)
