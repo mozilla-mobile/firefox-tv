@@ -14,6 +14,7 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 
 import mozilla.components.browser.session.Session;
+import mozilla.components.concept.engine.EngineSession;
 import mozilla.components.concept.engine.EngineView;
 import org.mozilla.tv.firefox.R;
 import org.mozilla.tv.firefox.ext.ContextKt;
@@ -95,7 +96,7 @@ public class IntentUtils {
         if (fallbackUrl != null) {
             // This is not Kotlin code :(
             final Session session = ContextKt.getWebRenderComponents(context).getSessionManager().getSelectedSessionOrThrow();
-            ContextKt.getWebRenderComponents(context).getSessionUseCases().getLoadUrl().invoke(fallbackUrl, session);
+            ContextKt.getWebRenderComponents(context).getSessionUseCases().getLoadUrl().invoke(fallbackUrl, session, EngineSession.LoadUrlFlags.Companion.none());
             return true;
         }
 
