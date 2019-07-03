@@ -9,7 +9,7 @@ It diverges in the following ways:
 
 ## Unreleased
 
-## 3.11
+## 3.11 - 2019-06-25
 ### Added
 - TV Guide Channel Onboarding
 
