@@ -137,44 +137,18 @@
     <!-- The title of Pinned channel remove modal.
     %1$s will be replaced by the title of tiles (website titles or url). -->
     <string name="pinned_tiles_channel_remove_title">Remove %1$s from Pinned sites</string>
-    <!-- The title of News Channel remove modal.
-    %1$s will be replaced by the title of tiles (website titles or url). -->
-    <string name="news_channel_remove_title">Remove %1$s from News sites</string>
-    <!-- The title of Sports channel remove modal.
-    %1$s will be replaced by the title of tiles (website titles or url). -->
-    <string name="sports_channel_remove_title">Remove %1$s from Sports sites</string>
-    <!-- The title of Music channel remove modal.
-    %1$s will be replaced by the title of tiles (website titles or url). -->
-    <string name="music_channel_remove_title">Remove %1$s from Music sites</string>
 
     <!-- Title text displayed above the pinned tile channel. Pinned tiles are a collection of links
     to commonly used sites (bundled with the app), as well as custom pinnned ones (added by the user)
     See https://github.com/mozilla-mobile/firefox-tv/issues/1630 for channel mocks -->
     <string name="pinned_tile_channel_title">Pinned Tiles</string>
-    <!-- Title text displayed above the news tile channel. Channels are a collection of links
-    to commonly used sites that are bundled with the app. -->
-    <string name="news_channel_title">News &amp; Politics</string>
-    <!-- Title text displayed above the sports tile channel. Channels are a collection of links
-    to commonly used sites that are bundled with the app. -->
-    <string name="sports_channel_title">Sports</string>
-    <!-- Title text displayed above the music tile channel. Channels are a collection of links
-    to commonly used sites that are bundled with the app. -->
-    <string name="music_channel_title">Music</string>
-    <!-- Title text displayed above the food tile channel. Channels are a collection of links
-    to commonly used sites that are bundled with the app. -->
-    <string name="food_channel_title">Food</string>
+
     <string name="pin_label">Pin to homescreen</string>
     <!-- Label shown underneath Pin icon in toolbar when a site is already pinned, to hint to users that
          they can unpin the site to remove it-->
     <string name="unpin_label">Unpin from homescreen</string>
     <string name="notification_pinned_site">Pinned to Firefox TV homescreen</string>
     <string name="notification_unpinned_site">Removed from Firefox TV homescreen</string>
-
-    <!-- TV Guide Channel onboarding screen -->
-    <!-- This is shown as title text on an onboarding screen that describes our new ‘channels’ feature,
-         which add lists of frequently visited sites to the overlay -->
-    <string name="tv_onboarding_title">Now playing: the internet</string>
-    <string name="tv_onboarding_description">Watch videos from the most popular sites: news, sports, culture, music, and more. Scroll down. Select. Watch</string>
 
     <!-- The title of a tutorial shown to introduce Pocket video recommendations.
     %1$s will be replaced with the Pocket brand name. -->

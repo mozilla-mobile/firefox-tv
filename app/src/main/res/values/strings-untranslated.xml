@@ -8,4 +8,34 @@
     <!-- Title text shown above the Pocket channel -->
     <string name="pocket_channel_title2" translatable="false">Pocket Recommends</string>
     <string name="pocket_channel_subtitle" translatable="false">Fascinating videos to fuel your mind, curated by Pocket.</string>
+
+    <!-- The title of News Channel remove modal.
+    %1$s will be replaced by the title of tiles (website titles or url). -->
+    <string name="news_channel_remove_title" translatable="false">Remove %1$s from News sites</string>
+    <!-- The title of Sports channel remove modal.
+    %1$s will be replaced by the title of tiles (website titles or url). -->
+    <string name="sports_channel_remove_title" translatable="false">Remove %1$s from Sports sites</string>
+    <!-- The title of Music channel remove modal.
+    %1$s will be replaced by the title of tiles (website titles or url). -->
+    <string name="music_channel_remove_title" translatable="false">Remove %1$s from Music sites</string>
+
+    <!-- Title text displayed above the news tile channel. Channels are a collection of links
+    to commonly used sites that are bundled with the app. -->
+    <string name="news_channel_title" translatable="false">News &amp; Politics</string>
+    <!-- Title text displayed above the sports tile channel. Channels are a collection of links
+    to commonly used sites that are bundled with the app. -->
+    <string name="sports_channel_title" translatable="false">Sports</string>
+    <!-- Title text displayed above the music tile channel. Channels are a collection of links
+    to commonly used sites that are bundled with the app. -->
+    <string name="music_channel_title" translatable="false">Music</string>
+    <!-- Title text displayed above the food tile channel. Channels are a collection of links
+    to commonly used sites that are bundled with the app. -->
+    <string name="food_channel_title" translatable="false">Food</string>
+
+    <!-- TV Guide Channel onboarding screen -->
+    <!-- This is shown as title text on an onboarding screen that describes our new ‘channels’ feature,
+         which add lists of frequently visited sites to the overlay -->
+    <string name="tv_onboarding_title" translatable="false">Now playing: the internet</string>
+    <string name="tv_onboarding_description" translatable="false">Watch videos from the most popular sites: news, sports, culture, music, and more. Scroll down. Select. Watch</string>
+
 </resources>
