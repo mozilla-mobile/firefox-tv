@@ -44,7 +44,7 @@ tasks:
           && ./tools/taskcluster/upload-coverage-report.sh
           && ./tools/taskcluster/download-firebase-sdk.sh
           && ./tools/taskcluster/google-firebase-testlab-login.sh
-          && ./tools/taskcluster/execute-firebase-test.sh system/debug app-system-debug model=cheryl,version=25,orientation=landscape
+          && ./tools/taskcluster/execute-firebase-test.sh system/debug app-system-debug model=Nexus9,version=25,orientation=landscape
       artifacts:
         'public/reports':
           type: 'directory'
