@@ -39,7 +39,7 @@
   <string name="your_rights_content3"><![CDATA["Não lhe são concedidos quaisquer direitos ou licenças sobre marcas registradas da Fundação Mozilla ou de terceiros, incluindo os nomes ou logos da Mozilla, Firefox ou %1$s. Informações adicionais podem ser encontradas "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">aqui</a>.]]></string>
   <string name="your_rights_content4"><![CDATA[Códigos fonte adicionais do %1$s estão disponíveis sob várias outras \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">licen&#231;as</a>" livres e de código aberto."]]></string>
   <string name="your_rights_content5"><![CDATA["O %1$s também usa listas de bloqueio fornecidas pela Disconnect, Inc. como trabalhos separados e independentes, disponibilizados "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">aqui</a>\" sob a \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>.]]></string>
-  <string name="settings_cookies_dialog_title">Limpar todos os cookies e dados do site</string>
+  <string name="settings_cookies_dialog_title">Limpar todos os cookies e dados de sites</string>
   <string name="settings_cookies_dialog_content2">Está ação limpará todos os cookies e dados de sites. Limpar essas informações pode finalizar sessões de sites e apagar conteúdo da web armazenado localmente.</string>
   <string name="settings_cookies_confirm">Limpar agora</string>
   <string name="preference_mozilla_telemetry2">Enviar dados de uso</string>
