@@ -8,6 +8,8 @@ import android.os.StrictMode
 import androidx.annotation.VisibleForTesting
 import android.webkit.WebSettings
 import mozilla.components.service.glean.Glean
+import mozilla.components.support.base.log.Log
+import mozilla.components.support.base.log.sink.AndroidLogSink
 import mozilla.components.support.ktx.android.content.runOnlyInMainProcess
 import org.mozilla.tv.firefox.components.locale.LocaleAwareApplication
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
@@ -17,6 +19,8 @@ import org.mozilla.tv.firefox.utils.BuildConstants
 import org.mozilla.tv.firefox.utils.OkHttpWrapper
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.webrender.WebRenderComponents
+
+private const val DEFAULT_LOGTAG = "FFTV"
 
 open class FirefoxApplication : LocaleAwareApplication() {
     lateinit var visibilityLifeCycleCallback: VisibilityLifeCycleCallback
@@ -40,6 +44,8 @@ open class FirefoxApplication : LocaleAwareApplication() {
 
     override fun onCreate() {
         super.onCreate()
+
+        enableAndroidComponentsLogging() // In theory, the Gecko process may use this logger so init for all processes.
 
         // If this is not the main process then do not continue with the initialization here. Everything that
         // follows only needs to be done in our app's main process and should not be done in other processes like
@@ -116,4 +122,8 @@ open class FirefoxApplication : LocaleAwareApplication() {
         serviceLocator.sessionManager.onLowMemory()
         // If you need to dump more memory, you may be able to clear the Picasso cache.
     }
+}
+
+private fun enableAndroidComponentsLogging() {
+    Log.addSink(AndroidLogSink(defaultTag = DEFAULT_LOGTAG))
 }
