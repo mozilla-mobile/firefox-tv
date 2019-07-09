@@ -8,17 +8,27 @@ import android.app.Application
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import mozilla.components.browser.search.SearchEngineManager
+import org.mozilla.tv.firefox.search.SearchEngineManagerFactory.AMAZON_SEARCH_CODE
+import org.mozilla.tv.firefox.search.SearchEngineManagerFactory.AMAZON_SEARCH_CODE_US_ONLY
 import org.mozilla.tv.firefox.utils.ServiceLocator
 
-val replacements = mapOf("google" to "google-b-amzftv", "google-2018" to "google-b-1-amzftv",
-        "google-b-m" to "google-b-amzftv", "google-b-1-m" to "google-b-1-amzftv")
-val engineProvider = SearchEngineProviderWrapper(replacements)
+private val replacements = mapOf(
+    "google" to AMAZON_SEARCH_CODE,
+    "google-2018" to AMAZON_SEARCH_CODE_US_ONLY,
+    "google-b-m" to AMAZON_SEARCH_CODE,
+    "google-b-1-m" to AMAZON_SEARCH_CODE_US_ONLY
+)
+private val engineProvider = SearchEngineProviderWrapper(replacements)
 
 /**
  * Encapsulates [SearchEngineManager] setup in order to clean up the
  * [ServiceLocator]
  */
 object SearchEngineManagerFactory {
+
+    val AMAZON_SEARCH_CODE = "google-b-amzftv"
+    val AMAZON_SEARCH_CODE_US_ONLY = "google-b-1-amzftv"
+
     fun create(app: Application): SearchEngineManager {
         return SearchEngineManager(listOf(engineProvider)).apply {
             GlobalScope.launch {
