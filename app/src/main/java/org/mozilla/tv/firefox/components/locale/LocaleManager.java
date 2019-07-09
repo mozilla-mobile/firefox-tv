@@ -218,6 +218,11 @@ public class LocaleManager {
         return resultant;
     }
 
+    public void resetLocaleIfChanged(Context context) {
+        if (currentLocale != systemLocale)
+            resetToSystemLocale(context);
+    }
+
     public void resetToSystemLocale(Context context) {
         // Wipe the pref.
         final SharedPreferences settings = getSharedPreferences(context);

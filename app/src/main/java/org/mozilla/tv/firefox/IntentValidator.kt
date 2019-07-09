@@ -12,6 +12,7 @@ import androidx.annotation.VisibleForTesting
 import mozilla.components.browser.session.Session
 import mozilla.components.service.fretboard.ExperimentDescriptor
 import mozilla.components.support.utils.SafeIntent
+import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.pocket.PocketVideoFetchScheduler
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
@@ -19,6 +20,7 @@ import org.mozilla.tv.firefox.utils.UrlUtils
 
 private const val EXTRA_ACTIVE_EXPERIMENTS = "qaActiveExperiments"
 private const val EXTRA_FETCH_DELAY_KEY = "qaFetchDelaySeconds"
+private const val EXTRA_SELECTED_LOCALE = "qaSelectedLocale"
 
 data class ValidatedIntentData(val url: String, val source: Session.Source)
 
@@ -58,6 +60,7 @@ object IntentValidator {
     fun validate(context: Context, intent: SafeIntent): ValidatedIntentData? {
         setQAExperimentOverrides(intent, context)
         setQAFetchDelayOverrides(intent, context.serviceLocator.pocketVideoFetchScheduler)
+        setQALocaleOverride(intent, context)
 
         when (intent.action) {
             Intent.ACTION_MAIN -> {
@@ -103,5 +106,11 @@ object IntentValidator {
         intent.extras?.getLong(EXTRA_FETCH_DELAY_KEY)?.let { delay ->
             pocketVideoFetchScheduler.setQAFetchDelayOverride(delay)
         }
+    }
+
+    private fun setQALocaleOverride(intent: SafeIntent, context: Context) {
+        val selectedLocale = intent.extras?.getString(EXTRA_SELECTED_LOCALE)?:return
+        val localeManager = LocaleManager.getInstance()
+        localeManager.setSelectedLocale(context, selectedLocale)
     }
 }
