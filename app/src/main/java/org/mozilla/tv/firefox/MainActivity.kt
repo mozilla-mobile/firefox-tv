@@ -183,6 +183,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     }
 
     override fun onDestroy() {
+        LocaleManager.getInstance().resetLocaleIfChanged(applicationContext)
         if (webRenderComponents.sessionManager.size > 0) {
             /**
              * This is to clear the previously assigned WebView instance from EngineView (which
