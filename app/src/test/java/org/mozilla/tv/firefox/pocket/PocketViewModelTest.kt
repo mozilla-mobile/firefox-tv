@@ -14,7 +14,9 @@ import io.reactivex.subjects.Subject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.Timeout
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mozilla.tv.firefox.R
@@ -24,6 +26,10 @@ private const val POCKET_TITLE = "Pocket Title"
 private const val POCKET_SUBTITLE = "Pocket Subtitle"
 
 class PocketViewModelTest {
+
+    @Rule
+    @JvmField
+    var timeout = Timeout.seconds(20)
 
     @MockK lateinit var resources: Resources
 

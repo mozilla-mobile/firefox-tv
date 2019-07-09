@@ -11,7 +11,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.fail
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.TestResource
 import org.robolectric.RobolectricTestRunner
@@ -20,6 +22,9 @@ private const val KEY_INNER = "recommendations"
 
 @RunWith(RobolectricTestRunner::class)
 class PocketVideoParserTest {
+
+    @Rule @JvmField
+    var timeout = Timeout.seconds(20)
 
     private val pocketVideoParser = PocketVideoParser
 

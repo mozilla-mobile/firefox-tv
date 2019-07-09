@@ -19,7 +19,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.pocket.PocketVideoFetchScheduler.Companion.FETCH_END_HOUR
 import org.mozilla.tv.firefox.pocket.PocketVideoFetchScheduler.Companion.FETCH_START_HOUR
@@ -28,6 +30,10 @@ import java.util.Calendar
 
 @RunWith(RobolectricTestRunner::class)
 class PocketVideoFetchSchedulerTest {
+
+    @Rule
+    @JvmField
+    var timeout = Timeout.seconds(20)
 
     private lateinit var scheduler: PocketVideoFetchScheduler
     @MockK(relaxed = true) private lateinit var workManager: WorkManager

@@ -14,11 +14,17 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.Timeout
 import org.mozilla.tv.firefox.FirefoxApplication
 import org.mozilla.tv.firefox.utils.ServiceLocator
 
 class PocketVideoFetchWorkerTest {
+
+    @Rule
+    @JvmField
+    var timeout = Timeout.seconds(20)
 
     private lateinit var worker: PocketVideoFetchWorker
 

@@ -20,7 +20,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.helpers.PocketTestData
 import org.robolectric.RobolectricTestRunner
@@ -32,6 +34,11 @@ private val POCKET_FEED_TEST_DATA = PocketTestData.getVideoFeed(1)
 
 @RunWith(RobolectricTestRunner::class)
 class PocketVideoStoreTest {
+
+    @Rule
+    @JvmField
+    var timeout = Timeout.seconds(20)
+
     private lateinit var pocketVideoStore: PocketVideoStore
     private lateinit var sharedPrefs: SharedPreferences
 

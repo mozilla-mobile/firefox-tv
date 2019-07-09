@@ -12,10 +12,16 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.Timeout
 import org.mozilla.tv.firefox.helpers.PocketTestData
 
 class PocketVideoJSONValidatorTest {
+
+    @Rule
+    @JvmField
+    var timeout = Timeout.seconds(20)
 
     @Suppress("DEPRECATION")
     @MockK private lateinit var pocketVideoParser: PocketVideoParser

@@ -11,7 +11,9 @@ import io.reactivex.observers.TestObserver
 import io.reactivex.subjects.BehaviorSubject
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.helpers.PocketTestData
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState
@@ -19,6 +21,9 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class PocketVideoRepoTest {
+
+    @Rule @JvmField
+    var timeout = Timeout.seconds(20)
 
     private lateinit var repo: PocketVideoRepo
     @MockK private lateinit var videoStore: PocketVideoStore
