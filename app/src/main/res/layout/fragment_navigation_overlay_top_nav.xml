@@ -48,6 +48,16 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+    <!-- This button is set visible if the user is in the experiment. -->
+    <!-- TODO: add content description dynamically -->
+    <!-- TODO: use production icon. -->
+    <ImageButton
+        android:id="@+id/fxaButton"
+        style="@style/NavigationButton"
+        android:src="@drawable/lb_ic_cc"
+        android:contentDescription="@null"
+        android:visibility="gone"/>
+
     <ImageButton
         android:id="@+id/exitButton"
         style="@style/NavigationButton"
