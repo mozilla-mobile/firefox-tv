@@ -178,12 +178,12 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
     override fun onStop() {
         super.onStop()
+        LocaleManager.getInstance().resetLocaleIfChanged(applicationContext)
         TelemetryIntegration.INSTANCE.stopMainActivity()
         rootView.viewTreeObserver.removeOnGlobalFocusChangeListener(serviceLocator.focusRepo)
     }
 
     override fun onDestroy() {
-        LocaleManager.getInstance().resetLocaleIfChanged(applicationContext)
         if (webRenderComponents.sessionManager.size > 0) {
             /**
              * This is to clear the previously assigned WebView instance from EngineView (which
