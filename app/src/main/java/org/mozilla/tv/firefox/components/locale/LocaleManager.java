@@ -276,6 +276,13 @@ public class LocaleManager {
         settings.edit().putString(PREF_LOCALE, localeCode).apply();
     }
 
+    /**
+     *  Note: If getCurrentLocale is used prior to a locale selection
+     *  through an Intent (ie. as a commandline argument),
+     *  there could be odd behaviour with differing
+     *  locale information.
+     */
+
     @NonNull
     public Locale getCurrentLocale(@NonNull Context context) {
         if (currentLocale != null) {
