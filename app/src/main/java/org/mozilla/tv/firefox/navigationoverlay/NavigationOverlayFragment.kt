@@ -31,7 +31,7 @@ import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.channelsContainer
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.navUrlInput
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.settingsTileContainer
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.exitButton
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.*
 import kotlinx.android.synthetic.main.hint_bar.hintBarContainer
 import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.MainActivity
@@ -63,7 +63,7 @@ private const val MAX_UNPIN_TOAST_COUNT = 3
 private val uiHandler = Handler(Looper.getMainLooper())
 
 enum class NavigationEvent {
-    BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION, DESKTOP_MODE, EXIT_FIREFOX,
+    BACK, FORWARD, RELOAD, LOAD_URL, LOAD_TILE, TURBO, PIN_ACTION, DESKTOP_MODE, EXIT_FIREFOX, FXA_BUTTON,
     SETTINGS_DATA_COLLECTION, SETTINGS_CLEAR_COOKIES;
 
     companion object {
@@ -74,6 +74,7 @@ enum class NavigationEvent {
             R.id.turboButton -> TURBO
             R.id.pinButton -> PIN_ACTION
             R.id.desktopModeButton -> DESKTOP_MODE
+            R.id.fxaButton -> FXA_BUTTON
             R.id.exitButton -> EXIT_FIREFOX
             else -> null
         }
@@ -114,6 +115,10 @@ class NavigationOverlayFragment : Fragment() {
             NavigationEvent.SETTINGS_CLEAR_COOKIES -> {
                 serviceLocator.screenController.showSettingsScreen(fragmentManager!!, SettingsScreen.CLEAR_COOKIES)
             }
+
+            // TODO: change button action based on profile state.
+            NavigationEvent.FXA_BUTTON -> serviceLocator.fxaLoginUseCase.beginLogin(fragmentManager!!)
+
             NavigationEvent.TURBO, NavigationEvent.PIN_ACTION, NavigationEvent.DESKTOP_MODE, NavigationEvent.BACK,
             NavigationEvent.FORWARD, NavigationEvent.RELOAD, NavigationEvent.EXIT_FIREFOX -> { /* not handled by this object */ }
         }
@@ -218,6 +223,8 @@ class NavigationOverlayFragment : Fragment() {
             .forEach { compositeDisposable.add(it) }
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = false)
                 .forEach { compositeDisposable.add(it) }
+
+        fxaButton.isVisible = serviceLocator.experimentsProvider.shouldShowSendTab()
     }
 
     override fun onStop() {

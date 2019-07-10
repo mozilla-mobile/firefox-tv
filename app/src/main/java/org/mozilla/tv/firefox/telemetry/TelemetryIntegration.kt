@@ -340,6 +340,8 @@ open class TelemetryIntegration protected constructor(
 
             // Load is handled in a separate event
             NavigationEvent.LOAD_URL, NavigationEvent.LOAD_TILE -> return
+
+            NavigationEvent.FXA_BUTTON -> return // TODO: #2512 add telemetry for FxA login.
         }
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.MENU, telemetryValue).queue()
     }
