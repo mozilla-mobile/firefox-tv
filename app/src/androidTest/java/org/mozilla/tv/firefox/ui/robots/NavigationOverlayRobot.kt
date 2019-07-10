@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox.ui.robots
 import android.net.Uri
 import android.os.Build
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.action.ViewActions.clearText
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.closeSoftKeyboard
@@ -29,6 +30,8 @@ import mozilla.components.support.android.test.espresso.assertIsDisplayed
 import mozilla.components.support.android.test.espresso.assertIsEnabled
 import mozilla.components.support.android.test.espresso.assertIsSelected
 import mozilla.components.support.android.test.espresso.click
+import mozilla.components.support.android.test.espresso.matcher.hasFocus
+import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert.assertTrue
 import org.mozilla.tv.firefox.R
@@ -56,14 +59,18 @@ class NavigationOverlayRobot {
      * Navigate to the settings channel using keypresses
      */
     fun linearNavigateToSettings() {
-        // We hard-code this navigiation pattern because making a generic way to linearly navigate
-        // is very difficult within Espresso. Espresso supports asserting view state, but not
-        // querying it. Because of this, we can't write conditional logic based on the currently
-        // focused view.
+
+        var settingsTileSelected = false
+
         device.apply {
-            // This will need to change if the button layout changes. However, such layout
-            // changes are infrequent, and updating this will be easy.
-            repeat(4) { pressDPadDown() }
+            while (!settingsTileSelected) {
+                try {
+                    onView(allOf(withId(R.id.settings_cardview), hasFocus(true))).assertIsDisplayed(true)
+                    settingsTileSelected = true
+                } catch (ex: NoMatchingViewException) {
+                    pressDPadDown()
+                }
+            }
         }
     }
 
@@ -171,11 +178,18 @@ class NavigationOverlayRobot {
         }
 
         fun linearNavigateToTelemtryTileAndOpen(interact: SettingsRobot.() -> Unit): SettingsRobot.Transition {
+            var settingsTileSelected = false
+
             device.apply {
-                // This will need to change if the button layout changes. However, such layout
-                // changes are infrequent, and updating this will be easy.
-                repeat(4) { pressDPadDown() }
-                pressDPadCenter()
+                while (!settingsTileSelected) {
+                    try {
+                        onView(allOf(withId(R.id.settings_cardview), hasFocus(true))).assertIsDisplayed(true)
+                        settingsTileSelected = true
+                        pressDPadCenter()
+                    } catch (ex: NoMatchingViewException) {
+                        pressDPadDown()
+                    }
+                }
             }
 
             SettingsRobot().interact()
