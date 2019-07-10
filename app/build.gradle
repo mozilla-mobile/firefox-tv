@@ -147,6 +147,7 @@ dependencies {
     implementation "org.mozilla.components:feature-session:$moz_components_version"
     implementation "org.mozilla.components:ui-icons:$moz_components_version"
     implementation "org.mozilla.components:service-fretboard:$moz_components_version"
+    implementation "org.mozilla.components:service-firefox-accounts:$moz_components_version"
     implementation "org.mozilla.components:support-ktx:$moz_components_version"
     implementation "org.mozilla.components:support-utils:$moz_components_version"
     implementation "org.mozilla.components:service-glean:$moz_components_version"
