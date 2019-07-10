@@ -8,6 +8,18 @@ It diverges in the following ways:
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html) for bug fix releases.
 
 ## Unreleased
+### Added
+
+### Changed
+
+### Fixed
+
+## 4.0 - 2019-07-15
+
+### Fixed
+- Crash when last tile deleted (#2444)
+- Categories remain displayed even if deleting all the videos from each tile section (#2448)
+- Stuck after deleting the last pinned tile (#2447)
 
 ## 3.11 - 2019-06-25
 ### Added
