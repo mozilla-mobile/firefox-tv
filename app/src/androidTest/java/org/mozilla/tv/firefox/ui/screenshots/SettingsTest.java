@@ -5,6 +5,7 @@
 
 package org.mozilla.tv.firefox.ui.screenshots;
 
+import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.UiDevice;
@@ -21,10 +22,11 @@ import tools.fastlane.screengrab.Screengrab;
 import tools.fastlane.screengrab.locale.LocaleTestRule;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static mozilla.components.support.android.test.espresso.matcher.ViewMatchersKt.hasFocus;
+import static org.hamcrest.core.AllOf.allOf;
 
 
 public class SettingsTest extends ScreenshotTest {
@@ -43,39 +45,48 @@ public class SettingsTest extends ScreenshotTest {
     }
 
     @Test
-    public void showSettingsViews() throws InterruptedException {
-        onView(withId(R.id.navUrlInput)).check(matches(isDisplayed()));
-
-        // current settings list view
-        onView(withId(R.id.container_web_render)).check(matches(isDisplayed()));
-
+    public void showSettingsUsageData() throws InterruptedException {
         linearNavigateToSettingsChannel();
-
-        onView(withId(R.id.settings_tile_telemetry)).check(matches(isDisplayed()));
 
         // capture a screenshot of the default settings list
         Screengrab.screenshot("settings");
 
-        onView(withId(R.id.settings_tile_telemetry)).perform(click());
+        mDevice.pressDPadCenter();
         takeScreenshotsAfterWait("send-usage-data", 5000);
-        mDevice.pressBack();
-
-        linearNavigateToSettingsChannel();
-        onView(withId(R.id.settings_tile_cleardata)).perform(click());
-        takeScreenshotsAfterWait("clear-all-data", 5000);
-        mDevice.pressBack();
-        linearNavigateToSettingsChannel();
-        onView(withId(R.id.settings_tile_about)).perform(click());
-        takeScreenshotsAfterWait("about-screen", 5000);
-        mDevice.pressBack();
     }
 
-    private void linearNavigateToSettingsChannel() {
-        // This will need to change if the button layout changes. However, such layout
-        // changes are infrequent, and updating this will be easy.
-        device.pressDPadDown();
-        device.pressDPadDown();
-        device.pressDPadDown();
-        device.pressDPadDown();
+    @Test
+    public void showSettingsClearAllData() throws InterruptedException {
+        linearNavigateToSettingsChannel();
+        mDevice.pressDPadRight();
+
+        onView(withId(R.id.settings_tile_cleardata)).check(matches(isDisplayed()));
+        mDevice.pressDPadCenter();
+        takeScreenshotsAfterWait("clear-all-data", 5000);
+    }
+
+    @Test
+    public void showSettingsAboutScreen() throws InterruptedException {
+        linearNavigateToSettingsChannel();
+        mDevice.pressDPadRight();
+        mDevice.pressDPadRight();
+
+        onView(withId(R.id.settings_tile_about)).check(matches(isDisplayed()));
+        mDevice.pressDPadCenter();
+        takeScreenshotsAfterWait("about-screen", 5000);
+    }
+
+    void linearNavigateToSettingsChannel() {
+
+        boolean settingsTileSelected = false;
+
+        while (!settingsTileSelected) {
+            try {
+                onView(allOf(withId(R.id.settings_cardview), hasFocus(true))).check(matches(isDisplayed()));
+                settingsTileSelected = true;
+            } catch (NoMatchingViewException ex) {
+                mDevice.pressDPadDown();
+            }
+        }
     }
 }

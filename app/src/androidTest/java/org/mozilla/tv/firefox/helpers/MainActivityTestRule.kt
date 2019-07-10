@@ -9,6 +9,7 @@ import androidx.test.espresso.IdlingRegistry
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import org.mozilla.tv.firefox.MainActivity
+import org.mozilla.tv.firefox.channels.ChannelOnboardingActivity.Companion.TV_ONBOARDING_SHOWN_PREF
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity.Companion.ONBOARD_SHOWN_PREF
 
 /**
@@ -58,6 +59,7 @@ class MainActivityTestRule(
         PreferenceManager.getDefaultSharedPreferences(appContext)
                 .edit()
                 .putBoolean(ONBOARD_SHOWN_PREF, true)
+                .putBoolean(TV_ONBOARDING_SHOWN_PREF, true)
                 .apply()
     }
 }
