@@ -10,9 +10,13 @@ import mozilla.components.service.fretboard.ExperimentDescriptor
  * [ExperimentConfig] defines a set of supported [ExperimentDescriptor] from [Fretboard]
  */
 enum class ExperimentConfig(val value: String) {
+    // N.B.: an experiment WILL ALWAYS BE DISABLED if it is not added to the fretboard backend.
+    //
+    // The format is: "ExperimentName-IssueNumberForExperiment"
     AA_TEST("AAtest-1675"),
     HINT_BAR_TEST("HintBar-2011"),
-    TV_GUIDE_CHANNELS("TvGuideChannels-2195")
+    TV_GUIDE_CHANNELS("TvGuideChannels-2195"),
+    SEND_TAB("SendTab-2511")
 }
 
 /**
