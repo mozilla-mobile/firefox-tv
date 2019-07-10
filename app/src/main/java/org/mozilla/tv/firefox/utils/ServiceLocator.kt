@@ -11,6 +11,7 @@ package org.mozilla.tv.firefox.utils
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import mozilla.components.support.base.observer.Consumable
+import org.mozilla.tv.firefox.fxa.FxaLoginUseCase
 import org.mozilla.tv.firefox.fxa.FxaRepo
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ValidatedIntentData
@@ -95,6 +96,7 @@ open class ServiceLocator(val app: Application) {
     val pocketVideoStore by lazy { PocketVideoStore(app, app.assets, pocketVideoJSONValidator) }
     val pocketVideoFetchScheduler by lazy { PocketVideoFetchScheduler(isPocketEnabledByLocale) }
     val fxaRepo by lazy { FxaRepo(app) }
+    val fxaLoginUseCase by lazy { FxaLoginUseCase(fxaRepo, sessionRepo, screenController) }
 
     // These open vals are overridden in testing
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())
