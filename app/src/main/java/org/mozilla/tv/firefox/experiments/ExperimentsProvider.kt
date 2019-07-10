@@ -74,6 +74,19 @@ class ExperimentsProvider(private val fretboard: Fretboard, private val context:
         }
     }
 
+    fun shouldShowSendTab(): Boolean {
+        val expDescriptor = checkBranchVariants(ExperimentConfig.SEND_TAB)
+        return when {
+            expDescriptor == null -> false // Experiment unknown, or overridden to be false.
+            expDescriptor.name.endsWith(ExperimentSuffix.A.value) -> false
+            expDescriptor.name.endsWith(ExperimentSuffix.B.value) -> true
+            else -> {
+                Sentry.capture(ExperimentIllegalStateException("FxA Login Illegal Branch Name"))
+                false
+            }
+        }
+    }
+
     /**
      * Check if [ExperimentConfig] + [ExperimentSuffix] is in the experiment and return its
      * corresponding [ExperimentDescriptor].
