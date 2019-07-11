@@ -26,6 +26,12 @@ import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NOT_AUTHENTICATED
 
 private const val LOGTAG = "FxaRepo"
 
+private val APPLICATION_SCOPES = arrayOf(
+    // We don't use sync, however, if we later add the sync scope, already authenticated users
+    // will have to log in again. To avoid this in the future, we preemptively declare a sync scope.
+    "https://identity.mozilla.com/apps/oldsync"
+)
+
 /**
  * Manages Firefox Account (FxA) state. In particular, [accountStateDontUseMeYet] exposes the current sign in
  * state of the user. If you want to initiate sign in, see [FxaLoginUseCase.beginLogin].
@@ -111,11 +117,11 @@ class FxaRepo(
             return FxaAccountManager(
                 context,
                 Config.release(CLIENT_ID, REDIRECT_URI),
-                applicationScopes = arrayOf("profile", "https://identity.mozilla.com/apps/oldsync"), // todo: proper vals?
+                applicationScopes = APPLICATION_SCOPES,
                 deviceTuple = DeviceTuple(
-                    name = "Firefox for Fire TV",
-                    type = DeviceType.MOBILE, // todo: proper values?
-                    capabilities = listOf(DeviceCapability.SEND_TAB) // todo: proper values?
+                    name = "Firefox for Fire TV", // TODO: #2516 choose final value.
+                    type = DeviceType.MOBILE, // TODO: appservices is considering adding DeviceType.TV.
+                    capabilities = listOf(DeviceCapability.SEND_TAB) // required to receive tabs.
                 )
             )
         }
