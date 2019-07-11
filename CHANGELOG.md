@@ -9,6 +9,7 @@ It diverges in the following ways:
 
 ## Unreleased
 ### Added
+- QA: command-line control to set current locale (#2418)
 
 ### Changed
 
