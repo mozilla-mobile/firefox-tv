@@ -1,6 +1,7 @@
 package org.mozilla.tv.firefox.ext
 
-import java.util.*
+import java.util.Locale
+
 
 /**
  * Returns true if the following is true for _any_ of the elements in [allowedLocales]:
@@ -13,6 +14,6 @@ fun Locale.languageAndMaybeCountryMatch(allowedLocales: Array<out Locale>?): Boo
         val languageMatches = allowed.language == this.language
         val countryMatches = allowed.country.isEmpty() ||
                 allowed.country == this.country
-        return languageMatches && countryMatches
+        return@any languageMatches && countryMatches
     }
 }
