@@ -25,8 +25,14 @@ private val logger = Logger("FxaLoginUseCase")
  * reported to us. On success, our observer in this class transmits the results from the engine view back to the FxA
  * library. After that, control of FxA state is returned to the [fxaRepo].
  *
- * This class was created as a "super repo": it allows repos to interact with each other without having
- * references to each other, eliminating possible circular dependencies.
+ * This class is designed to allows repos to interact with each other without references to each other,
+ * allowing each repo to operate independently of other repos, simplifying state.
+ *
+ * FxaRepo    SessionRepo
+ *    |            |
+ *     ------------
+ *           |
+ *    FxaLoginUseCase
  */
 class FxaLoginUseCase(
     private val fxaRepo: FxaRepo,
