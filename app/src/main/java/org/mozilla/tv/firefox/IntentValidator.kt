@@ -109,7 +109,7 @@ object IntentValidator {
     }
 
     private fun setQALocaleOverride(intent: SafeIntent, context: Context) {
-        val selectedLocale = intent.extras?.getString(EXTRA_SELECTED_LOCALE)?:return
+        val selectedLocale = intent.extras?.getString(EXTRA_SELECTED_LOCALE) ?: return
         val localeManager = LocaleManager.getInstance()
         localeManager.setSelectedLocale(context, selectedLocale)
     }
