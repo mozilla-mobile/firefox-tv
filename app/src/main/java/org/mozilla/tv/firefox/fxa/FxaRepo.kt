@@ -77,7 +77,11 @@ class FxaRepo(
         override fun onAuthenticated(account: OAuthAccount) {
             Log.d(LOGTAG, "onAuthenticated")
             // todo: is this correct?
-            val nextState = if (accountManager.accountProfile() != null) AUTHENTICATED else AUTHENTICATED_NO_PROFILE
+            val nextState = if (accountManager.accountProfile() != null) {
+                AUTHENTICATED
+            } else {
+                AUTHENTICATED_NO_PROFILE
+            }
             accountStateDontUseMeYet.onNext(nextState)
         }
 
