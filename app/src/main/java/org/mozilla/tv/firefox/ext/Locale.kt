@@ -1,5 +1,6 @@
 package org.mozilla.tv.firefox.ext
 
+import org.mozilla.tv.firefox.architecture.KillswitchLocales
 import java.util.Locale
 
 
@@ -15,5 +16,12 @@ fun Locale.languageAndMaybeCountryMatch(allowedLocales: Array<out Locale>?): Boo
         val countryMatches = allowed.country.isEmpty() ||
                 allowed.country == this.country
         return@any languageMatches && countryMatches
+    }
+}
+
+fun Locale.languageAndMaybeCountryMatch(allowedLocales: KillswitchLocales): Boolean {
+    return when (allowedLocales) {
+        is KillswitchLocales.All -> true
+        is KillswitchLocales.ActiveIn -> this.languageAndMaybeCountryMatch(allowedLocales.locales)
     }
 }
