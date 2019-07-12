@@ -219,8 +219,9 @@ public class LocaleManager {
     }
 
     public void resetLocaleIfChanged(Context context) {
-        if (currentLocale != systemLocale)
+        if (currentLocale != systemLocale) {
             resetToSystemLocale(context);
+        }
     }
 
     public void resetToSystemLocale(Context context) {
@@ -282,7 +283,6 @@ public class LocaleManager {
      *  there could be odd behaviour with differing
      *  locale information.
      */
-
     @NonNull
     public Locale getCurrentLocale(@NonNull Context context) {
         if (currentLocale != null) {
