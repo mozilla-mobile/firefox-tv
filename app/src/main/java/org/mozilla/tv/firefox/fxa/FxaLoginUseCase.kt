@@ -63,7 +63,8 @@ class FxaLoginUseCase(
     }
 
     init {
-        attachFxaLoginSuccessObserver() // @Suppress cannot be used on an initializer so we call a helper method.
+        // @Suppress cannot be used on an initializer so we call a helper method.
+        attachFxaLoginSuccessObserver()
     }
 
     @Suppress("CheckResult") // no need to dispose: sessionRepo is active for the duration of the app.
