@@ -10,11 +10,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import mozilla.components.service.fxa.manager.FxaAccountManager
+import mozilla.components.support.base.log.logger.Logger
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
 
-private const val LOGTAG = "FxaLoginUseCase"
+private val logger = Logger("FxaLoginUseCase")
 
 /**
  * Manages login with a Firefox Account (FxA).
@@ -46,7 +47,7 @@ class FxaLoginUseCase(
             // This may be null when the FxA library fails to do things internally, mostly likely due to network issues.
             if (loginUri == null) {
                 sentryIntegration.captureAndLogError(
-                    LOGTAG, IllegalStateException("beginAuthenticationAsync returned null loginUri"))
+                    logger, IllegalStateException("beginAuthenticationAsync returned null loginUri"))
                 return@launch
             }
 
@@ -83,7 +84,7 @@ class FxaLoginUseCase(
                     // Since we received a login success URL, this is never expected. However, since this action is
                     // controlled by a server, we don't want to crash the app so we log to Sentry instead.
                     sentryIntegration.captureAndLogError(
-                        LOGTAG, IllegalStateException("Received success URI but success keys cannot be found"))
+                        logger, IllegalStateException("Received success URI but success keys cannot be found"))
                     return@subscribe
                 }
 
