@@ -5,7 +5,6 @@
 package org.mozilla.tv.firefox.fxa
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ProcessLifecycleOwner
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.Deferred
@@ -19,12 +18,13 @@ import mozilla.components.concept.sync.OAuthAccount
 import mozilla.components.concept.sync.Profile
 import mozilla.components.service.fxa.manager.DeviceTuple
 import mozilla.components.service.fxa.manager.FxaAccountManager
+import mozilla.components.support.base.log.logger.Logger
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AUTHENTICATED
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AUTHENTICATED_NO_PROFILE
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NEEDS_REAUTHENTICATION
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NOT_AUTHENTICATED
 
-private const val LOGTAG = "FxaRepo"
+private val logger = Logger("FxaRepo")
 
 private val APPLICATION_SCOPES = arrayOf(
     // We don't use sync, however, if we later add the sync scope, already authenticated users
@@ -75,7 +75,7 @@ class FxaRepo(
 
     private inner class FirefoxAccountObserver : AccountObserver {
         override fun onAuthenticated(account: OAuthAccount) {
-            Log.d(LOGTAG, "onAuthenticated")
+            logger.debug("onAuthenticated")
             // todo: is this correct?
             val nextState = if (accountManager.accountProfile() != null) {
                 AUTHENTICATED
@@ -86,29 +86,29 @@ class FxaRepo(
         }
 
         override fun onAuthenticationProblems() {
-            Log.d(LOGTAG, "onAuthenticationProblems")
+            logger.debug("onAuthenticationProblems")
             accountStateDontUseMeYet.onNext(NEEDS_REAUTHENTICATION)
         }
 
         override fun onError(error: Exception) {
             // This is for internal errors in the sync library and is an unexpected state.
-            Log.d(LOGTAG, "onError")
+            logger.debug("onError")
         }
 
         override fun onLoggedOut() {
-            Log.d(LOGTAG, "onLoggedOut")
+            logger.debug("onLoggedOut")
             accountStateDontUseMeYet.onNext(NOT_AUTHENTICATED)
         }
 
         override fun onProfileUpdated(profile: Profile) {
-            Log.d(LOGTAG, "onProfileUpdated")
+            logger.debug("onProfileUpdated")
             // todo: update state.
         }
     }
 
     private inner class FirefoxDeviceEventsObserver : DeviceEventsObserver {
         override fun onEvents(events: List<DeviceEvent>) {
-            Log.d(LOGTAG, "received device events: $events")
+            logger.debug("received device events: $events")
         }
     }
 

@@ -5,11 +5,11 @@
 package org.mozilla.tv.firefox.telemetry
 
 import android.content.Context
-import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.NONE
 import io.sentry.Sentry
 import io.sentry.android.AndroidSentryClientFactory
+import mozilla.components.support.base.log.logger.Logger
 import org.mozilla.tv.firefox.BuildConfig
 import org.mozilla.tv.firefox.settings.SettingsRepo
 
@@ -76,9 +76,9 @@ object SentryIntegration {
      *
      * @see [Sentry.capture]
      */
-    fun captureAndLogError(tag: String, exception: Exception) {
+    fun captureAndLogError(logger: Logger, exception: Exception) {
         // Note: instead, by adding the Log4j dependency, we may be able to get Sentry to log captures to logcat automatically.
-        Log.e(tag, exception.message)
+        logger.error(message = exception.message)
         capture(exception)
     }
 }
