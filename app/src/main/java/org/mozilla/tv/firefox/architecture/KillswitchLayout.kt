@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.VisibleForTesting
 import org.mozilla.tv.firefox.components.locale.LocaleManager
+import org.mozilla.tv.firefox.ext.languageAndMaybeCountryMatch
 import java.util.Locale
 
 sealed class KillswitchLocales {
@@ -91,15 +92,5 @@ class KillswitchLayout : FrameLayout {
         }
 
         super.setVisibility(visibility)
-    }
-}
-
-private fun Locale.languageAndMaybeCountryMatch(allowedLocales: Array<out Locale>?): Boolean {
-    allowedLocales ?: return false
-    return allowedLocales.any { allowed ->
-        val languageMatches = allowed.language == this.language
-        val countryMatches = allowed.country.isEmpty() ||
-            allowed.country == this.country
-        return languageMatches && countryMatches
     }
 }
