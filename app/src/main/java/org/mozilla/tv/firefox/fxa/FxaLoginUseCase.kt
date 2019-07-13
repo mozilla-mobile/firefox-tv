@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.fxa
 
 import android.net.Uri
 import androidx.fragment.app.FragmentManager
+import io.reactivex.Observable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -78,23 +79,27 @@ class FxaLoginUseCase(
             return if (code != null && state != null) LoginSuccessKeys(code = code, state = state) else null
         }
 
-        sessionRepo.state
-            .map { it.currentUrl }
-            .distinctUntilChanged()
-            .subscribe {
-                if (!isLoginSuccessUri(it)) {
-                    return@subscribe
-                }
+        fun Observable<String>.filterMapLoginSuccessKeys(): Observable<LoginSuccessKeys> =
+            this.flatMap { url ->
+                val loginSuccessKeys = extractLoginSuccessKeys(url)
 
-                val loginSuccessKeys = extractLoginSuccessKeys(it)
-                if (loginSuccessKeys == null) {
+                if (loginSuccessKeys != null) {
+                    Observable.just(loginSuccessKeys)
+                } else {
                     // Since we received a login success URL, this is never expected. However, since this action is
                     // controlled by a server, we don't want to crash the app so we log to Sentry instead.
                     sentryIntegration.captureAndLogError(
                         logger, IllegalStateException("Received success URI but success keys cannot be found"))
-                    return@subscribe
+                    Observable.empty()
                 }
+            }
 
+        sessionRepo.state
+            .map { it.currentUrl }
+            .distinctUntilChanged()
+            .filter { isLoginSuccessUri(it) }
+            .filterMapLoginSuccessKeys()
+            .subscribe { loginSuccessKeys ->
                 // TODO: do we want to pop these fxa pages from the user's browsing history?
                 fxaRepo.accountManager.finishAuthenticationAsync(loginSuccessKeys)
             }
