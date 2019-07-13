@@ -15,6 +15,7 @@ import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.channels.ChannelConfig
 import org.mozilla.tv.firefox.channels.ChannelOnboardingActivity
 import org.mozilla.tv.firefox.components.locale.LocaleManager
+import org.mozilla.tv.firefox.ext.languageAndMaybeCountryMatch
 
 /**
  * A simple wrapper for SharedPreferences that makes reading preference a little bit easier.
@@ -51,10 +52,11 @@ class Settings private constructor(context: Context) {
 
     fun shouldShowTVOnboarding(localeManager: LocaleManager, context: Context): Boolean {
         val channelConfig = ChannelConfig.getTvGuideConfig(context)
+        val currentLocale = localeManager.getCurrentLocale(context)
 
         return !preferences.getBoolean(ChannelOnboardingActivity.TV_ONBOARDING_SHOWN_PREF, false) &&
                 channelConfig.isEnabledInCurrentExperiment &&
-                localeManager.currentLanguageIsEnglish(context)
+                currentLocale.languageAndMaybeCountryMatch(channelConfig.enabledInLocales)
     }
 
     fun shouldAutocompleteFromShippedDomainList() = true
