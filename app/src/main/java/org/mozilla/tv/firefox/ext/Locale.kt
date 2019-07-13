@@ -3,7 +3,6 @@ package org.mozilla.tv.firefox.ext
 import org.mozilla.tv.firefox.architecture.KillswitchLocales
 import java.util.Locale
 
-
 /**
  * Returns true if the following is true for _any_ of the elements in [allowedLocales]:
  * 1) Language == [this] language
