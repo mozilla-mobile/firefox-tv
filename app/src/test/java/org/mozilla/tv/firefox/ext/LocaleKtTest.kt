@@ -1,7 +1,12 @@
 package org.mozilla.tv.firefox.ext
 
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.verify
 import org.junit.Assert.*
 import org.junit.Test
+import org.mozilla.tv.firefox.architecture.KillswitchLocales
 import java.util.*
 
 class LocaleKtTest {
@@ -62,4 +67,45 @@ class LocaleKtTest {
 
         assertTrue(Locale.US.languageAndMaybeCountryMatch(arrayOf(Locale.CANADA, allowed)))
     }
+
+    @Test
+    fun `GIVEN all killswitch locale is allowed WHEN any locale is passed THEN should return true`() {
+        val allowed = KillswitchLocales.All
+
+        assertTrue(Locale.US.languageAndMaybeCountryMatch(allowed))
+        assertTrue(Locale.CANADA.languageAndMaybeCountryMatch(allowed))
+        assertTrue(Locale.UK.languageAndMaybeCountryMatch(allowed))
+        assertTrue(Locale.GERMANY.languageAndMaybeCountryMatch(allowed))
+        assertTrue(Locale.CHINA.languageAndMaybeCountryMatch(allowed))
+
+        assertTrue(Locale.ENGLISH.languageAndMaybeCountryMatch(allowed))
+        assertTrue(Locale.GERMAN.languageAndMaybeCountryMatch(allowed))
+        assertTrue(Locale.CHINESE.languageAndMaybeCountryMatch(allowed))
+    }
+
+    @Test
+    fun `WHEN KillswitchLocale ActiveIn is passed THEN overload should be called`() {
+        // Mock extension functions in this class
+        // If this test fails, check if this class has been moved, causing this string to be incorrect
+        mockkStatic("org.mozilla.tv.firefox.ext.LocaleKt")
+
+        val allowed = KillswitchLocales.ActiveIn(Locale.US)
+
+        val locales = listOf(
+                Locale.US,
+                Locale.CANADA,
+                Locale.UK,
+                Locale.GERMANY,
+                Locale.CHINA,
+                Locale.ENGLISH,
+                Locale.GERMAN,
+                Locale.CHINESE
+        )
+
+        locales.forEach { it.languageAndMaybeCountryMatch(allowed) }
+
+        // Verify that languageAndMaybeCountryMatch is called with an array of locales (i.e., the overload)
+        locales.forEach { verify(exactly = 1) { it.languageAndMaybeCountryMatch(any<Array<Locale>>()) } }
+    }
+
 }
