@@ -1,10 +1,9 @@
 package org.mozilla.tv.firefox.ext
 
-import io.mockk.every
-import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.verify
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.mozilla.tv.firefox.architecture.KillswitchLocales
 import java.util.*
@@ -43,7 +42,7 @@ class LocaleKtTest {
 
         assertTrue(Locale.CANADA.languageAndMaybeCountryMatch(arrayOf(allowed)))
     }
-    
+
     @Test
     fun `WHEN an incorrect country AND an incorrect language are passed THEN should return false`() {
         val allowed = Locale.GERMANY
@@ -107,5 +106,4 @@ class LocaleKtTest {
         // Verify that languageAndMaybeCountryMatch is called with an array of locales (i.e., the overload)
         locales.forEach { verify(exactly = 1) { it.languageAndMaybeCountryMatch(any<Array<Locale>>()) } }
     }
-
 }
