@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 package org.mozilla.tv.firefox.ext
 
 import io.mockk.mockkStatic
@@ -7,6 +11,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.mozilla.tv.firefox.architecture.KillswitchLocales
 import java.util.*
+
+private const val LOCALE_EXT_PACKAGE = "org.mozilla.tv.firefox.ext.LocaleKt"
 
 class LocaleKtTest {
 
@@ -86,7 +92,7 @@ class LocaleKtTest {
     fun `WHEN KillswitchLocale ActiveIn is passed THEN overload should be called`() {
         // Mock extension functions in this class
         // If this test fails, check if this class has been moved, causing this string to be incorrect
-        mockkStatic("org.mozilla.tv.firefox.ext.LocaleKt")
+        mockkStatic(LOCALE_EXT_PACKAGE)
 
         val allowed = KillswitchLocales.ActiveIn(Locale.US)
 
