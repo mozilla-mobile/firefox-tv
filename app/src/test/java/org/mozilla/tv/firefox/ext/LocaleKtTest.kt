@@ -12,7 +12,7 @@ import org.junit.Test
 import org.mozilla.tv.firefox.architecture.KillswitchLocales
 import java.util.*
 
-private const val LOCALE_EXT_PACKAGE = "org.mozilla.tv.firefox.ext.LocaleKt"
+private const val LOCALE_EXT_FILE = "org.mozilla.tv.firefox.ext.LocaleKt"
 
 class LocaleKtTest {
 
@@ -92,7 +92,7 @@ class LocaleKtTest {
     fun `WHEN KillswitchLocale ActiveIn is passed THEN overload should be called`() {
         // Mock extension functions in this class
         // If this test fails, check if this class has been moved, causing this string to be incorrect
-        mockkStatic(LOCALE_EXT_PACKAGE)
+        mockkStatic(LOCALE_EXT_FILE)
 
         val allowed = KillswitchLocales.ActiveIn(Locale.US)
 
