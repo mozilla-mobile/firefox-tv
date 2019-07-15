@@ -7,15 +7,9 @@ It diverges in the following ways:
 - This project only strictly adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html) for bug fix releases.
 
-## Unreleased
+## 4.0 - 2019-07-15
 ### Added
 - QA: command-line control to set current locale (#2418)
-
-### Changed
-
-### Fixed
-
-## 4.0 - 2019-07-15
 
 ### Fixed
 - Crash when last tile deleted (#2444)
