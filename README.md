@@ -25,8 +25,10 @@ we're available Monday-Friday, GMT and PST working hours.
 * Mailing list:
 [firefox-focus-public@](https://mail.mozilla.org/listinfo/firefox-focus-public)
 
-
 ## Build instructions
+Dependencies:
+- Java 8, *not the latest version* (for building via the command line)
+
 1. Clone the repository:
 
   ```shell
