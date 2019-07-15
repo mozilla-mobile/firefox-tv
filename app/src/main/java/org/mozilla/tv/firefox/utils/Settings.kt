@@ -51,6 +51,8 @@ class Settings private constructor(context: Context) {
             !preferences.getBoolean(OnboardingActivity.ONBOARD_SHOWN_PREF, false)
 
     fun shouldShowTVOnboarding(localeManager: LocaleManager, context: Context): Boolean {
+        // Note that this method duplicates some logic found in KillswitchLayout. Make sure
+        // that any changes made in one place are reflected in the other as well.
         val channelConfig = ChannelConfig.getTvGuideConfig(context)
         val currentLocale = localeManager.getCurrentLocale(context)
 

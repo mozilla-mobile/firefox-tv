@@ -65,6 +65,9 @@ class KillswitchLayout : FrameLayout {
      * Otherwise, sets visibility as usual
      */
     override fun setVisibility(visibility: Int) {
+        // Note that this method duplicates some logic found in Settings.shouldShowTVOnboarding.
+        // Make sure that any changes made in one place are reflected in the other as well.
+
         this.desiredVisibility = visibility
         val context = context ?: return
         val isAllowedByCurrentExperiment = this.isAllowedByCurrentExperiment
