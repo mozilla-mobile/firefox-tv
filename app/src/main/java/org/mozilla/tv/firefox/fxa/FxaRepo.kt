@@ -16,7 +16,7 @@ import mozilla.components.concept.sync.DeviceEventsObserver
 import mozilla.components.concept.sync.DeviceType
 import mozilla.components.concept.sync.OAuthAccount
 import mozilla.components.concept.sync.Profile
-import mozilla.components.service.fxa.manager.DeviceTuple
+import mozilla.components.service.fxa.DeviceConfig
 import mozilla.components.service.fxa.manager.FxaAccountManager
 import mozilla.components.support.base.log.logger.Logger
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AUTHENTICATED
@@ -26,7 +26,7 @@ import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NOT_AUTHENTICATED
 
 private val logger = Logger("FxaRepo")
 
-private val APPLICATION_SCOPES = arrayOf(
+private val APPLICATION_SCOPES = setOf(
     // We don't use sync, however, if we later add the sync scope, already authenticated users
     // will have to log in again. To avoid this in the future, we preemptively declare a sync scope.
     "https://identity.mozilla.com/apps/oldsync"
@@ -90,11 +90,6 @@ class FxaRepo(
             accountStateDontUseMeYet.onNext(NEEDS_REAUTHENTICATION)
         }
 
-        override fun onError(error: Exception) {
-            // This is for internal errors in the sync library and is an unexpected state.
-            logger.debug("onError")
-        }
-
         override fun onLoggedOut() {
             logger.debug("onLoggedOut")
             accountStateDontUseMeYet.onNext(NOT_AUTHENTICATED)
@@ -122,11 +117,12 @@ class FxaRepo(
                 context,
                 Config.release(CLIENT_ID, REDIRECT_URI),
                 applicationScopes = APPLICATION_SCOPES,
-                deviceTuple = DeviceTuple(
+                deviceConfig = DeviceConfig(
                     name = "Firefox for Fire TV", // TODO: #2516 choose final value.
                     type = DeviceType.MOBILE, // TODO: appservices is considering adding DeviceType.TV.
-                    capabilities = listOf(DeviceCapability.SEND_TAB) // required to receive tabs.
-                )
+                    capabilities = setOf(DeviceCapability.SEND_TAB) // required to receive tabs.
+                ),
+                syncConfig = null
             )
         }
     }
