@@ -14,7 +14,7 @@ import androidx.core.view.isVisible
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.hint_bar.view.hintBarText
-import mozilla.components.support.ktx.android.content.res.pxToDp
+import mozilla.components.support.ktx.android.util.dpToPx
 
 private const val IMAGE = "\$IMAGE"
 private const val IMAGE_SIZE_DP = 24
@@ -76,7 +76,7 @@ object HintBinder {
                 val imageStart = hint.text.indexOf(IMAGE)
                 val imageEnd = imageStart + IMAGE.length
                 val image = hintContainer.context.getDrawable(hint.icon)!!
-                val imageSize = resources.pxToDp(IMAGE_SIZE_DP)
+                val imageSize = IMAGE_SIZE_DP.dpToPx(resources.displayMetrics)
                 image.setBounds(0, 0, imageSize, imageSize)
                 val imageSpan = ImageSpan(image, ImageSpan.ALIGN_BOTTOM)
                 spannableBuilder.setSpan(imageSpan, imageStart, imageEnd, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)

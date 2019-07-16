@@ -29,7 +29,7 @@ import mozilla.components.concept.engine.EngineView
 import mozilla.components.concept.engine.permission.Permission
 import mozilla.components.concept.engine.permission.PermissionRequest
 import mozilla.components.feature.session.SessionFeature
-import mozilla.components.support.ktx.android.content.res.pxToDp
+import mozilla.components.support.ktx.android.util.dpToPx
 import mozilla.components.support.ktx.android.view.use
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.MediaSessionHolder
@@ -200,7 +200,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         val (hintViewModel, progressBarBottomMargin) = if (serviceLocator!!.experimentsProvider.shouldShowHintBar()) {
             FirefoxViewModelProviders.of(this).get(WebRenderHintViewModel::class.java) to
-                    resources.pxToDp(64)
+                64.dpToPx(resources.displayMetrics)
         } else {
             InactiveHintViewModel() to 0
         }
