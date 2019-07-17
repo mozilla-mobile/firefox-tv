@@ -14,6 +14,7 @@ It diverges in the following ways:
 ### Changed
 
 ### Fixed
+- Partial fix for poorly formatted videos (#2386)
 
 ## 4.0 - 2019-07-15
 
