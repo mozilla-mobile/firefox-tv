@@ -54,6 +54,7 @@ var _firefoxTV_isPlaybackStateObserverLoaded;
     function onDOMChangedForVideos() {
         addPlaybackStateListeners();
         syncPlaybackState();
+        adjustVideoCSS();
     }
 
     function addPlaybackStateListeners() {
@@ -88,6 +89,18 @@ var _firefoxTV_isPlaybackStateObserverLoaded;
         schedulePlaybackStateSyncInterval(isPlaying);
 
         javaInterface.syncPlaybackState(isVideoPresent, isPlaying, positionSeconds, playbackRate);
+    }
+
+    function adjustVideoCSS() {
+        const rawVideoElements = document.getElementsByTagName('video');
+        // Extract elements from HTMLCollection and collect them into an Array
+        const videoElements = new Array(...rawVideoElements);
+
+        videoElements.forEach((vid) => {
+            vid.style.left = '0px';
+            vid.style.transform = 'translate(0px, 0px)';
+            console.log('FFTV - adjusted video tag CSS')
+        });
     }
 
     /**
