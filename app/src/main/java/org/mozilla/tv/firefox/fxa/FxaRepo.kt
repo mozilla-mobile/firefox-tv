@@ -19,10 +19,11 @@ import mozilla.components.concept.sync.Profile
 import mozilla.components.service.fxa.DeviceConfig
 import mozilla.components.service.fxa.manager.FxaAccountManager
 import mozilla.components.support.base.log.logger.Logger
-import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AUTHENTICATED
+import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AUTHENTICATED_WITH_PROFILE
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AUTHENTICATED_NO_PROFILE
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NEEDS_REAUTHENTICATION
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NOT_AUTHENTICATED
+import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.INITIAL
 
 private val logger = Logger("FxaRepo")
 
@@ -33,7 +34,7 @@ private val APPLICATION_SCOPES = setOf(
 )
 
 /**
- * Manages Firefox Account (FxA) state. In particular, [accountStateDontUseMeYet] exposes the current sign in
+ * Manages Firefox Account (FxA) state. In particular, [accountState] exposes the current sign in
  * state of the user. If you want to initiate sign in, see [FxaLoginUseCase.beginLogin].
  *
  * Devs should use this class rather than interacting with the FxA library directly.
@@ -44,17 +45,16 @@ class FxaRepo(
 ) {
 
     enum class AccountState {
-        // TODO: Are these states accurate?
         // TODO: Later, may need "failed to login": https://github.com/mozilla-mobile/android-components/issues/3712
-        AUTHENTICATED,
-        AUTHENTICATED_NO_PROFILE, // todo: necessary? profile seems to be fetched async so yes?
-        NEEDS_REAUTHENTICATION,
-        NOT_AUTHENTICATED
-        // TODO: do we need initial state before state is fetched from disk?
+        AUTHENTICATED_WITH_PROFILE, // After the profile is fetched async
+        AUTHENTICATED_NO_PROFILE, // Before the profile is fetched async
+        NEEDS_REAUTHENTICATION, // When an auth error occurs
+        NOT_AUTHENTICATED, // When logged out
+        INITIAL // Behaves the same as NOT_AUTHENTICATED
     }
 
     // TODO: set state accurately, choose correct subject, set initial state, etc.
-    val accountStateDontUseMeYet = BehaviorSubject.create<AccountState>()
+    val accountState = BehaviorSubject.createDefault(INITIAL)
 
     init {
         accountManager.register(FirefoxAccountObserver())
@@ -74,30 +74,32 @@ class FxaRepo(
     }
 
     private inner class FirefoxAccountObserver : AccountObserver {
+        /**
+         * The account profile is fetched asynchronously.
+         * There is no way to transition from [NOT_AUTHENTICATED] directly to [AUTHENTICATED_WITH_PROFILE];
+         * [AUTHENTICATED_NO_PROFILE] is always a state in between.
+         */
         override fun onAuthenticated(account: OAuthAccount) {
             logger.debug("onAuthenticated")
-            // todo: is this correct?
-            val nextState = if (accountManager.accountProfile() != null) {
-                AUTHENTICATED
-            } else {
-                AUTHENTICATED_NO_PROFILE
-            }
-            accountStateDontUseMeYet.onNext(nextState)
+            accountState.onNext(AUTHENTICATED_NO_PROFILE)
         }
 
         override fun onAuthenticationProblems() {
             logger.debug("onAuthenticationProblems")
-            accountStateDontUseMeYet.onNext(NEEDS_REAUTHENTICATION)
+            accountState.onNext(NEEDS_REAUTHENTICATION)
         }
 
         override fun onLoggedOut() {
             logger.debug("onLoggedOut")
-            accountStateDontUseMeYet.onNext(NOT_AUTHENTICATED)
+            accountState.onNext(NOT_AUTHENTICATED)
         }
 
+        /**
+         * This is called when the profile is first fetched after sign-in.
+         */
         override fun onProfileUpdated(profile: Profile) {
             logger.debug("onProfileUpdated")
-            // todo: update state.
+            accountState.onNext(AUTHENTICATED_WITH_PROFILE)
         }
     }
 
