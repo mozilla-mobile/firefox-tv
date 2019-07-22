@@ -53,8 +53,8 @@ var _firefoxTV_isPlaybackStateObserverLoaded;
 
     function onDOMChangedForVideos() {
         addPlaybackStateListeners();
-        syncPlaybackState();
         adjustVideoCSS();
+        syncPlaybackState();
     }
 
     function addPlaybackStateListeners() {
