@@ -122,8 +122,7 @@ class FxaRepo(
     }
 
     companion object {
-        // TODO #2506: use production FFTV client ID (this ID is from an FxA sample app).
-        private const val CLIENT_ID = "a2270f727f45f648"
+        private const val CLIENT_ID = "85da77264642d6a1"
         const val REDIRECT_URI = "https://accounts.firefox.com/oauth/success/$CLIENT_ID"
 
         private fun newInstanceDefaultAccountManager(context: Context): FxaAccountManager {
