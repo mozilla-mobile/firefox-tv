@@ -16,7 +16,7 @@ import io.reactivex.subjects.PublishSubject
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen.WEB_RENDER
 import org.mozilla.tv.firefox.ext.isKeyCodeSelect
-import org.mozilla.tv.firefox.ext.isUriMozSignIn
+import org.mozilla.tv.firefox.ext.isUriFxaSignIn
 import org.mozilla.tv.firefox.ext.isUriYouTubeTV
 import org.mozilla.tv.firefox.ext.toDirection
 import org.mozilla.tv.firefox.framework.FrameworkRepo
@@ -136,7 +136,7 @@ class CursorModel(
         // We only display the cursor when the web content is active.
         val isWebRenderActive = activeScreen == WEB_RENDER
         val doesWebpageHaveOwnNavControls = sessionState.currentUrl.isUriYouTubeTV ||
-            sessionState.currentUrl.isUriMozSignIn ||
+            sessionState.currentUrl.isUriFxaSignIn ||
             isVoiceViewEnabled
         isWebRenderActive && !doesWebpageHaveOwnNavControls
     }

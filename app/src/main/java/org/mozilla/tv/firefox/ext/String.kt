@@ -86,5 +86,5 @@ val String.isUriYouTubeTvVideo: Boolean
     get() = this.isUriYouTubeTV &&
             this.contains("/watch/")
 
-val String.isUriMozSignIn: Boolean
+val String.isUriFxaSignIn: Boolean
     get() = this.startsWith("https://accounts.firefox.com/authorization")
