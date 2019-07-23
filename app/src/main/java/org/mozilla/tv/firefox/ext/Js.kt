@@ -53,7 +53,7 @@ var _firefoxTV_isPlaybackStateObserverLoaded;
 
     function onDOMChangedForVideos() {
         addPlaybackStateListeners();
-        adjustVideoCSS();
+        removeNegativeTranslationCSSCentering();
         syncPlaybackState();
     }
 
@@ -91,15 +91,31 @@ var _firefoxTV_isPlaybackStateObserverLoaded;
         javaInterface.syncPlaybackState(isVideoPresent, isPlaying, positionSeconds, playbackRate);
     }
 
-    function adjustVideoCSS() {
+    /*
+     * When a video has left=50% & transform=translateX(-50%) properties (a common CSS centering
+     * trick), videos are pushed outside their containers: if we see similar properties, we remove
+     * them as a workaround. #2526
+     */
+    function removeNegativeTranslationCSSCentering() {
         const rawVideoElements = document.getElementsByTagName('video');
         // Extract elements from HTMLCollection and collect them into an Array
         const videoElements = new Array(...rawVideoElements);
 
         videoElements.forEach((vid) => {
-            vid.style.left = '0px';
-            vid.style.transform = 'translate(0px, 0px)';
-            console.log('FFTV - adjusted video tag CSS')
+            const style = window.getComputedStyle(vid);
+            const left = parseFloat(style.left); /* style.left is e.g. "320px" */
+
+            /* The matrix's 4th column, 1st row (m41) represents the X translation.
+             * See: https://stackoverflow.com/a/42267468
+             */
+            const translateX = new DOMMatrix(style.transform).m41;
+
+            const translateNegatesLeft = left + translateX === 0;
+            if (translateNegatesLeft) {
+                vid.style.left = '0px';
+                vid.style.transform = 'translate(0px, 0px)';
+                console.log('FFTV - adjusted video tag CSS')
+            }
         });
     }
 
