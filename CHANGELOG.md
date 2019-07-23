@@ -14,7 +14,7 @@ It diverges in the following ways:
 ### Changed
 
 ### Fixed
-- Videos on many sites are displayed offset, with a black strip pushing content off of the page.  Solved one of the issues that led to that, fixing some broken videos (#2386)
+- Prevent some videos from being offset to the right, with a black strip on the left. (#2526)
 
 ## 4.0 - 2019-07-15
 

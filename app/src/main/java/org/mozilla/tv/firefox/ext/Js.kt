@@ -97,24 +97,21 @@ var _firefoxTV_isPlaybackStateObserverLoaded;
      * them as a workaround. #2526
      */
     function removeNegativeTranslationCSSCentering() {
-        const rawVideoElements = document.getElementsByTagName('video');
-        // Extract elements from HTMLCollection and collect them into an Array
-        const videoElements = new Array(...rawVideoElements);
+        const videoElements = document.querySelectorAll('video');
 
         videoElements.forEach((vid) => {
             const style = window.getComputedStyle(vid);
             const left = parseFloat(style.left); /* style.left is e.g. "320px" */
 
             /* The matrix's 4th column, 1st row (m41) represents the X translation.
-             * See: https://stackoverflow.com/a/42267468
-             */
+             * See: https://stackoverflow.com/a/42267468 */
             const translateX = new DOMMatrix(style.transform).m41;
 
             const translateNegatesLeft = left + translateX === 0;
             if (translateNegatesLeft) {
                 vid.style.left = '0px';
                 vid.style.transform = 'translate(0px, 0px)';
-                console.log('FFTV - adjusted video tag CSS')
+                console.log('FFTV - adjusted video tag CSS');
             }
         });
     }
