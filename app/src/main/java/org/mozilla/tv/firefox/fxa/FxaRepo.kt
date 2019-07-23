@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.fxa
 
 import android.content.Context
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ProcessLifecycleOwner
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.Deferred
@@ -53,11 +54,14 @@ class FxaRepo(
         INITIAL // Behaves the same as NOT_AUTHENTICATED
     }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    val accountObserver = FirefoxAccountObserver()
+
     // TODO: set state accurately, choose correct subject, set initial state, etc.
     val accountState = BehaviorSubject.createDefault(INITIAL)
 
     init {
-        accountManager.register(FirefoxAccountObserver())
+        accountManager.register(accountObserver)
         accountManager.registerForDeviceEvents(FirefoxDeviceEventsObserver(), ProcessLifecycleOwner.get(),
             autoPause = false /* Avoid pausing even when the app is backgrounded. */)
 
@@ -73,7 +77,7 @@ class FxaRepo(
         return accountManager.beginAuthenticationAsync()
     }
 
-    private inner class FirefoxAccountObserver : AccountObserver {
+    inner class FirefoxAccountObserver : AccountObserver {
         /**
          * The account profile is fetched asynchronously.
          * There is no way to transition from [NOT_AUTHENTICATED] directly to [AUTHENTICATED_WITH_PROFILE];
