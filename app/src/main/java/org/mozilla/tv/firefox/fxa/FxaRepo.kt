@@ -24,7 +24,6 @@ import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AUTHENTICATED_WITH_PROFIL
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AUTHENTICATED_NO_PROFILE
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NEEDS_REAUTHENTICATION
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NOT_AUTHENTICATED
-import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.INITIAL
 
 private val logger = Logger("FxaRepo")
 
@@ -49,16 +48,15 @@ class FxaRepo(
         // TODO: Later, may need "failed to login": https://github.com/mozilla-mobile/android-components/issues/3712
         AUTHENTICATED_WITH_PROFILE, // After the profile is fetched async
         AUTHENTICATED_NO_PROFILE, // Before the profile is fetched async
-        NEEDS_REAUTHENTICATION, // When an auth error occurs
-        NOT_AUTHENTICATED, // When logged out
-        INITIAL // Behaves the same as NOT_AUTHENTICATED
+        NEEDS_REAUTHENTICATION,
+        NOT_AUTHENTICATED // Initial state
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     val accountObserver = FirefoxAccountObserver()
 
     // TODO: set state accurately, choose correct subject, set initial state, etc.
-    val accountState = BehaviorSubject.createDefault(INITIAL)
+    val accountState = BehaviorSubject.createDefault(NOT_AUTHENTICATED)
 
     init {
         accountManager.register(accountObserver)

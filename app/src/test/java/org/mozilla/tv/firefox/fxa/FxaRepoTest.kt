@@ -40,8 +40,8 @@ class FxaRepoTest {
     }
 
     @Test
-    fun `WHEN fxa repo is initialized THEN account state is initial`() {
-        accountStateTestObs.assertValue(FxaRepo.AccountState.INITIAL)
+    fun `WHEN fxa repo is initialized THEN account state is not authenticated`() {
+        accountStateTestObs.assertValue(FxaRepo.AccountState.NOT_AUTHENTICATED)
     }
 
     @Test
