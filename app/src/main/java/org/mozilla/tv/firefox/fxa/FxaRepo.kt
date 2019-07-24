@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox.fxa
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ProcessLifecycleOwner
+import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.Deferred
 import mozilla.appservices.fxaclient.Config
@@ -20,8 +21,8 @@ import mozilla.components.concept.sync.Profile
 import mozilla.components.service.fxa.DeviceConfig
 import mozilla.components.service.fxa.manager.FxaAccountManager
 import mozilla.components.support.base.log.logger.Logger
-import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AUTHENTICATED_WITH_PROFILE
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AUTHENTICATED_NO_PROFILE
+import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AUTHENTICATED_WITH_PROFILE
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NEEDS_REAUTHENTICATION
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NOT_AUTHENTICATED
 
@@ -55,8 +56,8 @@ class FxaRepo(
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     val accountObserver = FirefoxAccountObserver()
 
-    // TODO: set state accurately, choose correct subject, set initial state, etc.
-    val accountState = BehaviorSubject.createDefault(NOT_AUTHENTICATED)
+    private val _accountState: BehaviorSubject<AccountState> = BehaviorSubject.createDefault(NOT_AUTHENTICATED)
+    val accountState: Observable<AccountState> = _accountState.hide()
 
     init {
         accountManager.register(accountObserver)
@@ -84,17 +85,17 @@ class FxaRepo(
          */
         override fun onAuthenticated(account: OAuthAccount) {
             logger.debug("onAuthenticated")
-            accountState.onNext(AUTHENTICATED_NO_PROFILE)
+            _accountState.onNext(AUTHENTICATED_NO_PROFILE)
         }
 
         override fun onAuthenticationProblems() {
             logger.debug("onAuthenticationProblems")
-            accountState.onNext(NEEDS_REAUTHENTICATION)
+            _accountState.onNext(NEEDS_REAUTHENTICATION)
         }
 
         override fun onLoggedOut() {
             logger.debug("onLoggedOut")
-            accountState.onNext(NOT_AUTHENTICATED)
+            _accountState.onNext(NOT_AUTHENTICATED)
         }
 
         /**
@@ -102,7 +103,7 @@ class FxaRepo(
          */
         override fun onProfileUpdated(profile: Profile) {
             logger.debug("onProfileUpdated")
-            accountState.onNext(AUTHENTICATED_WITH_PROFILE)
+            _accountState.onNext(AUTHENTICATED_WITH_PROFILE)
         }
     }
 
