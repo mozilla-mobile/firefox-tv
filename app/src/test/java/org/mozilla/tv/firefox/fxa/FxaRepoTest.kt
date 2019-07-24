@@ -9,8 +9,8 @@ import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
+import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
-import io.reactivex.subjects.BehaviorSubject
 import mozilla.components.concept.sync.OAuthAccount
 import mozilla.components.concept.sync.Profile
 import mozilla.components.service.fxa.manager.FxaAccountManager
@@ -22,7 +22,7 @@ class FxaRepoTest {
     @MockK(relaxed = true) private lateinit var accountManager: FxaAccountManager
 
     private lateinit var fxaRepo: FxaRepo
-    private lateinit var accountState: BehaviorSubject<FxaRepo.AccountState>
+    private lateinit var accountState: Observable<FxaRepo.AccountState>
     private lateinit var accountStateTestObs: TestObserver<FxaRepo.AccountState>
 
     @Before
