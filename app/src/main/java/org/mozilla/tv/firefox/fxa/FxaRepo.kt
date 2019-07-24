@@ -77,6 +77,7 @@ class FxaRepo(
         return accountManager.beginAuthenticationAsync()
     }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     inner class FirefoxAccountObserver : AccountObserver {
         /**
          * The account profile is fetched asynchronously.
