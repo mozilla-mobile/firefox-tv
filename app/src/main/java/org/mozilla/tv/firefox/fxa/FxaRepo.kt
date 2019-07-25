@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.fxa
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.NONE
 import androidx.lifecycle.ProcessLifecycleOwner
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -45,15 +46,28 @@ class FxaRepo(
     val accountManager: FxaAccountManager = newInstanceDefaultAccountManager(context)
 ) {
 
+    /**
+     * The account profile is fetched asynchronously.
+     * There is no way to transition from [NOT_AUTHENTICATED] directly to [AUTHENTICATED_WITH_PROFILE];
+     * [AUTHENTICATED_NO_PROFILE] is always a state in between. Even if the account is saved to disk,
+     * the profile is not and needs to be fetched.
+     */
     enum class AccountState {
         // TODO: Later, may need "failed to login": https://github.com/mozilla-mobile/android-components/issues/3712
-        AUTHENTICATED_WITH_PROFILE, // After the profile is fetched async
+        /**
+         *  After the profile is fetched async
+         */
+        AUTHENTICATED_WITH_PROFILE,
+        /**
+         *  Before the profile is fetched async.
+         *  If the profile is null, this is the resulting state.
+         */
         AUTHENTICATED_NO_PROFILE, // Before the profile is fetched async
         NEEDS_REAUTHENTICATION,
         NOT_AUTHENTICATED // Initial state
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    @VisibleForTesting(otherwise = NONE)
     val accountObserver = FirefoxAccountObserver()
 
     private val _accountState: BehaviorSubject<AccountState> = BehaviorSubject.createDefault(NOT_AUTHENTICATED)
@@ -76,25 +90,20 @@ class FxaRepo(
         return accountManager.beginAuthenticationAsync()
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.NONE)
+    /**
+     * See [AccountState] kdoc for more explanation on states.
+     */
+    @VisibleForTesting(otherwise = NONE)
     inner class FirefoxAccountObserver : AccountObserver {
-        /**
-         * The account profile is fetched asynchronously.
-         * There is no way to transition from [NOT_AUTHENTICATED] directly to [AUTHENTICATED_WITH_PROFILE];
-         * [AUTHENTICATED_NO_PROFILE] is always a state in between.
-         */
         override fun onAuthenticated(account: OAuthAccount) {
-            logger.debug("onAuthenticated")
             _accountState.onNext(AUTHENTICATED_NO_PROFILE)
         }
 
         override fun onAuthenticationProblems() {
-            logger.debug("onAuthenticationProblems")
             _accountState.onNext(NEEDS_REAUTHENTICATION)
         }
 
         override fun onLoggedOut() {
-            logger.debug("onLoggedOut")
             _accountState.onNext(NOT_AUTHENTICATED)
         }
 
@@ -102,7 +111,6 @@ class FxaRepo(
          * This is called when the profile is first fetched after sign-in.
          */
         override fun onProfileUpdated(profile: Profile) {
-            logger.debug("onProfileUpdated")
             _accountState.onNext(AUTHENTICATED_WITH_PROFILE)
         }
     }
