@@ -21,7 +21,7 @@ import org.junit.BeforeClass
 import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mozilla.tv.firefox.focus.FocusRepo
+import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayViewModel
 import org.mozilla.tv.firefox.channels.ChannelDetails
 import org.mozilla.tv.firefox.channels.ChannelRepo
@@ -51,7 +51,7 @@ class PinnedTileTest {
     }
 
     @MockK private lateinit var sessionRepo: SessionRepo
-    @MockK private lateinit var focusRepo: FocusRepo
+    @MockK private lateinit var screenController: ScreenController
     @MockK private lateinit var channelRepo: ChannelRepo
     @MockK private lateinit var pinnedTileImageUtilWrapper: PinnedTileImageUtilWrapper
     @MockK private lateinit var formattedDomainWrapper: FormattedDomainWrapper
@@ -66,8 +66,6 @@ class PinnedTileTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        every { focusRepo.focusUpdate } answers { Observable.empty() }
-        every { focusRepo.defaultViewAfterScreenChange } answers { Observable.empty() }
         every { pinnedTileImageUtilWrapper.generatePinnedTilePlaceholder(any()) } answers { drawable }
         every { pinnedTileImageUtilWrapper.getFileForUUID(any()) } answers { file }
         every { formattedDomainWrapper.format(any(), any(), any()) } answers { "" }
@@ -86,7 +84,8 @@ class PinnedTileTest {
         val appContext: Context = ApplicationProvider.getApplicationContext()
         pinnedTileRepo = PinnedTileRepo(appContext)
         overlayVm = NavigationOverlayViewModel(
-                focusRepo,
+                screenController,
+                sessionRepo,
                 channelTitles,
                 channelRepo
         )

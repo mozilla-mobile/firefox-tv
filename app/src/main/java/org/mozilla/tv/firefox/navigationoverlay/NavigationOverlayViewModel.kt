@@ -4,12 +4,15 @@
 
 package org.mozilla.tv.firefox.navigationoverlay
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
+import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.channels.ChannelDetails
 import org.mozilla.tv.firefox.channels.ChannelRepo
-import org.mozilla.tv.firefox.focus.FocusRepo
+import org.mozilla.tv.firefox.session.SessionRepo
+import org.mozilla.tv.firefox.utils.URLs
 
 class ChannelTitles(
     val pinned: String,
@@ -20,15 +23,13 @@ class ChannelTitles(
 )
 
 class NavigationOverlayViewModel(
-    focusRepo: FocusRepo,
-    channelTitles: ChannelTitles,
-    channelRepo: ChannelRepo
+        screenController: ScreenController,
+        sessionRepo: SessionRepo,
+        channelTitles: ChannelTitles,
+        channelRepo: ChannelRepo
 ) : ViewModel() {
 
-    val focusUpdate = focusRepo.focusUpdate
-    val focusRequests: Observable<Int> = focusRepo.defaultViewAfterScreenChange
-            .filter { it.second == ActiveScreen.NAVIGATION_OVERLAY }
-            .map { it.first.viewId }
+    val currentScreen = screenController.currentActiveScreen
 
     val pinnedTiles: Observable<ChannelDetails> = channelRepo.getPinnedTiles()
         .map { ChannelDetails(title = channelTitles.pinned, tileList = it) }
