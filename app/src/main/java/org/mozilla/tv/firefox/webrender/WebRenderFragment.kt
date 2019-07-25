@@ -163,9 +163,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     override fun onStart() {
         super.onStart()
 
-        observeRequestFocus()
-                .addTo(startStopCompositeDisposable)
-
         /**
          * When calling getOrCreateEngineSession(), [SessionManager] lazily creates an [EngineSession]
          * instance and links it with its respective [Session]. During the linking, [SessionManager]
@@ -226,21 +223,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         rootView = null
 
         super.onDestroyView()
-    }
-
-    private fun observeRequestFocus(): Disposable {
-        // EngineView focus may be lost after waking up from sleep & screen saver.
-        // Forcibly request focus onStart(), after DOMElement cache, IFF webRenderFragment
-        // is the current ActiveScreen
-        return webRenderViewModel.focusRequests
-                .subscribe { viewId ->
-                    rootView?.findViewById<View>(viewId).let { viewToFocus ->
-                        // Cache focused DOM element just before WebView gains focus. See comment in
-                        // FocusedDOMElementCacheInterface for details
-                        (viewToFocus as EngineView).focusedDOMElement.cache()
-                        viewToFocus.requestFocus()
-                    }
-                }
     }
 
     fun loadUrl(url: String) {
