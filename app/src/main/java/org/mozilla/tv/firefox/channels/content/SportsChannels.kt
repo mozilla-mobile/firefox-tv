@@ -29,7 +29,7 @@ fun ChannelContent.getSportsChannels(): List<ChannelTile> = listOf(
         url = "https://www.cbssports.com/videos/",
         title = "CBS Sports",
         subtitle = null,
-        setImage = setImage(R.drawable.cursor_active_bg), // TODO add real image
+        setImage = setImage(R.drawable.tile_sports_cbs_sports),
         tileSource = TileSource.SPORTS,
         id = "cbsSports"
     ),
@@ -37,7 +37,7 @@ fun ChannelContent.getSportsChannels(): List<ChannelTile> = listOf(
         url = "https://www.sbnation.com/videos",
         title = "SB Nation",
         subtitle = null,
-        setImage = setImage(R.drawable.cursor_active_bg), // TODO add real image
+        setImage = setImage(R.drawable.tile_sports_sb_nation),
         tileSource = TileSource.SPORTS,
         id = "sbNation"
     )
