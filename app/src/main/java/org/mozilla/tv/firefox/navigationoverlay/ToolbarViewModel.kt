@@ -50,7 +50,9 @@ class ToolbarViewModel(
     // We use events in order to decouple the ViewModel from holding a reference to a context
     val events: LiveData<Consumable<Action>> = _events
 
-    @Suppress("DEPRECATION")
+    @Suppress("DEPRECATION") // LiveData usage is deprecated.  If you need access to this
+    // state, please update this code to use Rx and expose `legacyState` as LiveData for existing
+    // consumers.  See `SessionRepo` for an example
     val state: LiveData<ToolbarViewModel.State> =
         LiveDataCombiners.combineLatest(sessionRepo.legacyState, pinnedTileRepo.legacyPinnedTiles) { sessionState, pinnedTiles ->
 
