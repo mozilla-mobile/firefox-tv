@@ -24,13 +24,5 @@ fun ChannelContent.getSportsChannels(): List<ChannelTile> = listOf(
         setImage = setImage(R.drawable.tile_sports_formula_1),
         tileSource = TileSource.SPORTS,
         id = "formula1"
-    ),
-    ChannelTile(
-        url = "https://www.cbssports.com/videos/",
-        title = "CBS Sports",
-        subtitle = null,
-        setImage = setImage(R.drawable.tile_sports_cbs_sports),
-        tileSource = TileSource.SPORTS,
-        id = "cbsSports"
     )
 )
