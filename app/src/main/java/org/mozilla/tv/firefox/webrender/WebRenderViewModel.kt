@@ -6,5 +6,4 @@ package org.mozilla.tv.firefox.webrender
 
 import androidx.lifecycle.ViewModel
 
-class WebRenderViewModel : ViewModel() {
-}
+class WebRenderViewModel : ViewModel()
