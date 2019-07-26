@@ -31,6 +31,8 @@ class NavigationOverlayViewModel(
 
     val currentScreen = screenController.currentActiveScreen
 
+    val sessionState = sessionRepo.state
+
     val pinnedTiles: Observable<ChannelDetails> = channelRepo.getPinnedTiles()
         .map { ChannelDetails(title = channelTitles.pinned, tileList = it) }
 
