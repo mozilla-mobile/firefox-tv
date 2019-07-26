@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.preference.PreferenceManager
+import android.text.method.KeyListener
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -52,10 +53,12 @@ import org.mozilla.tv.firefox.channels.DefaultChannelFactory
 import org.mozilla.tv.firefox.channels.SettingsChannelAdapter
 import org.mozilla.tv.firefox.channels.SettingsScreen
 import org.mozilla.tv.firefox.pocket.PocketViewModel
+import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.ServiceLocator
+import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 import java.lang.ref.WeakReference
 
@@ -145,6 +148,7 @@ class NavigationOverlayFragment : Fragment() {
     private val musicChannel: DefaultChannel get() = channelReferenceContainer!!.musicChannel
 
     private var rootView: View? = null
+    private var leftMostToolbarView: Int = View.NO_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -198,7 +202,6 @@ class NavigationOverlayFragment : Fragment() {
 
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context!!, R.color.photonGrey10_a60p)) }
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
-
         registerForContextMenu(channelsContainer)
         canShowUnpinToast = true
 
@@ -227,6 +230,8 @@ class NavigationOverlayFragment : Fragment() {
             .forEach { compositeDisposable.add(it) }
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = false)
                 .forEach { compositeDisposable.add(it) }
+        observeToolbarState()
+                .addTo(compositeDisposable)
 
         fxaButton.isVisible = serviceLocator.experimentsProvider.shouldShowSendTab()
     }
@@ -274,6 +279,18 @@ class NavigationOverlayFragment : Fragment() {
             sportsChannel,
             musicChannel
         ).map { channel -> channel.forwardRemoveEventsToRepo() }
+    }
+
+    private fun observeToolbarState(): Disposable {
+        return navigationOverlayViewModel.sessionState
+                .subscribe { state ->
+                    navUrlInput.nextFocusUpId = when {
+                        state.backEnabled -> R.id.navButtonBack
+                        state.forwardEnabled -> R.id.navButtonForward
+                        state.currentUrl != URLs.APP_URL_HOME -> R.id.navButtonReload
+                        else -> R.id.turboButton
+                    }
+                }
     }
 
     private fun observeChannelVisibility(): List<Disposable> {
