@@ -12,6 +12,7 @@ It diverges in the following ways:
 - QA: command-line control to set current locale (#2418)
 
 ### Changed
+- Removed FocusRepo and replaced navigation overlay focus handling (#2395)
 
 ### Fixed
 - Prevent some videos from being offset to the right, with a black strip on the left. (#2526)
