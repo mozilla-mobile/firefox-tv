@@ -159,8 +159,8 @@ class ToolbarViewModelTest {
 
     @Test
     fun `WHEN new session state url is not home THEN no overlay visibility event should be emitted`() {
-        @Suppress("RemoveEmptyParenthesesFromLambdaCall")
-        toolbarVm.events.assertValues(/* No values */) {
+        @Suppress("RemoveEmptyParenthesesFromLambdaCall", "DEPRECATION")
+        toolbarVm.legacyEvents.assertValues(/* No values */) {
             @Suppress("DEPRECATION")
             toolbarVm.legacyState.observeForever { /* start subscription */ }
             pinnedTiles.value = linkedMapOf()
