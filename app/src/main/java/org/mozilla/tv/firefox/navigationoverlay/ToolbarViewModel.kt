@@ -12,13 +12,12 @@ import androidx.lifecycle.LiveDataReactiveStreams
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
+import io.reactivex.subjects.BehaviorSubject
 import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
-import org.mozilla.tv.firefox.ext.LiveDataCombiners
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
-import org.mozilla.tv.firefox.utils.SetOnlyLiveData
 import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.utils.UrlUtils
 
@@ -47,14 +46,16 @@ class ToolbarViewModel(
         object ExitFirefox : Action()
     }
 
-    // Values should be pushed to _events using setValue. Two values are set in
-    // rapid succession using postValue, only the latest will be received
-    private var _events = SetOnlyLiveData<Consumable<Action>>()
-    // Note that events will only emit values if state is observed
     // We use events in order to decouple the ViewModel from holding a reference to a context
-    val events: LiveData<Consumable<Action>> = _events
+    private val _events = BehaviorSubject.create<Consumable<Action>>()
+    val events = _events.hide()
 
-    val state: Observable<State> = Observables.combineLatest(sessionRepo.state, pinnedTileRepo.pinnedTiles) { sessionState, pinnedTiles ->
+    @Deprecated(message = "Use ToolbarViewModel.events for new code")
+    val legacyEvents: LiveData<Consumable<Action>> = LiveDataReactiveStreams
+        .fromPublisher(events.toFlowable(BackpressureStrategy.LATEST))
+
+    val state: Observable<State> = Observables.combineLatest(sessionRepo.state, pinnedTileRepo.pinnedTiles)
+    { sessionState, pinnedTiles ->
         fun isCurrentURLPinned() = pinnedTiles.containsKey(sessionState.currentUrl)
 
         ToolbarViewModel.State(
@@ -107,10 +108,10 @@ class ToolbarViewModel(
 
         if (pinChecked) {
             pinnedTileRepo.removePinnedTile(url)
-            _events.value = Consumable.from(Action.ShowTopToast(R.string.notification_unpinned_site))
+            _events.onNext(Consumable.from(Action.ShowTopToast(R.string.notification_unpinned_site)))
         } else {
             pinnedTileRepo.addPinnedTile(url, sessionRepo.currentURLScreenshot())
-            _events.value = Consumable.from(Action.ShowTopToast(R.string.notification_pinned_site))
+            _events.onNext(Consumable.from(Action.ShowTopToast(R.string.notification_pinned_site)))
         }
         hideOverlay()
     }
@@ -141,14 +142,14 @@ class ToolbarViewModel(
             else -> R.string.notification_request_desktop_site
         }
 
-        _events.value = Consumable.from(Action.ShowBottomToast(textId))
+        _events.onNext(Consumable.from(Action.ShowBottomToast(textId)))
         hideOverlay()
     }
 
     @UiThread
     fun exitFirefoxButtonClicked() {
         sendOverlayClickTelemetry(NavigationEvent.EXIT_FIREFOX)
-        _events.value = Consumable.from(Action.ExitFirefox)
+        _events.onNext(Consumable.from(Action.ExitFirefox))
     }
 
     private fun sendOverlayClickTelemetry(
@@ -171,6 +172,6 @@ class ToolbarViewModel(
     private fun String.isEqualToHomepage() = this == URLs.APP_URL_HOME
 
     private fun hideOverlay() {
-        _events.value = Consumable.from(Action.SetOverlayVisible(false))
+        _events.onNext(Consumable.from(Action.SetOverlayVisible(false)))
     }
 }

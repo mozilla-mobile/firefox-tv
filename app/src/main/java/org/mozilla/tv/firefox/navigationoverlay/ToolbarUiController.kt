@@ -166,7 +166,8 @@ class ToolbarUiController(
             }
         })
 
-        toolbarViewModel.events.observe(viewLifecycleOwner, Observer {
+        @Suppress("DEPRECATION")
+        toolbarViewModel.legacyEvents.observe(viewLifecycleOwner, Observer {
             it?.consume {
                 when (it) {
                     is ToolbarViewModel.Action.ShowTopToast -> ViewUtils.showCenteredTopToast(context, it.textId)
