@@ -8,6 +8,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.annotation.StringRes
 import androidx.annotation.UiThread
+import androidx.lifecycle.LiveDataReactiveStreams
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.Observables
 import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
@@ -50,26 +54,25 @@ class ToolbarViewModel(
     // We use events in order to decouple the ViewModel from holding a reference to a context
     val events: LiveData<Consumable<Action>> = _events
 
-    @Suppress("DEPRECATION") // LiveData usage is deprecated.  If you need access to this
-    // state, please update this code to use Rx and expose `legacyState` as LiveData for existing
-    // consumers.  See `SessionRepo` for an example
-    val legacyState: LiveData<ToolbarViewModel.State> =
-        LiveDataCombiners.combineLatest(sessionRepo.legacyState, pinnedTileRepo.legacyPinnedTiles) { sessionState, pinnedTiles ->
+    val state: Observable<State> = Observables.combineLatest(sessionRepo.state, pinnedTileRepo.pinnedTiles) { sessionState, pinnedTiles ->
+        fun isCurrentURLPinned() = pinnedTiles.containsKey(sessionState.currentUrl)
 
-            fun isCurrentURLPinned() = pinnedTiles.containsKey(sessionState.currentUrl)
+        ToolbarViewModel.State(
+            backEnabled = sessionState.backEnabled,
+            forwardEnabled = sessionState.forwardEnabled,
+            refreshEnabled = !sessionState.currentUrl.isEqualToHomepage(),
+            pinEnabled = !sessionState.currentUrl.isEqualToHomepage(),
+            pinChecked = isCurrentURLPinned(),
+            turboChecked = sessionState.turboModeActive,
+            desktopModeEnabled = !sessionState.currentUrl.isEqualToHomepage(),
+            desktopModeChecked = sessionState.desktopModeActive,
+            urlBarText = UrlUtils.toUrlBarDisplay(sessionState.currentUrl)
+        )
+    }
 
-            ToolbarViewModel.State(
-                backEnabled = sessionState.backEnabled,
-                forwardEnabled = sessionState.forwardEnabled,
-                refreshEnabled = !sessionState.currentUrl.isEqualToHomepage(),
-                pinEnabled = !sessionState.currentUrl.isEqualToHomepage(),
-                pinChecked = isCurrentURLPinned(),
-                turboChecked = sessionState.turboModeActive,
-                desktopModeEnabled = !sessionState.currentUrl.isEqualToHomepage(),
-                desktopModeChecked = sessionState.desktopModeActive,
-                urlBarText = UrlUtils.toUrlBarDisplay(sessionState.currentUrl)
-            )
-        }
+    @Deprecated(message = "Use ToolbarViewModel.state for new code")
+    val legacyState: LiveData<ToolbarViewModel.State> = LiveDataReactiveStreams
+        .fromPublisher(state.toFlowable(BackpressureStrategy.LATEST))
 
     @UiThread
     fun backButtonClicked() {
@@ -95,6 +98,7 @@ class ToolbarViewModel(
 
     @UiThread
     fun pinButtonClicked() {
+        @Suppress("DEPRECATION")
         val pinChecked = legacyState.value?.pinChecked ?: return
         @Suppress("DEPRECATION")
         val url = sessionRepo.legacyState.value?.currentUrl ?: return
@@ -126,6 +130,7 @@ class ToolbarViewModel(
 
     @UiThread
     fun desktopModeButtonClicked() {
+        @Suppress("DEPRECATION")
         val desktopModeChecked = legacyState.value?.desktopModeChecked ?: return
 
         sendOverlayClickTelemetry(NavigationEvent.DESKTOP_MODE, desktopModeChecked = !desktopModeChecked)
@@ -152,6 +157,7 @@ class ToolbarViewModel(
         pinChecked: Boolean? = null,
         desktopModeChecked: Boolean? = null
     ) {
+        @Suppress("DEPRECATION")
         legacyState.value?.let {
             telemetryIntegration.overlayClickEvent(
                 event,
