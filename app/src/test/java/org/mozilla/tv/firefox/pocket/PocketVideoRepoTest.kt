@@ -7,10 +7,13 @@ package org.mozilla.tv.firefox.pocket
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.observers.TestObserver
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,6 +23,15 @@ import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class PocketVideoRepoTest {
+
+    companion object {
+        @JvmStatic
+        @BeforeClass
+        fun beforeClass() {
+            RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
+            RxAndroidPlugins.setMainThreadSchedulerHandler { Schedulers.trampoline() }
+        }
+    }
 
     private lateinit var repo: PocketVideoRepo
     @MockK private lateinit var videoStore: PocketVideoStore
@@ -90,14 +102,12 @@ class PocketVideoRepoTest {
         PocketVideoRepo.newInstance(videoStore, { true }, true)
     }
 
-    @Ignore("#2378: intermittent failures on TC: temporarily disabling")
     @Test
     fun `GIVEN pocket key is valid WHEN getting a new instance THEN feed state starts inactive`() {
         val repo = PocketVideoRepo.newInstance(videoStore, { true }, isPocketKeyValid = true)
         assertEquals(FeedState.Inactive, repo.feedState.blockingFirst())
     }
 
-    @Ignore("#2378: intermittent failures on TC: temporarily disabling")
     @Test
     fun `GIVEN pocket key is not valid WHEN getting a new instance THEN feed state starts no api key`() {
         val repo = PocketVideoRepo.newInstance(videoStore, { true }, isPocketKeyValid = false)
