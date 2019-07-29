@@ -186,13 +186,12 @@ class ScreenController(private val sessionRepo: SessionRepo) {
     }
 
     private fun canGoBack(): Boolean {
-        @Suppress("DEPRECATION")
-        return sessionRepo.legacyState.value?.backEnabled == true
+        return sessionRepo.state.blockingFirst().backEnabled
     }
 
     private fun isOnHomeUrl(): Boolean {
         @Suppress("DEPRECATION")
-        return sessionRepo.legacyState.value?.currentUrl == URLs.APP_URL_HOME
+        return sessionRepo.state.blockingFirst().currentUrl == URLs.APP_URL_HOME
     }
 
     private fun handleTransitionAndUpdateActiveScreen(fragmentManager: FragmentManager, transition: Transition): Boolean {

@@ -56,7 +56,6 @@ class ViewModelFactory(
             ) as T
 
             NavigationOverlayViewModel::class.java -> NavigationOverlayViewModel(
-                serviceLocator.sessionRepo,
                 serviceLocator.focusRepo,
                 ChannelTitles(
                     pinned = app.getString(R.string.pinned_tile_channel_title),
@@ -65,8 +64,7 @@ class ViewModelFactory(
                     music = resources.getString(R.string.music_channel_title),
                     food = resources.getString(R.string.food_channel_title)
                 ),
-                serviceLocator.channelRepo,
-                serviceLocator.pinnedTileRepo
+                serviceLocator.channelRepo
             ) as T
 
             OverlayHintViewModel::class.java -> OverlayHintViewModel(

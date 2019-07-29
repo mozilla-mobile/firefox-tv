@@ -1,6 +1,7 @@
 package org.mozilla.tv.firefox.navigationoverlay
 
-import androidx.lifecycle.MutableLiveData
+import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.Subject
 import mozilla.components.support.test.eq
 import org.junit.Before
 import org.junit.Rule
@@ -35,19 +36,17 @@ class ToolbarViewModelTest {
     private lateinit var pinnedTileRepo: PinnedTileRepo
     private lateinit var telemetryIntegration: TelemetryIntegration
 
-    private lateinit var sessionState: MutableLiveData<SessionRepo.State>
-    private lateinit var pinnedTiles: MutableLiveData<LinkedHashMap<String, PinnedTile>>
+    private lateinit var sessionState: Subject<SessionRepo.State>
+    private lateinit var pinnedTiles: Subject<LinkedHashMap<String, PinnedTile>>
 
     @Before
     fun setup() {
         sessionRepo = mock(SessionRepo::class.java)
-        sessionState = MutableLiveData()
-        @Suppress("DEPRECATION")
-        `when`(sessionRepo.legacyState).thenReturn(sessionState)
+        sessionState = BehaviorSubject.create()
+        `when`(sessionRepo.state).thenReturn(sessionState)
         pinnedTileRepo = mock(PinnedTileRepo::class.java)
-        pinnedTiles = MutableLiveData()
-        @Suppress("DEPRECATION")
-        `when`(pinnedTileRepo.legacyPinnedTiles).thenReturn(pinnedTiles)
+        pinnedTiles = BehaviorSubject.create()
+        `when`(pinnedTileRepo.pinnedTiles).thenReturn(pinnedTiles)
         telemetryIntegration = mock(TelemetryIntegration::class.java)
         toolbarVm = ToolbarViewModel(sessionRepo, pinnedTileRepo, telemetryIntegration)
     }
@@ -56,39 +55,39 @@ class ToolbarViewModelTest {
     fun `WHEN session back enabled is false THEN vm back enabled is false`() {
         @Suppress("DEPRECATION")
         toolbarVm.legacyState.map { it.backEnabled }.assertValues(false, false, false, false) {
-            pinnedTiles.value = linkedMapOf()
-            sessionState.value = SessionRepo.State(
+            pinnedTiles.onNext(linkedMapOf())
+            sessionState.onNext(SessionRepo.State(
                 backEnabled = false,
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = "www.google.com",
                 loading = false
-            )
-            sessionState.value = SessionRepo.State(
+            ))
+            sessionState.onNext(SessionRepo.State(
                 backEnabled = false,
                 forwardEnabled = true,
                 turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = "firefox:home",
                 loading = false
-            )
-            sessionState.value = SessionRepo.State(
+            ))
+            sessionState.onNext(SessionRepo.State(
                 backEnabled = false,
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = "https://www.wikipedia.org",
                 loading = false
-            )
-            sessionState.value = SessionRepo.State(
+            ))
+            sessionState.onNext(SessionRepo.State(
                 backEnabled = false,
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = "www.google.com",
                 loading = false
-            )
+            ))
         }
     }
 
@@ -96,31 +95,31 @@ class ToolbarViewModelTest {
     fun `GIVEN session back enabled is true WHEN back forward index is 2 or greater THEN vm back enabled should be true`() {
         @Suppress("DEPRECATION")
         toolbarVm.legacyState.map { it.backEnabled }.assertValues(true, true, true) {
-            pinnedTiles.value = linkedMapOf()
-            sessionState.value = SessionRepo.State(
+            pinnedTiles.onNext(linkedMapOf())
+            sessionState.onNext(SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = "www.google.com",
                 loading = false
-            )
-            sessionState.value = SessionRepo.State(
+            ))
+            sessionState.onNext(SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = true,
                 turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = "firefox:home",
                 loading = false
-            )
-            sessionState.value = SessionRepo.State(
+            ))
+            sessionState.onNext(SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = "https://www.wikipedia.org",
                 loading = false
-            )
+            ))
         }
     }
 
@@ -129,31 +128,31 @@ class ToolbarViewModelTest {
         @Suppress("DEPRECATION")
         toolbarVm.legacyState.map { it.pinChecked }.assertValues(true, true, true) {
             val tile = mock(PinnedTile::class.java)
-            pinnedTiles.value = linkedMapOf(google to tile, facebook to tile, wikipedia to tile)
-            sessionState.value = SessionRepo.State(
+            pinnedTiles.onNext(linkedMapOf(google to tile, facebook to tile, wikipedia to tile))
+            sessionState.onNext(SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = google,
                 loading = false
-            )
-            sessionState.value = SessionRepo.State(
+            ))
+            sessionState.onNext(SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = true,
                 turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = facebook,
                 loading = false
-            )
-            sessionState.value = SessionRepo.State(
+            ))
+            sessionState.onNext(SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = wikipedia,
                 loading = false
-            )
+            ))
         }
     }
 
@@ -163,15 +162,15 @@ class ToolbarViewModelTest {
         toolbarVm.legacyEvents.assertValues(/* No values */) {
             @Suppress("DEPRECATION")
             toolbarVm.legacyState.observeForever { /* start subscription */ }
-            pinnedTiles.value = linkedMapOf()
-            sessionState.value = SessionRepo.State(
+            pinnedTiles.onNext(linkedMapOf())
+            sessionState.onNext(SessionRepo.State(
                 backEnabled = true,
                 forwardEnabled = false,
                 turboModeActive = true,
                 desktopModeActive = false,
                 currentUrl = mozilla,
                 loading = false
-            )
+            ))
         }
     }
 
@@ -251,14 +250,14 @@ class ToolbarViewModelTest {
     private fun setToolbarVmState() {
         @Suppress("DEPRECATION")
         toolbarVm.legacyState.observeForever { }
-        pinnedTiles.value = linkedMapOf()
-        sessionState.value = SessionRepo.State(
+        pinnedTiles.onNext(linkedMapOf())
+        sessionState.onNext(SessionRepo.State(
             backEnabled = false,
             forwardEnabled = false,
             turboModeActive = true,
             desktopModeActive = false,
             currentUrl = "www.google.com",
             loading = false
-        )
+        ))
     }
 }
