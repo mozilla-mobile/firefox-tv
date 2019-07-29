@@ -8,15 +8,14 @@ It diverges in the following ways:
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html) for bug fix releases.
 
 ## Unreleased
-### Added
-- QA: command-line control to set current locale (#2418)
 
-### Changed
-
+## 4.1 - 2019-07-29
 ### Fixed
 - Prevent some videos from being offset to the right, with a black strip on the left. (#2526)
 
 ## 4.0 - 2019-07-15
+### Added
+- QA: command-line control to set current locale (#2418)
 
 ### Fixed
 - Crash when last tile deleted (#2444)
