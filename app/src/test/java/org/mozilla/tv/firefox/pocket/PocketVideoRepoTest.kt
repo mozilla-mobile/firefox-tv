@@ -11,10 +11,8 @@ import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.observers.TestObserver
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.BeforeClass
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.helpers.PocketTestData
@@ -105,12 +103,12 @@ class PocketVideoRepoTest {
     @Test
     fun `GIVEN pocket key is valid WHEN getting a new instance THEN feed state starts inactive`() {
         val repo = PocketVideoRepo.newInstance(videoStore, { true }, isPocketKeyValid = true)
-        assertEquals(FeedState.Inactive, repo.feedState.blockingFirst())
+        repo.feedState.test().assertValue(FeedState.Inactive)
     }
 
     @Test
     fun `GIVEN pocket key is not valid WHEN getting a new instance THEN feed state starts no api key`() {
         val repo = PocketVideoRepo.newInstance(videoStore, { true }, isPocketKeyValid = false)
-        assertEquals(FeedState.NoAPIKey, repo.feedState.blockingFirst())
+        repo.feedState.test().assertValue(FeedState.NoAPIKey)
     }
 }
