@@ -184,6 +184,10 @@
     to notify user that Firefox has requested the default "non-desktop version" from the site -->
     <string name="notification_request_non_desktop_site">Returned to non-desktop version</string>
 
+    <!-- Content description for a button that will prompt a user to sign in, in order to receive tabs pushed from FF
+    on another device -->
+    <string name="fxa_login_a11y">Receive tabs</string>
+
     <!-- Notification displayed to introduce a "YouTube casting" feature (similar to "broadcasting")
     Users who have the YouTube app on their phone or tablet can use it to play YouTube videos directly on their tv.
 
