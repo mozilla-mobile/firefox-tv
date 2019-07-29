@@ -130,6 +130,7 @@ class ToolbarUiController(
         val context = layout.context
         val serviceLocator = context.serviceLocator
 
+        @Suppress("DEPRECATION")
         toolbarViewModel.legacyState.observe(viewLifecycleOwner, Observer {
             if (it == null) return@Observer
             updateOverlayButtonState(it.backEnabled, layout.navButtonBack)
