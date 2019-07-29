@@ -50,13 +50,12 @@
 
     <!-- This button is set visible if the user is in the experiment. -->
     <!-- TODO: add content description dynamically -->
-    <!-- TODO: use production icon. -->
     <ImageButton
         android:id="@+id/fxaButton"
         style="@style/NavigationButton"
+        android:contentDescription="@string/fxa_login_a11y"
         android:src="@drawable/ic_fxa_login"
-        android:contentDescription="@null"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <ImageButton
         android:id="@+id/exitButton"
