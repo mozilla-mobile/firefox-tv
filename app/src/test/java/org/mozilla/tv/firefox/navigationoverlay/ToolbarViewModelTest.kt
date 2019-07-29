@@ -54,7 +54,7 @@ class ToolbarViewModelTest {
 
     @Test
     fun `WHEN session back enabled is false THEN vm back enabled is false`() {
-        toolbarVm.state.map { it.backEnabled }.assertValues(false, false, false, false) {
+        toolbarVm.legacyState.map { it.backEnabled }.assertValues(false, false, false, false) {
             pinnedTiles.value = linkedMapOf()
             sessionState.value = SessionRepo.State(
                 backEnabled = false,
@@ -93,7 +93,7 @@ class ToolbarViewModelTest {
 
     @Test
     fun `GIVEN session back enabled is true WHEN back forward index is 2 or greater THEN vm back enabled should be true`() {
-        toolbarVm.state.map { it.backEnabled }.assertValues(true, true, true) {
+        toolbarVm.legacyState.map { it.backEnabled }.assertValues(true, true, true) {
             pinnedTiles.value = linkedMapOf()
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
@@ -124,7 +124,7 @@ class ToolbarViewModelTest {
 
     @Test
     fun `WHEN current url is pinned THEN pinChecked should be true`() {
-        toolbarVm.state.map { it.pinChecked }.assertValues(true, true, true) {
+        toolbarVm.legacyState.map { it.pinChecked }.assertValues(true, true, true) {
             val tile = mock(PinnedTile::class.java)
             pinnedTiles.value = linkedMapOf(google to tile, facebook to tile, wikipedia to tile)
             sessionState.value = SessionRepo.State(
@@ -158,7 +158,7 @@ class ToolbarViewModelTest {
     fun `WHEN new session state url is not home THEN no overlay visibility event should be emitted`() {
         @Suppress("RemoveEmptyParenthesesFromLambdaCall")
         toolbarVm.events.assertValues(/* No values */) {
-            toolbarVm.state.observeForever { /* start subscription */ }
+            toolbarVm.legacyState.observeForever { /* start subscription */ }
             pinnedTiles.value = linkedMapOf()
             sessionState.value = SessionRepo.State(
                 backEnabled = true,
@@ -245,7 +245,7 @@ class ToolbarViewModelTest {
      * The toolbarVm state needs an observer before it will update, because it is a MediatorLiveData.
      */
     private fun setToolbarVmState() {
-        toolbarVm.state.observeForever { }
+        toolbarVm.legacyState.observeForever { }
         pinnedTiles.value = linkedMapOf()
         sessionState.value = SessionRepo.State(
             backEnabled = false,

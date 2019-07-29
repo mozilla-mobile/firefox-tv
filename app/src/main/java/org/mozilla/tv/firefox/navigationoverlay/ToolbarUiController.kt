@@ -130,7 +130,7 @@ class ToolbarUiController(
         val context = layout.context
         val serviceLocator = context.serviceLocator
 
-        toolbarViewModel.state.observe(viewLifecycleOwner, Observer {
+        toolbarViewModel.legacyState.observe(viewLifecycleOwner, Observer {
             if (it == null) return@Observer
             updateOverlayButtonState(it.backEnabled, layout.navButtonBack)
             updateOverlayButtonState(it.forwardEnabled, layout.navButtonForward)
