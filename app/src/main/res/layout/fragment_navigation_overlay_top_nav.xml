@@ -54,7 +54,7 @@
     <ImageButton
         android:id="@+id/fxaButton"
         style="@style/NavigationButton"
-        android:src="@drawable/lb_ic_cc"
+        android:src="@drawable/ic_fxa_login"
         android:contentDescription="@null"
         android:visibility="gone"/>
 
