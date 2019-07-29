@@ -7,8 +7,6 @@ package org.mozilla.tv.firefox.session
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.annotation.AnyThread
-import androidx.lifecycle.LiveDataReactiveStreams
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
@@ -46,12 +44,9 @@ class SessionRepo(
 
     private val _state: BehaviorSubject<State> = BehaviorSubject.create()
     val state: Observable<State> = _state.hide()
-    @Deprecated(message = "Use SessionRepo.state for new code")
-    val legacyState = LiveDataReactiveStreams
-            .fromPublisher(state.toFlowable(BackpressureStrategy.LATEST))
 
     private val _events: Subject<Event> = PublishSubject.create()
-    val events = _events.hide()
+    val events: Observable<Event> = _events.hide()
 
     var canGoBackTwice: (() -> Boolean?)? = null
     private var previousURLHost: String? = null

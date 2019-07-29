@@ -6,7 +6,6 @@ package org.mozilla.tv.firefox.channels.pinnedtile
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import androidx.lifecycle.MutableLiveData
 import androidx.test.core.app.ApplicationProvider
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -69,7 +68,6 @@ class PinnedTileTest {
         MockKAnnotations.init(this)
         every { focusRepo.focusUpdate } answers { Observable.empty() }
         every { focusRepo.defaultViewAfterScreenChange } answers { Observable.empty() }
-        every { sessionRepo.legacyState } answers { MutableLiveData() }
         every { pinnedTileImageUtilWrapper.generatePinnedTilePlaceholder(any()) } answers { drawable }
         every { pinnedTileImageUtilWrapper.getFileForUUID(any()) } answers { file }
         every { formattedDomainWrapper.format(any(), any(), any()) } answers { "" }
@@ -88,11 +86,9 @@ class PinnedTileTest {
         val appContext: Context = ApplicationProvider.getApplicationContext()
         pinnedTileRepo = PinnedTileRepo(appContext)
         overlayVm = NavigationOverlayViewModel(
-                sessionRepo,
                 focusRepo,
                 channelTitles,
-                channelRepo,
-                pinnedTileRepo
+                channelRepo
         )
         testObserver = overlayVm.pinnedTiles.test()
     }

@@ -54,8 +54,7 @@ class ToolbarViewModel(
     val legacyEvents: LiveData<Consumable<Action>> = LiveDataReactiveStreams
         .fromPublisher(events.toFlowable(BackpressureStrategy.LATEST))
 
-    val state: Observable<State> = Observables.combineLatest(sessionRepo.state, pinnedTileRepo.pinnedTiles)
-    { sessionState, pinnedTiles ->
+    val state: Observable<State> = Observables.combineLatest(sessionRepo.state, pinnedTileRepo.pinnedTiles) { sessionState, pinnedTiles ->
         fun isCurrentURLPinned() = pinnedTiles.containsKey(sessionState.currentUrl)
 
         ToolbarViewModel.State(
@@ -99,10 +98,8 @@ class ToolbarViewModel(
 
     @UiThread
     fun pinButtonClicked() {
-        @Suppress("DEPRECATION")
-        val pinChecked = legacyState.value?.pinChecked ?: return
-        @Suppress("DEPRECATION")
-        val url = sessionRepo.legacyState.value?.currentUrl ?: return
+        val pinChecked = state.blockingFirst().pinChecked
+        val url = sessionRepo.state.blockingFirst().currentUrl
 
         sendOverlayClickTelemetry(NavigationEvent.PIN_ACTION, pinChecked = !pinChecked)
 
@@ -117,22 +114,20 @@ class ToolbarViewModel(
     }
 
     @UiThread
-    @Suppress("DEPRECATION")
     fun turboButtonClicked() {
-        val currentUrl = sessionRepo.legacyState.value?.currentUrl
-        val turboModeActive = sessionRepo.legacyState.value?.turboModeActive ?: true
+        val currentUrl = sessionRepo.state.blockingFirst().currentUrl
+        val turboModeActive = sessionRepo.state.blockingFirst().turboModeActive
 
         sessionRepo.setTurboModeEnabled(!turboModeActive)
         sessionRepo.reload()
 
         sendOverlayClickTelemetry(NavigationEvent.TURBO, turboChecked = !turboModeActive)
-        currentUrl?.let { if (!it.isEqualToHomepage()) hideOverlay() }
+        currentUrl.let { if (!it.isEqualToHomepage()) hideOverlay() }
     }
 
     @UiThread
     fun desktopModeButtonClicked() {
-        @Suppress("DEPRECATION")
-        val desktopModeChecked = legacyState.value?.desktopModeChecked ?: return
+        val desktopModeChecked = state.blockingFirst().desktopModeChecked
 
         sendOverlayClickTelemetry(NavigationEvent.DESKTOP_MODE, desktopModeChecked = !desktopModeChecked)
 
