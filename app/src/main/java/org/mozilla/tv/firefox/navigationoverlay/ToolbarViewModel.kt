@@ -53,7 +53,7 @@ class ToolbarViewModel(
     @Suppress("DEPRECATION") // LiveData usage is deprecated.  If you need access to this
     // state, please update this code to use Rx and expose `legacyState` as LiveData for existing
     // consumers.  See `SessionRepo` for an example
-    val state: LiveData<ToolbarViewModel.State> =
+    val legacyState: LiveData<ToolbarViewModel.State> =
         LiveDataCombiners.combineLatest(sessionRepo.legacyState, pinnedTileRepo.legacyPinnedTiles) { sessionState, pinnedTiles ->
 
             fun isCurrentURLPinned() = pinnedTiles.containsKey(sessionState.currentUrl)
@@ -95,7 +95,7 @@ class ToolbarViewModel(
 
     @UiThread
     fun pinButtonClicked() {
-        val pinChecked = state.value?.pinChecked ?: return
+        val pinChecked = legacyState.value?.pinChecked ?: return
         @Suppress("DEPRECATION")
         val url = sessionRepo.legacyState.value?.currentUrl ?: return
 
@@ -126,7 +126,7 @@ class ToolbarViewModel(
 
     @UiThread
     fun desktopModeButtonClicked() {
-        val desktopModeChecked = state.value?.desktopModeChecked ?: return
+        val desktopModeChecked = legacyState.value?.desktopModeChecked ?: return
 
         sendOverlayClickTelemetry(NavigationEvent.DESKTOP_MODE, desktopModeChecked = !desktopModeChecked)
 
@@ -152,7 +152,7 @@ class ToolbarViewModel(
         pinChecked: Boolean? = null,
         desktopModeChecked: Boolean? = null
     ) {
-        state.value?.let {
+        legacyState.value?.let {
             telemetryIntegration.overlayClickEvent(
                 event,
                 turboChecked ?: it.turboChecked,
