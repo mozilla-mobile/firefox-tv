@@ -36,7 +36,6 @@ import kotlinx.android.synthetic.main.hint_bar.hintBarContainer
 import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.experiments.ExperimentConfig
 import org.mozilla.tv.firefox.ext.isKeyCodeSelect
@@ -55,7 +54,6 @@ import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.ServiceLocator
-import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 import java.lang.ref.WeakReference
 
@@ -141,7 +139,6 @@ class NavigationOverlayFragment : Fragment() {
     private val musicChannel: DefaultChannel get() = channelReferenceContainer!!.musicChannel
 
     private var rootView: View? = null
-    private var leftMostToolbarView: Int = View.NO_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -275,14 +272,13 @@ class NavigationOverlayFragment : Fragment() {
     }
 
     private fun observeToolbarState(): Disposable {
-        return navigationOverlayViewModel.sessionState
-                .subscribe { state ->
-                    navUrlInput.nextFocusUpId = when {
-                        state.backEnabled -> R.id.navButtonBack
-                        state.forwardEnabled -> R.id.navButtonForward
-                        state.currentUrl != URLs.APP_URL_HOME -> R.id.navButtonReload
-                        else -> R.id.turboButton
-                    }
+        return navigationOverlayViewModel.leftmostActiveToolBarId
+                .subscribe { viewToFocus ->
+                    // Reset previous left most active toolbar button's nextFocusLeftID
+                    rootView?.findViewById<View>(navUrlInput.nextFocusUpId)?.nextFocusLeftId = -1
+                    rootView?.findViewById<View>(viewToFocus)?.nextFocusLeftId = viewToFocus
+
+                    navUrlInput.nextFocusUpId = viewToFocus
                 }
     }
 

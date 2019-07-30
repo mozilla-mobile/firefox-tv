@@ -10,8 +10,7 @@
         android:id="@+id/navButtonBack"
         style="@style/NavigationButton"
         android:src="@drawable/mozac_ic_back"
-        android:contentDescription="@string/content_description_back"
-        android:nextFocusLeft="@id/navButtonBack"/>
+        android:contentDescription="@string/content_description_back"/>
 
     <ImageButton
         android:id="@+id/navButtonForward"

@@ -9,11 +9,9 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
-import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.channels.ChannelDetails
 import org.mozilla.tv.firefox.channels.ChannelRepo
-import org.mozilla.tv.firefox.session.SessionRepo
 
 class ChannelTitles(
     val pinned: String,
@@ -24,13 +22,11 @@ class ChannelTitles(
 )
 
 class NavigationOverlayViewModel(
-        screenController: ScreenController,
-        sessionRepo: SessionRepo,
-        channelTitles: ChannelTitles,
-        channelRepo: ChannelRepo
+    screenController: ScreenController,
+    channelTitles: ChannelTitles,
+    channelRepo: ChannelRepo,
+    toolbarViewModel: ToolbarViewModel
 ) : ViewModel() {
-
-    val sessionState = sessionRepo.state
 
     val pinnedTiles: Observable<ChannelDetails> = channelRepo.getPinnedTiles()
         .map { ChannelDetails(title = channelTitles.pinned, tileList = it) }
@@ -48,14 +44,24 @@ class NavigationOverlayViewModel(
         channelDetails.map { it.tileList.isNotEmpty() }
             .distinctUntilChanged()
 
-    val focusView : Observable<Int> = screenController.currentActiveScreen
-            .buffer(2,1)
-            .filter{ (_, currentScreen) -> currentScreen == ActiveScreen.NAVIGATION_OVERLAY }
+    val focusView: Observable<Int> = screenController.currentActiveScreen
+            .buffer(2, 1)
+            .filter { (_, currentScreen) -> currentScreen == ActiveScreen.NAVIGATION_OVERLAY }
             .map { (prevScreen, _) ->
-                when(prevScreen!!) {
+                when (prevScreen!!) {
                     ActiveScreen.WEB_RENDER -> R.id.navUrlInput
                     ActiveScreen.SETTINGS -> R.id.settings_tile_telemetry
                     ActiveScreen.NAVIGATION_OVERLAY -> View.NO_ID
+                }
+            }
+
+    val leftmostActiveToolBarId: Observable<Int> = toolbarViewModel.state
+            .map { state ->
+                when {
+                    state.backEnabled -> R.id.navButtonBack
+                    state.forwardEnabled -> R.id.navButtonForward
+                    state.refreshEnabled -> R.id.navButtonReload
+                    else -> R.id.turboButton
                 }
             }
 }
