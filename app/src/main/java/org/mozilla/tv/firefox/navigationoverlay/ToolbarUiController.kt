@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.fragment_navigation_overlay.view.*
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.view.*
 import kotlinx.android.synthetic.main.tooltip.view.*
 import mozilla.components.browser.domains.autocomplete.ShippedDomainsProvider
-import mozilla.components.support.ktx.android.view.forEach
 import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.serviceLocator
@@ -25,6 +24,7 @@ import org.mozilla.tv.firefox.utils.ViewUtils
 import org.mozilla.tv.firefox.widget.IgnoreFocusMovementMethod
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 import android.view.ViewTreeObserver
+import androidx.core.view.forEach
 
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
 private const val NAVIGATION_BUTTON_DISABLED_ALPHA = 0.3f
