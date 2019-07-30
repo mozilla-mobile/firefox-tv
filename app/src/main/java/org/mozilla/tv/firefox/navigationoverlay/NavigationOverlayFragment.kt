@@ -52,6 +52,7 @@ import org.mozilla.tv.firefox.channels.SettingsChannelAdapter
 import org.mozilla.tv.firefox.channels.SettingsScreen
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
+import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
@@ -117,7 +118,10 @@ class NavigationOverlayFragment : Fragment() {
             }
 
             // TODO: change button action based on profile state.
-            NavigationEvent.FXA_BUTTON -> serviceLocator.fxaLoginUseCase.beginLogin(fragmentManager!!)
+            NavigationEvent.FXA_BUTTON -> {
+                serviceLocator.fxaLoginUseCase.beginLogin(fragmentManager!!)
+                TelemetryIntegration.INSTANCE.fxaButtonClickEvent()
+            }
 
             NavigationEvent.TURBO, NavigationEvent.PIN_ACTION, NavigationEvent.DESKTOP_MODE, NavigationEvent.BACK,
             NavigationEvent.FORWARD, NavigationEvent.RELOAD, NavigationEvent.EXIT_FIREFOX -> { /* not handled by this object */ }
