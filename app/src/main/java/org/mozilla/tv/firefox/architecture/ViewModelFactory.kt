@@ -80,7 +80,7 @@ class ViewModelFactory(
                 hintContentFactory.getOpenMenuHint()
             ) as T
 
-            WebRenderViewModel::class.java -> WebRenderViewModel() as T
+            WebRenderViewModel::class.java -> WebRenderViewModel(serviceLocator.screenController) as T
 
         // This class needs to either return a ViewModel or throw, so we have no good way of silently handling
         // failures in production. However a failure could only occur if code requests a VM that we have not added
