@@ -5,5 +5,16 @@
 package org.mozilla.tv.firefox.webrender
 
 import androidx.lifecycle.ViewModel
+import io.reactivex.Observable
+import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.ScreenController
+import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 
-class WebRenderViewModel : ViewModel()
+class WebRenderViewModel(
+        screenController: ScreenController
+) : ViewModel() {
+    val focusRequests: Observable<Int> = screenController.currentActiveScreen
+            .filter { currentScreen -> currentScreen == ActiveScreen.WEB_RENDER }
+            .map { R.id.engineView }
+}
+
