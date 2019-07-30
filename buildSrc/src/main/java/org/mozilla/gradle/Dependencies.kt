@@ -25,6 +25,6 @@ object Dependencies {
          * explicitly exclude it from this regex so it can be found on jcenter. Note that the transitive dependency
          * com.google.guava is also not available on google's repo.
          */
-        const val comGoogleAndroid = "com\\.google\\.android\\.(?!apps.common.testing.accessibility.frame).*"
+        const val comGoogleAndroid = "com\\.google\\.android\\.(?!apps\\.common\\.testing\\.accessibility\\.framework).*"
     }
 }
