@@ -312,17 +312,9 @@ class NavigationOverlayFragment : Fragment() {
         )
     }
     private fun observeRequestFocus(): Disposable {
-        return navigationOverlayViewModel.currentScreen
-                .buffer(2, 1) // This emits a list of the previous and current screen. See RxTest.kt
-                .subscribe { (prevScreen, activeScreen) ->
-                    if (activeScreen == ActiveScreen.NAVIGATION_OVERLAY) {
-                        if (prevScreen == ActiveScreen.WEB_RENDER) {
-                            val viewToFocus = rootView?.findViewById<View>(R.id.navUrlInput)
-                            viewToFocus?.requestFocus()
-                        } else if (prevScreen == ActiveScreen.SETTINGS) {
-                            rootView?.findViewById<View>(R.id.settings_tile_telemetry)?.requestFocus()
-                        }
-                    }
+        return navigationOverlayViewModel.focusView
+                .subscribe { viewToFocus ->
+                    rootView?.findViewById<View>(viewToFocus)?.requestFocus()
                 }
     }
 

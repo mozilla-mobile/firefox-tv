@@ -4,14 +4,16 @@
 
 package org.mozilla.tv.firefox.navigationoverlay
 
-import androidx.lifecycle.LiveData
+import android.view.View
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
+import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
+import org.mozilla.tv.firefox.ScreenControllerStateMachine
+import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.channels.ChannelDetails
 import org.mozilla.tv.firefox.channels.ChannelRepo
 import org.mozilla.tv.firefox.session.SessionRepo
-import org.mozilla.tv.firefox.utils.URLs
 
 class ChannelTitles(
     val pinned: String,
@@ -27,8 +29,6 @@ class NavigationOverlayViewModel(
         channelTitles: ChannelTitles,
         channelRepo: ChannelRepo
 ) : ViewModel() {
-
-    val currentScreen = screenController.currentActiveScreen
 
     val sessionState = sessionRepo.state
 
@@ -47,4 +47,15 @@ class NavigationOverlayViewModel(
     fun shouldBeDisplayed(channelDetails: Observable<ChannelDetails>): Observable<Boolean> =
         channelDetails.map { it.tileList.isNotEmpty() }
             .distinctUntilChanged()
+
+    val focusView : Observable<Int> = screenController.currentActiveScreen
+            .buffer(2,1)
+            .filter{ (_, currentScreen) -> currentScreen == ActiveScreen.NAVIGATION_OVERLAY }
+            .map { (prevScreen, _) ->
+                when(prevScreen!!) {
+                    ActiveScreen.WEB_RENDER -> R.id.navUrlInput
+                    ActiveScreen.SETTINGS -> R.id.settings_tile_telemetry
+                    ActiveScreen.NAVIGATION_OVERLAY -> View.NO_ID
+                }
+            }
 }
