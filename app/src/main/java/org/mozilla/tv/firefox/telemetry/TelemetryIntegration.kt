@@ -88,6 +88,7 @@ open class TelemetryIntegration protected constructor(
         const val DESKTOP_MODE = "desktop_mode"
         const val VIDEO_ID = "video_id"
         const val FULL_SCREEN_VIDEO = "full_screen_video"
+        const val FXA = "fxa"
     }
 
     internal object Value {
@@ -107,6 +108,7 @@ open class TelemetryIntegration protected constructor(
         const val SETTINGS_SEND_DATA_TILE = "send_data_tile"
         const val SETTINGS_ABOUT_TILE = "about_tile"
         const val SETTINGS_PRIVACY_TILE = "privacy_tile"
+        const val FXA_LOGIN_BUTTON = "fxa_login_button"
     }
 
     private object Extra {
@@ -285,6 +287,11 @@ open class TelemetryIntegration protected constructor(
             else -> null
         }
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.SETTING, telemetryValue).queue()
+    }
+
+    // TODO send different values depending on the Fxa state
+    fun fxaButtonClickEvent() {
+        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.FXA, Value.FXA_LOGIN_BUTTON).queue()
     }
 
     /**
