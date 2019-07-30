@@ -11,10 +11,9 @@ import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 
 class WebRenderViewModel(
-        screenController: ScreenController
+    screenController: ScreenController
 ) : ViewModel() {
     val focusRequests: Observable<Int> = screenController.currentActiveScreen
             .filter { currentScreen -> currentScreen == ActiveScreen.WEB_RENDER }
             .map { R.id.engineView }
 }
-

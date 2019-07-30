@@ -69,8 +69,8 @@
                     android:importantForAutofill="no"
                     android:inputType="textUri"
                     android:lines="1"
+                    android:nextFocusLeft="@+id/navUrlInput"
                     android:nextFocusRight="@id/navUrlInput"
-                    android:nextFocusUp="@id/topNavContainer"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
                     android:textColor="@color/photonGrey10"
@@ -79,6 +79,7 @@
                     android:fontFamily="@string/font_ember_regular"
                     tools:ignore="UnusedAttribute" >
                     <requestFocus />
+
                 </org.mozilla.tv.firefox.widget.InlineAutocompleteEditText>
 
                 <LinearLayout

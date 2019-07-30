@@ -26,6 +26,7 @@ import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayViewModel
 import org.mozilla.tv.firefox.channels.ChannelDetails
 import org.mozilla.tv.firefox.channels.ChannelRepo
 import org.mozilla.tv.firefox.navigationoverlay.ChannelTitles
+import org.mozilla.tv.firefox.navigationoverlay.ToolbarViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
 import org.robolectric.RobolectricTestRunner
@@ -85,9 +86,12 @@ class PinnedTileTest {
         pinnedTileRepo = PinnedTileRepo(appContext)
         overlayVm = NavigationOverlayViewModel(
                 screenController,
-                sessionRepo,
                 channelTitles,
-                channelRepo
+                channelRepo,
+                ToolbarViewModel(
+                    sessionRepo = sessionRepo,
+                    pinnedTileRepo = pinnedTileRepo
+                )
         )
         testObserver = overlayVm.pinnedTiles.test()
     }
