@@ -7,15 +7,14 @@ package org.mozilla.tv.firefox.pocket
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.observers.TestObserver
-import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.helpers.PocketTestData
+import org.mozilla.tv.firefox.helpers.RxTestHelper
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState
 import org.robolectric.RobolectricTestRunner
 
@@ -23,11 +22,9 @@ import org.robolectric.RobolectricTestRunner
 class PocketVideoRepoTest {
 
     companion object {
-        @JvmStatic
-        @BeforeClass
+        @BeforeClass @JvmStatic
         fun beforeClass() {
-            RxAndroidPlugins.setInitMainThreadSchedulerHandler { Schedulers.trampoline() }
-            RxAndroidPlugins.setMainThreadSchedulerHandler { Schedulers.trampoline() }
+            RxTestHelper.forceRxSynchronousInBeforeClass()
         }
     }
 
@@ -102,12 +99,14 @@ class PocketVideoRepoTest {
 
     @Test
     fun `GIVEN pocket key is valid WHEN getting a new instance THEN feed state starts inactive`() {
+        // This test uses different instances than the ones created in the @Before block
         val repo = PocketVideoRepo.newInstance(videoStore, { true }, isPocketKeyValid = true)
         repo.feedState.test().assertValue(FeedState.Inactive)
     }
 
     @Test
     fun `GIVEN pocket key is not valid WHEN getting a new instance THEN feed state starts no api key`() {
+        // This test uses different instances than the ones created in the @Before block
         val repo = PocketVideoRepo.newInstance(videoStore, { true }, isPocketKeyValid = false)
         repo.feedState.test().assertValue(FeedState.NoAPIKey)
     }
