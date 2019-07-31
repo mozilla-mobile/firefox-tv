@@ -9,44 +9,29 @@ import io.reactivex.schedulers.Schedulers
 import org.junit.Assert.assertEquals
 import org.junit.BeforeClass
 import org.junit.Test
-import org.mozilla.tv.firefox.helpers.forceRxSynchronous
+import org.mozilla.tv.firefox.helpers.RxTestHelper
 
 class ForceRxSynchronousTest {
 
     companion object {
-
         @BeforeClass
         @JvmStatic
         fun beforeClass() {
-            forceRxSynchronous()
+            RxTestHelper.forceRxSynchronousInBeforeClass()
         }
     }
 
     @Test
     fun `GIVEN forceRxSynchronous WHEN various rx schedulers are used THEN all should operate on the same thread`() {
-        val comp = Observable.just(1)
-            .observeOn(Schedulers.computation())
-            .toThreadName()
-
-        val io = Observable.just(1)
-            .observeOn(Schedulers.io())
-            .toThreadName()
-
-        val trampoline = Observable.just(1)
-            .observeOn(Schedulers.trampoline())
-            .toThreadName()
-
-        val newThread = Observable.just(1)
-            .observeOn(Schedulers.newThread())
-            .toThreadName()
-
-        val single = Observable.just(1)
-            .observeOn(Schedulers.single())
-            .toThreadName()
-
-        val nameSet = setOf(comp, io, trampoline, newThread, single)
-
-        println(nameSet)
+        val nameSet = listOf(
+            Schedulers.computation(),
+            Schedulers.io(),
+            Schedulers.trampoline(),
+            Schedulers.newThread(),
+            Schedulers.single()
+        )
+            .map { Observable.just(1).observeOn(it).toThreadName() }
+            .toSet()
 
         assertEquals(1, nameSet.size)
     }
