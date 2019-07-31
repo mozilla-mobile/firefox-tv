@@ -9,8 +9,6 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.reactivex.Observable
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
@@ -23,6 +21,7 @@ import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.framework.FrameworkRepo
+import org.mozilla.tv.firefox.helpers.forceRxTestScheduler
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.Direction
 import org.robolectric.RobolectricTestRunner
@@ -37,9 +36,7 @@ class CursorModelTest {
         @BeforeClass
         @JvmStatic
         fun beforeClass() {
-            testScheduler = TestScheduler()
-            RxAndroidPlugins.setInitMainThreadSchedulerHandler { testScheduler }
-            RxJavaPlugins.setInitComputationSchedulerHandler { testScheduler }
+            testScheduler = forceRxTestScheduler()
         }
     }
 

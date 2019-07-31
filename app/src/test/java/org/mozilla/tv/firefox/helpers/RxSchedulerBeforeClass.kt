@@ -11,11 +11,22 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import org.junit.BeforeClass
-import org.junit.rules.ExternalResource
 import java.util.concurrent.Callable
 
 /**
  * Used to force all tested Rx code to execute synchronously.
+ *
+ * ```
+ * // Example usage
+ * companion object {
+ *
+ *     @BeforeClass
+ *     @JvmStatic
+ *     fun beforeClass() {
+ *         forceRxSynchronous()
+ *     }
+ * }
+ * ```
  *
  * IMPORTANT NOTE: **must** be called from [BeforeClass]
  */
@@ -28,6 +39,19 @@ fun forceRxSynchronous() {
  * [TestScheduler].
  *
  * IMPORTANT NOTE: **must** be called from [BeforeClass]
+ *
+ * ```
+ * // Example usage
+ * companion object {
+ *     private lateinit var testScheduler: TestScheduler
+ *
+ *     @BeforeClass
+ *     @JvmStatic
+ *     fun beforeClass() {
+ *         testScheduler = forceRxTestScheduler()
+ *     }
+ * }
+ * ```
  *
  * @return the [TestScheduler] to which all observeOn and subscribeOn calls will
  * be forwarded.
