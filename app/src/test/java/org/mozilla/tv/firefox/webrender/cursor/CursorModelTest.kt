@@ -21,7 +21,7 @@ import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine
 import org.mozilla.tv.firefox.framework.FrameworkRepo
-import org.mozilla.tv.firefox.helpers.forceRxTestScheduler
+import org.mozilla.tv.firefox.helpers.RxTestHelper
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.Direction
 import org.robolectric.RobolectricTestRunner
@@ -36,7 +36,7 @@ class CursorModelTest {
         @BeforeClass
         @JvmStatic
         fun beforeClass() {
-            testScheduler = forceRxTestScheduler()
+            testScheduler = RxTestHelper.forceRxTestSchedulerInBeforeClass()
         }
     }
 

@@ -9,7 +9,7 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import org.junit.BeforeClass
 import org.junit.Test
-import org.mozilla.tv.firefox.helpers.forceRxTestScheduler
+import org.mozilla.tv.firefox.helpers.RxTestHelper
 import java.util.concurrent.TimeUnit
 
 class ForceRxTestSchedulerTest {
@@ -20,7 +20,7 @@ class ForceRxTestSchedulerTest {
         @BeforeClass
         @JvmStatic
         fun beforeClass() {
-            testScheduler = forceRxTestScheduler()
+            testScheduler = RxTestHelper.forceRxTestSchedulerInBeforeClass()
         }
     }
 
