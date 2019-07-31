@@ -12,9 +12,15 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.schedulers.TestScheduler
 import org.junit.BeforeClass
 import java.util.concurrent.Callable
+import org.junit.ClassRule
 
 /**
  * Used to force all tested Rx code to execute synchronously.
+ *
+ * IMPORTANT NOTE: **must** be called from [BeforeClass]
+ *
+ * This cannot be a JUnit [ClassRule] because [ClassRule]s are not executed in any
+ * files using Robolectric
  *
  * ```
  * // Example usage
@@ -27,8 +33,6 @@ import java.util.concurrent.Callable
  *     }
  * }
  * ```
- *
- * IMPORTANT NOTE: **must** be called from [BeforeClass]
  */
 fun forceRxSynchronous() {
     setRxScheduler(Schedulers.trampoline())
@@ -39,6 +43,9 @@ fun forceRxSynchronous() {
  * [TestScheduler].
  *
  * IMPORTANT NOTE: **must** be called from [BeforeClass]
+ *
+ * This cannot be a JUnit [ClassRule] because [ClassRule]s are not executed in any
+ * files using Robolectric
  *
  * ```
  * // Example usage
