@@ -118,6 +118,7 @@ class NavigationOverlayFragment : Fragment() {
             }
 
             // TODO: change button action based on profile state.
+            // TODO: remember to update telemetry accordingly
             NavigationEvent.FXA_BUTTON -> {
                 serviceLocator.fxaLoginUseCase.beginLogin(fragmentManager!!)
                 TelemetryIntegration.INSTANCE.fxaButtonClickEvent()
