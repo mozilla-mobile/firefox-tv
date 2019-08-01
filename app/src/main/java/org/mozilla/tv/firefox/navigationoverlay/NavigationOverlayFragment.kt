@@ -225,7 +225,7 @@ class NavigationOverlayFragment : Fragment() {
             .forEach { compositeDisposable.add(it) }
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = false)
                 .forEach { compositeDisposable.add(it) }
-        observeToolbarState()
+        observeToolbarFocusability()
                 .addTo(compositeDisposable)
 
         fxaButton.isVisible = serviceLocator.experimentsProvider.shouldShowSendTab()
@@ -276,14 +276,15 @@ class NavigationOverlayFragment : Fragment() {
         ).map { channel -> channel.forwardRemoveEventsToRepo() }
     }
 
-    private fun observeToolbarState(): Disposable {
+    private fun observeToolbarFocusability(): Disposable {
         return navigationOverlayViewModel.leftmostActiveToolBarId
-                .subscribe { viewToFocus ->
+                .subscribe { leftmostToolbarId ->
                     // Reset previous left most active toolbar button's nextFocusLeftID
                     rootView?.findViewById<View>(navUrlInput.nextFocusUpId)?.nextFocusLeftId = -1
-                    rootView?.findViewById<View>(viewToFocus)?.nextFocusLeftId = viewToFocus
+                    // Disable left direction click on leftmostToolbarId
+                    rootView?.findViewById<View>(leftmostToolbarId)?.nextFocusLeftId = leftmostToolbarId
 
-                    navUrlInput.nextFocusUpId = viewToFocus
+                    navUrlInput.nextFocusUpId = leftmostToolbarId
                 }
     }
 
