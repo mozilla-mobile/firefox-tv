@@ -24,6 +24,7 @@ import mozilla.components.support.utils.toSafeIntent
 import org.mozilla.tv.firefox.channels.ChannelOnboardingActivity
 import org.mozilla.tv.firefox.components.locale.LocaleAwareAppCompatActivity
 import org.mozilla.tv.firefox.components.locale.LocaleManager
+import org.mozilla.tv.firefox.ext.application
 import org.mozilla.tv.firefox.ext.resetView
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.setupForApp
@@ -109,8 +110,9 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         // Debug logging display for non public users
         // TODO: refactor out the debug variant visibility check in #1953
         BuildConstants.debugLogStr?.apply {
+            val engineViewVersion = (this@MainActivity as Context).application.getEngineViewVersion()
             debugLog.visibility = View.VISIBLE
-            debugLog.text = "$this ${webRenderComponents.engine.version}"
+            debugLog.text = "$this $engineViewVersion"
         }
     }
 
