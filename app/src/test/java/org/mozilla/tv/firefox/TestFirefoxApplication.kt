@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox
 
 import mozilla.components.service.glean.Glean
 import androidx.work.testing.WorkManagerTestInitHelper
+import mozilla.components.concept.engine.utils.EngineVersion
 import org.mozilla.tv.firefox.helpers.EngineVariantFunctionality
 import org.robolectric.RobolectricTestRunner
 
@@ -36,6 +37,12 @@ class TestFirefoxApplication : FirefoxApplication() {
      */
     override fun getSystemUserAgent(): String =
             "Mozilla/5.0 (Linux; Android 7.1.2) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Focus/2.2.0.2 Chrome/59.0.3071.125 Mobile Safari/537.36"
+
+    /**
+     * Retrieves the system user agent for testing. The production implementation calls into `WebSettings` which throws
+     * an UnsupportedOperationException during Robolectric tests. We can't mock static methods so we stub the method.
+     */
+    override fun getEngineViewVersion() = EngineVersion(1, 1, 1, "dummyVersion")
 
     /**
      * This is used to disable ping upload when running tests.
