@@ -14,8 +14,8 @@ import android.view.InputDevice
 import android.view.KeyEvent
 import mozilla.components.support.ktx.android.os.resetAfter
 // Glean
-import mozilla.components.service.glean.BuildConfig
-import mozilla.components.service.glean.Glean
+// import mozilla.components.service.glean.BuildConfig
+// import mozilla.components.service.glean.Glean
 import org.mozilla.tv.firefox.GleanMetrics.App
 import org.mozilla.tv.firefox.GleanMetrics.Browser
 import org.mozilla.tv.firefox.GleanMetrics.Video
@@ -35,8 +35,8 @@ import org.mozilla.telemetry.measurement.SearchesMeasurement
 import org.mozilla.telemetry.ping.TelemetryCorePingBuilder
 import org.mozilla.telemetry.ping.TelemetryMobileEventPingBuilder
 import org.mozilla.telemetry.ping.TelemetryPocketEventPingBuilder
-//import org.mozilla.telemetry.glean.Glean
-//import org.mozilla.tv.firefox.GleanMetrics
+// import org.mozilla.telemetry.glean.Glean
+// import org.mozilla.tv.firefox.GleanMetrics
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.channels.ChannelTile
 import org.mozilla.tv.firefox.channels.SettingsButton
@@ -279,7 +279,7 @@ open class TelemetryIntegration protected constructor(
         if (tile.id == YOUTUBE_TILE_ID) {
             TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE,
                     Value.YOUTUBE_TILE).queue()
-            //Glean Probe
+            // Glean Probe
             Tiles.youtubeTile.record()
         }
         // Add an extra that contains the tileId for bundled tiles only
@@ -288,11 +288,11 @@ open class TelemetryIntegration protected constructor(
             TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE, tileType)
                 .extra(Extra.TILE_ID, tile.id)
                 .queue()
-            //Glean Probe
+            // Glean Probe
             Tiles.homeTile.record(mapOf(Tiles.homeTileKeys.homeTileId to tile.id))
         } else {
             TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.HOME_TILE, tileType).queue()
-            //Glean Probe
+            // Glean Probe
             Tiles.homeTile.record(mapOf(Tiles.homeTileKeys.homeTileId to "Not bundled tile"))
         }
         TelemetryHomeTileUniqueClickPerSessionCounter.countTile(context, tile)
@@ -365,7 +365,7 @@ open class TelemetryIntegration protected constructor(
             // Pin has a similar state change so we model it after turbo.
             NavigationEvent.TURBO -> {
                 TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.TURBO_MODE, boolToOnOff(isTurboButtonChecked)).queue()
-                //Glean Probe
+                // Glean Probe
                 Toggles.turboMode.set(isTurboButtonChecked)
                 return
             }
@@ -428,7 +428,7 @@ open class TelemetryIntegration protected constructor(
         for (videoId in pocketUniqueImpressedVideoIDs) {
             TelemetryEvent.create(Category.POCKET, Method.IMPRESSION, Object.VIDEO_ID,
                     videoId).queueInPocketPing()
-            //Glean Probe
+            // Glean Probe
             Pocket.pocketImpression.record(mapOf(Pocket.pocketImpressionKeys.pocketImpressionId to videoId))
         }
     }
@@ -437,7 +437,7 @@ open class TelemetryIntegration protected constructor(
         for (videoId in pocketUniqueClickedVideoIDs) {
             TelemetryEvent.create(Category.POCKET, Method.CLICK, Object.VIDEO_ID,
                     videoId.toString()).queueInPocketPing()
-            //Glean Probe
+            // Glean Probe
             Pocket.pocketClick.record(mapOf(Pocket.pocketClickKeys.pocketClickId to videoId))
         }
     }
@@ -465,7 +465,7 @@ open class TelemetryIntegration protected constructor(
 
     fun youtubeCastEvent() {
         TelemetryEvent.create(Category.ACTION, Method.YOUTUBE_CAST, Object.BROWSER).queue()
-        //Glean Probe
+        // Glean Probe
         Browser.youtubeCast.record()
     }
 
