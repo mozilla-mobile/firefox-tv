@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:ignore="ContentDescription"
-                tools:src="@drawable/tile_youtube" />
+                tools:src="@drawable/tile_sports_formula_1" />
         </androidx.cardview.widget.CardView>
 
         <TextView
