@@ -29,14 +29,15 @@ test_app_apk = testdroid.upload_file(os.path.join(os.path.dirname(__file__), "..
 # Custom configuration using preset: android framework, project & device group
 test_run = testdroid.start_test_run_using_config(json.dumps({
     "deviceGroupId": 42,
-    "files": [{"id": app_apk['id']}, {"id": test_app_apk['id']}],
+    "files": [{"id": app_apk['id'], "action": "INSTALL"}, {"id": test_app_apk['id'], "action": "RUN_TEST"}],
     "frameworkId": 24,
     "limitationType": "CLASS",
     "limitationValue": "org.mozilla.tv.firefox.ui",
     "osType": "ANDROID",
     "projectId": 296208,
     "scheduler": "PARALLEL",
-    "testRunName": str(time.strftime("%m/%d/%Y %H:%M:%S"))
+    "testRunName": str(time.strftime("%m/%d/%Y %H:%M:%S")),
+    "instrumentationRunner": "org.mozilla.tv.firefox.FirefoxTestRunner"
 }))
 
 print "Bitbar Cloud: UI Test Run Created - " + str(test_run['id'])
