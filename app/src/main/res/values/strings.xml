@@ -184,10 +184,6 @@
     to notify user that Firefox has requested the default "non-desktop version" from the site -->
     <string name="notification_request_non_desktop_site">Returned to non-desktop version</string>
 
-    <!-- Content description for a button that will prompt a user to sign in, in order to receive tabs pushed from FF
-    on another device -->
-    <string name="fxa_login_a11y">Receive tabs</string>
-
     <!-- Notification displayed to introduce a "YouTube casting" feature (similar to "broadcasting")
     Users who have the YouTube app on their phone or tablet can use it to play YouTube videos directly on their tv.
 
@@ -217,4 +213,40 @@
      When the described button is pressed, the overlay will open and the browser will be hidden underneath it -->
     <string name="hint_press_menu_to_open_overlay_a11y">Press the menu button for %1$s Home, search, settings, and more</string>
 
+    <!-- FxA Strings-->
+    <!-- Content description for a button that will prompt a user to sign in, in order to receive tabs pushed from FF
+    on another device -->
+    <string name="fxa_login_a11y">Receive tabs</string>
+    <!-- Heading for settings menu item button and CTA link on new update -->
+    <string name="fxa_settings_item_new">New! Firefox tabs on Fire TV</string>
+    <!-- Heading for settings menu item button and CTA link when signed in -->
+    <string name="fxa_settings_item_signed_in">Sent tab settings</string>
+    <!-- Heading for settings menu item button and CTA link when need to sign in again -->
+    <string name="fxa_settings_item_sign_in_again">Sent tabs - sign in again</string>
+    <!-- FxA pre-boarding header -->
+    <string name="fxa_preboarding_header">See your tabs on the big screen</string>
+    <!-- FxA pre-boarding instruction text -->
+    <string name="fxa_preboarding_instruction">Send a tab from anywhere you use Firefox and see it here. Sign in to Firefox for Fire TV to get started.</string>
+    <!-- FxA pre-boarding sign in button -->
+    <string name="fxa_preboarding_primary_button">Sign in</string>
+    <!-- FxA pre-boarding not now button -->
+    <string name="fxa_preboarding_secondary_button">Not now</string>
+    <!-- FxA onboarding header -->
+    <string name="fxa_onboarding_header">Your tabs. Now ready for prime time.</string>
+    <!-- FxA onboarding instruction text -->
+    <string name="fxa_onboarding_instruction">You’re ready to receive tabs. To get started, select Send Tab to Device on Firefox for desktop and iOS or Share on Firefox Preview. Then choose Fire TV and your tab will appear in just a moment.</string>
+    <!-- FxA onboarding primary button -->
+    <string name="fxa_onboarding_primary_button">Ok, got it</string>
+    <!-- Toast shown on webpage when tab is sent from another device
+     %1$s will be replaced with the device name where the tab was sent from. -->
+    <string name="fxa_tab_sent_toast">Tab sent from %1$s</string>
+    <!-- FxA settings page header -->
+    <string name="fxa_settings_header">Sent tabs</string>
+    <!-- FxA settings page body text
+    %1$s will be replaced with the signed-in user account email. -->
+    <string name="fxa_settings_body">Signed in as %1$s</string>
+    <!-- FxA settings page primary button -->
+    <string name="fxa_settings_primary_button">Firefox tabs</string>
+    <!-- FxA settings page secondary button -->
+    <string name="fxa_settings_secondary_button">Sign out</string>
 </resources>
