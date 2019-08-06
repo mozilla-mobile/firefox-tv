@@ -7,12 +7,12 @@
     <item>
         <set>
             <objectAnimator
-                android:duration="@android:integer/config_shortAnimTime"
+                android:duration="@integer/channelTileAnimTime"
                 android:propertyName="scaleX"
                 android:valueTo="1"
                 android:valueType="floatType"/>
             <objectAnimator
-                android:duration="@android:integer/config_shortAnimTime"
+                android:duration="@integer/channelTileAnimTime"
                 android:propertyName="scaleY"
                 android:valueTo="1"
                 android:valueType="floatType"/>
