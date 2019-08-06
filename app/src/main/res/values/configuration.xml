@@ -5,4 +5,5 @@
 <resources>
     <!-- We are overriding this value in values-sw600dp -->
 
+    <integer name="channelTileAnimTime">100</integer>
 </resources>
