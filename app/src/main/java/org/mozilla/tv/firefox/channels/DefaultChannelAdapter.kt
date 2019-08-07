@@ -94,7 +94,7 @@ class DefaultChannelAdapter(
                 // We can't use a selector for the tile cardview because we use the focused item to
                 // get the RecyclerView adapter position
                 val focusRingDrawable: Drawable?
-                val animation: StateListAnimator?
+                val animation: StateListAnimator
                 if (hasFocus) {
                     focusRingDrawable = context.getDrawable(R.drawable.tile_selected_stroke)
                     animation = AnimatorInflater.loadStateListAnimator(context, R.animator.channel_item_animator_focused)
