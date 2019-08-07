@@ -37,7 +37,7 @@ test_run = testdroid.start_test_run_using_config(json.dumps({
     "projectId": 296208,
     "scheduler": "PARALLEL",
     "testRunName": str(time.strftime("%m/%d/%Y %H:%M:%S")),
-    "instrumentationRunner": "org.mozilla.tv.firefox.FirefoxTestRunner"
+    "instrumentationRunner": "org.mozilla.tv.firefox.FirefoxOnDeviceTestRunner"
 }))
 
 print "Bitbar Cloud: UI Test Run Created - " + str(test_run['id'])
