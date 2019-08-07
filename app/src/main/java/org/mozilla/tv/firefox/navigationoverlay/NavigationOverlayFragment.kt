@@ -159,10 +159,8 @@ class NavigationOverlayFragment : Fragment() {
         } else {
             InactiveHintViewModel()
         }
-        with(this) {
-            enterTransition = Fade()
-            exitTransition = Fade()
-        }
+
+        initTransitions()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -406,6 +404,13 @@ class NavigationOverlayFragment : Fragment() {
                     onNavigationEvent.invoke(navigationEvent, null, null)
                 }
         )
+    }
+
+    private fun initTransitions() {
+        with(this) {
+            enterTransition = Fade()
+            exitTransition = Fade()
+        }
     }
 
     override fun onDestroyView() {
