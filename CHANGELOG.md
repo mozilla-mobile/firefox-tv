@@ -8,16 +8,19 @@ It diverges in the following ways:
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html) for bug fix releases.
 
 ## Unreleased
-### Fixed
-- Add tile focus animation and overlay fade animation (#2454)
+### Added
+- Tile focus animation and overlay fade animation (#2454)
 
 ### Changed
-- Removed FocusRepo and replaced navigation overlay focus handling (#2395)
+- Refactored out FocusRepo in favor of native focus handling; no user-facing changes are expected (#2395)
+- (disabled by default) Use final logo for Receive Tabs toolbar button (#2489)
+
+### Fixed
+- Remote Settings URL goes through the CDN (#2651)
 
 ## 4.1 - 2019-07-29
 ### Fixed
 - Prevent some videos from being offset to the right, with a black strip on the left. (#2526)
-- Fix Remote Settings URL to go through the CDN. (#2651)
 
 ## 4.0 - 2019-07-15
 ### Added
