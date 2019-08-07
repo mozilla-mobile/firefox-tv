@@ -16,6 +16,7 @@ It diverges in the following ways:
 
 ### Fixed
 - Prevent some videos from being offset to the right, with a black strip on the left. (#2526)
+- Fix Remote Settings URL to go through the CDN. (#2651)
 
 ## 4.0 - 2019-07-15
 
