@@ -52,7 +52,7 @@
     <ImageButton
         android:id="@+id/fxaButton"
         style="@style/NavigationButton"
-        android:contentDescription="@string/fxa_login_a11y"
+        android:contentDescription="@string/fxa_navigation_item_new"
         android:src="@drawable/ic_fxa_login"
         android:visibility="gone" />
 
