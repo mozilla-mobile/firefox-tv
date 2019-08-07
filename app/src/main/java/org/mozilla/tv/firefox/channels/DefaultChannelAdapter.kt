@@ -97,7 +97,7 @@ class DefaultChannelAdapter(
                 val animation: StateListAnimator?
                 if (hasFocus) {
                     focusRingDrawable = context.getDrawable(R.drawable.tile_selected_stroke)
-                    animation = AnimatorInflater.loadStateListAnimator(context, R.animator.channel_item_animator)
+                    animation = AnimatorInflater.loadStateListAnimator(context, R.animator.channel_item_animator_focused)
                     onTileFocused?.invoke()
                 } else {
                     focusRingDrawable = null
