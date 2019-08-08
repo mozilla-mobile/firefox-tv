@@ -109,7 +109,8 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         if (enabled) window.addFlags(dontSleep)
         else window.clearFlags(dontSleep)
 
-        if (enabled) {
+        if (enabled &&
+                serviceLocator?.experimentsProvider?.shouldUseMp4VideoWorkaround() == true) {
             engineView?.updateFullscreenScrollPosition()
         }
     }

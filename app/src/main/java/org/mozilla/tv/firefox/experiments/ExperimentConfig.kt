@@ -16,7 +16,13 @@ enum class ExperimentConfig(val value: String) {
     AA_TEST("AAtest-1675"),
     HINT_BAR_TEST("HintBar-2011"),
     TV_GUIDE_CHANNELS("TvGuideChannels-2195"),
-    SEND_TAB("SendTab-2511")
+    SEND_TAB("SendTab-2511"),
+
+    /**
+     * This is not an experiment. If Amazon deploys a fix for this bug, our workaround
+     * may break it: we use this flag as an option to disable this workaround remotely.
+     */
+    MP4_VIDEO_WORKAROUND("Mp4VideoWorkaround-2540")
 }
 
 /**
