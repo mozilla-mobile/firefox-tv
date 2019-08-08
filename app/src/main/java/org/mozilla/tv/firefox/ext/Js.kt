@@ -4,6 +4,8 @@
 
 package org.mozilla.tv.firefox.ext
 
+import mozilla.components.browser.session.Session
+
 object Js {
     const val CACHE_VAR = "_firefoxForFireTvPreviouslyFocusedElement"
     const val CACHE_JS = "var $CACHE_VAR = document.activeElement;"
@@ -16,6 +18,72 @@ object Js {
     const val SIDEBAR_FOCUSED = "document.activeElement.parentElement.parentElement.id === 'guide-list'"
 
     const val PAUSE_VIDEO = "document.querySelectorAll('video').forEach(v => v.pause());"
+
+    /**
+     * Due to a bug in the Fire OS WebView (#2540, #2541), fullscreen mp4 videos will appear partially off screen if the
+     * page, before entering fullscreen, is at a scroll position greater than 0. We can correct these videos by caching
+     * the scroll position before the page was fullscreened and restoring this scroll position after entering fullscreen
+     * mode.
+     *
+     * This fix does not work for all sites. In particular, it does not help YouTube desktop.
+     *
+     * This fix has a side effect of sometimes changing the page scroll position after the user leaves fullscreen.
+     *
+     * webm videos were working fine before this fix and this fix does not appear to impact them; I have not tried other
+     * video types types because I don't know of any other supported ones.
+     */
+    object MP4TranslationWorkaround {
+        private const val CACHED_SCROLL_POSITION = "_firefoxTV_cachedScrollPosition"
+
+        /**
+         * Caches the page scroll position before an element is fullscreened via a scroll position observer. Ideally,
+         * we'd cache the scroll position when fullscreen is pressed but there are no appropriate hooks for that
+         * ([Session.Observer.onFullScreenChanged] is too late) so we use a global scroll observer instead.
+         */
+        val OBSERVE_SCROLL_POSITION = """
+var $CACHED_SCROLL_POSITION;
+var _firefoxTV_lastTimeout;
+var _firefoxTV_isScrollPositionObserverLoaded;
+(function () {
+    /* Ensure we only add one listener. */
+    if (_firefoxTV_isScrollPositionObserverLoaded) { return; }
+    _firefoxTV_isScrollPositionObserverLoaded = true;
+
+    console.log('adding scroll event listener');
+    window.addEventListener('scroll', (e) => {
+        /* During the transition to fullscreen, the WebView may or may not change the scroll position to an incorrect
+         * value so we add a short delay before caching. This creates a race condition & is imperfect: on a slow page,
+         * it's possible the incorrect value will cache before we restore the fullscreen value so we'll restore the
+         * incorrect position. Also, if the user is fast enough, they can open fullscreen before we cache the value.
+         * This value was set through manual testing. I did not find better solutions. */
+        if (typeof _firefoxTV_lastTimeout !== 'undefined') {
+            window.clearTimeout(_firefoxTV_lastTimeout);
+        }
+
+        var pendingScrollPosition = window.scrollY;
+        _firefoxTV_lastTimeout = window.setTimeout(() => {
+            $CACHED_SCROLL_POSITION = pendingScrollPosition;
+            console.log('FFTV workaround - caching scroll position: ' + $CACHED_SCROLL_POSITION);
+        }, 500);
+    });
+})();""".trimIndent()
+
+        val UPDATE_FULLSCREEN_SCROLL_POSITION = """
+var $CACHED_SCROLL_POSITION;
+(function () {
+    /* We delay restoring the cached value because WebView may override the value we restore. This creates a race
+     * condition & is imperfect: on a slow page, sometimes WebView will override us anyway. This value was set through
+     * manual testing. I did not find better solutions.
+     *
+     * We use the cached scroll position from when this method is initially called so that we're less likely to use one
+     * of WebView's incorrect positions (see OBSERVE_SCROLL_POSITION). */
+    var nonFullscreenPageScrollPosition = $CACHED_SCROLL_POSITION;
+    window.setTimeout(() => {
+        console.log('FFTV workaround - scrolled fullscreen to non-fullscreen scroll position: ' + nonFullscreenPageScrollPosition);
+        window.scrollTo(0, nonFullscreenPageScrollPosition);
+    }, 1500);
+})();""".trimIndent()
+    }
 
     /**
      * This script will:
