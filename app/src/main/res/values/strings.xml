@@ -215,8 +215,9 @@
 
     <!-- Firefox Accounts Strings-->
     <!-- Description for Sent tab buttons (in navigation toolbar & settings, both on the homescreen)
-     that will launch the Firefox Account sign-in experience so users can receive Firefox tabs on their Fire TV. -->
-    <string name="fxa_navigation_item_new">New! Send Firefox tabs to Fire TV</string>
+     that will launch the Firefox Account sign-in experience so users can receive Firefox tabs on their Fire TV.
+     %1$s will be replaced with Firefox. -->
+    <string name="fxa_navigation_item_new">New! Send %1$s tabs to Fire TV</string>
     <!-- Description for Sent tab button in navigation toolbar
      that will launch the Firefox Account settings after the user is signed in. -->
     <string name="fxa_navigation_item_signed_in">Sent tab settings</string>
@@ -226,16 +227,18 @@
     <!-- Header for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
     <string name="fxa_preboarding_header">See your tabs on the big screen</string>
     <!-- Instruction text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature.
-    %1$s will be replaced with the name of our app (i.e. Firefox for Fire TV) -->
-    <string name="fxa_preboarding_instruction">Send a tab from anywhere you use Firefox and see it here. Sign in to %1$s to get started.</string>
+    %1$s will be replaced with Firefox.
+    %2$s will be replaced with the name of our app (i.e. Firefox for Fire TV) -->
+    <string name="fxa_preboarding_instruction">Send a tab from anywhere you use %1$s and see it here. Sign in to %2$s to get started.</string>
     <!-- Sign-in button text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
     <string name="fxa_preboarding_primary_button">Sign in</string>
     <!-- Text on the cancel button for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
     <string name="fxa_preboarding_secondary_button">Not now</string>
     <!-- Header for Firefox Accounts onboarding screen, which is shown after signing in. -->
     <string name="fxa_onboarding_header">Your tabs. Now ready for prime time.</string>
-    <!-- Instruction text for Firefox Accounts onboarding screen, which is shown after signing in. -->
-    <string name="fxa_onboarding_instruction">You’re ready to receive tabs. To get started, select Send Tab to Device on Firefox for desktop and iOS or Share on Firefox Preview. Then choose Fire TV and your tab will appear in just a moment.</string>
+    <!-- Instruction text for Firefox Accounts onboarding screen, which is shown after signing in.
+     %1$s will be replaced with Firefox. -->
+    <string name="fxa_onboarding_instruction">You’re ready to receive tabs. To get started, select Send Tab to Device on %1$s for desktop and iOS or Share on Firefox Preview. Then choose Fire TV and your tab will appear in just a moment.</string>
     <!-- Text on the dismiss button for Firefox Accounts onboarding screen, which is shown after signing in. -->
     <string name="fxa_onboarding_primary_button">Ok, got it</string>
     <!-- Toast shown on webpage when tab is sent from another device
@@ -246,8 +249,9 @@
     <!-- Body text for Firefox Accounts settings page
     %1$s will be replaced with the signed-in user account email. -->
     <string name="fxa_settings_body">Signed in as %1$s</string>
-    <!-- Button text for seeing the onboarding screen on the Firefox Accounts settings page -->
-    <string name="fxa_settings_primary_button">Firefox tabs</string>
+    <!-- Button text for seeing the onboarding screen on the Firefox Accounts settings page.
+     %1$s will be replaced with Firefox. -->
+    <string name="fxa_settings_primary_button">%1$s tabs</string>
     <!-- Button text to sign out from the Firefox Accounts settings page -->
     <string name="fxa_settings_secondary_button">Sign out</string>
 </resources>
