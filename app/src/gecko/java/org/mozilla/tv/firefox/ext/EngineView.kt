@@ -66,6 +66,14 @@ fun EngineView.observePlaybackState() {
     evalJS(JS_OBSERVE_PLAYBACK_STATE)
 }
 
+fun EngineView.observeScrollPosition() {
+    // No action necessary.
+}
+
+fun EngineView.updateFullscreenScrollPosition() {
+    // No action necessary.
+}
+
 private fun EngineView.evalJSWithTargetVideo(getExpressionToEval: (videoId: String) -> String) {
     val ID_TARGET_VIDEO = "targetVideo"
     val GET_TARGET_VIDEO_OR_RETURN = """
