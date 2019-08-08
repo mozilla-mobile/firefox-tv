@@ -39,11 +39,13 @@ import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.ext.couldScrollInDirection
 import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.isYoutubeTV
+import org.mozilla.tv.firefox.ext.observeScrollPosition
 import org.mozilla.tv.firefox.ext.pauseAllVideoPlaybacks
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.resetView
 import org.mozilla.tv.firefox.ext.scrollByClamped
 import org.mozilla.tv.firefox.ext.serviceLocator
+import org.mozilla.tv.firefox.ext.updateFullscreenScrollPosition
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.InactiveHintViewModel
@@ -106,6 +108,10 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         if (enabled) window.addFlags(dontSleep)
         else window.clearFlags(dontSleep)
+
+        if (enabled) {
+            engineView?.updateFullscreenScrollPosition()
+        }
     }
 
     override fun onUrlChanged(session: Session, url: String) {
@@ -114,7 +120,12 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     }
 
     override fun onLoadingStateChanged(session: Session, loading: Boolean) {
-        if (!loading) youtubeBackHandler.onLoadComplete()
+        if (!loading) {
+            // If the page isn't finished loading, our observers won't be attached to capture the scroll position
+            // and the fix won't work. Unfortunately, I've spent too much time on this so I did not prepare a fix.
+            engineView?.observeScrollPosition()
+            youtubeBackHandler.onLoadComplete()
+        }
     }
 
     override fun onDesktopModeChanged(session: Session, enabled: Boolean) {
