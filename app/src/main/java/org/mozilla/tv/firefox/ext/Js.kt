@@ -91,6 +91,7 @@ var $CACHED_SCROLL_POSITION;
      *   observer to attach listeners to new <video> nodes as well
      * - On playback state change, notify Java about the current playback state
      * - Prevent this script from being injected more than once per page
+     * - As a workaround to a WebView bug, modify certain videos' CSS tags.
      *
      * Note that `//` style comments are not supported in `evalJS`.
      *
@@ -179,7 +180,7 @@ var _firefoxTV_isPlaybackStateObserverLoaded;
             if (translateNegatesLeft) {
                 vid.style.left = '0px';
                 vid.style.transform = 'translate(0px, 0px)';
-                console.log('FFTV - adjusted video tag CSS');
+                console.log('FFTV workaround - removed CSS transform "translate"');
             }
         });
     }
