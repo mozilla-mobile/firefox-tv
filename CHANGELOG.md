@@ -17,6 +17,7 @@ It diverges in the following ways:
 
 ### Fixed
 - Remote Settings URL goes through the CDN (#2651)
+- Fullscreen videos were offset if the page was scrolled down before fullscreening. This fix will not work under certain conditions and on certain sites (#2540. #2541)
 
 ## 4.1 - 2019-07-29
 ### Fixed
