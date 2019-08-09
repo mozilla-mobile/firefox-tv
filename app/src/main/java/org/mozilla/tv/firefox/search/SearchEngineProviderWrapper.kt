@@ -48,11 +48,15 @@ class SearchEngineProviderWrapper(private val replacements: Map<String, String>)
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun updateSearchEngines(searchEngines: SearchEngineList, replacements: Map<String, String>): SearchEngineList {
-        val defaultSearch = searchEngines.default
+        var defaultSearch = searchEngines.default
+
         @Suppress("NAME_SHADOWING") // Defensive copy & mutable
         val searchEngines = mutableListOf<SearchEngine>().apply { addAll(searchEngines.list) }
 
         replacements.forEach { (old, new) ->
+            if (defaultSearch?.identifier == old) {
+                defaultSearch = searchEngines[searchEngines.indexOfFirst { it.identifier == new } ]
+            }
             val newIndex = searchEngines.indexOfFirst { it.identifier == new }
             if (newIndex != -1) {
                 val initialOldIndex = searchEngines.indexOfFirst { it.identifier == old }
