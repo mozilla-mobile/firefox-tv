@@ -6,15 +6,15 @@ package org.mozilla.tv.firefox.search
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
-import android.util.Log
 import java.util.Locale
 import mozilla.components.browser.search.SearchEngine
 import mozilla.components.browser.search.provider.AssetsSearchEngineProvider
 import mozilla.components.browser.search.provider.SearchEngineList
 import mozilla.components.browser.search.provider.SearchEngineProvider
 import mozilla.components.browser.search.provider.localization.SearchLocalizationProvider
+import mozilla.components.support.base.log.logger.Logger
 
-private const val LOGTAG = "Search"
+private val logger = Logger("Search")
 
 /**
  * Wraps an [AssetsSearchEngineProvider] to allow for replacements of
@@ -55,8 +55,9 @@ class SearchEngineProviderWrapper(private val replacements: Map<String, String>)
 
         replacements.forEach { (old, new) ->
             if (defaultSearch?.identifier == old) {
-                defaultSearch = searchEngines[searchEngines.indexOfFirst { it.identifier == new } ]
+                defaultSearch = searchEngines.firstOrNull { it.identifier == new } ?: defaultSearch
             }
+
             val newIndex = searchEngines.indexOfFirst { it.identifier == new }
             if (newIndex != -1) {
                 val initialOldIndex = searchEngines.indexOfFirst { it.identifier == old }
@@ -66,10 +67,10 @@ class SearchEngineProviderWrapper(private val replacements: Map<String, String>)
                     val oldIndex = searchEngines.indexOfFirst { it.identifier == old }
                     searchEngines[oldIndex] = newEngine
                 } else {
-                    Log.d(LOGTAG, "Failed to replace plugin $old with $new")
+                    logger.debug("Failed to replace plugin $old with $new")
                 }
             } else {
-                Log.d(LOGTAG, "Failed to replace plugin $old with $new")
+                logger.debug("Failed to replace plugin $old with $new")
             }
         }
         return SearchEngineList(searchEngines, defaultSearch)
