@@ -45,9 +45,16 @@ class FxaRepoTest {
     }
 
     @Test
-    fun `WHEN on authenticated callback is called THEN account state is authenticated no profile`() {
+    fun `WHEN on authenticated callback is called with newAccount as false THEN account state is authenticated no profile`() {
         val account = mockk<OAuthAccount>()
-        fxaRepo.accountObserver.onAuthenticated(account)
+        fxaRepo.accountObserver.onAuthenticated(account, false)
+        accountStateTestObs.assertValueAt(1, FxaRepo.AccountState.AUTHENTICATED_NO_PROFILE)
+    }
+
+    @Test
+    fun `WHEN on authenticated callback is called with newAccount as true THEN account state is authenticated no profile`() {
+        val account = mockk<OAuthAccount>()
+        fxaRepo.accountObserver.onAuthenticated(account, true)
         accountStateTestObs.assertValueAt(1, FxaRepo.AccountState.AUTHENTICATED_NO_PROFILE)
     }
 
