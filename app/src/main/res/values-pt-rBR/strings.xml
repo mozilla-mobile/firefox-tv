@@ -1,78 +1,217 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-  <string name="firefox_tv_brand_name">Firefox TV</string>
-  <string name="firefox_tv_brand_name_short">Firefox</string>
-  <string name="pocket_brand_name">Pocket</string>
-  <string name="action_cancel">Cancelar</string>
-  <string name="action_ok">OK</string>
-  <string name="urlbar_hint">Pesquisar ou navegar</string>
-  <string name="menu_settings">Configurações</string>
-  <string name="menu_about">Sobre</string>
-  <string name="preference_language">Idioma</string>
-  <string name="preference_language_systemdefault">Padrão do sistema</string>
-  <string name="preference_category_privacy">Privacidade</string>
-  <string name="preference_privacy_block_ads">Bloquear rastreadores de anúncios</string>
-  <string name="preference_privacy_block_ads_summary">Algumas propagandas rastreiam visitas a sites, mesmo se você não clicar na propaganda</string>
-  <string name="preference_privacy_block_analytics">Bloquear rastreadores analíticos</string>
-  <string name="preference_privacy_block_analytics_summary">Usado para coletar, analisar e medir atividades como toque e rolagem</string>
-  <string name="preference_privacy_block_social">Bloquear rastreadores sociais</string>
-  <string name="preference_privacy_block_social_summary">Incorporados nos sites para rastrear suas visitas e exibir funcionalidades como botões de compartilhamento</string>
-  <string name="preference_privacy_block_content">Bloquear outros rastreadores</string>
-  <string name="preference_privacy_block_content_summary2">Ativar pode causar comportamento inesperado em algumas páginas</string>
-  <string name="preference_category_performance">Desempenho</string>
-  <string name="preference_performance_block_webfonts">Bloquear fontes web</string>
-  <string name="preference_performance_block_webfonts_summary">Pode resultar em falta de ícones ou imagens</string>
-  <string name="preference_privacy_notice">Aviso de Privacidade</string>
-  <string name="content_description_forward">Ir para a próxima página</string>
-  <string name="content_description_reload">Recarregar o site</string>
-  <string name="content_description_back">Voltar à página anterior</string>
-  <string name="external_app_prompt_title">Abrir link em outro app</string>
-  <string name="external_app_prompt">Você pode sair do %1$s para abrir este link no %2$s.</string>
-  <string name="external_app_prompt_no_app_title">Encontrar um app que consegue abrir o link</string>
-  <string name="external_app_prompt_no_app">Nenhum aplicativo instalado no seu dispositivo consegue abrir este link. Você pode sair do %1$s para procurar um aplicativo compatível no %2$s.</string>
-  <string name="external_multiple_apps_matched_exit">Sair da navegação privativa?</string>
-  <string name="errorpage_title">Problemas ao carregar a página</string>
-  <string name="errorpage_refresh">Tentar novamente</string>
-  <string name="your_rights">Seus direitos</string>
-  <string name="your_rights_content1">O %1$s é um software livre e de código aberto, feito pela Mozilla e outros colaboradores.</string>
-  <string name="your_rights_content2"><![CDATA["O %1$s é disponibilizado de acordo com os termos da "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Licen&#231;a P&#250;blica da Mozilla</a>" e outras licenças de código aberto."]]></string>
-  <string name="your_rights_content3"><![CDATA["Não lhe são concedidos quaisquer direitos ou licenças sobre marcas registradas da Fundação Mozilla ou de terceiros, incluindo os nomes ou logos da Mozilla, Firefox ou %1$s. Informações adicionais podem ser encontradas "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">aqui</a>.]]></string>
-  <string name="your_rights_content4"><![CDATA[Códigos fonte adicionais do %1$s estão disponíveis sob várias outras \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">licen&#231;as</a>" livres e de código aberto."]]></string>
-  <string name="your_rights_content5"><![CDATA["O %1$s também usa listas de bloqueio fornecidas pela Disconnect, Inc. como trabalhos separados e independentes, disponibilizados "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">aqui</a>\" sob a \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>.]]></string>
-  <string name="settings_cookies_dialog_title">Limpar todos os cookies e dados de sites</string>
-  <string name="settings_cookies_dialog_content2">Está ação limpará todos os cookies e dados de sites. Limpar essas informações pode finalizar sessões de sites e apagar conteúdo da web armazenado localmente.</string>
-  <string name="settings_cookies_confirm">Limpar agora</string>
-  <string name="preference_mozilla_telemetry2">Enviar dados de uso</string>
-  <string name="settings_telemetry_description">A Mozilla se empenha em coletar somente o necessário para fornecer e melhorar o %1$s para todos.</string>
-  <string name="turbo_mode">Modo Turbo</string>
-  <string name="onboarding_turbo_mode_title">O modo turbo ajuda você a navegar mais rápido</string>
-  <string name="onboarding_turbo_mode_body2">O modo turbo bloqueia anúncios e rastreadores automaticamente.\nSe um site não agir da forma que você espera, experimente desativar o modo turbo.</string>
-  <string name="button_turbo_mode_keep_enabled2">Manter o modo turbo ativado</string>
-  <string name="button_turbo_mode_turn_off2">Desativar o modo turbo</string>
-  <string name="turbo_mode_image_a11y">Exemplo de modo turbo ativado</string>
-  <string name="homescreen_unpin_tutorial_toast">Pressione e segure o SELECT para desafixar da tela inicial</string>
-  <string name="homescreen_tile_remove">Remover</string>
-  <string name="pinned_tiles_channel_remove_title">Remover %1$s de sites fixados</string>
-  <string name="pinned_tile_channel_title">Quadros fixados</string>
-  <string name="pin_label">Fixar na tela inicial</string>
-  <string name="unpin_label">Desafixar da tela inicial</string>
-  <string name="notification_pinned_site">Fixado à tela inicial do Firefox TV</string>
-  <string name="notification_unpinned_site">Removido da tela inicial do Firefox TV</string>
-  <string name="pocket_home_tutorial_title">Apresentação de vídeos recomendados pelo %1$s</string>
-  <string name="pocket_home_tutorial_description">Os vídeos mais interessantes da internet. Recomendados pelo %1$s, agora parte da Mozilla.</string>
-  <string name="pocket_home_tutorial_dismiss_button">Ok, entendi</string>
-  <string name="pocket_home_a11y_tile_focused">Recomendação de vídeos do %1$s</string>
-  <string name="pocket_info_a11y">Sobre o Pocket</string>
-  <string name="pocket_video_feed_recommended_videos_title">Vídeos recomendados</string>
-  <string name="pocket_video_feed_failed_to_load">Estamos com problemas na exibição de recomendações de vídeos do %1$s.</string>
-  <string name="pocket_video_feed_reload_button">Tentar novamente</string>
-  <string name="request_desktop_site_a11y">Solicitar versão para desktop deste site</string>
-  <string name="notification_request_desktop_site">Versão desktop solicitada</string>
-  <string name="notification_request_non_desktop_site">Retornou para a versão padrão</string>
-  <string name="youtube_casting_onboarding_toast">Transmita vídeos do YouTube a partir do seu celular ou tablet. Abra o YouTube no seu dispositivo e toque em %s para começar.</string>
-  <string name="exit_firefox_a11y">Sair do %1$s</string>
-  <string name="hint_press_back_to_close_overlay">Pressione $IMAGE para voltar</string>
-  <string name="hint_press_back_to_close_overlay_a11y">Pressione o botão de voltar para retornar</string>
-  <string name="hint_press_menu_to_open_overlay">Pressione $IMAGE para página inicial do %1$s, pesquisa, configurações, etc.</string>
-  <string name="hint_press_menu_to_open_overlay_a11y">Pressione o botão de menu para ir para a página inicial do %1$s, pesquisa, configurações, etc.</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- ####################################################################################### -->
+    <!-- ## Put only strings into this file that should be translated. Move all other strings ## -->
+    <!-- ## into a separate file like strings_references.xml                                  ## -->
+    <!-- ####################################################################################### -->
+
+    <!-- The brand name of this app -->
+    <string name="firefox_tv_brand_name" tools:keep="@string/firefox_tv_brand_name">Firefox TV</string>
+    <string name="firefox_tv_brand_name_short" tools:keep="@string/firefox_tv_brand_name_short">Firefox</string>
+
+    <!-- The brand name of our partner company, Pocket. -->
+    <string name="pocket_brand_name">Pocket</string>
+
+    <!-- Label used for buttons, e.g. in dialogs -->
+    <string name="action_cancel">Cancelar</string>
+    <!-- Label used for buttons, e.g. in dialogs -->
+    <string name="action_ok">OK</string>
+
+    <!-- This text is shown in the URL bar when it's empty -->
+    <string name="urlbar_hint">Pesquisar ou navegar</string>
+
+    <string name="menu_settings">Configurações</string>
+    <string name="menu_about">Sobre</string>
+    <string name="preference_language">Idioma</string>
+
+    <!-- This is shown when the user hasn't set a Firefox for Fire TV specific language, i.e. when Firefox for Fire TV
+         is using the system default language. -->
+    <string name="preference_language_systemdefault">Padrão do sistema</string>
+
+    <string name="preference_category_privacy">Privacidade</string>
+    <string name="preference_privacy_block_ads">Bloquear rastreadores de anúncios</string>
+    <string name="preference_privacy_block_ads_summary">Algumas propagandas rastreiam visitas a sites, mesmo se você não clicar na propaganda</string>
+    <string name="preference_privacy_block_analytics">Bloquear rastreadores analíticos</string>
+    <string name="preference_privacy_block_analytics_summary">Usado para coletar, analisar e medir atividades como toque e rolagem</string>
+    <string name="preference_privacy_block_social">Bloquear rastreadores de mídias sociais</string>
+    <string name="preference_privacy_block_social_summary">Incorporados nos sites para rastrear suas visitas e exibir funcionalidades como botões de compartilhamento</string>
+    <string name="preference_privacy_block_content">Bloquear outros rastreadores</string>
+    <string name="preference_privacy_block_content_summary2">Ativar pode causar comportamento inesperado em algumas páginas</string>
+
+    <string name="preference_category_performance">Desempenho</string>
+    <string name="preference_performance_block_webfonts">Bloquear fontes web</string>
+    <!-- This text is shown below the setting for disabling web fonts. Some websites use icons/images from a font and those do not show up if fonts are blocked.-->
+    <string name="preference_performance_block_webfonts_summary">Pode resultar em falta de ícones ou imagens</string>
+
+    <!-- In-app link (in settings) to Firefox for Fire TV privacy notice. -->
+    <string name="preference_privacy_notice">Aviso de Privacidade</string>
+
+    <!-- Content description (not visible, for screen readers etc.): Navigate forward (browsing history) -->
+    <string name="content_description_forward">Ir para a próxima página</string>
+
+    <!-- Content description (not visible, for screen readers etc.): Reload current website -->
+    <string name="content_description_reload">Recarregar o site</string>
+
+    <!-- Content description (not visible, for screen readers etc.): Navigate back (browsing history) -->
+    <string name="content_description_back">Voltar à página anterior</string>
+
+    <string name="external_app_prompt_title">Abrir link em outro app</string>
+    <!-- This string is shown when the user has clicked a link that needs to be opened in a different app.
+         Argument 2 is the external app name, argument 1 is our name (i.e. Firefox for Fire TV). -->
+    <string name="external_app_prompt">Você pode sair do %1$s para abrir este link no %2$s.</string>
+    <!-- This text is the title of a dialog shown if no app could be found for a custom link protocol. -->
+    <string name="external_app_prompt_no_app_title">Encontrar um app que consegue abrir o link</string>
+    <!-- This text is shown in a dialog if no app could be found for a custom link protocol. %1$s is the name of the app (i.e. Firefox for Fire TV) and %2$s is the name of
+         the app store installed on the device (usually that's Google Play). -->
+    <string name="external_app_prompt_no_app">Nenhum aplicativo instalado no seu dispositivo consegue abrir este link. Você pode sair do %1$s para procurar um aplicativo compatível no %2$s.</string>
+    <!-- This label is shown above a list of apps that can be used to open a given link -->
+    <string name="external_multiple_apps_matched_exit">Sair da navegação privativa?</string>
+
+    <!-- The page html title (i.e. the <title> tag content) -->
+    <string name="errorpage_title">Problemas ao carregar a página</string>
+    <string name="errorpage_refresh">Tentar novamente</string>
+
+    <string name="your_rights">Seus direitos</string>
+
+    <!-- Text shown in the "Your rights" screen.
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)-->
+    <string name="your_rights_content1"><![CDATA[O %1$s é um software livre e de código aberto, feito pela Mozilla e outros colaboradores.]]></string>
+
+    <!-- Text shown in the "Your rights" screen.
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+    %2$s will be replaced with a URL linking to the MPL (e.g. https://www.mozilla.org/en-US/MPL/) -->
+    <string name="your_rights_content2"><![CDATA["O %1$s é disponibilizado de acordo com os termos da "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Licen&#231;a P&#250;blica da Mozilla</a>" e outras licenças de código aberto."]]></string>
+
+    <!-- Text shown in the "Your rights" screen.
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+    %2$s will be replaced with a URL linking to the trademark policy (e.g. https://www.mozilla.org/foundation/trademarks/policy/) -->
+    <string name="your_rights_content3"><![CDATA["Não lhe são concedidos quaisquer direitos ou licenças sobre marcas registradas da Fundação Mozilla ou de terceiros, incluindo os nomes ou logos da Mozilla, Firefox ou %1$s. Informações adicionais podem ser encontradas "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">aqui</a>.]]></string>
+
+    <!-- Text shown in the "Your rights" screen.
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+    %2$s will be replaced with a URL linking to the list of licenses used by the dependencies.-->
+    <string name="your_rights_content4"><![CDATA[Códigos fonte adicionais do %1$s estão disponíveis sob várias outras \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">licen&#231;as</a>" livres e de código aberto."]]></string>
+
+    <!-- Text shown in the "Your rights" screen.
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+    %2$s will be replaced with a URL linking to the GPL
+    %3$s will be replaced with a URL linking to the tracking protection wiki page (e.g. https://wiki.mozilla.org/Security/Tracking_protection#Lists) -->
+    <string name="your_rights_content5"><![CDATA["O %1$s também usa listas de bloqueio fornecidas pela Disconnect, Inc. como trabalhos separados e independentes, disponibilizados "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">aqui</a>\" sob a \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>.]]></string>
+
+    <!-- Firefox for Fire TV
+    video strings -->
+    <!-- Settings strings -->
+    <string name="settings_cookies_dialog_title">Limpar todos os cookies e dados de sites</string>
+    <string name="settings_cookies_dialog_content2">Está ação limpará todos os cookies e dados de sites. Limpar essas informações pode finalizar sessões de sites e apagar conteúdo da web armazenado localmente.</string>
+    <!-- Text on a button that, when pressed, will clear all user data.
+    Mock: https://user-images.githubusercontent.com/1721875/47298531-59442f00-d618-11e8-98df-632f74e9ebc3.png -->
+    <string name="settings_cookies_confirm">Limpar agora</string>
+
+    <!-- Title for a screen that explains the purpose of our telemetry, and contains a
+    switch that can toggle it on and off
+     Mock: https://user-images.githubusercontent.com/1721875/47298694-b809a880-d618-11e8-9e18-1d6d47d2045d.png -->
+    <string name="preference_mozilla_telemetry2">Enviar dados de uso</string>
+    <!-- Description text that explains the purpose of our telemetry
+      Mock: https://user-images.githubusercontent.com/1721875/47298694-b809a880-d618-11e8-9e18-1d6d47d2045d.png
+      %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV) -->
+    <string name="settings_telemetry_description">A Mozilla se empenha em coletar somente o necessário para fornecer e melhorar o %1$s para todos.</string>
+
+    <string name="turbo_mode">Modo Turbo</string>
+    <string name="onboarding_turbo_mode_title">O modo turbo ajuda você a navegar mais rápido</string>
+    <string name="onboarding_turbo_mode_body2">O modo turbo bloqueia anúncios e rastreadores automaticamente.\nSe um site não agir da forma que você espera, experimente desativar o modo turbo.</string>
+    <!-- Button text for keeping Turbo Mode enabled in onboarding -->
+    <string name="button_turbo_mode_keep_enabled2">Manter o modo turbo ativado</string>
+    <!-- Button text for turning off Turbo Mode in onboarding -->
+    <string name="button_turbo_mode_turn_off2">Desativar o modo turbo</string>
+    <!-- Spoken to screen reader users to explain image on Turbo mode onboarding -->
+    <string name="turbo_mode_image_a11y">Exemplo de modo turbo ativado</string>
+
+    <!-- Text displayed in a toast to explain to the user how to unpin a tile from the homescreen.
+         SELECT refers to a button on the remote: the button at the center of the 4-way directional navigation. -->
+    <string name="homescreen_unpin_tutorial_toast">Pressione e segure o SELECT para desafixar da tela inicial</string>
+    <string name="homescreen_tile_remove">Remover</string>
+
+    <!-- The title of Pinned channel remove modal.
+    %1$s will be replaced by the title of tiles (website titles or url). -->
+    <string name="pinned_tiles_channel_remove_title">Remover %1$s de sites fixados</string>
+
+    <!-- Title text displayed above the pinned tile channel. Pinned tiles are a collection of links
+    to commonly used sites (bundled with the app), as well as custom pinnned ones (added by the user)
+    See https://github.com/mozilla-mobile/firefox-tv/issues/1630 for channel mocks -->
+    <string name="pinned_tile_channel_title">Quadros fixados</string>
+
+    <string name="pin_label">Fixar na tela inicial</string>
+    <!-- Label shown underneath Pin icon in toolbar when a site is already pinned, to hint to users that
+         they can unpin the site to remove it-->
+    <string name="unpin_label">Desafixar da tela inicial</string>
+    <string name="notification_pinned_site">Fixado à tela inicial do Firefox TV</string>
+    <string name="notification_unpinned_site">Removido da tela inicial do Firefox TV</string>
+
+    <!-- The title of a tutorial shown to introduce Pocket video recommendations.
+    %1$s will be replaced with the Pocket brand name. -->
+    <string name="pocket_home_tutorial_title">Apresentação de vídeos recomendados pelo %1$s</string>
+    <!-- The description text of a tutorial shown to introduce Pocket video recommendations.
+    %1$s will be replaced with the Pocket brand name. -->
+    <string name="pocket_home_tutorial_description">Os vídeos mais interessantes da internet. Recomendados pelo %1$s, agora parte da Mozilla.</string>
+    <!-- The text on the dismiss button of a tutorial shown to introduce Pocket video recommendations. -->
+    <string name="pocket_home_tutorial_dismiss_button">Ok, entendi</string>
+    <!-- Spoken to screen reader users when they focus the Pocket tile. Clicking this tile will take them to the
+         Pocket video recommendations feed.
+    %1$s will be replaced with the Pocket brand name. -->
+    <string name="pocket_home_a11y_tile_focused">Recomendação de vídeos do %1$s</string>
+    <!-- Spoken by screen reader when they focus the "?" button on the Pocket Video feed screen,
+    which will shows the Pocket tutorial again -->
+    <string name="pocket_info_a11y">Sobre o Pocket</string>
+
+
+    <string name="pocket_video_feed_recommended_videos_title">Vídeos recomendados</string>
+    <!-- Text displayed when the Pocket video recommendations feed failed to load.
+    %1$s will be replaced with the Pocket brand name. -->
+    <string name="pocket_video_feed_failed_to_load">Estamos com problemas na exibição de recomendações de vídeos do %1$s.</string>
+    <!-- Text displayed on a button to reload the Pocket video recommendations feed if it failed to load. -->
+    <string name="pocket_video_feed_reload_button">Tentar novamente</string>
+
+    <!--Request desktop site strings-->
+    <!-- Content description for Request desktop version button-->
+    <string name="request_desktop_site_a11y">Solicitar versão para desktop deste site</string>
+    <!-- Notification displayed when the user has clicked the "request desktop version" button to turn ON desktop mode,
+    notifying the user that Firefox has requested the "desktop version" from the site -->
+    <string name="notification_request_desktop_site">Versão desktop solicitada</string>
+    <!-- Notification displayed when the user has clicked the "request desktop version" button to turn OFF desktop mode,
+    to notify user that Firefox has requested the default "non-desktop version" from the site -->
+    <string name="notification_request_non_desktop_site">Retornou para a versão padrão</string>
+
+    <!-- Content description for a button that will prompt a user to sign in, in order to receive tabs pushed from FF
+    on another device -->
+    <string name="fxa_login_a11y">Receber abas</string>
+
+    <!-- Notification displayed to introduce a "YouTube casting" feature (similar to "broadcasting")
+    Users who have the YouTube app on their phone or tablet can use it to play YouTube videos directly on their tv.
+
+    %s will be replaced with the icon that matches the button in the YouTube app for this feature.
+    Clicking on that button in the YouTube app will show YouTube's instructions on how to cast. -->
+    <string name="youtube_casting_onboarding_toast">Transmita vídeos do YouTube a partir do seu celular ou tablet. Abra o YouTube no seu dispositivo e toque em %s para começar.</string>
+
+    <!-- Content description for the Exit Firefox button.
+     %1$s will be replaced with the Firefox brand name. -->
+    <string name="exit_firefox_a11y">Sair do %1$s</string>
+
+    <!-- Hint Strings -->
+    <!-- Hint text displayed when the overlay is open.
+     $IMAGE will be replaced with the image of a hardware back button.
+     When the described button is pressed, the overlay will close and the user will be returned to the browser. -->
+    <string name="hint_press_back_to_close_overlay">Pressione $IMAGE para voltar</string>
+    <!-- Content description for a hint bar that is displayed when the overlay is open.
+     When the described button is pressed, the overlay will close and the user will be returned to the browser. -->
+    <string name="hint_press_back_to_close_overlay_a11y">Pressione o botão de voltar para retornar</string>
+    <!-- Hint text displayed when the browser is open.
+     $IMAGE will be replaced with the image of a hardware menu button.
+     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+     When the described button is pressed, the overlay will open and the browser will be hidden underneath it -->
+    <string name="hint_press_menu_to_open_overlay">Pressione $IMAGE para página inicial do %1$s, pesquisa, configurações, etc.</string>
+    <!-- Content description for a hint bar displayed when the browser is open.
+     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+     When the described button is pressed, the overlay will open and the browser will be hidden underneath it -->
+    <string name="hint_press_menu_to_open_overlay_a11y">Pressione o botão de menu para ir para a página inicial do %1$s, pesquisa, configurações, etc.</string>
+
 </resources>
