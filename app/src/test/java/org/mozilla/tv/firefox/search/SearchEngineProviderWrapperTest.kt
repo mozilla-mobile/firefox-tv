@@ -46,6 +46,17 @@ class SearchEngineProviderWrapperTest {
 
         assertEquals(expected, wrapper.updateSearchEngines(searchEngines, replacements))
     }
+
+    @Test
+    fun `WHEN searchEngines does not contain new engine THEN values should not change`() {
+        val searchEnginesList = listOf(YAHOO, GOOGLE)
+        val searchEngines = SearchEngineList(searchEnginesList, GOOGLE)
+        val replacements = mapOf(GOOGLE.identifier to GOOGLE_FFTV.identifier)
+
+        val expected = SearchEngineList(listOf(YAHOO, GOOGLE), GOOGLE)
+
+        assertEquals(expected, wrapper.updateSearchEngines(searchEngines, replacements))
+    }
 }
 
 private fun mockSearchEngine(id: String): SearchEngine {
