@@ -11,6 +11,7 @@ import org.junit.Test
 import org.mozilla.tv.firefox.FirefoxApplication
 import org.mozilla.tv.firefox.search.SearchEngineManagerFactory
 import org.mozilla.tv.firefox.search.SearchEngineProviderWrapper
+import org.mozilla.tv.firefox.utils.UrlUtils
 
 /**
  * This is an integration test between [SearchEngineManagerFactory], [SearchEngineProviderWrapper],
@@ -34,5 +35,13 @@ class SearchEngineManagerFactoryTest {
         assertTrue(searchIds.contains(SearchEngineManagerFactory.AMAZON_SEARCH_CODE))
         // We don't test for AMAZON_SEARCH_CODE_US_ONLY so that this test won't
         // fail when run outside of the US
+    }
+
+    @Test
+    fun searchEngineUrlShouldIncludeFftvSearchCodes() {
+        val searchUrl = UrlUtils.createSearchUrl(app, "cats")
+        assertTrue(searchUrl.contains(SearchEngineManagerFactory.AMAZON_SEARCH_CODE) ||
+                searchUrl.contains(SearchEngineManagerFactory.AMAZON_SEARCH_CODE_US_ONLY)
+        )
     }
 }

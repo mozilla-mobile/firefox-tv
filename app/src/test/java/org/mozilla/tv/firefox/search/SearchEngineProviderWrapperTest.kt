@@ -31,7 +31,7 @@ class SearchEngineProviderWrapperTest {
         val searchEngines = SearchEngineList(searchEnginesList, GOOGLE)
         val replacements = mapOf(GOOGLE.identifier to GOOGLE_FFTV.identifier)
 
-        val expected = SearchEngineList(listOf(GOOGLE_FFTV, YAHOO), GOOGLE)
+        val expected = SearchEngineList(listOf(GOOGLE_FFTV, YAHOO), GOOGLE_FFTV)
 
         assertEquals(expected, wrapper.updateSearchEngines(searchEngines, replacements))
     }
@@ -42,7 +42,7 @@ class SearchEngineProviderWrapperTest {
         val searchEngines = SearchEngineList(searchEnginesList, GOOGLE)
         val replacements = mapOf(GOOGLE.identifier to GOOGLE_FFTV.identifier)
 
-        val expected = SearchEngineList(listOf(YAHOO, GOOGLE_FFTV), GOOGLE)
+        val expected = SearchEngineList(listOf(YAHOO, GOOGLE_FFTV), GOOGLE_FFTV)
 
         assertEquals(expected, wrapper.updateSearchEngines(searchEngines, replacements))
     }
