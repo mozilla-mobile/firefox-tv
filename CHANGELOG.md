@@ -8,6 +8,8 @@ It diverges in the following ways:
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html) for bug fix releases.
 
 ## Unreleased
+
+## 4.2 - 2019-08-12
 ### Added
 - Tile focus animation and overlay fade animation (#2454)
 
