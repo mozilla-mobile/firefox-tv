@@ -244,6 +244,8 @@
     <!-- Toast shown on webpage when tab is sent from another device
      %1$s will be replaced with the device name where the tab was sent from. -->
     <string name="fxa_tab_sent_toast">Tab sent from %1$s</string>
+    <!-- Toast shown on webpage when tab is sent from another device that does not have a device name specified -->
+    <string name="fxa_tab_sent_toast_no_device">Tab received</string>
     <!-- Description for header text for Firefox Accounts settings page. -->
     <string name="fxa_settings_header">Sent tabs</string>
     <!-- Body text for Firefox Accounts settings page
