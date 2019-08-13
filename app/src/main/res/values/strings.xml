@@ -220,7 +220,7 @@
     <string name="fxa_navigation_item_new">New! Send %1$s tabs to Fire TV</string>
     <!-- Description for Sent tab button in navigation toolbar
      that will launch the Firefox Account settings after the user is signed in. -->
-    <string name="fxa_navigation_item_signed_in">Sent tabs settings</string>
+    <string name="fxa_navigation_item_signed_in2">Sent tabs settings</string>
     <!-- Description for Sent tab buttons (in navigation toolbar & settings, both on the homescreen)
      that will launch the Firefox Account sign-in experience when the user needs to sign in again. -->
     <string name="fxa_navigation_item_sign_in_again">Sent tabs - sign in again</string>
