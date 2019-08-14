@@ -148,6 +148,7 @@ dependencies {
     implementation "org.mozilla.components:ui-fonts:$moz_components_version"
     implementation "org.mozilla.components:feature-session:$moz_components_version"
     implementation "org.mozilla.components:feature-push:$moz_components_version"
+    implementation "org.mozilla.components:feature-sendtab:$moz_components_version"
     implementation "org.mozilla.components:ui-icons:$moz_components_version"
     implementation "org.mozilla.components:service-fretboard:$moz_components_version"
     implementation "org.mozilla.components:service-firefox-accounts:$moz_components_version"
