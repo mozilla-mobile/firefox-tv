@@ -10,6 +10,7 @@ import android.webkit.WebSettings
 import androidx.annotation.VisibleForTesting.PRIVATE
 import mozilla.appservices.Megazord
 import mozilla.components.concept.engine.utils.EngineVersion
+import mozilla.components.concept.push.PushProcessor
 import mozilla.components.lib.fetch.okhttp.OkHttpClient
 import mozilla.components.service.glean.Glean
 import mozilla.components.support.base.log.Log
@@ -73,6 +74,8 @@ open class FirefoxApplication : LocaleAwareApplication() {
                 loadExperiments()
                 updateExperiments()
             }
+
+            PushProcessor.install(serviceLocator.pushFeature)
 
             enableStrictMode()
 
