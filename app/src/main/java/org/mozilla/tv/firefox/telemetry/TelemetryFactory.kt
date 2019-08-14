@@ -6,9 +6,6 @@ package org.mozilla.tv.firefox.telemetry
 
 import android.content.Context
 import mozilla.components.concept.fetch.Client
-import mozilla.components.lib.fetch.httpurlconnection.HttpURLConnectionClient
-import org.mozilla.tv.firefox.BuildConfig
-import org.mozilla.tv.firefox.utils.Settings
 import org.mozilla.telemetry.Telemetry
 import org.mozilla.telemetry.config.TelemetryConfiguration
 import org.mozilla.telemetry.measurement.DefaultSearchMeasurement
@@ -19,7 +16,10 @@ import org.mozilla.telemetry.ping.TelemetryPocketEventPingBuilder
 import org.mozilla.telemetry.schedule.jobscheduler.JobSchedulerTelemetryScheduler
 import org.mozilla.telemetry.serialize.JSONPingSerializer
 import org.mozilla.telemetry.storage.FileTelemetryStorage
+import org.mozilla.tv.firefox.BuildConfig
 import org.mozilla.tv.firefox.ext.serviceLocator
+import org.mozilla.tv.firefox.utils.HttpUrlConnectionWrapper
+import org.mozilla.tv.firefox.utils.Settings
 
 private const val TELEMETRY_APP_NAME_FOCUS_TV = "FirefoxForFireTV"
 
@@ -27,7 +27,7 @@ private const val TELEMETRY_APP_NAME_FOCUS_TV = "FirefoxForFireTV"
  * Constructs objects related to telemetry
  */
 object TelemetryFactory {
-    var client: Client = HttpURLConnectionClient() // Set it to [TestClient] to intercept request payload
+    var client: Client = HttpUrlConnectionWrapper.client // Set it to [TestClient] to intercept request payload
 
     fun createTelemetry(context: Context): Telemetry {
         val configuration = TelemetryConfiguration(context)
