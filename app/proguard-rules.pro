@@ -84,3 +84,12 @@
 # A reference class used by androidx.concurrent.futures.AbstractFuture$UnsafeAtomicHelper
 # Currently consumed (in depenendecies) by mozilla.components.service.freboard.scheduler
 -dontwarn sun.misc.Unsafe
+
+####################################################################################################
+# Amazon
+####################################################################################################
+-libraryjars libs/amazon-device-messaging-1.0.1.jar
+-dontwarn com.amazon.device.messaging.**
+-keep class com.amazon.device.messaging.** {*;}
+-keep public class * extends com.amazon.device.messaging.ADMMessageReceiver
+-keep public class * extends com.amazon.device.messaging.ADMMessageHandlerBase
