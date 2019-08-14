@@ -218,6 +218,7 @@ dependencies {
     testImplementation "org.mozilla.appservices:full-megazord-forUnitTests:0.37.1"
 
     compileOnly files('libs/amazon-device-messaging-1.0.1.jar')
+    testImplementation files('libs/amazon-device-messaging-1.0.1.jar')
 }
 
 task validateReleaseConfiguration(type: ValidateAndroidAppReleaseConfiguration)
