@@ -213,6 +213,8 @@ dependencies {
 
     // See https://github.com/mozilla/application-services/blob/master/.buildconfig-android.yml#L1 for latest version
     testImplementation "org.mozilla.appservices:full-megazord-forUnitTests:0.37.1"
+
+    compileOnly files('libs/amazon-device-messaging-1.0.1.jar')
 }
 
 task validateReleaseConfiguration(type: ValidateAndroidAppReleaseConfiguration)
