@@ -21,6 +21,7 @@ import mozilla.components.concept.sync.DeviceType
 import mozilla.components.concept.sync.OAuthAccount
 import mozilla.components.concept.sync.Profile
 import mozilla.components.feature.push.AutoPushFeature
+import mozilla.components.feature.sendtab.SendTabFeature
 import mozilla.components.service.fxa.DeviceConfig
 import mozilla.components.service.fxa.manager.FxaAccountManager
 import mozilla.components.support.base.log.logger.Logger
@@ -83,6 +84,11 @@ class FxaRepo(
 
         @Suppress("DeferredResultUnused") // No value is returned & we don't need to wait for this to complete.
         accountManager.initAsync() // If user is already logged in, the appropriate observers will be triggered.
+
+        // For push to work in debug builds (not needed for release), an api key is needed in the assets folder. See README for instructions.
+        SendTabFeature(accountManager, pushFeature) { _, _ ->
+            // TODO: Handle receiving tabs (#2491)
+        }
     }
 
     /**
