@@ -15,7 +15,7 @@ _Think something can be automated? Add it to [this doc](https://docs.google.com/
 
 #### Wednesday # 1
 
-- [ ] Export strings (*if applicable*) ([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Localization#exporting-strings-for-translation))
+- [ ] Verify all strings have been landed; exports now happen automatically
 - [ ] Create PR for bumping version (`X.X-LAT1`)
   - Merge to master
 - [ ] Cut LAT branch `releases/vX.X-LAT1` (this must include a-c upgrade)
