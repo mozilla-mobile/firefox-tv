@@ -1,217 +1,78 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- ####################################################################################### -->
-    <!-- ## Put only strings into this file that should be translated. Move all other strings ## -->
-    <!-- ## into a separate file like strings_references.xml                                  ## -->
-    <!-- ####################################################################################### -->
-
-    <!-- The brand name of this app -->
-    <string name="firefox_tv_brand_name" tools:keep="@string/firefox_tv_brand_name">Firefox TV</string>
-    <string name="firefox_tv_brand_name_short" tools:keep="@string/firefox_tv_brand_name_short">Firefox</string>
-
-    <!-- The brand name of our partner company, Pocket. -->
-    <string name="pocket_brand_name">Pocket</string>
-
-    <!-- Label used for buttons, e.g. in dialogs -->
-    <string name="action_cancel">取消</string>
-    <!-- Label used for buttons, e.g. in dialogs -->
-    <string name="action_ok">确定</string>
-
-    <!-- This text is shown in the URL bar when it's empty -->
-    <string name="urlbar_hint">搜索或输入网址</string>
-
-    <string name="menu_settings">设置</string>
-    <string name="menu_about">关于</string>
-    <string name="preference_language">语言</string>
-
-    <!-- This is shown when the user hasn't set a Firefox for Fire TV specific language, i.e. when Firefox for Fire TV
-         is using the system default language. -->
-    <string name="preference_language_systemdefault">系统默认</string>
-
-    <string name="preference_category_privacy">隐私</string>
-    <string name="preference_privacy_block_ads">拦截广告跟踪器</string>
-    <string name="preference_privacy_block_ads_summary">一些广告跟踪您的访问，即便您没有点击广告</string>
-    <string name="preference_privacy_block_analytics">拦截分析跟踪器</string>
-    <string name="preference_privacy_block_analytics_summary">会收集、分析和测量您的活动，例如点击与滚动</string>
-    <string name="preference_privacy_block_social">拦截社交跟踪器</string>
-    <string name="preference_privacy_block_social_summary">嵌入到网站上从而跟踪您的访问和显示分享按钮</string>
-    <string name="preference_privacy_block_content">拦截其他内容跟踪器</string>
-    <string name="preference_privacy_block_content_summary2">启用可能导致部分网站工作异常</string>
-
-    <string name="preference_category_performance">性能</string>
-    <string name="preference_performance_block_webfonts">拦截网络字体</string>
-    <!-- This text is shown below the setting for disabling web fonts. Some websites use icons/images from a font and those do not show up if fonts are blocked.-->
-    <string name="preference_performance_block_webfonts_summary">可能造成图标或图像缺失</string>
-
-    <!-- In-app link (in settings) to Firefox for Fire TV privacy notice. -->
-    <string name="preference_privacy_notice">隐私声明</string>
-
-    <!-- Content description (not visible, for screen readers etc.): Navigate forward (browsing history) -->
-    <string name="content_description_forward">浏览下一页</string>
-
-    <!-- Content description (not visible, for screen readers etc.): Reload current website -->
-    <string name="content_description_reload">重新载入网站</string>
-
-    <!-- Content description (not visible, for screen readers etc.): Navigate back (browsing history) -->
-    <string name="content_description_back">浏览上一页</string>
-
-    <string name="external_app_prompt_title">用另一个应用打开链接</string>
-    <!-- This string is shown when the user has clicked a link that needs to be opened in a different app.
-         Argument 2 is the external app name, argument 1 is our name (i.e. Firefox for Fire TV). -->
-    <string name="external_app_prompt">您可以离开 %1$s，用 %2$s 打开此链接。</string>
-    <!-- This text is the title of a dialog shown if no app could be found for a custom link protocol. -->
-    <string name="external_app_prompt_no_app_title">寻找可以打开此链接的应用</string>
-    <!-- This text is shown in a dialog if no app could be found for a custom link protocol. %1$s is the name of the app (i.e. Firefox for Fire TV) and %2$s is the name of
-         the app store installed on the device (usually that's Google Play). -->
-    <string name="external_app_prompt_no_app">您的设备上的应用都不能打开此链接。您可以离开 %1$s，到 %2$s 找找适合的应用。</string>
-    <!-- This label is shown above a list of apps that can be used to open a given link -->
-    <string name="external_multiple_apps_matched_exit">退出隐私浏览模式？</string>
-
-    <!-- The page html title (i.e. the <title> tag content) -->
-    <string name="errorpage_title">页面载入出错</string>
-    <string name="errorpage_refresh">重试</string>
-
-    <string name="your_rights">您的权利</string>
-
-    <!-- Text shown in the "Your rights" screen.
-    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)-->
-    <string name="your_rights_content1"><![CDATA[%1$s 是由 Mozilla 及贡献者制作的一款自由的开源软件。]]></string>
-
-    <!-- Text shown in the "Your rights" screen.
-    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
-    %2$s will be replaced with a URL linking to the MPL (e.g. https://www.mozilla.org/en-US/MPL/) -->
-    <string name="your_rights_content2"><![CDATA[\"%1$s 依照 \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla &amp;#20844;&amp;#20849;&amp;#35768;&amp;#21487;&amp;#35777;</a>及其他一些开源许可证向您授权。]]></string>
-
-    <!-- Text shown in the "Your rights" screen.
-    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
-    %2$s will be replaced with a URL linking to the trademark policy (e.g. https://www.mozilla.org/foundation/trademarks/policy/) -->
-    <string name="your_rights_content3"><![CDATA[您没有取得 Mozilla 基金会或任何一方的商标的任何权利或许可，包括 Mozilla、Firefox 和 %1$s 名称或徽标的许可。有关信息请查阅<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&amp;#27492;&amp;#22788;</a>。]]></string>
-
-    <!-- Text shown in the "Your rights" screen.
-    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
-    %2$s will be replaced with a URL linking to the list of licenses used by the dependencies.-->
-    <string name="your_rights_content4"><![CDATA[%1$s 其他源代码以各类自由和开源<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&amp;#35768;&amp;#21487;&amp;#35777;</a>开放。]]></string>
-
-    <!-- Text shown in the "Your rights" screen.
-    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
-    %2$s will be replaced with a URL linking to the GPL
-    %3$s will be replaced with a URL linking to the tracking protection wiki page (e.g. https://wiki.mozilla.org/Security/Tracking_protection#Lists) -->
-    <string name="your_rights_content5"><![CDATA[\"%1$s 还使用 Disconnect 公司提供的阻止列表，它是以 \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU &amp;#36890;&amp;#29992;&amp;#20844;&amp;#20849;&amp;#35768;&amp;#21487;&amp;#35777; v3</a>\" 提供的一个独立的作品，可在\"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">&amp;#36825;&amp;#37324;</a>找到。]]></string>
-
-    <!-- Firefox for Fire TV
-    video strings -->
-    <!-- Settings strings -->
-    <string name="settings_cookies_dialog_title">清除所有 Cookie 和站点数据</string>
-    <string name="settings_cookies_dialog_content2">这将清除所有 Cookie 和网站数据。清除此信息可能会使您退出网站登录并删除存储的离线 Web 内容。</string>
-    <!-- Text on a button that, when pressed, will clear all user data.
-    Mock: https://user-images.githubusercontent.com/1721875/47298531-59442f00-d618-11e8-98df-632f74e9ebc3.png -->
-    <string name="settings_cookies_confirm">立即清除</string>
-
-    <!-- Title for a screen that explains the purpose of our telemetry, and contains a
-    switch that can toggle it on and off
-     Mock: https://user-images.githubusercontent.com/1721875/47298694-b809a880-d618-11e8-9e18-1d6d47d2045d.png -->
-    <string name="preference_mozilla_telemetry2">发送使用统计</string>
-    <!-- Description text that explains the purpose of our telemetry
-      Mock: https://user-images.githubusercontent.com/1721875/47298694-b809a880-d618-11e8-9e18-1d6d47d2045d.png
-      %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV) -->
-    <string name="settings_telemetry_description">Mozilla 坚持仅收集为大众提供和改进 %1$s 所必需的数据</string>
-
-    <string name="turbo_mode">加速模式</string>
-    <string name="onboarding_turbo_mode_title">加速模式下浏览更快更轻巧</string>
-    <string name="onboarding_turbo_mode_body2">加速模式会自动拦截广告和跟踪器。\n如果网站的行为不符合您的预期，请尝试将其关闭。</string>
-    <!-- Button text for keeping Turbo Mode enabled in onboarding -->
-    <string name="button_turbo_mode_keep_enabled2">保持加速模式启用</string>
-    <!-- Button text for turning off Turbo Mode in onboarding -->
-    <string name="button_turbo_mode_turn_off2">退出加速模式</string>
-    <!-- Spoken to screen reader users to explain image on Turbo mode onboarding -->
-    <string name="turbo_mode_image_a11y">加速模式启用范例</string>
-
-    <!-- Text displayed in a toast to explain to the user how to unpin a tile from the homescreen.
-         SELECT refers to a button on the remote: the button at the center of the 4-way directional navigation. -->
-    <string name="homescreen_unpin_tutorial_toast">长按 SELECT 键从主屏幕取消固定</string>
-    <string name="homescreen_tile_remove">移除</string>
-
-    <!-- The title of Pinned channel remove modal.
-    %1$s will be replaced by the title of tiles (website titles or url). -->
-    <string name="pinned_tiles_channel_remove_title">从已固定网站中删除 %1$s</string>
-
-    <!-- Title text displayed above the pinned tile channel. Pinned tiles are a collection of links
-    to commonly used sites (bundled with the app), as well as custom pinnned ones (added by the user)
-    See https://github.com/mozilla-mobile/firefox-tv/issues/1630 for channel mocks -->
-    <string name="pinned_tile_channel_title">已固定的磁贴</string>
-
-    <string name="pin_label">固定到主屏幕</string>
-    <!-- Label shown underneath Pin icon in toolbar when a site is already pinned, to hint to users that
-         they can unpin the site to remove it-->
-    <string name="unpin_label">取消固定到主屏幕</string>
-    <string name="notification_pinned_site">已固定到 Firefox TV 主屏幕</string>
-    <string name="notification_unpinned_site">已从 Firefox TV 主屏幕移除</string>
-
-    <!-- The title of a tutorial shown to introduce Pocket video recommendations.
-    %1$s will be replaced with the Pocket brand name. -->
-    <string name="pocket_home_tutorial_title">介绍由“%1$s”推荐的视频</string>
-    <!-- The description text of a tutorial shown to introduce Pocket video recommendations.
-    %1$s will be replaced with the Pocket brand name. -->
-    <string name="pocket_home_tutorial_description">网络上最有趣的视频。由 Mozilla 旗下 %1$s 为您推荐。</string>
-    <!-- The text on the dismiss button of a tutorial shown to introduce Pocket video recommendations. -->
-    <string name="pocket_home_tutorial_dismiss_button">我明白了</string>
-    <!-- Spoken to screen reader users when they focus the Pocket tile. Clicking this tile will take them to the
-         Pocket video recommendations feed.
-    %1$s will be replaced with the Pocket brand name. -->
-    <string name="pocket_home_a11y_tile_focused">由“%1$s”推荐的视频</string>
-    <!-- Spoken by screen reader when they focus the "?" button on the Pocket Video feed screen,
-    which will shows the Pocket tutorial again -->
-    <string name="pocket_info_a11y">关于 Pocket</string>
-
-
-    <string name="pocket_video_feed_recommended_videos_title">推荐视频</string>
-    <!-- Text displayed when the Pocket video recommendations feed failed to load.
-    %1$s will be replaced with the Pocket brand name. -->
-    <string name="pocket_video_feed_failed_to_load">呃，我们在显示由“%1$s”推荐的视频时遇到一些问题。</string>
-    <!-- Text displayed on a button to reload the Pocket video recommendations feed if it failed to load. -->
-    <string name="pocket_video_feed_reload_button">重试</string>
-
-    <!--Request desktop site strings-->
-    <!-- Content description for Request desktop version button-->
-    <string name="request_desktop_site_a11y">要求此站点的桌面版</string>
-    <!-- Notification displayed when the user has clicked the "request desktop version" button to turn ON desktop mode,
-    notifying the user that Firefox has requested the "desktop version" from the site -->
-    <string name="notification_request_desktop_site">已发出桌面版请求</string>
-    <!-- Notification displayed when the user has clicked the "request desktop version" button to turn OFF desktop mode,
-    to notify user that Firefox has requested the default "non-desktop version" from the site -->
-    <string name="notification_request_non_desktop_site">返回非桌面版</string>
-
-    <!-- Content description for a button that will prompt a user to sign in, in order to receive tabs pushed from FF
-    on another device -->
-    <string name="fxa_login_a11y">收取标签页</string>
-
-    <!-- Notification displayed to introduce a "YouTube casting" feature (similar to "broadcasting")
-    Users who have the YouTube app on their phone or tablet can use it to play YouTube videos directly on their tv.
-
-    %s will be replaced with the icon that matches the button in the YouTube app for this feature.
-    Clicking on that button in the YouTube app will show YouTube's instructions on how to cast. -->
-    <string name="youtube_casting_onboarding_toast">用您的手机或平板电脑投屏 YouTube 视频。在您的设备上打开 YouTube，然后点按 %s 即可开始使用。</string>
-
-    <!-- Content description for the Exit Firefox button.
-     %1$s will be replaced with the Firefox brand name. -->
-    <string name="exit_firefox_a11y">退出 %1$s</string>
-
-    <!-- Hint Strings -->
-    <!-- Hint text displayed when the overlay is open.
-     $IMAGE will be replaced with the image of a hardware back button.
-     When the described button is pressed, the overlay will close and the user will be returned to the browser. -->
-    <string name="hint_press_back_to_close_overlay">按下 $IMAGE 返回</string>
-    <!-- Content description for a hint bar that is displayed when the overlay is open.
-     When the described button is pressed, the overlay will close and the user will be returned to the browser. -->
-    <string name="hint_press_back_to_close_overlay_a11y">按下后退按钮返回</string>
-    <!-- Hint text displayed when the browser is open.
-     $IMAGE will be replaced with the image of a hardware menu button.
-     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
-     When the described button is pressed, the overlay will open and the browser will be hidden underneath it -->
-    <string name="hint_press_menu_to_open_overlay">按下 $IMAGE 打开 %1$s 主页、搜索、设置等</string>
-    <!-- Content description for a hint bar displayed when the browser is open.
-     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
-     When the described button is pressed, the overlay will open and the browser will be hidden underneath it -->
-    <string name="hint_press_menu_to_open_overlay_a11y">按下菜单按钮打开 %1$s 主页、搜索、设置等</string>
-
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+  <string name="firefox_tv_brand_name">Firefox TV</string>
+  <string name="firefox_tv_brand_name_short">Firefox</string>
+  <string name="pocket_brand_name">Pocket</string>
+  <string name="action_cancel">取消</string>
+  <string name="action_ok">确定</string>
+  <string name="urlbar_hint">搜索或输入网址</string>
+  <string name="menu_settings">设置</string>
+  <string name="menu_about">关于</string>
+  <string name="preference_language">语言</string>
+  <string name="preference_language_systemdefault">系统默认</string>
+  <string name="preference_category_privacy">隐私</string>
+  <string name="preference_privacy_block_ads">拦截广告跟踪器</string>
+  <string name="preference_privacy_block_ads_summary">一些广告跟踪您的访问，即便您没有点击广告</string>
+  <string name="preference_privacy_block_analytics">拦截分析跟踪器</string>
+  <string name="preference_privacy_block_analytics_summary">会收集、分析和测量您的活动，例如点击与滚动</string>
+  <string name="preference_privacy_block_social">拦截社交跟踪器</string>
+  <string name="preference_privacy_block_social_summary">嵌入到网站上从而跟踪您的访问和显示分享按钮</string>
+  <string name="preference_privacy_block_content">拦截其他内容跟踪器</string>
+  <string name="preference_privacy_block_content_summary2">启用可能导致部分网站工作异常</string>
+  <string name="preference_category_performance">性能</string>
+  <string name="preference_performance_block_webfonts">拦截网络字体</string>
+  <string name="preference_performance_block_webfonts_summary">可能造成图标或图像缺失</string>
+  <string name="preference_privacy_notice">隐私声明</string>
+  <string name="content_description_forward">浏览下一页</string>
+  <string name="content_description_reload">重新载入网站</string>
+  <string name="content_description_back">浏览上一页</string>
+  <string name="external_app_prompt_title">用另一个应用打开链接</string>
+  <string name="external_app_prompt">您可以离开 %1$s，用 %2$s 打开此链接。</string>
+  <string name="external_app_prompt_no_app_title">寻找可以打开此链接的应用</string>
+  <string name="external_app_prompt_no_app">您的设备上的应用都不能打开此链接。您可以离开 %1$s，到 %2$s 找找适合的应用。</string>
+  <string name="external_multiple_apps_matched_exit">退出隐私浏览模式？</string>
+  <string name="errorpage_title">页面载入出错</string>
+  <string name="errorpage_refresh">重试</string>
+  <string name="your_rights">您的权利</string>
+  <string name="your_rights_content1">%1$s 是由 Mozilla 及贡献者制作的一款自由的开源软件。</string>
+  <string name="your_rights_content2"><![CDATA[\"%1$s 依照 \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla &amp;#20844;&amp;#20849;&amp;#35768;&amp;#21487;&amp;#35777;</a>及其他一些开源许可证向您授权。]]></string>
+  <string name="your_rights_content3"><![CDATA[您没有取得 Mozilla 基金会或任何一方的商标的任何权利或许可，包括 Mozilla、Firefox 和 %1$s 名称或徽标的许可。有关信息请查阅<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&amp;#27492;&amp;#22788;</a>。]]></string>
+  <string name="your_rights_content4"><![CDATA[%1$s 其他源代码以各类自由和开源<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&amp;#35768;&amp;#21487;&amp;#35777;</a>开放。]]></string>
+  <string name="your_rights_content5"><![CDATA[\"%1$s 还使用 Disconnect 公司提供的阻止列表，它是以 \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU &amp;#36890;&amp;#29992;&amp;#20844;&amp;#20849;&amp;#35768;&amp;#21487;&amp;#35777; v3</a>\" 提供的一个独立的作品，可在\"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">&amp;#36825;&amp;#37324;</a>找到。]]></string>
+  <string name="settings_cookies_dialog_title">清除所有 Cookie 和站点数据</string>
+  <string name="settings_cookies_dialog_content2">这将清除所有 Cookie 和网站数据。清除此信息可能会使您退出网站登录并删除存储的离线 Web 内容。</string>
+  <string name="settings_cookies_confirm">立即清除</string>
+  <string name="preference_mozilla_telemetry2">发送使用统计</string>
+  <string name="settings_telemetry_description">Mozilla 坚持仅收集为大众提供和改进 %1$s 所必需的数据</string>
+  <string name="turbo_mode">加速模式</string>
+  <string name="onboarding_turbo_mode_title">加速模式下浏览更快更轻巧</string>
+  <string name="onboarding_turbo_mode_body2">加速模式会自动拦截广告和跟踪器。\n如果网站的行为不符合您的预期，请尝试将其关闭。</string>
+  <string name="button_turbo_mode_keep_enabled2">保持加速模式启用</string>
+  <string name="button_turbo_mode_turn_off2">退出加速模式</string>
+  <string name="turbo_mode_image_a11y">加速模式启用范例</string>
+  <string name="homescreen_unpin_tutorial_toast">长按 SELECT 键从主屏幕取消固定</string>
+  <string name="homescreen_tile_remove">移除</string>
+  <string name="pinned_tiles_channel_remove_title">从已固定网站中删除 %1$s</string>
+  <string name="pinned_tile_channel_title">已固定的磁贴</string>
+  <string name="pin_label">固定到主屏幕</string>
+  <string name="unpin_label">取消固定到主屏幕</string>
+  <string name="notification_pinned_site">已固定到 Firefox TV 主屏幕</string>
+  <string name="notification_unpinned_site">已从 Firefox TV 主屏幕移除</string>
+  <string name="pocket_home_tutorial_title">介绍由“%1$s”推荐的视频</string>
+  <string name="pocket_home_tutorial_description">网络上最有趣的视频。由 Mozilla 旗下 %1$s 为您推荐。</string>
+  <string name="pocket_home_tutorial_dismiss_button">我明白了</string>
+  <string name="pocket_home_a11y_tile_focused">由“%1$s”推荐的视频</string>
+  <string name="pocket_info_a11y">关于 Pocket</string>
+  <string name="pocket_video_feed_recommended_videos_title">推荐视频</string>
+  <string name="pocket_video_feed_failed_to_load">呃，我们在显示由“%1$s”推荐的视频时遇到一些问题。</string>
+  <string name="pocket_video_feed_reload_button">重试</string>
+  <string name="request_desktop_site_a11y">要求此站点的桌面版</string>
+  <string name="notification_request_desktop_site">已发出桌面版请求</string>
+  <string name="notification_request_non_desktop_site">返回非桌面版</string>
+  <string name="youtube_casting_onboarding_toast">用您的手机或平板电脑投屏 YouTube 视频。在您的设备上打开 YouTube，然后点按 %s 即可开始使用。</string>
+  <string name="exit_firefox_a11y">退出 %1$s</string>
+  <string name="hint_press_back_to_close_overlay">按下 $IMAGE 返回</string>
+  <string name="hint_press_back_to_close_overlay_a11y">按下后退按钮返回</string>
+  <string name="hint_press_menu_to_open_overlay">按下 $IMAGE 打开 %1$s 主页、搜索、设置等</string>
+  <string name="hint_press_menu_to_open_overlay_a11y">按下菜单按钮打开 %1$s 主页、搜索、设置等</string>
 </resources>
