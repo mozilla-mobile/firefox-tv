@@ -97,7 +97,7 @@ open class ServiceLocator(val app: Application) {
     val pocketEndpointRaw by lazy { PocketEndpointRaw(appVersion, buildConfigDerivables.globalPocketVideoEndpoint) }
     val pocketVideoStore by lazy { PocketVideoStore(app, app.assets, pocketVideoJSONValidator) }
     val pocketVideoFetchScheduler by lazy { PocketVideoFetchScheduler(isPocketEnabledByLocale) }
-    val fxaRepo by lazy { FxaRepo(app) }
+    val fxaRepo by lazy { FxaRepo(app, pushFeature = pushFeature) }
     val fxaLoginUseCase by lazy { FxaLoginUseCase(fxaRepo, sessionRepo, screenController) }
     val admService by lazy { ADMService() }
     val pushFeature by lazy { AutoPushFeature(app, admService, PushConfig(senderId = "fftv", serviceType = ServiceType.ADM)) }
