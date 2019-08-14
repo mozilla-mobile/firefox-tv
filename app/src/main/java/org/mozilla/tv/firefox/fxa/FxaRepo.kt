@@ -20,6 +20,7 @@ import mozilla.components.concept.sync.DeviceEventsObserver
 import mozilla.components.concept.sync.DeviceType
 import mozilla.components.concept.sync.OAuthAccount
 import mozilla.components.concept.sync.Profile
+import mozilla.components.feature.push.AutoPushFeature
 import mozilla.components.service.fxa.DeviceConfig
 import mozilla.components.service.fxa.manager.FxaAccountManager
 import mozilla.components.support.base.log.logger.Logger
@@ -43,8 +44,9 @@ private val APPLICATION_SCOPES = setOf(
  * Devs should use this class rather than interacting with the FxA library directly.
  */
 class FxaRepo(
-    context: Context,
-    val accountManager: FxaAccountManager = newInstanceDefaultAccountManager(context)
+    val context: Context,
+    val accountManager: FxaAccountManager = newInstanceDefaultAccountManager(context),
+    val pushFeature: AutoPushFeature
 ) {
 
     /**
@@ -98,6 +100,9 @@ class FxaRepo(
     inner class FirefoxAccountObserver : AccountObserver {
         override fun onAuthenticated(account: OAuthAccount, newAccount: Boolean) {
             _accountState.onNext(AuthenticatedNoProfile)
+
+            // Push service is only needed when logged in (this saves resources)
+            pushFeature.initialize()
         }
 
         override fun onAuthenticationProblems() {
@@ -106,6 +111,9 @@ class FxaRepo(
 
         override fun onLoggedOut() {
             _accountState.onNext(NotAuthenticated)
+
+            // Push service is not needed after logging out (this saves resources)
+            pushFeature.shutdown()
         }
 
         /**
