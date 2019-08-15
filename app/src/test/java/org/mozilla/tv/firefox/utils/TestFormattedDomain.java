@@ -10,7 +10,7 @@ import android.text.TextUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
 import java.net.URI;
@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(FirefoxRobolectricTestRunner.class)
 public class TestFormattedDomain {
 
     private final String BUGZILLA_URL = "https://bugzilla.mozilla.org/enter_bug.cgi?format=guided#h=dupes%7CData%20%26%20BI%20Services%20Team%7C";

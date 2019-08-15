@@ -9,11 +9,11 @@ import android.graphics.Color;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner;
 
 import static org.junit.Assert.assertEquals;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(FirefoxRobolectricTestRunner.class)
 public class ColorUtilsTest {
     @Test
     public void testGetReadableTextColor() {

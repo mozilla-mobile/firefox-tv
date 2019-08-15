@@ -24,10 +24,10 @@ import org.mozilla.tv.firefox.framework.FrameworkRepo
 import org.mozilla.tv.firefox.helpers.RxTestHelper
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.Direction
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 import java.util.concurrent.TimeUnit
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(FirefoxRobolectricTestRunner::class)
 class CursorModelTest {
 
     companion object {

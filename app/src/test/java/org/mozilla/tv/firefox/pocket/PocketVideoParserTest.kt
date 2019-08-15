@@ -14,11 +14,11 @@ import org.junit.Assert.fail
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.TestResource
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 
 private const val KEY_INNER = "recommendations"
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(FirefoxRobolectricTestRunner::class)
 class PocketVideoParserTest {
 
     private val pocketVideoParser = PocketVideoParser

@@ -20,11 +20,11 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 
 private const val TEST_URL = "https://github.com/mozilla-mobile/focus-android"
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(FirefoxRobolectricTestRunner::class)
 class IntentValidatorTest {
     private lateinit var appContext: Application
 

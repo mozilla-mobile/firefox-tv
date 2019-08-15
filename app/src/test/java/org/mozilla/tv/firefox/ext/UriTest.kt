@@ -8,9 +8,9 @@ import android.net.Uri
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(FirefoxRobolectricTestRunner::class)
 class UriTest {
     @Test
     fun testTruncatedHostWithCommonUrls() {

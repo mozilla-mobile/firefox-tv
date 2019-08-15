@@ -12,9 +12,9 @@ import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.robolectric.Robolectric
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(FirefoxRobolectricTestRunner::class)
 class FirefoxViewModelProvidersTest {
 
     private lateinit var mainActivity: MainActivity

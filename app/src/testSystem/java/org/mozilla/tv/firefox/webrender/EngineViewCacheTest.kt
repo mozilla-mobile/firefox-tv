@@ -16,9 +16,9 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.robolectric.Robolectric
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(FirefoxRobolectricTestRunner::class)
 class EngineViewCacheTest {
 
     private lateinit var engineViewCache: EngineViewCache

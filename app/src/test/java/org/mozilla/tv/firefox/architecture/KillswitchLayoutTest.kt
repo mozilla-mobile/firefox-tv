@@ -14,10 +14,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.robolectric.Robolectric
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 import java.util.Locale
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(FirefoxRobolectricTestRunner::class)
 class KillswitchLayoutTest {
 
     private lateinit var killswitchLayout: KillswitchLayout

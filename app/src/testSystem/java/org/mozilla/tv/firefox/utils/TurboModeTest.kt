@@ -14,11 +14,11 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.ext.webRenderComponents
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 import mozilla.components.browser.engine.system.SystemEngine
 import org.mozilla.tv.firefox.ext.application
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(FirefoxRobolectricTestRunner::class)
 class TurboModeTest {
     private val context: Context
         get() = ApplicationProvider.getApplicationContext()

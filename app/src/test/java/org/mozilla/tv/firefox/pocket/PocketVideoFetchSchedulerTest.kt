@@ -23,10 +23,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.pocket.PocketVideoFetchScheduler.Companion.FETCH_END_HOUR
 import org.mozilla.tv.firefox.pocket.PocketVideoFetchScheduler.Companion.FETCH_START_HOUR
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 import java.util.Calendar
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(FirefoxRobolectricTestRunner::class)
 class PocketVideoFetchSchedulerTest {
 
     private lateinit var scheduler: PocketVideoFetchScheduler

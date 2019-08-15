@@ -16,7 +16,7 @@ import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.spy
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 import java.util.UUID
 
 private const val BUNDLED_TILE_COUNT = 10
@@ -25,7 +25,7 @@ private const val BUNDLED_TILE_COUNT = 10
  * Unit tests for the [PinnedTileRepo].
  * Bundled tile list fetch comes from /assets/bundled/bundled_tiles.json
  */
-@RunWith(RobolectricTestRunner::class)
+@RunWith(FirefoxRobolectricTestRunner::class)
 class PinnedTileRepoTest {
 
     private lateinit var pinnedTileRepo: PinnedTileRepo
