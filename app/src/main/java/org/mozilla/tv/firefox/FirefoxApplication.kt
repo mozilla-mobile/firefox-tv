@@ -75,7 +75,19 @@ open class FirefoxApplication : LocaleAwareApplication() {
                 updateExperiments()
             }
 
-            PushProcessor.install(serviceLocator.pushFeature)
+            var admAvailable = false
+            try {
+                Class.forName("com.amazon.device.messaging.ADM")
+                admAvailable = true
+            } catch (e: ClassNotFoundException) {
+                android.util.Log.i(DEFAULT_LOGTAG, "ADM is not available on this device.")
+            }
+
+            // Only install push feature if ADM is available on this device
+            if (admAvailable) {
+                // This installs the [pushFeature] as a singleton
+                PushProcessor.install(serviceLocator.pushFeature)
+            }
 
             enableStrictMode()
 
