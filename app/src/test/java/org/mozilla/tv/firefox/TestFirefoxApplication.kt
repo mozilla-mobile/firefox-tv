@@ -8,14 +8,14 @@ import mozilla.components.service.glean.Glean
 import androidx.work.testing.WorkManagerTestInitHelper
 import mozilla.components.concept.engine.utils.EngineVersion
 import org.mozilla.tv.firefox.helpers.EngineVariantFunctionality
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 
 /**
- * The application class used by the [RobolectricTestRunner]: this class may modified to run additional
+ * The application class used by the [FirefoxRobolectricTestRunner]: this class may modified to run additional
  * test setup code during off-device Robolectric tests.
  *
  * This class should not be confused with [FirefoxTestApplication] which is used for on-device tests.
- * Unfortunately, this class name is hardcoded into the [RobolectricTestRunner] so we can't rename it to
+ * Unfortunately, this class name is hardcoded into the [FirefoxRobolectricTestRunner] so we can't rename it to
  * better distinguish it from the other test application.
  */
 @Suppress("unused") // Robolectric hardcodes this class name.

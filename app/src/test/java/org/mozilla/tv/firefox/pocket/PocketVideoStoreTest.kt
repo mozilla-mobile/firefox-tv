@@ -23,14 +23,14 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.helpers.PocketTestData
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.InputStream
 
 private val POCKET_FEED_TEST_DATA = PocketTestData.getVideoFeed(1)
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(FirefoxRobolectricTestRunner::class)
 class PocketVideoStoreTest {
     private lateinit var pocketVideoStore: PocketVideoStore
     private lateinit var sharedPrefs: SharedPreferences

@@ -16,9 +16,9 @@ import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.helpers.PocketTestData
 import org.mozilla.tv.firefox.helpers.RxTestHelper
 import org.mozilla.tv.firefox.pocket.PocketVideoRepo.FeedState
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(FirefoxRobolectricTestRunner::class)
 class PocketVideoRepoTest {
 
     companion object {

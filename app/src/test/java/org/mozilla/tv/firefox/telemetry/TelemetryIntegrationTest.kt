@@ -17,9 +17,9 @@ import org.mockito.Mockito.verify
 import org.mozilla.tv.firefox.utils.anyNonNull
 import org.mozilla.telemetry.Telemetry
 import org.mozilla.telemetry.TelemetryHolder
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(FirefoxRobolectricTestRunner::class)
 class TelemetryIntegrationTest {
     private lateinit var appContext: Application
     private lateinit var telemetryIntegration: TelemetryIntegration

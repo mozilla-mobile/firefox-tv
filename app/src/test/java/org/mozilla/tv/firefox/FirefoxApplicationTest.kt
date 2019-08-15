@@ -13,10 +13,10 @@ import org.mockito.Mockito.mock
 import org.mockito.Mockito.never
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 import org.mozilla.tv.firefox.utils.ServiceLocator
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(FirefoxRobolectricTestRunner::class)
 class FirefoxApplicationTest {
 
     private lateinit var application: FirefoxApplication

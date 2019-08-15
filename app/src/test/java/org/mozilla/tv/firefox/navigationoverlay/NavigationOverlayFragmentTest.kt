@@ -13,9 +13,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.helpers.KeyEventHelper
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(FirefoxRobolectricTestRunner::class)
 class NavigationOverlayFragmentTest {
 
     private lateinit var navigationOverlayFragment: NavigationOverlayFragment

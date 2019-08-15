@@ -29,7 +29,7 @@ import org.mozilla.tv.firefox.navigationoverlay.ChannelTitles
 import org.mozilla.tv.firefox.navigationoverlay.ToolbarViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.FormattedDomainWrapper
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 import java.io.File
 
 const val DEFAULT_PINNED_TILE_COUNT = 10
@@ -39,7 +39,7 @@ const val DEFAULT_PINNED_TILE_COUNT = 10
  */
 @Ignore(value = "This test needs to be rethought. Most of the tested functionality currently " +
     "belongs to the ChannelRepo, not the PinnedTileRepo.  Should these classes be merged?")
-@RunWith(RobolectricTestRunner::class)
+@RunWith(FirefoxRobolectricTestRunner::class)
 class PinnedTileTest {
 
     companion object {

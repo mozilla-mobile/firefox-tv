@@ -3,14 +3,14 @@ package org.mozilla.tv.firefox.utils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mozilla.tv.firefox.BuildConfig;
-import org.robolectric.RobolectricTestRunner;
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
 import java.util.Locale;
 
 import static org.junit.Assert.assertEquals;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(FirefoxRobolectricTestRunner.class)
 public class SupportUtilsTest {
 
     @Test

@@ -16,9 +16,9 @@ import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.helpers.KeyEventHelper
 import org.mozilla.tv.firefox.helpers.MockFragmentManagerContainer
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
+@RunWith(FirefoxRobolectricTestRunner::class)
 class ScreenControllerTest {
 
     private lateinit var controller: ScreenController

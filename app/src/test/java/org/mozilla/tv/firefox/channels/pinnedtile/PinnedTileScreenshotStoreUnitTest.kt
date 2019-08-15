@@ -14,7 +14,7 @@ import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 import java.util.UUID
 
 /**
@@ -24,7 +24,7 @@ import java.util.UUID
  * We could improve the tests by additionally testing:
  * - Read/write locking works correctly.
  */
-@RunWith(RobolectricTestRunner::class)
+@RunWith(FirefoxRobolectricTestRunner::class)
 class PinnedTileScreenshotStoreUnitTest {
     private lateinit var appContext: Application
     private lateinit var uuid: UUID

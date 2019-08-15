@@ -19,14 +19,14 @@ import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.PreventLiveDataMainLooperCrashRule
-import org.robolectric.RobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 
 private const val mozilla = "https://www.mozilla.org/en-US/"
 private const val google = "www.google.com/"
 private const val facebook = "www.facebook.com/"
 private const val wikipedia = "https://www.wikipedia.org/"
 
-@RunWith(RobolectricTestRunner::class) // Requires Robolectric for Uri
+@RunWith(FirefoxRobolectricTestRunner::class) // Requires Robolectric for Uri
 class ToolbarViewModelTest {
 
     @get:Rule val rule = PreventLiveDataMainLooperCrashRule()
