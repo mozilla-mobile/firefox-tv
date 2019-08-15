@@ -57,6 +57,8 @@ var _firefoxTV_isScrollPositionObserverLoaded;
          * incorrect position. Also, if the user is fast enough, they can open fullscreen before we cache the value.
          * This value was set through manual testing. I did not find better solutions. */
         if (typeof _firefoxTV_lastTimeout !== 'undefined') {
+            /* We clear the timeout as an optimization: there are many scroll events so there might be performance
+             * problems if we kept every event on the JS thread. */
             window.clearTimeout(_firefoxTV_lastTimeout);
         }
 
@@ -71,9 +73,10 @@ var _firefoxTV_isScrollPositionObserverLoaded;
         val UPDATE_FULLSCREEN_SCROLL_POSITION = """
 var $CACHED_SCROLL_POSITION;
 (function () {
-    /* We delay restoring the cached value because WebView may override the value we restore. This creates a race
-     * condition & is imperfect: on a slow page, sometimes WebView will override us anyway. This value was set through
-     * manual testing. I did not find better solutions.
+    /* When fullscreen is pressed, the WebView sometimes updates the scroll position of the page. We delay a short
+     * duration so that we can ensure the WebView scroll position update occurs before we write our final scroll
+     * position. This creates a race condition & is imperfect: on a slow page, sometimes WebView will overwrite our
+     * scroll position anyway. This delay duration was set through manual testing. I did not find better solutions.
      *
      * We use the cached scroll position from when this method is initially called so that we're less likely to use one
      * of WebView's incorrect positions (see OBSERVE_SCROLL_POSITION). */
