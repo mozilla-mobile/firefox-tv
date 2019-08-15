@@ -49,7 +49,7 @@ var _firefoxTV_isScrollPositionObserverLoaded;
     if (_firefoxTV_isScrollPositionObserverLoaded) { return; }
     _firefoxTV_isScrollPositionObserverLoaded = true;
 
-    console.log('adding scroll event listener');
+    console.log('FFTV workaround - adding scroll event listener');
     window.addEventListener('scroll', (e) => {
         /* During the transition to fullscreen, the WebView may or may not change the scroll position to an incorrect
          * value so we add a short delay before caching. This creates a race condition & is imperfect: on a slow page,
