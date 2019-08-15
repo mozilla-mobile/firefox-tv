@@ -38,10 +38,11 @@
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
 
-        <!-- For ADM -->
+        <!-- For ADM. -->
+        <!-- When required is false, graceful degradation is required. If true, APK will not be available to devices not supporting ADM. -->
         <amazon:enable-feature
             android:name="com.amazon.device.messaging"
-            android:required="true"/>
+            android:required="false"/>
         <service
             android:name=".fxa.ADMService"
             android:exported="false" />
