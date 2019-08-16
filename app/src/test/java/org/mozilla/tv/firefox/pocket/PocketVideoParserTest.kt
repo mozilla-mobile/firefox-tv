@@ -13,7 +13,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.fail
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mozilla.tv.firefox.TestResource
+import org.mozilla.tv.firefox.helpers.TestResource
 import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 
 private const val KEY_INNER = "recommendations"
