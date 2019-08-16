@@ -8,6 +8,7 @@ import android.os.StrictMode
 import androidx.annotation.VisibleForTesting
 import android.webkit.WebSettings
 import androidx.annotation.VisibleForTesting.PRIVATE
+import com.amazon.device.messaging.ADM
 import mozilla.appservices.Megazord
 import mozilla.components.concept.engine.utils.EngineVersion
 import mozilla.components.concept.push.PushProcessor
@@ -75,19 +76,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
                 updateExperiments()
             }
 
-            var admAvailable = false
-            try {
-                Class.forName("com.amazon.device.messaging.ADM")
-                admAvailable = true
-            } catch (e: ClassNotFoundException) {
-                android.util.Log.i(DEFAULT_LOGTAG, "ADM is not available on this device.")
-            }
-
-            // Only install push feature if ADM is available on this device
-            if (admAvailable) {
-                // This installs the [pushFeature] as a singleton
-                PushProcessor.install(serviceLocator.pushFeature)
-            }
+            initPush()
 
             enableStrictMode()
 
@@ -100,6 +89,18 @@ open class FirefoxApplication : LocaleAwareApplication() {
     private fun initRustDependencies() {
         Megazord.init()
         RustHttpConfig.setClient(lazy { OkHttpClient(OkHttpWrapper.client, this) })
+    }
+
+    private fun initPush() {
+        var admAvailable = ADM(applicationContext).isSupported
+        // Only install push feature if ADM is available on this device
+        if (admAvailable) {
+            Log.log(tag = DEFAULT_LOGTAG, message = "ADM not available")
+            // This installs the [pushFeature] as a singleton
+            PushProcessor.install(serviceLocator.pushFeature)
+        } else {
+            android.util.Log.i(DEFAULT_LOGTAG, "ADM is not available on this device.")
+        }
     }
 
     // This method is used to call Glean.setUploadEnabled. During the tests, this is
