@@ -9,9 +9,9 @@
 
     <!-- This permission ensures that no other application can intercept your ADM messages. -->
     <permission
-        android:name="org.mozilla.tv.firefox.permission.RECEIVE_ADM_MESSAGE"
+        android:name="${applicationId}.permission.RECEIVE_ADM_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="org.mozilla.tv.firefox.permission.RECEIVE_ADM_MESSAGE" />
+    <uses-permission android:name="${applicationId}.permission.RECEIVE_ADM_MESSAGE" />
     <uses-permission android:name="com.amazon.device.messaging.permission.RECEIVE" />
     <!-- ADM uses WAKE_LOCK to keep the processor from sleeping when a message is received. -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -53,7 +53,7 @@
             <intent-filter>
                 <action android:name="com.amazon.device.messaging.intent.REGISTRATION" />
                 <action android:name="com.amazon.device.messaging.intent.RECEIVE" />
-                <category android:name="org.mozilla.tv.firefox" />
+                <category android:name="${applicationId}" />
             </intent-filter>
         </receiver>
 
