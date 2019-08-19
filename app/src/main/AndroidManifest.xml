@@ -47,7 +47,7 @@
             android:name=".fxa.ADMService"
             android:exported="false" />
         <receiver
-            android:name=".fxa.ADMService$ADMReceiver"
+            android:name=".fxa.ADMReceiver"
             android:permission="com.amazon.device.messaging.permission.SEND">
             <!-- To interact with ADM, your app must listen for the following intents. -->
             <intent-filter>
