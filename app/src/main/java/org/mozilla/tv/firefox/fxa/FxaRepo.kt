@@ -10,6 +10,7 @@ import androidx.annotation.VisibleForTesting.NONE
 import androidx.lifecycle.ProcessLifecycleOwner
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.Deferred
 import mozilla.appservices.fxaclient.Config
 import mozilla.components.concept.sync.AccountObserver
@@ -48,7 +49,8 @@ private val APPLICATION_SCOPES = setOf(
 class FxaRepo(
     val context: Context,
     val accountManager: FxaAccountManager = newInstanceDefaultAccountManager(context),
-    val admIntegration: ADMIntegration
+    val admIntegration: ADMIntegration,
+    private val sentryIntegration: SentryIntegration = SentryIntegration
 ) {
 
     /**
@@ -77,6 +79,9 @@ class FxaRepo(
 
     private val _accountState: BehaviorSubject<AccountState> = BehaviorSubject.createDefault(NotAuthenticated)
     val accountState: Observable<AccountState> = _accountState.hide()
+
+    private val _receivedTabs: PublishSubject<ReceivedTabs> = PublishSubject.create()
+    val receivedTabs: Observable<ReceivedTabs> = _receivedTabs.hide()
 
     init {
         accountManager.register(accountObserver)
@@ -136,6 +141,39 @@ class FxaRepo(
     private inner class FirefoxDeviceEventsObserver : DeviceEventsObserver {
         override fun onEvents(events: List<DeviceEvent>) {
             logger.debug("received device events: $events")
+            events.forEach {
+                when (it) {
+                    is DeviceEvent.TabReceived -> onReceiveTab(it)
+                }
+            }
+        }
+
+        private fun onReceiveTab(event: DeviceEvent.TabReceived) {
+            if (event.entries.isEmpty()) {
+                sentryIntegration.captureAndLogError(logger, ReceiveTabException("Received push event with no entries"))
+                return
+            }
+
+            val deviceMetadata = event.from?.let {
+                ReceivedTabs.DeviceMetadata(
+                    displayName = it.displayName,
+                    deviceType = it.deviceType
+                )
+            }
+
+            val receivedTab = ReceivedTabs(
+                urls = event.entries
+                    .map { it.url }
+                    .filter { it.isNotBlank() }, // blank URLs may not be possible but we do this just to be safe.
+                sendingDevice = deviceMetadata
+            )
+
+            if (receivedTab.urls.isEmpty()) {
+                sentryIntegration.captureAndLogError(logger, ReceiveTabException("Received push event with only blank URLs"))
+                return
+            }
+
+            _receivedTabs.onNext(receivedTab)
         }
     }
 
@@ -203,3 +241,27 @@ fun Profile.toDomainObject(): FxaProfile {
 
     return FxaProfile(validatedAvatar, validatedDisplayName)
 }
+
+/**
+ * A data container for tabs received from a single device via FxA. While we currently support only
+ * one tab, this container can actually contain multiple received tabs.
+ *
+ * This container exists to avoid exposing the underlying [DeviceEvent.TabReceived] events to consumers.
+ */
+data class ReceivedTabs constructor(
+    /** The urls sent to this device. */
+    val urls: List<String>,
+
+    /** Metadata about the device that sent the tab, or null if it's unavailable. */
+    val sendingDevice: DeviceMetadata?
+) {
+
+    /** Metadata about the device that sent the tab. */
+    data class DeviceMetadata(
+        val displayName: String,
+        val deviceType: DeviceType // We expose the FxA DeviceType to avoid excessive boilerplate.
+    )
+}
+
+/** An Exception thrown when during the receive tab process. */
+private class ReceiveTabException(msg: String) : Exception(msg)
