@@ -259,11 +259,15 @@ class NavigationOverlayFragment : Fragment() {
         return serviceLocator.fxaRepo.accountState.subscribe {
             when (it) {
                 FxaRepo.AccountState.AUTHENTICATED_WITH_PROFILE -> Unit //TODO
-                FxaRepo.AccountState.AUTHENTICATED_NO_PROFILE ->
+                FxaRepo.AccountState.AUTHENTICATED_NO_PROFILE -> {
                     fxaButton.setImageResource(R.drawable.ic_avatar_authenticated_no_picture)
+                    fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
+                }
                 FxaRepo.AccountState.NEEDS_REAUTHENTICATION,
-                FxaRepo.AccountState.NOT_AUTHENTICATED ->
+                FxaRepo.AccountState.NOT_AUTHENTICATED -> {
                     fxaButton.setImageResource(R.drawable.ic_fxa_login)
+                    fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_new)
+                }
                 null -> Unit
             }
         }
