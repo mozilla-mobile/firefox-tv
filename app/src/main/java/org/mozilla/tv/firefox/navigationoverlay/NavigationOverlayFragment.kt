@@ -256,9 +256,20 @@ class NavigationOverlayFragment : Fragment() {
     }
 
     private fun observeAccountState(): Disposable {
-        return serviceLocator.fxaRepo.accountState.subscribe {
+        val fxaRepo = serviceLocator.fxaRepo
+
+        return fxaRepo.accountState.subscribe {
             when (it) {
-                FxaRepo.AccountState.AUTHENTICATED_WITH_PROFILE -> Unit //TODO
+                FxaRepo.AccountState.AUTHENTICATED_WITH_PROFILE -> {
+                    fxaRepo.accountManager.accountProfile()?.let { profile ->
+                        if (profile.avatar != null) {
+                            // TODO: need to fetch avatar
+                        } else {
+                            fxaButton.setImageResource(R.drawable.ic_avatar_authenticated_no_picture)
+                            fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
+                        }
+                    }
+                }
                 FxaRepo.AccountState.AUTHENTICATED_NO_PROFILE -> {
                     fxaButton.setImageResource(R.drawable.ic_avatar_authenticated_no_picture)
                     fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
