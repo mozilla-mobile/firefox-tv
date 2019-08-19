@@ -68,14 +68,8 @@ open class FirefoxApplication : LocaleAwareApplication() {
 
             initRustDependencies()
             initGlean()
-
             TelemetryIntegration.INSTANCE.init(this)
-
-            with(serviceLocator.fretboardProvider) {
-                loadExperiments()
-                updateExperiments()
-            }
-
+            initFretboard()
             initPush()
 
             enableStrictMode()
@@ -91,12 +85,16 @@ open class FirefoxApplication : LocaleAwareApplication() {
         RustHttpConfig.setClient(lazy { OkHttpClient(OkHttpWrapper.client, this) })
     }
 
+    private fun initFretboard() {
+        with(serviceLocator.fretboardProvider) {
+            loadExperiments()
+            updateExperiments()
+        }
+    }
+
     private fun initPush() {
-        var admAvailable = ADM(applicationContext).isSupported
-        // Only install push feature if ADM is available on this device
-        if (admAvailable) {
-            Log.log(tag = DEFAULT_LOGTAG, message = "ADM not available")
-            // This installs the [pushFeature] as a singleton
+        // Only use push feature if ADM is available on this device
+        if (ADM(applicationContext).isSupported) {
             PushProcessor.install(serviceLocator.pushFeature)
         } else {
             android.util.Log.i(DEFAULT_LOGTAG, "ADM is not available on this device.")
