@@ -218,10 +218,10 @@ dependencies {
     // See https://github.com/mozilla/application-services/blob/master/.buildconfig-android.yml#L1 for latest version
     testImplementation "org.mozilla.appservices:full-megazord-forUnitTests:0.37.1"
 
-    compileOnly files('libs/amazon-device-messaging-1.0.1.jar')
-    testImplementation files('libs/amazon-device-messaging-1.0.1.jar')
-    // See https://github.com/mozilla/application-services/blob/master/.buildconfig-android.yml#L1 for latest version
-    testImplementation "org.mozilla.appservices:full-megazord-forUnitTests:0.37.1"
+    // Download from https://developer.amazon.com/sdk-download
+    // This library has not been updated since 2013, so it might be unlikely that the version will change
+    compileOnly files("libs/amazon-device-messaging-${adm_version}.jar")
+    testImplementation files("libs/amazon-device-messaging-${adm_version}.jar")
 }
 
 task validateReleaseConfiguration(type: ValidateAndroidAppReleaseConfiguration)

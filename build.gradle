@@ -11,6 +11,7 @@ buildscript {
     ext.coroutines_version = '1.0.1'
     ext.moz_components_version = '8.0.0'
     ext.androidx_work_version = '2.0.1'
+    ext.adm_version = '1.0.1' // Also update proguard rule if this gets updated
 
     ext.robolectric_version = '4.0.2' // required for SDK 28.
 
