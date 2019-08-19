@@ -17,7 +17,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
-import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.NONE
 import androidx.core.content.ContextCompat
@@ -55,6 +54,7 @@ import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.ServiceLocator
+import org.mozilla.tv.firefox.utils.ViewUtils
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 import java.lang.ref.WeakReference
 
@@ -373,8 +373,7 @@ class NavigationOverlayFragment : Fragment() {
                     val contextReference = WeakReference(context)
                     val showToast = showToast@{
                         val context = contextReference.get() ?: return@showToast
-                        Toast.makeText(context, R.string.homescreen_unpin_tutorial_toast,
-                                android.widget.Toast.LENGTH_LONG).show()
+                        ViewUtils.showCenteredBottomToast(context, R.string.homescreen_unpin_tutorial_toast)
                     }
                     // We believe this delays in order to avoid speaking over the focus
                     // change announcement. However this is taken legacy code, so there

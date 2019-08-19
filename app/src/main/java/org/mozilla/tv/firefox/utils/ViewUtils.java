@@ -121,7 +121,7 @@ public class ViewUtils {
         TextView text = layout.findViewById(R.id.toast_text);
         text.setText(resId);
         Toast toast = new Toast(context);
-        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
 
         if (toastLocation.equals("top")) {
