@@ -7,6 +7,12 @@ package org.mozilla.tv.firefox.fxa
 import mozilla.components.lib.push.amazon.AbstractAmazonPushService
 import com.amazon.device.messaging.ADMMessageReceiver
 
-class ADMService : AbstractAmazonPushService() {
-    class ADMReceiver : ADMMessageReceiver(ADMService::class.java)
-}
+/**
+ * Extends [AbstractAmazonPushService], which overrides the callbacks used to communicate with [ADMReceiver].
+ */
+class ADMService : AbstractAmazonPushService()
+
+/**
+ * Broadcast receiver used by ADM APIs to automatically forward intents to [ADMService].
+ */
+class ADMReceiver : ADMMessageReceiver(ADMService::class.java)
