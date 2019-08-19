@@ -15,6 +15,7 @@ import mozilla.components.concept.push.PushProcessor
 import mozilla.components.lib.fetch.okhttp.OkHttpClient
 import mozilla.components.service.glean.Glean
 import mozilla.components.support.base.log.Log
+import mozilla.components.support.base.log.logger.Logger
 import mozilla.components.support.base.log.sink.AndroidLogSink
 import mozilla.components.support.ktx.android.content.runOnlyInMainProcess
 import mozilla.components.support.rusthttp.RustHttpConfig
@@ -29,6 +30,7 @@ import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.webrender.WebRenderComponents
 
 private const val DEFAULT_LOGTAG = "FFTV"
+private val logger = Logger(DEFAULT_LOGTAG)
 
 open class FirefoxApplication : LocaleAwareApplication() {
     lateinit var visibilityLifeCycleCallback: VisibilityLifeCycleCallback
@@ -97,7 +99,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
         if (ADM(applicationContext).isSupported) {
             PushProcessor.install(serviceLocator.pushFeature)
         } else {
-            android.util.Log.i(DEFAULT_LOGTAG, "ADM is not available on this device.")
+            logger.warn("ADM is not available on this device.")
         }
     }
 
