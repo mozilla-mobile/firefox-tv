@@ -51,6 +51,7 @@ import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.InactiveHintViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.URLs
+import org.mozilla.tv.firefox.utils.ViewUtils
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 
@@ -177,6 +178,8 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         observeRequestFocus()
                 .addTo(startStopCompositeDisposable)
+        observeReceivedTabs()
+                .addTo(startStopCompositeDisposable)
 
         /**
          * When calling getOrCreateEngineSession(), [SessionManager] lazily creates an [EngineSession]
@@ -253,6 +256,20 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                         viewToFocus.requestFocus()
                     }
                 }
+    }
+
+    private fun observeReceivedTabs(): Disposable {
+        return serviceLocator!!.fxaRepo.receivedTabs.subscribe {
+            // TODO: what do we do if we receive more than one url?
+            serviceLocator!!.screenController.showBrowserScreenForUrl(fragmentManager!!, it.urls[0])
+
+            val toastText = if (it.sendingDevice == null) {
+                resources.getString(R.string.fxa_tab_sent_toast_no_device)
+            } else {
+                resources.getString(R.string.fxa_tab_sent_toast, it.sendingDevice.displayName)
+            }
+            ViewUtils.showCenteredBottomToast(context, toastText)
+        }
     }
 
     fun loadUrl(url: String) {
