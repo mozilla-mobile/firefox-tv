@@ -181,10 +181,6 @@
     to notify user that Firefox has requested the default "non-desktop version" from the site -->
     <string name="notification_request_non_desktop_site">返回非桌面版</string>
 
-    <!-- Content description for a button that will prompt a user to sign in, in order to receive tabs pushed from FF
-    on another device -->
-    <string name="fxa_login_a11y">收取标签页</string>
-
     <!-- Notification displayed to introduce a "YouTube casting" feature (similar to "broadcasting")
     Users who have the YouTube app on their phone or tablet can use it to play YouTube videos directly on their tv.
 
@@ -214,4 +210,47 @@
      When the described button is pressed, the overlay will open and the browser will be hidden underneath it -->
     <string name="hint_press_menu_to_open_overlay_a11y">按下菜单按钮打开 %1$s 主页、搜索、设置等</string>
 
+    <!-- Firefox Accounts Strings-->
+    <!-- Description for Sent tab buttons (in navigation toolbar & settings, both on the homescreen)
+     that will launch the Firefox Account sign-in experience so users can receive Firefox tabs on their Fire TV.
+     %1$s will be replaced with Firefox. -->
+    <string name="fxa_navigation_item_new">新功能！将 %1$s 标签页发送至 Fire TV</string>
+    <!-- Description for Sent tab button in navigation toolbar
+     that will launch the Firefox Account settings after the user is signed in. -->
+    <string name="fxa_navigation_item_signed_in2">标签页发送设置</string>
+    <!-- Description for Sent tab buttons (in navigation toolbar & settings, both on the homescreen)
+     that will launch the Firefox Account sign-in experience when the user needs to sign in again. -->
+    <string name="fxa_navigation_item_sign_in_again">标签页发送 - 请再次登录</string>
+    <!-- Header for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
+    <string name="fxa_preboarding_header">在大屏幕上浏览您的标签页</string>
+    <!-- Instruction text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature.
+    %1$s will be replaced with Firefox.
+    %2$s will be replaced with the name of our app (i.e. Firefox for Fire TV) -->
+    <string name="fxa_preboarding_instruction">在您使用 %1$s 的任何设备发送标签页，并在此处查看。登录 %2$s 即可开始使用。</string>
+    <!-- Sign-in button text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
+    <string name="fxa_preboarding_primary_button">登录</string>
+    <!-- Text on the cancel button for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
+    <string name="fxa_preboarding_secondary_button">暂时不要</string>
+    <!-- Header for Firefox Accounts onboarding screen, which is shown after signing in. -->
+    <string name="fxa_onboarding_header">您的标签页，现以更炫方式呈现。</string>
+    <!-- Instruction text for Firefox Accounts onboarding screen, which is shown after signing in.
+     %1$s will be replaced with Firefox. -->
+    <string name="fxa_onboarding_instruction">您已准备好接收标签页。要开始使用，请在桌面或 iOS 版 %1$s 上选择“发送标签页到设备” ，亦或在 Firefox Preview 上分享。然后选择 Fire TV，您的标签页片刻后即会出现。</string>
+    <!-- Text on the dismiss button for Firefox Accounts onboarding screen, which is shown after signing in. -->
+    <string name="fxa_onboarding_primary_button">我知道了</string>
+    <!-- Toast shown on webpage when tab is sent from another device
+     %1$s will be replaced with the device name where the tab was sent from. -->
+    <string name="fxa_tab_sent_toast">发送自 %1$s 的标签</string>
+    <!-- Toast shown on webpage when tab is sent from another device that does not have a device name specified -->
+    <string name="fxa_tab_sent_toast_no_device">收到标签页</string>
+    <!-- Description for header text for Firefox Accounts settings page. -->
+    <string name="fxa_settings_header">标签页发送</string>
+    <!-- Body text for Firefox Accounts settings page
+    %1$s will be replaced with the signed-in user account email. -->
+    <string name="fxa_settings_body">已登录为 %1$s</string>
+    <!-- Button text for seeing the onboarding screen on the Firefox Accounts settings page.
+     %1$s will be replaced with Firefox. -->
+    <string name="fxa_settings_primary_button">%1$s 个标签页</string>
+    <!-- Button text to sign out from the Firefox Accounts settings page -->
+    <string name="fxa_settings_secondary_button">退出登录</string>
 </resources>

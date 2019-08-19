@@ -1,78 +1,251 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-  <string name="firefox_tv_brand_name">Firefox TV</string>
-  <string name="firefox_tv_brand_name_short">Firefox</string>
-  <string name="pocket_brand_name">Pocket</string>
-  <string name="action_cancel">キャンセル</string>
-  <string name="action_ok">OK</string>
-  <string name="urlbar_hint">検索語またはアドレスを入力</string>
-  <string name="menu_settings">設定</string>
-  <string name="menu_about">製品情報</string>
-  <string name="preference_language">言語</string>
-  <string name="preference_language_systemdefault">システム標準</string>
-  <string name="preference_category_privacy">プライバシー</string>
-  <string name="preference_privacy_block_ads">追跡広告をブロック</string>
-  <string name="preference_privacy_block_ads_summary">一部の広告は、あなたがその広告をクリックしなくても訪れたサイトを追跡します</string>
-  <string name="preference_privacy_block_analytics">アクセス解析をブロック</string>
-  <string name="preference_privacy_block_analytics_summary">タップやスクロールなどの操作統計を収集、解析、計測するために利用されます</string>
-  <string name="preference_privacy_block_social">ソーシャル追跡をブロック</string>
-  <string name="preference_privacy_block_social_summary">ユーザーの訪問を追跡するためサイトに埋め込まれ、共有ボタンのように表示されます</string>
-  <string name="preference_privacy_block_content">他の追跡コンテンツをブロック</string>
-  <string name="preference_privacy_block_content_summary2">有効にすると、ページによっては予期せぬ動作をする原因になります</string>
-  <string name="preference_category_performance">パフォーマンス</string>
-  <string name="preference_performance_block_webfonts">ウェブフォントをブロック</string>
-  <string name="preference_performance_block_webfonts_summary">アイコンや画像が正常に表示されない場合があります</string>
-  <string name="preference_privacy_notice">プライバシー通知</string>
-  <string name="content_description_forward">次のページへ進む</string>
-  <string name="content_description_reload">ウェブサイトを再読み込み</string>
-  <string name="content_description_back">前のページへ戻る</string>
-  <string name="external_app_prompt_title">リンクを他のアプリで開く</string>
-  <string name="external_app_prompt">%1$s を離れて、%2$s でこのリンクを開いてください。</string>
-  <string name="external_app_prompt_no_app_title">リンクを開けるアプリを探す</string>
-  <string name="external_app_prompt_no_app">ご使用の端末にはこのリンクを開けるアプリがありません。%1$s を離れて、%2$s で開けるアプリを探してください。</string>
-  <string name="external_multiple_apps_matched_exit">プライベートブラウジングを終了しますか？</string>
-  <string name="errorpage_title">ページ読み込みエラー</string>
-  <string name="errorpage_refresh">再試行</string>
-  <string name="your_rights">あなたの権利</string>
-  <string name="your_rights_content1">%1$s は Mozilla や他の貢献者によって開発されているフリーでオープンソースのソフトウェアです。</string>
-  <string name="your_rights_content2"><![CDATA["%1$s は "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" やその他オープンソースライセンスの条件に基づいて使用可能となっています。"]]></string>
-  <string name="your_rights_content3"><![CDATA["Mozilla、Firefox、%1$s の名称やロゴを含む、Mozilla Foundation および第三者の商標に関するいかなる権利やライセンスもあなたには与えられていません。追加の情報は "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla &#21830;&#27161;&#12509;&#12522;&#12471;&#12540;</a>" をご覧ください。"]]></string>
-  <string name="your_rights_content4"><![CDATA["%1$s の追加ソースコードは、様々な他のフリーおよびオープンソースの "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#12521;&#12452;&#12475;&#12531;&#12473;</a>" に基いて公開されています。"]]></string>
-  <string name="your_rights_content5"><![CDATA["%1$s は Disconnect, Inc. により提供されているブロックリストも "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>" の下で単独のリソースとして使用しており、それらは "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">&#12371;&#12385;&#12425;</a>" から入手可能です。"]]></string>
-  <string name="settings_cookies_dialog_title">すべての Cookie とサイトデータの消去</string>
-  <string name="settings_cookies_dialog_content2">これにより、すべての Cookie とサイトデータが消去され、ウェブサイトからログアウトしたり、オフライン用に保存されているコンテンツが削除されたりする可能性があります。</string>
-  <string name="settings_cookies_confirm">今すぐ消去</string>
-  <string name="preference_mozilla_telemetry2">使用状況データを送信</string>
-  <string name="settings_telemetry_description">Mozilla は %1$s を皆さんに提供し改善するために必要な情報だけを収集するよう努めています。</string>
-  <string name="turbo_mode">ターボモード</string>
-  <string name="onboarding_turbo_mode_title">ターボモードはより速くブラウズするのに役立ちます</string>
-  <string name="onboarding_turbo_mode_body2">ターボモードは自動的に広告やトラッカーをブロックします。\nサイトが期待通りの動作をしない場合は、これをオフにしてみてください。</string>
-  <string name="button_turbo_mode_keep_enabled2">ターボモードを有効のままにする</string>
-  <string name="button_turbo_mode_turn_off2">ターボモードをオフにする</string>
-  <string name="turbo_mode_image_a11y">ターボモードが有効な例</string>
-  <string name="homescreen_unpin_tutorial_toast">ホーム画面からピン留めを外すには [選択] ボタンを長押ししてください</string>
-  <string name="homescreen_tile_remove">削除</string>
-  <string name="pinned_tiles_channel_remove_title">ピン留めしたサイトから %1$s を削除</string>
-  <string name="pinned_tile_channel_title">ピン留めしたタイル</string>
-  <string name="pin_label">ホーム画面にピン留め</string>
-  <string name="unpin_label">ホーム画面からピン留めを外す</string>
-  <string name="notification_pinned_site">Firefox TV のホーム画面にピン留めしました</string>
-  <string name="notification_unpinned_site">Firefox TV のホーム画面から削除しました</string>
-  <string name="pocket_home_tutorial_title">%1$s からおすすめの動画を紹介します</string>
-  <string name="pocket_home_tutorial_description">ウェブ上で一番興味深い動画。Mozilla の一員となった %1$s がおすすめします。</string>
-  <string name="pocket_home_tutorial_dismiss_button">了解しました</string>
-  <string name="pocket_home_a11y_tile_focused">%1$s のおすすめ動画</string>
-  <string name="pocket_info_a11y">Pocket について</string>
-  <string name="pocket_video_feed_recommended_videos_title">おすすめ動画</string>
-  <string name="pocket_video_feed_failed_to_load">申し訳ありませんが、%1$s のおすすめ動画を表示中に何か問題が発生しました。</string>
-  <string name="pocket_video_feed_reload_button">再読み込み</string>
-  <string name="request_desktop_site_a11y">このサイトのデスクトップ版を見る</string>
-  <string name="notification_request_desktop_site">デスクトップ版を表示します</string>
-  <string name="notification_request_non_desktop_site">デスクトップ版でない表示に戻しました</string>
-  <string name="youtube_casting_onboarding_toast">YouTube 動画をスマートフォンやタブレットからキャスト配信します。開始するには、端末で YouTube を開き、%s をタップしてください。</string>
-  <string name="exit_firefox_a11y">%1$s を終了</string>
-  <string name="hint_press_back_to_close_overlay">戻るには $IMAGE を押してください</string>
-  <string name="hint_press_back_to_close_overlay_a11y">戻るボタンを押すとブラウザーに戻ります</string>
-  <string name="hint_press_menu_to_open_overlay">$IMAGE を押すと %1$s のホーム画面 (検索、設定など) に戻ります</string>
-  <string name="hint_press_menu_to_open_overlay_a11y">メニューボタンを押すと %1$s のホーム画面 (検索、設定など) に戻ります</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- ####################################################################################### -->
+    <!-- ## Put only strings into this file that should be translated. Move all other strings ## -->
+    <!-- ## into a separate file like strings_references.xml                                  ## -->
+    <!-- ####################################################################################### -->
+
+    <!-- The brand name of this app -->
+    <string name="firefox_tv_brand_name" tools:keep="@string/firefox_tv_brand_name">Firefox TV</string>
+    <string name="firefox_tv_brand_name_short" tools:keep="@string/firefox_tv_brand_name_short">Firefox</string>
+
+    <!-- The brand name of our partner company, Pocket. -->
+    <string name="pocket_brand_name">Pocket</string>
+
+    <!-- Label used for buttons, e.g. in dialogs -->
+    <string name="action_cancel">キャンセル</string>
+    <!-- Label used for buttons, e.g. in dialogs -->
+    <string name="action_ok">OK</string>
+
+    <!-- This text is shown in the URL bar when it's empty -->
+    <string name="urlbar_hint">検索語またはアドレスを入力</string>
+
+    <string name="menu_settings">設定</string>
+    <string name="menu_about">製品情報</string>
+    <string name="preference_language">言語</string>
+
+    <!-- This is shown when the user hasn't set a Firefox for Fire TV specific language, i.e. when Firefox for Fire TV
+         is using the system default language. -->
+    <string name="preference_language_systemdefault">システム標準</string>
+
+    <string name="preference_category_privacy">プライバシー</string>
+    <string name="preference_privacy_block_ads">追跡広告をブロック</string>
+    <string name="preference_privacy_block_ads_summary">一部の広告は、あなたがその広告をクリックしなくても訪れたサイトを追跡します</string>
+    <string name="preference_privacy_block_analytics">アクセス解析をブロック</string>
+    <string name="preference_privacy_block_analytics_summary">タップやスクロールなどの操作統計を収集、解析、計測するために利用されます</string>
+    <string name="preference_privacy_block_social">ソーシャル追跡をブロック</string>
+    <string name="preference_privacy_block_social_summary">ユーザーの訪問を追跡するためサイトに埋め込まれ、共有ボタンのように表示されます</string>
+    <string name="preference_privacy_block_content">他の追跡コンテンツをブロック</string>
+    <string name="preference_privacy_block_content_summary2">有効にすると、ページによっては予期せぬ動作をする原因になります</string>
+
+    <string name="preference_category_performance">パフォーマンス</string>
+    <string name="preference_performance_block_webfonts">ウェブフォントをブロック</string>
+    <!-- This text is shown below the setting for disabling web fonts. Some websites use icons/images from a font and those do not show up if fonts are blocked.-->
+    <string name="preference_performance_block_webfonts_summary">アイコンや画像が正常に表示されない場合があります</string>
+
+    <!-- In-app link (in settings) to Firefox for Fire TV privacy notice. -->
+    <string name="preference_privacy_notice">プライバシー通知</string>
+
+    <!-- Content description (not visible, for screen readers etc.): Navigate forward (browsing history) -->
+    <string name="content_description_forward">次のページへ進む</string>
+
+    <!-- Content description (not visible, for screen readers etc.): Reload current website -->
+    <string name="content_description_reload">ウェブサイトを再読み込み</string>
+
+    <!-- Content description (not visible, for screen readers etc.): Navigate back (browsing history) -->
+    <string name="content_description_back">前のページへ戻る</string>
+
+    <string name="external_app_prompt_title">リンクを他のアプリで開く</string>
+    <!-- This string is shown when the user has clicked a link that needs to be opened in a different app.
+         Argument 2 is the external app name, argument 1 is our name (i.e. Firefox for Fire TV). -->
+    <string name="external_app_prompt">%1$s を離れて、%2$s でこのリンクを開いてください。</string>
+    <!-- This text is the title of a dialog shown if no app could be found for a custom link protocol. -->
+    <string name="external_app_prompt_no_app_title">リンクを開けるアプリを探す</string>
+    <!-- This text is shown in a dialog if no app could be found for a custom link protocol. %1$s is the name of the app (i.e. Firefox for Fire TV) and %2$s is the name of
+         the app store installed on the device (usually that's Google Play). -->
+    <string name="external_app_prompt_no_app">ご使用の端末にはこのリンクを開けるアプリがありません。%1$s を離れて、%2$s で開けるアプリを探してください。</string>
+    <!-- This label is shown above a list of apps that can be used to open a given link -->
+    <string name="external_multiple_apps_matched_exit">プライベートブラウジングを終了しますか？</string>
+
+    <!-- The page html title (i.e. the <title> tag content) -->
+    <string name="errorpage_title">ページ読み込みエラー</string>
+    <string name="errorpage_refresh">再試行</string>
+
+    <string name="your_rights">あなたの権利</string>
+
+    <!-- Text shown in the "Your rights" screen.
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)-->
+    <string name="your_rights_content1"><![CDATA[%1$s は Mozilla や他の貢献者によって開発されているフリーでオープンソースのソフトウェアです。]]></string>
+
+    <!-- Text shown in the "Your rights" screen.
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+    %2$s will be replaced with a URL linking to the MPL (e.g. https://www.mozilla.org/en-US/MPL/) -->
+    <string name="your_rights_content2"><![CDATA["%1$s は "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" やその他オープンソースライセンスの条件に基づいて使用可能となっています。"]]></string>
+
+    <!-- Text shown in the "Your rights" screen.
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+    %2$s will be replaced with a URL linking to the trademark policy (e.g. https://www.mozilla.org/foundation/trademarks/policy/) -->
+    <string name="your_rights_content3"><![CDATA["Mozilla、Firefox、%1$s の名称やロゴを含む、Mozilla Foundation および第三者の商標に関するいかなる権利やライセンスもあなたには与えられていません。追加の情報は "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla &#21830;&#27161;&#12509;&#12522;&#12471;&#12540;</a>" をご覧ください。"]]></string>
+
+    <!-- Text shown in the "Your rights" screen.
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+    %2$s will be replaced with a URL linking to the list of licenses used by the dependencies.-->
+    <string name="your_rights_content4"><![CDATA["%1$s の追加ソースコードは、様々な他のフリーおよびオープンソースの "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">&#12521;&#12452;&#12475;&#12531;&#12473;</a>" に基いて公開されています。"]]></string>
+
+    <!-- Text shown in the "Your rights" screen.
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+    %2$s will be replaced with a URL linking to the GPL
+    %3$s will be replaced with a URL linking to the tracking protection wiki page (e.g. https://wiki.mozilla.org/Security/Tracking_protection#Lists) -->
+    <string name="your_rights_content5"><![CDATA["%1$s は Disconnect, Inc. により提供されているブロックリストも "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>" の下で単独のリソースとして使用しており、それらは "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">&#12371;&#12385;&#12425;</a>" から入手可能です。"]]></string>
+
+    <!-- Firefox for Fire TV
+    video strings -->
+    <!-- Settings strings -->
+    <string name="settings_cookies_dialog_title">すべての Cookie とサイトデータの消去</string>
+    <string name="settings_cookies_dialog_content2">これにより、すべての Cookie とサイトデータが消去され、ウェブサイトからログアウトしたり、オフライン用に保存されているコンテンツが削除されたりする可能性があります。</string>
+    <!-- Text on a button that, when pressed, will clear all user data.
+    Mock: https://user-images.githubusercontent.com/1721875/47298531-59442f00-d618-11e8-98df-632f74e9ebc3.png -->
+    <string name="settings_cookies_confirm">今すぐ消去</string>
+
+    <!-- Title for a screen that explains the purpose of our telemetry, and contains a
+    switch that can toggle it on and off
+     Mock: https://user-images.githubusercontent.com/1721875/47298694-b809a880-d618-11e8-9e18-1d6d47d2045d.png -->
+    <string name="preference_mozilla_telemetry2">使用状況データを送信</string>
+    <!-- Description text that explains the purpose of our telemetry
+      Mock: https://user-images.githubusercontent.com/1721875/47298694-b809a880-d618-11e8-9e18-1d6d47d2045d.png
+      %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV) -->
+    <string name="settings_telemetry_description">Mozilla は %1$s を皆さんに提供し改善するために必要な情報だけを収集するよう努めています。</string>
+
+    <string name="turbo_mode">ターボモード</string>
+    <string name="onboarding_turbo_mode_title">ターボモードはより速くブラウズするのに役立ちます</string>
+    <string name="onboarding_turbo_mode_body2">ターボモードは自動的に広告やトラッカーをブロックします。\nサイトが期待通りの動作をしない場合は、これをオフにしてみてください。</string>
+    <!-- Button text for keeping Turbo Mode enabled in onboarding -->
+    <string name="button_turbo_mode_keep_enabled2">ターボモードを有効のままにする</string>
+    <!-- Button text for turning off Turbo Mode in onboarding -->
+    <string name="button_turbo_mode_turn_off2">ターボモードをオフにする</string>
+    <!-- Spoken to screen reader users to explain image on Turbo mode onboarding -->
+    <string name="turbo_mode_image_a11y">ターボモードが有効な例</string>
+
+    <!-- Text displayed in a toast to explain to the user how to unpin a tile from the homescreen.
+         SELECT refers to a button on the remote: the button at the center of the 4-way directional navigation. -->
+    <string name="homescreen_unpin_tutorial_toast">ホーム画面からピン留めを外すには [選択] ボタンを長押ししてください</string>
+    <string name="homescreen_tile_remove">削除</string>
+
+    <!-- The title of Pinned channel remove modal.
+    %1$s will be replaced by the title of tiles (website titles or url). -->
+    <string name="pinned_tiles_channel_remove_title">ピン留めしたサイトから %1$s を削除</string>
+
+    <!-- Title text displayed above the pinned tile channel. Pinned tiles are a collection of links
+    to commonly used sites (bundled with the app), as well as custom pinnned ones (added by the user)
+    See https://github.com/mozilla-mobile/firefox-tv/issues/1630 for channel mocks -->
+    <string name="pinned_tile_channel_title">ピン留めしたタイル</string>
+
+    <string name="pin_label">ホーム画面にピン留め</string>
+    <!-- Label shown underneath Pin icon in toolbar when a site is already pinned, to hint to users that
+         they can unpin the site to remove it-->
+    <string name="unpin_label">ホーム画面からピン留めを外す</string>
+    <string name="notification_pinned_site">Firefox TV のホーム画面にピン留めしました</string>
+    <string name="notification_unpinned_site">Firefox TV のホーム画面から削除しました</string>
+
+    <!-- The title of a tutorial shown to introduce Pocket video recommendations.
+    %1$s will be replaced with the Pocket brand name. -->
+    <string name="pocket_home_tutorial_title">%1$s からおすすめの動画を紹介します</string>
+    <!-- The description text of a tutorial shown to introduce Pocket video recommendations.
+    %1$s will be replaced with the Pocket brand name. -->
+    <string name="pocket_home_tutorial_description">ウェブ上で一番興味深い動画。Mozilla の一員となった %1$s がおすすめします。</string>
+    <!-- The text on the dismiss button of a tutorial shown to introduce Pocket video recommendations. -->
+    <string name="pocket_home_tutorial_dismiss_button">了解しました</string>
+    <!-- Spoken to screen reader users when they focus the Pocket tile. Clicking this tile will take them to the
+         Pocket video recommendations feed.
+    %1$s will be replaced with the Pocket brand name. -->
+    <string name="pocket_home_a11y_tile_focused">%1$s のおすすめ動画</string>
+    <!-- Spoken by screen reader when they focus the "?" button on the Pocket Video feed screen,
+    which will shows the Pocket tutorial again -->
+    <string name="pocket_info_a11y">Pocket について</string>
+
+
+    <string name="pocket_video_feed_recommended_videos_title">おすすめ動画</string>
+    <!-- Text displayed when the Pocket video recommendations feed failed to load.
+    %1$s will be replaced with the Pocket brand name. -->
+    <string name="pocket_video_feed_failed_to_load">申し訳ありませんが、%1$s のおすすめ動画を表示中に何か問題が発生しました。</string>
+    <!-- Text displayed on a button to reload the Pocket video recommendations feed if it failed to load. -->
+    <string name="pocket_video_feed_reload_button">再読み込み</string>
+
+    <!--Request desktop site strings-->
+    <!-- Content description for Request desktop version button-->
+    <string name="request_desktop_site_a11y">このサイトのデスクトップ版を見る</string>
+    <!-- Notification displayed when the user has clicked the "request desktop version" button to turn ON desktop mode,
+    notifying the user that Firefox has requested the "desktop version" from the site -->
+    <string name="notification_request_desktop_site">デスクトップ版を表示します</string>
+    <!-- Notification displayed when the user has clicked the "request desktop version" button to turn OFF desktop mode,
+    to notify user that Firefox has requested the default "non-desktop version" from the site -->
+    <string name="notification_request_non_desktop_site">デスクトップ版でない表示に戻しました</string>
+
+    <!-- Notification displayed to introduce a "YouTube casting" feature (similar to "broadcasting")
+    Users who have the YouTube app on their phone or tablet can use it to play YouTube videos directly on their tv.
+
+    %s will be replaced with the icon that matches the button in the YouTube app for this feature.
+    Clicking on that button in the YouTube app will show YouTube's instructions on how to cast. -->
+    <string name="youtube_casting_onboarding_toast">YouTube 動画をスマートフォンやタブレットからキャスト配信します。開始するには、端末で YouTube を開き、%s をタップしてください。</string>
+
+    <!-- Content description for the Exit Firefox button.
+     %1$s will be replaced with the Firefox brand name. -->
+    <string name="exit_firefox_a11y">%1$s を終了</string>
+
+    <!-- Hint Strings -->
+    <!-- Hint text displayed when the overlay is open.
+     $IMAGE will be replaced with the image of a hardware back button.
+     When the described button is pressed, the overlay will close and the user will be returned to the browser. -->
+    <string name="hint_press_back_to_close_overlay">戻るには $IMAGE を押してください</string>
+    <!-- Content description for a hint bar that is displayed when the overlay is open.
+     When the described button is pressed, the overlay will close and the user will be returned to the browser. -->
+    <string name="hint_press_back_to_close_overlay_a11y">戻るボタンを押すとブラウザーに戻ります</string>
+    <!-- Hint text displayed when the browser is open.
+     $IMAGE will be replaced with the image of a hardware menu button.
+     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+     When the described button is pressed, the overlay will open and the browser will be hidden underneath it -->
+    <string name="hint_press_menu_to_open_overlay">$IMAGE を押すと %1$s のホーム画面 (検索、設定など) に戻ります</string>
+    <!-- Content description for a hint bar displayed when the browser is open.
+     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+     When the described button is pressed, the overlay will open and the browser will be hidden underneath it -->
+    <string name="hint_press_menu_to_open_overlay_a11y">メニューボタンを押すと %1$s のホーム画面 (検索、設定など) に戻ります</string>
+
+    <!-- Firefox Accounts Strings-->
+    <!-- Description for Sent tab buttons (in navigation toolbar & settings, both on the homescreen)
+     that will launch the Firefox Account sign-in experience so users can receive Firefox tabs on their Fire TV.
+     %1$s will be replaced with Firefox. -->
+    <string name="fxa_navigation_item_new">新機能！ Fire TV に %1$s のタブを送信します</string>
+    <!-- Description for Sent tab button in navigation toolbar
+     that will launch the Firefox Account settings after the user is signed in. -->
+    <string name="fxa_navigation_item_signed_in2">送信したタブの設定</string>
+    <!-- Description for Sent tab buttons (in navigation toolbar & settings, both on the homescreen)
+     that will launch the Firefox Account sign-in experience when the user needs to sign in again. -->
+    <string name="fxa_navigation_item_sign_in_again">送信したタブ - 再度ログイン</string>
+    <!-- Header for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
+    <string name="fxa_preboarding_header">大きな画面でタブを表示</string>
+    <!-- Instruction text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature.
+    %1$s will be replaced with Firefox.
+    %2$s will be replaced with the name of our app (i.e. Firefox for Fire TV) -->
+    <string name="fxa_preboarding_instruction">ご使用のどの %1$s からでもタブを送信でき、ここに表示されます。%2$s にログインして始めましょう。</string>
+    <!-- Sign-in button text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
+    <string name="fxa_preboarding_primary_button">ログイン</string>
+    <!-- Text on the cancel button for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
+    <string name="fxa_preboarding_secondary_button">後で</string>
+    <!-- Text on the dismiss button for Firefox Accounts onboarding screen, which is shown after signing in. -->
+    <string name="fxa_onboarding_primary_button">了解しました</string>
+    <!-- Toast shown on webpage when tab is sent from another device
+     %1$s will be replaced with the device name where the tab was sent from. -->
+    <string name="fxa_tab_sent_toast">%1$s から送信されたタブ</string>
+    <!-- Toast shown on webpage when tab is sent from another device that does not have a device name specified -->
+    <string name="fxa_tab_sent_toast_no_device">タブを受け取りました</string>
+    <!-- Description for header text for Firefox Accounts settings page. -->
+    <string name="fxa_settings_header">送信したタブ</string>
+    <!-- Body text for Firefox Accounts settings page
+    %1$s will be replaced with the signed-in user account email. -->
+    <string name="fxa_settings_body">%1$s としてログイン</string>
+    <!-- Button text for seeing the onboarding screen on the Firefox Accounts settings page.
+     %1$s will be replaced with Firefox. -->
+    <string name="fxa_settings_primary_button">%1$s 個のタブ</string>
+    <!-- Button text to sign out from the Firefox Accounts settings page -->
+    <string name="fxa_settings_secondary_button">ログアウト</string>
 </resources>

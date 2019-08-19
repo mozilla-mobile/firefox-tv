@@ -181,10 +181,6 @@
     to notify user that Firefox has requested the default "non-desktop version" from the site -->
     <string name="notification_request_non_desktop_site">Retour à la version par défaut</string>
 
-    <!-- Content description for a button that will prompt a user to sign in, in order to receive tabs pushed from FF
-    on another device -->
-    <string name="fxa_login_a11y">Onglets reçus</string>
-
     <!-- Notification displayed to introduce a "YouTube casting" feature (similar to "broadcasting")
     Users who have the YouTube app on their phone or tablet can use it to play YouTube videos directly on their tv.
 
@@ -214,4 +210,45 @@
      When the described button is pressed, the overlay will open and the browser will be hidden underneath it -->
     <string name="hint_press_menu_to_open_overlay_a11y">Appuyez sur le bouton de menu pour atteindre l’accueil, la recherche, les paramètres de %1$s et plus encore</string>
 
+    <!-- Firefox Accounts Strings-->
+    <!-- Description for Sent tab buttons (in navigation toolbar & settings, both on the homescreen)
+     that will launch the Firefox Account sign-in experience so users can receive Firefox tabs on their Fire TV.
+     %1$s will be replaced with Firefox. -->
+    <string name="fxa_navigation_item_new">Nouveau : envoyez des onglets %1$s à une Fire TV</string>
+    <!-- Description for Sent tab button in navigation toolbar
+     that will launch the Firefox Account settings after the user is signed in. -->
+    <string name="fxa_navigation_item_signed_in2">Paramètres d’envoi d’onglets</string>
+    <!-- Description for Sent tab buttons (in navigation toolbar & settings, both on the homescreen)
+     that will launch the Firefox Account sign-in experience when the user needs to sign in again. -->
+    <string name="fxa_navigation_item_sign_in_again">Envoi d’onglets — Veuillez vous reconnecter</string>
+    <!-- Header for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
+    <string name="fxa_preboarding_header">Affichez vos onglets sur grand écran</string>
+    <!-- Instruction text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature.
+    %1$s will be replaced with Firefox.
+    %2$s will be replaced with the name of our app (i.e. Firefox for Fire TV) -->
+    <string name="fxa_preboarding_instruction">Envoyez un onglet depuis n’importe quel appareil où vous utilisez %1$s et consultez-le ici. Connectez-vous à %2$s pour commencer.</string>
+    <!-- Sign-in button text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
+    <string name="fxa_preboarding_primary_button">Se connecter</string>
+    <!-- Text on the cancel button for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
+    <string name="fxa_preboarding_secondary_button">Plus tard</string>
+    <!-- Instruction text for Firefox Accounts onboarding screen, which is shown after signing in.
+     %1$s will be replaced with Firefox. -->
+    <string name="fxa_onboarding_instruction">Vous pouvez désormais recevoir des onglets. Pour commencer, sélectionnez Envoyer l’onglet à un appareil depuis %1$s pour ordinateur ou iOS, ou sélectionnez Partager sur Firefox Preview. Choisissez ensuite Fire TV et votre onglet apparaîtra en quelques instants.</string>
+    <!-- Text on the dismiss button for Firefox Accounts onboarding screen, which is shown after signing in. -->
+    <string name="fxa_onboarding_primary_button">J’ai compris</string>
+    <!-- Toast shown on webpage when tab is sent from another device
+     %1$s will be replaced with the device name where the tab was sent from. -->
+    <string name="fxa_tab_sent_toast">Onglet envoyé depuis %1$s</string>
+    <!-- Toast shown on webpage when tab is sent from another device that does not have a device name specified -->
+    <string name="fxa_tab_sent_toast_no_device">Onglet reçu</string>
+    <!-- Description for header text for Firefox Accounts settings page. -->
+    <string name="fxa_settings_header">Envoyer des onglets</string>
+    <!-- Body text for Firefox Accounts settings page
+    %1$s will be replaced with the signed-in user account email. -->
+    <string name="fxa_settings_body">Connecté·e en tant que %1$s</string>
+    <!-- Button text for seeing the onboarding screen on the Firefox Accounts settings page.
+     %1$s will be replaced with Firefox. -->
+    <string name="fxa_settings_primary_button">Onglets %1$s</string>
+    <!-- Button text to sign out from the Firefox Accounts settings page -->
+    <string name="fxa_settings_secondary_button">Déconnexion</string>
 </resources>

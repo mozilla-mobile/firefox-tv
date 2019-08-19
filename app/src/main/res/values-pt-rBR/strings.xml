@@ -181,10 +181,6 @@
     to notify user that Firefox has requested the default "non-desktop version" from the site -->
     <string name="notification_request_non_desktop_site">Retornou para a versão padrão</string>
 
-    <!-- Content description for a button that will prompt a user to sign in, in order to receive tabs pushed from FF
-    on another device -->
-    <string name="fxa_login_a11y">Receber abas</string>
-
     <!-- Notification displayed to introduce a "YouTube casting" feature (similar to "broadcasting")
     Users who have the YouTube app on their phone or tablet can use it to play YouTube videos directly on their tv.
 
@@ -214,4 +210,47 @@
      When the described button is pressed, the overlay will open and the browser will be hidden underneath it -->
     <string name="hint_press_menu_to_open_overlay_a11y">Pressione o botão de menu para ir para a página inicial do %1$s, pesquisa, configurações, etc.</string>
 
+    <!-- Firefox Accounts Strings-->
+    <!-- Description for Sent tab buttons (in navigation toolbar & settings, both on the homescreen)
+     that will launch the Firefox Account sign-in experience so users can receive Firefox tabs on their Fire TV.
+     %1$s will be replaced with Firefox. -->
+    <string name="fxa_navigation_item_new">Novidade! Envie abas do %1$s para a Fire TV</string>
+    <!-- Description for Sent tab button in navigation toolbar
+     that will launch the Firefox Account settings after the user is signed in. -->
+    <string name="fxa_navigation_item_signed_in2">Configurações de abas enviadas</string>
+    <!-- Description for Sent tab buttons (in navigation toolbar & settings, both on the homescreen)
+     that will launch the Firefox Account sign-in experience when the user needs to sign in again. -->
+    <string name="fxa_navigation_item_sign_in_again">Abas enviadas - entre novamente</string>
+    <!-- Header for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
+    <string name="fxa_preboarding_header">Veja suas abas na tela grande</string>
+    <!-- Instruction text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature.
+    %1$s will be replaced with Firefox.
+    %2$s will be replaced with the name of our app (i.e. Firefox for Fire TV) -->
+    <string name="fxa_preboarding_instruction">Envie uma aba de onde quer que use o %1$s e a veja aqui. Acesse sua conta no %2$s para começar.</string>
+    <!-- Sign-in button text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
+    <string name="fxa_preboarding_primary_button">Entrar</string>
+    <!-- Text on the cancel button for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
+    <string name="fxa_preboarding_secondary_button">Agora não</string>
+    <!-- Header for Firefox Accounts onboarding screen, which is shown after signing in. -->
+    <string name="fxa_onboarding_header">Suas abas. Agora prontas para o horário nobre.</string>
+    <!-- Instruction text for Firefox Accounts onboarding screen, which is shown after signing in.
+     %1$s will be replaced with Firefox. -->
+    <string name="fxa_onboarding_instruction">Você está pronto para receber abas. Para começar, selecione &quot;Enviar aba para dispositivo&quot; no %1$s para desktop e iOS, ou &quot;Compartilhar&quot; no Firefox Preview. Então escolha Fire TV e sua aba aparecerá logo depois.</string>
+    <!-- Text on the dismiss button for Firefox Accounts onboarding screen, which is shown after signing in. -->
+    <string name="fxa_onboarding_primary_button">Ok, entendi</string>
+    <!-- Toast shown on webpage when tab is sent from another device
+     %1$s will be replaced with the device name where the tab was sent from. -->
+    <string name="fxa_tab_sent_toast">Aba enviada de %1$s</string>
+    <!-- Toast shown on webpage when tab is sent from another device that does not have a device name specified -->
+    <string name="fxa_tab_sent_toast_no_device">Aba recebida</string>
+    <!-- Description for header text for Firefox Accounts settings page. -->
+    <string name="fxa_settings_header">Abas enviadas</string>
+    <!-- Body text for Firefox Accounts settings page
+    %1$s will be replaced with the signed-in user account email. -->
+    <string name="fxa_settings_body">Acessando como %1$s</string>
+    <!-- Button text for seeing the onboarding screen on the Firefox Accounts settings page.
+     %1$s will be replaced with Firefox. -->
+    <string name="fxa_settings_primary_button">Abas do %1$s</string>
+    <!-- Button text to sign out from the Firefox Accounts settings page -->
+    <string name="fxa_settings_secondary_button">Sair</string>
 </resources>
