@@ -55,6 +55,7 @@ import org.mozilla.tv.firefox.fxa.FxaRepo
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
+import org.mozilla.tv.firefox.utils.PicassoWrapper
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 import java.lang.ref.WeakReference
@@ -263,7 +264,11 @@ class NavigationOverlayFragment : Fragment() {
                 FxaRepo.AccountState.AUTHENTICATED_WITH_PROFILE -> {
                     fxaRepo.accountManager.accountProfile()?.let { profile ->
                         if (profile.avatar != null) {
-                            // TODO: need to fetch avatar
+                            profile.avatar?.url?.let { url ->
+                                PicassoWrapper.client
+                                    .load(url)
+                                    .into(fxaButton)
+                            }
                         } else {
                             fxaButton.setImageResource(R.drawable.ic_avatar_authenticated_no_picture)
                             fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
