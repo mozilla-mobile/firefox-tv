@@ -51,6 +51,7 @@ import org.mozilla.tv.firefox.channels.DefaultChannel
 import org.mozilla.tv.firefox.channels.DefaultChannelFactory
 import org.mozilla.tv.firefox.channels.SettingsChannelAdapter
 import org.mozilla.tv.firefox.channels.SettingsScreen
+import org.mozilla.tv.firefox.fxa.FxaRepo
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
@@ -209,6 +210,8 @@ class NavigationOverlayFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        observeAccountState()
+            .addTo(compositeDisposable)
         observePinnedTiles()
             .addTo(compositeDisposable)
         observeTileRemoval()
@@ -250,6 +253,20 @@ class NavigationOverlayFragment : Fragment() {
 
     private fun exitFirefox() {
         activity!!.moveTaskToBack(true)
+    }
+
+    private fun observeAccountState(): Disposable {
+        return serviceLocator.fxaRepo.accountState.subscribe {
+            when (it) {
+                FxaRepo.AccountState.AUTHENTICATED_WITH_PROFILE -> Unit //TODO
+                FxaRepo.AccountState.AUTHENTICATED_NO_PROFILE ->
+                    fxaButton.setImageResource(R.drawable.ic_avatar_authenticated_no_picture)
+                FxaRepo.AccountState.NEEDS_REAUTHENTICATION,
+                FxaRepo.AccountState.NOT_AUTHENTICATED ->
+                    fxaButton.setImageResource(R.drawable.ic_fxa_login)
+                null -> Unit
+            }
+        }
     }
 
     private fun observePinnedTiles(): Disposable {
