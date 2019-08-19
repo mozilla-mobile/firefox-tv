@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.annotation.StringRes;
 import org.mozilla.tv.firefox.R;
 import androidx.core.view.ViewCompat;
 import java.lang.ref.WeakReference;
@@ -115,11 +116,21 @@ public class ViewUtils {
         showToast(context, resId, "bottom");
     }
 
-    private static void showToast(Context context, int resId, String toastLocation) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    private static void showToast(final Context context, @StringRes final int resId, final String toastLocation) {
+        final String text = context.getResources().getString(resId);
+        showToast(context, text, toastLocation);
+    }
+
+    public static void showCenteredBottomToast(final Context context, final String text) {
+        showToast(context, text, "bottom");
+    }
+
+    private static void showToast(final Context context, final String text, final String toastLocation) {
+        final LayoutInflater inflater = LayoutInflater.from(context);
         View layout = inflater.inflate(R.layout.custom_toast, null);
-        TextView text = layout.findViewById(R.id.toast_text);
-        text.setText(resId);
+        final TextView textView = layout.findViewById(R.id.toast_text);
+        textView.setText(text);
+
         Toast toast = new Toast(context);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
