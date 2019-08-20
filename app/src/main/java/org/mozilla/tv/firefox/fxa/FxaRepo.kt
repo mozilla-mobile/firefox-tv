@@ -20,8 +20,6 @@ import mozilla.components.concept.sync.DeviceEventsObserver
 import mozilla.components.concept.sync.DeviceType
 import mozilla.components.concept.sync.OAuthAccount
 import mozilla.components.concept.sync.Profile
-import mozilla.components.feature.push.AutoPushFeature
-import mozilla.components.feature.sendtab.SendTabFeature
 import mozilla.components.service.fxa.DeviceConfig
 import mozilla.components.service.fxa.manager.FxaAccountManager
 import mozilla.components.support.base.log.logger.Logger
@@ -47,7 +45,7 @@ private val APPLICATION_SCOPES = setOf(
 class FxaRepo(
     val context: Context,
     val accountManager: FxaAccountManager = newInstanceDefaultAccountManager(context),
-    val pushFeature: AutoPushFeature
+    val admIntegration: ADMIntegration
 ) {
 
     /**
@@ -85,10 +83,7 @@ class FxaRepo(
         @Suppress("DeferredResultUnused") // No value is returned & we don't need to wait for this to complete.
         accountManager.initAsync() // If user is already logged in, the appropriate observers will be triggered.
 
-        // For push to work in debug builds (not needed for release), an api key is needed in the assets folder. See README for instructions.
-        SendTabFeature(accountManager, pushFeature) { _, _ ->
-            // TODO: Handle receiving tabs (#2491)
-        }
+        admIntegration.createSendTabFeature(accountManager)
     }
 
     /**
@@ -108,7 +103,7 @@ class FxaRepo(
             _accountState.onNext(AuthenticatedNoProfile)
 
             // Push service is only needed when logged in (this saves resources)
-            pushFeature.initialize()
+            admIntegration.initPushFeature()
         }
 
         override fun onAuthenticationProblems() {
@@ -119,7 +114,7 @@ class FxaRepo(
             _accountState.onNext(NotAuthenticated)
 
             // Push service is not needed after logging out (this saves resources)
-            pushFeature.shutdown()
+            admIntegration.shutdownPushFeature()
         }
 
         /**

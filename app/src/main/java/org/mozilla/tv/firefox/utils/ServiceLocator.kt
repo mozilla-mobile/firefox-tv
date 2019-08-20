@@ -10,9 +10,6 @@ package org.mozilla.tv.firefox.utils
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
-import mozilla.components.feature.push.AutoPushFeature
-import mozilla.components.feature.push.PushConfig
-import mozilla.components.feature.push.ServiceType
 import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ValidatedIntentData
@@ -26,7 +23,7 @@ import org.mozilla.tv.firefox.experiments.FretboardProvider
 import org.mozilla.tv.firefox.ext.getAccessibilityManager
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.framework.FrameworkRepo
-import org.mozilla.tv.firefox.fxa.ADMService
+import org.mozilla.tv.firefox.fxa.ADMIntegration
 import org.mozilla.tv.firefox.fxa.FxaLoginUseCase
 import org.mozilla.tv.firefox.fxa.FxaRepo
 import org.mozilla.tv.firefox.pocket.PocketEndpointRaw
@@ -97,10 +94,9 @@ open class ServiceLocator(val app: Application) {
     val pocketEndpointRaw by lazy { PocketEndpointRaw(appVersion, buildConfigDerivables.globalPocketVideoEndpoint) }
     val pocketVideoStore by lazy { PocketVideoStore(app, app.assets, pocketVideoJSONValidator) }
     val pocketVideoFetchScheduler by lazy { PocketVideoFetchScheduler(isPocketEnabledByLocale) }
-    val fxaRepo by lazy { FxaRepo(app, pushFeature = pushFeature) }
+    val fxaRepo by lazy { FxaRepo(app, admIntegration = admIntegration) }
     val fxaLoginUseCase by lazy { FxaLoginUseCase(fxaRepo, sessionRepo, screenController) }
-    val admService by lazy { ADMService() }
-    val pushFeature by lazy { AutoPushFeature(app, admService, PushConfig(senderId = "fftv", serviceType = ServiceType.ADM)) }
+    val admIntegration by lazy { ADMIntegration(app) }
 
     // These open vals are overridden in testing
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())

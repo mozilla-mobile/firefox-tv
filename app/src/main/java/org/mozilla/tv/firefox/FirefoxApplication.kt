@@ -8,14 +8,11 @@ import android.os.StrictMode
 import androidx.annotation.VisibleForTesting
 import android.webkit.WebSettings
 import androidx.annotation.VisibleForTesting.PRIVATE
-import com.amazon.device.messaging.ADM
 import mozilla.appservices.Megazord
 import mozilla.components.concept.engine.utils.EngineVersion
-import mozilla.components.concept.push.PushProcessor
 import mozilla.components.lib.fetch.okhttp.OkHttpClient
 import mozilla.components.service.glean.Glean
 import mozilla.components.support.base.log.Log
-import mozilla.components.support.base.log.logger.Logger
 import mozilla.components.support.base.log.sink.AndroidLogSink
 import mozilla.components.support.ktx.android.content.runOnlyInMainProcess
 import mozilla.components.support.rusthttp.RustHttpConfig
@@ -30,7 +27,6 @@ import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.webrender.WebRenderComponents
 
 private const val DEFAULT_LOGTAG = "FFTV"
-private val logger = Logger(DEFAULT_LOGTAG)
 
 open class FirefoxApplication : LocaleAwareApplication() {
     lateinit var visibilityLifeCycleCallback: VisibilityLifeCycleCallback
@@ -72,7 +68,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
             initGlean()
             TelemetryIntegration.INSTANCE.init(this)
             initFretboard()
-            initPush()
+            serviceLocator.admIntegration.initPush()
 
             enableStrictMode()
 
@@ -91,15 +87,6 @@ open class FirefoxApplication : LocaleAwareApplication() {
         with(serviceLocator.fretboardProvider) {
             loadExperiments()
             updateExperiments()
-        }
-    }
-
-    private fun initPush() {
-        // Only use push feature if ADM is available on this device
-        if (ADM(applicationContext).isSupported) {
-            PushProcessor.install(serviceLocator.pushFeature)
-        } else {
-            logger.warn("ADM is not available on this device.")
         }
     }
 
