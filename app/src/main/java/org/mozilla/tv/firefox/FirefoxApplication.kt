@@ -15,6 +15,7 @@ import mozilla.components.service.glean.Glean
 import mozilla.components.support.base.log.Log
 import mozilla.components.support.base.log.sink.AndroidLogSink
 import mozilla.components.support.ktx.android.content.runOnlyInMainProcess
+import mozilla.components.support.ktx.android.os.resetAfter
 import mozilla.components.support.rusthttp.RustHttpConfig
 import org.mozilla.tv.firefox.components.locale.LocaleAwareApplication
 import org.mozilla.tv.firefox.ext.webRenderComponents
@@ -68,9 +69,13 @@ open class FirefoxApplication : LocaleAwareApplication() {
             initGlean()
             TelemetryIntegration.INSTANCE.init(this)
             initFretboard()
-            serviceLocator.admIntegration.initPush()
 
             enableStrictMode()
+
+            // For now, ignore the violations (a-c#4166)
+            StrictMode.allowThreadDiskReads().resetAfter {
+                serviceLocator.admIntegration.initPush()
+            }
 
             visibilityLifeCycleCallback = VisibilityLifeCycleCallback(this).also {
                 registerActivityLifecycleCallbacks(it)
