@@ -41,39 +41,39 @@ class FxaRepoTest {
 
     @Test
     fun `WHEN fxa repo is initialized THEN account state is not authenticated`() {
-        accountStateTestObs.assertValue(FxaRepo.AccountState.NOT_AUTHENTICATED)
+        accountStateTestObs.assertValue(FxaRepo.AccountState.NotAuthenticated)
     }
 
     @Test
     fun `WHEN on authenticated callback is called with newAccount as false THEN account state is authenticated no profile`() {
         val account = mockk<OAuthAccount>()
         fxaRepo.accountObserver.onAuthenticated(account, false)
-        accountStateTestObs.assertValueAt(1, FxaRepo.AccountState.AUTHENTICATED_NO_PROFILE)
+        accountStateTestObs.assertValueAt(1, FxaRepo.AccountState.AuthenticatedNoProfile)
     }
 
     @Test
     fun `WHEN on authenticated callback is called with newAccount as true THEN account state is authenticated no profile`() {
         val account = mockk<OAuthAccount>()
         fxaRepo.accountObserver.onAuthenticated(account, true)
-        accountStateTestObs.assertValueAt(1, FxaRepo.AccountState.AUTHENTICATED_NO_PROFILE)
+        accountStateTestObs.assertValueAt(1, FxaRepo.AccountState.AuthenticatedNoProfile)
     }
 
     @Test
     fun `WHEN on authentication problems callback is called THEN account state is needs reauthentication`() {
         fxaRepo.accountObserver.onAuthenticationProblems()
-        accountStateTestObs.assertValueAt(1, FxaRepo.AccountState.NEEDS_REAUTHENTICATION)
+        accountStateTestObs.assertValueAt(1, FxaRepo.AccountState.NeedsReauthentication)
     }
 
     @Test
     fun `WHEN on logout callback is called THEN account state is not authenticated`() {
         fxaRepo.accountObserver.onLoggedOut()
-        accountStateTestObs.assertValueAt(1, FxaRepo.AccountState.NOT_AUTHENTICATED)
+        accountStateTestObs.assertValueAt(1, FxaRepo.AccountState.NotAuthenticated)
     }
 
     @Test
     fun `WHEN on profile update callback is called THEN account state is authenticated with profile`() {
         val profile = mockk<Profile>()
         fxaRepo.accountObserver.onProfileUpdated(profile)
-        accountStateTestObs.assertValueAt(1, FxaRepo.AccountState.AUTHENTICATED_WITH_PROFILE)
+        accountStateTestObs.assertValueAt(1, FxaRepo.AccountState.AuthenticatedWithProfile(profile))
     }
 }
