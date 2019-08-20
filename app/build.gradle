@@ -150,6 +150,7 @@ dependencies {
     implementation "org.mozilla.components:service-firefox-accounts:$moz_components_version"
     implementation "org.mozilla.components:support-ktx:$moz_components_version"
     implementation "org.mozilla.components:support-utils:$moz_components_version"
+    implementation "org.mozilla.components:support-rusthttp:$moz_components_version"
     implementation "org.mozilla.components:service-glean:$moz_components_version"
 
     systemImplementation "org.mozilla.components:browser-engine-system:$moz_components_version"
@@ -209,6 +210,9 @@ dependencies {
     }
 
     androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}"
+
+    // See https://github.com/mozilla/application-services/blob/master/.buildconfig-android.yml#L1 for latest version
+    testImplementation "org.mozilla.appservices:full-megazord-forUnitTests:0.37.1"
 }
 
 task validateReleaseConfiguration(type: ValidateAndroidAppReleaseConfiguration)
