@@ -121,7 +121,8 @@ class NavigationOverlayFragment : Fragment() {
             // TODO: change button action based on profile state.
             // TODO: remember to update telemetry accordingly
             NavigationEvent.FXA_BUTTON -> {
-                serviceLocator.fxaLoginUseCase.beginLogin(fragmentManager!!)
+//                serviceLocator.fxaLoginUseCase.beginLogin(fragmentManager!!) // TODO
+                serviceLocator.screenController.showSettingsScreen(fragmentManager!!, SettingsScreen.FXA_PROFILE)
                 TelemetryIntegration.INSTANCE.fxaButtonClickEvent()
             }
 
@@ -400,6 +401,7 @@ class NavigationOverlayFragment : Fragment() {
                     val navigationEvent = when (type) {
                         SettingsScreen.DATA_COLLECTION -> NavigationEvent.SETTINGS_DATA_COLLECTION
                         SettingsScreen.CLEAR_COOKIES -> NavigationEvent.SETTINGS_CLEAR_COOKIES
+                        SettingsScreen.FXA_PROFILE -> NavigationEvent.FXA_BUTTON
                     }
                     onNavigationEvent.invoke(navigationEvent, null, null)
                 }

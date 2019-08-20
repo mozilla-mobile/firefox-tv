@@ -11,10 +11,17 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.sentry.Sentry
 import kotlinx.android.synthetic.main.settings_screen_buttons.view.cancel_action
 import kotlinx.android.synthetic.main.settings_screen_buttons.view.confirm_action
+import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.avatar_image
+import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.button_firefox_tabs
+import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.button_sign_out
+import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.description_bottom
 import kotlinx.android.synthetic.main.settings_screen_switch.toggle
+import kotlinx.android.synthetic.main.settings_screen_switch.view.back_button
 import kotlinx.android.synthetic.main.settings_screen_switch.view.description
 import kotlinx.android.synthetic.main.settings_screen_switch.view.toggle
 import org.mozilla.tv.firefox.R
@@ -22,6 +29,8 @@ import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.channels.SettingsScreen
 import org.mozilla.tv.firefox.channels.SettingsTile
+import org.mozilla.tv.firefox.fxa.FxaRepo
+import org.mozilla.tv.firefox.utils.PicassoWrapper
 
 const val KEY_SETTINGS_TYPE = "KEY_SETTINGS_TYPE"
 
@@ -31,12 +40,15 @@ class SettingsFragment : Fragment() {
         SESSION_CLEARED
     }
 
+    var profileDisposable: Disposable? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val settingsVM = FirefoxViewModelProviders.of(this@SettingsFragment).get(SettingsViewModel::class.java)
         val type: SettingsTile = SettingsScreen.valueOf(arguments!!.getString(KEY_SETTINGS_TYPE)!!)
         val view = when (type) {
             SettingsScreen.DATA_COLLECTION -> setupDataCollectionScreen(inflater, container, settingsVM)
             SettingsScreen.CLEAR_COOKIES -> setupClearCookiesScreen(inflater, container, settingsVM)
+            SettingsScreen.FXA_PROFILE -> setupFxaProfileScreen(inflater, container)
             else -> {
                 Sentry.capture(IllegalStateException("Unexpected Settings type received: $type"))
                 return container!!
@@ -91,6 +103,52 @@ class SettingsFragment : Fragment() {
             serviceLocator!!.screenController.handleBack(fragmentManager!!)
         }
         return view
+    }
+
+    private fun setupFxaProfileScreen(
+        inflater: LayoutInflater,
+        parentView: ViewGroup?
+    ): View {
+        val view = inflater.inflate(R.layout.settings_screen_fxa_profile, parentView, false)
+
+        setupFxaProfileListeners(view)
+        profileDisposable = observeFxaProfile(view)
+
+        return view
+    }
+
+    private fun setupFxaProfileListeners(view: View) {
+        view.button_firefox_tabs.setOnClickListener {
+            // TODO perform action
+            // TODO telemetry
+        }
+        view.button_sign_out.setOnClickListener {
+            // TODO perform action
+            // TODO telemetry
+            serviceLocator!!.screenController.handleBack(fragmentManager!!)
+        }
+        view.back_button.setOnClickListener {
+            // TODO telemetry
+            serviceLocator!!.screenController.handleBack(fragmentManager!!)
+        }
+    }
+
+    private fun observeFxaProfile(view: View): Disposable = context!!.serviceLocator.fxaRepo.accountState
+        .ofType(FxaRepo.AccountState.AuthenticatedWithProfile::class.java)
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe {
+            view.description_bottom.text = it.profile.displayName
+
+            val avatarUrl = it.profile.avatar?.url
+            if (avatarUrl != null) {
+                // TODO set default image
+                PicassoWrapper.client.load(avatarUrl).into(view.avatar_image)
+            }
+        }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        profileDisposable?.dispose()
     }
 
     companion object {

@@ -74,7 +74,7 @@ class SettingsTileHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 // We differentiate between Settings tiles that lead to other Settings screens, or are just buttons
 interface SettingsTile
 enum class SettingsScreen : SettingsTile {
-    DATA_COLLECTION, CLEAR_COOKIES
+    DATA_COLLECTION, CLEAR_COOKIES, FXA_PROFILE
 }
 enum class SettingsButton : SettingsTile {
         ABOUT, PRIVACY_POLICY
