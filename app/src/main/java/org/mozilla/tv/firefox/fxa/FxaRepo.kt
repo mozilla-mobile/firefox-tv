@@ -13,6 +13,7 @@ import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.Deferred
 import mozilla.appservices.fxaclient.Config
 import mozilla.components.concept.sync.AccountObserver
+import mozilla.components.concept.sync.Avatar
 import mozilla.components.concept.sync.DeviceCapability
 import mozilla.components.concept.sync.DeviceEvent
 import mozilla.components.concept.sync.DeviceEventsObserver
@@ -57,7 +58,7 @@ class FxaRepo(
         /**
          *  After the profile is fetched async
          */
-        data class AuthenticatedWithProfile(val profile: Profile) : AccountState()
+        data class AuthenticatedWithProfile(val profile: FxaProfile) : AccountState()
         /**
          *  Before the profile is fetched async.
          *  If the profile is null, this is the resulting state.
@@ -111,7 +112,7 @@ class FxaRepo(
          * This is called when the profile is first fetched after sign-in.
          */
         override fun onProfileUpdated(profile: Profile) {
-            _accountState.onNext(AuthenticatedWithProfile(profile))
+            _accountState.onNext(AuthenticatedWithProfile(profile.toDomainObject()))
         }
     }
 
@@ -140,3 +141,21 @@ class FxaRepo(
         }
     }
 }
+
+/**
+ *  A wrapper for [Profile]. This insulates us from any upstream changes to the API, and
+ *  allows us to validate related data at the edge of our app.
+ *
+ *  TODO it looks like some of these fields should be nonnullable (at least [uid] and [email]. We should:
+ *  - Reach out to FxA devs for clarification re: which of these fields are actually nullable
+ *  - Validate that important fields are nonnull at the edge of our app
+ *  - Replace other fields ([avatar], possibly [displayName]) with default values
+ */
+data class FxaProfile(
+    val uid: String?,
+    val email: String?,
+    val avatar: Avatar?,
+    val displayName: String?
+)
+
+fun Profile.toDomainObject() = FxaProfile(this.uid, this.email, this.avatar, this.displayName)
