@@ -52,19 +52,19 @@ class FxaRepo(
      * [AUTHENTICATED_NO_PROFILE] is always a state in between. Even if the account is saved to disk,
      * the profile is not and needs to be fetched.
      */
-    enum class AccountState {
+    sealed class AccountState {
         // TODO: Later, may need "failed to login": https://github.com/mozilla-mobile/android-components/issues/3712
         /**
          *  After the profile is fetched async
          */
-        AUTHENTICATED_WITH_PROFILE,
+        data class AUTHENTICATED_WITH_PROFILE(val profile: Profile) : AccountState()
         /**
          *  Before the profile is fetched async.
          *  If the profile is null, this is the resulting state.
          */
-        AUTHENTICATED_NO_PROFILE, // Before the profile is fetched async
-        NEEDS_REAUTHENTICATION,
-        NOT_AUTHENTICATED // Initial state
+        object AUTHENTICATED_NO_PROFILE : AccountState() // Before the profile is fetched async
+        object NEEDS_REAUTHENTICATION : AccountState()
+        object NOT_AUTHENTICATED : AccountState() // Initial state
     }
 
     @VisibleForTesting(otherwise = NONE)
@@ -111,7 +111,7 @@ class FxaRepo(
          * This is called when the profile is first fetched after sign-in.
          */
         override fun onProfileUpdated(profile: Profile) {
-            _accountState.onNext(AUTHENTICATED_WITH_PROFILE)
+            _accountState.onNext(AUTHENTICATED_WITH_PROFILE(profile))
         }
     }
 
