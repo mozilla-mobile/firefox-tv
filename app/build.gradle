@@ -215,7 +215,8 @@ dependencies {
 
     androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}"
 
-    // See https://github.com/mozilla/application-services/blob/master/.buildconfig-android.yml#L1 for latest version
+    // For the latest version, see `Versions.mozilla_appservices` in
+    // https://github.com/mozilla-mobile/android-components/blob/master/buildSrc/src/main/java/Dependencies.kt
     testImplementation "org.mozilla.appservices:full-megazord-forUnitTests:0.37.1"
 
     // Download from https://developer.amazon.com/sdk-download
