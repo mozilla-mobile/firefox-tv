@@ -13,7 +13,6 @@ import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
 import mozilla.components.concept.sync.OAuthAccount
 import mozilla.components.concept.sync.Profile
-import mozilla.components.feature.push.AutoPushFeature
 import mozilla.components.service.fxa.manager.FxaAccountManager
 import org.junit.Before
 import org.junit.Test
@@ -21,7 +20,7 @@ import org.junit.Test
 class FxaRepoTest {
 
     @MockK(relaxed = true) private lateinit var accountManager: FxaAccountManager
-    @MockK(relaxed = true) private lateinit var pushFeature: AutoPushFeature
+    @MockK(relaxed = true) private lateinit var admIntegration: ADMIntegration
 
     private lateinit var fxaRepo: FxaRepo
     private lateinit var accountState: Observable<FxaRepo.AccountState>
@@ -31,7 +30,7 @@ class FxaRepoTest {
     fun setUp() {
         MockKAnnotations.init(this)
         val context = mockk<Context>()
-        fxaRepo = FxaRepo(context, accountManager, pushFeature)
+        fxaRepo = FxaRepo(context, accountManager, admIntegration)
         accountState = fxaRepo.accountState
         accountStateTestObs = accountState.test()
     }
@@ -65,7 +64,7 @@ class FxaRepoTest {
         val account = mockk<OAuthAccount>()
         fxaRepo.accountObserver.onAuthenticated(account, true)
 
-        verify(exactly = 1) { pushFeature.initialize() }
+        verify(exactly = 1) { admIntegration.initPushFeature() }
     }
 
     @Test
@@ -84,7 +83,7 @@ class FxaRepoTest {
     fun `WHEN on logout callback is called THEN push feature is shutdown`() {
         fxaRepo.accountObserver.onLoggedOut()
 
-        verify(exactly = 1) { pushFeature.shutdown() }
+        verify(exactly = 1) { admIntegration.shutdownPushFeature() }
     }
 
     @Test
