@@ -8,11 +8,14 @@ import android.os.StrictMode
 import androidx.annotation.VisibleForTesting
 import android.webkit.WebSettings
 import androidx.annotation.VisibleForTesting.PRIVATE
+import mozilla.appservices.Megazord
 import mozilla.components.concept.engine.utils.EngineVersion
+import mozilla.components.lib.fetch.okhttp.OkHttpClient
 import mozilla.components.service.glean.Glean
 import mozilla.components.support.base.log.Log
 import mozilla.components.support.base.log.sink.AndroidLogSink
 import mozilla.components.support.ktx.android.content.runOnlyInMainProcess
+import mozilla.components.support.rusthttp.RustHttpConfig
 import org.mozilla.tv.firefox.components.locale.LocaleAwareApplication
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
@@ -61,6 +64,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
             // Enable crash reporting. Don't add anything above here because if it crashes, we won't know.
             SentryIntegration.init(this, serviceLocator.settingsRepo)
 
+            initRustDependencies()
             initGlean()
 
             TelemetryIntegration.INSTANCE.init(this)
@@ -76,6 +80,11 @@ open class FirefoxApplication : LocaleAwareApplication() {
                 registerActivityLifecycleCallbacks(it)
             }
         }
+    }
+
+    private fun initRustDependencies() {
+        Megazord.init()
+        RustHttpConfig.setClient(lazy { OkHttpClient(OkHttpWrapper.client, this) })
     }
 
     // This method is used to call Glean.setUploadEnabled. During the tests, this is
