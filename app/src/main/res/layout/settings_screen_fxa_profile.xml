@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?><!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!-- TODO comment why this is a separate file -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/photonGrey70">
+
+    <Button
+        android:id="@+id/button_firefox_tabs"
+        style="@style/ConfirmButton"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@string/font_ember_regular"
+        android:text="Firefox tabs"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/description_bottom">
+
+        <requestFocus />
+    </Button>
+
+    <!-- TODO extract + localize text -->
+    <Button
+        android:id="@+id/button_sign_out"
+        style="@style/CancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@string/font_ember_regular"
+        android:text="Sign out"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/button_firefox_tabs"
+        app:layout_constraintTop_toTopOf="@+id/button_firefox_tabs" />
+
+    <!-- TODO extract + localize text -->
+    <ImageButton
+        android:id="@+id/back_button"
+        style="@style/NavigationButton"
+        android:layout_width="@dimen/button_size"
+        android:layout_height="@dimen/button_size"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="32dp"
+        android:contentDescription="@string/content_description_back"
+        android:src="@drawable/ic_tv_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/avatar_image"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toStartOf="@+id/description_top"
+        app:layout_constraintTop_toTopOf="@+id/description_top"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <!-- TODO extract + localize text -->
+    <TextView
+        android:id="@+id/title"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/button_size"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@string/font_ember_regular"
+        android:gravity="center_vertical"
+        android:maxWidth="400dp"
+        android:text="Sent tabs"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/back_button"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- TODO extract + localize text -->
+    <TextView
+        android:id="@+id/description_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:fontFamily="@string/font_ember_regular"
+        android:paddingStart="0dp"
+        android:paddingEnd="300dp"
+        android:text="Signed in as"
+        android:textColor="@color/photonGrey10_a40p"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <TextView
+        android:id="@+id/description_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@string/font_ember_regular"
+        android:paddingStart="0dp"
+        android:paddingEnd="300dp"
+        android:textColor="@color/photonGrey10_a80p"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/description_top"
+        app:layout_constraintTop_toBottomOf="@+id/description_top" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

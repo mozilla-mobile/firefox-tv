@@ -28,6 +28,7 @@
 
     <color name="photonGrey10_a60p">#99F9F9FA</color>
     <color name="photonGrey10_a80p">#CCF9F9FA</color>
+    <color name="photonGrey10_a40p">#66F9F9FA</color>
     <color name="photonGrey40_a20p">#33b1b1b3</color>
 
     <color name="tv_white">#eeeeee</color>

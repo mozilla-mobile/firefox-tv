@@ -52,6 +52,7 @@ class NavigationOverlayViewModel(
                     ActiveScreen.WEB_RENDER -> R.id.navUrlInput
                     ActiveScreen.SETTINGS -> R.id.settings_tile_telemetry
                     ActiveScreen.NAVIGATION_OVERLAY -> View.NO_ID
+                    ActiveScreen.FXA_PROFILE -> R.id.fxaButton
                 }
             }
 
