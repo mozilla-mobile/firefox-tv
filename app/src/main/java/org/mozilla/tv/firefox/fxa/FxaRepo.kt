@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox.fxa
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.NONE
+import androidx.annotation.VisibleForTesting.PRIVATE
 import androidx.lifecycle.ProcessLifecycleOwner
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
@@ -76,6 +77,8 @@ class FxaRepo(
 
     @VisibleForTesting(otherwise = NONE)
     val accountObserver = FirefoxAccountObserver()
+    @VisibleForTesting(otherwise = NONE)
+    val deviceEventsObserver = FirefoxDeviceEventsObserver()
 
     private val _accountState: BehaviorSubject<AccountState> = BehaviorSubject.createDefault(NotAuthenticated)
     val accountState: Observable<AccountState> = _accountState.hide()
@@ -85,7 +88,7 @@ class FxaRepo(
 
     init {
         accountManager.register(accountObserver)
-        accountManager.registerForDeviceEvents(FirefoxDeviceEventsObserver(), ProcessLifecycleOwner.get(),
+        accountManager.registerForDeviceEvents(deviceEventsObserver, ProcessLifecycleOwner.get(),
             autoPause = false /* Avoid pausing even when the app is backgrounded. */)
 
         @Suppress("DeferredResultUnused") // No value is returned & we don't need to wait for this to complete.
@@ -138,7 +141,8 @@ class FxaRepo(
         }
     }
 
-    private inner class FirefoxDeviceEventsObserver : DeviceEventsObserver {
+    @VisibleForTesting(otherwise = PRIVATE)
+    inner class FirefoxDeviceEventsObserver : DeviceEventsObserver {
         override fun onEvents(events: List<DeviceEvent>) {
             logger.debug("received device events: $events")
             events.forEach {

@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.fxa
 
 import android.content.Context
 import io.mockk.MockKAnnotations
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.mockkObject
@@ -13,8 +14,11 @@ import io.mockk.verify
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
 import mozilla.components.concept.sync.Avatar
+import mozilla.components.concept.sync.DeviceEvent
+import mozilla.components.concept.sync.DeviceType
 import mozilla.components.concept.sync.OAuthAccount
 import mozilla.components.concept.sync.Profile
+import mozilla.components.concept.sync.TabData
 import mozilla.components.service.fxa.manager.FxaAccountManager
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -27,20 +31,25 @@ class FxaRepoTest {
 
     @MockK(relaxed = true) private lateinit var accountManager: FxaAccountManager
     @MockK(relaxed = true) private lateinit var admIntegration: ADMIntegration
+    @MockK(relaxed = true) private lateinit var sentryIntegration: SentryIntegration
 
     private lateinit var fxaRepo: FxaRepo
     private lateinit var accountState: Observable<FxaRepo.AccountState>
     private lateinit var accountStateTestObs: TestObserver<FxaRepo.AccountState>
+    private lateinit var receivedTabsTestObs: TestObserver<ReceivedTabs>
 
     private val defaultProfileAvatarImage = ImageSetStrategy.ById(R.drawable.ic_default_avatar)
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
+
         val context = mockk<Context>()
-        fxaRepo = FxaRepo(context, accountManager, admIntegration)
+        fxaRepo = FxaRepo(context, accountManager, admIntegration, sentryIntegration)
         accountState = fxaRepo.accountState
         accountStateTestObs = accountState.test()
+
+        receivedTabsTestObs = fxaRepo.receivedTabs.test()
     }
 
     @Test
@@ -174,5 +183,109 @@ class FxaRepoTest {
         profiles.map { it.toDomainObject() }
             .map { it.avatarSetStrategy }
             .forEach { assertEquals(expectedStrategy, it) }
+    }
+
+    @Test
+    fun `WHEN one receive tab event occurs with two URLs and a non-null device THEN receivedTabs emits the corresponding event`() {
+        val expectedDeviceName = "Expected device name"
+        val expectedTabUrls = getTwoExpectedTabUrls()
+        val expected = ReceivedTabs(
+            expectedTabUrls,
+            sendingDevice = ReceivedTabs.DeviceMetadata(
+                expectedDeviceName,
+                DeviceType.DESKTOP
+        ))
+
+        val inputTabData = expectedTabUrls.mapIndexed { i, url -> TabData("tab title $i", url) }
+        val tabReceivedEvent = mockTabReceivedEvent(DeviceType.DESKTOP, expectedDeviceName, inputTabData)
+
+        fxaRepo.deviceEventsObserver.onEvents(listOf(tabReceivedEvent))
+
+        receivedTabsTestObs.assertValues(expected)
+    }
+
+    @Test
+    fun `WHEN a receive tab event occurs with two URLs and a null device THEN receivedTabs emits the corresponding event`() {
+        val expectedTabUrls = getTwoExpectedTabUrls()
+        val expected = ReceivedTabs(
+            expectedTabUrls,
+            sendingDevice = null
+        )
+
+        val inputTabData = expectedTabUrls.mapIndexed { i, url -> TabData("tab title $i", url) }
+        val tabReceivedEvent = mockTabReceivedEventWithNullDevice(inputTabData)
+
+        fxaRepo.deviceEventsObserver.onEvents(listOf(tabReceivedEvent))
+
+        receivedTabsTestObs.assertValues(expected)
+    }
+
+    private fun getTwoExpectedTabUrls() = listOf(
+        "https://google.com",
+        "https://android.com"
+    )
+
+    @Test
+    fun `WHEN a receive tab event occurs with blank and non-blank URLs THEN receivedTabs emits an event with tabs with blank URLs filtered out`() {
+        val expectedTabUrls = getTwoExpectedTabUrls()
+        val expected = ReceivedTabs(
+            expectedTabUrls,
+            sendingDevice = null
+        )
+
+        val inputTabUrls = listOf(" ", "") + expectedTabUrls + listOf("  ", "", " ")
+        val inputTabData = inputTabUrls.mapIndexed { i, url -> TabData("tab title $i", url) }
+        val tabReceivedEvent = mockTabReceivedEventWithNullDevice(inputTabData)
+
+        fxaRepo.deviceEventsObserver.onEvents(listOf(tabReceivedEvent))
+
+        receivedTabsTestObs.assertValues(expected)
+    }
+
+    @Test
+    fun `WHEN a receive tab event occurs with empty entries THEN sentry records an event and receivedTabs does not emit`() {
+        val tabReceivedEvent = DeviceEvent.TabReceived(null, emptyList())
+
+        fxaRepo.deviceEventsObserver.onEvents(listOf(tabReceivedEvent))
+
+        verify(exactly = 1) { sentryIntegration.captureAndLogError(any(), any()) }
+        receivedTabsTestObs.assertEmpty()
+    }
+
+    @Test
+    fun `WHEN a receive tab event occurs with only blank URLs THEN sentry records an event and receivedTabs does not emit`() {
+        val inputTabData = List(2) { TabData(title = "TabName $it", url = "   ") }
+        val tabReceivedEvent = mockTabReceivedEventWithNullDevice(inputTabData)
+
+        fxaRepo.deviceEventsObserver.onEvents(listOf(tabReceivedEvent))
+
+        verify(exactly = 1) { sentryIntegration.captureAndLogError(any(), any()) }
+        receivedTabsTestObs.assertEmpty()
+    }
+
+    @Test
+    fun `WHEN an empty list of device events occurs THEN received tabs does not emit`() {
+        fxaRepo.deviceEventsObserver.onEvents(emptyList())
+        receivedTabsTestObs.assertEmpty()
+    }
+
+    private fun mockTabReceivedEvent(
+        deviceTypeArg: DeviceType = DeviceType.UNKNOWN,
+        deviceName: String = "Name not entered",
+        entriesArg: List<TabData> = emptyList()
+    ): DeviceEvent.TabReceived = mockk {
+        every { from } returns mockk {
+            every { deviceType } returns deviceTypeArg
+            every { displayName } returns deviceName
+        }
+
+        every { entries } returns entriesArg
+    }
+
+    private fun mockTabReceivedEventWithNullDevice(
+        entriesArg: List<TabData>
+    ): DeviceEvent.TabReceived = mockk {
+        every { from } returns null
+        every { entries } returns entriesArg
     }
 }
