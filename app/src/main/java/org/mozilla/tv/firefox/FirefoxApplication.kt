@@ -125,7 +125,9 @@ open class FirefoxApplication : LocaleAwareApplication() {
         val threadPolicyBuilder = StrictMode.ThreadPolicy.Builder().detectAll()
         val vmPolicyBuilder = StrictMode.VmPolicy.Builder().detectAll()
 
-        threadPolicyBuilder.penaltyDialog()
+        threadPolicyBuilder
+            .penaltyLog()
+            .penaltyDialog()
         vmPolicyBuilder.penaltyLog()
 
         StrictMode.setThreadPolicy(threadPolicyBuilder.build())
