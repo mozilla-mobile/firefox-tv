@@ -22,10 +22,10 @@ import mozilla.components.concept.sync.Profile
 import mozilla.components.service.fxa.DeviceConfig
 import mozilla.components.service.fxa.manager.FxaAccountManager
 import mozilla.components.support.base.log.logger.Logger
-import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AUTHENTICATED_NO_PROFILE
-import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AUTHENTICATED_WITH_PROFILE
-import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NEEDS_REAUTHENTICATION
-import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NOT_AUTHENTICATED
+import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AuthenticatedNoProfile
+import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AuthenticatedWithProfile
+import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NeedsReauthentication
+import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NotAuthenticated
 
 private val logger = Logger("FxaRepo")
 
@@ -48,8 +48,8 @@ class FxaRepo(
 
     /**
      * The account profile is fetched asynchronously.
-     * There is no way to transition from [NOT_AUTHENTICATED] directly to [AUTHENTICATED_WITH_PROFILE];
-     * [AUTHENTICATED_NO_PROFILE] is always a state in between. Even if the account is saved to disk,
+     * There is no way to transition from [NotAuthenticated] directly to [AuthenticatedWithProfile];
+     * [AuthenticatedNoProfile] is always a state in between. Even if the account is saved to disk,
      * the profile is not and needs to be fetched.
      */
     sealed class AccountState {
@@ -57,20 +57,20 @@ class FxaRepo(
         /**
          *  After the profile is fetched async
          */
-        data class AUTHENTICATED_WITH_PROFILE(val profile: Profile) : AccountState()
+        data class AuthenticatedWithProfile(val profile: Profile) : AccountState()
         /**
          *  Before the profile is fetched async.
          *  If the profile is null, this is the resulting state.
          */
-        object AUTHENTICATED_NO_PROFILE : AccountState() // Before the profile is fetched async
-        object NEEDS_REAUTHENTICATION : AccountState()
-        object NOT_AUTHENTICATED : AccountState() // Initial state
+        object AuthenticatedNoProfile : AccountState() // Before the profile is fetched async
+        object NeedsReauthentication : AccountState()
+        object NotAuthenticated : AccountState() // Initial state
     }
 
     @VisibleForTesting(otherwise = NONE)
     val accountObserver = FirefoxAccountObserver()
 
-    private val _accountState: BehaviorSubject<AccountState> = BehaviorSubject.createDefault(NOT_AUTHENTICATED)
+    private val _accountState: BehaviorSubject<AccountState> = BehaviorSubject.createDefault(NotAuthenticated)
     val accountState: Observable<AccountState> = _accountState.hide()
 
     init {
@@ -96,22 +96,22 @@ class FxaRepo(
     @VisibleForTesting(otherwise = NONE)
     inner class FirefoxAccountObserver : AccountObserver {
         override fun onAuthenticated(account: OAuthAccount, newAccount: Boolean) {
-            _accountState.onNext(AUTHENTICATED_NO_PROFILE)
+            _accountState.onNext(AuthenticatedNoProfile)
         }
 
         override fun onAuthenticationProblems() {
-            _accountState.onNext(NEEDS_REAUTHENTICATION)
+            _accountState.onNext(NeedsReauthentication)
         }
 
         override fun onLoggedOut() {
-            _accountState.onNext(NOT_AUTHENTICATED)
+            _accountState.onNext(NotAuthenticated)
         }
 
         /**
          * This is called when the profile is first fetched after sign-in.
          */
         override fun onProfileUpdated(profile: Profile) {
-            _accountState.onNext(AUTHENTICATED_WITH_PROFILE(profile))
+            _accountState.onNext(AuthenticatedWithProfile(profile))
         }
     }
 
