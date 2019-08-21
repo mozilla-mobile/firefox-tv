@@ -59,6 +59,7 @@ break the layout into a separate file, rather than handling both in the same fil
         android:src="@drawable/ic_avatar_authenticated_no_picture"
         app:layout_constraintEnd_toStartOf="@+id/description_top"
         app:layout_constraintTop_toTopOf="@+id/description_top"
+        android:contentDescription="@string/content_description_fxa_profile_avatar_image"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
