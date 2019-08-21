@@ -68,7 +68,9 @@ class ViewModelFactory(
                 ToolbarViewModel(
                         sessionRepo = serviceLocator.sessionRepo,
                         pinnedTileRepo = serviceLocator.pinnedTileRepo
-                )
+                ),
+                serviceLocator.fxaRepo,
+                serviceLocator.fxaLoginUseCase
             ) as T
 
             OverlayHintViewModel::class.java -> OverlayHintViewModel(

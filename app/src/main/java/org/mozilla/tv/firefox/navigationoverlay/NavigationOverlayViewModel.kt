@@ -5,6 +5,7 @@
 package org.mozilla.tv.firefox.navigationoverlay
 
 import android.view.View
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
 import org.mozilla.tv.firefox.R
@@ -12,6 +13,11 @@ import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.channels.ChannelDetails
 import org.mozilla.tv.firefox.channels.ChannelRepo
+import org.mozilla.tv.firefox.channels.SettingsScreen
+import org.mozilla.tv.firefox.fxa.FxaLoginUseCase
+import org.mozilla.tv.firefox.fxa.FxaRepo
+import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState
+import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
 class ChannelTitles(
     val pinned: String,
@@ -22,10 +28,12 @@ class ChannelTitles(
 )
 
 class NavigationOverlayViewModel(
-    screenController: ScreenController,
+    private val screenController: ScreenController,
     channelTitles: ChannelTitles,
     channelRepo: ChannelRepo,
-    toolbarViewModel: ToolbarViewModel
+    toolbarViewModel: ToolbarViewModel,
+    private val fxaRepo: FxaRepo,
+    private val fxaLoginUseCase: FxaLoginUseCase
 ) : ViewModel() {
 
     val pinnedTiles: Observable<ChannelDetails> = channelRepo.getPinnedTiles()
@@ -65,4 +73,26 @@ class NavigationOverlayViewModel(
                     else -> R.id.turboButton
                 }
             }
+
+    fun fxaButtonClicked(fragmentManager: FragmentManager) {
+        fun beginLogin() {
+                fxaLoginUseCase.beginLogin(fragmentManager)
+                TelemetryIntegration.INSTANCE.fxaButtonClickEvent()
+        }
+
+        fun showFxaProfileScreen() {
+            screenController.showSettingsScreen(fragmentManager, SettingsScreen.FXA_PROFILE)
+            TelemetryIntegration.INSTANCE.fxaShowProfileButtonClickEvent()
+        }
+
+        when (fxaRepo.accountState.blockingFirst()) {
+            is AccountState.AuthenticatedWithProfile -> showFxaProfileScreen()
+            is AccountState.AuthenticatedNoProfile -> {
+                // TODO The UI for this error state is not perfect. See #2721
+                showFxaProfileScreen()
+            }
+            is AccountState.NeedsReauthentication -> beginLogin()
+            is AccountState.NotAuthenticated -> beginLogin()
+        }
+    }
 }
