@@ -8,6 +8,8 @@ It diverges in the following ways:
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html) for bug fix releases.
 
 ## Unreleased
+### Fixed
+- Fullscreen videos were offset if the page was scrolled down before fullscreening. This fix will not work under certain conditions and on certain sites (#2540. #2541)
 
 ## 4.2 - 2019-08-12
 ### Added
@@ -19,7 +21,6 @@ It diverges in the following ways:
 
 ### Fixed
 - Remote Settings URL goes through the CDN (#2651)
-- Fullscreen videos were offset if the page was scrolled down before fullscreening. This fix will not work under certain conditions and on certain sites (#2540. #2541)
 
 ## 4.1 - 2019-07-29
 ### Fixed
