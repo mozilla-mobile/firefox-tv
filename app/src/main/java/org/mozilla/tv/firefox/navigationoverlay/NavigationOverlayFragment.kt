@@ -25,10 +25,12 @@ import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.transition.Fade
+import com.squareup.picasso.Callback
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
+import io.sentry.Sentry
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.channelsContainer
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.navUrlInput
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.settingsTileContainer
@@ -58,6 +60,7 @@ import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.PicassoWrapper
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
+import java.lang.Exception
 import java.lang.ref.WeakReference
 
 private const val SHOW_UNPIN_TOAST_COUNTER_PREF = "show_upin_toast_counter"
@@ -266,7 +269,12 @@ class NavigationOverlayFragment : Fragment() {
                     if (fxaProfile.avatar != null) {
                         PicassoWrapper.client
                             .load(fxaProfile.avatar.url)
-                            .into(fxaButton)
+                            .into(fxaButton, object : Callback {
+                                override fun onError(e: Exception?) {
+                                    Sentry.capture(e)
+                                }
+                                override fun onSuccess() {}
+                            })
                     }
                 }
                 AccountState.AuthenticatedNoProfile -> {
@@ -278,7 +286,6 @@ class NavigationOverlayFragment : Fragment() {
                     fxaButton.setImageResource(R.drawable.ic_fxa_login)
                     fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_new)
                 }
-                null -> Unit
             }
         }
     }
