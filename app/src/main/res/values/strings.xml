@@ -260,4 +260,6 @@
     <string name="fxa_settings_primary_button">%1$s tabs</string>
     <!-- Button text to sign out from the Firefox Accounts settings page -->
     <string name="fxa_settings_secondary_button">Sign out</string>
+    <!-- This is a content description for an image that will display the avatar of the currently logged in user -->
+    <string name="content_description_fxa_profile_avatar_image">User profile avatar image</string>
 </resources>
