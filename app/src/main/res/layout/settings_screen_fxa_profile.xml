@@ -2,7 +2,9 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
-<!-- TODO comment why this is a separate file -->
+<!-- This file is currently extremely similar to settings_screen_buttons. However, it is expected
+to expand considerably in the near future as more FxA options are added. This is why we chose to
+break the layout into a separate file, rather than handling both in the same file -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
