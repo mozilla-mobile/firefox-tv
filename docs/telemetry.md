@@ -80,6 +80,10 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 | No menu action taken ††                | aggregate| no_action_taken       | menu         |                          |               |
 | Exit Firefox clicked                   | action   | click                 | menu         | exit                     |               |
 | Fxa login clicked                      | action   | click                 | fxa          | fxa_login_button         |               |
+| Fxa show profile screen                | action   | click                 | fxa          | fxa_show_profile_button  |               |
+| Fxa profile get tabs clicked           | action   | click                 | fxa          | fxa_get_tabs_button      |               |
+| Fxa profile sign out clicked           | action   | click                 | fxa          | fxa_sign_out_button      |               |
+| Fxa profile back button clicked        | action   | click                 | fxa          | fxa_go_back_button       |               |
 
 (*)When the pin site switch is clicked, the state (on/off) of the desktop mode switch is also sent.
 

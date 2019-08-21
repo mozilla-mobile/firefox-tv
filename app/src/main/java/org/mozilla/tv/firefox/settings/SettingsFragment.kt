@@ -31,6 +31,7 @@ import org.mozilla.tv.firefox.channels.SettingsScreen
 import org.mozilla.tv.firefox.channels.SettingsTile
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.fxa.FxaRepo
+import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.PicassoWrapper
 
 const val KEY_SETTINGS_TYPE = "KEY_SETTINGS_TYPE"
@@ -131,19 +132,20 @@ class SettingsFragment : Fragment() {
         val serviceLocator = serviceLocator!!
         val screenController = serviceLocator.screenController
         val fxaRepo = serviceLocator.fxaRepo
+        val telemetryIntegration = TelemetryIntegration.INSTANCE
 
         view.button_firefox_tabs.setOnClickListener {
             // TODO show send tab tutorial
-            // TODO telemetry
+            telemetryIntegration.fxaProfileGetTabsButtonClickEvent()
         }
         view.button_sign_out.setOnClickListener {
             fxaRepo.logout()
-            // TODO telemetry
             screenController.handleBack(fragmentManager!!)
+            telemetryIntegration.fxaProfileSignOutButtonClickEvent()
         }
         view.back_button.setOnClickListener {
-            // TODO telemetry
             screenController.handleBack(fragmentManager!!)
+            telemetryIntegration.fxaProfileGoBackButtonClickEvent()
         }
     }
 
