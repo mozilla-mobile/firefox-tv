@@ -83,6 +83,11 @@ class FxaRepo(
         accountManager.initAsync() // If user is already logged in, the appropriate observers will be triggered.
     }
 
+    fun logout() {
+        @Suppress("DeferredResultUnused") // No value is returned & we don't need to wait for this to complete.
+        accountManager.logoutAsync()
+    }
+
     /**
      * Notifies the FxA library that login is starting: callers should generally call [FxaLoginUseCase.beginLogin]
      * instead of this method.

@@ -118,18 +118,22 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setupFxaProfileListeners(view: View) {
+        val serviceLocator = serviceLocator!!
+        val screenController = serviceLocator.screenController
+        val fxaRepo = serviceLocator.fxaRepo
+
         view.button_firefox_tabs.setOnClickListener {
-            // TODO perform action
+            // TODO show send tab tutorial
             // TODO telemetry
         }
         view.button_sign_out.setOnClickListener {
-            // TODO perform action
+            fxaRepo.logout()
             // TODO telemetry
-            serviceLocator!!.screenController.handleBack(fragmentManager!!)
+            screenController.handleBack(fragmentManager!!)
         }
         view.back_button.setOnClickListener {
             // TODO telemetry
-            serviceLocator!!.screenController.handleBack(fragmentManager!!)
+            screenController.handleBack(fragmentManager!!)
         }
     }
 
@@ -141,7 +145,6 @@ class SettingsFragment : Fragment() {
 
             val avatarUrl = it.profile.avatar?.url
             if (avatarUrl != null) {
-                // TODO set default image
                 PicassoWrapper.client.load(avatarUrl).into(view.avatar_image)
             }
         }
