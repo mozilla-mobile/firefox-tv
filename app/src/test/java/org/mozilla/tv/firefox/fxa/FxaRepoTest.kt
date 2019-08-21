@@ -74,6 +74,6 @@ class FxaRepoTest {
     fun `WHEN on profile update callback is called THEN account state is authenticated with profile`() {
         val profile = Profile("uid", "email", null, "displayName")
         fxaRepo.accountObserver.onProfileUpdated(profile)
-        accountStateTestObs.assertValueAt(1, FxaRepo.AccountState.AuthenticatedWithProfile(profile.toDomainObject()))
+        accountStateTestObs.assertValueAt(1) { it is FxaRepo.AccountState.AuthenticatedWithProfile }
     }
 }
