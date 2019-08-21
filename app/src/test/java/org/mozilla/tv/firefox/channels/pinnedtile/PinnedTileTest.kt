@@ -10,6 +10,7 @@ import androidx.test.core.app.ApplicationProvider
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
 import io.reactivex.Observable
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.observers.TestObserver
@@ -91,7 +92,9 @@ class PinnedTileTest {
                 ToolbarViewModel(
                     sessionRepo = sessionRepo,
                     pinnedTileRepo = pinnedTileRepo
-                )
+                ),
+                mockk(),
+                mockk()
         )
         testObserver = overlayVm.pinnedTiles.test()
     }

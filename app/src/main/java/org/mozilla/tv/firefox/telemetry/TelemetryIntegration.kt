@@ -294,7 +294,7 @@ open class TelemetryIntegration protected constructor(
     }
 
     // TODO send different values depending on the Fxa state
-    fun fxaButtonClickEvent() {
+    fun fxaButtonClickEvent() { // TODO split out, rename
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.FXA, Value.FXA_LOGIN_BUTTON).queue()
     }
 

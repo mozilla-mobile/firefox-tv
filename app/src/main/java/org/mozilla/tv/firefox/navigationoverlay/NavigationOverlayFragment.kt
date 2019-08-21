@@ -53,7 +53,6 @@ import org.mozilla.tv.firefox.channels.SettingsChannelAdapter
 import org.mozilla.tv.firefox.channels.SettingsScreen
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
-import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
@@ -117,13 +116,8 @@ class NavigationOverlayFragment : Fragment() {
             NavigationEvent.SETTINGS_CLEAR_COOKIES -> {
                 serviceLocator.screenController.showSettingsScreen(fragmentManager!!, SettingsScreen.CLEAR_COOKIES)
             }
-
-            // TODO: change button action based on profile state.
-            // TODO: remember to update telemetry accordingly
             NavigationEvent.FXA_BUTTON -> {
-//                serviceLocator.fxaLoginUseCase.beginLogin(fragmentManager!!) // TODO
-                serviceLocator.screenController.showSettingsScreen(fragmentManager!!, SettingsScreen.FXA_PROFILE)
-                TelemetryIntegration.INSTANCE.fxaButtonClickEvent()
+                navigationOverlayViewModel.fxaButtonClicked(fragmentManager!!)
             }
 
             NavigationEvent.TURBO, NavigationEvent.PIN_ACTION, NavigationEvent.DESKTOP_MODE, NavigationEvent.BACK,
