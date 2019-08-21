@@ -20,15 +20,16 @@ import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.avatar_im
 import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.button_firefox_tabs
 import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.button_sign_out
 import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.description_bottom
+import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.description_top
 import kotlinx.android.synthetic.main.settings_screen_switch.toggle
 import kotlinx.android.synthetic.main.settings_screen_switch.view.back_button
 import kotlinx.android.synthetic.main.settings_screen_switch.view.description
 import kotlinx.android.synthetic.main.settings_screen_switch.view.toggle
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
-import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.channels.SettingsScreen
 import org.mozilla.tv.firefox.channels.SettingsTile
+import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.fxa.FxaRepo
 import org.mozilla.tv.firefox.utils.PicassoWrapper
 
@@ -111,10 +112,19 @@ class SettingsFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.settings_screen_fxa_profile, parentView, false)
 
+        setupFxaText(view)
         setupFxaProfileListeners(view)
         profileDisposable = observeFxaProfile(view)
 
         return view
+    }
+
+    private fun setupFxaText(view: View) {
+        val appName = resources.getString(R.string.app_name)
+        view.button_firefox_tabs.text = resources.getString(R.string.fxa_settings_primary_button, appName)
+        // Username is positioned and styled differently, so it is left blank here
+        // and set on another TextView
+        view.description_top.text = resources.getString(R.string.fxa_settings_body, "")
     }
 
     private fun setupFxaProfileListeners(view: View) {
