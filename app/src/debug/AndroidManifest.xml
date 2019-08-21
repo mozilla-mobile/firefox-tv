@@ -4,7 +4,9 @@
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="ImpliedTouchscreenHardware,MissingLeanbackLauncher,MissingLeanbackSupport">
+    tools:ignore="ImpliedTouchscreenHardware,MissingLeanbackLauncher,MissingLeanbackSupport,GoogleAppIndexingWarning"
+    xmlns:amazon="http://schemas.amazon.com/apk/res/android"
+    package="org.mozilla.tv.firefox">
     <!-- ImpliedTouchscreenHardware, MissingLeanbackLauncher, and MissingLeanbackSupport
     requirements are all fulfilled in main/AndroidManifest. Their absence here did not
     trigger a lint failure until the AndroidX migration -->
@@ -26,4 +28,34 @@
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" tools:ignore="ProtectedPermissions" />
 
     <!-- *** Fastlane permissions end *** -->
+
+    <!-- *** ADM permissions (temporarily in debug only) *** -->
+    <!-- This permission ensures that no other application can intercept your ADM messages. -->
+    <permission
+        android:name="${applicationId}.permission.RECEIVE_ADM_MESSAGE"
+        android:protectionLevel="signature"/>
+    <uses-permission android:name="${applicationId}.permission.RECEIVE_ADM_MESSAGE" />
+    <uses-permission android:name="com.amazon.device.messaging.permission.RECEIVE" />
+    <!-- *** ADM permissions end *** -->
+
+    <application>
+        <!-- For ADM. -->
+        <!-- When required is false, graceful degradation is required. If true, APK will not be available to devices not supporting ADM. -->
+        <amazon:enable-feature
+            android:name="com.amazon.device.messaging"
+            android:required="false"/>
+        <service
+            android:name=".fxa.ADMService"
+            android:exported="false"/>
+        <receiver
+            android:name=".fxa.ADMReceiver"
+            android:permission="com.amazon.device.messaging.permission.SEND">
+            <!-- To interact with ADM, your app must listen for the following intents. -->
+            <intent-filter>
+                <action android:name="com.amazon.device.messaging.intent.REGISTRATION" />
+                <action android:name="com.amazon.device.messaging.intent.RECEIVE" />
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </receiver>
+    </application>
 </manifest>
