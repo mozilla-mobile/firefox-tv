@@ -163,4 +163,4 @@ data class FxaProfile(
     val displayName: String?
 )
 
-fun Profile.toDomainObject() = FxaProfile(this.uid, this.email, this.avatar, this.displayName)
+fun Profile.toDomainObject() = FxaProfile(this.uid, this.email, this.avatar, this.displayName ?: this.email)
