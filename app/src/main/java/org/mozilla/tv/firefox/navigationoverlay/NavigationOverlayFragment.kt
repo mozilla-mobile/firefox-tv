@@ -50,7 +50,7 @@ import org.mozilla.tv.firefox.channels.DefaultChannel
 import org.mozilla.tv.firefox.channels.DefaultChannelFactory
 import org.mozilla.tv.firefox.channels.SettingsChannelAdapter
 import org.mozilla.tv.firefox.channels.SettingsScreen
-import org.mozilla.tv.firefox.fxa.FxaRepo
+import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
@@ -260,28 +260,22 @@ class NavigationOverlayFragment : Fragment() {
     private fun observeAccountState(): Disposable {
         val fxaRepo = serviceLocator.fxaRepo
 
-        return fxaRepo.accountState.subscribe {
-            when (it) {
-                FxaRepo.AccountState.AUTHENTICATED_WITH_PROFILE -> {
-                    fxaRepo.accountManager.accountProfile()?.let { profile ->
-                        if (profile.avatar != null) {
-                            profile.avatar?.url?.let { url ->
-                                PicassoWrapper.client
-                                    .load(url)
-                                    .into(fxaButton)
-                            }
-                        } else {
-                            fxaButton.setImageResource(R.drawable.ic_avatar_authenticated_no_picture)
-                            fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
-                        }
+        return fxaRepo.accountState.subscribe { accountState ->
+            when (accountState) {
+                is AccountState.AuthenticatedWithProfile -> {
+                    val fxaProfile = accountState.profile
+                    if (fxaProfile.avatar != null) {
+                        PicassoWrapper.client
+                            .load(fxaProfile.avatar.url)
+                            .into(fxaButton)
                     }
                 }
-                FxaRepo.AccountState.AUTHENTICATED_NO_PROFILE -> {
+                AccountState.AuthenticatedNoProfile -> {
                     fxaButton.setImageResource(R.drawable.ic_avatar_authenticated_no_picture)
                     fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
                 }
-                FxaRepo.AccountState.NEEDS_REAUTHENTICATION,
-                FxaRepo.AccountState.NOT_AUTHENTICATED -> {
+                AccountState.NeedsReauthentication,
+                AccountState.NotAuthenticated -> {
                     fxaButton.setImageResource(R.drawable.ic_fxa_login)
                     fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_new)
                 }
