@@ -109,6 +109,10 @@ open class TelemetryIntegration protected constructor(
         const val SETTINGS_ABOUT_TILE = "about_tile"
         const val SETTINGS_PRIVACY_TILE = "privacy_tile"
         const val FXA_LOGIN_BUTTON = "fxa_login_button"
+        const val FXA_SHOW_PROFILE_BUTTON = "fxa_show_profile_button"
+        const val FXA_GET_TABS_BUTTON = "fxa_get_tabs_button"
+        const val FXA_SIGN_OUT_BUTTON = "fxa_sign_out_button"
+        const val FXA_GO_BACK_BUTTON = "fxa_go_back_button"
     }
 
     private object Extra {
@@ -292,6 +296,22 @@ open class TelemetryIntegration protected constructor(
     // TODO send different values depending on the Fxa state
     fun fxaButtonClickEvent() {
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.FXA, Value.FXA_LOGIN_BUTTON).queue()
+    }
+
+    fun fxaShowProfileButtonClickEvent() {
+        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.FXA, Value.FXA_SHOW_PROFILE_BUTTON).queue()
+    }
+
+    fun fxaProfileGetTabsButtonClickEvent() {
+        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.FXA, Value.FXA_GET_TABS_BUTTON).queue()
+    }
+
+    fun fxaProfileSignOutButtonClickEvent() {
+        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.FXA, Value.FXA_SIGN_OUT_BUTTON).queue()
+    }
+
+    fun fxaProfileGoBackButtonClickEvent() {
+        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.FXA, Value.FXA_GO_BACK_BUTTON).queue()
     }
 
     /**
