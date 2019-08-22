@@ -9,7 +9,10 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.preference.PreferenceManager
 import androidx.annotation.VisibleForTesting
-import mozilla.components.concept.engine.EngineSession
+import mozilla.components.concept.engine.EngineSession.TrackingProtectionPolicy
+import mozilla.components.concept.engine.EngineSession.TrackingProtectionPolicy.CookiePolicy
+import mozilla.components.concept.engine.EngineSession.TrackingProtectionPolicy.SafeBrowsingCategory
+import mozilla.components.concept.engine.EngineSession.TrackingProtectionPolicy.TrackingCategory
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.channels.ChannelConfig
@@ -75,16 +78,36 @@ class Settings private constructor(context: Context) {
     /**
      * Get the tracking protection policy which is a combination of tracker categories that should be blocked.
      */
-    val trackingProtectionPolicy: EngineSession.TrackingProtectionPolicy
+    val trackingProtectionPolicy: TrackingProtectionPolicy
         get() {
+            // TODO: consider enabling safe browsing in #1184.
+            val safeBrowsingCategories = arrayOf(SafeBrowsingCategory.NONE)
+
             return if (isBlockingEnabled) {
-                EngineSession.TrackingProtectionPolicy.select(
-                    EngineSession.TrackingProtectionPolicy.AD,
-                    EngineSession.TrackingProtectionPolicy.ANALYTICS,
-                    EngineSession.TrackingProtectionPolicy.SOCIAL
+                TrackingProtectionPolicy.select(
+                    safeBrowsingCategories = safeBrowsingCategories,
+
+                    // We want to use TrackingCategory.RECOMMENDED but it doesn't block ads properly:
+                    // a-c#4191. We write out the values in RECOMMENDED manually below and it works
+                    // properly.
+                    trackingCategories = arrayOf(
+                        TrackingCategory.AD,
+                        TrackingCategory.ANALYTICS,
+                        TrackingCategory.SOCIAL,
+                        TrackingCategory.TEST
+                    )
+                    // We use the default cookiePolicy.
                 )
             } else {
-                EngineSession.TrackingProtectionPolicy.none()
+                TrackingProtectionPolicy.select(
+                    // If we disable tracking protection, we probably want to keep our safe browsing
+                    // policy the same so we break it out to be shared in both configurations. See a-c#4190.
+                    safeBrowsingCategories = safeBrowsingCategories,
+
+                    // These defaults are from TrackingProtectionPolicy.none().
+                    trackingCategories = arrayOf(TrackingCategory.NONE),
+                    cookiePolicy = CookiePolicy.ACCEPT_ALL
+                )
             }
         }
 }
