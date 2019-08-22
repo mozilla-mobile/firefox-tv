@@ -53,6 +53,7 @@
             android:id="@+id/tile_pocket_author"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             android:ellipsize="end"
             android:fontFamily="@string/font_ember_regular"
             android:gravity="start"
