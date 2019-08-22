@@ -77,7 +77,7 @@ class NavigationOverlayViewModel(
     fun fxaButtonClicked(fragmentManager: FragmentManager) {
         fun beginLogin() {
                 fxaLoginUseCase.beginLogin(fragmentManager)
-                TelemetryIntegration.INSTANCE.fxaButtonClickEvent()
+                TelemetryIntegration.INSTANCE.fxaLoginButtonClickEvent()
         }
 
         fun showFxaProfileScreen() {
