@@ -13,6 +13,7 @@ It diverges in the following ways:
 
 ### Fixed
 - Fullscreen videos were offset if the page was scrolled down before fullscreening. This fix will not work under certain conditions and on certain sites (#2540. #2541)
+- Fixed a rare crash that could occur when Pocket tiles with longer than average text were quickly scrolled to the right (#2727)
 
 ## 4.2 - 2019-08-12
 ### Added
