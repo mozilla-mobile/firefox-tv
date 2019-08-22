@@ -13,7 +13,6 @@ import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.Deferred
 import mozilla.appservices.fxaclient.Config
 import mozilla.components.concept.sync.AccountObserver
-import mozilla.components.concept.sync.Avatar
 import mozilla.components.concept.sync.DeviceCapability
 import mozilla.components.concept.sync.DeviceEvent
 import mozilla.components.concept.sync.DeviceEventsObserver
@@ -23,10 +22,14 @@ import mozilla.components.concept.sync.Profile
 import mozilla.components.service.fxa.DeviceConfig
 import mozilla.components.service.fxa.manager.FxaAccountManager
 import mozilla.components.support.base.log.logger.Logger
+import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.channels.ImageSetStrategy
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AuthenticatedNoProfile
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AuthenticatedWithProfile
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NeedsReauthentication
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NotAuthenticated
+import org.mozilla.tv.firefox.telemetry.SentryIntegration
+import java.lang.IllegalStateException
 
 private val logger = Logger("FxaRepo")
 
@@ -160,16 +163,40 @@ class FxaRepo(
  *  A wrapper for [Profile]. This insulates us from any upstream changes to the API, and
  *  allows us to validate related data at the edge of our app.
  *
- *  TODO it looks like some of these fields should be nonnullable (at least [uid] and [email]. We should:
- *  - Reach out to FxA devs for clarification re: which of these fields are actually nullable
- *  - Validate that important fields are nonnull at the edge of our app
- *  - Replace other fields ([avatar], possibly [displayName]) with default values
+ *  Note that [Profile] has additional fields not reflected in [FxaProfile] (namely
+ *  [Profile.uid] and [Profile.email]). These are not currently required by our app, but
+ *  can be added if that ever changes.
  */
 data class FxaProfile(
-    val uid: String?,
-    val email: String?,
-    val avatar: Avatar?,
-    val displayName: String?
+    val avatar: ImageSetStrategy,
+    val displayName: String
 )
 
-fun Profile.toDomainObject() = FxaProfile(this.uid, this.email, this.avatar, this.displayName ?: this.email)
+private const val DEFAULT_FXA_AVATAR_URL = "https://firefoxusercontent.com/00000000000000000000000000000000"
+private const val DEFAULT_AVATAR_RESOURCE = R.drawable.ic_default_avatar
+
+fun Profile.toDomainObject(): FxaProfile {
+    val avatar = this.avatar
+    val displayName = this.displayName
+    val email = this.email
+
+    val validatedAvatar = when {
+        avatar == null -> ImageSetStrategy.ById(DEFAULT_AVATAR_RESOURCE)
+        avatar.url == DEFAULT_FXA_AVATAR_URL -> ImageSetStrategy.ById(DEFAULT_AVATAR_RESOURCE)
+        else -> ImageSetStrategy.ByPath(avatar.url)
+    }
+
+    @Suppress("ThrowableNotThrown")
+    val validatedDisplayName = when {
+        displayName != null -> displayName
+        email != null -> email
+        else -> {
+            SentryIntegration.captureAndLogError(logger,
+                IllegalStateException("FxA profile displayName and email fields are unexpectedly both null"))
+            // This shouldn't happen. Falling back to an empty string
+            ""
+        }
+    }
+
+    return FxaProfile(validatedAvatar, validatedDisplayName)
+}

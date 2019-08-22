@@ -32,7 +32,6 @@ import org.mozilla.tv.firefox.channels.SettingsTile
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.fxa.FxaRepo
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
-import org.mozilla.tv.firefox.utils.PicassoWrapper
 
 const val KEY_SETTINGS_TYPE = "KEY_SETTINGS_TYPE"
 
@@ -154,11 +153,7 @@ class SettingsFragment : Fragment() {
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe {
             view.description_bottom.text = it.profile.displayName
-
-            val avatarUrl = it.profile.avatar?.url
-            if (avatarUrl != null) {
-                PicassoWrapper.client.load(avatarUrl).into(view.avatar_image)
-            }
+            it.profile.avatar.invoke(view.avatar_image)
         }
 
     override fun onDestroyView() {
