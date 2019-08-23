@@ -30,6 +30,13 @@ android {
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
         multiDexEnabled true
+
+        ndk {
+            // This strips unused architectures out of our build, lowering out APK size.
+            // At this time, all FFTV devices run ARM v7, and most emulators use x86. See
+            // #2647 for details
+            abiFilters 'armeabi-v7a', 'x86'
+        }
     }
 
     dexOptions {
