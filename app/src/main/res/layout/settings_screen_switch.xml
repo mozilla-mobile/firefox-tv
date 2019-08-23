@@ -10,7 +10,7 @@
     android:background="@color/photonGrey70">
 
     <ImageButton
-        android:id="@+id/back_button"
+        android:id="@+id/backButton"
         style="@style/NavigationButton"
         android:layout_width="@dimen/button_size"
         android:layout_height="@dimen/button_size"
@@ -33,7 +33,7 @@
         android:fontFamily="@string/font_ember_regular"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/back_button"
+        app:layout_constraintStart_toEndOf="@+id/backButton"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.SwitchCompat

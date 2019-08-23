@@ -16,13 +16,13 @@ import io.reactivex.disposables.Disposable
 import io.sentry.Sentry
 import kotlinx.android.synthetic.main.settings_screen_buttons.view.cancel_action
 import kotlinx.android.synthetic.main.settings_screen_buttons.view.confirm_action
-import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.avatar_image
-import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.button_firefox_tabs
-import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.button_sign_out
-import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.description_bottom
-import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.description_top
+import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.avatarImage
+import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.backButton
+import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.buttonFirefoxTabs
+import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.buttonSignOut
+import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.signedInAs
+import kotlinx.android.synthetic.main.settings_screen_fxa_profile.view.userDisplayName
 import kotlinx.android.synthetic.main.settings_screen_switch.toggle
-import kotlinx.android.synthetic.main.settings_screen_switch.view.back_button
 import kotlinx.android.synthetic.main.settings_screen_switch.view.description
 import kotlinx.android.synthetic.main.settings_screen_switch.view.toggle
 import org.mozilla.tv.firefox.R
@@ -55,7 +55,7 @@ class SettingsFragment : Fragment() {
                 return container!!
             }
         }
-        view.findViewById<ImageButton>(R.id.back_button).setOnClickListener {
+        view.findViewById<ImageButton>(R.id.backButton).setOnClickListener {
             serviceLocator!!.screenController.handleBack(fragmentManager!!)
         }
 
@@ -113,7 +113,7 @@ class SettingsFragment : Fragment() {
         val view = inflater.inflate(R.layout.settings_screen_fxa_profile, parentView, false)
 
         setupFxaText(view)
-        setupFxaProfileListeners(view)
+        setupFxaProfileClickListeners(view)
         profileDisposable = observeFxaProfile(view)
 
         return view
@@ -121,30 +121,29 @@ class SettingsFragment : Fragment() {
 
     private fun setupFxaText(view: View) {
         val appName = resources.getString(R.string.app_name)
-        view.button_firefox_tabs.text = resources.getString(R.string.fxa_settings_primary_button, appName)
+        view.buttonFirefoxTabs.text = resources.getString(R.string.fxa_settings_primary_button, appName)
         // Username is positioned and styled differently, so it is left blank here
         // and set on another TextView
-        view.description_top.text = resources.getString(R.string.fxa_settings_body, "")
+        view.signedInAs.text = resources.getString(R.string.fxa_settings_body, "")
     }
 
-    private fun setupFxaProfileListeners(view: View) {
+    private fun setupFxaProfileClickListeners(view: View) {
         val serviceLocator = serviceLocator!!
         val screenController = serviceLocator.screenController
         val fxaRepo = serviceLocator.fxaRepo
         val telemetryIntegration = TelemetryIntegration.INSTANCE
 
-        view.button_firefox_tabs.setOnClickListener {
+        view.buttonFirefoxTabs.setOnClickListener {
             // TODO show send tab tutorial
-            telemetryIntegration.fxaProfileGetTabsButtonClickEvent()
+            telemetryIntegration.fxaProfileShowOnboardingButtonClickEvent()
         }
-        view.button_sign_out.setOnClickListener {
+        view.buttonSignOut.setOnClickListener {
             fxaRepo.logout()
             screenController.handleBack(fragmentManager!!)
             telemetryIntegration.fxaProfileSignOutButtonClickEvent()
         }
-        view.back_button.setOnClickListener {
+        view.backButton.setOnClickListener {
             screenController.handleBack(fragmentManager!!)
-            telemetryIntegration.fxaProfileGoBackButtonClickEvent()
         }
     }
 
@@ -152,8 +151,8 @@ class SettingsFragment : Fragment() {
         .ofType(FxaRepo.AccountState.AuthenticatedWithProfile::class.java)
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe {
-            view.description_bottom.text = it.profile.displayName
-            it.profile.avatar.invoke(view.avatar_image)
+            view.userDisplayName.text = it.profile.displayName
+            it.profile.avatarSetStrategy.invoke(view.avatarImage)
         }
 
     override fun onDestroyView() {

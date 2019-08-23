@@ -17,7 +17,7 @@ It diverges in the following ways:
 ## 4.2 - 2019-08-12
 ### Added
 - Tile focus animation and overlay fade animation (#2454)
-- Added FxA profile screen (#2494)
+- (disabled by default) FxA profile screen (#2494)
 
 ### Changed
 - Refactored out FocusRepo in favor of native focus handling; no user-facing changes are expected (#2395)

@@ -168,10 +168,12 @@ class FxaRepo(
  *  can be added if that ever changes.
  */
 data class FxaProfile(
-    val avatar: ImageSetStrategy,
+    val avatarSetStrategy: ImageSetStrategy,
     val displayName: String
 )
 
+// This URL will be sent for any user that has no avatar set. It is improperly sized for
+// our ImageView, so we filter it out here and use an SVG instead
 private const val DEFAULT_FXA_AVATAR_URL = "https://firefoxusercontent.com/00000000000000000000000000000000"
 private const val DEFAULT_AVATAR_RESOURCE = R.drawable.ic_default_avatar
 
@@ -193,7 +195,8 @@ fun Profile.toDomainObject(): FxaProfile {
         else -> {
             SentryIntegration.captureAndLogError(logger,
                 IllegalStateException("FxA profile displayName and email fields are unexpectedly both null"))
-            // This shouldn't happen. Falling back to an empty string
+            // According to the FxA team, email should never be null, so we log an error
+            // and fall back to an empty string here
             ""
         }
     }
