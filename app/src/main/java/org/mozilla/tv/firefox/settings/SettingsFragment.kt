@@ -12,6 +12,7 @@ import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.sentry.Sentry
 import kotlinx.android.synthetic.main.settings_screen_buttons.view.cancel_action
@@ -32,6 +33,7 @@ import org.mozilla.tv.firefox.channels.SettingsTile
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.fxa.FxaRepo
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
+import org.mozilla.tv.firefox.utils.PicassoWrapper
 
 const val KEY_SETTINGS_TYPE = "KEY_SETTINGS_TYPE"
 
@@ -41,7 +43,7 @@ class SettingsFragment : Fragment() {
         SESSION_CLEARED
     }
 
-    var profileDisposable: Disposable? = null
+    var compositeDisposable = CompositeDisposable()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val settingsVM = FirefoxViewModelProviders.of(this@SettingsFragment).get(SettingsViewModel::class.java)
@@ -114,7 +116,8 @@ class SettingsFragment : Fragment() {
 
         setupFxaText(view)
         setupFxaProfileClickListeners(view)
-        profileDisposable = observeFxaProfile(view)
+        observeFxaProfile(view)
+            .forEach { compositeDisposable.add(it) }
 
         return view
     }
@@ -147,17 +150,30 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    private fun observeFxaProfile(view: View): Disposable = context!!.serviceLocator.fxaRepo.accountState
-        .ofType(FxaRepo.AccountState.AuthenticatedWithProfile::class.java)
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe {
-            view.userDisplayName.text = it.profile.displayName
-            it.profile.avatarSetStrategy.invoke(view.avatarImage)
-        }
+    private fun observeFxaProfile(view: View): List<Disposable> {
+        val accountState = context!!.serviceLocator.fxaRepo.accountState
+
+        return listOf(
+            accountState
+                .ofType(FxaRepo.AccountState.AuthenticatedWithProfile::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    view.userDisplayName.text = it.profile.displayName
+                    it.profile.avatarSetStrategy.invoke(view.avatarImage)
+                },
+            accountState
+                .filter { it::class.java != FxaRepo.AccountState.AuthenticatedWithProfile::class.java }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    view.userDisplayName.text = ""
+                    PicassoWrapper.client.load(R.drawable.ic_default_avatar).into(view.avatarImage)
+                }
+        )
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        profileDisposable?.dispose()
+        compositeDisposable.clear()
     }
 
     companion object {
