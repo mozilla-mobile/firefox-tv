@@ -92,11 +92,14 @@ sealed class ImageSetStrategy {
     }
 
     // Note that ByPath can be used with either local paths or URLs
-    data class ByPath(val path: String) : ImageSetStrategy() {
+    data class ByPath(val path: String, val placeholderId: Int? = null) : ImageSetStrategy() {
         override fun invoke(imageView: ImageView) {
             PicassoWrapper.client
                 .load(path)
-                // TODO this should probably have a backup placeholder
+                .let { picassoBuilder ->
+                    if (placeholderId == null) picassoBuilder
+                    else picassoBuilder.placeholder(placeholderId)
+                }
                 .into(imageView)
         }
     }
