@@ -127,7 +127,7 @@ class FxaRepoTest {
     fun `GIVEN profile has no avatar WHEN profile is converted to domain object THEN default resource image should be used`() {
         val profile = Profile("uid", null, null, null)
 
-        assertEquals(defaultProfileAvatarImage, profile.toDomainObject().avatar)
+        assertEquals(defaultProfileAvatarImage, profile.toDomainObject().avatarSetStrategy)
     }
 
     @Test
@@ -140,7 +140,7 @@ class FxaRepoTest {
         )
 
         profiles.map { it.toDomainObject() }
-            .map { it.avatar }
+            .map { it.avatarSetStrategy }
             .forEach { assertEquals(defaultProfileAvatarImage, it) }
     }
 
@@ -156,7 +156,7 @@ class FxaRepoTest {
         )
 
         profiles.map { it.toDomainObject() }
-            .map { it.avatar }
+            .map { it.avatarSetStrategy }
             .forEach { assertEquals(expectedStrategy, it) }
     }
 }

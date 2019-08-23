@@ -1,11 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?><!-- This Source Code Form is subject to the terms of the Mozilla Public
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 
-<!-- This file is currently extremely similar to settings_screen_buttons. However, it is expected
-to expand considerably in the near future as more FxA options are added. This is why we chose to
-break the layout into a separate file, rather than handling both in the same file -->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- This file is similar to settings_screen_buttons. However, it is expected to expand as more
+     FxA options are added. This is why we keep it as a separate file instead of handling both
+     in the same file. -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,33 +16,35 @@ break the layout into a separate file, rather than handling both in the same fil
 
     <!-- Text set programmatically -->
     <Button
-        android:id="@+id/button_firefox_tabs"
+        android:id="@+id/buttonFirefoxTabs"
         style="@style/ConfirmButton"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:layout_marginTop="24dp"
         android:fontFamily="@string/font_ember_regular"
+        android:minWidth="48dp"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/title"
-        app:layout_constraintTop_toBottomOf="@+id/description_bottom">
+        app:layout_constraintTop_toBottomOf="@+id/userDisplayName">
 
         <requestFocus />
     </Button>
 
     <Button
-        android:id="@+id/button_sign_out"
+        android:id="@+id/buttonSignOut"
         style="@style/CancelButton"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:layout_marginStart="24dp"
         android:fontFamily="@string/font_ember_regular"
+        android:minWidth="48dp"
         android:text="@string/fxa_settings_secondary_button"
         android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/button_firefox_tabs"
-        app:layout_constraintTop_toTopOf="@+id/button_firefox_tabs" />
+        app:layout_constraintStart_toEndOf="@+id/buttonFirefoxTabs"
+        app:layout_constraintTop_toTopOf="@+id/buttonFirefoxTabs" />
 
     <ImageButton
-        android:id="@+id/back_button"
+        android:id="@+id/backButton"
         style="@style/NavigationButton"
         android:layout_width="@dimen/button_size"
         android:layout_height="@dimen/button_size"
@@ -52,14 +56,14 @@ break the layout into a separate file, rather than handling both in the same fil
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/avatar_image"
+        android:id="@+id/avatarImage"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginEnd="32dp"
-        android:src="@drawable/ic_default_avatar"
-        app:layout_constraintEnd_toStartOf="@+id/description_top"
-        app:layout_constraintTop_toTopOf="@+id/description_top"
         android:contentDescription="@string/content_description_fxa_profile_avatar_image"
+        android:src="@drawable/ic_default_avatar"
+        app:layout_constraintEnd_toStartOf="@+id/signedInAs"
+        app:layout_constraintTop_toTopOf="@+id/signedInAs"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -75,12 +79,12 @@ break the layout into a separate file, rather than handling both in the same fil
         android:text="@string/fxa_settings_header"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/back_button"
+        app:layout_constraintStart_toEndOf="@+id/backButton"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Text is set programmatically -->
     <TextView
-        android:id="@+id/description_top"
+        android:id="@+id/signedInAs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -93,7 +97,7 @@ break the layout into a separate file, rather than handling both in the same fil
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <TextView
-        android:id="@+id/description_bottom"
+        android:id="@+id/userDisplayName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@string/font_ember_regular"
@@ -101,7 +105,7 @@ break the layout into a separate file, rather than handling both in the same fil
         android:paddingEnd="300dp"
         android:textColor="@color/photonGrey10_a80p"
         android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/description_top"
-        app:layout_constraintTop_toBottomOf="@+id/description_top" />
+        app:layout_constraintStart_toStartOf="@+id/signedInAs"
+        app:layout_constraintTop_toBottomOf="@+id/signedInAs" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
