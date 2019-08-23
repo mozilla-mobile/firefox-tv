@@ -227,6 +227,10 @@
     %1$s will be replaced with Firefox.
     %2$s will be replaced with the name of our app (i.e. Firefox for Fire TV) -->
     <string name="fxa_preboarding_instruction">在您使用 %1$s 的任何设备发送标签页，并在此处查看。登录 %2$s 即可开始使用。</string>
+    <!-- Instruction text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature.
+    %1$s will be replaced with Firefox.
+    %2$s will be replaced with the name of our app (i.e. Firefox for Fire TV) -->
+    <string name="fxa_preboarding_instruction1">在您使用 %1$s 的桌面或移动设备发送标签页，并在此处查看。登录 %2$s 即可开始使用。</string>
     <!-- Sign-in button text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
     <string name="fxa_preboarding_primary_button">登录</string>
     <!-- Text on the cancel button for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
