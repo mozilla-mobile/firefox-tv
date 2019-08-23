@@ -183,7 +183,7 @@ fun Profile.toDomainObject(): FxaProfile {
     val validatedAvatar = when {
         avatar == null -> ImageSetStrategy.ById(DEFAULT_AVATAR_RESOURCE)
         avatar.url == DEFAULT_FXA_AVATAR_URL -> ImageSetStrategy.ById(DEFAULT_AVATAR_RESOURCE)
-        else -> ImageSetStrategy.ByPath(avatar.url)
+        else -> ImageSetStrategy.ByPath(avatar.url, DEFAULT_AVATAR_RESOURCE)
     }
 
     @Suppress("ThrowableNotThrown")
