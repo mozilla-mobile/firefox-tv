@@ -227,6 +227,10 @@
     %1$s will be replaced with Firefox.
     %2$s will be replaced with the name of our app (i.e. Firefox for Fire TV) -->
     <string name="fxa_preboarding_instruction">Senden Sie einen Tab von überall, wo Sie %1$s verwenden, und sehen Sie ihn hier. Melden Sie sich bei %2$s an, um zu beginnen.</string>
+    <!-- Instruction text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature.
+    %1$s will be replaced with Firefox.
+    %2$s will be replaced with the name of our app (i.e. Firefox for Fire TV) -->
+    <string name="fxa_preboarding_instruction1">Senden Sie einen Tab von %1$s für Desktop oder Mobilgeräte und sehen Sie ihn hier. Melden Sie sich bei %2$s an, um zu beginnen.</string>
     <!-- Sign-in button text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
     <string name="fxa_preboarding_primary_button">Anmelden</string>
     <!-- Text on the cancel button for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->

@@ -227,10 +227,16 @@
     %1$s will be replaced with Firefox.
     %2$s will be replaced with the name of our app (i.e. Firefox for Fire TV) -->
     <string name="fxa_preboarding_instruction">Envoyez un onglet depuis n’importe quel appareil où vous utilisez %1$s et consultez-le ici. Connectez-vous à %2$s pour commencer.</string>
+    <!-- Instruction text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature.
+    %1$s will be replaced with Firefox.
+    %2$s will be replaced with the name of our app (i.e. Firefox for Fire TV) -->
+    <string name="fxa_preboarding_instruction1">Envoyez un onglet depuis %1$s mobile ou pour ordinateur et consultez-le ici. Connectez-vous à %2$s pour commencer.</string>
     <!-- Sign-in button text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
     <string name="fxa_preboarding_primary_button">Se connecter</string>
     <!-- Text on the cancel button for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
     <string name="fxa_preboarding_secondary_button">Plus tard</string>
+    <!-- Header for Firefox Accounts onboarding screen, which is shown after signing in. -->
+    <string name="fxa_onboarding_header">Vos onglets. Toujours sous la main au moment voulu.</string>
     <!-- Instruction text for Firefox Accounts onboarding screen, which is shown after signing in.
      %1$s will be replaced with Firefox. -->
     <string name="fxa_onboarding_instruction">Vous pouvez désormais recevoir des onglets. Pour commencer, sélectionnez Envoyer l’onglet à un appareil depuis %1$s pour ordinateur ou iOS, ou sélectionnez Partager sur Firefox Preview. Choisissez ensuite Fire TV et votre onglet apparaîtra en quelques instants.</string>
