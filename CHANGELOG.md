@@ -12,7 +12,7 @@ It diverges in the following ways:
 - (disabled by default) Support for Amazon Device Messaging (#2528)
 
 ### Changed
-- Stripped code supporting unused architectures (#2647)
+- Stripped out code for unsupported architectures (#2647)
 
 ### Fixed
 - Fullscreen videos were offset if the page was scrolled down before fullscreening. This fix will not work under certain conditions and on certain sites (#2540. #2541)
