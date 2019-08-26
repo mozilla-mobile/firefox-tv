@@ -8,6 +8,9 @@ It diverges in the following ways:
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html) for bug fix releases.
 
 ## Unreleased
+### Added
+- Receive tabs onboarding screen (#2495)
+
 ### Changed
 - Stripped out code for unsupported architectures (#2647)
 
