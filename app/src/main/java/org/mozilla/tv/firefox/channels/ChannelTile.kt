@@ -98,7 +98,10 @@ sealed class ImageSetStrategy {
                 .load(path)
                 .let { picassoBuilder ->
                     if (placeholderId == null) picassoBuilder
-                    else picassoBuilder.placeholder(placeholderId)
+                    else {
+                        picassoBuilder.placeholder(placeholderId)
+                        picassoBuilder.error(placeholderId)
+                    }
                 }
                 .into(imageView)
         }
