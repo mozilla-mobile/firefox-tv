@@ -8,11 +8,12 @@ It diverges in the following ways:
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html) for bug fix releases.
 
 ## Unreleased
-### Added
-- (disabled by default) Support for Amazon Device Messaging (#2528)
-
 ### Changed
 - Stripped out code for unsupported architectures (#2647)
+
+## 4.3 - 2019-08-26
+### Added
+- (disabled by default) Support for Amazon Device Messaging (#2528)
 
 ### Fixed
 - Fullscreen videos were offset if the page was scrolled down before fullscreening. This fix will not work under certain conditions and on certain sites (#2540. #2541)
