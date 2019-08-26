@@ -4,47 +4,40 @@
 
 package org.mozilla.tv.firefox.onboarding
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.content_onboarding.*
+import kotlinx.android.synthetic.main.receive_tab_onboarding.buttonNotNow
+import kotlinx.android.synthetic.main.receive_tab_onboarding.buttonSignIn
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.ext.serviceLocator
 
 class ReceiveTabOnboardingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_onboarding)
+        setContentView(R.layout.receive_tab_onboarding)
 
-        enable_turbo_mode.setOnClickListener { _ ->
-            setTurboMode(true)
+        buttonSignIn.setOnClickListener { _ ->
+//            TODO login
             finish()
         }
 
-        disable_turbo_mode.setOnClickListener { _ ->
-            setTurboMode(false)
-            setResult(Activity.RESULT_OK, Intent())
+        buttonNotNow.setOnClickListener { _ ->
+            // TODO go to main
             finish()
         }
 
-        setOnboardShown()
+        setOnboardReceiveTabsShown()
     }
 
-    private fun setTurboMode(turboModeEnabled: Boolean) {
-        serviceLocator.turboMode.isEnabled = turboModeEnabled
-    }
-
-    private fun setOnboardShown() {
+    private fun setOnboardReceiveTabsShown() {
         PreferenceManager.getDefaultSharedPreferences(this)
                 .edit()
-                .putBoolean(ONBOARD_SHOWN_PREF, true)
+                .putBoolean(ONBOARD_RECEIVE_TABS_SHOWN_PREF, true)
                 .apply()
     }
 
     companion object {
-        const val ONBOARD_SHOWN_PREF = "onboard_shown"
+        const val ONBOARD_RECEIVE_TABS_SHOWN_PREF = "onboard_receive_tabs_shown"
     }
 }
