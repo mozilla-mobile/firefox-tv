@@ -30,6 +30,7 @@ import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.setupForApp
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
+import org.mozilla.tv.firefox.onboarding.ReceiveTabOnboardingActivity
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.BuildConstants
@@ -94,18 +95,23 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         // Skip onboarding if turbo mode is set via intent. This is used in automated perf testing.
         // See #1881 for details
         if (!safeIntent.hasExtra("TURBO_MODE")) {
+            val settings = Settings.getInstance(this@MainActivity)
             // Receive tab must _always_ be the first item here (i.e., the last onboarding shown
             // to the user). This is because it can take the user to sign in
-            //TODO receive tab onboarding
+            if (settings.shouldShowReceiveTabsOnboarding()) {
+                val onboardingIntent =
+                    Intent(this@MainActivity, ReceiveTabOnboardingActivity::class.java)
+                startActivity(onboardingIntent)
+            }
 
             val localeManager = LocaleManager.getInstance()
-            if (Settings.getInstance(this@MainActivity).shouldShowTVOnboarding(localeManager, this)) {
+            if (settings.shouldShowTVOnboarding(localeManager, this)) {
                 val onboardingIntents =
                         Intent(this@MainActivity, ChannelOnboardingActivity::class.java)
                 startActivity(onboardingIntents)
             }
 
-            if (Settings.getInstance(this@MainActivity).shouldShowTurboModeOnboarding()) {
+            if (settings.shouldShowTurboModeOnboarding()) {
                 val onboardingIntent = Intent(this@MainActivity, OnboardingActivity::class.java)
                 startActivity(onboardingIntent)
             }
