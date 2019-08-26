@@ -263,13 +263,13 @@ class NavigationOverlayFragment : Fragment() {
             when (accountState) {
                 is AccountState.AuthenticatedWithProfile -> {
                     accountState.profile.avatarSetStrategy.invoke(fxaButton)
+                    fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
                 }
                 AccountState.AuthenticatedNoProfile -> {
                     fxaButton.setImageResource(R.drawable.ic_avatar_authenticated_no_picture)
                     fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
                 }
-                AccountState.NeedsReauthentication,
-                AccountState.NotAuthenticated -> {
+                AccountState.NeedsReauthentication, AccountState.NotAuthenticated -> {
                     fxaButton.setImageResource(R.drawable.ic_fxa_login)
                     fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_new, "Firefox")
                 }
