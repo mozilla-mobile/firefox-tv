@@ -30,13 +30,13 @@
         app:layout_constraintTop_toBottomOf="@+id/titleText"
         app:srcCompat="@drawable/receive_tabs_preboarding" />
 
+    <!-- Text set programmatically -->
     <TextView
         android:id="@+id/descriptionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:fontFamily="@string/font_ember_regular"
-        android:text="@string/receive_tab_onboarding_description"
         android:textColor="@color/photonGrey10_a80p"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"

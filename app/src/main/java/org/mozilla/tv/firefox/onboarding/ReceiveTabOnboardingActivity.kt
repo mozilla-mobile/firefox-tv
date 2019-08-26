@@ -9,6 +9,7 @@ import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.receive_tab_onboarding.buttonNotNow
 import kotlinx.android.synthetic.main.receive_tab_onboarding.buttonSignIn
+import kotlinx.android.synthetic.main.receive_tab_onboarding.descriptionText
 import org.mozilla.tv.firefox.R
 
 class ReceiveTabOnboardingActivity : AppCompatActivity() {
@@ -16,6 +17,12 @@ class ReceiveTabOnboardingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.receive_tab_onboarding)
+
+        descriptionText.text = resources.getString(
+            R.string.receive_tab_onboarding_description,
+            resources.getString(R.string.firefox_tv_brand_name),
+            resources.getString(R.string.firefox_tv_brand_name_short)
+        )
 
         buttonSignIn.setOnClickListener { _ ->
 //            TODO login
