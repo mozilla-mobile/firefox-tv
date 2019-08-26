@@ -91,7 +91,13 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             }
         })
 
+        // Skip onboarding if turbo mode is set via intent. This is used in automated perf testing.
+        // See #1881 for details
         if (!safeIntent.hasExtra("TURBO_MODE")) {
+            // Receive tab must _always_ be the first item here (i.e., the last onboarding shown
+            // to the user). This is because it can take the user to sign in
+            //TODO receive tab onboarding
+
             val localeManager = LocaleManager.getInstance()
             if (Settings.getInstance(this@MainActivity).shouldShowTVOnboarding(localeManager, this)) {
                 val onboardingIntents =
