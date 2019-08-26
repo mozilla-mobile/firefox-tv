@@ -24,13 +24,12 @@ class ReceiveTabOnboardingActivity : AppCompatActivity() {
             resources.getString(R.string.firefox_tv_brand_name_short)
         )
 
-        buttonSignIn.setOnClickListener { _ ->
-//            TODO login
+        buttonSignIn.setOnClickListener {
+            setResult(RESULT_SIGN_IN)
             finish()
         }
 
-        buttonNotNow.setOnClickListener { _ ->
-            // TODO go to main
+        buttonNotNow.setOnClickListener {
             finish()
         }
 
@@ -46,5 +45,6 @@ class ReceiveTabOnboardingActivity : AppCompatActivity() {
 
     companion object {
         const val ONBOARD_RECEIVE_TABS_SHOWN_PREF = "onboard_receive_tabs_shown"
+        const val RESULT_SIGN_IN = 1
     }
 }

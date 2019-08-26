@@ -46,6 +46,8 @@ interface MediaSessionHolder {
     val videoVoiceCommandMediaSession: VideoVoiceCommandMediaSession
 }
 
+private const val RECEIVE_TABS_REQUEST_CODE = 1
+
 class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, MediaSessionHolder {
     private val LOG_TAG = "MainActivity"
 
@@ -101,7 +103,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             if (settings.shouldShowReceiveTabsOnboarding()) {
                 val onboardingIntent =
                     Intent(this@MainActivity, ReceiveTabOnboardingActivity::class.java)
-                startActivity(onboardingIntent)
+                startActivityForResult(onboardingIntent, RECEIVE_TABS_REQUEST_CODE)
             }
 
             val localeManager = LocaleManager.getInstance()
@@ -223,6 +225,13 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
                 setupForApp()
             }
         } else super.onCreateView(parent, name, context, attrs)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RECEIVE_TABS_REQUEST_CODE && resultCode == ReceiveTabOnboardingActivity.RESULT_SIGN_IN) {
+            serviceLocator.fxaLoginUseCase.beginLogin(supportFragmentManager)
+        }
     }
 
     override fun onBackPressed() {
