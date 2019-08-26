@@ -17,6 +17,7 @@ import org.mozilla.tv.firefox.channels.ChannelConfig
 import org.mozilla.tv.firefox.channels.ChannelOnboardingActivity
 import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.ext.languageAndMaybeCountryMatch
+import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
 import org.mozilla.tv.firefox.onboarding.ReceiveTabOnboardingActivity
 
@@ -46,6 +47,7 @@ class Settings private constructor(context: Context) {
 
     private val preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     private val resources: Resources = context.resources
+    private val experimentsProvider = context.serviceLocator.experimentsProvider
 
     val defaultSearchEngineName: String?
         get() = preferences.getString(getPreferenceKey(R.string.pref_key_search_engine), null)
@@ -53,7 +55,7 @@ class Settings private constructor(context: Context) {
     fun shouldShowTurboModeOnboarding(): Boolean =
             !preferences.getBoolean(OnboardingActivity.ONBOARD_SHOWN_PREF, false)
 
-    fun shouldShowReceiveTabsOnboarding(): Boolean =
+    fun shouldShowReceiveTabsOnboarding(): Boolean = experimentsProvider.shouldShowSendTab() &&
         !preferences.getBoolean(ReceiveTabOnboardingActivity.ONBOARD_RECEIVE_TABS_SHOWN_PREF, false)
 
     fun shouldShowTVOnboarding(localeManager: LocaleManager, context: Context): Boolean {
