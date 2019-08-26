@@ -5,39 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<!--   TODO extract strings + add content descriptions   -->
+<!--    TODO text styling. see https://github.com/mozilla-mobile/firefox-tv/issues/2495#issuecomment-525031256 -->
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/titleText"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginTop="72dp"
-        android:text="Watch your tabs on the big screen"
+        android:text="@string/receive_tab_onboarding_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/receiveTabGraphic"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="76dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="76dp"
         android:adjustViewBounds="true"
+        android:contentDescription="@string/content_description_receive_tab_onboarding_graphic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/titleText"
         app:srcCompat="@drawable/receive_tabs_preboarding" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/descriptionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Send what’s playing on your devices to Firefox on Fire TV. Sign in with Firefox Account to get started."
+        android:fontFamily="@string/font_ember_regular"
+        android:text="@string/receive_tab_onboarding_description"
+        android:textColor="@color/photonGrey10_a80p"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/receiveTabGraphic" />
 
     <Button
         android:id="@+id/buttonSignIn"
@@ -52,14 +56,14 @@
         android:minHeight="@dimen/onboarding_button_height"
         android:nextFocusUp="@+id/buttonNotNow"
         android:nextFocusDown="@+id/buttonNotNow"
-        android:text="Sign in"
+        android:text="@string/receive_tab_onboarding_sign_in_button"
         android:textAllCaps="false"
         android:textColor="@color/photonGrey10"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@id/buttonNotNow"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView2">
+        app:layout_constraintTop_toBottomOf="@id/descriptionText">
 
         <requestFocus />
     </Button>
@@ -75,7 +79,7 @@
         android:minHeight="@dimen/onboarding_button_height"
         android:nextFocusUp="@id/buttonSignIn"
         android:nextFocusDown="@id/buttonSignIn"
-        android:text="Not now"
+        android:text="@string/receive_tab_onboarding_not_now_button"
         android:textAllCaps="false"
         android:textColor="@color/photonGrey10"
         android:textSize="14sp"

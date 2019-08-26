@@ -278,4 +278,23 @@
     <string name="fxa_settings_secondary_button">Sign out</string>
     <!-- This text is announced to screen reader users when they focus an image that will display the avatar of the currently logged in user -->
     <string name="content_description_fxa_profile_avatar_image">User profile avatar image</string>
+    <!-- Shown on the onboarding page that explains how to receive tabs that are sent from other devices.
+         Title text displayed above a graphic. -->
+    <string name="receive_tab_onboarding_title">Watch your tabs on the big screen</string>
+    <!-- Shown on the onboarding page that explains how to receive tabs that are sent from other devices.
+         Description text displayed beneath a graphic.
+         %1$s will be replaced with the name of the app (i.e. Firefox for Fire TV).
+         %2$s will be replaced with the Firefox brand name.-->
+<!--  TODO make sure string is updated properly  -->
+    <string name="receive_tab_onboarding_description">Send what’s playing on your devices to %1$s. Sign in with %2$s Account to get started.</string>
+    <!-- Shown on the onboarding page that explains how to receive tabs that are sent from other devices.
+         Affirmative text shown on a button. Hitting this button will redirect to a sign in page. -->
+    <string name="receive_tab_onboarding_sign_in_button">Sign in</string>
+    <!-- Shown on the onboarding page that explains how to receive tabs that are sent from other devices.
+         Neagtive text shown on a button. Hitting this text will take the user to the normal home screen. -->
+    <string name="receive_tab_onboarding_not_now_button">Not now</string>
+    <!-- Shown on the onboarding page that explains how to receive tabs that are sent from other devices.
+         This text is announced to screen reader users when they focus an image that will display a graphic explaining the receive tab process-->
+    <!--  TODO add content description. https://github.com/mozilla-mobile/firefox-tv/issues/2495#issuecomment-525027176  -->
+    <string name="content_description_receive_tab_onboarding_graphic"> </string>
 </resources>
