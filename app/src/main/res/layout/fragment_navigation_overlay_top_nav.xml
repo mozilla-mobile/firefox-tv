@@ -2,7 +2,8 @@
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- We set focusDown targets in code to avoid the redundancy.  -->
 
@@ -48,19 +49,20 @@
         android:layout_weight="1" />
 
     <!-- This button is set visible if the user is in the experiment. -->
-    <!-- TODO: add content description dynamically -->
+    <!-- Content description is set programmatically.-->
     <ImageButton
+        tools:ignore="ContentDescription"
         android:id="@+id/fxaButton"
         style="@style/NavigationButton"
-        android:contentDescription="@string/fxa_navigation_item_new"
         android:src="@drawable/ic_fxa_login"
         android:visibility="gone" />
 
+    <!-- Content description is set programmatically.-->
     <ImageButton
+        tools:ignore="ContentDescription"
         android:id="@+id/exitButton"
         style="@style/NavigationButton"
         android:src="@drawable/ic_home"
-        android:contentDescription="@null"
         android:nextFocusRight="@id/exitButton"/>
 
     <ImageView
