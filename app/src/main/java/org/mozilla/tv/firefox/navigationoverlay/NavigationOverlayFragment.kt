@@ -192,6 +192,7 @@ class NavigationOverlayFragment : Fragment() {
         initSettingsChannel() // When pulling everything into channels, add this to the channel RV
 
         exitButton.contentDescription = serviceLocator.experimentsProvider.getAAExitButtonExperiment(ExperimentConfig.AA_TEST)
+        fxaButton.contentDescription = getString(R.string.fxa_navigation_item_new, getString(R.string.app_name))
 
         val tintDrawable: (Drawable?) -> Unit = { it?.setTint(ContextCompat.getColor(context!!, R.color.photonGrey10_a60p)) }
         navUrlInput.compoundDrawablesRelative.forEach(tintDrawable)
