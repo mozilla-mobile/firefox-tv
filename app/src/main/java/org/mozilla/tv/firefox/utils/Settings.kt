@@ -9,16 +9,16 @@ import android.content.SharedPreferences
 import android.content.res.Resources
 import android.preference.PreferenceManager
 import androidx.annotation.VisibleForTesting
+import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.EngineSession.TrackingProtectionPolicy
 import mozilla.components.concept.engine.EngineSession.TrackingProtectionPolicy.CookiePolicy
-import mozilla.components.concept.engine.EngineSession.TrackingProtectionPolicy.SafeBrowsingCategory
 import mozilla.components.concept.engine.EngineSession.TrackingProtectionPolicy.TrackingCategory
-import org.mozilla.tv.firefox.onboarding.OnboardingActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.channels.ChannelConfig
 import org.mozilla.tv.firefox.channels.ChannelOnboardingActivity
 import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.ext.languageAndMaybeCountryMatch
+import org.mozilla.tv.firefox.onboarding.OnboardingActivity
 
 /**
  * A simple wrapper for SharedPreferences that makes reading preference a little bit easier.
@@ -80,13 +80,8 @@ class Settings private constructor(context: Context) {
      */
     val trackingProtectionPolicy: TrackingProtectionPolicy
         get() {
-            // TODO: consider enabling safe browsing in #1184.
-            val safeBrowsingCategories = arrayOf(SafeBrowsingCategory.NONE)
-
             return if (isBlockingEnabled) {
                 TrackingProtectionPolicy.select(
-                    safeBrowsingCategories = safeBrowsingCategories,
-
                     // We want to use TrackingCategory.RECOMMENDED but it doesn't block ads properly:
                     // a-c#4191. We write out the values in RECOMMENDED manually below and it works
                     // properly.
@@ -100,10 +95,6 @@ class Settings private constructor(context: Context) {
                 )
             } else {
                 TrackingProtectionPolicy.select(
-                    // If we disable tracking protection, we probably want to keep our safe browsing
-                    // policy the same so we break it out to be shared in both configurations. See a-c#4190.
-                    safeBrowsingCategories = safeBrowsingCategories,
-
                     // These defaults are from TrackingProtectionPolicy.none().
                     trackingCategories = arrayOf(TrackingCategory.NONE),
                     cookiePolicy = CookiePolicy.ACCEPT_ALL
