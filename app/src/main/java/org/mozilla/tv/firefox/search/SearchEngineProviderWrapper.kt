@@ -11,6 +11,7 @@ import mozilla.components.browser.search.SearchEngine
 import mozilla.components.browser.search.provider.AssetsSearchEngineProvider
 import mozilla.components.browser.search.provider.SearchEngineList
 import mozilla.components.browser.search.provider.SearchEngineProvider
+import mozilla.components.browser.search.provider.localization.SearchLocalization
 import mozilla.components.browser.search.provider.localization.SearchLocalizationProvider
 import mozilla.components.support.base.log.logger.Logger
 
@@ -25,14 +26,12 @@ private val logger = Logger("Search")
  */
 class SearchEngineProviderWrapper(private val replacements: Map<String, String>) : SearchEngineProvider {
 
-    val myLocalizationProvider = object : SearchLocalizationProvider() {
-        override val language: String
-            get() = Locale.getDefault().language
-
-        override val country: String
-            get() = Locale.getDefault().country
-
-        override val region: String? = country
+    val myLocalizationProvider = object : SearchLocalizationProvider {
+        override suspend fun determineRegion() = SearchLocalization(
+            language = Locale.getDefault().language,
+            country = Locale.getDefault().country,
+            region = Locale.getDefault().country
+        )
     }
 
     private val inner = AssetsSearchEngineProvider(
