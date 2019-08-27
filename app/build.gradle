@@ -207,6 +207,7 @@ dependencies {
 
     androidTestImplementation "org.mozilla.components:support-android-test:$moz_components_version"
     testImplementation "org.mozilla.components:support-test:$moz_components_version"
+    testImplementation "org.mozilla.components:support-test-appservices:$moz_components_version"
 
     androidTestImplementation 'com.squareup.okhttp3:mockwebserver:3.10.0'
     testImplementation 'com.squareup.okhttp3:mockwebserver:3.10.0'
@@ -222,10 +223,6 @@ dependencies {
     }
 
     androidTestImplementation "org.jetbrains.kotlin:kotlin-reflect:${kotlin_version}"
-
-    // For the latest version, see `Versions.mozilla_appservices` in
-    // https://github.com/mozilla-mobile/android-components/blob/master/buildSrc/src/main/java/Dependencies.kt
-    testImplementation "org.mozilla.appservices:full-megazord-forUnitTests:0.37.1"
 
     // Download from https://developer.amazon.com/sdk-download
     // This library has not been updated since 2013, so it might be unlikely that the version will change
