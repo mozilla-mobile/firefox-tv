@@ -20,8 +20,8 @@ class ReceiveTabOnboardingActivity : AppCompatActivity() {
 
         descriptionText.text = resources.getString(
             R.string.receive_tab_onboarding_description,
-            resources.getString(R.string.firefox_tv_brand_name),
-            resources.getString(R.string.firefox_tv_brand_name_short)
+            resources.getString(R.string.firefox_tv_brand_name_short),
+            resources.getString(R.string.firefox_tv_brand_name)
         )
 
         buttonSignIn.setOnClickListener {

@@ -87,7 +87,7 @@
             android:theme="@style/AppTheme.Transparent"/>
 
         <activity android:name=".onboarding.ReceiveTabOnboardingActivity"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme.Transparent"/>
 
         <!-- Allows MediaSessionCallbacks to be called while a voice command is active. Without
              this, the video pauses for the voice command, resumes when the voice command ends, and
