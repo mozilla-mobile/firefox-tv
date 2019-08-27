@@ -4,13 +4,17 @@
 
 package org.mozilla.tv.firefox.onboarding
 
+import android.app.Activity
+import android.app.Application
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.receive_tab_onboarding.buttonNotNow
 import kotlinx.android.synthetic.main.receive_tab_onboarding.buttonSignIn
 import kotlinx.android.synthetic.main.receive_tab_onboarding.descriptionText
+import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.ext.serviceLocator
 
 class ReceiveTabOnboardingActivity : AppCompatActivity() {
 
@@ -25,7 +29,20 @@ class ReceiveTabOnboardingActivity : AppCompatActivity() {
         )
 
         buttonSignIn.setOnClickListener {
-            setResult(RESULT_SIGN_IN)
+            application.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
+                override fun onActivityResumed(activity: Activity?) {
+                    if (activity is MainActivity) {
+                        serviceLocator.fxaLoginUseCase.beginLogin(activity.supportFragmentManager)
+                        application.unregisterActivityLifecycleCallbacks(this)
+                    }
+                }
+                override fun onActivityPaused(activity: Activity?) {}
+                override fun onActivityStarted(activity: Activity?) {}
+                override fun onActivityDestroyed(activity: Activity?) {}
+                override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {}
+                override fun onActivityStopped(activity: Activity?) {}
+                override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {}
+            })
             finish()
         }
 
@@ -45,6 +62,5 @@ class ReceiveTabOnboardingActivity : AppCompatActivity() {
 
     companion object {
         const val ONBOARD_RECEIVE_TABS_SHOWN_PREF = "onboard_receive_tabs_shown"
-        const val RESULT_SIGN_IN = 1
     }
 }
