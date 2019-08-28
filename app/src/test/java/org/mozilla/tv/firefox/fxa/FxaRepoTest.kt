@@ -172,7 +172,7 @@ class FxaRepoTest {
     @Test
     fun `GIVEN profile avatar is nonnull and not default WHEN profile is converted to domain object THEN that url should be used`() {
         val url = "https://www.mozilla.org"
-        val expectedStrategy = ImageSetStrategy.ByPath(url, placeholderId = R.drawable.ic_default_avatar)
+        val expectedStrategy = ImageSetStrategy.ByPath(url, placeholderId = R.drawable.ic_default_avatar, errorId = R.drawable.ic_default_avatar)
         val profiles = listOf(
             Profile("uid", null, Avatar(url, true), null),
             Profile("uid", null, Avatar(url, false), null),
