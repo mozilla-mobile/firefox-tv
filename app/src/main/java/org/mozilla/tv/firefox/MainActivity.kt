@@ -13,7 +13,6 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import androidx.core.app.ActivityManagerCompat
 import androidx.lifecycle.Observer
 import io.sentry.Sentry
 import kotlinx.android.synthetic.main.activity_main.*
@@ -158,25 +157,23 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         // See #1881 for details
         if (!safeIntent.hasExtra("TURBO_MODE")) {
             val settings = Settings.getInstance(this@MainActivity)
-            // Receive tab must _always_ be the first item here (i.e., the last onboarding shown
-            // to the user). This is because it can take the user to sign in
-            if (settings.shouldShowReceiveTabsOnboarding()) {
-                val onboardingIntent =
-                    Intent(this@MainActivity, ReceiveTabOnboardingActivity::class.java)
-                startActivity(onboardingIntent)
-            }
-
             val localeManager = LocaleManager.getInstance()
-            if (settings.shouldShowTVOnboarding(localeManager, this)) {
-                val onboardingIntents =
-                    Intent(this@MainActivity, ChannelOnboardingActivity::class.java)
-                startActivity(onboardingIntents)
-            }
 
-            if (settings.shouldShowTurboModeOnboarding()) {
-                val onboardingIntent = Intent(this@MainActivity, OnboardingActivity::class.java)
-                startActivity(onboardingIntent)
+            val onboardingIntent = when {
+                settings.shouldShowTurboModeOnboarding() -> {
+                    Intent(this@MainActivity, OnboardingActivity::class.java)
+                }
+                settings.shouldShowTVOnboarding(localeManager, this) -> {
+                    Intent(this@MainActivity, ChannelOnboardingActivity::class.java)
+                }
+                // Receive tab must _always_ be the last onboarding shown. This is because it
+                // can take the user to sign in
+                settings.shouldShowReceiveTabsOnboarding() -> {
+                    Intent(this@MainActivity, ReceiveTabOnboardingActivity::class.java)
+                }
+                else -> null
             }
+            if (onboardingIntent != null) startActivity(onboardingIntent)
         }
     }
 
