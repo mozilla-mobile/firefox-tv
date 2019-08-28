@@ -26,6 +26,7 @@ import mozilla.components.service.fxa.manager.FxaAccountManager
 import mozilla.components.support.base.log.logger.Logger
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.channels.ImageSetStrategy
+import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AuthenticatedNoProfile
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AuthenticatedWithProfile
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NeedsReauthentication
@@ -186,13 +187,14 @@ class FxaRepo(
         const val REDIRECT_URI = "https://accounts.firefox.com/oauth/success/$CLIENT_ID"
 
         private fun newInstanceDefaultAccountManager(context: Context): FxaAccountManager {
+            val deviceModel = context.serviceLocator.deviceInfo.getDeviceModel()
             return FxaAccountManager(
                 context,
                 Config.release(CLIENT_ID, REDIRECT_URI),
                 applicationScopes = APPLICATION_SCOPES,
                 deviceConfig = DeviceConfig(
-                    name = "Firefox for Fire TV", // TODO: #2516 choose final value.
-                    type = DeviceType.MOBILE, // TODO: appservices is considering adding DeviceType.TV.
+                    name = "Firefox on $deviceModel",
+                    type = DeviceType.TV,
                     capabilities = setOf(DeviceCapability.SEND_TAB) // required to receive tabs.
                 ),
                 syncConfig = null
