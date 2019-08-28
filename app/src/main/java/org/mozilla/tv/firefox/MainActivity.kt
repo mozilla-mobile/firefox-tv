@@ -93,31 +93,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             }
         })
 
-        // Skip onboarding if turbo mode is set via intent. This is used in automated perf testing.
-        // See #1881 for details
-        if (!safeIntent.hasExtra("TURBO_MODE")) {
-            val settings = Settings.getInstance(this@MainActivity)
-            // Receive tab must _always_ be the first item here (i.e., the last onboarding shown
-            // to the user). This is because it can take the user to sign in
-            if (settings.shouldShowReceiveTabsOnboarding()) {
-                val onboardingIntent =
-                    Intent(this@MainActivity, ReceiveTabOnboardingActivity::class.java)
-                startActivity(onboardingIntent)
-            }
-
-            val localeManager = LocaleManager.getInstance()
-            if (settings.shouldShowTVOnboarding(localeManager, this)) {
-                val onboardingIntents =
-                        Intent(this@MainActivity, ChannelOnboardingActivity::class.java)
-                startActivity(onboardingIntents)
-            }
-
-            if (settings.shouldShowTurboModeOnboarding()) {
-                val onboardingIntent = Intent(this@MainActivity, OnboardingActivity::class.java)
-                startActivity(onboardingIntent)
-            }
-        }
-
         serviceLocator.intentLiveData.value = Consumable.from(intentData)
 
         // Debug logging display for non public users
@@ -177,6 +152,32 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     override fun onResume() {
         super.onResume()
         TelemetryIntegration.INSTANCE.startSession(this)
+
+        val safeIntent = intent.toSafeIntent()
+        // Skip onboarding if turbo mode is set via intent. This is used in automated perf testing.
+        // See #1881 for details
+        if (!safeIntent.hasExtra("TURBO_MODE")) {
+            val settings = Settings.getInstance(this@MainActivity)
+            // Receive tab must _always_ be the first item here (i.e., the last onboarding shown
+            // to the user). This is because it can take the user to sign in
+            if (settings.shouldShowReceiveTabsOnboarding()) {
+                val onboardingIntent =
+                    Intent(this@MainActivity, ReceiveTabOnboardingActivity::class.java)
+                startActivity(onboardingIntent)
+            }
+
+            val localeManager = LocaleManager.getInstance()
+            if (settings.shouldShowTVOnboarding(localeManager, this)) {
+                val onboardingIntents =
+                    Intent(this@MainActivity, ChannelOnboardingActivity::class.java)
+                startActivity(onboardingIntents)
+            }
+
+            if (settings.shouldShowTurboModeOnboarding()) {
+                val onboardingIntent = Intent(this@MainActivity, OnboardingActivity::class.java)
+                startActivity(onboardingIntent)
+            }
+        }
     }
 
     override fun onPause() {
