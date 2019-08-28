@@ -104,6 +104,57 @@ class ExperimentsProvider(private val fretboard: Fretboard, private val context:
         }
     }
 
+    private fun shouldUseTurboRebrand(): Boolean {
+        val expDescriptor = checkBranchVariants(ExperimentConfig.TURBO_MODE_REBRAND)
+        return when {
+            expDescriptor == null -> false // Experiment unknown, or overridden to be false.
+            expDescriptor.name.endsWith(ExperimentSuffix.A.value) -> false
+            expDescriptor.name.endsWith(ExperimentSuffix.B.value) -> true
+            else -> {
+                Sentry.capture(ExperimentIllegalStateException("Turbo Mode Rebrand Illegal Branch Name"))
+                false
+            }
+        }
+    }
+
+    data class TurboModeToolbarContent(
+        val imageId: Int,
+        val contentDescriptionId: Int
+    )
+
+    fun getTurboModeToolbar() = when(shouldUseTurboRebrand()) {
+        true -> TurboModeToolbarContent(imageId = R.drawable.etp_selector, contentDescriptionId = R.string.toolbar_etp)
+        false -> TurboModeToolbarContent(imageId = R.drawable.turbo_selector, contentDescriptionId = R.string.turbo_mode)
+    }
+
+    data class TurboModeOnboardingContent(
+        val titleId: Int,
+        val descriptionId: Int,
+        val enableButtonTextId: Int,
+        val disableButtonTextId: Int,
+        val imageId: Int,
+        val imageContentDescriptionId: Int
+    )
+
+    fun getTurboModeOnboarding() = when (shouldUseTurboRebrand()) {
+        true -> TurboModeOnboardingContent(
+            titleId = R.string.onboarding_etp_title,
+            descriptionId = R.string.onboarding_etp_description,
+            enableButtonTextId = R.string.onboarding_etp_enable,
+            disableButtonTextId = R.string.onboarding_etp_disable,
+            imageId = R.drawable.etp_onboarding,
+            imageContentDescriptionId = R.string.onboarding_etp_image_a11y
+        )
+        false -> TurboModeOnboardingContent(
+            titleId = R.string.onboarding_turbo_mode_title,
+            descriptionId = R.string.onboarding_turbo_mode_body2,
+            enableButtonTextId = R.string.button_turbo_mode_keep_enabled2,
+            disableButtonTextId = R.string.button_turbo_mode_turn_off2,
+            imageId = R.drawable.turbo_mode_onboarding,
+            imageContentDescriptionId = R.string.turbo_mode_image_a11y
+        )
+    }
+
     /**
      * Check if [ExperimentConfig] + [ExperimentSuffix] is in the experiment and return its
      * corresponding [ExperimentDescriptor].
