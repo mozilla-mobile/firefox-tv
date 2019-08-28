@@ -97,6 +97,7 @@ open class ServiceLocator(val app: Application) {
     val fxaRepo by lazy { FxaRepo(app, admIntegration = admIntegration) }
     val fxaLoginUseCase by lazy { FxaLoginUseCase(fxaRepo, sessionRepo, screenController) }
     val admIntegration by lazy { ADMIntegration(app) }
+    val deviceInfo by lazy { DeviceInfo() }
 
     // These open vals are overridden in testing
     open val frameworkRepo = FrameworkRepo.newInstanceAndInit(app.getAccessibilityManager())
