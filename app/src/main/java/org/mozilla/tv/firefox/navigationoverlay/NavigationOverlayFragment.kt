@@ -25,6 +25,7 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.transition.Fade
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
@@ -259,24 +260,26 @@ class NavigationOverlayFragment : Fragment() {
     private fun observeAccountState(): Disposable {
         val fxaRepo = serviceLocator.fxaRepo
 
-        return fxaRepo.accountState.subscribe { accountState ->
-            when (accountState) {
-                is AccountState.AuthenticatedWithProfile -> {
-                    accountState.profile.avatarSetStrategy.invoke(fxaButton)
-                    fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
-                }
-                AccountState.AuthenticatedNoProfile -> {
-                    fxaButton.setImageResource(R.drawable.ic_avatar_authenticated_no_picture)
-                    fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
-                }
-                AccountState.NeedsReauthentication, AccountState.NotAuthenticated -> {
-                    fxaButton.setImageResource(R.drawable.ic_fxa_login)
-                    fxaButton.contentDescription =
+        return fxaRepo.accountState
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { accountState ->
+                when (accountState) {
+                    is AccountState.AuthenticatedWithProfile -> {
+                        accountState.profile.avatarSetStrategy.invoke(fxaButton)
+                        fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
+                    }
+                    AccountState.AuthenticatedNoProfile -> {
+                        fxaButton.setImageResource(R.drawable.ic_avatar_authenticated_no_picture)
+                        fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
+                    }
+                    AccountState.NeedsReauthentication, AccountState.NotAuthenticated -> {
+                        fxaButton.setImageResource(R.drawable.ic_fxa_login)
+                        fxaButton.contentDescription =
                             resources.getString(R.string.fxa_navigation_item_new,
-                                    resources.getString(R.string.app_name))
+                                resources.getString(R.string.app_name))
+                    }
                 }
             }
-        }
     }
 
     private fun observePinnedTiles(): Disposable {
