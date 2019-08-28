@@ -15,7 +15,7 @@ _Think something can be automated? Add it to [this doc](https://docs.google.com/
 
 #### Wednesday # 1
 
-- [ ] Verify all strings have been landed; exports now happen automatically
+- [ ] Verify all `strings-ready` issues in Sprint have strings landed (exports now happen automatically). If not, check with L10N/PM if the issue needs to be removed from Sprint.
 - [ ] Create PR for bumping version (`X.X-LAT1`)
   - Merge to master
 - [ ] Cut LAT branch `releases/vX.X-LAT1` (this must include a-c upgrade)
