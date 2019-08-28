@@ -270,7 +270,9 @@ class NavigationOverlayFragment : Fragment() {
                 }
                 AccountState.NeedsReauthentication, AccountState.NotAuthenticated -> {
                     fxaButton.setImageResource(R.drawable.ic_fxa_login)
-                    fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_new, "Firefox")
+                    fxaButton.contentDescription =
+                            resources.getString(R.string.fxa_navigation_item_new,
+                                    resources.getString(R.string.app_name))
                 }
             }
         }
