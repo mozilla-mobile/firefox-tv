@@ -30,7 +30,7 @@ import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.setupForApp
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
-import org.mozilla.tv.firefox.onboarding.ReceiveTabOnboardingActivity
+import org.mozilla.tv.firefox.onboarding.ReceiveTabPreboardingActivity
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.BuildConstants
@@ -168,8 +168,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
                 }
                 // Receive tab must _always_ be the last onboarding shown. This is because it
                 // can take the user to sign in
-                settings.shouldShowReceiveTabsOnboarding() -> {
-                    Intent(this@MainActivity, ReceiveTabOnboardingActivity::class.java)
+                settings.shouldShowReceiveTabsPreboarding() -> {
+                    Intent(this@MainActivity, ReceiveTabPreboardingActivity::class.java)
                 }
                 else -> null
             }
