@@ -17,6 +17,7 @@ enum class ExperimentConfig(val value: String) {
     HINT_BAR_TEST("HintBar-2011"),
     TV_GUIDE_CHANNELS("TvGuideChannels-2195"),
     SEND_TAB("SendTab-2511"),
+    TURBO_MODE_REBRAND("TurboModeRebrand-2689"),
 
     /**
      * This is not an experiment. If Amazon deploys a fix for this bug, our workaround
