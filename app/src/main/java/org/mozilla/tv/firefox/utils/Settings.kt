@@ -19,7 +19,7 @@ import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.ext.languageAndMaybeCountryMatch
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
-import org.mozilla.tv.firefox.onboarding.ReceiveTabOnboardingActivity
+import org.mozilla.tv.firefox.onboarding.ReceiveTabPreboardingActivity
 
 /**
  * A simple wrapper for SharedPreferences that makes reading preference a little bit easier.
@@ -55,8 +55,8 @@ class Settings private constructor(context: Context) {
     fun shouldShowTurboModeOnboarding(): Boolean =
             !preferences.getBoolean(OnboardingActivity.ONBOARD_SHOWN_PREF, false)
 
-    fun shouldShowReceiveTabsOnboarding(): Boolean = experimentsProvider.shouldShowSendTab() &&
-        !preferences.getBoolean(ReceiveTabOnboardingActivity.ONBOARD_RECEIVE_TABS_SHOWN_PREF, false)
+    fun shouldShowReceiveTabsPreboarding(): Boolean = experimentsProvider.shouldShowSendTab() &&
+        !preferences.getBoolean(ReceiveTabPreboardingActivity.ONBOARD_RECEIVE_TABS_SHOWN_PREF, false)
 
     fun shouldShowTVOnboarding(localeManager: LocaleManager, context: Context): Boolean {
         // Note that this method duplicates some logic found in KillswitchLayout. Make sure

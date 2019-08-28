@@ -86,7 +86,7 @@
         <activity android:name=".channels.ChannelOnboardingActivity"
             android:theme="@style/AppTheme.Transparent"/>
 
-        <activity android:name=".onboarding.ReceiveTabOnboardingActivity"
+        <activity android:name=".onboarding.ReceiveTabPreboardingActivity"
             android:theme="@style/AppTheme.Transparent"/>
 
         <!-- Allows MediaSessionCallbacks to be called while a voice command is active. Without

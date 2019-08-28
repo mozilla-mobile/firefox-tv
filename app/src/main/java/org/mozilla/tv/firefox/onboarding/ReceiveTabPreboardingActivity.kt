@@ -9,18 +9,18 @@ import android.app.Application
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.receive_tab_onboarding.buttonNotNow
-import kotlinx.android.synthetic.main.receive_tab_onboarding.buttonSignIn
-import kotlinx.android.synthetic.main.receive_tab_onboarding.descriptionText
+import kotlinx.android.synthetic.main.receive_tab_preboarding.buttonNotNow
+import kotlinx.android.synthetic.main.receive_tab_preboarding.buttonSignIn
+import kotlinx.android.synthetic.main.receive_tab_preboarding.descriptionText
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.serviceLocator
 
-class ReceiveTabOnboardingActivity : AppCompatActivity() {
+class ReceiveTabPreboardingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.receive_tab_onboarding)
+        setContentView(R.layout.receive_tab_preboarding)
 
         descriptionText.text = resources.getString(
             R.string.receive_tab_onboarding_description,
