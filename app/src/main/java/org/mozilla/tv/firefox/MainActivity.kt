@@ -152,29 +152,39 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         super.onResume()
         TelemetryIntegration.INSTANCE.startSession(this)
 
-        val safeIntent = intent.toSafeIntent()
+        maybeShowOnboarding()
+    }
+
+    // One onboarding activity will be shown each time any are valid. After the activity
+    // is closed, MainActivity#onResume will be hit again, and the next will be displayed.
+    // This ensures that only one onboarding activity is shown at any time (preventing
+    // transparency issues).
+    private fun maybeShowOnboarding() {
         // Skip onboarding if turbo mode is set via intent. This is used in automated perf testing.
         // See #1881 for details
-        if (!safeIntent.hasExtra("TURBO_MODE")) {
-            val settings = Settings.getInstance(this@MainActivity)
-            val localeManager = LocaleManager.getInstance()
+        val safeIntent = intent.toSafeIntent()
+        if (safeIntent.hasExtra("TURBO_MODE")) return
 
-            val onboardingIntent = when {
-                settings.shouldShowTurboModeOnboarding() -> {
-                    Intent(this@MainActivity, OnboardingActivity::class.java)
-                }
-                settings.shouldShowTVOnboarding(localeManager, this) -> {
-                    Intent(this@MainActivity, ChannelOnboardingActivity::class.java)
-                }
-                // Receive tab must _always_ be the last onboarding shown. This is because it
-                // can take the user to sign in
-                settings.shouldShowReceiveTabsPreboarding() -> {
-                    Intent(this@MainActivity, ReceiveTabPreboardingActivity::class.java)
-                }
-                else -> null
+        val settings = Settings.getInstance(this@MainActivity)
+        val localeManager = LocaleManager.getInstance()
+
+        val onboardingIntent = when {
+            settings.shouldShowTurboModeOnboarding() -> {
+                Intent(this@MainActivity, OnboardingActivity::class.java)
             }
-            if (onboardingIntent != null) startActivity(onboardingIntent)
+            settings.shouldShowTVOnboarding(localeManager, this) -> {
+                Intent(this@MainActivity, ChannelOnboardingActivity::class.java)
+            }
+
+            // Receive tab must _always_ be the last onboarding shown. This is because it
+            // can take the user to sign in
+            settings.shouldShowReceiveTabsPreboarding() -> {
+                Intent(this@MainActivity, ReceiveTabPreboardingActivity::class.java)
+            }
+            else -> null
         }
+
+        if (onboardingIntent != null) startActivity(onboardingIntent)
     }
 
     override fun onPause() {

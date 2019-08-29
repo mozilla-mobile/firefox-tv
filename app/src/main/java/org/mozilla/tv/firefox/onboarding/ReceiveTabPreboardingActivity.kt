@@ -16,6 +16,10 @@ import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.serviceLocator
 
+/**
+ * Manages an onboarding screen, which is shown once to users upon app start in order
+ * to educate them about receive tab functionality.
+ */
 class ReceiveTabPreboardingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
