@@ -31,11 +31,10 @@
         android:src="@drawable/pin_selector"
         android:contentDescription="@string/pin_label"/>
 
+    <!-- src and content description set programmatically -->
     <org.mozilla.tv.firefox.widget.CheckableImageButton
         android:id="@+id/turboButton"
-        style="@style/NavigationButton"
-        android:src="@drawable/turbo_selector"
-        android:contentDescription="@string/turbo_mode"/>
+        style="@style/NavigationButton" />
 
     <org.mozilla.tv.firefox.widget.CheckableImageButton
         android:id="@+id/desktopModeButton"

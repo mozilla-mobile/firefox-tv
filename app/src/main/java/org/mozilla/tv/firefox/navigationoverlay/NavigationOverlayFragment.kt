@@ -168,7 +168,8 @@ class NavigationOverlayFragment : Fragment() {
         ToolbarUiController(
             toolbarViewModel,
             ::exitFirefox,
-            onNavigationEvent
+            onNavigationEvent,
+            serviceLocator.experimentsProvider
         ).onCreateView(view, viewLifecycleOwner, fragmentManager!!)
 
         rootView = view
