@@ -7,17 +7,13 @@ package org.mozilla.tv.firefox.fxa
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.NONE
-import androidx.annotation.VisibleForTesting.PRIVATE
-import androidx.lifecycle.ProcessLifecycleOwner
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.Deferred
 import mozilla.appservices.fxaclient.Config
 import mozilla.components.concept.sync.AccountObserver
 import mozilla.components.concept.sync.DeviceCapability
 import mozilla.components.concept.sync.DeviceEvent
-import mozilla.components.concept.sync.DeviceEventsObserver
 import mozilla.components.concept.sync.DeviceType
 import mozilla.components.concept.sync.OAuthAccount
 import mozilla.components.concept.sync.Profile
@@ -32,7 +28,6 @@ import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AuthenticatedWithProfile
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NeedsReauthentication
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NotAuthenticated
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
-import java.lang.IllegalStateException
 
 private val logger = Logger("FxaRepo")
 
@@ -51,7 +46,7 @@ private val APPLICATION_SCOPES = setOf(
 class FxaRepo(
     val context: Context,
     val accountManager: FxaAccountManager = newInstanceDefaultAccountManager(context),
-    val admIntegration: ADMIntegration,
+    val admIntegration: ADMIntegration, // Consider moving to an FxaReceiveTabsUseCase or rm this comment.
     private val sentryIntegration: SentryIntegration = SentryIntegration
 ) {
 
@@ -78,19 +73,16 @@ class FxaRepo(
 
     @VisibleForTesting(otherwise = NONE)
     val accountObserver = FirefoxAccountObserver()
-    @VisibleForTesting(otherwise = NONE)
-    val deviceEventsObserver = FirefoxDeviceEventsObserver()
 
     private val _accountState: BehaviorSubject<AccountState> = BehaviorSubject.createDefault(NotAuthenticated)
     val accountState: Observable<AccountState> = _accountState.hide()
 
-    private val _receivedTabs: PublishSubject<ReceivedTabs> = PublishSubject.create()
-    val receivedTabs: Observable<ReceivedTabs> = _receivedTabs.hide()
+    val receivedTabs: Observable<ReceivedTabs> = admIntegration.receivedTabsRaw
+        .mapToReceivedTabs()
+        .filterInvalidTabs(sentryIntegration)
 
     init {
         accountManager.register(accountObserver)
-        accountManager.registerForDeviceEvents(deviceEventsObserver, ProcessLifecycleOwner.get(),
-            autoPause = false /* Avoid pausing even when the app is backgrounded. */)
 
         @Suppress("DeferredResultUnused") // No value is returned & we don't need to wait for this to complete.
         accountManager.initAsync() // If user is already logged in, the appropriate observers will be triggered.
@@ -139,46 +131,6 @@ class FxaRepo(
          */
         override fun onProfileUpdated(profile: Profile) {
             _accountState.onNext(AuthenticatedWithProfile(profile.toDomainObject()))
-        }
-    }
-
-    @VisibleForTesting(otherwise = PRIVATE)
-    inner class FirefoxDeviceEventsObserver : DeviceEventsObserver {
-        override fun onEvents(events: List<DeviceEvent>) {
-            logger.debug("received device events: $events")
-            events.forEach {
-                when (it) {
-                    is DeviceEvent.TabReceived -> onReceiveTab(it)
-                }
-            }
-        }
-
-        private fun onReceiveTab(event: DeviceEvent.TabReceived) {
-            if (event.entries.isEmpty()) {
-                sentryIntegration.captureAndLogError(logger, ReceiveTabException("Received push event with no entries"))
-                return
-            }
-
-            val deviceMetadata = event.from?.let {
-                ReceivedTabs.DeviceMetadata(
-                    displayName = it.displayName,
-                    deviceType = it.deviceType
-                )
-            }
-
-            val receivedTab = ReceivedTabs(
-                urls = event.entries
-                    .map { it.url }
-                    .filter { it.isNotBlank() }, // blank URLs may not be possible but we do this just to be safe.
-                sendingDevice = deviceMetadata
-            )
-
-            if (receivedTab.urls.isEmpty()) {
-                sentryIntegration.captureAndLogError(logger, ReceiveTabException("Received push event with only blank URLs"))
-                return
-            }
-
-            _receivedTabs.onNext(receivedTab)
         }
     }
 
@@ -246,6 +198,29 @@ fun Profile.toDomainObject(): FxaProfile {
     }
 
     return FxaProfile(validatedAvatar, validatedDisplayName)
+}
+
+private fun Observable<ADMIntegration.ReceivedTabs>.mapToReceivedTabs(): Observable<ReceivedTabs> = map { admTabs ->
+    ReceivedTabs(
+        urls = admTabs.tabData
+            .map { it.url }
+            .filter { it.isNotBlank() }, // blank URLs may not be possible but we do this just to be safe.
+        sendingDevice = admTabs.device?.let {
+            ReceivedTabs.DeviceMetadata(
+                displayName = it.displayName,
+                deviceType = it.deviceType
+            )
+        }
+    )
+}
+
+private fun Observable<ReceivedTabs>.filterInvalidTabs(sentryIntegration: SentryIntegration): Observable<ReceivedTabs> = filter {
+    return@filter if (it.urls.isNotEmpty()) {
+        true
+    } else {
+        sentryIntegration.captureAndLogError(logger, ReceiveTabException("Received tab event with only blank URLs"))
+        false
+    }
 }
 
 /**
