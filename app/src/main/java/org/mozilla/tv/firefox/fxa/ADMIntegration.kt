@@ -6,7 +6,11 @@ package org.mozilla.tv.firefox.fxa
 
 import android.app.Application
 import com.amazon.device.messaging.ADM
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import mozilla.components.concept.push.PushProcessor
+import mozilla.components.concept.sync.Device
+import mozilla.components.concept.sync.TabData
 import mozilla.components.feature.push.AutoPushFeature
 import mozilla.components.feature.push.PushConfig
 import mozilla.components.feature.push.ServiceType
@@ -40,12 +44,15 @@ class ADMIntegration(private val app: Application) {
         AutoPushFeature(app, ADMService(), PushConfig(senderId = senderId, serviceType = ServiceType.ADM))
     }
 
+    private val _receivedTabsRaw: PublishSubject<ReceivedTabs> = PublishSubject.create()
+    val receivedTabsRaw: Observable<ReceivedTabs> = _receivedTabsRaw.hide()
+
     fun createSendTabFeature(accountManager: FxaAccountManager) {
         if (isADMAvailable) {
             // For push to work in debug builds (not needed for release), an api key is needed in the assets folder.
             // See README for instructions.
-            SendTabFeature(accountManager, pushFeature) { _, _ ->
-                // TODO: Handle receiving tabs (#2491)
+            SendTabFeature(accountManager, pushFeature) { device, tabData ->
+                _receivedTabsRaw.onNext(ReceivedTabs(device, tabData))
             }
         }
     }
@@ -67,4 +74,9 @@ class ADMIntegration(private val app: Application) {
             pushFeature.shutdown()
         }
     }
+
+    /**
+     * A tab, as received by ADM. We let consumers handle the conversion to more useful types.
+     */
+    data class ReceivedTabs(val device: Device?, val tabData: List<TabData>)
 }
