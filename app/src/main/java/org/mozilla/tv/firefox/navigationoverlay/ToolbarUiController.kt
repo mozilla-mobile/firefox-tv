@@ -25,6 +25,7 @@ import org.mozilla.tv.firefox.widget.IgnoreFocusMovementMethod
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 import android.view.ViewTreeObserver
 import androidx.core.view.forEach
+import org.mozilla.tv.firefox.experiments.ExperimentsProvider
 
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
 private const val NAVIGATION_BUTTON_DISABLED_ALPHA = 0.3f
@@ -36,7 +37,8 @@ private const val WRAP_CONTENT = LinearLayout.LayoutParams.WRAP_CONTENT
 class ToolbarUiController(
     private val toolbarViewModel: ToolbarViewModel,
     private val exitFirefox: () -> Unit,
-    private val onNavigationEvent: (NavigationEvent, String?, InlineAutocompleteEditText.AutocompleteResult?) -> Unit
+    private val onNavigationEvent: (NavigationEvent, String?, InlineAutocompleteEditText.AutocompleteResult?) -> Unit,
+    private val experimentsProvider: ExperimentsProvider
 ) {
 
     private var hasUserChangedURLSinceEditTextFocused = false
@@ -129,6 +131,9 @@ class ToolbarUiController(
 
         val context = layout.context
         val serviceLocator = context.serviceLocator
+        val turboButtonContent = experimentsProvider.getTurboModeToolbar()
+
+        layout.turboButton.setImageResource(turboButtonContent.imageId)
 
         @Suppress("DEPRECATION")
         toolbarViewModel.legacyState.observe(viewLifecycleOwner, Observer {
@@ -148,6 +153,11 @@ class ToolbarUiController(
 
             layout.desktopModeButton.isChecked = it.desktopModeChecked
             layout.turboButton.isChecked = it.turboChecked
+            layout.turboButton.contentDescription = layout.context.resources.getString(
+                // TODO known issue: updating the content description doesn't update the hanger until focus navigates away and back again. fix this
+                turboButtonContent.contentDescriptionId,
+                if (it.turboChecked) "ON" else "OFF"
+            )
 
             if (!hasUserChangedURLSinceEditTextFocused) {
                 // The url can get updated in the background, e.g. if a loading page is redirected. We
