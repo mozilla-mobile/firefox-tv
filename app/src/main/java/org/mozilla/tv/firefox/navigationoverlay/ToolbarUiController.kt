@@ -153,11 +153,12 @@ class ToolbarUiController(
 
             layout.desktopModeButton.isChecked = it.desktopModeChecked
             layout.turboButton.isChecked = it.turboChecked
-            layout.turboButton.contentDescription = layout.context.resources.getString(
-                // TODO known issue: updating the content description doesn't update the hanger until focus navigates away and back again. fix this
+            val turboText = layout.context.resources.getString(
                 turboButtonContent.contentDescriptionId,
                 if (it.turboChecked) "ON" else "OFF"
             )
+            layout.turboButton.contentDescription = turboText
+            tooltipView.tooltip.text = turboText
 
             if (!hasUserChangedURLSinceEditTextFocused) {
                 // The url can get updated in the background, e.g. if a loading page is redirected. We
