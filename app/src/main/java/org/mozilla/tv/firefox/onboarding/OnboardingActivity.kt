@@ -19,6 +19,8 @@ class OnboardingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding)
 
+        setContent()
+
         enable_turbo_mode.setOnClickListener { _ ->
             setTurboMode(true)
             finish()
@@ -31,6 +33,17 @@ class OnboardingActivity : AppCompatActivity() {
         }
 
         setOnboardShown()
+    }
+
+    private fun setContent() {
+        val content = serviceLocator.experimentsProvider.getTurboModeOnboarding()
+
+        disable_turbo_mode.text = resources.getString(content.disableButtonTextId)
+        enable_turbo_mode.text = resources.getString(content.enableButtonTextId)
+        onboarding_main_text.text = resources.getString(content.descriptionId)
+        turbo_mode_title.text = resources.getString(content.titleId)
+        turbo_image_view.setImageResource(content.imageId)
+        turbo_image_view.contentDescription = resources.getString(content.imageContentDescriptionId)
     }
 
     private fun setTurboMode(turboModeEnabled: Boolean) {
