@@ -22,17 +22,17 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent=".75" />
 
+    <!-- src and content description set programmatically -->
     <ImageView
         android:id="@+id/turbo_image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:contentDescription="@string/turbo_mode_image_a11y"
         app:layout_constraintHeight_default="wrap"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/turbo_mode_onboarding" />
+        tools:ignore="ContentDescription" />
 
     <Space
         android:layout_width="0dp"
@@ -43,13 +43,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/turbo_image_view" />
 
+    <!-- text set programmatically -->
     <TextView
         android:id="@+id/turbo_mode_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:fontFamily="@string/font_ember_light"
-        android:text="@string/onboarding_turbo_mode_title"
         android:textColor="@color/photonGrey10_a80p"
         android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@id/onboarding_main_text"
@@ -59,6 +59,7 @@
         app:layout_constraintVertical_bias="0.36"
         app:layout_constraintVertical_chainStyle="packed" />
 
+    <!-- text set programmatically -->
     <TextView
         android:id="@+id/onboarding_main_text"
         android:layout_width="0dp"
@@ -66,7 +67,6 @@
         android:layout_marginBottom="24dp"
         android:fontFamily="@string/font_ember_regular"
         android:lineSpacingExtra="2sp"
-        android:text="@string/onboarding_turbo_mode_body2"
         android:textAlignment="center"
         android:textColor="@color/photonGrey10_a80p"
         android:textSize="16sp"
@@ -75,6 +75,7 @@
         app:layout_constraintStart_toStartOf="@id/guideline_left_quarter"
         app:layout_constraintTop_toBottomOf="@+id/turbo_mode_title" />
 
+    <!-- text set programmatically -->
     <Button
         android:id="@+id/enable_turbo_mode"
         style="@style/Widget.AppCompat.Button.Borderless"
@@ -88,7 +89,6 @@
         android:minHeight="@dimen/onboarding_button_height"
         android:nextFocusUp="@id/disable_turbo_mode"
         android:nextFocusDown="@+id/disable_turbo_mode"
-        android:text="@string/button_turbo_mode_keep_enabled2"
         android:textAllCaps="false"
         android:textColor="@color/photonGrey10"
         android:textSize="14sp"
@@ -101,6 +101,7 @@
         <requestFocus />
     </Button>
 
+    <!-- text set programmatically -->
     <Button
         android:id="@id/disable_turbo_mode"
         style="@style/Widget.AppCompat.Button.Borderless"
@@ -114,7 +115,6 @@
         android:minHeight="@dimen/onboarding_button_height"
         android:nextFocusUp="@id/enable_turbo_mode"
         android:nextFocusDown="@id/enable_turbo_mode"
-        android:text="@string/button_turbo_mode_turn_off2"
         android:textAllCaps="false"
         android:textColor="@color/photonGrey10"
         android:textSize="14sp"
