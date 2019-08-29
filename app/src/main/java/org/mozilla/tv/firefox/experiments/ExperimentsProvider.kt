@@ -122,7 +122,7 @@ class ExperimentsProvider(private val fretboard: Fretboard, private val context:
         val contentDescriptionId: Int
     )
 
-    fun getTurboModeToolbar() = when(shouldUseTurboRebrand()) {
+    fun getTurboModeToolbar() = when (shouldUseTurboRebrand()) {
         true -> TurboModeToolbarContent(imageId = R.drawable.etp_selector, contentDescriptionId = R.string.toolbar_etp)
         false -> TurboModeToolbarContent(imageId = R.drawable.turbo_selector, contentDescriptionId = R.string.turbo_mode)
     }
