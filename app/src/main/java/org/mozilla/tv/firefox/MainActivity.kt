@@ -14,6 +14,8 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import androidx.lifecycle.Observer
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
 import io.sentry.Sentry
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.overlay_debug.debugLog
@@ -48,10 +50,15 @@ interface MediaSessionHolder {
 
 class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, MediaSessionHolder {
     private val LOG_TAG = "MainActivity"
+    private val compositeDisposable = CompositeDisposable()
 
     // There should be at most one MediaSession per process, hence it's in MainActivity.
     // We crash if we init MediaSession at init time, hence lateinit.
     override lateinit var videoVoiceCommandMediaSession: VideoVoiceCommandMediaSession
+
+    enum class Command {
+        BEGIN_LOGIN
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // We override onSaveInstanceState to not save state (for handling Clear Data), so startup flow
@@ -196,6 +203,17 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         super.onStart()
         // TODO when MainActivity has a VM, route this call through it
         serviceLocator.pocketRepo.updatePocketFromStore()
+
+        @Suppress("DEPRECATION") // Couldn't work out a better way to do this. If you
+        // think of one, please replace this
+        (application as FirefoxApplication).mainActivityCommandBus
+            .subscribe { command ->
+                when (command) {
+                    Command.BEGIN_LOGIN -> serviceLocator.fxaLoginUseCase.beginLogin(supportFragmentManager)
+                    null -> { /* do nothing */ }
+                }
+            }
+            .addTo(compositeDisposable)
     }
 
     override fun onStop() {

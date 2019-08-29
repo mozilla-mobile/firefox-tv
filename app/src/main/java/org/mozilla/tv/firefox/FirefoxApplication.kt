@@ -8,6 +8,8 @@ import android.os.StrictMode
 import androidx.annotation.VisibleForTesting
 import android.webkit.WebSettings
 import androidx.annotation.VisibleForTesting.PRIVATE
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 import mozilla.appservices.Megazord
 import mozilla.components.concept.engine.utils.EngineVersion
 import mozilla.components.lib.fetch.okhttp.OkHttpClient
@@ -145,6 +147,9 @@ open class FirefoxApplication : LocaleAwareApplication() {
         serviceLocator.sessionManager.onLowMemory()
         // If you need to dump more memory, you may be able to clear the Picasso cache.
     }
+
+    @Deprecated("Avoid using this bus whenever possible. Only use it if the alternatives are even worse")
+    val mainActivityCommandBus: Subject<MainActivity.Command> = PublishSubject.create()
 }
 
 private fun enableAndroidComponentsLogging() {
