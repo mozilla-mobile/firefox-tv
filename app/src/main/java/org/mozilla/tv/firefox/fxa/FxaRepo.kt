@@ -57,7 +57,6 @@ class FxaRepo(
      * the profile is not and needs to be fetched.
      */
     sealed class AccountState {
-        // TODO: Later, may need "failed to login": https://github.com/mozilla-mobile/android-components/issues/3712
         /**
          *  After the profile is fetched async
          */
