@@ -4,17 +4,15 @@
 
 package org.mozilla.tv.firefox.onboarding
 
-import android.app.Activity
-import android.app.Application
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.receive_tab_preboarding.buttonNotNow
 import kotlinx.android.synthetic.main.receive_tab_preboarding.buttonSignIn
 import kotlinx.android.synthetic.main.receive_tab_preboarding.descriptionText
+import org.mozilla.tv.firefox.FirefoxApplication
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
-import org.mozilla.tv.firefox.ext.serviceLocator
 
 /**
  * Manages an onboarding screen, which is shown once to users upon app start in order
@@ -33,20 +31,10 @@ class ReceiveTabPreboardingActivity : AppCompatActivity() {
         )
 
         buttonSignIn.setOnClickListener {
-            application.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
-                override fun onActivityResumed(activity: Activity?) {
-                    if (activity is MainActivity) {
-                        serviceLocator.fxaLoginUseCase.beginLogin(activity.supportFragmentManager)
-                        application.unregisterActivityLifecycleCallbacks(this)
-                    }
-                }
-                override fun onActivityPaused(activity: Activity?) {}
-                override fun onActivityStarted(activity: Activity?) {}
-                override fun onActivityDestroyed(activity: Activity?) {}
-                override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {}
-                override fun onActivityStopped(activity: Activity?) {}
-                override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {}
-            })
+            @Suppress("DEPRECATION") // Couldn't work out a better way to do this. If you
+            // think of one, please replace this
+            (application as FirefoxApplication).mainActivityCommandBus
+                .onNext(MainActivity.Command.BEGIN_LOGIN)
             finish()
         }
 
