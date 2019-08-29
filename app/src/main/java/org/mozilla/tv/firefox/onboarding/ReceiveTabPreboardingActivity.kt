@@ -27,7 +27,7 @@ class ReceiveTabPreboardingActivity : AppCompatActivity() {
         setContentView(R.layout.receive_tab_preboarding)
 
         descriptionText.text = resources.getString(
-            R.string.receive_tab_onboarding_description,
+            R.string.fxa_preboarding_instruction1,
             resources.getString(R.string.firefox_tv_brand_name_short),
             resources.getString(R.string.firefox_tv_brand_name)
         )
