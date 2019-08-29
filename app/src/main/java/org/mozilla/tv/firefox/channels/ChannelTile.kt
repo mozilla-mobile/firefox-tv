@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.RequestCreator
+import com.squareup.picasso.Transformation
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.getDimenPixelSize
 import org.mozilla.tv.firefox.utils.PicassoWrapper
@@ -85,9 +87,27 @@ data class ChannelTile(
 sealed class ImageSetStrategy {
     abstract operator fun invoke(imageView: ImageView)
 
+    protected var transformation: Transformation? = null
+
+    // This cannot be done during strategy instantiation because it will often require
+    // information about the target ImageView (particularly its size)
+    fun setTransformation(transformation: Transformation): ImageSetStrategy {
+        this.transformation = transformation
+        return this
+    }
+
+    protected fun RequestCreator.applyTransformationIfNotNull(transformation: Transformation?): RequestCreator = this
+        .let { requestCreator ->
+            if (transformation != null) requestCreator.transform(transformation)
+            else requestCreator
+        }
+
     data class ById(val id: Int) : ImageSetStrategy() {
         override fun invoke(imageView: ImageView) {
-            imageView.setImageResource(id)
+            PicassoWrapper.client
+                .load(id)
+                .applyTransformationIfNotNull(transformation)
+                .into(imageView)
         }
     }
 
@@ -96,6 +116,7 @@ sealed class ImageSetStrategy {
         override fun invoke(imageView: ImageView) {
             PicassoWrapper.client
                 .load(path)
+                .applyTransformationIfNotNull(transformation)
                 .let { requestCreator ->
                     if (placeholderId != null) requestCreator.placeholder(placeholderId)
                     if (errorId == null) requestCreator
@@ -110,6 +131,7 @@ sealed class ImageSetStrategy {
             PicassoWrapper.client
                 .load(file)
                 .placeholder(backup)
+                .applyTransformationIfNotNull(transformation)
                 .into(imageView)
         }
     }

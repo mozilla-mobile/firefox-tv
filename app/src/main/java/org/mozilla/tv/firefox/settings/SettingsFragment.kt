@@ -34,6 +34,7 @@ import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.fxa.FxaRepo
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.PicassoWrapper
+import org.mozilla.tv.firefox.utils.RoundCornerTransformation
 
 const val KEY_SETTINGS_TYPE = "KEY_SETTINGS_TYPE"
 
@@ -159,7 +160,9 @@ class SettingsFragment : Fragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     view.userDisplayName.text = it.profile.displayName
-                    it.profile.avatarSetStrategy.invoke(view.avatarImage)
+                    it.profile.avatarSetStrategy
+                        .setTransformation(RoundCornerTransformation(view.avatarImage.width.toFloat()))
+                        .invoke(view.avatarImage)
                 },
             accountState
                 .filter { it::class.java != FxaRepo.AccountState.AuthenticatedWithProfile::class.java }
