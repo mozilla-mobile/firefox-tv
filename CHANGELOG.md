@@ -14,6 +14,7 @@ It diverges in the following ways:
 ## 4.3 - 2019-08-26
 ### Added
 - (disabled by default) Support for Amazon Device Messaging (#2528)
+- Experiment for turbo mode rebrand (#2689)
 
 ### Fixed
 - Fullscreen videos were offset if the page was scrolled down before fullscreening. This fix will not work under certain conditions and on certain sites (#2540. #2541)
