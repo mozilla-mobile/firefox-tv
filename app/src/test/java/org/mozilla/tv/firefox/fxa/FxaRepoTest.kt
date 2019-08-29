@@ -13,8 +13,8 @@ import io.mockk.mockkObject
 import io.mockk.verify
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
+import io.reactivex.subjects.PublishSubject
 import mozilla.components.concept.sync.Avatar
-import mozilla.components.concept.sync.DeviceEvent
 import mozilla.components.concept.sync.DeviceType
 import mozilla.components.concept.sync.OAuthAccount
 import mozilla.components.concept.sync.Profile
@@ -30,8 +30,10 @@ import org.mozilla.tv.firefox.telemetry.SentryIntegration
 class FxaRepoTest {
 
     @MockK(relaxed = true) private lateinit var accountManager: FxaAccountManager
-    @MockK(relaxed = true) private lateinit var admIntegration: ADMIntegration
     @MockK(relaxed = true) private lateinit var sentryIntegration: SentryIntegration
+
+    private lateinit var admIntegration: ADMIntegration
+    private lateinit var receivedTabsRaw: PublishSubject<ADMIntegration.ReceivedTabs>
 
     private lateinit var fxaRepo: FxaRepo
     private lateinit var accountState: Observable<FxaRepo.AccountState>
@@ -43,6 +45,11 @@ class FxaRepoTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
+
+        receivedTabsRaw = PublishSubject.create()
+        admIntegration = mockk(relaxed = true) {
+            every { receivedTabsRaw } returns this@FxaRepoTest.receivedTabsRaw
+        }
 
         val context = mockk<Context>()
         fxaRepo = FxaRepo(context, accountManager, admIntegration, sentryIntegration)
@@ -197,9 +204,9 @@ class FxaRepoTest {
         ))
 
         val inputTabData = expectedTabUrls.mapIndexed { i, url -> TabData("tab title $i", url) }
-        val tabReceivedEvent = mockTabReceivedEvent(DeviceType.DESKTOP, expectedDeviceName, inputTabData)
+        val tabReceivedEvent = mockADMTabReceivedEvent(DeviceType.DESKTOP, expectedDeviceName, inputTabData)
 
-        fxaRepo.deviceEventsObserver.onEvents(listOf(tabReceivedEvent))
+        receivedTabsRaw.onNext(tabReceivedEvent)
 
         receivedTabsTestObs.assertValues(expected)
     }
@@ -213,9 +220,9 @@ class FxaRepoTest {
         )
 
         val inputTabData = expectedTabUrls.mapIndexed { i, url -> TabData("tab title $i", url) }
-        val tabReceivedEvent = mockTabReceivedEventWithNullDevice(inputTabData)
+        val tabReceivedEvent = mockADMTabReceivedEventWithNullDevice(inputTabData)
 
-        fxaRepo.deviceEventsObserver.onEvents(listOf(tabReceivedEvent))
+        receivedTabsRaw.onNext(tabReceivedEvent)
 
         receivedTabsTestObs.assertValues(expected)
     }
@@ -235,18 +242,18 @@ class FxaRepoTest {
 
         val inputTabUrls = listOf(" ", "") + expectedTabUrls + listOf("  ", "", " ")
         val inputTabData = inputTabUrls.mapIndexed { i, url -> TabData("tab title $i", url) }
-        val tabReceivedEvent = mockTabReceivedEventWithNullDevice(inputTabData)
+        val tabReceivedEvent = mockADMTabReceivedEventWithNullDevice(inputTabData)
 
-        fxaRepo.deviceEventsObserver.onEvents(listOf(tabReceivedEvent))
+        receivedTabsRaw.onNext(tabReceivedEvent)
 
         receivedTabsTestObs.assertValues(expected)
     }
 
     @Test
     fun `WHEN a receive tab event occurs with empty entries THEN sentry records an event and receivedTabs does not emit`() {
-        val tabReceivedEvent = DeviceEvent.TabReceived(null, emptyList())
+        val tabReceivedEvent = ADMIntegration.ReceivedTabs(null, emptyList())
 
-        fxaRepo.deviceEventsObserver.onEvents(listOf(tabReceivedEvent))
+        receivedTabsRaw.onNext(tabReceivedEvent)
 
         verify(exactly = 1) { sentryIntegration.captureAndLogError(any(), any()) }
         receivedTabsTestObs.assertEmpty()
@@ -255,37 +262,30 @@ class FxaRepoTest {
     @Test
     fun `WHEN a receive tab event occurs with only blank URLs THEN sentry records an event and receivedTabs does not emit`() {
         val inputTabData = List(2) { TabData(title = "TabName $it", url = "   ") }
-        val tabReceivedEvent = mockTabReceivedEventWithNullDevice(inputTabData)
+        val tabReceivedEvent = mockADMTabReceivedEventWithNullDevice(inputTabData)
 
-        fxaRepo.deviceEventsObserver.onEvents(listOf(tabReceivedEvent))
+        receivedTabsRaw.onNext(tabReceivedEvent)
 
         verify(exactly = 1) { sentryIntegration.captureAndLogError(any(), any()) }
         receivedTabsTestObs.assertEmpty()
     }
 
-    @Test
-    fun `WHEN an empty list of device events occurs THEN received tabs does not emit`() {
-        fxaRepo.deviceEventsObserver.onEvents(emptyList())
-        receivedTabsTestObs.assertEmpty()
-    }
-
-    private fun mockTabReceivedEvent(
+    private fun mockADMTabReceivedEvent(
         deviceTypeArg: DeviceType = DeviceType.UNKNOWN,
         deviceName: String = "Name not entered",
-        entriesArg: List<TabData> = emptyList()
-    ): DeviceEvent.TabReceived = mockk {
-        every { from } returns mockk {
+        tabDataArg: List<TabData> = emptyList()
+    ): ADMIntegration.ReceivedTabs = ADMIntegration.ReceivedTabs(
+        device = mockk {
             every { deviceType } returns deviceTypeArg
             every { displayName } returns deviceName
-        }
+        },
+        tabData = tabDataArg
+    )
 
-        every { entries } returns entriesArg
-    }
-
-    private fun mockTabReceivedEventWithNullDevice(
-        entriesArg: List<TabData>
-    ): DeviceEvent.TabReceived = mockk {
-        every { from } returns null
-        every { entries } returns entriesArg
-    }
+    private fun mockADMTabReceivedEventWithNullDevice(
+        tabData: List<TabData>
+    ): ADMIntegration.ReceivedTabs = ADMIntegration.ReceivedTabs(
+        device = null,
+        tabData = tabData
+    )
 }
