@@ -9,7 +9,7 @@ It diverges in the following ways:
 
 ## Unreleased
 ### Added
-- Receive tabs onboarding screen (#2495)
+- (disabled by default) Receive tabs onboarding screen (#2495)
 
 ### Changed
 - Stripped out code for unsupported architectures (#2647)

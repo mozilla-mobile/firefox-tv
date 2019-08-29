@@ -79,15 +79,21 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        
-        <activity android:name=".onboarding.OnboardingActivity"
-                  android:theme="@style/AppTheme"/>
 
-        <activity android:name=".channels.ChannelOnboardingActivity"
-            android:theme="@style/AppTheme.Transparent"/>
+        <activity
+            android:name=".onboarding.OnboardingActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
 
-        <activity android:name=".onboarding.ReceiveTabPreboardingActivity"
-            android:theme="@style/AppTheme.Transparent"/>
+        <activity
+            android:name=".channels.ChannelOnboardingActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.Transparent" />
+
+        <activity
+            android:name=".onboarding.ReceiveTabPreboardingActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.Transparent" />
 
         <!-- Allows MediaSessionCallbacks to be called while a voice command is active. Without
              this, the video pauses for the voice command, resumes when the voice command ends, and

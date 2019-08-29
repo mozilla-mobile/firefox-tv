@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,7 +13,7 @@
     <TextView
         android:id="@+id/titleText"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="72dp"
         android:text="@string/receive_tab_onboarding_title"
         android:textColor="@color/photonGrey10"
@@ -37,7 +41,9 @@
         android:id="@+id/descriptionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
         android:fontFamily="@string/font_ember_regular"
         android:textColor="@color/photonGrey10_a80p"
         android:textSize="18sp"
