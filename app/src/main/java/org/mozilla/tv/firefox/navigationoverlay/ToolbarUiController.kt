@@ -153,10 +153,14 @@ class ToolbarUiController(
 
             layout.desktopModeButton.isChecked = it.desktopModeChecked
             layout.turboButton.isChecked = it.turboChecked
-            val turboText = layout.context.resources.getString(
-                turboButtonContent.contentDescriptionId,
-                if (it.turboChecked) "ON" else "OFF"
-            )
+
+            val resources = layout.context.resources
+            val turboText = if (it.turboChecked){
+                resources.getString(turboButtonContent.enabledTextId)
+            } else {
+                resources.getString(turboButtonContent.disabledTextId)
+            }
+
             layout.turboButton.contentDescription = turboText
             tooltipView.tooltip.text = turboText
 

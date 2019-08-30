@@ -121,9 +121,11 @@
 
     <string name="turbo_mode">Turbo Mode</string>
     <!-- This string will be displayed underneath the Enhanced Tracking Protection button (formerly
-         'Turbo mode') when it is highlighted.
-         %1$s will be replaced by the current status (i.e., ON or OFF) -->
-    <string name="toolbar_etp">Enhanced Tracking Protection %1$s</string>
+         'Turbo mode') when it is highlighted and ETP is currently active. -->
+    <string name="toolbar_etp_on">Enhanced Tracking Protection ON</string>
+    <!-- This string will be displayed underneath the Enhanced Tracking Protection button (formerly
+         'Turbo mode') when it is highlighted and ETP is currently inactive. -->
+    <string name="toolbar_etp_off">Enhanced Tracking Protection OFF</string>
     <!-- Title text for Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen -->
     <string name="onboarding_etp_title">Enhanced Tracking Protection</string>
     <!-- Description text for Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen -->
