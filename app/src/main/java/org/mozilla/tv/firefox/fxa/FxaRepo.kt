@@ -28,6 +28,7 @@ import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AuthenticatedWithProfile
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NeedsReauthentication
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NotAuthenticated
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
+import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
 private val logger = Logger("FxaRepo")
 
@@ -47,6 +48,7 @@ class FxaRepo(
     val context: Context,
     val accountManager: FxaAccountManager = newInstanceDefaultAccountManager(context),
     val admIntegration: ADMIntegration, // Consider moving to an FxaReceiveTabsUseCase or rm this comment.
+    private val telemetryIntegration: TelemetryIntegration = TelemetryIntegration.INSTANCE,
     private val sentryIntegration: SentryIntegration = SentryIntegration
 ) {
 
@@ -79,6 +81,7 @@ class FxaRepo(
     val receivedTabs: Observable<ReceivedTabs> = admIntegration.receivedTabsRaw
         .mapToReceivedTabs()
         .filterInvalidTabs(sentryIntegration)
+        .doOnNext { telemetryIntegration.receivedTabEvent(it) }
 
     init {
         accountManager.register(accountObserver)

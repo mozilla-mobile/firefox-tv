@@ -60,8 +60,21 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 | Pocket channel: unique videos clicked per session    | aggregate  | click                   | pocket_video      | `<int>`    |            |
 | App opened from view intent                          | action     | view_intent             | app               |            |            |
 | Opening the overlay forced a video out of fullscreen | action     | programmatically_closed | full_screen_video |            |            |
+| Received tab(s) (via FxA send tab feature)**         | action     | received_tab            |                   |            | `device_type`*** / `total`**** |
 
 (*) This event is sent at the end of every session.
+(**) If a user's tab appears in the UI, this event is sent. If we receive a tab push event that the user does not see
+because it does not pass validation (e.g. it contains blank URLs), we record the error in Sentry instead.
+(**) `device_type` is the type of the device that sent the tabs. These can currently be:
+- `desktop`
+- `mobile`
+- `tablet`
+- `tv`
+- `vr`
+- `unknown`
+(***) In a single send tab event, the server can send multiple tabs from a single device: `total` is the number of tabs received in this event.
+
+``
 
 ### Browser Overlay
 | Event                                  | category | method                | object       | value                    | extra.       |
