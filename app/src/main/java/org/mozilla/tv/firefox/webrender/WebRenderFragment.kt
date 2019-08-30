@@ -260,7 +260,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     private fun observeReceivedTabs(): Disposable {
         return serviceLocator!!.fxaRepo.receivedTabs.subscribe {
-            // TODO: what do we do if we receive more than one url?
+            // TODO: Gracefully handle receiving multiple tabs around the same time. #2777
             serviceLocator!!.screenController.showBrowserScreenForUrl(fragmentManager!!, it.urls[0])
 
             val toastText = if (it.sendingDevice == null) {
