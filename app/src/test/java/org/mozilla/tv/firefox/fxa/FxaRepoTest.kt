@@ -26,10 +26,12 @@ import org.junit.Test
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.channels.ImageSetStrategy
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
+import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 
 class FxaRepoTest {
 
     @MockK(relaxed = true) private lateinit var accountManager: FxaAccountManager
+    @MockK(relaxed = true) private lateinit var telemetryIntegration: TelemetryIntegration
     @MockK(relaxed = true) private lateinit var sentryIntegration: SentryIntegration
 
     private lateinit var admIntegration: ADMIntegration
@@ -52,7 +54,7 @@ class FxaRepoTest {
         }
 
         val context = mockk<Context>()
-        fxaRepo = FxaRepo(context, accountManager, admIntegration, sentryIntegration)
+        fxaRepo = FxaRepo(context, accountManager, admIntegration, telemetryIntegration, sentryIntegration)
         accountState = fxaRepo.accountState
         accountStateTestObs = accountState.test()
 
@@ -268,6 +270,14 @@ class FxaRepoTest {
 
         verify(exactly = 1) { sentryIntegration.captureAndLogError(any(), any()) }
         receivedTabsTestObs.assertEmpty()
+    }
+
+    @Test
+    fun `WHEN a receive tab event occurs with non-blank URLs THEN telemetry records the event`() {
+        val tabEvent = mockADMTabReceivedEventWithNullDevice(listOf(TabData("TabName", url = "https://mozilla.org")))
+        receivedTabsRaw.onNext(tabEvent)
+
+        verify(exactly = 1) { telemetryIntegration.receivedTabEvent(any()) }
     }
 
     private fun mockADMTabReceivedEvent(

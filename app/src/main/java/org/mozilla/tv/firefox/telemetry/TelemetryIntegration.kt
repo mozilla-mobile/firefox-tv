@@ -12,6 +12,7 @@ import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
 import android.view.InputDevice
 import android.view.KeyEvent
+import mozilla.components.concept.sync.DeviceType
 import mozilla.components.support.ktx.android.os.resetAfter
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
 import org.mozilla.tv.firefox.utils.Assert
@@ -28,6 +29,7 @@ import org.mozilla.tv.firefox.channels.SettingsButton
 import org.mozilla.tv.firefox.channels.SettingsScreen
 import org.mozilla.tv.firefox.channels.SettingsTile
 import org.mozilla.tv.firefox.channels.TileSource
+import org.mozilla.tv.firefox.fxa.ReceivedTabs
 import java.util.Collections
 
 private const val SHARED_PREFS_KEY = "telemetryLib" // Don't call it TelemetryWrapper to avoid accidental IDE rename.
@@ -72,6 +74,7 @@ open class TelemetryIntegration protected constructor(
         const val VIEW_INTENT = "view_intent"
         const val IMPRESSION = "impression"
         const val PROGRAMMATICALLY_CLOSED = "programmatically_closed"
+        const val RECEIVED_TAB = "received_tab"
     }
 
     private object Object {
@@ -119,6 +122,7 @@ open class TelemetryIntegration protected constructor(
         const val AUTOCOMPLETE = "autocomplete"
         const val SOURCE = "source"
         const val ERROR_CODE = "error_code"
+        const val DEVICE_TYPE = "device_type"
 
         // We need this second source key because we use SOURCE when using this key.
         // For the const value, "autocomplete_source" exceeds max extra key length.
@@ -433,6 +437,23 @@ open class TelemetryIntegration protected constructor(
     fun recordActiveExperiments(experimentNames: List<String>) {
         TelemetryHolder.get().recordActiveExperiments(experimentNames)
     }
+
+    fun receivedTabEvent(receivedTabs: ReceivedTabs) {
+        val internalDeviceType = when (receivedTabs.sendingDevice?.deviceType) {
+            DeviceType.DESKTOP -> ReceivedTabDeviceType.DESKTOP
+            DeviceType.MOBILE -> ReceivedTabDeviceType.MOBILE
+            DeviceType.TABLET -> ReceivedTabDeviceType.TABLET
+            DeviceType.TV -> ReceivedTabDeviceType.TV
+            DeviceType.VR -> ReceivedTabDeviceType.VR
+
+            DeviceType.UNKNOWN, null -> ReceivedTabDeviceType.UNKNOWN
+        }.extra
+
+        TelemetryEvent.create(Category.ACTION, Method.RECEIVED_TAB, null)
+            .extra(Extra.DEVICE_TYPE, internalDeviceType)
+            .extra(Extra.TOTAL, receivedTabs.urls.size.toString())
+            .queue()
+    }
 }
 
 enum class MediaSessionEventType(internal val value: String) {
@@ -444,9 +465,20 @@ enum class MediaSessionEventType(internal val value: String) {
 }
 
 enum class UrlTextInputLocation(internal val extra: String) {
-    // We hardcode the Strings so we can change the enum
+    // We hardcode the Strings so we can change the enum without changing the sent telemetry values.
     HOME("home"),
     MENU("menu"),
+}
+
+private enum class ReceivedTabDeviceType(val extra: String) {
+    // We hardcode the Strings so we can change the enum without changing the sent telemetry values.
+    DESKTOP("desktop"),
+    MOBILE("mobile"),
+    TABLET("tablet"),
+    TV("tv"),
+    VR("vr"),
+
+    UNKNOWN("unknown")
 }
 
 /** Counts the number of unique home tiles per session the user has clicked on. */
