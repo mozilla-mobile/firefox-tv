@@ -96,11 +96,10 @@ sealed class ImageSetStrategy {
         return this
     }
 
-    protected fun RequestCreator.applyTransformationIfNotNull(transformation: Transformation?): RequestCreator = this
-        .let { requestCreator ->
-            if (transformation != null) requestCreator.transform(transformation)
-            else requestCreator
-        }
+    protected fun RequestCreator.applyTransformationIfNotNull(transformation: Transformation?): RequestCreator {
+        return if (transformation != null) this.transform(transformation)
+        else this
+    }
 
     data class ById(val id: Int) : ImageSetStrategy() {
         override fun invoke(imageView: ImageView) {
