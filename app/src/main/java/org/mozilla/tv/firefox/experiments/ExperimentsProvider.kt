@@ -9,6 +9,7 @@ import io.sentry.Sentry
 import mozilla.components.service.fretboard.ExperimentDescriptor
 import mozilla.components.service.fretboard.Fretboard
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.components.locale.LocaleManager
 
 /**
  * [ExperimentsProvider] checks for experiment branch from [Fretboard] to provide its respective content.
@@ -106,15 +107,18 @@ class ExperimentsProvider(private val fretboard: Fretboard, private val context:
 
     private fun shouldUseTurboRebrand(): Boolean {
         val expDescriptor = checkBranchVariants(ExperimentConfig.TURBO_MODE_REBRAND)
-        return when {
+        val isInExperiment = when {
             expDescriptor == null -> false // Experiment unknown, or overridden to be false.
             expDescriptor.name.endsWith(ExperimentSuffix.A.value) -> false
             expDescriptor.name.endsWith(ExperimentSuffix.B.value) -> true
             else -> {
-                Sentry.capture(ExperimentIllegalStateException("Turbo Mode Rebrand Illegal Branch Name"))
+                Sentry.capture(ExperimentIllegalStateException("Turbo Mode Rebrand Illegal Branch Name: ${expDescriptor.name}"))
                 false
             }
         }
+        val isENLocale = LocaleManager.getInstance().currentLanguageIsEnglish(context)
+
+        return isENLocale && isInExperiment
     }
 
     data class TurboModeToolbarContent(
