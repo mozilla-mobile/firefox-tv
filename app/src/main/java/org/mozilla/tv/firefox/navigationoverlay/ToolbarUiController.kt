@@ -155,7 +155,7 @@ class ToolbarUiController(
             layout.turboButton.isChecked = it.turboChecked
 
             val resources = layout.context.resources
-            val turboText = if (it.turboChecked){
+            val turboText = if (it.turboChecked) {
                 resources.getString(turboButtonContent.enabledTextId)
             } else {
                 resources.getString(turboButtonContent.disabledTextId)
