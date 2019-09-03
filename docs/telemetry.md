@@ -38,7 +38,6 @@ As part of the event ping the most recent state of the user's setting is sent (d
 | Custom home tile count          | custom_home_tile_count          | `<int>`
 | Remote control name             | remote_control_name             | `<string>`
 | App ID                          | app_id                          | `<string>`*
-| FxA Reauthentication Required   | fxa_reauthentication_required   | `<boolean>`
 
 (*) This is the public, published app ID, and does not contain any user information
 
@@ -98,6 +97,7 @@ because it does not pass validation (e.g. it contains blank URLs), we record the
 | Fxa profile get tabs clicked           | action   | click                 | fxa          | fxa_get_tabs_button      |               |
 | Fxa profile sign out clicked           | action   | click                 | fxa          | fxa_sign_out_button      |               |
 | Fxa profile back button clicked        | action   | click                 | fxa          | fxa_go_back_button       |               |
+| Fxa needs reauthentication             | action   | change                | fxa          | fxa_needs_reauthentication | boolean     |
 
 (*)When the pin site switch is clicked, the state (on/off) of the desktop mode switch is also sent.
 
