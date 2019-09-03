@@ -75,11 +75,6 @@ class NavigationOverlayViewModel(
             }
 
     fun fxaButtonClicked(fragmentManager: FragmentManager) {
-        fun beginLogin() {
-                fxaLoginUseCase.beginLogin(fragmentManager)
-                TelemetryIntegration.INSTANCE.fxaLoginButtonClickEvent()
-        }
-
         fun showFxaProfileScreen() {
             screenController.showSettingsScreen(fragmentManager, SettingsScreen.FXA_PROFILE)
             TelemetryIntegration.INSTANCE.fxaShowProfileButtonClickEvent()
@@ -91,8 +86,14 @@ class NavigationOverlayViewModel(
                 // TODO The UI for this error state is not perfect. See #2721
                 showFxaProfileScreen()
             }
-            is AccountState.NeedsReauthentication -> beginLogin()
-            is AccountState.NotAuthenticated -> beginLogin()
+            is AccountState.NeedsReauthentication -> {
+                TelemetryIntegration.INSTANCE.fxaReauthorizeButtonClickEvent()
+                fxaLoginUseCase.beginLogin(fragmentManager)
+            }
+            is AccountState.NotAuthenticated -> {
+                TelemetryIntegration.INSTANCE.fxaLoginButtonClickEvent()
+                fxaLoginUseCase.beginLogin(fragmentManager)
+            }
         }
     }
 }
