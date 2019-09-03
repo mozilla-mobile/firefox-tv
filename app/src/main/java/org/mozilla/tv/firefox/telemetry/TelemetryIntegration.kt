@@ -115,6 +115,7 @@ open class TelemetryIntegration protected constructor(
         const val FXA_SHOW_PROFILE_BUTTON = "fxa_show_profile_button"
         const val FXA_GET_TABS_BUTTON = "fxa_get_tabs_button"
         const val FXA_SIGN_OUT_BUTTON = "fxa_sign_out_button"
+        const val FXA_REAUTHORIZE_BUTTON = "fxa_reauthorize_button"
     }
 
     private object Extra {
@@ -298,6 +299,10 @@ open class TelemetryIntegration protected constructor(
 
     fun fxaLoginButtonClickEvent() {
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.FXA, Value.FXA_LOGIN_BUTTON).queue()
+    }
+
+    fun fxaReauthorizeButtonClickEvent() {
+        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.FXA, Value.FXA_REAUTHORIZE_BUTTON).queue()
     }
 
     fun fxaShowProfileButtonClickEvent() {
