@@ -115,7 +115,7 @@ open class TelemetryIntegration protected constructor(
         const val FXA_SHOW_PROFILE_BUTTON = "fxa_show_profile_button"
         const val FXA_GET_TABS_BUTTON = "fxa_get_tabs_button"
         const val FXA_SIGN_OUT_BUTTON = "fxa_sign_out_button"
-        const val FXA_REAUTHORIZE_BUTTON = "fxa_reauthorize_button" // TODO should be reauthenticate
+        const val FXA_REAUTHENTICATE_BUTTON = "fxa_reauthenticate_button"
         const val FXA_NEEDS_REAUTHENTICATION = "fxa_needs_reauthentication"
     }
 
@@ -304,7 +304,7 @@ open class TelemetryIntegration protected constructor(
     }
 
     fun fxaReauthorizeButtonClickEvent() {
-        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.FXA, Value.FXA_REAUTHORIZE_BUTTON).queue()
+        TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.FXA, Value.FXA_REAUTHENTICATE_BUTTON).queue()
     }
 
     fun fxaShowProfileButtonClickEvent() {
