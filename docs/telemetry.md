@@ -38,6 +38,7 @@ As part of the event ping the most recent state of the user's setting is sent (d
 | Custom home tile count          | custom_home_tile_count          | `<int>`
 | Remote control name             | remote_control_name             | `<string>`
 | App ID                          | app_id                          | `<string>`*
+| FxA Reauthentication Required   | fxa_reauthentication_required   | `<boolean>`
 
 (*) This is the public, published app ID, and does not contain any user information
 
