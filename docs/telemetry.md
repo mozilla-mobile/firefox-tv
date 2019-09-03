@@ -97,7 +97,7 @@ because it does not pass validation (e.g. it contains blank URLs), we record the
 | Fxa profile get tabs clicked           | action   | click                 | fxa          | fxa_get_tabs_button      |               |
 | Fxa profile sign out clicked           | action   | click                 | fxa          | fxa_sign_out_button      |               |
 | Fxa profile back button clicked        | action   | click                 | fxa          | fxa_go_back_button       |               |
-| Fxa needs reauthentication             | action   | change                | fxa          | fxa_needs_reauthentication | boolean     |
+| Fxa needs reauthentication ****        | action   | change                | fxa          | fxa_needs_reauthentication | boolean     |
 
 (*)When the pin site switch is clicked, the state (on/off) of the desktop mode switch is also sent.
 
@@ -105,6 +105,8 @@ because it does not pass validation (e.g. it contains blank URLs), we record the
 This value existed from v3.2+, but is intended for removal. For versions after v3.8, the tile_id is included as an extra.
 
 (***)The tile_id is only collected for bundled tiles.
+
+(****)This probe is sent any time the user's FxA sign in state changes (debounced to avoid sending redundant pings). `boolean` will be `true` if the user requires reauthentication, or `false` otherwise
 
 (†) This probe was broken starting in the v3.6 release. It was fixed in the v3.9 release. At this time, it was determined
 the "No menu action taken" probe was redundant to the "Menu hidden by user" probe so the latter was removed. This probe

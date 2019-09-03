@@ -319,7 +319,7 @@ open class TelemetryIntegration protected constructor(
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.FXA, Value.FXA_SIGN_OUT_BUTTON).queue()
     }
 
-    fun fxaNeedsReauthentication(boolean: Boolean) {
+    fun doesFxaNeedReauthenticationEvent(boolean: Boolean) {
         TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.FXA, Value.FXA_NEEDS_REAUTHENTICATION)
             .extra(Extra.BOOLEAN, boolean.toString())
             .queue()

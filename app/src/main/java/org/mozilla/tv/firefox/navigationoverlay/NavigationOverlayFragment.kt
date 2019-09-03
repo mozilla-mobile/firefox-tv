@@ -259,7 +259,7 @@ class NavigationOverlayFragment : Fragment() {
         activity!!.moveTaskToBack(true)
     }
 
-    // TODO move this to the ToolbarUiController
+    // TODO other toolbar state is set in the ToolbarUiController. Move this there to be consistent
     private fun observeAccountState(): Disposable {
         val fxaRepo = serviceLocator.fxaRepo
 

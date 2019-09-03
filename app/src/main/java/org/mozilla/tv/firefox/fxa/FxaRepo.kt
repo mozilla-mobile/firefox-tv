@@ -115,10 +115,16 @@ class FxaRepo(
             // Filter out intermediate states. E.g., when signing in, we see 'NotAuthenticated',
             // then 'AuthenticatedWithProfile' and 'AuthenticatedNoProfile' in quick succession. We
             // only want to use the final value here
+            //
+            // This can strip out useful information if a user signs in and then immediately either
+            // signs out or the app process is killed. These both seem like narrow edge cases. We
+            // use a debounce of 10 seconds here to cover any slow networks during the sign in
+            // process, under the assumption that 10 seconds is still narrow enough that those two
+            // edge cases will still be infrequently hit.
             .debounce(10, TimeUnit.SECONDS)
             .map { it is NeedsReauthentication }
             .subscribe {
-                telemetryIntegration.fxaNeedsReauthentication(it)
+                telemetryIntegration.doesFxaNeedReauthenticationEvent(it)
             }
     }
 
