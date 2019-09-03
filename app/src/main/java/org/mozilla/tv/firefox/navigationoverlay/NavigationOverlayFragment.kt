@@ -259,6 +259,7 @@ class NavigationOverlayFragment : Fragment() {
         activity!!.moveTaskToBack(true)
     }
 
+    // TODO move this to the ToolbarUiController
     private fun observeAccountState(): Disposable {
         val fxaRepo = serviceLocator.fxaRepo
 
@@ -276,11 +277,16 @@ class NavigationOverlayFragment : Fragment() {
                         fxaButton.setImageResource(R.drawable.ic_avatar_authenticated_no_picture)
                         fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
                     }
-                    AccountState.NeedsReauthentication, AccountState.NotAuthenticated -> {
+                    AccountState.NotAuthenticated -> {
                         fxaButton.setImageResource(R.drawable.ic_fxa_login)
                         fxaButton.contentDescription =
                             resources.getString(R.string.fxa_navigation_item_new,
                                 resources.getString(R.string.app_name))
+                    }
+                    AccountState.NeedsReauthentication -> {
+                        fxaButton.setImageResource(R.drawable.ic_fxa_needs_reauthentication)
+                        fxaButton.contentDescription =
+                            resources.getString(R.string.fxa_navigation_item_sign_in_again)
                     }
                 }
             }
