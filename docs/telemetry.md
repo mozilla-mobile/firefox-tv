@@ -92,6 +92,7 @@ because it does not pass validation (e.g. it contains blank URLs), we record the
 | No menu action taken ††                | aggregate| no_action_taken       | menu         |                          |               |
 | Exit Firefox clicked                   | action   | click                 | menu         | exit                     |               |
 | Fxa login clicked                      | action   | click                 | fxa          | fxa_login_button         |               |
+| Fxa reauthorize button clicked         | action   | click                 | fxa          | fxa_reauthorize_button   |               |
 | Fxa show profile screen                | action   | click                 | fxa          | fxa_show_profile_button  |               |
 | Fxa profile get tabs clicked           | action   | click                 | fxa          | fxa_get_tabs_button      |               |
 | Fxa profile sign out clicked           | action   | click                 | fxa          | fxa_sign_out_button      |               |
