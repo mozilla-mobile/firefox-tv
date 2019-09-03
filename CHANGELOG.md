@@ -15,7 +15,7 @@ It diverges in the following ways:
 - Stripped out code for unsupported architectures (#2647)
 
 ### Added
-- FxA reauthentication state icon, text, and telemetry (#2493)
+- (disabled by default) FxA reauthentication state icon, text, and telemetry (#2493)
 
 ## 4.3 - 2019-08-26
 ### Added
