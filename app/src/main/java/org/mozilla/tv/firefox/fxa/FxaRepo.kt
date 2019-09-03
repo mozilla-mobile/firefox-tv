@@ -4,6 +4,7 @@
 
 package org.mozilla.tv.firefox.fxa
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.NONE
@@ -29,6 +30,7 @@ import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NeedsReauthentication
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NotAuthenticated
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
+import java.util.concurrent.TimeUnit
 
 private val logger = Logger("FxaRepo")
 
@@ -90,6 +92,8 @@ class FxaRepo(
         accountManager.initAsync() // If user is already logged in, the appropriate observers will be triggered.
 
         admIntegration.createSendTabFeature(accountManager)
+
+        setupTelemetry()
     }
 
     fun logout() {
@@ -103,6 +107,19 @@ class FxaRepo(
      */
     fun beginLoginInternalAsync(): Deferred<String?> {
         return accountManager.beginAuthenticationAsync()
+    }
+
+    @SuppressLint("CheckResult") // This survives for the duration of the app
+    private fun setupTelemetry() {
+        accountState
+            // Filter out intermediate states. E.g., when signing in, we see 'NotAuthenticated',
+            // then 'AuthenticatedWithProfile' and 'AuthenticatedNoProfile' in quick succession. We
+            // only want to use the final value here
+            .debounce(10, TimeUnit.SECONDS)
+            .map { it is NeedsReauthentication }
+            .subscribe {
+                telemetryIntegration.fxaNeedsReauthentication(it)
+            }
     }
 
     /**

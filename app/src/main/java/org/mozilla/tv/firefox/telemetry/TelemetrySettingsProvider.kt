@@ -8,7 +8,6 @@ import android.content.Context
 import org.mozilla.telemetry.measurement.SettingsMeasurement
 import org.mozilla.tv.firefox.BuildConfig
 import org.mozilla.tv.firefox.ext.serviceLocator
-import org.mozilla.tv.firefox.fxa.FxaRepo
 
 /**
  * A SettingsProvider that provides custom value getters when settings values
@@ -21,7 +20,6 @@ class TelemetrySettingsProvider(private val appContext: Context) : SettingsMeasu
             key == PREF_TOTAL_HOME_TILE_COUNT ||
             key == APP_ID ||
             key == PREF_REMOTE_CONTROL_NAME ||
-            key == FXA_REAUTHENTICATION_REQUIRED ||
             super.containsKey(key)
     }
 
@@ -31,8 +29,6 @@ class TelemetrySettingsProvider(private val appContext: Context) : SettingsMeasu
                 appContext.serviceLocator.pinnedTileRepo.bundledTilesSize
         APP_ID -> BuildConfig.APPLICATION_ID
         PREF_REMOTE_CONTROL_NAME -> appContext.getSharedPreferences(SHARED_PREFS_KEY, 0).getStringSet(KEY_REMOTE_CONTROL_NAME, null)
-        FXA_REAUTHENTICATION_REQUIRED -> appContext.serviceLocator.fxaRepo.accountState.blockingFirst() is
-            FxaRepo.AccountState.NeedsReauthentication
         else -> super.getValue(key)
     }
 
@@ -43,7 +39,6 @@ class TelemetrySettingsProvider(private val appContext: Context) : SettingsMeasu
         const val PREF_TOTAL_HOME_TILE_COUNT = "total_home_tile_count"
         const val APP_ID = "app_id"
         const val PREF_REMOTE_CONTROL_NAME = "remote_control_name"
-        const val FXA_REAUTHENTICATION_REQUIRED = "fxa_reauthentication_required"
 
         const val SHARED_PREFS_KEY = "telemetryLib"
         const val KEY_REMOTE_CONTROL_NAME = "remoteControlName"

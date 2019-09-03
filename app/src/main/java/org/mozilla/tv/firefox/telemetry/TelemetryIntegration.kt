@@ -115,7 +115,8 @@ open class TelemetryIntegration protected constructor(
         const val FXA_SHOW_PROFILE_BUTTON = "fxa_show_profile_button"
         const val FXA_GET_TABS_BUTTON = "fxa_get_tabs_button"
         const val FXA_SIGN_OUT_BUTTON = "fxa_sign_out_button"
-        const val FXA_REAUTHORIZE_BUTTON = "fxa_reauthorize_button"
+        const val FXA_REAUTHORIZE_BUTTON = "fxa_reauthorize_button" // TODO should be reauthenticate
+        const val FXA_NEEDS_REAUTHENTICATION = "fxa_needs_reauthentication"
     }
 
     private object Extra {
@@ -129,6 +130,7 @@ open class TelemetryIntegration protected constructor(
         // For the const value, "autocomplete_source" exceeds max extra key length.
         const val AUTOCOMPLETE_SOURCE = "autocompl_src"
         const val TILE_ID = "tile_id"
+        const val BOOLEAN = "boolean"
     }
 
     // Available on any thread: we synchronize.
@@ -315,6 +317,12 @@ open class TelemetryIntegration protected constructor(
 
     fun fxaProfileSignOutButtonClickEvent() {
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.FXA, Value.FXA_SIGN_OUT_BUTTON).queue()
+    }
+
+    fun fxaNeedsReauthentication(boolean: Boolean) {
+        TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.FXA, Value.FXA_NEEDS_REAUTHENTICATION)
+            .extra(Extra.BOOLEAN, boolean.toString())
+            .queue()
     }
 
     /**

@@ -39,8 +39,7 @@ object TelemetryFactory {
                         TelemetrySettingsProvider.PREF_CUSTOM_HOME_TILE_COUNT,
                         TelemetrySettingsProvider.PREF_TOTAL_HOME_TILE_COUNT,
                         TelemetrySettingsProvider.PREF_REMOTE_CONTROL_NAME,
-                        TelemetrySettingsProvider.APP_ID,
-                        TelemetrySettingsProvider.FXA_REAUTHENTICATION_REQUIRED
+                        TelemetrySettingsProvider.APP_ID
                 )
                 .setSettingsProvider(TelemetrySettingsProvider(context))
 
