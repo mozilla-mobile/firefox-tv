@@ -13,6 +13,7 @@ import io.mockk.mockkObject
 import io.mockk.verify
 import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
+import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.PublishSubject
 import mozilla.components.concept.sync.Avatar
 import mozilla.components.concept.sync.DeviceType
@@ -22,13 +23,26 @@ import mozilla.components.concept.sync.TabData
 import mozilla.components.service.fxa.manager.FxaAccountManager
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Test
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.channels.ImageSetStrategy
+import org.mozilla.tv.firefox.helpers.RxTestHelper
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
+import java.util.concurrent.TimeUnit
 
 class FxaRepoTest {
+
+    companion object {
+        private lateinit var testScheduler: TestScheduler
+
+        @BeforeClass
+        @JvmStatic
+        fun beforeClass() {
+            testScheduler = RxTestHelper.forceRxTestSchedulerInBeforeClass()
+        }
+    }
 
     @MockK(relaxed = true) private lateinit var accountManager: FxaAccountManager
     @MockK(relaxed = true) private lateinit var telemetryIntegration: TelemetryIntegration
@@ -278,6 +292,29 @@ class FxaRepoTest {
         receivedTabsRaw.onNext(tabEvent)
 
         verify(exactly = 1) { telemetryIntegration.receivedTabEvent(any()) }
+    }
+
+    @Test
+    fun `WHEN fxa state changes THEN telemetry events carrying reauthentication state are sent`() {
+        fun waitPastDebounce() {
+            testScheduler.advanceTimeBy(11, TimeUnit.SECONDS)
+        }
+
+        fxaRepo.accountObserver.onAuthenticated(mockk(relaxed = true), mockk(relaxed = true))
+        waitPastDebounce()
+        verify(exactly = 1) { telemetryIntegration.doesFxaNeedReauthenticationEvent(false) }
+
+        fxaRepo.accountObserver.onLoggedOut()
+        waitPastDebounce()
+        verify(exactly = 2) { telemetryIntegration.doesFxaNeedReauthenticationEvent(false) }
+
+        fxaRepo.accountObserver.onProfileUpdated(mockk(relaxed = true))
+        waitPastDebounce()
+        verify(exactly = 3) { telemetryIntegration.doesFxaNeedReauthenticationEvent(false) }
+
+        fxaRepo.accountObserver.onAuthenticationProblems()
+        waitPastDebounce()
+        verify(exactly = 1) { telemetryIntegration.doesFxaNeedReauthenticationEvent(true) }
     }
 
     private fun mockADMTabReceivedEvent(
