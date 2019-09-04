@@ -257,4 +257,6 @@
     <string name="fxa_settings_primary_button">Abas do %1$s</string>
     <!-- Button text to sign out from the Firefox Accounts settings page -->
     <string name="fxa_settings_secondary_button">Sair</string>
+    <!-- This text is announced to screen reader users when they focus an image that will display the avatar of the currently logged in user -->
+    <string name="content_description_fxa_profile_avatar_image">Imagem de avatar do perfil do usuário</string>
 </resources>
