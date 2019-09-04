@@ -162,7 +162,7 @@ class ToolbarUiController(
             }
 
             layout.turboButton.contentDescription = turboText
-            tooltipView.tooltip.text = turboText
+            if (layout.turboButton.hasFocus()) tooltipView.tooltip.text = turboText
 
             if (!hasUserChangedURLSinceEditTextFocused) {
                 // The url can get updated in the background, e.g. if a loading page is redirected. We
