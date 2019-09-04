@@ -154,7 +154,7 @@ class ExperimentsProvider(private val fretboard: Fretboard, private val context:
             titleId = R.string.onboarding_etp_title,
             descriptionId = R.string.onboarding_etp_description,
             enableButtonTextId = R.string.onboarding_etp_enable,
-            disableButtonTextId = R.string.onboarding_etp_disable,
+            disableButtonTextId = R.string.onboarding_etp_disable2,
             imageId = R.drawable.etp_onboarding,
             imageContentDescriptionId = R.string.onboarding_etp_image_a11y
         )
