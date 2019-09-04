@@ -135,7 +135,11 @@ API services currently supported are:
 * pocket_key
 
 ##### ADM API key
-To use ADM in debug builds, there must be a `<project-dir>/app/src/main/assets/api_key.txt` file that contains the api key. It is necessary that it is in the project's assets folder. Amazon will automatically provide an API key for production builds. See [ADM integration doc][adm] for more info.
+To use ADM in debug builds, there must be a `<project-dir>/app/src/main/assets/api_key.txt` file
+that contains the api key. It is necessary that it is in the project's assets folder.
+Amazon will automatically provide an API key for production builds. See
+[ADM integration doc][adm] for more details. If you're on the core team, we share debug keys: ask
+another developer for access.
 
 ## License
 
