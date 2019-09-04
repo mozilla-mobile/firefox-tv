@@ -281,4 +281,16 @@
     <string name="fxa_settings_secondary_button">Sign out</string>
     <!-- This text is announced to screen reader users when they focus an image that will display the avatar of the currently logged in user -->
     <string name="content_description_fxa_profile_avatar_image">User profile avatar image</string>
+
+    <!-- Strings for the prompt window for users to update the app. -->
+    <!-- Header string for the prompt shown to users to update the app.
+    %1$s will be replaced with Firefox. -->
+    <string name="update_prompt_header">Keep %1$s up to date</string>
+    <!-- Instruction text for the prompt shown to users to update the app.
+    %1$s and %2$s will be replaced with Firefox.-->
+    <string name="update_prompt_instruction">Update %1$s for the latest in performance and security. This update lets you send tabs from other %2$s browsers and view them here on the big screen.</string>
+    <!-- Button text to update the app. -->
+    <string name="update_prompt_primary_button">Update</string>
+    <!-- Button text to dismiss the prompt to update the app. -->
+    <string name="update_prompt_secondary_button">Not now</string>
 </resources>
