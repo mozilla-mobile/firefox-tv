@@ -53,8 +53,10 @@
         tools:ignore="ContentDescription"
         android:id="@+id/fxaButton"
         style="@style/NavigationButton"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_fxa_login"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:tint="@null"/>
 
     <!-- Content description is set programmatically.-->
     <ImageButton

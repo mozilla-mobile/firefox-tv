@@ -55,6 +55,7 @@ import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
+import org.mozilla.tv.firefox.utils.RoundCornerTransformation
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.utils.ViewUtils
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
@@ -266,7 +267,9 @@ class NavigationOverlayFragment : Fragment() {
             .subscribe { accountState ->
                 when (accountState) {
                     is AccountState.AuthenticatedWithProfile -> {
-                        accountState.profile.avatarSetStrategy.invoke(fxaButton)
+                        accountState.profile.avatarSetStrategy
+                            .setTransformation(RoundCornerTransformation(fxaButton.width.toFloat()))
+                            .invoke(fxaButton)
                         fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
                     }
                     AccountState.AuthenticatedNoProfile -> {
