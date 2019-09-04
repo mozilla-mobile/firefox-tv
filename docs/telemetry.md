@@ -106,7 +106,9 @@ This value existed from v3.2+, but is intended for removal. For versions after v
 
 (***)The tile_id is only collected for bundled tiles.
 
-(****)This probe is sent any time the user's FxA sign in state changes (debounced to avoid sending redundant pings). `boolean` will be `true` if the user requires reauthentication, or `false` otherwise
+(****)This probe is sent any time the user's FxA sign in state changes (debounced to avoid sending redundant 
+pings). `boolean` will be `true` if the FxA repo state is `AccountState.NeedsReauthentication`. If it is any 
+other state, `boolean` will be `false` 
 
 (†) This probe was broken starting in the v3.6 release. It was fixed in the v3.9 release. At this time, it was determined
 the "No menu action taken" probe was redundant to the "Menu hidden by user" probe so the latter was removed. This probe
