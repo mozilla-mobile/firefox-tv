@@ -1,160 +1,124 @@
-# This Source Code Form is subject to the terms of the Mozilla Public
-# License, v. 2.0. If a copy of the MPL was not distributed with this
-# file, You can obtain one at http://mozilla.org/MPL/2.0/.
-
-version: 0
-allowPullRequests: collaborators
+version: 1
+policy:
+  pullRequests: collaborators
 tasks:
-###############################################################################
-# Task: Pull requests
-#
-# Triggered whenever a pull request is opened or updated.
-#
-# - Build the app (all flavors)
-# - Run unit tests
-# - Run code quality tools (findbugs, lint, checkstyle etc.)
-###############################################################################
-  - provisionerId: '{{ taskcluster.docker.provisionerId }}'
-    workerType: '{{ taskcluster.docker.workerType }}'
-    extra:
-      github:
-        events:
-          - pull_request.opened
-          - pull_request.edited
-          - pull_request.synchronize
-          - pull_request.reopened
-    scopes:
-    - "secrets:get:project/mobile/firefox-tv/tokens"
-    payload:
-      maxRunTime: 3600
-      deadline: "{{ '2 hours' | $fromNow }}"
-      image: 'mozillamobile/firefox-tv:2.3'
-      command:
-        - /bin/bash
-        - '--login'
-        - '-cx'
-        - >-
-          export TERM=dumb
-          && git fetch {{ event.head.repo.url }} {{ event.head.repo.branch }}
-          && git config advice.detachedHead false
-          && git checkout {{event.head.sha}}
-          && yes | sdkmanager --licenses
-          && ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
-          && ./gradlew -Pcoverage jacocoSystemDebugTestReport
-          && ./tools/taskcluster/upload-coverage-report.sh
-          && ./tools/taskcluster/download-firebase-sdk.sh
-          && ./tools/taskcluster/google-firebase-testlab-login.sh
-          && ./tools/taskcluster/execute-firebase-test.sh system/debug app-system-debug model=sailfish,version=25,orientation=landscape
-      artifacts:
-        'public/reports':
-          type: 'directory'
-          path: '/opt/firefox-tv/app/build/reports'
-          expires: "{{ '1 week' | $fromNow }}"
-
-      features:
-          taskclusterProxy: true
-
-    metadata:
-      name: Firefox for Amazon's Fire TV - Build - Pull Request
-      description: Building Firefox for Amazon's Fire TV (via Gradle) - triggered by a pull request.
-      owner: '{{ event.head.user.email }}'
-      source: '{{ event.head.repo.url }}'
-###############################################################################
-# Task: Master builds
-#
-# Triggered whenever something is pushed/merged to the master branch.
-#
-# - Build the app (all flavors)
-# - Run unit tests
-# - Run code quality tools (findbugs, lint, checkstyle etc.)
-# - Upload app and test build APKs to Bitbar Cloud and run UI tests
-#
-# - HACK: Used {{ event.head.repo.url }} instead of origin because origin routes to
-#   the Focus Android repo
-###############################################################################
-  - provisionerId: '{{ taskcluster.docker.provisionerId }}'
-    workerType: '{{ taskcluster.docker.workerType }}'
-    extra:
-      github:
-        events:
-          - push
-        branches:
-          - master
-    scopes:
-    - "secrets:get:project/mobile/firefox-tv/tokens"
-    payload:
-      maxRunTime: 3600
-      deadline: "{{ '2 hours' | $fromNow }}"
-      image: 'mozillamobile/firefox-tv:2.3'
-      command:
-        - /bin/bash
-        - '--login'
-        - '-cx'
-        - >-
-          export TERM=dumb
-          && git fetch {{ event.head.repo.url }}
-          && git config advice.detachedHead false
-          && git checkout {{event.head.sha}}
-          && yes | sdkmanager --licenses
-          && ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
-          && python ./tools/taskcluster/get-bitbar-token.py
-          && python ./tools/taskcluster/execute-bitbar-test.py system/debug app-system-debug
-      artifacts:
-        'public':
-          type: 'directory'
-          path: '/opt/firefox-tv/app/build/reports'
-          expires: "{{ '1 week' | $fromNow }}"
-
-      features:
-          taskclusterProxy: true
-
-    metadata:
-      name: Firefox for Amazon's Fire TV - Build - Master
-      description: Building Firefox for Amazon's Fire TV (via Gradle) - Master
-      owner: '{{ event.head.user.email }}'
-      source: '{{ event.head.repo.url }}'
-
-###############################################################################
-# Task: Release builds
-#
-# Triggered when a new tag or release is published (in any branch)
-#
-# - Build (unsigned) release versions of the app with release translations and
-#   secrets.
-###############################################################################
-  - provisionerId: '{{ taskcluster.docker.provisionerId }}'
-    workerType: '{{ taskcluster.docker.workerType }}'
-    extra:
-      github:
-        events:
-          - release
-    scopes:
-      - "secrets:get:project/mobile/firefox-tv/tokens"
-    payload:
-      maxRunTime: 3600
-      deadline: "{{ '2 hours' | $fromNow }}"
-      image: 'mozillamobile/firefox-tv:2.3'
-      command:
-        - /bin/bash
-        - '--login'
-        - '-cx'
-        - >-
-          git fetch origin --tags
-          && git config advice.detachedHead false
-          && git checkout {{ event.version }}
-          && yes | sdkmanager --licenses
-          && python tools/taskcluster/get-sentry-token.py
-          && python tools/taskcluster/get-pocket-token.py
-          && ./gradlew --no-daemon clean test assembleSystemRelease
-      artifacts:
-        'public':
-          type: 'directory'
-          path: '/opt/firefox-tv/app/build/outputs/apk'
-          expires: "{{ '1 week' | $fromNow }}"
-      features:
-        taskclusterProxy: true
-    metadata:
-      name: Firefox for Fire TV - Release build ({{ event.version }})
-      description: Building Firefox for Amazon's Fire TV (via Gradle) - Release
-      owner: '{{ event.head.user.email }}'
-      source: '{{ event.head.repo.url }}'
+  $let:
+    decision_task_id: {$eval: as_slugid("decision_task")}
+    repository:
+      $if: 'tasks_for == "github-pull-request"'
+      then: ${event.pull_request.head.repo.html_url}
+      else: ${event.repository.html_url}
+    head_rev:
+      $if: 'tasks_for == "github-pull-request"'
+      then: ${event.pull_request.head.sha}
+      else:
+        $if: 'tasks_for == "github-push"'
+        then: ${event.after}
+        else: ${event.release.tag_name}
+    trust_level:
+      $if: 'tasks_for in ["github-push", "github-release"] && event.repository.html_url == "https://github.com/mozilla-mobile/fenix"'
+      then: 3
+      else: 1
+    repository_full_name:
+      $if: 'tasks_for == "github-pull-request"'
+      then: ${event.pull_request.base.repo.full_name}
+      else: ${event.repository.full_name}
+  in:
+    $let:
+      assume_scope_prefix: assume:repo:github.com/${repository_full_name}
+      default_task_definition:
+        taskId: ${decision_task_id}
+        taskGroupId: ${decision_task_id}  # Must be explicit because of Chain of Trust
+        schedulerId: taskcluster-github
+        created: {$fromNow: ''}
+        deadline: {$fromNow: '2 hours'}
+        expires: {$fromNow: '1 year'}
+        provisionerId: aws-provisioner-v1
+        workerType: mobile-${trust_level}-decision
+        requires: all-completed
+        payload:
+          maxRunTime: 6000
+          image: mozillamobile/firefox-tv:2.3
+          command:
+            - /bin/bash
+            - --login
+            - -cx
+            # The rest of the command must be defined below
+          env:
+            TASK_ID: ${decision_task_id}
+            MOBILE_HEAD_REPOSITORY: ${repository}
+            MOBILE_HEAD_REV: ${head_rev}
+          features:
+            taskclusterProxy: true
+          artifacts:
+            public/task-graph.json:
+              type: file
+              path: /opt/firefox-tv/task-graph.json
+              expires: {$fromNow: '1 year'}
+            public/actions.json:
+              type: file
+              path: /opt/firefox-tv/actions.json
+              expires: {$fromNow: '1 year'}
+            public/parameters.yml:
+              type: file
+              path: /opt/firefox-tv/parameters.yml
+              expires: {$fromNow: '1 year'}
+        metadata:
+          name: 'Decision task'
+          description: ''
+          source: ${repository}/raw/${head_rev}/.taskcluster.yml
+    in:
+      - $if: 'tasks_for == "github-pull-request" && event["action"] in ["opened", "reopened", "edited", "synchronized"]'
+        then:
+          $mergeDeep:
+            - {$eval: 'default_task_definition'}
+            - scopes:
+                - ${assume_scope_prefix}:pull-request
+              payload:
+                command:
+                  - >-
+                    git fetch ${repository} ${event.pull_request.head.ref}
+                    && git config advice.detachedHead false
+                    && git checkout FETCH_HEAD
+                    && apt update
+                    && apt install -y python3-pip
+                    && pip3 install taskcluster
+                    && python3 tools/taskcluster/decision_task.py pull-request ${event.sender.login}@users.noreply.github.com ${event.pull_request.head.ref}
+              metadata:
+                owner: ${event.sender.login}@users.noreply.github.com
+      - $if: 'tasks_for == "github-push" && event["ref"] == "refs/heads/master"'
+        then:
+          $mergeDeep:
+            - {$eval: 'default_task_definition'}
+            - scopes:
+                - ${assume_scope_prefix}:branch:master
+              payload:
+                command:
+                  - >-
+                    git fetch ${repository} refs/heads/master
+                    && git config advice.detachedHead false
+                    && git checkout FETCH_HEAD
+                    && apt update
+                    && apt install -y python3-pip
+                    && pip3 install taskcluster
+                    && python3 tools/taskcluster/decision_task.py landed ${event.sender.login}@users.noreply.github.com
+              metadata:
+                owner: ${event.sender.login}@users.noreply.github.com
+      - $if: 'tasks_for == "github-release" && event["action"] == "published"'
+        then:
+          $mergeDeep:
+            - {$eval: 'default_task_definition'}
+            - scopes:
+                - ${assume_scope_prefix}:release
+              payload:
+                command:
+                  - >-
+                    git fetch ${repository} refs/tags/${event.release.tag_name}
+                    && git config advice.detachedHead false
+                    && git checkout FETCH_HEAD
+                    && apt update
+                    && apt install -y python3-pip
+                    && pip3 install taskcluster
+                    && python3 tools/taskcluster/decision_task.py release ${event.release.tag_name}
+              metadata:
+                owner: firefox-tv@mozilla.com
