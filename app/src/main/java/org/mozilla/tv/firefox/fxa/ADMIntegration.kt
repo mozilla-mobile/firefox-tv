@@ -5,7 +5,6 @@
 package org.mozilla.tv.firefox.fxa
 
 import android.app.Application
-import com.amazon.device.messaging.ADM
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import mozilla.components.concept.push.PushProcessor
@@ -16,9 +15,7 @@ import mozilla.components.feature.push.PushConfig
 import mozilla.components.feature.push.ServiceType
 import mozilla.components.feature.sendtab.SendTabFeature
 import mozilla.components.service.fxa.manager.FxaAccountManager
-import mozilla.components.support.base.log.logger.Logger
 
-private val logger = Logger("FFTV - ADMIntegration")
 private const val senderId = "fftv"
 
 /**
@@ -29,19 +26,11 @@ private const val senderId = "fftv"
  * you may see ClassNotFound log warnings - these can be safely ignored.
  */
 class ADMIntegration(private val app: Application) {
-    private val isADMAvailable = run {
-        // Suggested implementation from https://developer.amazon.com/docs/adm/integrate-your-app.html#gracefully-degrade-if-adm-is-unavailable
-        try {
-            Class.forName("com.amazon.device.messaging.ADM")
-            ADM(app).isSupported
-        } catch (e: ClassNotFoundException) {
-            logger.warn("ADM is not available on this device.")
-            false
-        }
-    }
+    private val admService = ADMService()
+    private val isADMAvailable = admService.isServiceAvailable(app)
 
     private val pushFeature by lazy {
-        AutoPushFeature(app, ADMService(), PushConfig(senderId = senderId, serviceType = ServiceType.ADM))
+        AutoPushFeature(app, admService, PushConfig(senderId = senderId, serviceType = ServiceType.ADM))
     }
 
     private val _receivedTabsRaw: PublishSubject<ReceivedTabs> = PublishSubject.create()
