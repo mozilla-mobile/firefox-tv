@@ -1,4 +1,4 @@
-# devv
+# devv spaghetti
 version: 1
 policy:
   pullRequests: collaborators
@@ -85,7 +85,7 @@ tasks:
                     && python3 tools/taskcluster/decision_task.py pull-request ${event.sender.login}@users.noreply.github.com ${event.pull_request.head.ref}
               metadata:
                 owner: ${event.sender.login}@users.noreply.github.com
-      - $if: 'tasks_for == "github-push" && event.ref == "refs/heads/master"'
+      - $if: 'tasks_for == "github-push" && event["ref"] == "refs/heads/master"'
         then:
           $mergeDeep:
             - {$eval: 'default_task_definition'}
