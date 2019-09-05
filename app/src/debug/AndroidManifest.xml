@@ -36,6 +36,8 @@
         android:protectionLevel="signature"/>
     <uses-permission android:name="${applicationId}.permission.RECEIVE_ADM_MESSAGE" />
     <uses-permission android:name="com.amazon.device.messaging.permission.RECEIVE" />
+    <!-- This permission is also brought in by androidx.work:work-runtime dependency. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <!-- *** ADM permissions end *** -->
 
     <application>
