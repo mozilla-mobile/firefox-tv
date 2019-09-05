@@ -67,9 +67,9 @@ class TaskBuilder:
             }
         )
 
-    def craft_release_task(self, tag):
+    def craft_release_build_task(self, tag):
         script = f'''
-        git fetch origin --tags
+        git fetch {self.repo_url} --tags
         git config advice.detachedHead false
         git checkout {tag}
         yes | sdkmanager --licenses
