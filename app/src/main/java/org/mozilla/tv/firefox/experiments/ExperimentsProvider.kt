@@ -19,7 +19,7 @@ import org.mozilla.tv.firefox.components.locale.LocaleManager
  * since fretboard doesn't necessarily load the latest changes from Kinto backend. See
  * [FretboardProvider.updateExperiments] and [FretboardProvider.loadExperiments] for more details
  */
-class ExperimentsProvider(private val fretboard: Fretboard, private val context: Context) {
+open class ExperimentsProvider(private val fretboard: Fretboard, private val context: Context) {
 
     fun getAAExitButtonExperiment(expConfig: ExperimentConfig): String {
         val expDescriptor = checkBranchVariants(expConfig)
@@ -78,7 +78,7 @@ class ExperimentsProvider(private val fretboard: Fretboard, private val context:
         }
     }
 
-    fun shouldShowSendTab(): Boolean {
+    open fun shouldShowSendTab(): Boolean {
         val expDescriptor = checkBranchVariants(ExperimentConfig.SEND_TAB)
         return when {
             expDescriptor == null -> false // Experiment unknown, or overridden to be false.

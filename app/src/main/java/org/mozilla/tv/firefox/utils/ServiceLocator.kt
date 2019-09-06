@@ -78,7 +78,6 @@ open class ServiceLocator(val app: Application) {
 
     val intentLiveData by lazy { MutableLiveData<Consumable<ValidatedIntentData?>>() }
     val fretboardProvider: FretboardProvider by lazy { FretboardProvider(app) }
-    val experimentsProvider by lazy { ExperimentsProvider(fretboardProvider.fretboard, app) }
     val turboMode: TurboMode by lazy { TurboMode(app) }
     val viewModelFactory by lazy { ViewModelFactory(this, app) }
     val screenController by lazy { ScreenController(sessionRepo) }
@@ -109,4 +108,5 @@ open class ServiceLocator(val app: Application) {
     ) }
     open val sessionRepo by lazy { SessionRepo(sessionManager, sessionUseCases, turboMode).apply { observeSources() } }
     open val settingsRepo by lazy { SettingsRepo(app) }
+    open val experimentsProvider by lazy { ExperimentsProvider(fretboardProvider.fretboard, app) }
 }

@@ -4,15 +4,20 @@
 
 package org.mozilla.tv.firefox.ui
 
+import android.app.Application
 import android.net.Uri
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Assert.assertNotEquals
 import org.junit.Rule
 import org.junit.Test
+import org.mozilla.tv.firefox.TestDependencyFactory
+import org.mozilla.tv.firefox.experiments.ExperimentsProvider
 import org.mozilla.tv.firefox.helpers.AndroidAssetDispatcher
+import org.mozilla.tv.firefox.helpers.CustomPocketFeedStateProvider
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
 import org.mozilla.tv.firefox.helpers.TestAssetHelper
 import org.mozilla.tv.firefox.ui.robots.navigationOverlay
+import org.mozilla.tv.firefox.utils.ServiceLocator
 
 /**
  * A test for basic browser navigation including:
@@ -22,6 +27,14 @@ import org.mozilla.tv.firefox.ui.robots.navigationOverlay
  * - Back/forward/reload enabled state updates correctly
  */
 class BasicNavigationTest {
+
+    companion object : TestDependencyFactory {
+        override fun createServiceLocator(app: Application) = object : ServiceLocator(app) {
+            override val experimentsProvider = object : ExperimentsProvider(fretboardProvider.fretboard, app) {
+                override fun shouldShowSendTab() = true
+            }
+        }
+    }
 
     @get:Rule val activityTestRule = MainActivityTestRule()
 
