@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pocket_onboarding_background">
+
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="13dp"
+        android:layout_marginTop="60dp"
+        android:text="@string/fxa_onboarding_header"
+        android:textSize="32sp"
+        android:fontFamily="@string/font_ember_light"
+        android:textColor="@color/photonGrey10"
+        android:textAlignment="center"/>
+
+    <ImageView
+        android:src="@drawable/receive_tabs_onboarding"
+        tools:ignore="ContentDescription"
+        android:layout_width="808dp"
+        android:layout_height="240dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter" />
+
+    <TextView
+        android:id="@+id/descriptionText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="43.5dp"
+        android:layout_marginRight="43.5dp"
+        android:layout_marginBottom="31dp"
+        android:text="@string/fxa_onboarding_instruction"
+        android:textSize="18sp"
+        android:textColor="@color/photonGrey10_a80p"
+        android:fontFamily="@string/font_ember_regular"
+        android:textAlignment="center"/>
+
+    <Button
+        android:id="@+id/tabs_onboarding_button"
+        style="@style/TVOnboardingButton"
+        android:layout_marginBottom="60dp"
+        android:text="@string/fxa_onboarding_primary_button" />
+
+</LinearLayout>
