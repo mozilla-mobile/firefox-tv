@@ -4,10 +4,13 @@
 
 package org.mozilla.tv.firefox.navigationoverlay
 
+import android.app.Dialog
+import android.content.Context
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
+import kotlinx.android.synthetic.main.tabs_onboarding.*
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
@@ -95,5 +98,16 @@ class NavigationOverlayViewModel(
                 fxaLoginUseCase.beginLogin(fragmentManager)
             }
         }
+    }
+
+    fun showFxaOnboardingScreen(context: Context) {
+        val dialog = Dialog(context, R.style.OverlayDialogStyle)
+        dialog.setContentView(R.layout.tabs_onboarding)
+
+        dialog.tabs_onboarding_button.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }

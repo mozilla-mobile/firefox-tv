@@ -39,6 +39,11 @@
         <item name="android:fontFamily">@string/font_ember_regular</item>
     </style>
 
+    <style name="OverlayDialogStyle" parent="AppTheme.Transparent">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
     <style name="PopupMenu" parent="@style/Widget.AppCompat.Light.PopupMenu">
         <item name="overlapAnchor">true</item>
         <item name="android:fontFamily">@string/font_ember_regular</item>
