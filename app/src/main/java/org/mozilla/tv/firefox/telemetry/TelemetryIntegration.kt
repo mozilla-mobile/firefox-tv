@@ -17,7 +17,6 @@ import mozilla.components.support.ktx.android.os.resetAfter
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
 import org.mozilla.tv.firefox.utils.Assert
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText.AutocompleteResult
-import org.mozilla.telemetry.TelemetryHolder
 import org.mozilla.telemetry.event.TelemetryEvent
 import org.mozilla.telemetry.measurement.SearchesMeasurement
 import org.mozilla.telemetry.ping.TelemetryCorePingBuilder
@@ -141,16 +140,16 @@ open class TelemetryIntegration protected constructor(
         // When initializing the telemetry library it will make sure that all directories exist and
         // are readable/writable.
         StrictMode.allowThreadDiskWrites().resetAfter {
-            TelemetryHolder.set(TelemetryFactory.createTelemetry(context))
+            DeprecatedTelemetryHolder.set(TelemetryFactory.createTelemetry(context))
         }
     }
 
     val clientId: String
-        get() = TelemetryHolder.get().clientId
+        get() = DeprecatedTelemetryHolder.get().clientId
 
     @UiThread // via TelemetryHomeTileUniqueClickPerSessionCounter
     fun startSession(context: Context) {
-        TelemetryHolder.get().recordSessionStart()
+        DeprecatedTelemetryHolder.get().recordSessionStart()
         TelemetryEvent.create(Category.ACTION, Method.FOREGROUND, Object.APP).queue()
 
         // We call reset in both startSession and stopSession. We call it here to make sure we
@@ -161,7 +160,7 @@ open class TelemetryIntegration protected constructor(
     @UiThread // via TelemetryHomeTileUniqueClickPerSessionCounter
     fun stopSession(context: Context) {
         // We cannot use named arguments here as we are calling into Java code
-        TelemetryHolder.get().recordSessionEnd { // onFailure =
+        DeprecatedTelemetryHolder.get().recordSessionEnd { // onFailure =
             sentryIntegration.capture(IllegalStateException("Telemetry#recordSessionEnd called when no session was active"))
         }
 
@@ -175,11 +174,11 @@ open class TelemetryIntegration protected constructor(
 
     // EXT to add events to pocket ping (independently from mobile_events)
     fun TelemetryEvent.queueInPocketPing() {
-        if (!TelemetryHolder.get().configuration.isCollectionEnabled) {
+        if (!DeprecatedTelemetryHolder.get().configuration.isCollectionEnabled) {
             return
         }
 
-        (TelemetryHolder.get()
+        (DeprecatedTelemetryHolder.get()
                 .getPingBuilder(TelemetryPocketEventPingBuilder.TYPE) as TelemetryPocketEventPingBuilder)
                 .eventsMeasurement.add(this)
     }
@@ -200,7 +199,7 @@ open class TelemetryIntegration protected constructor(
     }
 
     fun stopMainActivity() {
-        TelemetryHolder.get()
+        DeprecatedTelemetryHolder.get()
                 .queuePing(TelemetryCorePingBuilder.TYPE)
                 .queuePing(TelemetryMobileEventPingBuilder.TYPE)
                 .queuePing(TelemetryPocketEventPingBuilder.TYPE)
@@ -229,7 +228,7 @@ open class TelemetryIntegration protected constructor(
     }
 
     private fun searchEnterEvent(inputLocation: UrlTextInputLocation) {
-        val telemetry = TelemetryHolder.get()
+        val telemetry = DeprecatedTelemetryHolder.get()
 
         TelemetryEvent.create(Category.ACTION, Method.TYPE_QUERY, Object.SEARCH_BAR)
                 .extra(Extra.SOURCE, inputLocation.extra)
@@ -448,7 +447,7 @@ open class TelemetryIntegration protected constructor(
     fun viewIntentEvent() = TelemetryEvent.create(Category.ACTION, Method.VIEW_INTENT, Object.APP).queue()
 
     fun recordActiveExperiments(experimentNames: List<String>) {
-        TelemetryHolder.get().recordActiveExperiments(experimentNames)
+        DeprecatedTelemetryHolder.get().recordActiveExperiments(experimentNames)
     }
 
     fun receivedTabEvent(receivedTabs: ReceivedTabs) {
@@ -500,7 +499,7 @@ private object TelemetryHomeTileUniqueClickPerSessionCounter {
 
     fun countTile(context: Context, tile: ChannelTile) {
         Assert.isUiThread()
-        if (!TelemetryHolder.get().configuration.isCollectionEnabled) { return }
+        if (!DeprecatedTelemetryHolder.get().configuration.isCollectionEnabled) { return }
 
         val sharedPrefs = getSharedPrefs(context)
         val clickedTileIDs = (sharedPrefs.getStringSet(KEY_CLICKED_HOME_TILE_IDS_PER_SESSION, null)
@@ -538,7 +537,7 @@ private object TelemetryRemoteControlTracker {
 
     fun saveRemoteControlInformation(context: Context, keyEvent: KeyEvent) {
         Assert.isUiThread()
-        if (!TelemetryHolder.get().configuration.isCollectionEnabled) { return }
+        if (!DeprecatedTelemetryHolder.get().configuration.isCollectionEnabled) { return }
 
         val remoteName = InputDevice.getDevice(keyEvent.deviceId)?.name ?: "null"
         val sharedPrefs = getSharedPrefs(context)
