@@ -107,6 +107,7 @@ class NavigationOverlayViewModel(
         dialog.setContentView(R.layout.tabs_onboarding)
 
         dialog.tabs_onboarding_button.setOnClickListener {
+            TelemetryIntegration.INSTANCE.fxaProfileShowOnboardingButtonClickEvent()
             dialog.dismiss()
         }
 
