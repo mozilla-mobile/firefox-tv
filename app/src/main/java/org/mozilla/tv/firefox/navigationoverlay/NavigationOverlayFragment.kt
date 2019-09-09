@@ -57,6 +57,7 @@ import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.RoundCornerTransformation
 import org.mozilla.tv.firefox.utils.ServiceLocator
+import org.mozilla.tv.firefox.utils.Settings
 import org.mozilla.tv.firefox.utils.ViewUtils
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 import java.lang.ref.WeakReference
@@ -276,6 +277,11 @@ class NavigationOverlayFragment : Fragment() {
                     AccountState.AuthenticatedNoProfile -> {
                         fxaButton.setImageResource(R.drawable.ic_avatar_authenticated_no_picture)
                         fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
+
+                        val settings = Settings.getInstance(context!!)
+                        if (settings.shouldShowFxaOnboarding()) {
+                            navigationOverlayViewModel.showFxaOnboardingScreen(context!!)
+                        }
                     }
                     AccountState.NotAuthenticated -> {
                         fxaButton.setImageResource(R.drawable.ic_fxa_login)

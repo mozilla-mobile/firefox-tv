@@ -6,6 +6,7 @@ package org.mozilla.tv.firefox.navigationoverlay
 
 import android.app.Dialog
 import android.content.Context
+import android.preference.PreferenceManager
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
@@ -21,6 +22,7 @@ import org.mozilla.tv.firefox.fxa.FxaLoginUseCase
 import org.mozilla.tv.firefox.fxa.FxaRepo
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
+import org.mozilla.tv.firefox.utils.Settings
 
 class ChannelTitles(
     val pinned: String,
@@ -107,6 +109,11 @@ class NavigationOverlayViewModel(
         dialog.tabs_onboarding_button.setOnClickListener {
             dialog.dismiss()
         }
+
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(Settings.FXA_ONBOARD_SHOWN_PREF, true)
+                .apply()
 
         dialog.show()
     }

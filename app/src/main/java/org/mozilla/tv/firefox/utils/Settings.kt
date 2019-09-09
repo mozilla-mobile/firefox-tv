@@ -40,6 +40,8 @@ class Settings private constructor(context: Context) {
         const val TRACKING_PROTECTION_ENABLED_PREF = "tracking_protection_enabled"
         const val TRACKING_PROTECTION_ENABLED_DEFAULT = true
 
+        const val FXA_ONBOARD_SHOWN_PREF = "fxa_onboard_shown"
+
         @VisibleForTesting internal fun reset() {
             instance = null
         }
@@ -54,6 +56,9 @@ class Settings private constructor(context: Context) {
 
     fun shouldShowTurboModeOnboarding(): Boolean =
             !preferences.getBoolean(OnboardingActivity.ONBOARD_SHOWN_PREF, false)
+
+    fun shouldShowFxaOnboarding(): Boolean =
+            !preferences.getBoolean(FXA_ONBOARD_SHOWN_PREF, false)
 
     fun shouldShowReceiveTabsPreboarding(): Boolean = experimentsProvider.shouldShowSendTab() &&
         !preferences.getBoolean(ReceiveTabPreboardingActivity.ONBOARD_RECEIVE_TABS_SHOWN_PREF, false)
