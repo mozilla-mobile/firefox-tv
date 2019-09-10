@@ -28,6 +28,7 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.channels.ImageSetStrategy
+import org.mozilla.tv.firefox.framework.UnresolvedString
 import org.mozilla.tv.firefox.helpers.RxTestHelper
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
@@ -55,7 +56,7 @@ class FxaRepoTest {
     private lateinit var fxaRepo: FxaRepo
     private lateinit var accountState: Observable<FxaRepo.AccountState>
     private lateinit var accountStateTestObs: TestObserver<FxaRepo.AccountState>
-    private lateinit var receivedTabsTestObs: TestObserver<ReceivedTabs>
+    private lateinit var receivedTabsTestObs: TestObserver<FxaReceivedTab>
 
     private val defaultProfileAvatarImage = ImageSetStrategy.ById(R.drawable.ic_default_avatar)
 
@@ -213,12 +214,11 @@ class FxaRepoTest {
     fun `WHEN one receive tab event occurs with two URLs and a non-null device THEN receivedTabs emits the corresponding event`() {
         val expectedDeviceName = "Expected device name"
         val expectedTabUrls = getTwoExpectedTabUrls()
-        val expected = ReceivedTabs(
-            expectedTabUrls,
-            sendingDevice = ReceivedTabs.DeviceMetadata(
-                expectedDeviceName,
-                DeviceType.DESKTOP
-        ))
+        val expected = FxaReceivedTab(
+            expectedTabUrls[0],
+            UnresolvedString(R.string.fxa_tab_sent_toast, listOf(expectedDeviceName)),
+            FxaReceivedTab.Metadata(DeviceType.DESKTOP)
+        )
 
         val inputTabData = expectedTabUrls.mapIndexed { i, url -> TabData("tab title $i", url) }
         val tabReceivedEvent = mockADMTabReceivedEvent(DeviceType.DESKTOP, expectedDeviceName, inputTabData)
@@ -231,9 +231,10 @@ class FxaRepoTest {
     @Test
     fun `WHEN a receive tab event occurs with two URLs and a null device THEN receivedTabs emits the corresponding event`() {
         val expectedTabUrls = getTwoExpectedTabUrls()
-        val expected = ReceivedTabs(
-            expectedTabUrls,
-            sendingDevice = null
+        val expected = FxaReceivedTab(
+            expectedTabUrls[0],
+            UnresolvedString(R.string.fxa_tab_sent_toast_no_device),
+            FxaReceivedTab.Metadata(DeviceType.UNKNOWN)
         )
 
         val inputTabData = expectedTabUrls.mapIndexed { i, url -> TabData("tab title $i", url) }
@@ -252,9 +253,10 @@ class FxaRepoTest {
     @Test
     fun `WHEN a receive tab event occurs with blank and non-blank URLs THEN receivedTabs emits an event with tabs with blank URLs filtered out`() {
         val expectedTabUrls = getTwoExpectedTabUrls()
-        val expected = ReceivedTabs(
-            expectedTabUrls,
-            sendingDevice = null
+        val expected = FxaReceivedTab(
+            expectedTabUrls[0],
+            UnresolvedString(R.string.fxa_tab_sent_toast_no_device),
+            FxaReceivedTab.Metadata(DeviceType.UNKNOWN)
         )
 
         val inputTabUrls = listOf(" ", "") + expectedTabUrls + listOf("  ", "", " ")
