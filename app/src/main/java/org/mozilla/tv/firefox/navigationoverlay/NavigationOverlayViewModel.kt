@@ -112,7 +112,7 @@ class NavigationOverlayViewModel(
                         resources.getString(R.string.app_name))
 
         dialog.tabs_onboarding_button.setOnClickListener {
-            TelemetryIntegration.INSTANCE.fxaProfileShowOnboardingButtonClickEvent()
+
             dialog.dismiss()
         }
 
@@ -121,6 +121,7 @@ class NavigationOverlayViewModel(
                 .putBoolean(Settings.FXA_ONBOARD_SHOWN_PREF, true)
                 .apply()
 
+        TelemetryIntegration.INSTANCE.fxaShowOnboardingEvent()
         dialog.show()
     }
 }
