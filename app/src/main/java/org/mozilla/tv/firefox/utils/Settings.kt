@@ -57,7 +57,7 @@ class Settings private constructor(context: Context) {
     fun shouldShowTurboModeOnboarding(): Boolean =
             !preferences.getBoolean(OnboardingActivity.ONBOARD_SHOWN_PREF, false)
 
-    fun shouldShowFxaOnboarding(): Boolean =
+    fun shouldShowFxaOnboarding(): Boolean = experimentsProvider.shouldShowSendTab() &&
             !preferences.getBoolean(FXA_ONBOARD_SHOWN_PREF, false)
 
     fun shouldShowReceiveTabsPreboarding(): Boolean = experimentsProvider.shouldShowSendTab() &&
