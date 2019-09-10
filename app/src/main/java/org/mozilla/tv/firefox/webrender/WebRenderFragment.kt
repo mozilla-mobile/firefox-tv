@@ -15,6 +15,8 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.lifecycle.Lifecycle
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
@@ -56,6 +58,7 @@ import org.mozilla.tv.firefox.hint.InactiveHintViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.utils.ViewUtils
+import java.util.concurrent.TimeUnit
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
 
@@ -231,8 +234,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = true)
                 .forEach { startStopCompositeDisposable.add(it) }
 
-        val queuedTab = serviceLocator!!.fxaRepo.queuedTab
-        if (queuedTab != null) receiveTab(queuedTab) // TODO this crashes with 'java.lang.IllegalStateException: FragmentManager is already executing transactions'
+        maybeOpenQueuedTab()?.addTo(startStopCompositeDisposable)
     }
 
     override fun onStop() {
@@ -270,6 +272,18 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                         viewToFocus.requestFocus()
                     }
                 }
+    }
+
+    private fun maybeOpenQueuedTab(): Disposable? {
+        val queuedTab = serviceLocator!!.fxaRepo.queuedTab ?: return null
+
+        // This is a really bad solution, and could cause future race conditions. Executing
+        // immediately throws "java.lang.IllegalStateException: FragmentManager is already
+        // executing transactions", and I couldn't find any better way to deconflict
+        return Observable.just("unused")
+            .delay(1, TimeUnit.SECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { receiveTab(queuedTab) }
     }
 
     private fun observeReceivedTabs(): Disposable {
