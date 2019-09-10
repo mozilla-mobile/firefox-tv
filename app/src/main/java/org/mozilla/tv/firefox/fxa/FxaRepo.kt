@@ -90,6 +90,11 @@ class FxaRepo(
     val receivedTabs: Observable<FxaReceivedTab> = admIntegration.receivedTabsRaw
         .doOnNext { telemetryIntegration.receivedTabEvent(it) }
         .filterMapToDomainObject()
+        .doOnNext { lastReceivedTab = it }
+
+    private var lastReceivedTab: FxaReceivedTab? = null
+    var queuedTab: FxaReceivedTab? = null
+        private set
 
     init {
         accountManager.register(accountObserver)
@@ -121,8 +126,8 @@ class FxaRepo(
 
         val resources = context.resources
         dialog.descriptionText.text =
-                resources.getString(R.string.fxa_onboarding_instruction,
-                        resources.getString(R.string.app_name))
+            resources.getString(R.string.fxa_onboarding_instruction,
+                resources.getString(R.string.app_name))
 
         dialog.tabs_onboarding_button.setOnClickListener {
 
@@ -130,12 +135,16 @@ class FxaRepo(
         }
 
         PreferenceManager.getDefaultSharedPreferences(context)
-                .edit()
-                .putBoolean(Settings.FXA_ONBOARD_SHOWN_PREF, true)
-                .apply()
+            .edit()
+            .putBoolean(Settings.FXA_ONBOARD_SHOWN_PREF, true)
+            .apply()
 
         TelemetryIntegration.INSTANCE.fxaShowOnboardingEvent()
         dialog.show()
+    }
+
+    fun lastTabCouldNotBeDisplayed() {
+        queuedTab = lastReceivedTab
     }
 
     @SuppressLint("CheckResult") // This survives for the duration of the app
