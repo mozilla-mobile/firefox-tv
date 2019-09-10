@@ -4,6 +4,7 @@
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
+          xmlns:amazon="http://schemas.amazon.com/apk/res/android"
           package="org.mozilla.tv.firefox">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,6 +13,19 @@
     <!-- Required for media playback voice control.
            https://developer.amazon.com/blogs/appstore/post/623addd5-6184-4e7f-a969-123a653cfb1a/implementing-voice-control-with-the-media-session-api-on-amazon-fire-tv -->
     <uses-permission android:name="com.amazon.permission.media.session.voicecommandcontrol" />
+
+    <!-- *** ADM permissions start *** -->
+    <!-- This permission ensures that no other application can intercept your ADM messages. -->
+    <permission
+        android:name="${applicationId}.permission.RECEIVE_ADM_MESSAGE"
+        android:protectionLevel="signature"/>
+
+    <uses-permission android:name="${applicationId}.permission.RECEIVE_ADM_MESSAGE" />
+    <uses-permission android:name="com.amazon.device.messaging.permission.RECEIVE" />
+
+    <!-- This permission is also brought in by androidx.work:work-runtime dependency. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <!-- *** ADM permissions end *** -->
 
     <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
     <uses-feature android:name="android.software.leanback" android:required="true" />
@@ -37,6 +51,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
         </provider>
+
         <activity android:name=".MainActivity"
             android:launchMode="singleTask"
             android:configChanges="keyboard|keyboardHidden|mcc|mnc|orientation|screenSize|locale|layoutDirection|smallestScreenSize|screenLayout"
@@ -94,6 +109,26 @@
             android:name=".onboarding.ReceiveTabPreboardingActivity"
             android:exported="false"
             android:theme="@style/AppTheme.Transparent" />
+
+        <!-- *** ADM app components start *** -->
+        <!-- When required is false, graceful degradation is required. If true, APK will not be available to devices not supporting ADM. -->
+        <amazon:enable-feature
+            android:name="com.amazon.device.messaging"
+            android:required="false"/>
+        <service
+            android:name=".fxa.ADMService"
+            android:exported="false"/>
+        <receiver
+            android:name=".fxa.ADMReceiver"
+            android:permission="com.amazon.device.messaging.permission.SEND">
+            <!-- To interact with ADM, your app must listen for the following intents. -->
+            <intent-filter>
+                <action android:name="com.amazon.device.messaging.intent.REGISTRATION" />
+                <action android:name="com.amazon.device.messaging.intent.RECEIVE" />
+                <category android:name="${applicationId}" />
+            </intent-filter>
+        </receiver>
+        <!-- *** ADM attrs end *** -->
 
         <!-- Allows MediaSessionCallbacks to be called while a voice command is active. Without
              this, the video pauses for the voice command, resumes when the voice command ends, and
