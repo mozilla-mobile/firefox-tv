@@ -13,6 +13,7 @@ import io.reactivex.subjects.BehaviorSubject
 import kotlinx.coroutines.Deferred
 import mozilla.appservices.fxaclient.Config
 import mozilla.components.concept.sync.AccountObserver
+import mozilla.components.concept.sync.AuthType
 import mozilla.components.concept.sync.DeviceCapability
 import mozilla.components.concept.sync.DeviceEvent
 import mozilla.components.concept.sync.DeviceType
@@ -133,7 +134,7 @@ class FxaRepo(
      */
     @VisibleForTesting(otherwise = NONE)
     inner class FirefoxAccountObserver : AccountObserver {
-        override fun onAuthenticated(account: OAuthAccount, newAccount: Boolean) {
+        override fun onAuthenticated(account: OAuthAccount, authType: AuthType) {
             _accountState.onNext(AuthenticatedNoProfile)
 
             // Push service is only needed when logged in (this saves resources)
