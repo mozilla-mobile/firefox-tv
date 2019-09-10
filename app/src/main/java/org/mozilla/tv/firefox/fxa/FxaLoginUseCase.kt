@@ -10,6 +10,8 @@ import io.reactivex.Observable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import mozilla.components.concept.sync.AuthType
+import mozilla.components.service.fxa.FxaAuthData
 import mozilla.components.service.fxa.manager.FxaAccountManager
 import mozilla.components.support.base.log.logger.Logger
 import org.mozilla.tv.firefox.ScreenController
@@ -109,6 +111,6 @@ class FxaLoginUseCase(
 
     private fun FxaAccountManager.finishAuthenticationAsync(keys: LoginSuccessKeys) {
         @Suppress("DeferredResultUnused") // We don't care to wait until completion.
-        finishAuthenticationAsync(code = keys.code, state = keys.state)
+        finishAuthenticationAsync(FxaAuthData(AuthType.Signin, keys.code, keys.state))
     }
 }

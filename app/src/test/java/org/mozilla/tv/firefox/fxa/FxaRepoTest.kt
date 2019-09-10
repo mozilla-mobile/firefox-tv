@@ -15,6 +15,7 @@ import io.reactivex.Observable
 import io.reactivex.observers.TestObserver
 import io.reactivex.schedulers.TestScheduler
 import io.reactivex.subjects.PublishSubject
+import mozilla.components.concept.sync.AuthType
 import mozilla.components.concept.sync.Avatar
 import mozilla.components.concept.sync.DeviceType
 import mozilla.components.concept.sync.OAuthAccount
@@ -86,23 +87,23 @@ class FxaRepoTest {
     }
 
     @Test
-    fun `WHEN on authenticated callback is called with newAccount as false THEN account state is authenticated no profile`() {
+    fun `WHEN on authenticated callback is called with authType as Signin THEN account state is authenticated no profile`() {
         val account = mockk<OAuthAccount>()
-        fxaRepo.accountObserver.onAuthenticated(account, false)
+        fxaRepo.accountObserver.onAuthenticated(account, AuthType.Signin)
         accountStateTestObs.assertValueAt(1, FxaRepo.AccountState.AuthenticatedNoProfile)
     }
 
     @Test
-    fun `WHEN on authenticated callback is called with newAccount as true THEN account state is authenticated no profile`() {
+    fun `WHEN on authenticated callback is called with authType as Signup THEN account state is authenticated no profile`() {
         val account = mockk<OAuthAccount>()
-        fxaRepo.accountObserver.onAuthenticated(account, true)
+        fxaRepo.accountObserver.onAuthenticated(account, AuthType.Signup)
         accountStateTestObs.assertValueAt(1, FxaRepo.AccountState.AuthenticatedNoProfile)
     }
 
     @Test
     fun `WHEN on authenticated callback is called THEN push feature is initialized`() {
         val account = mockk<OAuthAccount>()
-        fxaRepo.accountObserver.onAuthenticated(account, true)
+        fxaRepo.accountObserver.onAuthenticated(account, AuthType.Signin)
 
         verify(exactly = 1) { admIntegration.initPushFeature() }
     }
