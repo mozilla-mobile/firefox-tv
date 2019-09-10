@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.FrameLayout
+import androidx.lifecycle.Lifecycle
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
@@ -36,6 +37,8 @@ import org.mozilla.tv.firefox.MediaSessionHolder
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
+import org.mozilla.tv.firefox.ext.application
+import org.mozilla.tv.firefox.ext.bringAppToForeground
 import org.mozilla.tv.firefox.ext.couldScrollInDirection
 import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.isYoutubeTV
@@ -47,6 +50,7 @@ import org.mozilla.tv.firefox.ext.scrollByClamped
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.updateFullscreenScrollPosition
 import org.mozilla.tv.firefox.ext.webRenderComponents
+import org.mozilla.tv.firefox.fxa.FxaReceivedTab
 import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.InactiveHintViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
@@ -73,6 +77,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     private val mediaSessionHolder get() = activity as MediaSessionHolder? // null when not attached.
 
     private val startStopCompositeDisposable = CompositeDisposable()
+    private val createDestroyCompositeDisposable = CompositeDisposable()
 
     // If YouTubeBackHandler is instantiated without an EngineView, YouTube won't
     // work properly, so we !!
@@ -86,6 +91,9 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         initSession()
 
         webRenderViewModel = FirefoxViewModelProviders.of(this).get(WebRenderViewModel::class.java)
+
+        observeReceivedTabs()
+            .addTo(createDestroyCompositeDisposable)
     }
 
     @SuppressLint("RestrictedApi")
@@ -178,8 +186,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         observeRequestFocus()
                 .addTo(startStopCompositeDisposable)
-        observeReceivedTabs()
-                .addTo(startStopCompositeDisposable)
 
         /**
          * When calling getOrCreateEngineSession(), [SessionManager] lazily creates an [EngineSession]
@@ -224,6 +230,9 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         HintBinder.bindHintsToView(hintViewModel, hintBarContainer, animate = true)
                 .forEach { startStopCompositeDisposable.add(it) }
+
+        val queuedTab = serviceLocator!!.fxaRepo.queuedTab
+        if (queuedTab != null) receiveTab(queuedTab) // TODO this crashes with 'java.lang.IllegalStateException: FragmentManager is already executing transactions'
     }
 
     override fun onStop() {
@@ -231,6 +240,11 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         serviceLocator!!.sessionRepo.exitFullScreenIfPossible()
         startStopCompositeDisposable.clear()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        createDestroyCompositeDisposable.clear()
     }
 
     override fun onDestroyView() {
@@ -260,10 +274,25 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
     private fun observeReceivedTabs(): Disposable {
         return serviceLocator!!.fxaRepo.receivedTabs.subscribe {
-            // TODO: Gracefully handle receiving multiple tabs around the same time. #2777
-            serviceLocator!!.screenController.showBrowserScreenForUrl(fragmentManager!!, it.url)
-            ViewUtils.showCenteredBottomToast(context, it.sourceDescription.resolve(resources))
+            val appIsInForeground = lifecycle.currentState == Lifecycle.State.STARTED ||
+                lifecycle.currentState == Lifecycle.State.RESUMED
+            val appMightBeInBackground = lifecycle.currentState == Lifecycle.State.CREATED
+
+            when {
+                appIsInForeground -> receiveTab(it)
+                appMightBeInBackground -> {
+                    serviceLocator!!.fxaRepo.lastTabCouldNotBeDisplayed()
+                    context?.application?.bringAppToForeground()
+                }
+                else -> { }
+            }
         }
+    }
+
+    private fun receiveTab(receivedTab: FxaReceivedTab) {
+        // TODO: Gracefully handle receiving multiple tabs around the same time. #2777
+        serviceLocator!!.screenController.showBrowserScreenForUrl(fragmentManager!!, receivedTab.url)
+        ViewUtils.showCenteredBottomToast(context, receivedTab.sourceDescription.resolve(resources))
     }
 
     fun loadUrl(url: String) {
