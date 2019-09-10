@@ -261,14 +261,8 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     private fun observeReceivedTabs(): Disposable {
         return serviceLocator!!.fxaRepo.receivedTabs.subscribe {
             // TODO: Gracefully handle receiving multiple tabs around the same time. #2777
-            serviceLocator!!.screenController.showBrowserScreenForUrl(fragmentManager!!, it.urls[0])
-
-            val toastText = if (it.sendingDevice == null) {
-                resources.getString(R.string.fxa_tab_sent_toast_no_device)
-            } else {
-                resources.getString(R.string.fxa_tab_sent_toast, it.sendingDevice.displayName)
-            }
-            ViewUtils.showCenteredBottomToast(context, toastText)
+            serviceLocator!!.screenController.showBrowserScreenForUrl(fragmentManager!!, it.url)
+            ViewUtils.showCenteredBottomToast(context, it.sourceDescription.resolve(resources))
         }
     }
 
