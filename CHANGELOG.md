@@ -10,6 +10,8 @@ It diverges in the following ways:
 ## Unreleased
 ### Changed
 - Amazon Device Messaging (ADM) is supported in release builds (#2781)
+- (disabled by default) Amazon Device Messaging (ADM) is supported in release builds (#2781)
+- (disabled by default) FFTV is now opened automatically if a tab is sent while the app is backgrounded (#2807)
 
 ### Added
 - (disabled by default) Dialog prompting users to manually upgrade the app
