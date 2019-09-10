@@ -135,6 +135,9 @@ API services currently supported are:
 * pocket_key
 
 ##### ADM API key
+We suspect **ADM access is only available in local builds for core team members** because testing
+ADM requires access to a private API key that is connected to our app on the Amazon store dashboard.
+
 To use ADM in debug builds, there must be a `<project-dir>/app/src/main/assets/api_key.txt` file
 that contains the api key. It is necessary that it is in the project's assets folder.
 Amazon will automatically provide an API key for production builds. See
