@@ -8,6 +8,8 @@ It diverges in the following ways:
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html) for bug fix releases.
 
 ## Unreleased
+### Changed
+- (disabled by default) Amazon Device Messaging (ADM) is supported in release builds (#2781)
 
 ## 4.4 - 2019-09-09
 ### Added
