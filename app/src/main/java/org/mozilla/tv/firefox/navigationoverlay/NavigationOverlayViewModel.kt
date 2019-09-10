@@ -106,6 +106,11 @@ class NavigationOverlayViewModel(
         val dialog = Dialog(context, R.style.OverlayDialogStyle)
         dialog.setContentView(R.layout.tabs_onboarding)
 
+        val resources = context.resources
+        dialog.descriptionText.text =
+                resources.getString(R.string.fxa_onboarding_instruction,
+                        resources.getString(R.string.app_name))
+
         dialog.tabs_onboarding_button.setOnClickListener {
             TelemetryIntegration.INSTANCE.fxaProfileShowOnboardingButtonClickEvent()
             dialog.dismiss()
