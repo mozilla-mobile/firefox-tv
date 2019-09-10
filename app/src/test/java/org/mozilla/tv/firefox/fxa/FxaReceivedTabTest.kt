@@ -1,16 +1,27 @@
 package org.mozilla.tv.firefox.fxa
 
+import io.mockk.MockKAnnotations
 import io.mockk.every
+import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.verify
+import io.reactivex.Observable
 import mozilla.components.concept.sync.DeviceType
 import mozilla.components.concept.sync.TabData
+import org.junit.Before
 import org.junit.Test
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.framework.UnresolvedString
-import java.util.concurrent.TimeUnit
+import org.mozilla.tv.firefox.telemetry.SentryIntegration
 
 class FxaReceivedTabTest {
+
+    @MockK(relaxed = true) private lateinit var sentryIntegration: SentryIntegration
+
+    @Before
+    fun before() {
+        MockKAnnotations.init(this)
+    }
 
     @Test
     fun `WHEN one receive tab event occurs with two URLs and a non-null device THEN receivedTabs emits the corresponding event`() {
@@ -25,9 +36,10 @@ class FxaReceivedTabTest {
         val inputTabData = expectedTabUrls.mapIndexed { i, url -> TabData("tab title $i", url) }
         val tabReceivedEvent = mockADMTabReceivedEvent(DeviceType.DESKTOP, expectedDeviceName, inputTabData)
 
-        receivedTabsRaw.onNext(tabReceivedEvent)
-
-        receivedTabsTestObs.assertValues(expected)
+        Observable.just(tabReceivedEvent)
+            .filterMapToDomainObject()
+            .test()
+            .assertValues(expected)
     }
 
     @Test
@@ -42,9 +54,10 @@ class FxaReceivedTabTest {
         val inputTabData = expectedTabUrls.mapIndexed { i, url -> TabData("tab title $i", url) }
         val tabReceivedEvent = mockADMTabReceivedEventWithNullDevice(inputTabData)
 
-        receivedTabsRaw.onNext(tabReceivedEvent)
-
-        receivedTabsTestObs.assertValues(expected)
+        Observable.just(tabReceivedEvent)
+            .filterMapToDomainObject()
+            .test()
+            .assertValues(expected)
     }
 
     private fun getTwoExpectedTabUrls() = listOf(
@@ -65,19 +78,22 @@ class FxaReceivedTabTest {
         val inputTabData = inputTabUrls.mapIndexed { i, url -> TabData("tab title $i", url) }
         val tabReceivedEvent = mockADMTabReceivedEventWithNullDevice(inputTabData)
 
-        receivedTabsRaw.onNext(tabReceivedEvent)
-
-        receivedTabsTestObs.assertValues(expected)
+        Observable.just(tabReceivedEvent)
+            .filterMapToDomainObject()
+            .test()
+            .assertValues(expected)
     }
 
     @Test
     fun `WHEN a receive tab event occurs with empty entries THEN sentry records an event and receivedTabs does not emit`() {
         val tabReceivedEvent = ADMIntegration.ReceivedTabs(null, emptyList())
 
-        receivedTabsRaw.onNext(tabReceivedEvent)
+        Observable.just(tabReceivedEvent)
+            .filterMapToDomainObject(sentryIntegration)
+            .test()
+            .assertNoValues()
 
         verify(exactly = 1) { sentryIntegration.captureAndLogError(any(), any()) }
-        receivedTabsTestObs.assertEmpty()
     }
 
     @Test
@@ -85,41 +101,12 @@ class FxaReceivedTabTest {
         val inputTabData = List(2) { TabData(title = "TabName $it", url = "   ") }
         val tabReceivedEvent = mockADMTabReceivedEventWithNullDevice(inputTabData)
 
-        receivedTabsRaw.onNext(tabReceivedEvent)
+        Observable.just(tabReceivedEvent)
+            .filterMapToDomainObject(sentryIntegration)
+            .test()
+            .assertNoValues()
 
         verify(exactly = 1) { sentryIntegration.captureAndLogError(any(), any()) }
-        receivedTabsTestObs.assertEmpty()
-    }
-
-    @Test
-    fun `WHEN a receive tab event occurs with non-blank URLs THEN telemetry records the event`() {
-        val tabEvent = mockADMTabReceivedEventWithNullDevice(listOf(TabData("TabName", url = "https://mozilla.org")))
-        receivedTabsRaw.onNext(tabEvent)
-
-        verify(exactly = 1) { telemetryIntegration.receivedTabEvent(any()) }
-    }
-
-    @Test
-    fun `WHEN fxa state changes THEN telemetry events carrying reauthentication state are sent`() {
-        fun waitPastDebounce() {
-            FxaRepoTest.testScheduler.advanceTimeBy(11, TimeUnit.SECONDS)
-        }
-
-        fxaRepo.accountObserver.onAuthenticated(mockk(relaxed = true), mockk(relaxed = true))
-        waitPastDebounce()
-        verify(exactly = 1) { telemetryIntegration.doesFxaNeedReauthenticationEvent(false) }
-
-        fxaRepo.accountObserver.onLoggedOut()
-        waitPastDebounce()
-        verify(exactly = 2) { telemetryIntegration.doesFxaNeedReauthenticationEvent(false) }
-
-        fxaRepo.accountObserver.onProfileUpdated(mockk(relaxed = true))
-        waitPastDebounce()
-        verify(exactly = 3) { telemetryIntegration.doesFxaNeedReauthenticationEvent(false) }
-
-        fxaRepo.accountObserver.onAuthenticationProblems()
-        waitPastDebounce()
-        verify(exactly = 1) { telemetryIntegration.doesFxaNeedReauthenticationEvent(true) }
     }
 
     private fun mockADMTabReceivedEvent(
@@ -133,11 +120,11 @@ class FxaReceivedTabTest {
         },
         tabData = tabDataArg
     )
-
-    private fun mockADMTabReceivedEventWithNullDevice(
-        tabData: List<TabData>
-    ): ADMIntegration.ReceivedTabs = ADMIntegration.ReceivedTabs(
-        device = null,
-        tabData = tabData
-    )
 }
+
+fun mockADMTabReceivedEventWithNullDevice(
+    tabData: List<TabData>
+): ADMIntegration.ReceivedTabs = ADMIntegration.ReceivedTabs(
+    device = null,
+    tabData = tabData
+)

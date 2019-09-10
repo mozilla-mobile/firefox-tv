@@ -20,6 +20,7 @@ data class UnresolvedString(private val id: Int, private val formatArgs: List<St
         0 -> resources.getString(id)
         1 -> resources.getString(id, formatArgs[0])
         2 -> resources.getString(id, formatArgs[0], formatArgs[1])
-        else -> throw NotImplementedError("UnresolvedString#resolve does not currently support that number of arguments. Please extend the class!")
+        else -> throw NotImplementedError("UnresolvedString#resolve does not currently support " +
+            "that number of arguments. Please extend the class!")
     }
 }
