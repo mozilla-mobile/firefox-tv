@@ -22,12 +22,14 @@ import mozilla.components.concept.sync.DeviceEvent
 import mozilla.components.concept.sync.DeviceType
 import mozilla.components.concept.sync.OAuthAccount
 import mozilla.components.concept.sync.Profile
+import mozilla.components.concept.sync.TabData
 import mozilla.components.service.fxa.DeviceConfig
 import mozilla.components.service.fxa.manager.FxaAccountManager
 import mozilla.components.support.base.log.logger.Logger
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.channels.ImageSetStrategy
 import org.mozilla.tv.firefox.ext.serviceLocator
+import org.mozilla.tv.firefox.framework.UnresolvedString
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AuthenticatedNoProfile
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AuthenticatedWithProfile
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NeedsReauthentication
@@ -85,10 +87,9 @@ class FxaRepo(
     private val _accountState: BehaviorSubject<AccountState> = BehaviorSubject.createDefault(NotAuthenticated)
     val accountState: Observable<AccountState> = _accountState.hide()
 
-    val receivedTabs: Observable<ReceivedTabs> = admIntegration.receivedTabsRaw
-        .mapToReceivedTabs()
-        .filterInvalidTabs(sentryIntegration)
+    val receivedTabs: Observable<FxaReceivedTab> = admIntegration.receivedTabsRaw
         .doOnNext { telemetryIntegration.receivedTabEvent(it) }
+        .filterMapToDomainObject()
 
     init {
         accountManager.register(accountObserver)
@@ -257,49 +258,53 @@ fun Profile.toDomainObject(): FxaProfile {
     return FxaProfile(validatedAvatar, validatedDisplayName)
 }
 
-private fun Observable<ADMIntegration.ReceivedTabs>.mapToReceivedTabs(): Observable<ReceivedTabs> = map { admTabs ->
-    ReceivedTabs(
-        urls = admTabs.tabData
-            .map { it.url }
-            .filter { it.isNotBlank() }, // blank URLs may not be possible but we do this just to be safe.
-        sendingDevice = admTabs.device?.let {
-            ReceivedTabs.DeviceMetadata(
-                displayName = it.displayName,
-                deviceType = it.deviceType
-            )
-        }
-    )
-}
-
-private fun Observable<ReceivedTabs>.filterInvalidTabs(sentryIntegration: SentryIntegration): Observable<ReceivedTabs> = filter {
-    return@filter if (it.urls.isNotEmpty()) {
-        true
-    } else {
-        sentryIntegration.captureAndLogError(logger, ReceiveTabException("Received tab event with only blank URLs"))
-        false
-    }
-}
-
 /**
  * A data container for tabs received from a single device via FxA. While we currently support only
  * one tab, this container can actually contain multiple received tabs.
  *
  * This container exists to avoid exposing the underlying [DeviceEvent.TabReceived] events to consumers.
  */
-data class ReceivedTabs constructor(
-    /** The urls sent to this device. */
-    val urls: List<String>,
-
-    /** Metadata about the device that sent the tab, or null if it's unavailable. */
-    val sendingDevice: DeviceMetadata?
+data class FxaReceivedTab(
+    val url: String,
+    val sourceDescription: UnresolvedString,
+    val metadata: Metadata
 ) {
-
-    /** Metadata about the device that sent the tab. */
-    data class DeviceMetadata(
-        val displayName: String,
+    data class Metadata(
         val deviceType: DeviceType // We expose the FxA DeviceType to avoid excessive boilerplate.
     )
 }
+
+private fun Observable<ADMIntegration.ReceivedTabs>.filterMapToDomainObject(
+    sentryIntegration: SentryIntegration = SentryIntegration
+): Observable<FxaReceivedTab> = this
+    .flatMap { admTabs ->
+        val url = admTabs.tabData
+            .map(TabData::url)
+            .firstOrNull(String::isNotBlank)
+
+        if (url == null) {
+            sentryIntegration.captureAndLogError(logger,
+                ReceiveTabException("Received tab event with only blank URLs"))
+            return@flatMap Observable.empty<FxaReceivedTab>()
+        }
+
+        val sourceDescription = when (admTabs.device) {
+            null -> UnresolvedString(R.string.fxa_tab_sent_toast_no_device)
+            else -> UnresolvedString(R.string.fxa_tab_sent_toast, listOf(admTabs.device.displayName))
+        }
+
+        val metadata = FxaReceivedTab.Metadata(
+            deviceType = admTabs.device?.deviceType ?: DeviceType.UNKNOWN
+        )
+
+        val domainObject = FxaReceivedTab(
+            url = url,
+            sourceDescription = sourceDescription,
+            metadata = metadata
+        )
+
+        Observable.just(domainObject)
+    }
 
 /** An Exception thrown when during the receive tab process. */
 private class ReceiveTabException(msg: String) : Exception(msg)

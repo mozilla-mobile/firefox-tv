@@ -8,27 +8,27 @@ package org.mozilla.tv.firefox.telemetry
 import android.content.Context
 import android.net.http.SslError
 import android.os.StrictMode
-import androidx.annotation.AnyThread
-import androidx.annotation.UiThread
 import android.view.InputDevice
 import android.view.KeyEvent
+import androidx.annotation.AnyThread
+import androidx.annotation.UiThread
 import mozilla.components.concept.sync.DeviceType
 import mozilla.components.support.ktx.android.os.resetAfter
-import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
-import org.mozilla.tv.firefox.utils.Assert
-import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText.AutocompleteResult
 import org.mozilla.telemetry.event.TelemetryEvent
 import org.mozilla.telemetry.measurement.SearchesMeasurement
 import org.mozilla.telemetry.ping.TelemetryCorePingBuilder
 import org.mozilla.telemetry.ping.TelemetryMobileEventPingBuilder
 import org.mozilla.telemetry.ping.TelemetryPocketEventPingBuilder
-import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.channels.ChannelTile
 import org.mozilla.tv.firefox.channels.SettingsButton
 import org.mozilla.tv.firefox.channels.SettingsScreen
 import org.mozilla.tv.firefox.channels.SettingsTile
 import org.mozilla.tv.firefox.channels.TileSource
-import org.mozilla.tv.firefox.fxa.ReceivedTabs
+import org.mozilla.tv.firefox.ext.serviceLocator
+import org.mozilla.tv.firefox.fxa.ADMIntegration
+import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
+import org.mozilla.tv.firefox.utils.Assert
+import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText.AutocompleteResult
 import java.util.Collections
 
 private const val SHARED_PREFS_KEY = "telemetryLib" // Don't call it TelemetryWrapper to avoid accidental IDE rename.
@@ -475,8 +475,8 @@ open class TelemetryIntegration protected constructor(
         DeprecatedTelemetryHolder.get().recordActiveExperiments(experimentNames)
     }
 
-    fun receivedTabEvent(receivedTabs: ReceivedTabs) {
-        val internalDeviceType = when (receivedTabs.sendingDevice?.deviceType) {
+    fun receivedTabEvent(receivedTabs: ADMIntegration.ReceivedTabs) {
+        val internalDeviceType = when (receivedTabs.device?.deviceType) {
             DeviceType.DESKTOP -> ReceivedTabDeviceType.DESKTOP
             DeviceType.MOBILE -> ReceivedTabDeviceType.MOBILE
             DeviceType.TABLET -> ReceivedTabDeviceType.TABLET
@@ -488,7 +488,7 @@ open class TelemetryIntegration protected constructor(
 
         TelemetryEvent.create(Category.ACTION, Method.RECEIVED_TAB, null)
             .extra(Extra.DEVICE_TYPE, internalDeviceType)
-            .extra(Extra.TOTAL, receivedTabs.urls.size.toString())
+            .extra(Extra.TOTAL, receivedTabs.tabData.size.toString())
             .queue()
     }
 }
