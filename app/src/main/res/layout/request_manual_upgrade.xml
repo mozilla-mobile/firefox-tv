@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:background="@color/pocket_onboarding_background">
+    android:background="@color/pocket_onboarding_background"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_left_quarter"
@@ -62,9 +62,9 @@
         android:background="@drawable/turbo_button_enable"
         android:fontFamily="@string/font_ember_regular"
         android:minWidth="108dp"
+        android:minHeight="@dimen/onboarding_button_height"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:minHeight="@dimen/onboarding_button_height"
         android:text="@string/manual_upgrade_yes_button"
         android:textAllCaps="false"
         android:textColor="@color/photonGrey10"
