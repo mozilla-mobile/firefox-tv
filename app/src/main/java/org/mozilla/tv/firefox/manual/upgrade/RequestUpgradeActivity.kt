@@ -16,7 +16,7 @@ import org.mozilla.tv.firefox.utils.IntentUtils
 // TODO This file can be removed from master as soon as it has been released. See #2794
 
 /**
- * TODO
+ * Displays an activity that asks the user to manually upgrade the app.
  */
 class RequestUpgradeActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,10 +42,9 @@ class RequestUpgradeActivity : Activity() {
 }
 
 /**
- * TODO
+ * Displays an activity that forces the user to manually upgrade the app.
  */
 class ForceUpgradeActivity : Activity() {
-    // TODO somehow lock users out of the rest of the app
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.force_manual_upgrade)
