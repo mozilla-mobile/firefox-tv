@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/pocket_onboarding_background"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <androidx.constraintlayout.widget.Guideline
@@ -61,7 +60,7 @@
         android:layout_marginEnd="12dp"
         android:background="@drawable/turbo_button_enable"
         android:fontFamily="@string/font_ember_regular"
-        android:minWidth="@dimen/onboarding_button_width"
+        android:minWidth="108dp"
         android:minHeight="@dimen/onboarding_button_height"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
@@ -70,34 +69,12 @@
         android:textColor="@color/photonGrey10"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/manual_upgrade_button_negative"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/manual_upgrade_description">
 
         <requestFocus />
     </Button>
-
-    <Button
-        android:id="@+id/manual_upgrade_button_negative"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/turbo_button_disable"
-        android:fontFamily="@string/font_ember_regular"
-        android:minWidth="@dimen/onboarding_button_width"
-        android:minHeight="@dimen/onboarding_button_height"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="@string/manual_upgrade_no_button"
-        android:textAllCaps="false"
-        android:textColor="@color/photonGrey10"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@id/manual_upgrade_button_positive"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/manual_upgrade_button_positive"
-        app:layout_constraintTop_toTopOf="@id/manual_upgrade_button_positive" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
