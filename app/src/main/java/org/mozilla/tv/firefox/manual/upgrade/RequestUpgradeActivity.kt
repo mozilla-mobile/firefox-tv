@@ -28,3 +28,22 @@ class RequestUpgradeActivity : Activity() {
         )
     }
 }
+
+/**
+ * TODO
+ */
+class ForceUpgradeActivity : Activity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.force_manual_upgrade)
+
+        manual_upgrade_title.text = resources.getString(
+            R.string.manual_upgrade_title,
+            resources.getString(R.string.firefox_tv_brand_name_short)
+        )
+        manual_upgrade_description.text = resources.getString(
+            R.string.manual_upgrade_description,
+            resources.getString(R.string.firefox_tv_brand_name_short)
+        )
+    }
+}
