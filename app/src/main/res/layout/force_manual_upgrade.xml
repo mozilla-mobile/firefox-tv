@@ -6,6 +6,8 @@
     android:layout_height="fill_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+    <!-- TODO This file can be removed from master as soon as it has been released. See #2794 -->
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_left_quarter"
         android:layout_width="wrap_content"
