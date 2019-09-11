@@ -17,4 +17,6 @@ object URLs {
     const val URL_GPL = "${APP_URL_PREFIX}gpl"
     const val URL_LICENSES = "${APP_URL_PREFIX}licenses"
     const val PRIVACY_NOTICE_URL = "https://www.mozilla.org/privacy/firefox-fire-tv/"
+
+    const val SEARCH_AMZN_MARKET_BY_PACKAGE = "amzn://apps/android?p="
 }
