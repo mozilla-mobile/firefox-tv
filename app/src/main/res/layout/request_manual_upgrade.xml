@@ -5,8 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="org.mozilla.tv.firefox.onboarding.OnboardingActivity"
-    tools:showIn="@layout/activity_onboarding">
+    android:background="@color/pocket_onboarding_background">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_left_quarter"
@@ -22,46 +21,24 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent=".75" />
 
-    <!-- src and content description set programmatically -->
-    <ImageView
-        android:id="@+id/turbo_image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        app:layout_constraintHeight_default="wrap"
-        app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
-
-    <Space
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/photonGrey70"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/turbo_image_view" />
-
     <!-- text set programmatically -->
     <TextView
-        android:id="@+id/turbo_mode_title"
+        android:id="@+id/manual_upgrade_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:fontFamily="@string/font_ember_light"
         android:textColor="@color/photonGrey10_a80p"
         android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@id/onboarding_main_text"
+        app:layout_constraintBottom_toTopOf="@id/manual_upgrade_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/turbo_image_view"
-        app:layout_constraintVertical_bias="0.36"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <!-- text set programmatically -->
     <TextView
-        android:id="@+id/onboarding_main_text"
+        android:id="@+id/manual_upgrade_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
@@ -70,14 +47,13 @@
         android:textAlignment="center"
         android:textColor="@color/photonGrey10_a80p"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/enable_turbo_mode"
+        app:layout_constraintBottom_toTopOf="@+id/manual_upgrade_button_positive"
         app:layout_constraintEnd_toEndOf="@id/guideline_right_quarter"
         app:layout_constraintStart_toStartOf="@id/guideline_left_quarter"
-        app:layout_constraintTop_toBottomOf="@+id/turbo_mode_title" />
+        app:layout_constraintTop_toBottomOf="@+id/manual_upgrade_title" />
 
-    <!-- text set programmatically -->
     <Button
-        android:id="@+id/enable_turbo_mode"
+        android:id="@+id/manual_upgrade_button_positive"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -85,26 +61,25 @@
         android:layout_marginEnd="12dp"
         android:background="@drawable/turbo_button_enable"
         android:fontFamily="@string/font_ember_regular"
-        android:minWidth="@dimen/onboarding_button_width"
+        android:minWidth="108dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:minHeight="@dimen/onboarding_button_height"
-        android:text="@string/button_turbo_mode_keep_enabled2"
+        android:text="@string/manual_upgrade_yes_button"
         android:textAllCaps="false"
         android:textColor="@color/photonGrey10"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/disable_turbo_mode"
+        app:layout_constraintEnd_toStartOf="@+id/manual_upgrade_button_negative"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/onboarding_main_text">
+        app:layout_constraintTop_toBottomOf="@id/manual_upgrade_description">
 
         <requestFocus />
     </Button>
 
-    <!-- text set programmatically -->
     <Button
-        android:id="@id/disable_turbo_mode"
+        android:id="@+id/manual_upgrade_button_negative"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -112,17 +87,17 @@
         android:layout_marginEnd="8dp"
         android:background="@drawable/turbo_button_disable"
         android:fontFamily="@string/font_ember_regular"
-        android:minWidth="@dimen/onboarding_button_width"
+        android:minWidth="108dp"
         android:minHeight="@dimen/onboarding_button_height"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:text="@string/button_turbo_mode_turn_off2"
+        android:text="@string/manual_upgrade_no_button"
         android:textAllCaps="false"
         android:textColor="@color/photonGrey10"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@id/enable_turbo_mode"
+        app:layout_constraintBottom_toBottomOf="@id/manual_upgrade_button_positive"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/enable_turbo_mode"
-        app:layout_constraintTop_toTopOf="@id/enable_turbo_mode" />
+        app:layout_constraintStart_toEndOf="@+id/manual_upgrade_button_positive"
+        app:layout_constraintTop_toTopOf="@id/manual_upgrade_button_positive" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
