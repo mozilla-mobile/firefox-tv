@@ -4,6 +4,22 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 package org.mozilla.tv.firefox.utils
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import org.mozilla.tv.firefox.utils.BuildConstants.FFTV_PACKAGE
+import org.mozilla.tv.firefox.utils.URLs.SEARCH_AMZN_MARKET_BY_PACKAGE
+
+/**
+ * Handles the boilerplate of construction, conversion, sending/receiving, etc of [Intent]s
+ */
 object IntentUtils {
 
+    fun openFftvStorePage(context: Context) {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse(SEARCH_AMZN_MARKET_BY_PACKAGE + FFTV_PACKAGE)
+        )
+        context.startActivity(intent)
+    }
 }
