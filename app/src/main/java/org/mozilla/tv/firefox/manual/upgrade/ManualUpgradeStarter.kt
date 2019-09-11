@@ -8,13 +8,16 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.preference.PreferenceManager
-import java.time.LocalDateTime
-import java.time.ZoneOffset
+import java.util.Calendar
+import java.util.TimeZone
 
 // TODO This file can be removed from master as soon as it has been released. See #2794
 
 /**
- * TODO
+ * This class determines whether or not an upgrade dialog should be shown. If yes, it shows
+ * the dialog.
+ *
+ * Example of the strategy pattern.
  */
 interface ManualUpgradeStarter {
     /**
@@ -27,25 +30,27 @@ class DoNotShowUpgradeStarter : ManualUpgradeStarter {
     override fun maybeShow(context: Context): Boolean { return false }
 }
 
-// TODO use different time library
 private const val UPGRADE_REQUEST_LAST_SHOWN_AT = "UPGRADE_REQUEST_LAST_SHOWN_AT"
-private val UTC = ZoneOffset.UTC
-private const val SHOW_REQUEST_EVERY_X_DAYS = 5L
+private val UTC = TimeZone.getTimeZone("UTC")
+private const val SHOW_REQUEST_EVERY_X_DAYS = 5
 
 class RequestUpgradeStarter : ManualUpgradeStarter {
 
     override fun maybeShow(context: Context): Boolean {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val lastShownAtEpochSecond = preferences.getLong(UPGRADE_REQUEST_LAST_SHOWN_AT, 0)
-        val lastShownAt = LocalDateTime.ofEpochSecond(lastShownAtEpochSecond, 0, ZoneOffset.UTC)
-        val now = LocalDateTime.now(UTC)
+        val lastShownEpochTime = preferences.getLong(UPGRADE_REQUEST_LAST_SHOWN_AT, 0)
+        val lastShownAt = Calendar.getInstance().apply {
+            this.timeInMillis = lastShownEpochTime
+        }
+        val now = Calendar.getInstance(UTC)
 
-        if (lastShownAt.plusDays(SHOW_REQUEST_EVERY_X_DAYS) >= now) {
+        lastShownAt.add(Calendar.DAY_OF_YEAR, SHOW_REQUEST_EVERY_X_DAYS)
+        if (lastShownAt.before(now)) {
             preferences.edit()
-                .putLong(UPGRADE_REQUEST_LAST_SHOWN_AT, now.toEpochSecond())
+                .putLong(UPGRADE_REQUEST_LAST_SHOWN_AT, now.timeInMillis)
                 .apply()
 
-            context.startActivity(/* RequestUpgradeActivity */)
+            context.startActivity(Intent(context, RequestUpgradeActivity::class.java))
             return true
         }
         return false
