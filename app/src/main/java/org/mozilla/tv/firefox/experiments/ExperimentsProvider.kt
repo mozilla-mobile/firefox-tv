@@ -10,6 +10,10 @@ import mozilla.components.service.fretboard.ExperimentDescriptor
 import mozilla.components.service.fretboard.Fretboard
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.components.locale.LocaleManager
+import org.mozilla.tv.firefox.manual.upgrade.DoNotShowUpgradeStarter
+import org.mozilla.tv.firefox.manual.upgrade.ForceUpgradeStarter
+import org.mozilla.tv.firefox.manual.upgrade.ManualUpgradeStarter
+import org.mozilla.tv.firefox.manual.upgrade.RequestUpgradeStarter
 
 /**
  * [ExperimentsProvider] checks for experiment branch from [Fretboard] to provide its respective content.
@@ -166,6 +170,20 @@ class ExperimentsProvider(private val fretboard: Fretboard, private val context:
             imageId = R.drawable.turbo_mode_onboarding,
             imageContentDescriptionId = R.string.turbo_mode_image_a11y
         )
+    }
+
+    fun getManualUpgradeDialogStarter(): ManualUpgradeStarter {
+        val expDescriptor = checkBranchVariants(ExperimentConfig.MANUAL_UPGRADE_DIALOG)
+        return when {
+            expDescriptor == null -> DoNotShowUpgradeStarter() // Experiment unknown, or overridden to be false.
+            expDescriptor.name.endsWith(ExperimentSuffix.A.value) -> DoNotShowUpgradeStarter()
+            expDescriptor.name.endsWith(ExperimentSuffix.B.value) -> RequestUpgradeStarter()
+            expDescriptor.name.endsWith(ExperimentSuffix.C.value) -> ForceUpgradeStarter()
+            else -> {
+                Sentry.capture(ExperimentIllegalStateException("FxA Login Illegal Branch Name"))
+                DoNotShowUpgradeStarter()
+            }
+        }
     }
 
     /**
