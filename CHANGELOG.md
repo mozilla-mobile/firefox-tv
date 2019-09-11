@@ -11,6 +11,9 @@ It diverges in the following ways:
 ### Changed
 - (disabled by default) Amazon Device Messaging (ADM) is supported in release builds (#2781)
 
+### Added
+- (disabled by default) Dialog prompting users to manually upgrade the app
+
 ## 4.4 - 2019-09-09
 ### Added
 - (disabled by default) Receive tabs onboarding screen (#2495)
