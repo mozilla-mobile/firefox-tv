@@ -110,6 +110,11 @@
             android:exported="false"
             android:theme="@style/AppTheme.Transparent" />
 
+        <activity
+            android:name=".manual.upgrade.RequestUpgradeActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme.Transparent" />
+
         <!-- *** ADM app components start *** -->
         <!-- When required is false, graceful degradation is required. If true, APK will not be available to devices not supporting ADM. -->
         <amazon:enable-feature
