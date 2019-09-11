@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import mozilla.components.concept.sync.AuthType
 import mozilla.components.service.fxa.FxaAuthData
 import mozilla.components.service.fxa.manager.FxaAccountManager
+import mozilla.components.service.fxa.toAuthType
 import mozilla.components.support.base.log.logger.Logger
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.session.SessionRepo
@@ -76,9 +77,10 @@ class FxaLoginUseCase(
 
         fun extractLoginSuccessKeys(uriStr: String): LoginSuccessKeys? {
             val uri = Uri.parse(uriStr)
+            val authType = uri.getQueryParameter("action").toAuthType()
             val code = uri.getQueryParameter("code")
             val state = uri.getQueryParameter("state")
-            return if (code != null && state != null) LoginSuccessKeys(code = code, state = state) else null
+            return if (code != null && state != null) LoginSuccessKeys(authType = authType, code = code, state = state) else null
         }
 
         fun Observable<String>.filterMapLoginSuccessKeys(): Observable<LoginSuccessKeys> =
@@ -107,10 +109,10 @@ class FxaLoginUseCase(
             }
     }
 
-    private data class LoginSuccessKeys(val code: String, val state: String)
+    private data class LoginSuccessKeys(val authType: AuthType, val code: String, val state: String)
 
     private fun FxaAccountManager.finishAuthenticationAsync(keys: LoginSuccessKeys) {
         @Suppress("DeferredResultUnused") // We don't care to wait until completion.
-        finishAuthenticationAsync(FxaAuthData(AuthType.Signin, keys.code, keys.state))
+        finishAuthenticationAsync(FxaAuthData(keys.authType, keys.code, keys.state))
     }
 }
