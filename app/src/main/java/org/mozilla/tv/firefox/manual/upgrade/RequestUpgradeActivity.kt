@@ -6,9 +6,12 @@ package org.mozilla.tv.firefox.manual.upgrade
 
 import android.app.Activity
 import android.os.Bundle
+import kotlinx.android.synthetic.main.request_manual_upgrade.manual_upgrade_button_negative
+import kotlinx.android.synthetic.main.request_manual_upgrade.manual_upgrade_button_positive
 import kotlinx.android.synthetic.main.request_manual_upgrade.manual_upgrade_description
 import kotlinx.android.synthetic.main.request_manual_upgrade.manual_upgrade_title
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.utils.IntentUtils
 
 // TODO This file can be removed from master as soon as it has been released. See #2794
 
@@ -28,6 +31,13 @@ class RequestUpgradeActivity : Activity() {
             R.string.manual_upgrade_description,
             resources.getString(R.string.firefox_tv_brand_name_short)
         )
+
+        manual_upgrade_button_positive.setOnClickListener {
+            IntentUtils.openFftvStorePage(this)
+        }
+        manual_upgrade_button_negative.setOnClickListener {
+            this.finish()
+        }
     }
 }
 
@@ -48,5 +58,9 @@ class ForceUpgradeActivity : Activity() {
             R.string.manual_upgrade_description,
             resources.getString(R.string.firefox_tv_brand_name_short)
         )
+
+        manual_upgrade_button_positive.setOnClickListener {
+            IntentUtils.openFftvStorePage(this)
+        }
     }
 }
