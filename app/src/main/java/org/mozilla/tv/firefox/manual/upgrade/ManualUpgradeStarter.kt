@@ -9,15 +9,20 @@ import android.preference.PreferenceManager
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
+// TODO This file can be removed from master as soon as it has been released. See #2794
+
 /**
  * TODO
  */
 interface ManualUpgradeStarter {
-    fun maybeShow(context: Context)
+    /**
+     * Returns true if onboarding was shown
+     */
+    fun maybeShow(context: Context): Boolean
 }
 
 class DoNotShowUpgradeStarter : ManualUpgradeStarter {
-    override fun maybeShow(context: Context) { /* Noop */ }
+    override fun maybeShow(context: Context): Boolean { return false }
 }
 
 // TODO use different time library
@@ -27,7 +32,7 @@ private const val SHOW_REQUEST_EVERY_X_DAYS = 5L
 
 class RequestUpgradeStarter : ManualUpgradeStarter {
 
-    override fun maybeShow(context: Context) {
+    override fun maybeShow(context: Context): Boolean {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val lastShownAtEpochSecond = preferences.getLong(UPGRADE_REQUEST_LAST_SHOWN_AT, 0)
         val lastShownAt = LocalDateTime.ofEpochSecond(lastShownAtEpochSecond, 0, ZoneOffset.UTC)
@@ -39,12 +44,15 @@ class RequestUpgradeStarter : ManualUpgradeStarter {
                 .apply()
 
             context.startActivity(/* RequestUpgradeActivity */)
+            return true
         }
+        return false
     }
 }
 
 class ForceUpgradeStarter : ManualUpgradeStarter {
-    override fun maybeShow(context: Context) {
+    override fun maybeShow(context: Context): Boolean {
         context.startActivity(/* ForceUpgradeActivity */)
+        return true
     }
 }

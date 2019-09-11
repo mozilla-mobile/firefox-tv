@@ -10,6 +10,8 @@ import kotlinx.android.synthetic.main.request_manual_upgrade.manual_upgrade_desc
 import kotlinx.android.synthetic.main.request_manual_upgrade.manual_upgrade_title
 import org.mozilla.tv.firefox.R
 
+// TODO This file can be removed from master as soon as it has been released. See #2794
+
 /**
  * TODO
  */
@@ -33,6 +35,7 @@ class RequestUpgradeActivity : Activity() {
  * TODO
  */
 class ForceUpgradeActivity : Activity() {
+    // TODO somehow lock users out of the rest of the app
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.force_manual_upgrade)

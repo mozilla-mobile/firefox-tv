@@ -17,7 +17,7 @@ import androidx.lifecycle.Observer
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.sentry.Sentry
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.container_navigation_overlay
 import kotlinx.android.synthetic.main.overlay_debug.debugLog
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
@@ -176,6 +176,13 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         val localeManager = LocaleManager.getInstance()
 
         val onboardingIntent = when {
+            serviceLocator.experimentsProvider.getManualUpgradeDialogStarter()
+                .maybeShow(context = this) -> {
+                // Attempts to show manual upgrade onboarding, and returns true if it is
+                // shown. See ManualUpgradeStarter for details.
+                // TODO This block can be removed from master as soon as it has been released. See #2794
+                null
+            }
             settings.shouldShowTurboModeOnboarding() -> {
                 Intent(this@MainActivity, OnboardingActivity::class.java)
             }
