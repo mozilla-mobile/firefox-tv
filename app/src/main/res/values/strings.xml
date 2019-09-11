@@ -145,6 +145,20 @@
     <!-- Spoken to screen reader users to explain image on Turbo mode onboarding -->
     <string name="turbo_mode_image_a11y">Example of Turbo Mode enabled</string>
 
+    <!-- Manual upgrade dialog strings -->
+    <!-- Title text shown on a screen that asks the user to manually upgrade to the latest version.
+         %1$s will be replaced with Firefox -->
+    <string name="manual_upgrade_title">Keep %1$s up to date</string>
+    <!-- Description text shown on a screen that asks the user to manually upgrade to the latest version.
+         %1$s will be replaced with Firefox -->
+    <string name="manual_upgrade_description">Update %1$s for the latest in performance and security. This update lets you send tabs from other %1$s browsers and view them here on the big screen.</string>
+    <!-- Affirmative button text shown on a screen that asks the user to manually upgrade to the latest version.
+         This button will take users to the Amazon marketplace entry for FFTV -->
+    <string name="manual_upgrade_yes_button">Update</string>
+    <!-- Negative button text shown on a screen that asks the user to manually upgrade to the latest version.
+         This button will return users to the app -->
+    <string name="manual_upgrade_no_button">Not now</string>
+
     <!-- Text displayed in a toast to explain to the user how to unpin a tile from the homescreen.
          SELECT refers to a button on the remote: the button at the center of the 4-way directional navigation. -->
     <string name="homescreen_unpin_tutorial_toast">Press and hold SELECT to unpin from homescreen</string>
