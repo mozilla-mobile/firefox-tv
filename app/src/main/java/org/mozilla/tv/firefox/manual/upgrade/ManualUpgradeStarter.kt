@@ -4,7 +4,9 @@
 
 package org.mozilla.tv.firefox.manual.upgrade
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.preference.PreferenceManager
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -52,7 +54,9 @@ class RequestUpgradeStarter : ManualUpgradeStarter {
 
 class ForceUpgradeStarter : ManualUpgradeStarter {
     override fun maybeShow(context: Context): Boolean {
-        context.startActivity(/* ForceUpgradeActivity */)
+        context.startActivity(Intent(context, ForceUpgradeActivity::class.java))
+        // finish the MainActivity to prevent it from being accessed
+        (context as Activity).finish()
         return true
     }
 }
