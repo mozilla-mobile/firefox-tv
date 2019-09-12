@@ -7,7 +7,6 @@ package org.mozilla.tv.firefox.utils
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import org.mozilla.tv.firefox.utils.BuildConstants.FFTV_PACKAGE
 import org.mozilla.tv.firefox.utils.URLs.SEARCH_AMZN_MARKET_BY_PACKAGE
 
 /**
@@ -16,9 +15,13 @@ import org.mozilla.tv.firefox.utils.URLs.SEARCH_AMZN_MARKET_BY_PACKAGE
 object IntentUtils {
 
     fun openFftvStorePage(context: Context) {
+        // We use this instead of the value in BuildConfig so that it doesn't change between
+        // debug and release builds
+        val releasePackageId = "org.mozilla.tv.firefox"
+
         val intent = Intent(
             Intent.ACTION_VIEW,
-            Uri.parse(SEARCH_AMZN_MARKET_BY_PACKAGE + FFTV_PACKAGE)
+            Uri.parse(SEARCH_AMZN_MARKET_BY_PACKAGE + releasePackageId)
         )
         context.startActivity(intent)
     }
