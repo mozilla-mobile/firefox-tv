@@ -11,14 +11,19 @@ import org.mozilla.tv.firefox.telemetry.SentryIntegration
 private val logger = Logger(FxaReceivedTab::class.java.simpleName)
 
 /**
- * A data container for tabs received from a single device via FxA. While we currently support only
- * one tab, this container can actually contain multiple received tabs.
+ * A data container for tabs received from a single device via FxA. While we currently support
+ * only one tab, this container can actually contain multiple received tabs.
  *
- * This container exists to avoid exposing the underlying [DeviceEvent.TabReceived] events to consumers.
+ * This container exists to avoid exposing the underlying [DeviceEvent.TabReceived] events to
+ * consumers.
+ *
+ * @param [tabReceivedNotification] If possible, this will describe where the tab came from
+ * (e.g., "Sent from Severin's Pixel 2").  If we don't know those details, it will be more
+ * vague (e.g., "Tab received")
  */
 data class FxaReceivedTab(
     val url: String,
-    val sourceDescription: UnresolvedString,
+    val tabReceivedNotification: UnresolvedString,
     val metadata: Metadata
 ) {
     data class Metadata(
@@ -32,6 +37,8 @@ fun Observable<ADMIntegration.ReceivedTabs>.filterMapToDomainObject(
     .flatMap { admTabs ->
         val url = admTabs.tabData
             .map(TabData::url)
+            // Note that we are intentionally discarding all but the first tab here.
+            // TODO fix this in #2777
             .firstOrNull(String::isNotBlank)
 
         if (url == null) {
@@ -51,7 +58,7 @@ fun Observable<ADMIntegration.ReceivedTabs>.filterMapToDomainObject(
 
         val domainObject = FxaReceivedTab(
             url = url,
-            sourceDescription = sourceDescription,
+            tabReceivedNotification = sourceDescription,
             metadata = metadata
         )
 
