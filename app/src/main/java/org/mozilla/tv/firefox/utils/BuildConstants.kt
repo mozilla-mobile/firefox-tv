@@ -13,8 +13,6 @@ import org.mozilla.tv.firefox.BuildConfig
  * Provides constant values related to the build
  */
 object BuildConstants {
-    const val FFTV_PACKAGE = "org.mozilla.tv.firefox"
-
     private const val BUILD_TYPE_DEBUG = "debug"
     private const val BUILD_TYPE_RELEASE = "release"
     private const val PRODUCT_FLAVOR_GECKO = "gecko"
