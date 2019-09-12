@@ -66,7 +66,7 @@
         android:minHeight="@dimen/onboarding_button_height"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:text="@string/manual_upgrade_yes_button"
+        android:text="@string/update_prompt_primary_button"
         android:textAllCaps="false"
         android:textColor="@color/photonGrey10"
         android:textSize="14sp"

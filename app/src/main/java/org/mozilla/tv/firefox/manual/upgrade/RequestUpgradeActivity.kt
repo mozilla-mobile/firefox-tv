@@ -24,11 +24,12 @@ class RequestUpgradeActivity : Activity() {
         setContentView(R.layout.request_manual_upgrade)
 
         manual_upgrade_title.text = resources.getString(
-            R.string.manual_upgrade_title,
+            R.string.update_prompt_header,
             resources.getString(R.string.firefox_tv_brand_name_short)
         )
         manual_upgrade_description.text = resources.getString(
-            R.string.manual_upgrade_description,
+            R.string.update_prompt_instruction,
+            resources.getString(R.string.firefox_tv_brand_name_short),
             resources.getString(R.string.firefox_tv_brand_name_short)
         )
 
@@ -50,11 +51,12 @@ class ForceUpgradeActivity : Activity() {
         setContentView(R.layout.force_manual_upgrade)
 
         manual_upgrade_title.text = resources.getString(
-            R.string.manual_upgrade_title,
+            R.string.update_prompt_header,
             resources.getString(R.string.firefox_tv_brand_name_short)
         )
         manual_upgrade_description.text = resources.getString(
-            R.string.manual_upgrade_description,
+            R.string.update_prompt_instruction,
+            resources.getString(R.string.firefox_tv_brand_name_short),
             resources.getString(R.string.firefox_tv_brand_name_short)
         )
 
