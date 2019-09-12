@@ -275,7 +275,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     }
 
     private fun maybeOpenQueuedTab(): Disposable? {
-        val queuedTab = serviceLocator!!.fxaRepo.queuedTab ?: return null
+        val queuedTab = serviceLocator!!.fxaRepo.queuedFxaTabs.poll() ?: return null
 
         // This is a really bad solution, and could cause future race conditions. Executing
         // immediately throws "java.lang.IllegalStateException: FragmentManager is already
