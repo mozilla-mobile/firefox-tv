@@ -40,7 +40,6 @@ import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.ext.application
-import org.mozilla.tv.firefox.ext.bringAppToForeground
 import org.mozilla.tv.firefox.ext.couldScrollInDirection
 import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.isYoutubeTV
@@ -50,6 +49,7 @@ import org.mozilla.tv.firefox.ext.requireWebRenderComponents
 import org.mozilla.tv.firefox.ext.resetView
 import org.mozilla.tv.firefox.ext.scrollByClamped
 import org.mozilla.tv.firefox.ext.serviceLocator
+import org.mozilla.tv.firefox.ext.startMainActivity
 import org.mozilla.tv.firefox.ext.updateFullscreenScrollPosition
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.fxa.FxaReceivedTab
@@ -283,7 +283,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         return Observable.just("unused")
             .delay(1, TimeUnit.SECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { receiveTab(queuedTab) }
+            .subscribe { openReceivedFxaTab(queuedTab) }
     }
 
     private fun observeReceivedTabs(): Disposable {
@@ -293,20 +293,20 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             val appMightBeInBackground = lifecycle.currentState == Lifecycle.State.CREATED
 
             when {
-                appIsInForeground -> receiveTab(it)
+                appIsInForeground -> openReceivedFxaTab(it)
                 appMightBeInBackground -> {
                     serviceLocator!!.fxaRepo.lastTabCouldNotBeDisplayed()
-                    context?.application?.bringAppToForeground()
+                    context?.application?.startMainActivity()
                 }
                 else -> { }
             }
         }
     }
 
-    private fun receiveTab(receivedTab: FxaReceivedTab) {
+    private fun openReceivedFxaTab(receivedTab: FxaReceivedTab) {
         // TODO: Gracefully handle receiving multiple tabs around the same time. #2777
         serviceLocator!!.screenController.showBrowserScreenForUrl(fragmentManager!!, receivedTab.url)
-        ViewUtils.showCenteredBottomToast(context, receivedTab.sourceDescription.resolve(resources))
+        ViewUtils.showCenteredBottomToast(context, receivedTab.tabReceivedNotification.resolve(resources))
     }
 
     fun loadUrl(url: String) {
