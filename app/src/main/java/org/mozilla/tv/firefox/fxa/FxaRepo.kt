@@ -12,7 +12,9 @@ import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.NONE
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import kotlinx.android.synthetic.main.tabs_onboarding.*
+import io.sentry.util.CircularFifoQueue
+import kotlinx.android.synthetic.main.tabs_onboarding.descriptionText
+import kotlinx.android.synthetic.main.tabs_onboarding.tabs_onboarding_button
 import kotlinx.coroutines.Deferred
 import mozilla.appservices.fxaclient.Config
 import mozilla.components.concept.sync.AccountObserver
@@ -24,6 +26,7 @@ import mozilla.components.concept.sync.Profile
 import mozilla.components.service.fxa.DeviceConfig
 import mozilla.components.service.fxa.manager.FxaAccountManager
 import mozilla.components.support.base.log.logger.Logger
+import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AuthenticatedNoProfile
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AuthenticatedWithProfile
@@ -32,6 +35,7 @@ import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NotAuthenticated
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.Settings
+import java.util.Queue
 import java.util.concurrent.TimeUnit
 
 private val logger = Logger("FxaRepo")
@@ -88,8 +92,8 @@ class FxaRepo(
         .doOnNext { lastReceivedTab = it }
 
     private var lastReceivedTab: FxaReceivedTab? = null
-    var queuedTab: FxaReceivedTab? = null
-        private set
+    // This capacity can be changed if we ever want to support queuing multiple tabs
+    val queuedFxaTabs: Queue<FxaReceivedTab> = CircularFifoQueue(1)
 
     init {
         accountManager.register(accountObserver)
@@ -139,7 +143,7 @@ class FxaRepo(
     }
 
     fun lastTabCouldNotBeDisplayed() {
-        queuedTab = lastReceivedTab
+        queuedFxaTabs.offer(lastReceivedTab)
     }
 
     @SuppressLint("CheckResult") // This survives for the duration of the app
