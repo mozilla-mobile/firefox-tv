@@ -16,7 +16,10 @@ tasks:
         then: ${event.after}
         else: ${event.release.tag_name}
     trust_level:
-      $if: 'tasks_for in ["github-push", "github-release"] && event.repository.html_url == "https://github.com/mozilla-mobile/fenix"'
+      $if: 'tasks_for in ["github-push", "github-release"] && event.repository.html_url == "https://github.com/mozilla-mobile/firefox-tv"'
+      # Trust Level number corresponds to the "trust level" constants from the main Firefox repository.
+      # 3 represents trusted work (it's been reviewed and landed, or it's work by a trusted dev in-repo) while
+      # 1 represents anonymous/untrusted work (PRs)
       then: 3
       else: 1
     repository_full_name:
@@ -101,7 +104,7 @@ tasks:
                     && apt update
                     && apt install -y python3-pip
                     && pip3 install taskcluster
-                    && python3 tools/taskcluster/decision_task.py landed ${event.sender.login}@users.noreply.github.com
+                    && python3 tools/taskcluster/decision_task.py master ${event.sender.login}@users.noreply.github.com
               metadata:
                 owner: ${event.sender.login}@users.noreply.github.com
       - $if: 'tasks_for == "github-release" && event["action"] == "published"'
