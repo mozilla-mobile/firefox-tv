@@ -11,8 +11,8 @@ def pr(builder, branch):
     return (taskcluster.slugId(), builder.craft_pr_task(branch)),
 
 
-def landed(builder):
-    return (taskcluster.slugId(), builder.craft_landed_task()),
+def master(builder):
+    return (taskcluster.slugId(), builder.craft_master_task()),
 
 
 def release(builder, tag):
@@ -27,8 +27,8 @@ def main():
     pr_parser.add_argument('author')
     pr_parser.add_argument('branch')
 
-    landed_parser = subparsers.add_parser('landed')
-    landed_parser.add_argument('author')
+    master_parser = subparsers.add_parser('master')
+    master_parser.add_argument('author')
 
     release_parser = subparsers.add_parser('release')
     release_parser.add_argument('tag')
@@ -41,14 +41,14 @@ def main():
     if command == 'pull-request':
         builder = TaskBuilder(result.author, repo_url, commit, task_group_id)
         ordered_tasks = pr(builder, result.branch)
-    elif command == 'landed':
+    elif command == 'master':
         builder = TaskBuilder(result.author, repo_url, commit, task_group_id)
-        ordered_tasks = landed(builder)
+        ordered_tasks = master(builder)
     elif command == 'release':
         builder = TaskBuilder('firefox-tv@mozilla.com', repo_url, commit, task_group_id)
         ordered_tasks = release(builder, result.tag)
     else:
-        raise ValueError('A command ("pull-request", "landed" or "release") must be provided to '
+        raise ValueError('A command ("pull-request", "master" or "release") must be provided to '
                          'the decision task')
 
     full_task_graph = schedule_task_graph(ordered_tasks)

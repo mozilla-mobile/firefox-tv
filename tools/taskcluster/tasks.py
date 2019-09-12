@@ -5,14 +5,12 @@ import os
 import taskcluster
 
 
-def script_to_bash_command(script):
-    single_command = ' && '.join([line.strip() for line in script.split('\n') if line.strip()])
-    return [
-        '/bin/bash',
-        '--login',
-        '-cx',
-        f'export TERM=dumb && {single_command}'
-    ]
+def artifact(artifact_type, absolute_path):
+    return {
+        'type': artifact_type,
+        'path': absolute_path,
+        'expires': taskcluster.stringDate(taskcluster.fromNow('1 week'))
+    }
 
 
 class TaskBuilder:
@@ -41,15 +39,11 @@ class TaskBuilder:
             script,
             ['secrets:get:project/mobile/firefox-tv/tokens'],
             {
-                'public/reports': {
-                    'type': 'directory',
-                    'path': '/opt/firefox-tv/app/builds/reports',
-                    'expires': taskcluster.stringDate(taskcluster.fromNow('1 week')),
-                }
+                'public/reports': artifact('directory', '/opt/firefox-tv/app/builds/reports')
             }
         )
 
-    def craft_landed_task(self):
+    def craft_master_task(self):
         script = f'''
         git fetch {self.repo_url}
         git config advice.detachedHead false
@@ -65,11 +59,7 @@ class TaskBuilder:
             script,
             ['secrets:get:project/mobile/firefox-tv/tokens'],
             {
-                'public': {
-                    'type': 'directory',
-                    'path': '/opt/firefox-tv/app/builds/reports',
-                    'expires': taskcluster.stringDate(taskcluster.fromNow('1 week')),
-                }
+                'public': artifact('directory', '/opt/firefox-tv/app/builds/reports')
             }
         )
 
@@ -89,11 +79,7 @@ class TaskBuilder:
             script,
             ['secrets:get:project/mobile/firefox-tv/tokens'],
             {
-                'public': {
-                    'type': 'directory',
-                    'path': '/opt/firefox-tv/app/build/outputs/apk',
-                    'expires': taskcluster.stringDate(taskcluster.fromNow('1 week')),
-                }
+                'public': artifact('directory', '/opt/firefox-tv/app/build/outputs/apk')
             }
         )
 
@@ -116,7 +102,6 @@ class TaskBuilder:
             'scopes': scopes,
             'payload': {
                 'maxRunTime': 3600,
-                'deadline': taskcluster.stringDate(taskcluster.fromNow('2 hours')),
                 'image': 'mozillamobile/firefox-tv:2.3',
                 'command': bash_command,
                 'artifacts': artifacts,
