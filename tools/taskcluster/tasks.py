@@ -9,6 +9,9 @@ import os
 import taskcluster
 
 
+NOTIFY_EMAIL_ADDRESS = 'mhentges@mozilla.com'
+
+
 def artifact(artifact_type, absolute_path):
     return {
         'type': artifact_type,
@@ -27,15 +30,15 @@ class TaskBuilder:
     def craft_pr_task(self, branch):
         script = f'''
         git fetch {self.repo_url} {branch}
-        git config advice.detachedHead false
-        git checkout {self.commit}
-        yes | sdkmanager --licenses
-        ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
-        ./gradlew -Pcoverage jacocoSystemDebugTestReport
-        ./tools/taskcluster/upload-coverage-report.sh
-        ./tools/taskcluster/download-firebase-sdk.sh
-        ./tools/taskcluster/google-firebase-testlab-login.sh
-        ./tools/taskcluster/execute-firebase-test.sh system/debug app-system-debug model=sailfish,version=25,orientation=landscape
+        && git config advice.detachedHead false
+        && git checkout {self.commit}
+        && yes | sdkmanager --licenses
+        && ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
+        && ./gradlew -Pcoverage jacocoSystemDebugTestReport
+        && ./tools/taskcluster/upload-coverage-report.sh
+        && ./tools/taskcluster/download-firebase-sdk.sh
+        && ./tools/taskcluster/google-firebase-testlab-login.sh
+        && ./tools/taskcluster/execute-firebase-test.sh system/debug app-system-debug model=sailfish,version=25,orientation=landscape
         '''
 
         return self._craft_shell_task(
@@ -50,12 +53,12 @@ class TaskBuilder:
     def craft_master_task(self):
         script = f'''
         git fetch {self.repo_url}
-        git config advice.detachedHead false
-        git checkout {self.commit}
-        yes | sdkmanager --licenses
-        ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
-        python ./tools/taskcluster/get-bitbar-token.py
-        python ./tools/taskcluster/execute-bitbar-test.py system/debug app-system-debug
+        && git config advice.detachedHead false
+        && git checkout {self.commit}
+        && yes | sdkmanager --licenses
+        && ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
+        && python ./tools/taskcluster/get-bitbar-token.py
+        && python ./tools/taskcluster/execute-bitbar-test.py system/debug app-system-debug
         '''
 
         return self._craft_shell_task(
@@ -70,12 +73,12 @@ class TaskBuilder:
     def craft_release_build_task(self, tag):
         script = f'''
         git fetch {self.repo_url} --tags
-        git config advice.detachedHead false
-        git checkout {tag}
-        yes | sdkmanager --licenses
-        python tools/taskcluster/get-sentry-token.py
-        python tools/taskcluster/get-pocket-token.py
-        ./gradlew --no-daemon clean test assembleSystemRelease
+        && git config advice.detachedHead false
+        && git checkout {tag}
+        && yes | sdkmanager --licenses
+        && python tools/taskcluster/get-sentry-token.py
+        && python tools/taskcluster/get-pocket-token.py
+        && ./gradlew --no-daemon clean test assembleSystemRelease
         '''
 
         return self._craft_shell_task(
@@ -88,19 +91,46 @@ class TaskBuilder:
             chain_of_trust=True,  # Needed for sign and push task verification
         )
 
-    def _craft_shell_task(self, name, script, scopes, artifacts, *, chain_of_trust=False):
-        single_command = ' && '.join([line.strip() for line in script.split('\n') if line.strip()])
+    def craft_email_task(self, sign_task_id, tag):
+        script = f'''
+        apt update
+        && apt install -y python3-pip
+        && pip3 install taskcluster
+        && taskcluster api notify email << EOM
+        {{
+            "address": "{NOTIFY_EMAIL_ADDRESS}",
+            "content": "Download the APK and attach it to the [Github release](https://github.com/mitchhentges/firefox-tv/releases/tag/{tag})",
+            "link": {{
+                "href": "https://mozilla.com",
+                "text": "{tag} APK"
+            }},
+            "subject": "{tag} Github release artifact is signed"
+        }}
+        EOM
+        '''
+
+        return self._craft_shell_task(
+            'Email that Github APK is signed',
+            script,
+            [f'notify:email:{NOTIFY_EMAIL_ADDRESS}'],
+            {},
+            dependencies=[sign_task_id],
+        )
+
+    def _craft_shell_task(self, name, script, scopes, artifacts, *, dependencies=(), chain_of_trust=False):
+        trimmed_script = ' '.join([line.strip() for line in script.split('\n') if line.strip()])
         bash_command = [
             '/bin/bash',
             '--login',
             '-cx',
-            f'export TERM=dumb && {single_command}'
+            f'export TERM=dumb && {trimmed_script}'
         ]
 
         return self._craft_base_task(name, {
             'provisionerId': 'aws-provisioner-v1',
             'workerType': 'github-worker',
             'scopes': scopes,
+            'dependencies': dependencies,
             'payload': {
                 'maxRunTime': 3600,
                 'image': 'mozillamobile/firefox-tv:2.3',
