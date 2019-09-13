@@ -5,11 +5,14 @@
 package org.mozilla.tv.firefox.fxa
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Context
+import android.preference.PreferenceManager
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.NONE
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import kotlinx.android.synthetic.main.tabs_onboarding.*
 import kotlinx.coroutines.Deferred
 import mozilla.appservices.fxaclient.Config
 import mozilla.components.concept.sync.AccountObserver
@@ -31,6 +34,7 @@ import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NeedsReauthentication
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NotAuthenticated
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
+import org.mozilla.tv.firefox.utils.Settings
 import java.util.concurrent.TimeUnit
 
 private val logger = Logger("FxaRepo")
@@ -108,6 +112,29 @@ class FxaRepo(
      */
     fun beginLoginInternalAsync(): Deferred<String?> {
         return accountManager.beginAuthenticationAsync()
+    }
+
+    fun showFxaOnboardingScreen(context: Context) {
+        val dialog = Dialog(context, R.style.OverlayDialogStyle)
+        dialog.setContentView(R.layout.tabs_onboarding)
+
+        val resources = context.resources
+        dialog.descriptionText.text =
+                resources.getString(R.string.fxa_onboarding_instruction,
+                        resources.getString(R.string.app_name))
+
+        dialog.tabs_onboarding_button.setOnClickListener {
+
+            dialog.dismiss()
+        }
+
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putBoolean(Settings.FXA_ONBOARD_SHOWN_PREF, true)
+                .apply()
+
+        TelemetryIntegration.INSTANCE.fxaShowOnboardingEvent()
+        dialog.show()
     }
 
     @SuppressLint("CheckResult") // This survives for the duration of the app
