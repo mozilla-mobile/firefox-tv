@@ -13,8 +13,10 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
 import io.sentry.Sentry
 import kotlinx.android.synthetic.main.activity_main.container_navigation_overlay
@@ -30,7 +32,9 @@ import org.mozilla.tv.firefox.ext.application
 import org.mozilla.tv.firefox.ext.resetView
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.setupForApp
+import org.mozilla.tv.firefox.ext.startMainActivity
 import org.mozilla.tv.firefox.ext.webRenderComponents
+import org.mozilla.tv.firefox.fxa.FxaReceivedTab
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
 import org.mozilla.tv.firefox.onboarding.ReceiveTabPreboardingActivity
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
@@ -50,7 +54,8 @@ interface MediaSessionHolder {
 
 class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, MediaSessionHolder {
     private val LOG_TAG = "MainActivity"
-    private val compositeDisposable = CompositeDisposable()
+    private val startStopCompositeDisposable = CompositeDisposable()
+    private val createDestroyCompositeDisposable = CompositeDisposable()
 
     // There should be at most one MediaSession per process, hence it's in MainActivity.
     // We crash if we init MediaSession at init time, hence lateinit.
@@ -108,6 +113,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             debugLog.visibility = View.VISIBLE
             debugLog.text = "$this $engineViewVersion"
         }
+
+        observeReceivedTabs().addTo(createDestroyCompositeDisposable)
     }
 
     @SuppressLint("MissingSuperCall")
@@ -213,7 +220,9 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
                     null -> { /* do nothing */ }
                 }
             }
-            .addTo(compositeDisposable)
+            .addTo(startStopCompositeDisposable)
+
+        maybeOpenQueuedTab()
     }
 
     override fun onStop() {
@@ -242,6 +251,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
              */
             webRenderComponents.sessionManager.getEngineSession()?.resetView(applicationContext)
         }
+        createDestroyCompositeDisposable.clear()
         super.onDestroy()
     }
 
@@ -300,5 +310,33 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         return videoVoiceCommandMediaSession.dispatchKeyEvent(event) ||
                 serviceLocator.screenController.dispatchKeyEvent(event, fragmentManager) ||
                 super.dispatchKeyEvent(event)
+    }
+
+    private fun maybeOpenQueuedTab() {
+        val queuedTab = serviceLocator.fxaRepo.queuedFxaTabs.poll()
+        if (queuedTab != null) openReceivedFxaTab(queuedTab)
+    }
+
+    private fun observeReceivedTabs(): Disposable {
+        return serviceLocator.fxaRepo.receivedTabs.subscribe {
+            val appIsInForeground = lifecycle.currentState == Lifecycle.State.STARTED ||
+                lifecycle.currentState == Lifecycle.State.RESUMED
+            val appMightBeInBackground = lifecycle.currentState == Lifecycle.State.CREATED
+
+            when {
+                appIsInForeground -> openReceivedFxaTab(it)
+                appMightBeInBackground -> {
+                    serviceLocator.fxaRepo.lastTabCouldNotBeDisplayed()
+                    application?.startMainActivity()
+                }
+                else -> { }
+            }
+        }
+    }
+
+    private fun openReceivedFxaTab(receivedTab: FxaReceivedTab) {
+        // TODO: Gracefully handle receiving multiple tabs around the same time. #2777
+        serviceLocator.screenController.showBrowserScreenForUrl(supportFragmentManager!!, receivedTab.url)
+        ViewUtils.showCenteredBottomToast(this, receivedTab.tabReceivedNotification.resolve(resources))
     }
 }
