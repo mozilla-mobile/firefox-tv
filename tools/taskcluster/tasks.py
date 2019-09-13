@@ -13,7 +13,7 @@ def artifact(artifact_type, absolute_path):
     return {
         'type': artifact_type,
         'path': absolute_path,
-        'expires': taskcluster.stringDate(taskcluster.fromNow('1 week'))
+        'expires': taskcluster.stringDate(taskcluster.fromNow('1 year'))
     }
 
 
@@ -123,7 +123,7 @@ class TaskBuilder:
 
 
 def schedule_task_graph(ordered_tasks):
-    queue = taskcluster.Queue({'rootUrl': os.environ['TASKCLUSTER_PROXY_URL']})
+    queue = taskcluster.Queue({'rootUrl': os.environ.get('TASKCLUSTER_PROXY_URL', 'https://taskcluster.net')})
     full_task_graph = {}
 
     for task_id, task in ordered_tasks:

@@ -55,6 +55,8 @@ def main():
         raise ValueError('A command ("pull-request", "master" or "release") must be provided to '
                          'the decision task')
 
+    # This file is used by chainOfTrust to verify that the signing/push tasks were created by
+    # this decision task
     full_task_graph = schedule_task_graph(ordered_tasks)
     with open('task-graph.json', 'w') as f:
         json.dump(full_task_graph, f)
