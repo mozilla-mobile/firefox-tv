@@ -280,7 +280,7 @@ class NavigationOverlayFragment : Fragment() {
 
                         val settings = Settings.getInstance(context!!)
                         if (settings.shouldShowFxaOnboarding()) {
-                            navigationOverlayViewModel.showFxaOnboardingScreen(context!!)
+                            fxaRepo.showFxaOnboardingScreen(context!!)
                         }
                     }
                     AccountState.NotAuthenticated -> {

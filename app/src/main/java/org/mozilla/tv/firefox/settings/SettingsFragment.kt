@@ -35,6 +35,7 @@ import org.mozilla.tv.firefox.fxa.FxaRepo
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.PicassoWrapper
 import org.mozilla.tv.firefox.utils.RoundCornerTransformation
+import org.mozilla.tv.firefox.utils.ServiceLocator
 
 const val KEY_SETTINGS_TYPE = "KEY_SETTINGS_TYPE"
 
@@ -45,8 +46,11 @@ class SettingsFragment : Fragment() {
     }
 
     var compositeDisposable = CompositeDisposable()
+    private lateinit var serviceLocator: ServiceLocator
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        serviceLocator = context!!.serviceLocator
+
         val settingsVM = FirefoxViewModelProviders.of(this@SettingsFragment).get(SettingsViewModel::class.java)
         val type: SettingsTile = SettingsScreen.valueOf(arguments!!.getString(KEY_SETTINGS_TYPE)!!)
         val view = when (type) {
@@ -59,7 +63,7 @@ class SettingsFragment : Fragment() {
             }
         }
         view.findViewById<ImageButton>(R.id.backButton).setOnClickListener {
-            serviceLocator!!.screenController.handleBack(fragmentManager!!)
+            serviceLocator.screenController.handleBack(fragmentManager!!)
         }
 
         return view
@@ -100,11 +104,11 @@ class SettingsFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.settings_screen_buttons, parentView, false)
         view.confirm_action.setOnClickListener {
-            settingsViewModel.clearBrowsingData(serviceLocator!!.engineViewCache)
-            serviceLocator!!.screenController.handleBack(fragmentManager!!)
+            settingsViewModel.clearBrowsingData(serviceLocator.engineViewCache)
+            serviceLocator.screenController.handleBack(fragmentManager!!)
         }
         view.cancel_action.setOnClickListener {
-            serviceLocator!!.screenController.handleBack(fragmentManager!!)
+            serviceLocator.screenController.handleBack(fragmentManager!!)
         }
         return view
     }
@@ -120,6 +124,11 @@ class SettingsFragment : Fragment() {
         observeFxaProfile(view)
             .forEach { compositeDisposable.add(it) }
 
+        val fxaRepo = serviceLocator.fxaRepo
+        view.buttonFirefoxTabs.setOnClickListener {
+            fxaRepo.showFxaOnboardingScreen(context!!)
+        }
+
         return view
     }
 
@@ -132,7 +141,6 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setupFxaProfileClickListeners(view: View) {
-        val serviceLocator = serviceLocator!!
         val screenController = serviceLocator.screenController
         val fxaRepo = serviceLocator.fxaRepo
         val telemetryIntegration = TelemetryIntegration.INSTANCE

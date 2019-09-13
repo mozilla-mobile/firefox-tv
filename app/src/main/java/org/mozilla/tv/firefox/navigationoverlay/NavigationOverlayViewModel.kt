@@ -4,14 +4,10 @@
 
 package org.mozilla.tv.firefox.navigationoverlay
 
-import android.app.Dialog
-import android.content.Context
-import android.preference.PreferenceManager
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.tabs_onboarding.*
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
@@ -22,7 +18,6 @@ import org.mozilla.tv.firefox.fxa.FxaLoginUseCase
 import org.mozilla.tv.firefox.fxa.FxaRepo
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
-import org.mozilla.tv.firefox.utils.Settings
 
 class ChannelTitles(
     val pinned: String,
@@ -100,28 +95,5 @@ class NavigationOverlayViewModel(
                 fxaLoginUseCase.beginLogin(fragmentManager)
             }
         }
-    }
-
-    fun showFxaOnboardingScreen(context: Context) {
-        val dialog = Dialog(context, R.style.OverlayDialogStyle)
-        dialog.setContentView(R.layout.tabs_onboarding)
-
-        val resources = context.resources
-        dialog.descriptionText.text =
-                resources.getString(R.string.fxa_onboarding_instruction,
-                        resources.getString(R.string.app_name))
-
-        dialog.tabs_onboarding_button.setOnClickListener {
-
-            dialog.dismiss()
-        }
-
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .edit()
-                .putBoolean(Settings.FXA_ONBOARD_SHOWN_PREF, true)
-                .apply()
-
-        TelemetryIntegration.INSTANCE.fxaShowOnboardingEvent()
-        dialog.show()
     }
 }
