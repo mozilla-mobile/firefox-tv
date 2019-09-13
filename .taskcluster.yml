@@ -39,6 +39,10 @@ tasks:
         provisionerId: aws-provisioner-v1
         workerType: mobile-${trust_level}-decision
         requires: all-completed
+        retries: 5
+        priority: lowest
+        routes:
+          - statuses
         payload:
           maxRunTime: 6000
           image: mozillamobile/firefox-tv:2.3
@@ -52,6 +56,7 @@ tasks:
             MOBILE_HEAD_REPOSITORY: ${repository}
             MOBILE_HEAD_REV: ${head_rev}
           features:
+            chainOfTrust: true
             taskclusterProxy: true
           artifacts:
             public/task-graph.json:
@@ -66,6 +71,8 @@ tasks:
               type: file
               path: /opt/firefox-tv/parameters.yml
               expires: {$fromNow: '1 year'}
+        extra:
+          tasks_for: ${tasks_for} # for chain of trust to re-build the task
         metadata:
           name: 'Decision task'
           description: ''
