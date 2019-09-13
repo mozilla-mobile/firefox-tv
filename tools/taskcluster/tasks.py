@@ -84,10 +84,11 @@ class TaskBuilder:
             ['secrets:get:project/mobile/firefox-tv/tokens'],
             {
                 'public': artifact('directory', '/opt/firefox-tv/app/build/outputs/apk')
-            }
+            },
+            chain_of_trust=True,  # Needed for sign and push task verification
         )
 
-    def _craft_shell_task(self, name, script, scopes, artifacts):
+    def _craft_shell_task(self, name, script, scopes, artifacts, *, chain_of_trust=False):
         single_command = ' && '.join([line.strip() for line in script.split('\n') if line.strip()])
         bash_command = [
             '/bin/bash',
@@ -96,13 +97,9 @@ class TaskBuilder:
             f'export TERM=dumb && {single_command}'
         ]
 
-        return {
-            'taskGroupId': self.task_group_id,
+        return self._craft_base_task(name, {
             'provisionerId': 'aws-provisioner-v1',
-            'schedulerId': 'taskcluster-github',
             'workerType': 'github-worker',
-            'created': taskcluster.stringDate(datetime.datetime.now()),
-            'deadline': taskcluster.stringDate(taskcluster.fromNow('1 day')),
             'scopes': scopes,
             'payload': {
                 'maxRunTime': 3600,
@@ -111,14 +108,65 @@ class TaskBuilder:
                 'artifacts': artifacts,
                 'features': {
                     'taskclusterProxy': True,
+                    'chainOfTrust': chain_of_trust,
                 }
+            }
+        })
+
+    def craft_sign_for_github_task(self, build_task_id, is_staging):
+        return self._craft_base_task('Sign for Github', {
+            'provisionerId': 'scriptworker-prov-v1',
+            'workerType': 'mobile-signing-dep-v1' if is_staging else 'mobile-signing-v1',
+            'scopes': [
+                'project:mobile:firefox-tv:releng:signing:format:autograph_apk',
+                'project:mobile:firefox-tv:releng:signing:cert:{}-signing'.format(
+                    'dep' if is_staging else 'production')
+            ],
+            'dependencies': [build_task_id],
+            'payload': {
+                'upstreamArtifacts': [{
+                    'paths': ['public/build/target.apk'],
+                    'formats': ['autograph_apk'],
+                    'taskId': build_task_id,
+                    'taskType': 'build',
+                }]
             },
+        })
+
+    def craft_amazon_task(self, build_task_id, is_staging):
+        return self._craft_base_task('Push to Amazon', {
+            'provisionerId': 'scriptworker-prov-v1',
+            'workerType': 'mobile-pushapk-dep-v1' if is_staging else 'mobile-pushapk-v1',
+            'scopes': [
+                'project:mobile:firefox-tv:releng:googleplay:product:firefox-tv{}'.format(
+                    ':dep' if is_staging else ''
+                )
+            ],
+            'dependencies': [build_task_id],
+            'payload': {
+                'target_store': 'amazon',
+                'channel': 'production',
+                'upstreamArtifacts': [{
+                    'paths': ['public/build/target.apk'],
+                    'taskId': build_task_id,
+                    'taskType': 'build',
+                }]
+            }
+        })
+
+    def _craft_base_task(self, name, extend_task):
+        return {
+            'taskGroupId': self.task_group_id,
+            'schedulerId': 'taskcluster-github',
+            'created': taskcluster.stringDate(datetime.datetime.now()),
+            'deadline': taskcluster.stringDate(taskcluster.fromNow('1 day')),
             'metadata': {
                 'name': name,
                 'description': '',
                 'owner': self.owner,
                 'source': f'{self.repo_url}/raw/{self.commit}/.taskcluster.yml',
-            }
+            },
+            **extend_task
         }
 
 
