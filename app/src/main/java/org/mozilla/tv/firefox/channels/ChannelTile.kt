@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.RequestCreator
@@ -103,10 +104,18 @@ sealed class ImageSetStrategy {
 
     data class ById(val id: Int) : ImageSetStrategy() {
         override fun invoke(imageView: ImageView) {
-            PicassoWrapper.client
-                .load(id)
-                .applyTransformationIfNotNull(transformation)
-                .into(imageView)
+            // Picasso doesn't support SVGs, so we need to do a little extra work to be
+            // able to apply our transformation
+            // See https://github.com/square/picasso/issues/1109
+            val bitmap = imageView.context.resources.getDrawable(id, null)
+                .toBitmap()
+                .let {
+                    val transformation = transformation
+                    if (transformation != null) transformation.transform(it)
+                    else it
+                }
+
+            imageView.setImageBitmap(bitmap)
         }
     }
 
