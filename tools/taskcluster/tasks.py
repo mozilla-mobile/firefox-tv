@@ -28,10 +28,10 @@ class TaskBuilder:
         self.task_group_id = task_group_id
 
     def craft_pr_task(self, branch):
-        script = f'''
-        git fetch {self.repo_url} {branch}
+        script = '''
+        git fetch {} {}
         git config advice.detachedHead false
-        git checkout {self.commit}
+        git checkout {}
         yes | sdkmanager --licenses
         ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
         ./gradlew -Pcoverage jacocoSystemDebugTestReport
@@ -39,7 +39,7 @@ class TaskBuilder:
         ./tools/taskcluster/download-firebase-sdk.sh
         ./tools/taskcluster/google-firebase-testlab-login.sh
         ./tools/taskcluster/execute-firebase-test.sh system/debug app-system-debug model=sailfish,version=25,orientation=landscape
-        '''
+        '''.format(self.repo_url, branch, self.commit)
 
         return self._craft_shell_task(
             "Firefox for Amazon's Fire TV - Build - Pull Request",
@@ -51,15 +51,15 @@ class TaskBuilder:
         )
 
     def craft_master_task(self):
-        script = f'''
-        git fetch {self.repo_url}
+        script = '''
+        git fetch {}
         git config advice.detachedHead false
-        git checkout {self.commit}
+        git checkout {}
         yes | sdkmanager --licenses
         ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
         python ./tools/taskcluster/get-bitbar-token.py
         python ./tools/taskcluster/execute-bitbar-test.py system/debug app-system-debug
-        '''
+        '''.format(self.repo_url, self.commit)
 
         return self._craft_shell_task(
             "Firefox for Amazon's Fire TV - Build - Master",
@@ -71,18 +71,18 @@ class TaskBuilder:
         )
 
     def craft_release_build_task(self, tag):
-        script = f'''
-        git fetch {self.repo_url} --tags
+        script = '''
+        git fetch {} --tags
         git config advice.detachedHead false
-        git checkout {tag}
+        git checkout {}
         yes | sdkmanager --licenses
         python tools/taskcluster/get-sentry-token.py
         python tools/taskcluster/get-pocket-token.py
         ./gradlew --no-daemon clean test assembleSystemRelease
-        '''
+        '''.format(self.repo_url, tag)
 
         return self._craft_shell_task(
-            f'Firefox for Fire TV - Release build {tag}',
+            'Firefox for Fire TV - Release build {}'.format(tag),
             script,
             ['secrets:get:project/mobile/firefox-tv/tokens'],
             {
@@ -96,7 +96,7 @@ class TaskBuilder:
         # we do want the JSON to have the escaped newline.
         # This email content is formatted with markdown by Taskcluster
         content = 'Automation for this release is ready. Please: \n' \
-                  f'* Download the APK and attach it to the [Github release](https://github.com/mozilla-mobile/firefox-tv/releases/tag/{tag})\n' \
+                  '* Download the APK and attach it to the [Github release](https://github.com/mozilla-mobile/firefox-tv/releases/tag/{})\n'.format(tag) + \
                   '* [Deploy the new release on Amazon](https://developer.amazon.com/apps-and-games/console/app/amzn1.devportal.mobileapp.7f334089688646ef8953d041021029c9/release/amzn1.devportal.apprelease.4ca3990c43f34101bf5729543343747a/general/detail)'
 
         return self._craft_base_task(
@@ -110,10 +110,10 @@ class TaskBuilder:
                 ],
                 'requires': 'all-completed',
                 'routes': [
-                    f'notify.email.{NOTIFY_EMAIL_ADDRESS}.on-completed'
+                    'notify.email.{}.on-completed'.format(NOTIFY_EMAIL_ADDRESS)
                 ],
                 'scopes': [
-                    f'queue:route:notify.email.{NOTIFY_EMAIL_ADDRESS}.on-completed',
+                    'queue:route:notify.email.{}.on-completed'.format(NOTIFY_EMAIL_ADDRESS),
                     'queue:create-task:built-in/succeed',
                 ],
                 'payload': {},
@@ -121,10 +121,10 @@ class TaskBuilder:
                     'notify': {
                         'email': {
                             'content': content,
-                            'subject': f'Release {tag} is ready for deployment',
+                            'subject': 'Release {} is ready for deployment'.format(tag),
                             'link': {
-                                'href': f'https://queue.taskcluster.net/v1/task/{sign_task_id}/artifacts/public/build/target.apk',
-                                'text': f'{tag} APK',
+                                'href': 'https://queue.taskcluster.net/v1/task/{}/artifacts/public/build/target.apk'.format(sign_task_id),
+                                'text': '{} APK'.format(tag),
                             }
                         }
                     }
@@ -132,7 +132,7 @@ class TaskBuilder:
             }
         )
 
-    def _craft_shell_task(self, name, script, scopes, artifacts, *, dependencies=(), chain_of_trust=False):
+    def _craft_shell_task(self, name, script, scopes, artifacts, dependencies=(), chain_of_trust=False):
         # The script value here is probably produced from a python heredoc string, which means
         # it has unnecessary whitespace in it. This will iterate over each line and remove the
         # redundant whitespace
@@ -142,9 +142,7 @@ class TaskBuilder:
             '--login',
             '-c',
             'cat <<"SCRIPT" > ../script.sh && bash -e ../script.sh\n'
-            'export TERM=dumb\n'
-            f'{trimmed_script}\n'
-            'SCRIPT'
+            'export TERM=dumb\n{}\nSCRIPT'.format(trimmed_script),
         ]
 
         return self._craft_base_task(name, {
@@ -206,7 +204,7 @@ class TaskBuilder:
         })
 
     def _craft_base_task(self, name, extend_task):
-        return {
+        return dict({
             'taskGroupId': self.task_group_id,
             'schedulerId': 'taskcluster-github',
             'created': taskcluster.stringDate(datetime.datetime.now()),
@@ -215,10 +213,9 @@ class TaskBuilder:
                 'name': name,
                 'description': '',
                 'owner': self.owner,
-                'source': f'{self.repo_url}/raw/{self.commit}/.taskcluster.yml',
+                'source': '{}/raw/{}/.taskcluster.yml'.format(self.repo_url, self.commit),
             },
-            **extend_task
-        }
+        }, **extend_task)
 
 
 def schedule_task_graph(ordered_tasks):
