@@ -318,15 +318,19 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     }
 
     private fun observeReceivedTabs(): Disposable {
-        return serviceLocator.fxaRepo.receivedTabs.subscribe {
+        return serviceLocator.fxaRepo.receivedTabs.subscribe { consumableTab ->
             val appIsInForeground = lifecycle.currentState == Lifecycle.State.STARTED ||
                 lifecycle.currentState == Lifecycle.State.RESUMED
             val appMightBeInBackground = lifecycle.currentState == Lifecycle.State.CREATED
 
             when {
-                appIsInForeground -> openReceivedFxaTab(it)
+                appIsInForeground -> {
+                    consumableTab.consume { tab ->
+                        openReceivedFxaTab(tab)
+                        true // Consume value
+                    }
+                }
                 appMightBeInBackground -> {
-                    serviceLocator.fxaRepo.queueReceivedTabForNextAppForeground()
                     application?.startMainActivity()
                 }
                 else -> { }
