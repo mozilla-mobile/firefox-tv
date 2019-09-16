@@ -100,6 +100,10 @@ because it does not pass validation (e.g. it contains blank URLs), we record the
 | Fxa profile sign out clicked           | action   | click                 | fxa          | fxa_sign_out_button      |               |
 | Fxa profile back button clicked        | action   | click                 | fxa          | fxa_go_back_button       |               |
 | Fxa needs reauthentication ****        | action   | change                | fxa          | fxa_needs_reauthentication | boolean     |
+| Fxa logged in state                    | action   | change                | fxa          | fxa_logged_in            |               |
+| Fxa logged out state                   | action   | change                | fxa          | fxa_logged_out           |               |
+| Fxa preboarding not now button click   | action   | click                 | fxa          | fxa_preboarding_not_now  |               |
+| Fxa preboarding sign in button click   | action   | click                 | fxa          | fxa_preboarding_sign_in  |               |
 
 (*)When the pin site switch is clicked, the state (on/off) of the desktop mode switch is also sent.
 
