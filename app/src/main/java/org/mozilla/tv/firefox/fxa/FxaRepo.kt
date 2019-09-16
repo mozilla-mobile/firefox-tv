@@ -166,6 +166,8 @@ class FxaRepo(
 
             // Push service is only needed when logged in (this saves resources)
             admIntegration.initPushFeature()
+
+            telemetryIntegration.fxaLoggedInEvent()
         }
 
         override fun onAuthenticationProblems() {
@@ -177,6 +179,8 @@ class FxaRepo(
 
             // Push service is not needed after logging out (this saves resources)
             admIntegration.shutdownPushFeature()
+
+            telemetryIntegration.fxaLoggedOutEvent()
         }
 
         /**
