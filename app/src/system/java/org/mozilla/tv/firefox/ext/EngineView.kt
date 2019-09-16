@@ -214,6 +214,20 @@ fun EngineView.handleYoutubeBack(indexToGoBackTo: Int) {
     webView!!.goBackOrForward(-goBackSteps)
 }
 
+fun EngineView.maybebGoBackBeforeFxaSignIn() {
+    val backForwardList = this.backForwardList.toStandardList()
+
+    val signInIndex = backForwardList.map { it.url } // or it.originalUrl?
+        .indexOf("TODO sign in URL") // TODO upate with URL
+    val preSignInIndex = signInIndex - 1
+
+    webView?.let {
+        if (it.canGoBackOrForward(preSignInIndex)) {
+            it.goBackOrForward(preSignInIndex)
+        }
+    }
+}
+
 val EngineView.backForwardList: WebBackForwardList
         get() = webView!!.copyBackForwardList()
 
