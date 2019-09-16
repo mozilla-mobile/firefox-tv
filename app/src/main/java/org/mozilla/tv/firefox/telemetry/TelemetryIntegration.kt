@@ -483,7 +483,7 @@ open class TelemetryIntegration protected constructor(
             DeviceType.TV -> ReceivedTabDeviceType.TV
             DeviceType.VR -> ReceivedTabDeviceType.VR
 
-            DeviceType.UNKNOWN, null -> ReceivedTabDeviceType.UNKNOWN
+            DeviceType.UNKNOWN -> ReceivedTabDeviceType.UNKNOWN
         }.extra
 
         TelemetryEvent.create(Category.ACTION, Method.RECEIVED_TAB, null)
