@@ -88,7 +88,6 @@ class FxaRepo(
     val accountState: Observable<AccountState> = _accountState.hide()
 
     val receivedTabs: Observable<Consumable<FxaReceivedTab>> = admIntegration.receivedTabsRaw
-        .doOnNext { telemetryIntegration.receivedTabEvent(it) }
         .filterMapToDomainObject()
         .map { Consumable.from(it) }
         .replay(1)

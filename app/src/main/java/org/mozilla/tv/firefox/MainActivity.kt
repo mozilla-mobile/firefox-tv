@@ -326,6 +326,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             when {
                 appIsInForeground -> {
                     consumableTab.consume { tab ->
+                        TelemetryIntegration.INSTANCE.receivedTabEvent(tab.metadata)
                         openReceivedFxaTab(tab)
                         true // Consume value
                     }
