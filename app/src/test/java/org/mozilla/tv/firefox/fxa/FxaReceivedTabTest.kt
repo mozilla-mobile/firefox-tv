@@ -28,7 +28,7 @@ class FxaReceivedTabTest {
     }
 
     @Test
-    fun `WHEN one receive tab event occurs with two URLs and a non-null device THEN receivedTabs emits the corresponding event`() {
+    fun `WHEN one receive tab event occurs with two URLs and a non-null device THEN the corresponding event is emitted`() {
         val expectedDeviceName = "Expected device name"
         val expectedTabUrls = getTwoExpectedTabUrls()
         val expected = FxaReceivedTab(
@@ -47,7 +47,7 @@ class FxaReceivedTabTest {
     }
 
     @Test
-    fun `WHEN a receive tab event occurs with two URLs and a null device THEN receivedTabs emits the corresponding event`() {
+    fun `WHEN a receive tab event occurs with two URLs and a null device THEN the corresponding event is emitted`() {
         val expectedTabUrls = getTwoExpectedTabUrls()
         val expected = FxaReceivedTab(
             expectedTabUrls[0],
@@ -70,7 +70,7 @@ class FxaReceivedTabTest {
     )
 
     @Test
-    fun `WHEN a receive tab event occurs with blank and non-blank URLs THEN receivedTabs emits an event with tabs with blank URLs filtered out`() {
+    fun `WHEN a receive tab event occurs with blank and non-blank URLs THEN an event with tabs with blank URLs filtered out is emitted`() {
         val expectedTabUrls = getTwoExpectedTabUrls()
         val expected = FxaReceivedTab(
             expectedTabUrls[0],
@@ -89,7 +89,7 @@ class FxaReceivedTabTest {
     }
 
     @Test
-    fun `WHEN a receive tab event occurs with empty entries THEN sentry records an event and receivedTabs does not emit`() {
+    fun `WHEN a receive tab event occurs with empty entries THEN sentry records an event and nothing is emitted`() {
         val tabReceivedEvent = ADMIntegration.ReceivedTabs(null, emptyList())
 
         Observable.just(tabReceivedEvent)
@@ -101,7 +101,7 @@ class FxaReceivedTabTest {
     }
 
     @Test
-    fun `WHEN a receive tab event occurs with only blank URLs THEN sentry records an event and receivedTabs does not emit`() {
+    fun `WHEN a receive tab event occurs with only blank URLs THEN sentry records an event and nothing is emitted`() {
         val inputTabData = List(2) { TabData(title = "TabName $it", url = "   ") }
         val tabReceivedEvent = mockADMTabReceivedEventWithNullDevice(inputTabData)
 
