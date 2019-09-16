@@ -12,7 +12,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.NONE
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
-import io.sentry.util.CircularFifoQueue
 import kotlinx.android.synthetic.main.tabs_onboarding.descriptionText
 import kotlinx.android.synthetic.main.tabs_onboarding.tabs_onboarding_button
 import kotlinx.coroutines.Deferred
@@ -36,7 +35,6 @@ import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NotAuthenticated
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.Settings
-import java.util.Queue
 import java.util.concurrent.TimeUnit
 
 private val logger = Logger("FxaRepo")
@@ -92,9 +90,6 @@ class FxaRepo(
         .map { Consumable.from(it) }
         .replay(1)
         .autoConnect(0)
-
-    // This capacity can be changed if we ever want to support queuing multiple tabs
-    val queuedFxaTabs: Queue<FxaReceivedTab> = CircularFifoQueue(1)
 
     init {
         accountManager.register(accountObserver)
