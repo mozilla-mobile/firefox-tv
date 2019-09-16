@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 package org.mozilla.tv.firefox.fxa
 
 import io.reactivex.Observable
@@ -17,13 +21,13 @@ private val logger = Logger(FxaReceivedTab::class.java.simpleName)
  * This container exists to avoid exposing the underlying [DeviceEvent.TabReceived] events to
  * consumers.
  *
- * @param [tabReceivedNotification] If possible, this will describe where the tab came from
+ * @param [tabReceivedNotificationText] If possible, this will describe where the tab came from
  * (e.g., "Sent from Severin's Pixel 2").  If we don't know those details, it will be more
  * vague (e.g., "Tab received")
  */
 data class FxaReceivedTab(
     val url: String,
-    val tabReceivedNotification: UnresolvedString,
+    val tabReceivedNotificationText: UnresolvedString,
     val metadata: Metadata
 ) {
     data class Metadata(
@@ -47,7 +51,7 @@ fun Observable<ADMIntegration.ReceivedTabs>.filterMapToDomainObject(
             return@flatMap Observable.empty<FxaReceivedTab>()
         }
 
-        val sourceDescription = when (admTabs.device) {
+        val tabReceivedNotificationText = when (admTabs.device) {
             null -> UnresolvedString(R.string.fxa_tab_sent_toast_no_device)
             else -> UnresolvedString(R.string.fxa_tab_sent_toast, listOf(admTabs.device.displayName))
         }
@@ -58,7 +62,7 @@ fun Observable<ADMIntegration.ReceivedTabs>.filterMapToDomainObject(
 
         val domainObject = FxaReceivedTab(
             url = url,
-            tabReceivedNotification = sourceDescription,
+            tabReceivedNotificationText = tabReceivedNotificationText,
             metadata = metadata
         )
 
