@@ -19,6 +19,7 @@ import mozilla.components.concept.sync.OAuthAccount
 import mozilla.components.concept.sync.Profile
 import mozilla.components.concept.sync.TabData
 import mozilla.components.service.fxa.manager.FxaAccountManager
+import mozilla.components.support.base.observer.Consumable
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
@@ -49,7 +50,7 @@ class FxaRepoTest {
     private lateinit var fxaRepo: FxaRepo
     private lateinit var accountState: Observable<FxaRepo.AccountState>
     private lateinit var accountStateTestObs: TestObserver<FxaRepo.AccountState>
-    private lateinit var receivedTabsTestObs: TestObserver<FxaReceivedTab>
+    private lateinit var receivedTabsTestObs: TestObserver<Consumable<FxaReceivedTab>>
 
     @Before
     fun setUp() {

@@ -26,6 +26,7 @@ import mozilla.components.concept.sync.Profile
 import mozilla.components.service.fxa.DeviceConfig
 import mozilla.components.service.fxa.manager.FxaAccountManager
 import mozilla.components.support.base.log.logger.Logger
+import mozilla.components.support.base.observer.Consumable
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.AuthenticatedNoProfile
@@ -86,12 +87,13 @@ class FxaRepo(
     private val _accountState: BehaviorSubject<AccountState> = BehaviorSubject.createDefault(NotAuthenticated)
     val accountState: Observable<AccountState> = _accountState.hide()
 
-    val receivedTabs: Observable<FxaReceivedTab> = admIntegration.receivedTabsRaw
+    val receivedTabs: Observable<Consumable<FxaReceivedTab>> = admIntegration.receivedTabsRaw
         .doOnNext { telemetryIntegration.receivedTabEvent(it) }
         .filterMapToDomainObject()
-        .doOnNext { lastReceivedTab = it } // TODO in next commit: this only works if someone is listening.  Move it to a seprate subscription
+        .map { Consumable.from(it) }
+        .replay(1)
+        .autoConnect(0)
 
-    private var lastReceivedTab: FxaReceivedTab? = null
     // This capacity can be changed if we ever want to support queuing multiple tabs
     val queuedFxaTabs: Queue<FxaReceivedTab> = CircularFifoQueue(1)
 
@@ -140,10 +142,6 @@ class FxaRepo(
 
         TelemetryIntegration.INSTANCE.fxaShowOnboardingEvent()
         dialog.show()
-    }
-
-    fun queueReceivedTabForNextAppForeground() {
-        queuedFxaTabs.offer(lastReceivedTab)
     }
 
     @SuppressLint("CheckResult") // This survives for the duration of the app
