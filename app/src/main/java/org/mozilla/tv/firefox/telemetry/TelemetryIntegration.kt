@@ -119,6 +119,8 @@ open class TelemetryIntegration protected constructor(
         const val FXA_SHOW_ONBOARDING = "fxa_show_onboarding"
         const val FXA_PREBOARDING_NOT_NOW = "fxa_preboarding_not_now"
         const val FXA_PREBOARDING_SIGN_IN = "fxa_preboarding_sign_in"
+        const val FXA_LOGGED_IN = "fxa_logged_in"
+        const val FXA_LOGGED_OUT = "fxa_logged_out"
     }
 
     private object Extra {
@@ -337,6 +339,14 @@ open class TelemetryIntegration protected constructor(
 
     fun fxaPreboardingDismissButtonClickEvent() {
         TelemetryEvent.create(Category.ACTION, Method.CLICK, Object.FXA, Value.FXA_PREBOARDING_NOT_NOW).queue()
+    }
+
+    fun fxaLoggedInEvent() {
+        TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.FXA, Value.FXA_LOGGED_IN).queue()
+    }
+
+    fun fxaLoggedOutEvent() {
+        TelemetryEvent.create(Category.ACTION, Method.CHANGE, Object.FXA, Value.FXA_LOGGED_OUT).queue()
     }
 
     /**
