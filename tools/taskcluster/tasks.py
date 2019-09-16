@@ -9,7 +9,7 @@ import os
 import taskcluster
 
 
-NOTIFY_EMAIL_ADDRESS = 'mhentges@mozilla.com'
+NOTIFY_EMAIL_ADDRESS = 'firefox-tv@mozilla.com'
 
 
 def artifact(artifact_type, absolute_path):
@@ -30,15 +30,15 @@ class TaskBuilder:
     def craft_pr_task(self, branch):
         script = f'''
         git fetch {self.repo_url} {branch}
-        && git config advice.detachedHead false
-        && git checkout {self.commit}
-        && yes | sdkmanager --licenses
-        && ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
-        && ./gradlew -Pcoverage jacocoSystemDebugTestReport
-        && ./tools/taskcluster/upload-coverage-report.sh
-        && ./tools/taskcluster/download-firebase-sdk.sh
-        && ./tools/taskcluster/google-firebase-testlab-login.sh
-        && ./tools/taskcluster/execute-firebase-test.sh system/debug app-system-debug model=sailfish,version=25,orientation=landscape
+        git config advice.detachedHead false
+        git checkout {self.commit}
+        yes | sdkmanager --licenses
+        ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
+        ./gradlew -Pcoverage jacocoSystemDebugTestReport
+        ./tools/taskcluster/upload-coverage-report.sh
+        ./tools/taskcluster/download-firebase-sdk.sh
+        ./tools/taskcluster/google-firebase-testlab-login.sh
+        ./tools/taskcluster/execute-firebase-test.sh system/debug app-system-debug model=sailfish,version=25,orientation=landscape
         '''
 
         return self._craft_shell_task(
@@ -53,12 +53,12 @@ class TaskBuilder:
     def craft_master_task(self):
         script = f'''
         git fetch {self.repo_url}
-        && git config advice.detachedHead false
-        && git checkout {self.commit}
-        && yes | sdkmanager --licenses
-        && ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
-        && python ./tools/taskcluster/get-bitbar-token.py
-        && python ./tools/taskcluster/execute-bitbar-test.py system/debug app-system-debug
+        git config advice.detachedHead false
+        git checkout {self.commit}
+        yes | sdkmanager --licenses
+        ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
+        python ./tools/taskcluster/get-bitbar-token.py
+        python ./tools/taskcluster/execute-bitbar-test.py system/debug app-system-debug
         '''
 
         return self._craft_shell_task(
@@ -73,12 +73,12 @@ class TaskBuilder:
     def craft_release_build_task(self, tag):
         script = f'''
         git fetch {self.repo_url} --tags
-        && git config advice.detachedHead false
-        && git checkout {tag}
-        && yes | sdkmanager --licenses
-        && python tools/taskcluster/get-sentry-token.py
-        && python tools/taskcluster/get-pocket-token.py
-        && ./gradlew --no-daemon clean test assembleSystemRelease
+        git config advice.detachedHead false
+        git checkout {tag}
+        yes | sdkmanager --licenses
+        python tools/taskcluster/get-sentry-token.py
+        python tools/taskcluster/get-pocket-token.py
+        ./gradlew --no-daemon clean test assembleSystemRelease
         '''
 
         return self._craft_shell_task(
@@ -91,39 +91,45 @@ class TaskBuilder:
             chain_of_trust=True,  # Needed for sign and push task verification
         )
 
-    def craft_email_task(self, sign_task_id, tag):
+    def craft_email_task(self, sign_task_id, push_task_id, tag):
+        # The "\\n" are hard-coded on purpose, since we don't want a newline in the string, but
+        # we do want the JSON to have the escaped newline
+        content = 'Automation for this release is ready. Please: \\n' \
+                  f'* Download the APK and attach it to the [Github release](https://github.com/mozillamobile/firefox-tv/releases/tag/{tag})\\n' \
+                  '* [Deploy the new release on Amazon](https://developer.amazon.com/apps-and-games/console/app/amzn1.devportal.mobileapp.7f334089688646ef8953d041021029c9/release/amzn1.devportal.apprelease.4ca3990c43f34101bf5729543343747a/general/detail)'
         script = f'''
-        apt update
-        && apt install -y python3-pip
-        && pip3 install taskcluster
-        && taskcluster api notify email << EOM
+        curl -X POST "$TASKCLUSTER_PROXY_URL/notify/v1/email" -H "Content-Type: application/json" -d "$(cat <<EOM
         {{
             "address": "{NOTIFY_EMAIL_ADDRESS}",
-            "content": "Download the APK and attach it to the [Github release](https://github.com/mitchhentges/firefox-tv/releases/tag/{tag})",
+            "content": "{content}",
             "link": {{
-                "href": "https://mozilla.com",
+                "href": "https://queue.taskcluster.net/v1/task/{sign_task_id}/artifacts/public/build/target.apk",
                 "text": "{tag} APK"
             }},
-            "subject": "{tag} Github release artifact is signed"
+            "subject": "Release {tag} is ready for deployment"
         }}
         EOM
+        )"
         '''
 
         return self._craft_shell_task(
-            'Email that Github APK is signed',
+            'Email that automation is complete',
             script,
             [f'notify:email:{NOTIFY_EMAIL_ADDRESS}'],
             {},
-            dependencies=[sign_task_id],
+            dependencies=[sign_task_id, push_task_id],
         )
 
     def _craft_shell_task(self, name, script, scopes, artifacts, *, dependencies=(), chain_of_trust=False):
-        trimmed_script = ' '.join([line.strip() for line in script.split('\n') if line.strip()])
+        trimmed_script = '\n'.join([line.strip() for line in script.split('\n') if line.strip()])
         bash_command = [
             '/bin/bash',
             '--login',
-            '-cx',
-            f'export TERM=dumb && {trimmed_script}'
+            '-c',
+            'bash -e <<"SCRIPT"\n'
+            'export TERM=dumb\n'
+            f'{trimmed_script}\n'
+            'SCRIPT'
         ]
 
         return self._craft_base_task(name, {

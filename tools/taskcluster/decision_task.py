@@ -22,11 +22,12 @@ def master(builder):
 def release(builder, tag, is_staging):
     build_task_id = taskcluster.slugId()
     sign_task_id = taskcluster.slugId()
+    push_task_id = taskcluster.slugId()
     return (
         (build_task_id, builder.craft_release_build_task(tag)),
         (sign_task_id, builder.craft_sign_for_github_task(build_task_id, is_staging)),
-        (taskcluster.slugId(), builder.craft_email_task(sign_task_id, tag)),
-        (taskcluster.slugId(), builder.craft_amazon_task(build_task_id, is_staging)),
+        (push_task_id, builder.craft_amazon_task(build_task_id, is_staging)),
+        (taskcluster.slugId(), builder.craft_email_task(sign_task_id, push_task_id, tag)),
     )
 
 
