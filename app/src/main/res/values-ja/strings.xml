@@ -117,6 +117,22 @@
     <string name="settings_telemetry_description">Mozilla は %1$s を皆さんに提供し改善するために必要な情報だけを収集するよう努めています。</string>
 
     <string name="turbo_mode">ターボモード</string>
+    <!-- This string will be displayed underneath the Enhanced Tracking Protection button (formerly
+         'Turbo mode') when it is highlighted and ETP is currently active. -->
+    <string name="toolbar_etp_on">強化型トラッキング防止は有効です</string>
+    <!-- This string will be displayed underneath the Enhanced Tracking Protection button (formerly
+         'Turbo mode') when it is highlighted and ETP is currently inactive. -->
+    <string name="toolbar_etp_off">強化型トラッキング防止は無効です</string>
+    <!-- Title text for Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen -->
+    <string name="onboarding_etp_title">強化型トラッキング防止</string>
+    <!-- Description text for Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen -->
+    <string name="onboarding_etp_description">ブラウジング中のあなたのプライバシーを保護します。あなたが訪問したサイトを追跡して訪問者の情報を収集する目に見えないコンテンツをブロックします。このようなコンテンツをブロックすると、ページの読み込みが速くなる可能性があります。</string>
+    <!-- Used for a button on the Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen. If this button is clicked, ETP will be enabled -->
+    <string name="onboarding_etp_enable">強化型トラッキング防止を有効化</string>
+    <!-- Used for a button on the Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen. If this button is clicked, ETP will be disabled -->
+    <string name="onboarding_etp_disable">強化型トラッキング防止を無効化</string>
+    <!-- Spoken to screen reader users to explain image on Enhanced Tracking Protection (formerly 'turbo mode') onboarding -->
+    <string name="onboarding_etp_image_a11y">強化型トラッキング防止を有効にした場合</string>
     <string name="onboarding_turbo_mode_title">ターボモードはより速くブラウズするのに役立ちます</string>
     <string name="onboarding_turbo_mode_body2">ターボモードは自動的に広告やトラッカーをブロックします。\nサイトが期待通りの動作をしない場合は、これをオフにしてみてください。</string>
     <!-- Button text for keeping Turbo Mode enabled in onboarding -->
@@ -227,10 +243,17 @@
     %1$s will be replaced with Firefox.
     %2$s will be replaced with the name of our app (i.e. Firefox for Fire TV) -->
     <string name="fxa_preboarding_instruction">ご使用のどの %1$s からでもタブを送信でき、ここに表示されます。%2$s にログインして始めましょう。</string>
+    <!-- Instruction text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature.
+    %1$s will be replaced with Firefox.
+    %2$s will be replaced with the name of our app (i.e. Firefox for Fire TV) -->
+    <string name="fxa_preboarding_instruction1">デスクトップ版またはモバイル版の %1$s から送信したタブがここに表示されます。%2$s にログインして始めましょう。</string>
     <!-- Sign-in button text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
     <string name="fxa_preboarding_primary_button">ログイン</string>
     <!-- Text on the cancel button for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
     <string name="fxa_preboarding_secondary_button">後で</string>
+    <!-- Shown on the onboarding page that explains how to receive tabs that are sent from other devices.
+         This text is announced to screen reader users when they focus an image that will display a graphic explaining the receive tab process-->
+    <string name="fxa_preboarding_image_a11y">タブを携帯電話やタブレットから Fire TV へ送信した図</string>
     <!-- Text on the dismiss button for Firefox Accounts onboarding screen, which is shown after signing in. -->
     <string name="fxa_onboarding_primary_button">了解しました</string>
     <!-- Toast shown on webpage when tab is sent from another device
@@ -248,4 +271,7 @@
     <string name="fxa_settings_primary_button">%1$s 個のタブ</string>
     <!-- Button text to sign out from the Firefox Accounts settings page -->
     <string name="fxa_settings_secondary_button">ログアウト</string>
-</resources>
+    <!-- This text is announced to screen reader users when they focus an image that will display the avatar of the currently logged in user -->
+    <string name="content_description_fxa_profile_avatar_image">ユーザープロファイルのアバター画像</string>
+
+    </resources>

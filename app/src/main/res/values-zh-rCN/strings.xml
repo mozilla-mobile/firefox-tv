@@ -30,7 +30,7 @@
 
     <string name="preference_category_privacy">隐私</string>
     <string name="preference_privacy_block_ads">拦截广告跟踪器</string>
-    <string name="preference_privacy_block_ads_summary">一些广告跟踪您的访问，即便您没有点击广告</string>
+    <string name="preference_privacy_block_ads_summary">有些广告跟踪您的访问，即使您不点击亦然</string>
     <string name="preference_privacy_block_analytics">拦截分析跟踪器</string>
     <string name="preference_privacy_block_analytics_summary">会收集、分析和测量您的活动，例如点击与滚动</string>
     <string name="preference_privacy_block_social">拦截社交跟踪器</string>
@@ -117,6 +117,22 @@
     <string name="settings_telemetry_description">Mozilla 坚持仅收集为大众提供和改进 %1$s 所必需的数据</string>
 
     <string name="turbo_mode">加速模式</string>
+    <!-- This string will be displayed underneath the Enhanced Tracking Protection button (formerly
+         'Turbo mode') when it is highlighted and ETP is currently active. -->
+    <string name="toolbar_etp_on">已启用增强型跟踪保护</string>
+    <!-- This string will be displayed underneath the Enhanced Tracking Protection button (formerly
+         'Turbo mode') when it is highlighted and ETP is currently inactive. -->
+    <string name="toolbar_etp_off">已关闭增强型跟踪保护</string>
+    <!-- Title text for Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen -->
+    <string name="onboarding_etp_title">增强型跟踪保护</string>
+    <!-- Description text for Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen -->
+    <string name="onboarding_etp_description">在浏览时保护您的隐私。拦截会跟踪您访问活动，并分析用户特征的隐藏内容。拦截此类内容也可能使页面加载更快。</string>
+    <!-- Used for a button on the Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen. If this button is clicked, ETP will be enabled -->
+    <string name="onboarding_etp_enable">启用增强型跟踪保护</string>
+    <!-- Used for a button on the Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen. If this button is clicked, ETP will be disabled -->
+    <string name="onboarding_etp_disable2">关闭增强型跟踪保护</string>
+    <!-- Spoken to screen reader users to explain image on Enhanced Tracking Protection (formerly 'turbo mode') onboarding -->
+    <string name="onboarding_etp_image_a11y">启用增强跟踪保护 - 示例</string>
     <string name="onboarding_turbo_mode_title">加速模式下浏览更快更轻巧</string>
     <string name="onboarding_turbo_mode_body2">加速模式会自动拦截广告和跟踪器。\n如果网站的行为不符合您的预期，请尝试将其关闭。</string>
     <!-- Button text for keeping Turbo Mode enabled in onboarding -->
@@ -235,6 +251,9 @@
     <string name="fxa_preboarding_primary_button">登录</string>
     <!-- Text on the cancel button for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
     <string name="fxa_preboarding_secondary_button">暂时不要</string>
+    <!-- Shown on the onboarding page that explains how to receive tabs that are sent from other devices.
+         This text is announced to screen reader users when they focus an image that will display a graphic explaining the receive tab process-->
+    <string name="fxa_preboarding_image_a11y">将手机和平板电脑上的标签页发送至 Fire TV - 图例</string>
     <!-- Header for Firefox Accounts onboarding screen, which is shown after signing in. -->
     <string name="fxa_onboarding_header">您的标签页，现以更炫方式呈现。</string>
     <!-- Instruction text for Firefox Accounts onboarding screen, which is shown after signing in.
@@ -248,7 +267,7 @@
     <!-- Toast shown on webpage when tab is sent from another device that does not have a device name specified -->
     <string name="fxa_tab_sent_toast_no_device">收到标签页</string>
     <!-- Description for header text for Firefox Accounts settings page. -->
-    <string name="fxa_settings_header">标签页发送</string>
+    <string name="fxa_settings_header">已发送的标签页</string>
     <!-- Body text for Firefox Accounts settings page
     %1$s will be replaced with the signed-in user account email. -->
     <string name="fxa_settings_body">已登录为 %1$s</string>
@@ -259,4 +278,16 @@
     <string name="fxa_settings_secondary_button">退出登录</string>
     <!-- This text is announced to screen reader users when they focus an image that will display the avatar of the currently logged in user -->
     <string name="content_description_fxa_profile_avatar_image">用户头像</string>
+
+    <!-- Strings for the prompt window for users to update the app. -->
+    <!-- Header string for the prompt shown to users to update the app.
+    %1$s will be replaced with Firefox. -->
+    <string name="update_prompt_header">时刻保持 %1$s 最新</string>
+    <!-- Instruction text for the prompt shown to users to update the app.
+    %1$s and %2$s will be replaced with Firefox.-->
+    <string name="update_prompt_instruction">更新 %1$s 以获得最佳的性能和安全性。此次更新允许您从其他 %2$s 浏览器发送标签页，并在大屏幕上进行查看。</string>
+    <!-- Button text to update the app. -->
+    <string name="update_prompt_primary_button">更新</string>
+    <!-- Button text to dismiss the prompt to update the app. -->
+    <string name="update_prompt_secondary_button">暂时不要</string>
 </resources>

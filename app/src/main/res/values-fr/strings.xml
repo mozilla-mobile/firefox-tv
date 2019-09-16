@@ -117,6 +117,22 @@
     <string name="settings_telemetry_description">Mozilla veille à collecter uniquement les données nécessaires afin d’offrir et d’améliorer %1$s pour tout le monde</string>
 
     <string name="turbo_mode">Mode turbo</string>
+    <!-- This string will be displayed underneath the Enhanced Tracking Protection button (formerly
+         'Turbo mode') when it is highlighted and ETP is currently active. -->
+    <string name="toolbar_etp_on">Protection renforcée contre le pistage ACTIVÉE</string>
+    <!-- This string will be displayed underneath the Enhanced Tracking Protection button (formerly
+         'Turbo mode') when it is highlighted and ETP is currently inactive. -->
+    <string name="toolbar_etp_off">Protection renforcée contre le pistage DÉSACTIVÉE</string>
+    <!-- Title text for Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen -->
+    <string name="onboarding_etp_title">Protection renforcée contre le pistage</string>
+    <!-- Description text for Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen -->
+    <string name="onboarding_etp_description">Protégez votre vie privée pendant votre navigation. Bloquez les contenus invisibles qui vous pistent de site en site et dressent votre profil. Le blocage d’une partie de ces contenus peut accélérer le chargement des pages.</string>
+    <!-- Used for a button on the Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen. If this button is clicked, ETP will be enabled -->
+    <string name="onboarding_etp_enable">Activer la protection renforcée contre le pistage</string>
+    <!-- Used for a button on the Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen. If this button is clicked, ETP will be disabled -->
+    <string name="onboarding_etp_disable2">Désactiver la protection renforcée contre le pistage</string>
+    <!-- Spoken to screen reader users to explain image on Enhanced Tracking Protection (formerly 'turbo mode') onboarding -->
+    <string name="onboarding_etp_image_a11y">Exemple de protection renforcée contre le pistage activée</string>
     <string name="onboarding_turbo_mode_title">Le mode turbo vous permet de naviguer plus rapidement</string>
     <string name="onboarding_turbo_mode_body2">Le mode turbo bloque automatiquement publicités et traqueurs.\nSi un site ne fonctionne pas comme vous l’attendiez, essayez de le désactiver.</string>
     <!-- Button text for keeping Turbo Mode enabled in onboarding -->
@@ -214,7 +230,7 @@
     <!-- Description for Sent tab buttons (in navigation toolbar & settings, both on the homescreen)
      that will launch the Firefox Account sign-in experience so users can receive Firefox tabs on their Fire TV.
      %1$s will be replaced with Firefox. -->
-    <string name="fxa_navigation_item_new">Nouveau : envoyez des onglets %1$s à une Fire TV</string>
+    <string name="fxa_navigation_item_new">Nouveau : envoyez des onglets de %1$s à une Fire TV</string>
     <!-- Description for Sent tab button in navigation toolbar
      that will launch the Firefox Account settings after the user is signed in. -->
     <string name="fxa_navigation_item_signed_in2">Paramètres d’envoi d’onglets</string>
@@ -235,6 +251,9 @@
     <string name="fxa_preboarding_primary_button">Se connecter</string>
     <!-- Text on the cancel button for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
     <string name="fxa_preboarding_secondary_button">Plus tard</string>
+    <!-- Shown on the onboarding page that explains how to receive tabs that are sent from other devices.
+         This text is announced to screen reader users when they focus an image that will display a graphic explaining the receive tab process-->
+    <string name="fxa_preboarding_image_a11y">Illustration d’onglets envoyés depuis un téléphone ou une tablette vers Fire TV</string>
     <!-- Header for Firefox Accounts onboarding screen, which is shown after signing in. -->
     <string name="fxa_onboarding_header">Vos onglets. Toujours sous la main au moment voulu.</string>
     <!-- Instruction text for Firefox Accounts onboarding screen, which is shown after signing in.
@@ -257,4 +276,19 @@
     <string name="fxa_settings_primary_button">Onglets %1$s</string>
     <!-- Button text to sign out from the Firefox Accounts settings page -->
     <string name="fxa_settings_secondary_button">Déconnexion</string>
+
+    <!-- This text is announced to screen reader users when they focus an image that will display the avatar of the currently logged in user -->
+    <string name="content_description_fxa_profile_avatar_image">Image d’avatar du profil utilisateur</string>
+
+    <!-- Strings for the prompt window for users to update the app. -->
+    <!-- Header string for the prompt shown to users to update the app.
+    %1$s will be replaced with Firefox. -->
+    <string name="update_prompt_header">Gardez %1$s à jour</string>
+    <!-- Instruction text for the prompt shown to users to update the app.
+    %1$s and %2$s will be replaced with Firefox.-->
+    <string name="update_prompt_instruction">Mettez %1$s à jour vers la dernière version pour de meilleures performances et une sécurité renforcée. Cette mise à jour vous permet d’envoyer des onglets depuis d’autres navigateurs %2$s et de les consulter ici sur grand écran.</string>
+    <!-- Button text to update the app. -->
+    <string name="update_prompt_primary_button">Mettre à jour</string>
+    <!-- Button text to dismiss the prompt to update the app. -->
+    <string name="update_prompt_secondary_button">Pas maintenant</string>
 </resources>
