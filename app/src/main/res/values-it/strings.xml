@@ -117,6 +117,22 @@
     <string name="settings_telemetry_description">Mozilla si impegna a raccogliere solo i dati necessari a fornire e migliorare %1$s per tutti gli utenti.</string>
 
     <string name="turbo_mode">Modalità turbo</string>
+    <!-- This string will be displayed underneath the Enhanced Tracking Protection button (formerly
+         'Turbo mode') when it is highlighted and ETP is currently active. -->
+    <string name="toolbar_etp_on">Protezione antitracciamento avanzata ATTIVA</string>
+    <!-- This string will be displayed underneath the Enhanced Tracking Protection button (formerly
+         'Turbo mode') when it is highlighted and ETP is currently inactive. -->
+    <string name="toolbar_etp_off">Protezione antitracciamento avanzata DISATTIVATA</string>
+    <!-- Title text for Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen -->
+    <string name="onboarding_etp_title">Protezione antitracciamento avanzata</string>
+    <!-- Description text for Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen -->
+    <string name="onboarding_etp_description">Proteggi la tua privacy durante la navigazione. Blocca contenuti invisibili in grado di tracciare i siti che visiti e creare un profilo con le tue informazioni. Il blocco di alcuni di questi contenuti potrebbe velocizzare il caricamento delle pagine.</string>
+    <!-- Used for a button on the Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen. If this button is clicked, ETP will be enabled -->
+    <string name="onboarding_etp_enable">Attiva la protezione antitracciamento avanzata</string>
+    <!-- Used for a button on the Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen. If this button is clicked, ETP will be disabled -->
+    <string name="onboarding_etp_disable">Disattiva la protezione antitracciamento avanzata</string>
+    <!-- Spoken to screen reader users to explain image on Enhanced Tracking Protection (formerly 'turbo mode') onboarding -->
+    <string name="onboarding_etp_image_a11y">Esempio di protezione antitracciamento avanzata attiva</string>
     <string name="onboarding_turbo_mode_title">La modalità turbo ti permette di navigare più velocemente</string>
     <string name="onboarding_turbo_mode_body2">La modalità turbo blocca automaticamente pubblicità ed elementi traccianti.\nSe un sito non funziona nel modo previsto, prova a disattivarla.</string>
     <!-- Button text for keeping Turbo Mode enabled in onboarding -->
@@ -235,6 +251,9 @@
     <string name="fxa_preboarding_primary_button">Accedi</string>
     <!-- Text on the cancel button for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
     <string name="fxa_preboarding_secondary_button">Non adesso</string>
+    <!-- Shown on the onboarding page that explains how to receive tabs that are sent from other devices.
+         This text is announced to screen reader users when they focus an image that will display a graphic explaining the receive tab process-->
+    <string name="fxa_preboarding_image_a11y">Immagine che raffigura alcune schede inviate da smartphone e tablet a Fire TV</string>
     <!-- Header for Firefox Accounts onboarding screen, which is shown after signing in. -->
     <string name="fxa_onboarding_header">Le tue schede. Pronte per la prima serata.</string>
     <!-- Instruction text for Firefox Accounts onboarding screen, which is shown after signing in.
@@ -259,4 +278,16 @@
     <string name="fxa_settings_secondary_button">Esci</string>
     <!-- This text is announced to screen reader users when they focus an image that will display the avatar of the currently logged in user -->
     <string name="content_description_fxa_profile_avatar_image">Immagine del profilo</string>
+
+    <!-- Strings for the prompt window for users to update the app. -->
+    <!-- Header string for the prompt shown to users to update the app.
+    %1$s will be replaced with Firefox. -->
+    <string name="update_prompt_header">Mantieni %1$s aggiornato</string>
+    <!-- Instruction text for the prompt shown to users to update the app.
+    %1$s and %2$s will be replaced with Firefox.-->
+    <string name="update_prompt_instruction">Aggiorna %1$s per avere sempre a disposizione le ultime innovazioni in tema di prestazioni e sicurezza. Con il presente aggiornamento potrai inviare schede da altri browser %2$s e visualizzarle sullo schermo TV.</string>
+    <!-- Button text to update the app. -->
+    <string name="update_prompt_primary_button">Aggiorna</string>
+    <!-- Button text to dismiss the prompt to update the app. -->
+    <string name="update_prompt_secondary_button">Non ora</string>
 </resources>
