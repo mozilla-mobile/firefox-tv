@@ -90,10 +90,7 @@ tasks:
                     git fetch ${repository} ${event.pull_request.head.ref}
                     && git config advice.detachedHead false
                     && git checkout FETCH_HEAD
-                    && apt update
-                    && apt install -y python3-pip
-                    && pip3 install taskcluster
-                    && python3 tools/taskcluster/decision_task.py pull-request ${event.sender.login}@users.noreply.github.com ${event.pull_request.head.ref}
+                    && python tools/taskcluster/decision_task.py pull-request ${event.sender.login}@users.noreply.github.com ${event.pull_request.head.ref}
               metadata:
                 owner: ${event.sender.login}@users.noreply.github.com
       - $if: 'tasks_for == "github-push" && event["ref"] == "refs/heads/master"'
@@ -108,10 +105,7 @@ tasks:
                     git fetch ${repository} refs/heads/master
                     && git config advice.detachedHead false
                     && git checkout FETCH_HEAD
-                    && apt update
-                    && apt install -y python3-pip
-                    && pip3 install taskcluster
-                    && python3 tools/taskcluster/decision_task.py master ${event.sender.login}@users.noreply.github.com
+                    && python tools/taskcluster/decision_task.py master ${event.sender.login}@users.noreply.github.com
               metadata:
                 owner: ${event.sender.login}@users.noreply.github.com
       - $if: 'tasks_for == "github-release" && event["action"] == "published"'
@@ -126,9 +120,6 @@ tasks:
                     git fetch ${repository} refs/tags/${event.release.tag_name}
                     && git config advice.detachedHead false
                     && git checkout FETCH_HEAD
-                    && apt update
-                    && apt install -y python3-pip
-                    && pip3 install taskcluster
-                    && python3 tools/taskcluster/decision_task.py release ${event.release.tag_name}
+                    && python tools/taskcluster/decision_task.py release ${event.release.tag_name}
               metadata:
                 owner: firefox-tv@mozilla.com
