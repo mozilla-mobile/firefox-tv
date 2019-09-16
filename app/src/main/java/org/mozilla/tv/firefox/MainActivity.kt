@@ -13,7 +13,6 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -32,7 +31,6 @@ import org.mozilla.tv.firefox.ext.application
 import org.mozilla.tv.firefox.ext.resetView
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.ext.setupForApp
-import org.mozilla.tv.firefox.ext.startMainActivity
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.fxa.FxaReceivedTab
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
@@ -113,8 +111,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             debugLog.visibility = View.VISIBLE
             debugLog.text = "$this $engineViewVersion"
         }
-
-        observeReceivedTabs().addTo(createDestroyCompositeDisposable)
     }
 
     @SuppressLint("MissingSuperCall")
@@ -222,7 +218,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             }
             .addTo(startStopCompositeDisposable)
 
-        maybeOpenQueuedTab()
+        observeReceivedTabs().addTo(startStopCompositeDisposable)
     }
 
     override fun onStop() {
@@ -312,29 +308,12 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
                 super.dispatchKeyEvent(event)
     }
 
-    private fun maybeOpenQueuedTab() {
-        val queuedTab = serviceLocator.fxaRepo.queuedFxaTabs.poll()
-        if (queuedTab != null) openReceivedFxaTab(queuedTab)
-    }
-
     private fun observeReceivedTabs(): Disposable {
         return serviceLocator.fxaRepo.receivedTabs.subscribe { consumableTab ->
-            val appIsInForeground = lifecycle.currentState == Lifecycle.State.STARTED ||
-                lifecycle.currentState == Lifecycle.State.RESUMED
-            val appMightBeInBackground = lifecycle.currentState == Lifecycle.State.CREATED
-
-            when {
-                appIsInForeground -> {
-                    consumableTab.consume { tab ->
-                        TelemetryIntegration.INSTANCE.receivedTabEvent(tab.metadata)
-                        openReceivedFxaTab(tab)
-                        true // Consume value
-                    }
-                }
-                appMightBeInBackground -> {
-                    application?.startMainActivity()
-                }
-                else -> { }
+            consumableTab.consume { tab ->
+                TelemetryIntegration.INSTANCE.receivedTabEvent(tab.metadata)
+                openReceivedFxaTab(tab)
+                true // Consume value
             }
         }
     }
