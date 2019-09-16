@@ -43,7 +43,7 @@ class TaskBuilder:
             script,
             ['secrets:get:project/mobile/firefox-tv/tokens'],
             {
-                'public/reports': artifact('directory', '/opt/firefox-tv/app/builds/reports')
+                'public/reports': artifact('directory', '/opt/firefox-tv/app/build/reports')
             }
         )
 
@@ -63,7 +63,7 @@ class TaskBuilder:
             script,
             ['secrets:get:project/mobile/firefox-tv/tokens'],
             {
-                'public': artifact('directory', '/opt/firefox-tv/app/builds/reports')
+                'public': artifact('directory', '/opt/firefox-tv/app/build/reports')
             }
         )
 
