@@ -89,7 +89,7 @@ class FxaRepo(
     val receivedTabs: Observable<FxaReceivedTab> = admIntegration.receivedTabsRaw
         .doOnNext { telemetryIntegration.receivedTabEvent(it) }
         .filterMapToDomainObject()
-        .doOnNext { lastReceivedTab = it }
+        .doOnNext { lastReceivedTab = it } // TODO in next commit: this only works if someone is listening.  Move it to a seprate subscription
 
     private var lastReceivedTab: FxaReceivedTab? = null
     // This capacity can be changed if we ever want to support queuing multiple tabs
@@ -142,7 +142,7 @@ class FxaRepo(
         dialog.show()
     }
 
-    fun lastTabCouldNotBeDisplayed() {
+    fun queueReceivedTabForNextAppForeground() {
         queuedFxaTabs.offer(lastReceivedTab)
     }
 

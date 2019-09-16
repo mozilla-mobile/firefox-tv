@@ -326,7 +326,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             when {
                 appIsInForeground -> openReceivedFxaTab(it)
                 appMightBeInBackground -> {
-                    serviceLocator.fxaRepo.lastTabCouldNotBeDisplayed()
+                    serviceLocator.fxaRepo.queueReceivedTabForNextAppForeground()
                     application?.startMainActivity()
                 }
                 else -> { }
@@ -337,6 +337,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     private fun openReceivedFxaTab(receivedTab: FxaReceivedTab) {
         // TODO: Gracefully handle receiving multiple tabs around the same time. #2777
         serviceLocator.screenController.showBrowserScreenForUrl(supportFragmentManager!!, receivedTab.url)
-        ViewUtils.showCenteredBottomToast(this, receivedTab.tabReceivedNotification.resolve(resources))
+        ViewUtils.showCenteredBottomToast(this, receivedTab.tabReceivedNotificationText.resolve(resources))
     }
 }
