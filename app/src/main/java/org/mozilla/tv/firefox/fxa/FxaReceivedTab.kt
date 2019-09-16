@@ -30,8 +30,13 @@ data class FxaReceivedTab(
     val tabReceivedNotificationText: UnresolvedString,
     val metadata: Metadata
 ) {
+    /**
+     * @param [receivedUrlCount] the number of URLs included in the original push. At this time,
+     * this is only used for telemetry
+     */
     data class Metadata(
-        val deviceType: DeviceType // We expose the FxA DeviceType to avoid excessive boilerplate.
+        val deviceType: DeviceType, // We expose the FxA DeviceType to avoid excessive boilerplate.
+        val receivedUrlCount: Int
     )
 }
 
@@ -39,11 +44,12 @@ fun Observable<ADMIntegration.ReceivedTabs>.filterMapToDomainObject(
     sentryIntegration: SentryIntegration = SentryIntegration
 ): Observable<FxaReceivedTab> = this
     .flatMap { admTabs ->
-        val url = admTabs.tabData
+        val urls = admTabs.tabData
             .map(TabData::url)
             // Note that we are intentionally discarding all but the first tab here.
             // TODO fix this in #2777
-            .firstOrNull(String::isNotBlank)
+            .filter(String::isNotBlank)
+        val url = urls.firstOrNull()
 
         if (url == null) {
             sentryIntegration.captureAndLogError(logger,
@@ -57,7 +63,9 @@ fun Observable<ADMIntegration.ReceivedTabs>.filterMapToDomainObject(
         }
 
         val metadata = FxaReceivedTab.Metadata(
-            deviceType = admTabs.device?.deviceType ?: DeviceType.UNKNOWN
+            deviceType = admTabs.device?.deviceType ?: DeviceType.UNKNOWN,
+            receivedUrlCount = urls.size
+
         )
 
         val domainObject = FxaReceivedTab(

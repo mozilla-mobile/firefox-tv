@@ -34,7 +34,7 @@ class FxaReceivedTabTest {
         val expected = FxaReceivedTab(
             expectedTabUrls[0],
             UnresolvedString(R.string.fxa_tab_sent_toast, listOf(expectedDeviceName)),
-            FxaReceivedTab.Metadata(DeviceType.DESKTOP)
+            FxaReceivedTab.Metadata(DeviceType.DESKTOP, 2)
         )
 
         val inputTabData = expectedTabUrls.mapIndexed { i, url -> TabData("tab title $i", url) }
@@ -52,7 +52,7 @@ class FxaReceivedTabTest {
         val expected = FxaReceivedTab(
             expectedTabUrls[0],
             UnresolvedString(R.string.fxa_tab_sent_toast_no_device),
-            FxaReceivedTab.Metadata(DeviceType.UNKNOWN)
+            FxaReceivedTab.Metadata(DeviceType.UNKNOWN, 2)
         )
 
         val inputTabData = expectedTabUrls.mapIndexed { i, url -> TabData("tab title $i", url) }
@@ -75,7 +75,7 @@ class FxaReceivedTabTest {
         val expected = FxaReceivedTab(
             expectedTabUrls[0],
             UnresolvedString(R.string.fxa_tab_sent_toast_no_device),
-            FxaReceivedTab.Metadata(DeviceType.UNKNOWN)
+            FxaReceivedTab.Metadata(DeviceType.UNKNOWN, 2)
         )
 
         val inputTabUrls = listOf(" ", "") + expectedTabUrls + listOf("  ", "", " ")

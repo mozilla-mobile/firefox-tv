@@ -17,7 +17,6 @@ import io.reactivex.subjects.PublishSubject
 import mozilla.components.concept.sync.AuthType
 import mozilla.components.concept.sync.OAuthAccount
 import mozilla.components.concept.sync.Profile
-import mozilla.components.concept.sync.TabData
 import mozilla.components.service.fxa.manager.FxaAccountManager
 import mozilla.components.support.base.observer.Consumable
 import org.junit.Before
@@ -125,14 +124,6 @@ class FxaRepoTest {
         val profile = Profile("uid", "email", null, "displayName")
         fxaRepo.accountObserver.onProfileUpdated(profile)
         accountStateTestObs.assertValueAt(1) { it is FxaRepo.AccountState.AuthenticatedWithProfile }
-    }
-
-    @Test
-    fun `WHEN a receive tab event occurs with non-blank URLs THEN telemetry records the event`() {
-        val tabEvent = mockADMTabReceivedEventWithNullDevice(listOf(TabData("TabName", url = "https://mozilla.org")))
-        receivedTabsRaw.onNext(tabEvent)
-
-        verify(exactly = 1) { telemetryIntegration.receivedTabEvent(any()) }
     }
 
     @Test
