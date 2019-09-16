@@ -93,7 +93,8 @@ class TaskBuilder:
 
     def craft_email_task(self, sign_task_id, push_task_id, tag):
         # The "\\n" are hard-coded on purpose, since we don't want a newline in the string, but
-        # we do want the JSON to have the escaped newline
+        # we do want the JSON to have the escaped newline.
+        # This email content is formatted with markdown by Taskcluster
         content = 'Automation for this release is ready. Please: \\n' \
                   f'* Download the APK and attach it to the [Github release](https://github.com/mozillamobile/firefox-tv/releases/tag/{tag})\\n' \
                   '* [Deploy the new release on Amazon](https://developer.amazon.com/apps-and-games/console/app/amzn1.devportal.mobileapp.7f334089688646ef8953d041021029c9/release/amzn1.devportal.apprelease.4ca3990c43f34101bf5729543343747a/general/detail)'
