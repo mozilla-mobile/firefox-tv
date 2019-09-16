@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox.ui
 import android.app.Application
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.mozilla.tv.firefox.TestDependencyFactory
@@ -70,6 +71,7 @@ class YouTubeNavigationTest {
         customPocketFeedStateProvider.fakedPocketRepoState.onNext(mockedState)
     }
 
+    @Ignore("Disabled due to the Youtube warning dialog")
     @Test
     fun youtubeNavigationTest() {
         val youtubeUrl = "youtube.com/tv"
