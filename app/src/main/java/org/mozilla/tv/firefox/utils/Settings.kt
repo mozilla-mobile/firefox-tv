@@ -91,18 +91,7 @@ class Settings private constructor(context: Context) {
     val trackingProtectionPolicy: TrackingProtectionPolicy
         get() {
             return if (isBlockingEnabled) {
-                TrackingProtectionPolicy.select(
-                    // We want to use TrackingCategory.RECOMMENDED but it doesn't block ads properly:
-                    // a-c#4191. We write out the values in RECOMMENDED manually below and it works
-                    // properly.
-                    trackingCategories = arrayOf(
-                        TrackingCategory.AD,
-                        TrackingCategory.ANALYTICS,
-                        TrackingCategory.SOCIAL,
-                        TrackingCategory.TEST
-                    )
-                    // We use the default cookiePolicy.
-                )
+                TrackingProtectionPolicy.recommended()
             } else {
                 TrackingProtectionPolicy.select(
                     // These defaults are from TrackingProtectionPolicy.none().
