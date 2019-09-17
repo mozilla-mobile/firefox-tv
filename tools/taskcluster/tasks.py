@@ -127,7 +127,7 @@ class TaskBuilder:
             '/bin/bash',
             '--login',
             '-c',
-            'bash -e <<"SCRIPT"\n'
+            'cat <<"SCRIPT" script.sh && bash -e script.sh\n'
             'export TERM=dumb\n'
             f'{trimmed_script}\n'
             'SCRIPT'
