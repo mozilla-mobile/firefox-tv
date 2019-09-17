@@ -86,23 +86,23 @@ class TaskBuilder:
             script,
             ['secrets:get:project/mobile/firefox-tv/tokens'],
             {
-                'public': artifact('directory', '/opt/firefox-tv/app/build/outputs/apk')
+                'public/build/target.apk': artifact('file', '/opt/firefox-tv/app/build/outputs/apk/system/release/app-system-release-unsigned.apk')
             },
             chain_of_trust=True,  # Needed for sign and push task verification
         )
 
     def craft_email_task(self, sign_task_id, push_task_id, tag):
-        # The "\\n" are hard-coded on purpose, since we don't want a newline in the string, but
+        # The "\n" are hard-coded on purpose, since we don't want a newline in the string, but
         # we do want the JSON to have the escaped newline.
         # This email content is formatted with markdown by Taskcluster
-        content = 'Automation for this release is ready. Please: \\n' \
-                  f'* Download the APK and attach it to the [Github release](https://github.com/mozillamobile/firefox-tv/releases/tag/{tag})\\n' \
+        content = 'Automation for this release is ready. Please: \n' \
+                  f'* Download the APK and attach it to the [Github release](https://github.com/mozilla-mobile/firefox-tv/releases/tag/{tag})\n' \
                   '* [Deploy the new release on Amazon](https://developer.amazon.com/apps-and-games/console/app/amzn1.devportal.mobileapp.7f334089688646ef8953d041021029c9/release/amzn1.devportal.apprelease.4ca3990c43f34101bf5729543343747a/general/detail)'
 
         return self._craft_base_task(
             'Email that automation is complete',
             {
-                'provisionerId': 'build-in',
+                'provisionerId': 'built-in',
                 'workerType': 'succeed',
                 'dependencies': [
                     sign_task_id,
@@ -112,6 +112,11 @@ class TaskBuilder:
                 'routes': [
                     f'notify.email.{NOTIFY_EMAIL_ADDRESS}.on-completed'
                 ],
+                'scopes': [
+                    f'queue:route:notify.email.{NOTIFY_EMAIL_ADDRESS}.on-completed',
+                    'queue:create-task:built-in/succeed',
+                ],
+                'payload': {},
                 'extra': {
                     'notify': {
                         'email': {
@@ -133,7 +138,7 @@ class TaskBuilder:
             '/bin/bash',
             '--login',
             '-c',
-            'cat <<"SCRIPT" > script.sh && bash -e script.sh\n'
+            'cat <<"SCRIPT" > ../script.sh && bash -e ../script.sh\n'
             'export TERM=dumb\n'
             f'{trimmed_script}\n'
             'SCRIPT'
