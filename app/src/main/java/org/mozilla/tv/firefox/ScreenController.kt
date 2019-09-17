@@ -10,14 +10,15 @@ import android.view.KeyEvent
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.NONE
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import mozilla.components.browser.session.Session
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.Transition
+import org.mozilla.tv.firefox.channels.SettingsScreen
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayFragment
-import org.mozilla.tv.firefox.channels.SettingsScreen
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.settings.SettingsFragment
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
@@ -252,6 +253,7 @@ class ScreenController(private val sessionRepo: SessionRepo) {
             Transition.SHOW_BROWSER -> {
                 _currentActiveScreen.onNext(ActiveScreen.WEB_RENDER)
                 fragmentManager.beginTransaction()
+                    .maybeRemoveSettingsScreen(fragmentManager)
                     .hide(fragmentManager.navigationOverlayFragment())
                     .commitNow()
             }
@@ -267,3 +269,15 @@ private fun FragmentManager.webRenderFragment(): WebRenderFragment =
 
 private fun FragmentManager.navigationOverlayFragment(): NavigationOverlayFragment =
     this.findFragmentByTag(NavigationOverlayFragment.FRAGMENT_TAG) as NavigationOverlayFragment
+
+private fun FragmentTransaction.maybeRemoveSettingsScreen(
+    fragmentManager: FragmentManager
+): FragmentTransaction {
+    val settingsScreen = fragmentManager.findFragmentByTag(SettingsFragment.FRAGMENT_TAG)
+
+    return if (settingsScreen != null) {
+        this.remove(settingsScreen)
+    } else {
+        this
+    }
+}
