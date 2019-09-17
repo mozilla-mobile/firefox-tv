@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import androidx.lifecycle.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
@@ -225,7 +226,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         super.onStop()
         LocaleManager.getInstance().resetLocaleIfChanged(applicationContext)
         TelemetryIntegration.INSTANCE.stopMainActivity()
-        compositeDisposable.clear()
+        startStopCompositeDisposable.clear()
     }
 
     override fun onDestroy() {
@@ -309,7 +310,9 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     }
 
     private fun observeReceivedTabs(): Disposable {
-        return serviceLocator.fxaRepo.receivedTabs.subscribe { consumableTab ->
+        return serviceLocator.fxaRepo.receivedTabs
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { consumableTab ->
             consumableTab.consume { tab ->
                 TelemetryIntegration.INSTANCE.receivedTabEvent(tab.metadata)
                 openReceivedFxaTab(tab)
