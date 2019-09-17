@@ -274,6 +274,8 @@
     <!-- Body text for Firefox Accounts settings page
     %1$s will be replaced with the signed-in user account email. -->
     <string name="fxa_settings_body">Signed in as %1$s</string>
+    <!-- Body text for Firefox Accounts settings page. -->
+    <string name="fxa_settings_body_no_display_name">Signed in</string>
     <!-- Button text for seeing the onboarding screen on the Firefox Accounts settings page.
      %1$s will be replaced with Firefox. -->
     <string name="fxa_settings_primary_button">%1$s tabs</string>
