@@ -110,18 +110,6 @@
             android:exported="false"
             android:theme="@style/AppTheme.Transparent" />
 
-        <!-- TODO This Activity can be removed from master as soon as it has been released. See #2794 -->
-        <activity
-            android:name=".manual.upgrade.RequestUpgradeActivity"
-            android:exported="false"
-            android:theme="@style/AppTheme.Transparent" />
-
-        <!-- TODO This Activity can be removed from master as soon as it has been released. See #2794 -->
-        <activity
-            android:name=".manual.upgrade.ForceUpgradeActivity"
-            android:exported="false"
-            android:theme="@style/AppTheme" />
-
         <!-- *** ADM app components start *** -->
         <!-- When required is false, graceful degradation is required. If true, APK will not be available to devices not supporting ADM. -->
         <amazon:enable-feature
