@@ -18,9 +18,6 @@ enum class ExperimentConfig(val value: String) {
     TV_GUIDE_CHANNELS("TvGuideChannels-2195"),
     SEND_TAB("SendTab-2511"),
     TURBO_MODE_REBRAND("TurboModeRebrand-2689"),
-    // TODO MANUAL_UPGRADE_DIALOG can be removed from master as soon as it has been released.
-    // See #2794
-    MANUAL_UPGRADE_DIALOG("ManualUpgradeDialog-2794"),
 
     /**
      * This is not an experiment. If Amazon deploys a fix for this bug, our workaround

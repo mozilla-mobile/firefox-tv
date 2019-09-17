@@ -176,13 +176,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         val localeManager = LocaleManager.getInstance()
 
         val onboardingIntent = when {
-            serviceLocator.experimentsProvider.getManualUpgradeDialogStarter()
-                .maybeShow(context = this) -> {
-                // Attempts to show manual upgrade onboarding, and returns true if it is
-                // shown. See ManualUpgradeStarter for details.
-                // TODO This block can be removed from master as soon as it has been released. See #2794
-                null
-            }
             settings.shouldShowTurboModeOnboarding() -> {
                 Intent(this@MainActivity, OnboardingActivity::class.java)
             }
