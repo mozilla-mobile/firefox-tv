@@ -9,10 +9,11 @@ It diverges in the following ways:
 
 ## Unreleased
 ### Changed
-- (disabled by default) Amazon Device Messaging (ADM) is supported in release builds (#2781)
+- Amazon Device Messaging (ADM) is supported in release builds (#2781)
 
 ### Added
 - (disabled by default) Dialog prompting users to manually upgrade the app
+- Firefox Account sign in and Send Tab is available to release users
 
 ## 4.4 - 2019-09-09
 ### Added
