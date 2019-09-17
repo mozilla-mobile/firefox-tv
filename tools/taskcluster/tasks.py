@@ -98,27 +98,33 @@ class TaskBuilder:
         content = 'Automation for this release is ready. Please: \\n' \
                   f'* Download the APK and attach it to the [Github release](https://github.com/mozillamobile/firefox-tv/releases/tag/{tag})\\n' \
                   '* [Deploy the new release on Amazon](https://developer.amazon.com/apps-and-games/console/app/amzn1.devportal.mobileapp.7f334089688646ef8953d041021029c9/release/amzn1.devportal.apprelease.4ca3990c43f34101bf5729543343747a/general/detail)'
-        script = f'''
-        curl -X POST "$TASKCLUSTER_PROXY_URL/notify/v1/email" -H "Content-Type: application/json" -d "$(cat <<EOM
-        {{
-            "address": "{NOTIFY_EMAIL_ADDRESS}",
-            "content": "{content}",
-            "link": {{
-                "href": "https://queue.taskcluster.net/v1/task/{sign_task_id}/artifacts/public/build/target.apk",
-                "text": "{tag} APK"
-            }},
-            "subject": "Release {tag} is ready for deployment"
-        }}
-        EOM
-        )"
-        '''
 
-        return self._craft_shell_task(
+        return self._craft_base_task(
             'Email that automation is complete',
-            script,
-            [f'notify:email:{NOTIFY_EMAIL_ADDRESS}'],
-            {},
-            dependencies=[sign_task_id, push_task_id],
+            {
+                'provisionerId': 'build-in',
+                'workerType': 'succeed',
+                'dependencies': [
+                    sign_task_id,
+                    push_task_id
+                ],
+                'requires': 'all-completed',
+                'routes': [
+                    f'notify.email.{NOTIFY_EMAIL_ADDRESS}.on-completed'
+                ],
+                'extra': {
+                    'notify': {
+                        'email': {
+                            'content': content,
+                            'subject': f'Release {tag} is ready for deployment',
+                            'link': {
+                                'href': f'https://queue.taskcluster.net/v1/task/{sign_task_id}/artifacts/public/build/target.apk',
+                                'text': f'{tag} APK',
+                            }
+                        }
+                    }
+                }
+            }
         )
 
     def _craft_shell_task(self, name, script, scopes, artifacts, *, dependencies=(), chain_of_trust=False):
@@ -127,7 +133,7 @@ class TaskBuilder:
             '/bin/bash',
             '--login',
             '-c',
-            'cat <<"SCRIPT" script.sh && bash -e script.sh\n'
+            'cat <<"SCRIPT" > script.sh && bash -e script.sh\n'
             'export TERM=dumb\n'
             f'{trimmed_script}\n'
             'SCRIPT'
