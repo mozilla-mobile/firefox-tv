@@ -92,10 +92,11 @@ public class TooltipCaptureTest extends ScreenshotTest {
         takeScreenshotsAfterWait("tooltip-requestdesktop", 500);
         device.pressDPadRight();
         checkTooltipDisplayed();
-        takeScreenshotsAfterWait("tooltip-exit", 500);
+        takeScreenshotsAfterWait("tooltip-fxa", 500);
         device.pressDPadRight();
         checkTooltipDisplayed();
-        takeScreenshotsAfterWait("tooltip-settings", 500);
+        takeScreenshotsAfterWait("tooltip-exit", 500);
+        device.pressDPadLeft();
         device.pressDPadLeft();
         device.pressDPadCenter();
 
