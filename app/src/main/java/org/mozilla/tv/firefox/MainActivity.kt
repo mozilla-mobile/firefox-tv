@@ -54,7 +54,6 @@ interface MediaSessionHolder {
 class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, MediaSessionHolder {
     private val LOG_TAG = "MainActivity"
     private val startStopCompositeDisposable = CompositeDisposable()
-    private val createDestroyCompositeDisposable = CompositeDisposable()
 
     // There should be at most one MediaSession per process, hence it's in MainActivity.
     // We crash if we init MediaSession at init time, hence lateinit.
@@ -248,7 +247,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
              */
             webRenderComponents.sessionManager.getEngineSession()?.resetView(applicationContext)
         }
-        createDestroyCompositeDisposable.clear()
         super.onDestroy()
     }
 
@@ -310,20 +308,22 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     }
 
     private fun observeReceivedTabs(): Disposable {
+        fun openReceivedFxaTab(receivedTab: FxaReceivedTab) {
+            // TODO: Gracefully handle receiving multiple tabs around the same time. #2777
+            serviceLocator.screenController.showBrowserScreenForUrl(supportFragmentManager!!, receivedTab.url)
+            ViewUtils.showCenteredBottomToast(this, receivedTab.tabReceivedNotificationText.resolve(resources))
+        }
+
         return serviceLocator.fxaRepo.receivedTabs
+            // We ensure that this is on the main thread because it provokes a fragment transaction,
+            // and we want to avoid potential issues that could be caused by starting two in parallel
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { consumableTab ->
-            consumableTab.consume { tab ->
-                TelemetryIntegration.INSTANCE.receivedTabEvent(tab.metadata)
-                openReceivedFxaTab(tab)
-                true // Consume value
+                consumableTab.consume { tab ->
+                    TelemetryIntegration.INSTANCE.receivedTabEvent(tab.metadata)
+                    openReceivedFxaTab(tab)
+                    true // Consume value
+                }
             }
-        }
-    }
-
-    private fun openReceivedFxaTab(receivedTab: FxaReceivedTab) {
-        // TODO: Gracefully handle receiving multiple tabs around the same time. #2777
-        serviceLocator.screenController.showBrowserScreenForUrl(supportFragmentManager!!, receivedTab.url)
-        ViewUtils.showCenteredBottomToast(this, receivedTab.tabReceivedNotificationText.resolve(resources))
     }
 }

@@ -65,7 +65,6 @@ fun Observable<ADMIntegration.ReceivedTabs>.filterMapToDomainObject(
         val metadata = FxaReceivedTab.Metadata(
             deviceType = admTabs.device?.deviceType ?: DeviceType.UNKNOWN,
             receivedUrlCount = urls.size
-
         )
 
         val domainObject = FxaReceivedTab(
