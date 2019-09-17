@@ -71,7 +71,7 @@ tasks:
           description: ''
           source: ${repository}/raw/${head_rev}/.taskcluster.yml
     in:
-      - $if: 'tasks_for == "github-pull-request" && event["action"] in ["opened", "reopened", "edited", "synchronized"]'
+      - $if: 'tasks_for == "github-pull-request" && event["action"] in ["opened", "reopened", "edited", "synchronize"]'
         then:
           $mergeDeep:
             - {$eval: 'default_task_definition'}
