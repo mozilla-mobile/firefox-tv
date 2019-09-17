@@ -177,6 +177,7 @@ class SettingsFragment : Fragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     view.userDisplayName.text = ""
+                    view.signedInAs.text = resources.getString(R.string.fxa_settings_body_no_display_name)
                     PicassoWrapper.client.load(R.drawable.ic_default_avatar).into(view.avatarImage)
                 }
         )
