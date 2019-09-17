@@ -17,6 +17,7 @@ import io.reactivex.subjects.PublishSubject
 import mozilla.components.concept.sync.AuthType
 import mozilla.components.concept.sync.OAuthAccount
 import mozilla.components.concept.sync.Profile
+import mozilla.components.concept.sync.TabData
 import mozilla.components.service.fxa.manager.FxaAccountManager
 import mozilla.components.support.base.observer.Consumable
 import org.junit.Before
@@ -147,5 +148,34 @@ class FxaRepoTest {
         fxaRepo.accountObserver.onAuthenticationProblems()
         waitPastDebounce()
         verify(exactly = 1) { telemetryIntegration.doesFxaNeedReauthenticationEvent(true) }
+    }
+
+    @Test
+    fun `GIVEN received tabs are not being observed WHEN raw tabs are received THEN they are queued for later use`() {
+        fxaRepo.receivedTabs.test().apply {
+            assertNoValues()
+            dispose()
+        }
+
+        receivedTabsRaw.onNext(ADMIntegration.ReceivedTabs(null, listOf(TabData("title", "url"))))
+
+        fxaRepo.receivedTabs.test().assertValueCount(1)
+    }
+
+    @Test
+    fun `GIVEN received tabs have already been consumed WHEN a new subscriber observes received tabs THEN wrapped value should be null`() {
+        receivedTabsRaw.onNext(ADMIntegration.ReceivedTabs(null, listOf(TabData("title", "url"))))
+
+        fxaRepo.receivedTabs.test().apply {
+            assertValueCount(1)
+            assertValue { it.consume { true } } // Assert there was a value to consume
+            dispose()
+        }
+
+        fxaRepo.receivedTabs.test().apply {
+            assertValueCount(1)
+            assertValue { !it.consume { true } } // Assert there was no value to consume
+            dispose()
+        }
     }
 }
