@@ -16,14 +16,27 @@ enum class ExperimentConfig(val value: String) {
     AA_TEST("AAtest-1675"),
     HINT_BAR_TEST("HintBar-2011"),
     TV_GUIDE_CHANNELS("TvGuideChannels-2195"),
-    SEND_TAB("SendTab-2511"),
     TURBO_MODE_REBRAND("TurboModeRebrand-2689"),
 
     /**
      * This is not an experiment. If Amazon deploys a fix for this bug, our workaround
      * may break it: we use this flag as an option to disable this workaround remotely.
      */
-    MP4_VIDEO_WORKAROUND("Mp4VideoWorkaround-2540")
+    MP4_VIDEO_WORKAROUND("Mp4VideoWorkaround-2540"),
+
+    /**
+     * This flag does nothing; prior to v4.5, this flag was used to enable the incomplete
+     * implementation of FxA sign in and send tab for internal testing until we hard-coded it
+     * enabled for release. We keep this flag around as documentation because this file is linked
+     * to as living documentation for which experiments QA can be enable.
+     *
+     * We chose to hard-code it as enabled because if we used this flag, the incomplete
+     * implementation would be enabled on older versions of the app and we didn't feel it was
+     * worth the time to add a new flag as this was not being A/B tested.
+     */
+    @Deprecated("This flag does nothing")
+    @Suppress("unused")
+    SEND_TAB("SendTab-2511")
 }
 
 /**
