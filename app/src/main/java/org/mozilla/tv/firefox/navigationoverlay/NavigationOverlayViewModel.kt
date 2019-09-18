@@ -8,6 +8,7 @@ import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
@@ -74,6 +75,8 @@ class NavigationOverlayViewModel(
                 }
             }
 
+    val LOGIN_STARTED = PublishSubject.create<Boolean>()
+
     fun fxaButtonClicked(fragmentManager: FragmentManager) {
         fun showFxaProfileScreen() {
             screenController.showSettingsScreen(fragmentManager, SettingsScreen.FXA_PROFILE)
@@ -93,6 +96,7 @@ class NavigationOverlayViewModel(
             is AccountState.NotAuthenticated -> {
                 TelemetryIntegration.INSTANCE.fxaLoginButtonClickEvent()
                 fxaLoginUseCase.beginLogin(fragmentManager)
+                LOGIN_STARTED.onNext(true)
             }
         }
     }

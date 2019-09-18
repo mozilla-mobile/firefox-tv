@@ -216,7 +216,7 @@ class NavigationOverlayFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        observeAccountState().forEach { compositeDisposable.add(it) }
+        observeAccountState().addTo(compositeDisposable)
         observePinnedTiles()
             .addTo(compositeDisposable)
         observeTileRemoval()
@@ -233,6 +233,8 @@ class NavigationOverlayFragment : Fragment() {
                 .forEach { compositeDisposable.add(it) }
         observeToolbarFocusability()
                 .addTo(compositeDisposable)
+
+        SHOW_LOGIN_TEMP_NAME()
 
         fxaButton.isVisible = serviceLocator.experimentsProvider.shouldShowSendTab()
     }
@@ -261,10 +263,10 @@ class NavigationOverlayFragment : Fragment() {
     }
 
     // TODO other toolbar state is set in the ToolbarUiController. Move this there to be consistent
-    private fun observeAccountState(): List<Disposable> {
+    private fun observeAccountState(): Disposable {
         val fxaRepo = serviceLocator.fxaRepo
 
-        return listOf(fxaRepo.accountState
+        return fxaRepo.accountState
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { accountState ->
                 when (accountState) {
@@ -290,7 +292,13 @@ class NavigationOverlayFragment : Fragment() {
                             resources.getString(R.string.fxa_navigation_item_sign_in_again)
                     }
                 }
-            },
+            }
+    }
+
+    private fun SHOW_LOGIN_TEMP_NAME() {
+        navigationOverlayViewModel.LOGIN_STARTED.subscribe {
+            val fxaRepo = serviceLocator.fxaRepo
+
             fxaRepo.accountEvents
                 .ofType(AccountState.AuthenticatedNoProfile::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -299,8 +307,8 @@ class NavigationOverlayFragment : Fragment() {
                     if (settings.shouldShowFxaOnboarding()) {
                         fxaRepo.showFxaOnboardingScreen(context!!)
                     }
-                }
-            )
+                }.addTo(compositeDisposable)
+        }.addTo(compositeDisposable)
     }
 
     private fun observePinnedTiles(): Disposable {
