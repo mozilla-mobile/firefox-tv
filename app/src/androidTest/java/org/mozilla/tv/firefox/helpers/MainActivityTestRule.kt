@@ -11,6 +11,7 @@ import androidx.test.rule.ActivityTestRule
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.channels.ChannelOnboardingActivity.Companion.TV_ONBOARDING_SHOWN_PREF
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity.Companion.ONBOARD_SHOWN_PREF
+import org.mozilla.tv.firefox.onboarding.ReceiveTabPreboardingActivity.Companion.ONBOARD_RECEIVE_TABS_SHOWN_PREF
 
 /**
  * A [org.junit.Rule] to handle shared test set up for tests on [MainActivity].
@@ -60,6 +61,7 @@ class MainActivityTestRule(
                 .edit()
                 .putBoolean(ONBOARD_SHOWN_PREF, true)
                 .putBoolean(TV_ONBOARDING_SHOWN_PREF, true)
+                .putBoolean(ONBOARD_RECEIVE_TABS_SHOWN_PREF, true)
                 .apply()
     }
 }
