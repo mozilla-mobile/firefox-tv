@@ -92,7 +92,7 @@ class TaskBuilder:
             chain_of_trust=True,  # Needed for sign and push task verification
         )
 
-    def craft_email_task(self, sign_task_id, push_task_id, tag):
+    def craft_email_task(self, sign_task_label, push_task_label, tag):
         # The "\n" are hard-coded on purpose, since we don't want a newline in the string, but
         # we do want the JSON to have the escaped newline.
         # This email content is formatted with markdown by Taskcluster
@@ -105,10 +105,6 @@ class TaskBuilder:
             {
                 'provisionerId': 'built-in',
                 'workerType': 'succeed',
-                'dependencies': [
-                    sign_task_id,
-                    push_task_id
-                ],
                 'requires': 'all-completed',
                 'routes': [
                     'notify.email.{}.on-completed'.format(NOTIFY_EMAIL_ADDRESS)
@@ -124,16 +120,20 @@ class TaskBuilder:
                             'content': content,
                             'subject': 'Release {} is ready for deployment'.format(tag),
                             'link': {
-                                'href': 'https://queue.taskcluster.net/v1/task/{}/artifacts/public/build/target.apk'.format(sign_task_id),
+                                'href': 'https://queue.taskcluster.net/v1/task/{}/artifacts/public/build/target.apk'.format(sign_task_label),
                                 'text': '{} APK'.format(tag),
                             }
                         }
                     }
                 }
+            },
+            {
+                'sign': sign_task_label,
+                'push': push_task_label
             }
         )
 
-    def _craft_shell_task(self, name, script, scopes, artifacts, dependencies=(), chain_of_trust=False):
+    def _craft_shell_task(self, name, script, scopes, artifacts, chain_of_trust=False):
         # The script value here is probably produced from a python heredoc string, which means
         # it has unnecessary whitespace in it. This will iterate over each line and remove the
         # redundant whitespace
@@ -150,7 +150,6 @@ class TaskBuilder:
             'provisionerId': 'aws-provisioner-v1',
             'workerType': 'mobile-{}-b-firefox-tv'.format(self.level),
             'scopes': scopes,
-            'dependencies': dependencies,
             'payload': {
                 'maxRunTime': 3600,
                 'image': 'mozillamobile/firefox-tv:2.3',
@@ -163,7 +162,7 @@ class TaskBuilder:
             }
         })
 
-    def craft_sign_for_github_task(self, build_task_id):
+    def craft_sign_for_github_task(self, build_task_label, is_staging):
         return self._craft_base_task('Sign for Github', {
             'provisionerId': 'scriptworker-prov-v1',
             'workerType': 'mobile-signing-dep-v1' if self.level != 3 else 'mobile-signing-v1',
@@ -172,18 +171,17 @@ class TaskBuilder:
                 'project:mobile:firefox-tv:releng:signing:cert:{}-signing'.format(
                     'dep' if self.level != 3 else 'production')
             ],
-            'dependencies': [build_task_id],
             'payload': {
                 'upstreamArtifacts': [{
                     'paths': ['public/build/target.apk'],
                     'formats': ['autograph_apk'],
-                    'taskId': build_task_id,
+                    'taskId': {'task-reference': '<build>'},
                     'taskType': 'build',
                 }]
             },
-        })
+        }, {'build': build_task_label})
 
-    def craft_amazon_task(self, build_task_id):
+    def craft_amazon_task(self, build_task_label, is_staging):
         return self._craft_base_task('Push to Amazon', {
             'provisionerId': 'scriptworker-prov-v1',
             'workerType': 'mobile-pushapk-dep-v1' if self.level != 3 else 'mobile-pushapk-v1',
@@ -192,31 +190,35 @@ class TaskBuilder:
                     ':dep' if self.level != 3 else ''
                 )
             ],
-            'dependencies': [build_task_id],
             'payload': {
                 'target_store': 'amazon',
                 'channel': 'production',
                 'upstreamArtifacts': [{
                     'paths': ['public/build/target.apk'],
-                    'taskId': build_task_id,
+                    'taskId': {'task-reference': '<build>'},
                     'taskType': 'build',
                 }]
             }
-        })
+        }, {'build': build_task_label})
 
-    def _craft_base_task(self, name, extend_task):
-        return dict({
-            'taskGroupId': self.task_group_id,
-            'schedulerId': 'taskcluster-github',
-            'created': taskcluster.stringDate(datetime.datetime.now()),
-            'deadline': taskcluster.stringDate(taskcluster.fromNow('1 day')),
-            'metadata': {
-                'name': name,
-                'description': '',
-                'owner': self.owner,
-                'source': '{}/raw/{}/.taskcluster.yml'.format(self.repo_url, self.commit),
-            },
-        }, **extend_task)
+    def _craft_base_task(self, name, extend_task, dependencies=None):
+        return {
+            'label': name,
+            'attributes': {},
+            'dependencies': {} if dependencies is None else dependencies,
+            'task': dict({
+                'taskGroupId': self.task_group_id,
+                'schedulerId': 'taskcluster-github',
+                'created': taskcluster.stringDate(datetime.datetime.now()),
+                'deadline': taskcluster.stringDate(taskcluster.fromNow('1 day')),
+                'metadata': {
+                    'name': name,
+                    'description': '',
+                    'owner': self.owner,
+                    'source': '{}/raw/{}/.taskcluster.yml'.format(self.repo_url, self.commit),
+                },
+            }, **extend_task),
+        }
 
 
 def schedule_task_graph(ordered_tasks):
