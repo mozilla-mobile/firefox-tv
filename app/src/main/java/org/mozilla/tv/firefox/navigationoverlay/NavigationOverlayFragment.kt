@@ -288,14 +288,27 @@ class NavigationOverlayFragment : Fragment() {
                         fxaButton.contentDescription =
                             resources.getString(R.string.fxa_navigation_item_new,
                                 resources.getString(R.string.app_name))
+                        resetFxaOnboardingShown()
                     }
                     AccountState.NeedsReauthentication -> {
                         fxaButton.setImageResource(R.drawable.ic_fxa_needs_reauthentication)
                         fxaButton.contentDescription =
                             resources.getString(R.string.fxa_navigation_item_sign_in_again)
+                        resetFxaOnboardingShown()
                     }
                 }
             }
+    }
+
+    /**
+     * Reset FxA onboarding shown value to false in shared prefs.
+     * We need to reset the state of FxA onboarding screen to ensure that we do not show onboarding on every startup (#2861).
+     */
+    private fun resetFxaOnboardingShown() {
+        PreferenceManager.getDefaultSharedPreferences(context)
+            .edit()
+            .putBoolean(Settings.FXA_ONBOARD_SHOWN_PREF, false)
+            .apply()
     }
 
     private fun observePinnedTiles(): Disposable {
