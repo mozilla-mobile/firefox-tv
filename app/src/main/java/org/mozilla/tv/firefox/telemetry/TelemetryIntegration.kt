@@ -486,7 +486,7 @@ open class TelemetryIntegration protected constructor(
             DeviceType.UNKNOWN -> ReceivedTabDeviceType.UNKNOWN
         }.extra
 
-        TelemetryEvent.create(Category.ACTION, Method.RECEIVED_TAB, null)
+        TelemetryEvent.create(Category.ACTION, Method.RECEIVED_TAB, Object.FXA)
             .extra(Extra.DEVICE_TYPE, internalDeviceType)
             .extra(Extra.TOTAL, metadata.receivedUrlCount.toString())
             .queue()

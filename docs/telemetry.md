@@ -61,7 +61,7 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 | App opened from view intent                          | action     | view_intent             | app               |            |            |
 | Opening the overlay forced a video out of fullscreen | action     | programmatically_closed | full_screen_video |            |            |
 | Show Fxa onboarding screen* 						   | action     | user_show				  | fxa 			  | fxa_show_onboarding |            |
-| Received tab(s) (via FxA send tab feature)\*\*         | action     | received_tab            |                   |            | `device_type`\*\*\* / `total`\*\*\*\* |
+| Received tab(s) (via FxA send tab feature)\*\*         | action     | received_tab          | fxa               |            | `device_type`\*\*\* / `total`\*\*\*\* |
 
 (*) Fxa onboarding screen shown when the user first successfully authenticates or when linked to from the accounts page.
 (\*) This event is sent at the end of every session.
