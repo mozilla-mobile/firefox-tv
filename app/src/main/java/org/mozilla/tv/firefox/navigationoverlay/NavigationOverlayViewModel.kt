@@ -90,7 +90,7 @@ class NavigationOverlayViewModel(
                 TelemetryIntegration.INSTANCE.fxaReauthorizeButtonClickEvent()
                 fxaLoginUseCase.beginLogin(fragmentManager)
             }
-            is AccountState.NotAuthenticated -> {
+            is AccountState.NotAuthenticated, AccountState.Initial -> {
                 TelemetryIntegration.INSTANCE.fxaLoginButtonClickEvent()
                 fxaLoginUseCase.beginLogin(fragmentManager)
             }

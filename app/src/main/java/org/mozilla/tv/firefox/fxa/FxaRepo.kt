@@ -76,13 +76,14 @@ class FxaRepo(
          */
         object AuthenticatedNoProfile : AccountState() // Before the profile is fetched async
         object NeedsReauthentication : AccountState()
-        object NotAuthenticated : AccountState() // Initial state
+        object NotAuthenticated : AccountState()
+        object Initial : AccountState()
     }
 
     @VisibleForTesting(otherwise = NONE)
     val accountObserver = FirefoxAccountObserver()
 
-    private val _accountState: BehaviorSubject<AccountState> = BehaviorSubject.createDefault(NotAuthenticated)
+    private val _accountState: BehaviorSubject<AccountState> = BehaviorSubject.createDefault(AccountState.Initial)
     val accountState: Observable<AccountState> = _accountState.hide()
 
     val receivedTabs: Observable<Consumable<FxaReceivedTab>> = admIntegration.receivedTabsRaw

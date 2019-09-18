@@ -283,7 +283,7 @@ class NavigationOverlayFragment : Fragment() {
                             fxaRepo.showFxaOnboardingScreen(context!!)
                         }
                     }
-                    AccountState.NotAuthenticated -> {
+                    AccountState.NotAuthenticated, AccountState.Initial -> {
                         fxaButton.setImageResource(R.drawable.ic_fxa_login)
                         fxaButton.contentDescription =
                             resources.getString(R.string.fxa_navigation_item_new,
