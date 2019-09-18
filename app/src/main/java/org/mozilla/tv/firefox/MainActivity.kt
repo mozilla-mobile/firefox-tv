@@ -220,6 +220,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         super.onStop()
         LocaleManager.getInstance().resetLocaleIfChanged(applicationContext)
         TelemetryIntegration.INSTANCE.stopMainActivity()
+        compositeDisposable.clear()
     }
 
     override fun onDestroy() {
