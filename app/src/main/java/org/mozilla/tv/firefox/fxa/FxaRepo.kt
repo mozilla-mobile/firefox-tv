@@ -13,6 +13,10 @@ import androidx.annotation.VisibleForTesting.NONE
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.tabs_onboarding.*
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
+import kotlinx.android.synthetic.main.tabs_onboarding.descriptionText
+import kotlinx.android.synthetic.main.tabs_onboarding.tabs_onboarding_button
 import kotlinx.coroutines.Deferred
 import mozilla.appservices.fxaclient.Config
 import mozilla.components.concept.sync.AccountObserver
@@ -90,6 +94,8 @@ class FxaRepo(
         .filterInvalidTabs(sentryIntegration)
         .doOnNext { telemetryIntegration.receivedTabEvent(it) }
 
+    val accountEvents: Subject<AccountState> = PublishSubject.create()
+
     init {
         accountManager.register(accountObserver)
 
@@ -163,6 +169,7 @@ class FxaRepo(
     inner class FirefoxAccountObserver : AccountObserver {
         override fun onAuthenticated(account: OAuthAccount, authType: AuthType) {
             _accountState.onNext(AuthenticatedNoProfile)
+            accountEvents.onNext(AuthenticatedNoProfile)
 
             // Push service is only needed when logged in (this saves resources)
             admIntegration.initPushFeature()
@@ -172,10 +179,12 @@ class FxaRepo(
 
         override fun onAuthenticationProblems() {
             _accountState.onNext(NeedsReauthentication)
+            accountEvents.onNext(NeedsReauthentication)
         }
 
         override fun onLoggedOut() {
             _accountState.onNext(NotAuthenticated)
+            accountEvents.onNext(NotAuthenticated)
 
             // Push service is not needed after logging out (this saves resources)
             admIntegration.shutdownPushFeature()
@@ -188,6 +197,7 @@ class FxaRepo(
          */
         override fun onProfileUpdated(profile: Profile) {
             _accountState.onNext(AuthenticatedWithProfile(profile.toDomainObject()))
+            accountEvents.onNext(AuthenticatedWithProfile(profile.toDomainObject()))
         }
     }
 

@@ -32,26 +32,27 @@ import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.channelsContainer
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.navUrlInput
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.settingsTileContainer
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.*
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.exitButton
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.fxaButton
 import kotlinx.android.synthetic.main.hint_bar.hintBarContainer
 import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
-import org.mozilla.tv.firefox.experiments.ExperimentConfig
-import org.mozilla.tv.firefox.ext.isKeyCodeSelect
-import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
-import org.mozilla.tv.firefox.ext.serviceLocator
-import org.mozilla.tv.firefox.hint.HintBinder
-import org.mozilla.tv.firefox.hint.HintViewModel
-import org.mozilla.tv.firefox.hint.InactiveHintViewModel
 import org.mozilla.tv.firefox.channels.ChannelConfig
 import org.mozilla.tv.firefox.channels.ChannelDetails
 import org.mozilla.tv.firefox.channels.DefaultChannel
 import org.mozilla.tv.firefox.channels.DefaultChannelFactory
 import org.mozilla.tv.firefox.channels.SettingsChannelAdapter
 import org.mozilla.tv.firefox.channels.SettingsScreen
+import org.mozilla.tv.firefox.experiments.ExperimentConfig
+import org.mozilla.tv.firefox.ext.isKeyCodeSelect
+import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
+import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState
+import org.mozilla.tv.firefox.hint.HintBinder
+import org.mozilla.tv.firefox.hint.HintViewModel
+import org.mozilla.tv.firefox.hint.InactiveHintViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
@@ -215,8 +216,7 @@ class NavigationOverlayFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        observeAccountState()
-            .addTo(compositeDisposable)
+        observeAccountState().forEach { compositeDisposable.add(it) }
         observePinnedTiles()
             .addTo(compositeDisposable)
         observeTileRemoval()
@@ -261,10 +261,10 @@ class NavigationOverlayFragment : Fragment() {
     }
 
     // TODO other toolbar state is set in the ToolbarUiController. Move this there to be consistent
-    private fun observeAccountState(): Disposable {
+    private fun observeAccountState(): List<Disposable> {
         val fxaRepo = serviceLocator.fxaRepo
 
-        return fxaRepo.accountState
+        return listOf(fxaRepo.accountState
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { accountState ->
                 when (accountState) {
@@ -277,11 +277,6 @@ class NavigationOverlayFragment : Fragment() {
                     AccountState.AuthenticatedNoProfile -> {
                         fxaButton.setImageResource(R.drawable.ic_avatar_authenticated_no_picture)
                         fxaButton.contentDescription = resources.getString(R.string.fxa_navigation_item_signed_in2)
-
-                        val settings = Settings.getInstance(context!!)
-                        if (settings.shouldShowFxaOnboarding()) {
-                            fxaRepo.showFxaOnboardingScreen(context!!)
-                        }
                     }
                     AccountState.NotAuthenticated -> {
                         fxaButton.setImageResource(R.drawable.ic_fxa_login)
@@ -295,7 +290,17 @@ class NavigationOverlayFragment : Fragment() {
                             resources.getString(R.string.fxa_navigation_item_sign_in_again)
                     }
                 }
-            }
+            },
+            fxaRepo.accountEvents
+                .ofType(AccountState.AuthenticatedNoProfile::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    val settings = Settings.getInstance(context!!)
+                    if (settings.shouldShowFxaOnboarding()) {
+                        fxaRepo.showFxaOnboardingScreen(context!!)
+                    }
+                }
+            )
     }
 
     private fun observePinnedTiles(): Disposable {
