@@ -32,26 +32,27 @@ import io.reactivex.rxkotlin.addTo
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.channelsContainer
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.navUrlInput
 import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.settingsTileContainer
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.*
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.exitButton
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.fxaButton
 import kotlinx.android.synthetic.main.hint_bar.hintBarContainer
 import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
-import org.mozilla.tv.firefox.experiments.ExperimentConfig
-import org.mozilla.tv.firefox.ext.isKeyCodeSelect
-import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
-import org.mozilla.tv.firefox.ext.serviceLocator
-import org.mozilla.tv.firefox.hint.HintBinder
-import org.mozilla.tv.firefox.hint.HintViewModel
-import org.mozilla.tv.firefox.hint.InactiveHintViewModel
 import org.mozilla.tv.firefox.channels.ChannelConfig
 import org.mozilla.tv.firefox.channels.ChannelDetails
 import org.mozilla.tv.firefox.channels.DefaultChannel
 import org.mozilla.tv.firefox.channels.DefaultChannelFactory
 import org.mozilla.tv.firefox.channels.SettingsChannelAdapter
 import org.mozilla.tv.firefox.channels.SettingsScreen
+import org.mozilla.tv.firefox.experiments.ExperimentConfig
+import org.mozilla.tv.firefox.ext.isKeyCodeSelect
+import org.mozilla.tv.firefox.ext.isVoiceViewEnabled
+import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState
+import org.mozilla.tv.firefox.hint.HintBinder
+import org.mozilla.tv.firefox.hint.HintViewModel
+import org.mozilla.tv.firefox.hint.InactiveHintViewModel
 import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
@@ -135,6 +136,7 @@ class NavigationOverlayFragment : Fragment() {
     private lateinit var toolbarViewModel: ToolbarViewModel
     private lateinit var pocketViewModel: PocketViewModel
     private lateinit var hintViewModel: HintViewModel
+    private lateinit var toolbarUiController: ToolbarUiController
 
     private var channelReferenceContainer: ChannelReferenceContainer? = null // references a Context, must be nulled.
     private val pinnedTileChannel: DefaultChannel get() = channelReferenceContainer!!.pinnedTileChannel
@@ -167,12 +169,14 @@ class NavigationOverlayFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        ToolbarUiController(
+        toolbarUiController = ToolbarUiController(
             toolbarViewModel,
             ::exitFirefox,
             onNavigationEvent,
             serviceLocator.experimentsProvider
-        ).onCreateView(view, viewLifecycleOwner, fragmentManager!!)
+        ).apply {
+            onViewCreated(view)
+        }
 
         rootView = view
 
@@ -233,6 +237,8 @@ class NavigationOverlayFragment : Fragment() {
                 .forEach { compositeDisposable.add(it) }
         observeToolbarFocusability()
                 .addTo(compositeDisposable)
+        toolbarUiController.observeToolbarState(rootView!!, viewLifecycleOwner, fragmentManager!!)
+            .addTo(compositeDisposable)
 
         fxaButton.isVisible = serviceLocator.experimentsProvider.shouldShowSendTab()
     }
