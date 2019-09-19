@@ -280,6 +280,7 @@ class NavigationOverlayFragment : Fragment() {
 
                         val settings = Settings.getInstance(context!!)
                         if (settings.shouldShowFxaOnboarding()) {
+                            serviceLocator.screenController.showNavigationOverlay(fragmentManager, true)
                             fxaRepo.showFxaOnboardingScreen(context!!)
                         }
                     }
