@@ -1,7 +1,9 @@
 package org.mozilla.tv.firefox.navigationoverlay
 
+import io.reactivex.observers.TestObserver
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
+import mozilla.components.support.base.observer.Consumable
 import mozilla.components.support.test.eq
 import org.junit.Before
 import org.junit.Rule
@@ -38,6 +40,7 @@ class ToolbarViewModelTest {
 
     private lateinit var sessionState: Subject<SessionRepo.State>
     private lateinit var pinnedTiles: Subject<LinkedHashMap<String, PinnedTile>>
+    private lateinit var toolbarEventsTestObs: TestObserver<Consumable<ToolbarViewModel.Action>>
 
     @Before
     fun setup() {
@@ -49,6 +52,7 @@ class ToolbarViewModelTest {
         `when`(pinnedTileRepo.pinnedTiles).thenReturn(pinnedTiles)
         telemetryIntegration = mock(TelemetryIntegration::class.java)
         toolbarVm = ToolbarViewModel(sessionRepo, pinnedTileRepo, telemetryIntegration)
+        toolbarEventsTestObs = toolbarVm.events.test()
     }
 
     @Test
@@ -158,20 +162,18 @@ class ToolbarViewModelTest {
 
     @Test
     fun `WHEN new session state url is not home THEN no overlay visibility event should be emitted`() {
-        @Suppress("RemoveEmptyParenthesesFromLambdaCall", "DEPRECATION")
-        toolbarVm.legacyEvents.assertValues(/* No values */) {
-            @Suppress("DEPRECATION")
-            toolbarVm.legacyState.observeForever { /* start subscription */ }
-            pinnedTiles.onNext(linkedMapOf())
-            sessionState.onNext(SessionRepo.State(
-                backEnabled = true,
-                forwardEnabled = false,
-                turboModeActive = true,
-                desktopModeActive = false,
-                currentUrl = mozilla,
-                loading = false
-            ))
-        }
+        @Suppress("DEPRECATION")
+        toolbarVm.legacyState.observeForever { /* start subscription */ }
+        pinnedTiles.onNext(linkedMapOf())
+        sessionState.onNext(SessionRepo.State(
+            backEnabled = true,
+            forwardEnabled = false,
+            turboModeActive = true,
+            desktopModeActive = false,
+            currentUrl = mozilla,
+            loading = false
+        ))
+        toolbarEventsTestObs.assertValueCount(0)
     }
 
     @Test

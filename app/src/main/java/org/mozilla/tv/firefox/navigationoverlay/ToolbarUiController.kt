@@ -6,26 +6,33 @@ package org.mozilla.tv.firefox.navigationoverlay
 
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import androidx.core.view.forEach
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import kotlinx.android.synthetic.main.fragment_navigation_overlay.view.*
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.view.*
-import kotlinx.android.synthetic.main.tooltip.view.*
+import io.reactivex.disposables.Disposable
+import kotlinx.android.synthetic.main.fragment_navigation_overlay.view.navUrlInput
+import kotlinx.android.synthetic.main.fragment_navigation_overlay.view.topNavContainer
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.view.desktopModeButton
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.view.navButtonBack
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.view.navButtonForward
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.view.navButtonReload
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.view.pinButton
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.view.turboButton
+import kotlinx.android.synthetic.main.tooltip.view.tooltip
 import mozilla.components.browser.domains.autocomplete.ShippedDomainsProvider
 import mozilla.components.support.ktx.android.view.hideKeyboard
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.experiments.ExperimentsProvider
 import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.utils.ViewUtils
 import org.mozilla.tv.firefox.widget.IgnoreFocusMovementMethod
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
-import android.view.ViewTreeObserver
-import androidx.core.view.forEach
-import org.mozilla.tv.firefox.experiments.ExperimentsProvider
 
 private const val NAVIGATION_BUTTON_ENABLED_ALPHA = 1.0f
 private const val NAVIGATION_BUTTON_DISABLED_ALPHA = 0.3f
@@ -46,7 +53,7 @@ class ToolbarUiController(
     private lateinit var tooltip: PopupWindow
     private lateinit var tooltipView: View
 
-    fun onCreateView(layout: View, viewLifecycleOwner: LifecycleOwner, fragmentManager: FragmentManager) {
+    fun onViewCreated(layout: View) {
         val toolbarClickListener = ToolbarOnClickListener()
         layout.topNavContainer.forEach {
             it.nextFocusDownId = layout.navUrlInput.id
@@ -63,7 +70,6 @@ class ToolbarUiController(
         tooltip = PopupWindow(tooltipView, WRAP_CONTENT, WRAP_CONTENT, false)
 
         setupUrlInput(layout)
-        initToolbar(layout, viewLifecycleOwner, fragmentManager)
     }
 
     private fun showTooltip(navBarButton: View) {
@@ -121,7 +127,11 @@ class ToolbarUiController(
         setOnFocusChangeListener { _, hasFocus -> if (!hasFocus) hasUserChangedURLSinceEditTextFocused = false }
     }
 
-    private fun initToolbar(layout: View, viewLifecycleOwner: LifecycleOwner, fragmentManager: FragmentManager) {
+    fun observeToolbarState(
+        layout: View,
+        viewLifecycleOwner: LifecycleOwner,
+        fragmentManager: FragmentManager
+    ): Disposable {
         fun updateOverlayButtonState(isEnabled: Boolean, overlayButton: ImageButton) {
             overlayButton.isEnabled = isEnabled
             overlayButton.isFocusable = isEnabled
@@ -181,19 +191,18 @@ class ToolbarUiController(
             }
         })
 
-        @Suppress("DEPRECATION")
-        toolbarViewModel.legacyEvents.observe(viewLifecycleOwner, Observer {
+        return toolbarViewModel.events.subscribe {
             it?.consume {
                 when (it) {
                     is ToolbarViewModel.Action.ShowTopToast -> ViewUtils.showCenteredTopToast(context, it.textId)
                     is ToolbarViewModel.Action.ShowBottomToast -> ViewUtils.showCenteredBottomToast(context, it.textId)
                     is ToolbarViewModel.Action.SetOverlayVisible -> serviceLocator.screenController
-                            .showNavigationOverlay(fragmentManager, it.visible)
+                        .showNavigationOverlay(fragmentManager, it.visible)
                     ToolbarViewModel.Action.ExitFirefox -> exitFirefox()
                 }
                 true
             }
-        })
+        }
     }
 
     private inner class ToolbarOnClickListener : View.OnClickListener {

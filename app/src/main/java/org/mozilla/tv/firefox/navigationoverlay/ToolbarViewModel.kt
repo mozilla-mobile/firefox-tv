@@ -4,11 +4,11 @@
 
 package org.mozilla.tv.firefox.navigationoverlay
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import androidx.annotation.StringRes
 import androidx.annotation.UiThread
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
+import androidx.lifecycle.ViewModel
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
@@ -51,7 +51,7 @@ class ToolbarViewModel(
     val events = _events.hide()
 
     @Deprecated(message = "Use ToolbarViewModel.events for new code")
-    val legacyEvents: LiveData<Consumable<Action>> = LiveDataReactiveStreams
+    val legacyEvents: LiveData<Consumable<Action>> = LiveDataReactiveStreams // TODO update test, remove this
         .fromPublisher(events.toFlowable(BackpressureStrategy.LATEST))
 
     val state: Observable<State> = Observables.combineLatest(sessionRepo.state, pinnedTileRepo.pinnedTiles) { sessionState, pinnedTiles ->
