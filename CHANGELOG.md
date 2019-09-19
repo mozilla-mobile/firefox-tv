@@ -7,25 +7,25 @@ It diverges in the following ways:
 - This project only strictly adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html) for bug fix releases.
 
-## Unreleased
+## 4.5 - 2019-09-23
+### Added
+- Firefox Account sign in and Send Tab is available to release users
+
 ### Changed
 - Amazon Device Messaging (ADM) is supported in release builds (#2781)
-- (disabled by default) Amazon Device Messaging (ADM) is supported in release builds (#2781)
-- FFTV is now opened automatically if a tab is sent while the app is backgrounded (#2807)
+- If a tab is sent while the app is backgrounded, it will be shown the next time FFTV is opened (#2807)
 
+## 4.4.1 - 2019-09-17
 ### Added
-- (disabled by default) Dialog prompting users to manually upgrade the app
-- Firefox Account sign in and Send Tab is available to release users
+- Dialog prompting users to manually upgrade the app (#2794)
 
 ## 4.4 - 2019-09-09
 ### Added
 - (disabled by default) Receive tabs onboarding screen (#2495)
+- (disabled by default) FxA reauthentication state icon, text, and telemetry (#2493)
 
 ### Changed
 - Stripped out code for unsupported architectures (#2647)
-
-### Added
-- (disabled by default) FxA reauthentication state icon, text, and telemetry (#2493)
 
 ## 4.3 - 2019-08-26
 ### Added
