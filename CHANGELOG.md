@@ -19,6 +19,9 @@ It diverges in the following ways:
 ### Added
 - Dialog prompting users to manually upgrade the app (#2794)
 
+### Fixed
+- Toasts not appearing for pinning/unpinning and desktop mode (#2864)
+
 ## 4.4 - 2019-09-09
 ### Added
 - (disabled by default) Receive tabs onboarding screen (#2495)
