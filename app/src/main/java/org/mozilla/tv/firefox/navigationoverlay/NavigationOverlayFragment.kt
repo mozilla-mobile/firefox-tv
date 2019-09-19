@@ -262,6 +262,13 @@ class NavigationOverlayFragment : Fragment() {
 
     // TODO other toolbar state is set in the ToolbarUiController. Move this there to be consistent
     private fun observeAccountState(): Disposable {
+        fun setUiToNotAuthenticated() {
+            fxaButton.setImageResource(R.drawable.ic_fxa_login)
+            fxaButton.contentDescription =
+                resources.getString(R.string.fxa_navigation_item_new,
+                    resources.getString(R.string.app_name))
+        }
+
         val fxaRepo = serviceLocator.fxaRepo
 
         return fxaRepo.accountState
@@ -283,11 +290,11 @@ class NavigationOverlayFragment : Fragment() {
                             fxaRepo.showFxaOnboardingScreen(context!!)
                         }
                     }
-                    AccountState.NotAuthenticated, AccountState.Initial -> {
-                        fxaButton.setImageResource(R.drawable.ic_fxa_login)
-                        fxaButton.contentDescription =
-                            resources.getString(R.string.fxa_navigation_item_new,
-                                resources.getString(R.string.app_name))
+                    AccountState.Initial -> {
+                        setUiToNotAuthenticated()
+                    }
+                    AccountState.NotAuthenticated -> {
+                        setUiToNotAuthenticated()
                         resetFxaOnboardingShown()
                     }
                     AccountState.NeedsReauthentication -> {
