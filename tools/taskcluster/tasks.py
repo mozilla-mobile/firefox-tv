@@ -91,47 +91,6 @@ class TaskBuilder:
             chain_of_trust=True,  # Needed for sign and push task verification
         )
 
-    def craft_email_task(self, sign_task_label, push_task_label, tag):
-        # The "\n" are hard-coded on purpose, since we don't want a newline in the string, but
-        # we do want the JSON to have the escaped newline.
-        # This email content is formatted with markdown by Taskcluster
-        content = 'Automation for this release is ready. Please: \n' \
-                  '* Download the APK and attach it to the [Github release](https://github.com/mozilla-mobile/firefox-tv/releases/tag/{})\n'.format(tag) + \
-                  '* [Deploy the new release on Amazon](https://developer.amazon.com/apps-and-games/console/app/amzn1.devportal.mobileapp.7f334089688646ef8953d041021029c9/release/amzn1.devportal.apprelease.4ca3990c43f34101bf5729543343747a/general/detail)'
-
-        return self._craft_base_task(
-            'Email that automation is complete',
-            {
-                'provisionerId': 'built-in',
-                'workerType': 'succeed',
-                'requires': 'all-completed',
-                'routes': [
-                    'notify.email.{}.on-completed'.format(NOTIFY_EMAIL_ADDRESS)
-                ],
-                'scopes': [
-                    'queue:route:notify.email.{}.on-completed'.format(NOTIFY_EMAIL_ADDRESS),
-                    'queue:create-task:built-in/succeed',
-                ],
-                'payload': {},
-                'extra': {
-                    'notify': {
-                        'email': {
-                            'content': content,
-                            'subject': 'Release {} is ready for deployment'.format(tag),
-                            'link': {
-                                'href': 'https://queue.taskcluster.net/v1/task/{}/artifacts/public/build/target.apk'.format(sign_task_label),
-                                'text': '{} APK'.format(tag),
-                            }
-                        }
-                    }
-                }
-            },
-            {
-                'sign': sign_task_label,
-                'push': push_task_label
-            }
-        )
-
     def _craft_shell_task(self, name, script, scopes, artifacts, chain_of_trust=False):
         # The script value here is probably produced from a python heredoc string, which means
         # it has unnecessary whitespace in it. This will iterate over each line and remove the

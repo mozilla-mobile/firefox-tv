@@ -51,6 +51,7 @@ def build_scriptworker_signing_payload(config, task, task_def):
             Required("paths"): [text_type],
         }],
         Required("channel"): text_type,
+        Required("target-store"): text_type,
     }
 )
 def build_push_apk_payload(config, task, task_def):
@@ -69,3 +70,4 @@ def build_push_apk_payload(config, task, task_def):
             scope_prefix, worker["product"], ":dep" if worker["dep"] else ""
         )
     )
+
