@@ -1,0 +1,25 @@
+---
+loader: taskgraph.loader.transform:loader
+
+transforms:
+  - firefox_tv_taskgraph.push-apk:transforms
+  - taskgraph.transforms.task:transforms
+
+jobs:
+  push:
+    label: Push to Amazon
+    description: ''
+    worker-type: push-apk
+    run-on-tasks-for: [github-release]
+    dependencies:
+      build: 'Firefox for Fire TV - Release build'  # comes from old-decision task
+    worker:
+      product: firefox-tv
+      channel: production
+      target-store: amazon
+      upstream-artifacts:
+        - taskType: build
+          paths:
+            - public/build/target.apk
+          taskId:
+            task-reference: <build>

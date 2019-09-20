@@ -43,7 +43,7 @@ def build_scriptworker_signing_payload(config, task, task_def):
 
 
 @payload_builder(
-    "scriptworker-pushapk",
+    "scriptworker-push-apk",
     schema={
         Required("upstream-artifacts"): [{
             Required("taskId"): taskref_or_string,
@@ -52,6 +52,8 @@ def build_scriptworker_signing_payload(config, task, task_def):
         }],
         Required("channel"): text_type,
         Required("target-store"): text_type,
+        Required("product"): text_type,
+        Required("dep"): bool,
     }
 )
 def build_push_apk_payload(config, task, task_def):
