@@ -2,24 +2,23 @@
 loader: taskgraph.loader.transform:loader
 
 transforms:
-  - firefox_tv_taskgraph.pushapk:transforms
+  - firefox_tv_taskgraph.signing:transforms
   - taskgraph.transforms.task:transforms
 
 jobs:
   push:
-    label: Push to Amazon
+    label: Sign for Github
     description: ''
-    worker-type: push-apk
+    worker-type: signing
     run-on-tasks-for: [github-release]
     dependencies:
       build: 'Firefox for Fire TV - Release build'
     worker:
-      product: firefox-tv
-      channel: production
-      target-store: amazon
       upstream-artifacts:
         - taskType: build
           paths:
             - public/build/target.apk
+          formats:
+            - autograph_apk
           taskId:
             task-reference: <build>

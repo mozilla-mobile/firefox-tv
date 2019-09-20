@@ -15,7 +15,7 @@ jobs:
     worker-type: succeed
     run-on-tasks-for: [github-release]
     dependencies:
-      sign: 'Sign for Github'  # comes from old-decision task
-      push: 'Push to Amazon'  # comes from old-decision task
+      sign: 'Sign for Github'
+      push: 'Push to Amazon'
     worker:
       to-address: firefox-tv@mozilla.com

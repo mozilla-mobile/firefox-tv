@@ -26,7 +26,6 @@ class TaskBuilder:
         self.repo_url = repo_url
         self.commit = commit
         self.task_group_id = task_group_id
-        self.level = 1 if repo_url != 'https://github.com/mozilla-mobile/firefox-tv' else 3
 
     def craft_pr_task(self, branch):
         script = '''
@@ -107,7 +106,7 @@ class TaskBuilder:
 
         return self._craft_base_task(name, {
             'provisionerId': 'aws-provisioner-v1',
-            'workerType': 'mobile-{}-b-firefox-tv'.format(self.level),
+            'workerType': 'github-worker',
             'scopes': scopes,
             'payload': {
                 'maxRunTime': 3600,
@@ -120,25 +119,6 @@ class TaskBuilder:
                 }
             }
         })
-
-    def craft_sign_for_github_task(self, build_task_label, is_staging):
-        return self._craft_base_task('Sign for Github', {
-            'provisionerId': 'scriptworker-prov-v1',
-            'workerType': 'mobile-signing-dep-v1' if self.level != 3 else 'mobile-signing-v1',
-            'scopes': [
-                'project:mobile:firefox-tv:releng:signing:format:autograph_apk',
-                'project:mobile:firefox-tv:releng:signing:cert:{}-signing'.format(
-                    'dep' if self.level != 3 else 'production')
-            ],
-            'payload': {
-                'upstreamArtifacts': [{
-                    'paths': ['public/build/target.apk'],
-                    'formats': ['autograph_apk'],
-                    'taskId': {'task-reference': '<build>'},
-                    'taskType': 'build',
-                }]
-            },
-        }, {'build': build_task_label})
 
     def _craft_base_task(self, name, extend_task, dependencies=None):
         return {
