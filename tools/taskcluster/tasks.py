@@ -82,7 +82,7 @@ class TaskBuilder:
         '''.format(self.repo_url, tag)
 
         return self._craft_shell_task(
-            'Firefox for Fire TV - Release build {}'.format(tag),
+            'Firefox for Fire TV - Release build',
             script,
             ['secrets:get:project/mobile/firefox-tv/tokens'],
             {
@@ -137,26 +137,6 @@ class TaskBuilder:
                     'taskType': 'build',
                 }]
             },
-        }, {'build': build_task_label})
-
-    def craft_amazon_task(self, build_task_label, is_staging):
-        return self._craft_base_task('Push to Amazon', {
-            'provisionerId': 'scriptworker-prov-v1',
-            'workerType': 'mobile-pushapk-dep-v1' if is_staging else 'mobile-pushapk-v1',
-            'scopes': [
-                'project:mobile:firefox-tv:releng:googleplay:product:firefox-tv{}'.format(
-                    ':dep' if is_staging else ''
-                )
-            ],
-            'payload': {
-                'target_store': 'amazon',
-                'channel': 'production',
-                'upstreamArtifacts': [{
-                    'paths': ['public/build/target.apk'],
-                    'taskId': {'task-reference': '<build>'},
-                    'taskType': 'build',
-                }]
-            }
         }, {'build': build_task_label})
 
     def _craft_base_task(self, name, extend_task, dependencies=None):

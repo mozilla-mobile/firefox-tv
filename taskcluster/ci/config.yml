@@ -36,12 +36,12 @@ workers:
           default: mobile-signing-dep-v1
     push-apk:
       provisioner: scriptworker-prov-v1
-      implementation: scriptworker-pushapk
+      implementation: scriptworker-push-apk
       os: scriptworker
       worker-type:
         by-level:
-          "3": mobile-pushapk-v1
-          default: mobile-pushapk-dep-v1
+          "3": mobile-push-apk-v1
+          default: mobile-push-apk-dep-v1
 
 scriptworker:
   scope-prefix: project:mobile:firefox-tv:releng
