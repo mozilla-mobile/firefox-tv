@@ -114,7 +114,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     }
 
     @SuppressLint("MissingSuperCall")
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         // Do not save instance state.
         //
         // onSaveInstanceState attempts to save view state, including fragments that we sometimes want destroyed. In
@@ -310,7 +310,7 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     private fun observeReceivedTabs(): Disposable {
         fun openReceivedFxaTab(receivedTab: FxaReceivedTab) {
             // TODO: Gracefully handle receiving multiple tabs around the same time. #2777
-            serviceLocator.screenController.showBrowserScreenForUrl(supportFragmentManager!!, receivedTab.url)
+            serviceLocator.screenController.showBrowserScreenForUrl(supportFragmentManager, receivedTab.url)
             ViewUtils.showCenteredBottomToast(this, receivedTab.tabReceivedNotificationText.resolve(resources))
         }
 
