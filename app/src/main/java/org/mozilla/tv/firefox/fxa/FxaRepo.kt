@@ -11,6 +11,7 @@ import android.preference.PreferenceManager
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.NONE
 import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.tabs_onboarding.descriptionText
 import kotlinx.android.synthetic.main.tabs_onboarding.tabs_onboarding_button
@@ -138,6 +139,24 @@ class FxaRepo(
         TelemetryIntegration.INSTANCE.fxaShowOnboardingEvent()
         dialog.show()
     }
+
+    /**
+     * Polls for account state.  Any updates will be received through the normal
+     * [FxaRepo.FirefoxAccountObserver] code path. This is important because, as of now, FxA does
+     * not send push events when a user is logged out on another device. We poll so that we will
+     * (eventually) correctly show the user as not logged in.
+     *
+     * TODO remove this after FxA adds push event for revoked logins
+     * See: https://github.com/mozilla/application-services/issues/1418
+     */
+    fun periodicallyPollAccountState(): Disposable =
+        // TODO before merging update this to the period specified in #2806
+        Observable.interval(20, TimeUnit.SECONDS)
+            .subscribe {
+                @Suppress("DeferredResultUnused") // We don't need to do anything when
+                // this finishes
+                accountManager.authenticatedAccount()?.deviceConstellation()?.pollForEventsAsync()
+            }
 
     @SuppressLint("CheckResult") // This survives for the duration of the app
     private fun setupTelemetry() {

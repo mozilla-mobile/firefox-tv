@@ -221,6 +221,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
             .addTo(startStopCompositeDisposable)
 
         observeReceivedTabs().addTo(startStopCompositeDisposable)
+
+        serviceLocator.fxaRepo.periodicallyPollAccountState().addTo(startStopCompositeDisposable)
     }
 
     override fun onStop() {
