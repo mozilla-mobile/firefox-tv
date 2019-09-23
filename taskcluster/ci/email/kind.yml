@@ -5,9 +5,6 @@ transforms:
   - firefox_tv_taskgraph.email:transforms
   - taskgraph.transforms.task:transforms
 
-kind-dependencies:
-  - old-decision
-
 jobs:
   email:
     label: Email that automation is complete

@@ -15,23 +15,24 @@ NOTIFY_EMAIL_ADDRESS = 'firefox-tv@mozilla.com'
 def build_task(config, tasks):
     for task in tasks:
         script = task["worker"]["script"].format(
-            repo_url="TODO",
-            tag="TODO",
+            repo_url=config.params["head_repository"],
+            commit=os.environ.get("MOBILE_HEAD_REV"),  # TODO use params?
+            tag=os.environ.get("GIT_TAG"),  # TODO use params?
+            branch=config.params["head_rev"],
         )
-        trimmed_script = "\n".join([line.strip() for line in script.split("\n") if line.strip()])
         bash_command = [
             "/bin/bash",
             "--login",
             "-c",
             "cat <<'SCRIPT' > ../script.sh && bash -e ../script.sh\n"
-            "export TERM=dumb\n{}\nSCRIPT".format(trimmed_script)
+            "export TERM=dumb\n{}\nSCRIPT".format(script)
         ]
 
         task["worker"] = {
             "max-run-time": 3600,
             "docker-image": "mozillamobile/firefox-tv:2.3",
             "command": bash_command,
-            "artifacts": task["worker"]["artifacts"],
+            "artifacts": task["worker"].get("artifacts", []),
         }
 
         yield task
