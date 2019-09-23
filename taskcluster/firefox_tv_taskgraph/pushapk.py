@@ -7,7 +7,7 @@ transforms = TransformSequence()
 
 
 @transforms.add
-def build_pushapk_task(config, tasks):
+def pushapk_task(config, tasks):
     for task in tasks:
         task["worker"]["dep"] = config.params["level"] != 3
         yield task

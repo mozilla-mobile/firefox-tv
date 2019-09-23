@@ -70,27 +70,6 @@ class TaskBuilder:
             }
         )
 
-    def craft_release_build_task(self, tag):
-        script = '''
-        git fetch {} --tags
-        git config advice.detachedHead false
-        git checkout {}
-        yes | sdkmanager --licenses
-        python tools/taskcluster/get-sentry-token.py
-        python tools/taskcluster/get-pocket-token.py
-        ./gradlew --no-daemon clean test assembleSystemRelease
-        '''.format(self.repo_url, tag)
-
-        return self._craft_shell_task(
-            'Firefox for Fire TV - Release build',
-            script,
-            ['secrets:get:project/mobile/firefox-tv/tokens'],
-            {
-                'public/build/target.apk': artifact('file', '/opt/firefox-tv/app/build/outputs/apk/system/release/app-system-release-unsigned.apk')
-            },
-            chain_of_trust=True,  # Needed for sign and push task verification
-        )
-
     def _craft_shell_task(self, name, script, scopes, artifacts, chain_of_trust=False):
         # The script value here is probably produced from a python heredoc string, which means
         # it has unnecessary whitespace in it. This will iterate over each line and remove the
@@ -138,24 +117,3 @@ class TaskBuilder:
                 },
             }, **extend_task),
         }
-
-
-def schedule_task_graph(ordered_tasks):
-    queue = taskcluster.Queue({'rootUrl': os.environ.get('TASKCLUSTER_PROXY_URL', 'https://taskcluster.net')})
-    full_task_graph = {}
-
-    for task_id, task in ordered_tasks:
-        print("TASK", task_id)
-        print(json.dumps(task, indent=4, separators=(',', ': ')))
-
-        result = queue.createTask(task_id, task)
-        print("RESULT", task_id)
-        print(json.dumps(result))
-
-        full_task_graph[task_id] = {
-            # Some values of the task definition are automatically filled. Querying the task
-            # allows to have the full definition. This is needed to make Chain of Trust happy
-            'task': queue.task(task_id),
-        }
-
-    return full_task_graph
