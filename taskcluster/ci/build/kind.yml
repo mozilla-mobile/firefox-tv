@@ -1,0 +1,29 @@
+---
+loader: taskgraph.loader.transform:loader
+
+transforms:
+  - firefox_tv_taskgraph.build:transforms
+  - taskgraph.transforms.task:transforms
+
+jobs:
+  release:
+    label: Firefox for Fire TV - Release build
+    description: ''
+    worker-type: b-android
+    run-on-tasks-for: [github-release]
+    scopes:
+      - secrets:get:project/mobile/firefox-tv/tokens
+    worker:
+      artifacts:
+        - name: public/build/target.apk
+          path: /opt/firefox-tv/app/build/outputs/apk/system/release/app-system-release-unsigned.apk
+          type: file
+      script: |
+        git fetch {repo_url} --tags
+        git config advice.detachedHead false
+        git checkout {tag}
+        yes | sdkmanager --licenses
+        python tools/taskcluster/get-sentry-token.py
+        python tools/taskcluster/get-pocket-token.py
+        ./gradlew --no-daemon clean test assembleSystemRelease
+
