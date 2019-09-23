@@ -134,6 +134,8 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
     }
 
     override fun onNewIntent(unsafeIntent: Intent) {
+        super.onNewIntent(unsafeIntent)
+
         if (serviceLocator.sessionManager.selectedSession == null) {
             Sentry.capture(IllegalStateException("onNewIntent is called with null selectedSession"))
             return
