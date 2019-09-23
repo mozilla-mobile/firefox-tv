@@ -12,7 +12,7 @@ NOTIFY_EMAIL_ADDRESS = 'firefox-tv@mozilla.com'
 
 
 @transforms.add
-def build_email_task(config, tasks):
+def email_task(config, tasks):
     tag = os.environ['GIT_TAG']
     content = 'Automation for this release is ready. Please: \n' \
               '* Download the APK and attach it to the [Github release](https://github.com/mozilla-mobile/firefox-tv/releases/tag/{})\n'.format(tag) + \

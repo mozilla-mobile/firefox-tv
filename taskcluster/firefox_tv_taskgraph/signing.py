@@ -7,7 +7,7 @@ transforms = TransformSequence()
 
 
 @transforms.add
-def build_signing_task(config, tasks):
+def signing_task(config, tasks):
     for task in tasks:
         task["worker"]["signing-type"] = 'dep-signing' if config.params["level"] != 3 else 'production-signing'
         yield task
