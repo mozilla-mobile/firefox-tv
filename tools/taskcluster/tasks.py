@@ -133,6 +133,9 @@ class TaskBuilder:
         )
 
     def _craft_shell_task(self, name, script, scopes, artifacts, *, dependencies=(), chain_of_trust=False):
+        # The script value here is probably produced from a python heredoc string, which means
+        # it has unnecessary whitespace in it. This will iterate over each line and remove the
+        # redundant whitespace
         trimmed_script = '\n'.join([line.strip() for line in script.split('\n') if line.strip()])
         bash_command = [
             '/bin/bash',
