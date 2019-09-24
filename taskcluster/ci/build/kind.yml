@@ -5,14 +5,18 @@ transforms:
   - firefox_tv_taskgraph.build:transforms
   - taskgraph.transforms.task:transforms
 
+job-defaults:
+  description: Build Firefox for Amazon's Fire TV
+  worker-type: b-android
+  scopes:
+    - secrets:get:project/mobile/firefox-tv/tokens
+  worker:
+    max-run-time: 3600
+    docker-image: mozillamobile/firefox-tv:2.3
+
 jobs:
   pr:
-    label: Firefox for Amazon's Fire TV - Build - Pull Request
-    description: ''
-    worker-type: b-android
     run-on-tasks-for: [github-pull-request]
-    scopes:
-      - secrets:get:project/mobile/firefox-tv/tokens
     worker:
       script: |
         git fetch {repo_url} {branch}
@@ -26,12 +30,7 @@ jobs:
         ./tools/taskcluster/google-firebase-testlab-login.sh
         ./tools/taskcluster/execute-firebase-test.sh system/debug app-system-debug model=sailfish,version=25,orientation=landscape
   master:
-    label: Firefox for Amazon's Fire TV - Build - Master
-    description: ''
-    worker-type: b-android
     run-on-tasks-for: [github-push]
-    scopes:
-      - secrets:get:project/mobile/firefox-tv/tokens
     worker:
       script: |
         git fetch {repo_url}
@@ -42,12 +41,7 @@ jobs:
         python ./tools/taskcluster/get-bitbar-token.py
         python ./tools/taskcluster/execute-bitbar-test.py system/debug app-system-debug
   release:
-    label: Firefox for Fire TV - Release build
-    description: ''
-    worker-type: b-android
     run-on-tasks-for: [github-release]
-    scopes:
-      - secrets:get:project/mobile/firefox-tv/tokens
     worker:
       artifacts:
         - name: public/build/target.apk
