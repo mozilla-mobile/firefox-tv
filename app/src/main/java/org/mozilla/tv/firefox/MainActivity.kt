@@ -222,7 +222,9 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
         observeReceivedTabs().addTo(startStopCompositeDisposable)
 
-        serviceLocator.fxaRepo.periodicallyPollAccountState().addTo(startStopCompositeDisposable)
+        // TODO remove this after FxA adds push event for revoked logins
+        // See: https://github.com/mozilla/application-services/issues/1418
+        serviceLocator.fxaRepo.pollAccountState()
     }
 
     override fun onStop() {
