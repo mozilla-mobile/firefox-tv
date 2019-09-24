@@ -12,7 +12,7 @@ jobs:
     worker-type: signing
     run-on-tasks-for: [github-release]
     dependencies:
-      build: 'Firefox for Fire TV - Release build'
+      build: build-release
     worker:
       upstream-artifacts:
         - taskType: build
