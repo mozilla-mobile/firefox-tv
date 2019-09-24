@@ -12,6 +12,7 @@ buildscript {
     ext.moz_components_version = '13.0.0'
     ext.androidx_work_version = '2.0.1'
     ext.adm_version = '1.0.1' // Also update proguard rule if this gets updated
+    ext.oss_licenses_version = '17.0.0'
 
     ext.robolectric_version = '4.0.2' // required for SDK 28.
 
@@ -64,6 +65,8 @@ buildscript {
 
         classpath 'org.ajoberstar:grgit:1.5.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        classpath 'com.google.android.gms:oss-licenses-plugin:0.9.5'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
