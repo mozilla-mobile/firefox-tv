@@ -16,3 +16,9 @@ jobs:
       push: 'Push to Amazon'
     worker:
       to-address: firefox-tv@mozilla.com
+      content: |
+        Automation for this release is ready. Please:
+        * Download the APK and attach it to the [Github release](https://github.com/mozilla-mobile/firefox-tv/releases/tag/{tag})
+        * [Deploy the new release on Amazon](https://developer.amazon.com/apps-and-games/console/app/amzn1.devportal.mobileapp.7f334089688646ef8953d041021029c9/release/amzn1.devportal.apprelease.4ca3990c43f34101bf5729543343747a/general/detail)
+      subject: "Release {tag} is ready for deployment"
+      link-text: "{tag} APK"

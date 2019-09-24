@@ -16,9 +16,9 @@ def build_task(config, tasks):
     for task in tasks:
         script = task["worker"]["script"].format(
             repo_url=config.params["head_repository"],
-            commit=os.environ.get("MOBILE_HEAD_REV"),  # TODO use params?
+            commit=config.params["head_rev"],  # TODO use params?
             tag=os.environ.get("GIT_TAG"),  # TODO use params?
-            branch=config.params["head_rev"],
+            branch=config.params["head_ref"],
         )
         bash_command = [
             "/bin/bash",
@@ -28,11 +28,8 @@ def build_task(config, tasks):
             "export TERM=dumb\n{}\nSCRIPT".format(script)
         ]
 
-        task["worker"] = {
-            "max-run-time": 3600,
-            "docker-image": "mozillamobile/firefox-tv:2.3",
-            "command": bash_command,
-            "artifacts": task["worker"].get("artifacts", []),
-        }
+        del task["worker"]["script"]
+        task["worker"]["command"] = bash_command
+        task["worker"].setdefault("artifacts", [])
 
         yield task
