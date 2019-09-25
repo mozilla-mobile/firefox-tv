@@ -39,6 +39,7 @@ import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.ext.couldScrollInDirection
 import org.mozilla.tv.firefox.ext.focusedDOMElement
 import org.mozilla.tv.firefox.ext.isYoutubeTV
+import org.mozilla.tv.firefox.ext.maybeGoBackBeforeFxaSignIn
 import org.mozilla.tv.firefox.ext.observeScrollPosition
 import org.mozilla.tv.firefox.ext.pauseAllVideoPlaybacks
 import org.mozilla.tv.firefox.ext.requireWebRenderComponents
@@ -177,6 +178,8 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         observeRequestFocus()
                 .addTo(startStopCompositeDisposable)
+        observeFxaLoginSuccess()
+                .addTo(startStopCompositeDisposable)
 
         /**
          * When calling getOrCreateEngineSession(), [SessionManager] lazily creates an [EngineSession]
@@ -253,6 +256,12 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                         viewToFocus.requestFocus()
                     }
                 }
+    }
+
+    private fun observeFxaLoginSuccess(): Disposable {
+        return webRenderViewModel.onFxaLoginSuccess.subscribe {
+            engineView?.maybeGoBackBeforeFxaSignIn()
+        }
     }
 
     fun loadUrl(url: String) {
