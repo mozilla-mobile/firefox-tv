@@ -9,10 +9,15 @@ import io.reactivex.Observable
 import org.mozilla.tv.firefox.R
 import org.mozilla.tv.firefox.ScreenController
 import org.mozilla.tv.firefox.ScreenControllerStateMachine.ActiveScreen
+import org.mozilla.tv.firefox.fxa.FxaLoginUseCase
 
 class WebRenderViewModel(
-    screenController: ScreenController
+    screenController: ScreenController,
+    fxaLoginUseCase: FxaLoginUseCase
 ) : ViewModel() {
+
+    val onFxaLoginSuccess = fxaLoginUseCase.onLoginSuccess
+
     val focusRequests: Observable<Int> = screenController.currentActiveScreen
             .filter { currentScreen -> currentScreen == ActiveScreen.WEB_RENDER }
             .map { R.id.engineView }

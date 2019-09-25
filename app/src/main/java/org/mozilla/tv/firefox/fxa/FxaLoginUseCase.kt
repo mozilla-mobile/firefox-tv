@@ -7,6 +7,7 @@ package org.mozilla.tv.firefox.fxa
 import android.net.Uri
 import androidx.fragment.app.FragmentManager
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -44,6 +45,9 @@ class FxaLoginUseCase(
     private val screenController: ScreenController,
     private val sentryIntegration: SentryIntegration = SentryIntegration
 ) {
+
+    private val _onLoginSuccess = PublishSubject.create<Unit>()
+    val onLoginSuccess: Observable<Unit> = _onLoginSuccess.hide()
 
     /**
      * Opens the browser screen and loads the FxA login URL to begin the login flow.
@@ -104,8 +108,8 @@ class FxaLoginUseCase(
             .filter { isLoginSuccessUri(it) }
             .filterMapLoginSuccessKeys()
             .subscribe { loginSuccessKeys ->
-                // TODO: do we want to pop these fxa pages from the user's browsing history?
                 fxaRepo.accountManager.finishAuthenticationAsync(loginSuccessKeys)
+                _onLoginSuccess.onNext(Unit)
             }
     }
 
