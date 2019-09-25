@@ -15,7 +15,7 @@ job-defaults:
     - secrets:get:project/mobile/firefox-tv/tokens
   worker:
     max-run-time: 3600
-    docker-image: mozillamobile/firefox-tv:2.3
+    docker-image: {in-tree: android}
 
 jobs:
   pr:
