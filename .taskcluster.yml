@@ -138,7 +138,7 @@ tasks:
                                         MOBILE_PULL_REQUEST_NUMBER: '${event.pull_request.number}'
                                   - $if: 'tasks_for == "github-release"'
                                     then:
-                                        GIT_TAG: '${event.release.tag_name}'
+                                        MOBILE_HEAD_TAG: '${event.release.tag_name}'
                           features:
                               taskclusterProxy: true
                               chainOfTrust: true
