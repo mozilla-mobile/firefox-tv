@@ -165,19 +165,19 @@ class NavigationOverlayFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_navigation_overlay_orig, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val view = inflater.inflate(R.layout.fragment_navigation_overlay_orig, container, false)
         toolbarUiController = ToolbarUiController(
             toolbarViewModel,
             ::exitFirefox,
             onNavigationEvent,
             serviceLocator.experimentsProvider
         ).apply {
-            onViewCreated(view)
+            onCreateView(view)
         }
+        return view
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         rootView = view
 
         // TODO: Add back in once #1666 is ready to land.
@@ -237,8 +237,8 @@ class NavigationOverlayFragment : Fragment() {
                 .forEach { compositeDisposable.add(it) }
         observeToolbarFocusability()
                 .addTo(compositeDisposable)
-        toolbarUiController.observeToolbarState(rootView!!, viewLifecycleOwner, fragmentManager!!)
-            .addTo(compositeDisposable)
+        toolbarUiController.observeToolbarState(rootView!!, fragmentManager!!)
+            .forEach { compositeDisposable.add(it) }
 
         fxaButton.isVisible = serviceLocator.experimentsProvider.shouldShowSendTab()
     }
