@@ -163,7 +163,7 @@ class ToolbarViewModelTest {
     @Test
     fun `WHEN new session state url is not home THEN no overlay visibility event should be emitted`() {
         @Suppress("DEPRECATION")
-        toolbarVm.legacyState.observeForever { /* start subscription */ }
+        toolbarVm.events.subscribe { /* start subscription */ }
         pinnedTiles.onNext(linkedMapOf())
         sessionState.onNext(SessionRepo.State(
             backEnabled = true,
