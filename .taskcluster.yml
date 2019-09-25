@@ -16,43 +16,30 @@ tasks:
               ownerEmail:
                   $if: 'tasks_for == "github-push"'
                   then: '${event.pusher.email}'
-                  # Assume Pull Request
                   else:
                       $if: 'tasks_for == "github-pull-request"'
                       then: '${event.pull_request.user.login}@users.noreply.github.com'
                       else:
                           $if: 'tasks_for == "github-release"'
                           then: '${event.sender.login}@users.noreply.github.com'
-                          else:
-                              $if: 'tasks_for in ["cron", "action"]'
-                              then: '${tasks_for}@noreply.mozilla.org'
               baseRepoUrl:
                   $if: 'tasks_for in ["github-push", "github-release"]'
                   then: '${event.repository.html_url}'
                   else:
                       $if: 'tasks_for == "github-pull-request"'
                       then: '${event.pull_request.base.repo.html_url}'
-                      else:
-                          $if: 'tasks_for in ["cron", "action"]'
-                          then: '${repository.url}'
               repoUrl:
                   $if: 'tasks_for in ["github-push", "github-release"]'
                   then: '${event.repository.html_url}'
                   else:
                       $if: 'tasks_for == "github-pull-request"'
                       then: '${event.pull_request.head.repo.html_url}'
-                      else:
-                          $if: 'tasks_for in ["cron", "action"]'
-                          then: '${repository.url}'
               project:
                   $if: 'tasks_for in ["github-push", "github-release"]'
                   then: '${event.repository.name}'
                   else:
                       $if: 'tasks_for == "github-pull-request"'
                       then: '${event.pull_request.head.repo.name}'
-                      else:
-                          $if: 'tasks_for in ["cron", "action"]'
-                          then: '${repository.project}'
               head_branch:
                   $if: 'tasks_for == "github-pull-request"'
                   then: ${event.pull_request.head.ref}
@@ -62,9 +49,6 @@ tasks:
                       else:
                           $if: 'tasks_for == "github-release"'
                           then: '${event.release.target_commitish}'
-                          else:
-                              $if: 'tasks_for in ["cron", "action"]'
-                              then: '${push.branch}'
               head_sha:
                   $if: 'tasks_for == "github-push"'
                   then: '${event.after}'
@@ -74,31 +58,19 @@ tasks:
                       else:
                           $if: 'tasks_for == "github-release"'
                           then: '${event.release.tag_name}'
-                          else:
-                              $if: 'tasks_for in ["cron", "action"]'
-                              then: '${push.revision}'
-              ownTaskId:
-                  $if: '"github" in tasks_for'
-                  then: {$eval: as_slugid("decision_task")}
-                  else:
-                      $if: 'tasks_for == "cron"'
-                      then: '${ownTaskId}'
+              ownTaskId: {$eval: as_slugid("decision_task")}
           in:
-              $if: 'tasks_for in ["github-pull-request", "github-release", "action", "cron"] || tasks_for == "github-push" && head_branch[:10] != "refs/tags/"'
+              # filter for github events that we will run taskgraph for
+              $if: 'tasks_for in ["github-pull-request", "github-release"] || tasks_for == "github-push" && head_branch[:10] != "refs/tags/"'
               then:
                   $let:
                       level:
-                          $if: 'tasks_for in ["github-push", "github-release", "action", "cron"] && repoUrl == "https://github.com/mozilla-mobile/firefox-tv"'
+                          $if: 'tasks_for in ["github-push", "github-release"] && repoUrl == "https://github.com/mozilla-mobile/firefox-tv"'
                           then: '3'
                           else: '1'
                   in:
                       taskId: '${ownTaskId}'
-                      taskGroupId:
-                          $if: 'tasks_for == "action"'
-                          then:
-                              '${action.taskGroupId}'
-                          else:
-                              '${ownTaskId}'  # same as taskId; this is how automation identifies a decision task
+                      taskGroupId: '${ownTaskId}'  # same as taskId; this is how automation identifies a decision task
                       schedulerId: '${trustDomain}-level-${level}'
                       created: {$fromNow: ''}
                       deadline: {$fromNow: '1 day'}
@@ -111,28 +83,10 @@ tasks:
                                 then:
                                     name: "Decision Task"
                                     description: 'The task that creates all of the other tasks in the task graph'
-                                else:
-                                    $if: 'tasks_for == "action"'
-                                    then:
-                                        name: "Action: ${action.title}"
-                                        description: '${action.description}'
-                                    else:
-                                        name: "Decision Task for cron job ${cron.job_name}"
-                                        description: 'Created by a [cron task](https://tools.taskcluster.net/tasks/${cron.task_id})'
                       provisionerId: "aws-provisioner-v1"
                       workerType: "mobile-${level}-decision"
                       tags:
-                          $if: 'tasks_for in ["github-push", "github-pull-request"]'
-                          then:
-                              kind: decision-task
-                          else:
-                              $if: 'tasks_for == "action"'
-                              then:
-                                  kind: 'action-callback'
-                              else:
-                                  $if: 'tasks_for == "cron"'
-                                  then:
-                                      kind: cron-task
+                          kind: decision-task
                       routes:
                           - checks
                       scopes:
@@ -154,13 +108,6 @@ tasks:
                                   $if: 'tasks_for == "github-release"'
                                   then:
                                       - 'assume:repo:${repoUrl[8:]}:release'
-                                  else:
-                                      $if: 'tasks_for == "action"'
-                                      then:
-                                          # when all actions are hooks, we can calculate this directly rather than using a variable
-                                          - '${action.repo_scope}'
-                                      else:
-                                          - 'assume:repo:${repoUrl[8:]}:cron:${cron.job_name}'
 
                       requires: all-completed
                       priority: lowest
@@ -186,12 +133,6 @@ tasks:
                                   - $if: 'tasks_for in ["github-pull-request"]'
                                     then:
                                         MOBILE_PULL_REQUEST_NUMBER: '${event.pull_request.number}'
-                                  - $if: 'tasks_for == "action"'
-                                    then:
-                                        ACTION_TASK_GROUP_ID: '${action.taskGroupId}'  # taskGroupId of the target task
-                                        ACTION_TASK_ID: {$json: {$eval: 'taskId'}}  # taskId of the target task (JSON-encoded)
-                                        ACTION_INPUT: {$json: {$eval: 'input'}}
-                                        ACTION_CALLBACK: '${action.cb_name}'
                                   - $if: 'tasks_for == "github-release"'
                                     then:
                                         GIT_TAG: '${event.release.tag_name}'
@@ -204,7 +145,6 @@ tasks:
                               mozillareleases/taskgraph:decision-mobile-6020473b1a928d8df50e234a7ca2e81ade2220a4fb5fbe16b02477dd64a49728@sha256:98d226736b7d03907114bf37938002b90e8a37cbe3a297690e349f1ddddb1d7c
 
                           maxRunTime: 1800
-
                           command:
                               - /usr/local/bin/run-task
                               - '--mobile-checkout=/builds/worker/checkouts/src'
@@ -213,33 +153,24 @@ tasks:
                               - '--'
                               - bash
                               - -cx
-                              - $let:
-                                    extraArgs: {$if: 'tasks_for == "cron"', then: '${cron.quoted_args}', else: ''}
-                                in:
-                                    $if: 'tasks_for == "action"'
-                                    then: >
-                                        cd /builds/worker/checkouts/src &&
-                                        ln -s /builds/worker/artifacts artifacts &&
-                                        taskgraph action-callback
-                                    else: >
-                                        PIP_IGNORE_INSTALLED=0 pip install --user /builds/worker/checkouts/taskgraph &&
-                                        PIP_IGNORE_INSTALLED=0 pip install --user arrow taskcluster pyyaml &&
-                                        taskcluster/scripts/install-sdk.sh &&
-                                        ln -s /builds/worker/artifacts artifacts &&
-                                        ~/.local/bin/taskgraph decision
-                                        --pushlog-id='0'
-                                        --pushdate='0'
-                                        --project='${project}'
-                                        --message=""
-                                        --owner='${ownerEmail}'
-                                        --level='${level}'
-                                        --base-repository="$MOBILE_BASE_REPOSITORY"
-                                        --head-repository="$MOBILE_HEAD_REPOSITORY"
-                                        --head-ref="$MOBILE_HEAD_REF"
-                                        --head-rev="$MOBILE_HEAD_REV"
-                                        --repository-type="$MOBILE_REPOSITORY_TYPE"
-                                        --tasks-for='${tasks_for}'
-                                        ${extraArgs}
+                              - >
+                                PIP_IGNORE_INSTALLED=0 pip install --user /builds/worker/checkouts/taskgraph &&
+                                PIP_IGNORE_INSTALLED=0 pip install --user arrow taskcluster pyyaml &&
+                                taskcluster/scripts/install-sdk.sh &&
+                                ln -s /builds/worker/artifacts artifacts &&
+                                ~/.local/bin/taskgraph decision
+                                --pushlog-id='0'
+                                --pushdate='0'
+                                --project='${project}'
+                                --message=""
+                                --owner='${ownerEmail}'
+                                --level='${level}'
+                                --base-repository="$MOBILE_BASE_REPOSITORY"
+                                --head-repository="$MOBILE_HEAD_REPOSITORY"
+                                --head-ref="$MOBILE_HEAD_REF"
+                                --head-rev="$MOBILE_HEAD_REV"
+                                --repository-type="$MOBILE_REPOSITORY_TYPE"
+                                --tasks-for='${tasks_for}'
 
                           artifacts:
                               'public':
@@ -249,16 +180,4 @@ tasks:
 
                       extra:
                           $merge:
-                              - $if: 'tasks_for == "action"'
-                                then:
-                                    parent: '${action.taskGroupId}'
-                                    action:
-                                        name: '${action.name}'
-                                        context:
-                                            taskGroupId: '${action.taskGroupId}'
-                                            taskId: {$eval: 'taskId'}
-                                            input: {$eval: 'input'}
-                              - $if: 'tasks_for == "cron"'
-                                then:
-                                    cron: {$json: {$eval: 'cron'}}
                               - tasks_for: '${tasks_for}'
