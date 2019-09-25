@@ -19,14 +19,14 @@ def master(builder):
     return (taskcluster.slugId(), builder.craft_master_task()),
 
 
-def release(builder, tag, is_staging):
+def release(builder, tag):
     build_task_id = taskcluster.slugId()
     sign_task_id = taskcluster.slugId()
     push_task_id = taskcluster.slugId()
     return (
         (build_task_id, builder.craft_release_build_task(tag)),
-        (sign_task_id, builder.craft_sign_for_github_task(build_task_id, is_staging)),
-        (push_task_id, builder.craft_amazon_task(build_task_id, is_staging)),
+        (sign_task_id, builder.craft_sign_for_github_task(build_task_id)),
+        (push_task_id, builder.craft_amazon_task(build_task_id)),
         (taskcluster.slugId(), builder.craft_email_task(sign_task_id, push_task_id, tag)),
     )
 
@@ -57,9 +57,9 @@ def main():
         builder = TaskBuilder(result.author, repo_url, commit, task_group_id)
         ordered_tasks = master(builder)
     elif command == 'release':
-        is_staging = repo_url != 'https://github.com/mozilla-mobile/firefox-tv'
+
         builder = TaskBuilder('firefox-tv@mozilla.com', repo_url, commit, task_group_id)
-        ordered_tasks = release(builder, result.tag, is_staging)
+        ordered_tasks = release(builder, result.tag)
     else:
         raise ValueError('A command ("pull-request", "master" or "release") must be provided to '
                          'the decision task')

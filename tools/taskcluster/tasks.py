@@ -26,6 +26,7 @@ class TaskBuilder:
         self.repo_url = repo_url
         self.commit = commit
         self.task_group_id = task_group_id
+        self.level = 1 if repo_url != 'https://github.com/mozilla-mobile/firefox-tv' else 3
 
     def craft_pr_task(self, branch):
         script = f'''
@@ -149,7 +150,7 @@ class TaskBuilder:
 
         return self._craft_base_task(name, {
             'provisionerId': 'aws-provisioner-v1',
-            'workerType': 'github-worker',
+            'workerType': 'mobile-{}-b-firefox-tv'.format(self.level),
             'scopes': scopes,
             'dependencies': dependencies,
             'payload': {
@@ -164,14 +165,14 @@ class TaskBuilder:
             }
         })
 
-    def craft_sign_for_github_task(self, build_task_id, is_staging):
+    def craft_sign_for_github_task(self, build_task_id):
         return self._craft_base_task('Sign for Github', {
             'provisionerId': 'scriptworker-prov-v1',
-            'workerType': 'mobile-signing-dep-v1' if is_staging else 'mobile-signing-v1',
+            'workerType': 'mobile-signing-dep-v1' if self.level != 3 else 'mobile-signing-v1',
             'scopes': [
                 'project:mobile:firefox-tv:releng:signing:format:autograph_apk',
                 'project:mobile:firefox-tv:releng:signing:cert:{}-signing'.format(
-                    'dep' if is_staging else 'production')
+                    'dep' if self.level != 3 else 'production')
             ],
             'dependencies': [build_task_id],
             'payload': {
@@ -184,13 +185,13 @@ class TaskBuilder:
             },
         })
 
-    def craft_amazon_task(self, build_task_id, is_staging):
+    def craft_amazon_task(self, build_task_id):
         return self._craft_base_task('Push to Amazon', {
             'provisionerId': 'scriptworker-prov-v1',
-            'workerType': 'mobile-pushapk-dep-v1' if is_staging else 'mobile-pushapk-v1',
+            'workerType': 'mobile-pushapk-dep-v1' if self.level != 3 else 'mobile-pushapk-v1',
             'scopes': [
                 'project:mobile:firefox-tv:releng:googleplay:product:firefox-tv{}'.format(
-                    ':dep' if is_staging else ''
+                    ':dep' if self.level != 3 else ''
                 )
             ],
             'dependencies': [build_task_id],
