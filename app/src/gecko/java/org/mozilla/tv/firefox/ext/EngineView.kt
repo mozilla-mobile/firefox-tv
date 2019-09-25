@@ -10,6 +10,7 @@ import android.webkit.ValueCallback
 import android.widget.FrameLayout
 import androidx.annotation.VisibleForTesting
 import mozilla.components.concept.engine.EngineView
+import mozilla.components.support.base.log.logger.Logger
 import org.mozilla.geckoview.GeckoView
 import org.mozilla.geckoview.ScreenLength
 import org.mozilla.tv.firefox.ext.Js.CACHE_JS
@@ -22,6 +23,8 @@ import java.util.WeakHashMap
 
 // Extension methods on the EngineView class. This is used for additional features that are not part
 // of the upstream browser-engine(-gecko) component yet.
+
+private val logger = Logger("GeckoEngineView")
 
 private val uiHandler = Handler(Looper.getMainLooper())
 
@@ -176,6 +179,10 @@ object WebHistory {
 /** TODO: Replace stub when functionality is available in GV (See #1837) */
 val EngineView.backForwardList: WebHistory
     get() = WebHistory
+
+fun EngineView.maybeGoBackBeforeFxaSignIn() {
+    logger.warn("maybeGoBackBeforeFxaSignIn not implemented")
+}
 
 val EngineView.focusedDOMElement: FocusedDOMElementCache
     get() = getOrPutExtension(this).domElementCache

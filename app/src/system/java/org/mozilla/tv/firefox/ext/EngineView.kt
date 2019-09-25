@@ -12,6 +12,7 @@ import android.webkit.ValueCallback
 import android.webkit.WebBackForwardList
 import android.webkit.WebView
 import androidx.annotation.VisibleForTesting
+import androidx.annotation.VisibleForTesting.PRIVATE
 import mozilla.components.browser.engine.system.SystemEngineSession
 import mozilla.components.browser.session.SessionManager
 import mozilla.components.concept.engine.EngineView
@@ -23,13 +24,15 @@ import org.mozilla.tv.firefox.ext.Js.PAUSE_VIDEO
 import org.mozilla.tv.firefox.ext.Js.RESTORE_JS
 import org.mozilla.tv.firefox.ext.Js.SIDEBAR_FOCUSED
 import org.mozilla.tv.firefox.utils.Direction
+import org.mozilla.tv.firefox.utils.URLs
 import org.mozilla.tv.firefox.webrender.FocusedDOMElementCache
 import java.util.WeakHashMap
 
 // Extension methods on the EngineView class. This is used for additional features that are not part
 // of the upstream browser-engine(-system) component yet.
 
-private val uiHandler = Handler(Looper.getMainLooper())
+// lazy init lets us test this file without adding Robolectric.
+private val uiHandler by lazy { Handler(Looper.getMainLooper()) }
 
 /**
  * Firefox for Fire TV needs to configure every WebView appropriately.
@@ -217,6 +220,28 @@ fun EngineView.handleYoutubeBack(indexToGoBackTo: Int) {
 val EngineView.backForwardList: WebBackForwardList
         get() = webView!!.copyBackForwardList()
 
+fun EngineView.maybeGoBackBeforeFxaSignIn() {
+    val webView = webView ?: return
+    val backForwardList = backForwardList.toList()
+
+    // We get the last index because it is guaranteed to be from the latest sign in attempt.
+    // If we got the first index, which seems like it'd be the first page in the latest sign
+    // in attempt, it's possible that the user has visited the Firefox Accounts page directly
+    // in the past and we'll pop more history items than we intend to.
+    val lastIndexOfLastSignInAttempt = backForwardList.indexOfLast {
+        it.originalUrl.startsWith(URLs.FIREFOX_ACCOUNTS)
+    }
+
+    val numStepsToGoBack = backForwardList.subList(0, lastIndexOfLastSignInAttempt + 1)
+        .reversed()
+        .takeWhile { it.originalUrl.startsWith(URLs.FIREFOX_ACCOUNTS) }
+        .size
+    val goBackOrForwardSteps = -numStepsToGoBack // negative num to go back.
+
+    // If this value is invalid (which it shouldn't be), this is a no-op.
+    webView.goBackOrForward(goBackOrForwardSteps)
+}
+
 val EngineView.focusedDOMElement: FocusedDOMElementCache
     get() = getOrPutExtension(this).domElementCache
 
@@ -245,7 +270,7 @@ fun EngineView.onResumeIfNotNull() {
 }
 
 // This method is only for adding extension methods here (as a workaround). Do not expose WebView to the app.
-private val EngineView.webView: WebView?
+@VisibleForTesting(otherwise = PRIVATE) val EngineView.webView: WebView?
     get() = getOrPutExtension(this).webView
 
 private val extensions = WeakHashMap<EngineView, EngineViewExtension>()

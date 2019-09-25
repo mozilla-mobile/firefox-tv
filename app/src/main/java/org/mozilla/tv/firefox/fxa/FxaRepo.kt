@@ -35,6 +35,7 @@ import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState.NotAuthenticated
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.Settings
+import org.mozilla.tv.firefox.utils.URLs
 import java.util.concurrent.TimeUnit
 
 private val logger = Logger("FxaRepo")
@@ -210,7 +211,7 @@ class FxaRepo(
 
     companion object {
         private const val CLIENT_ID = "85da77264642d6a1"
-        const val REDIRECT_URI = "https://accounts.firefox.com/oauth/success/$CLIENT_ID"
+        const val REDIRECT_URI = "${URLs.FIREFOX_ACCOUNTS}/oauth/success/$CLIENT_ID"
 
         private fun newInstanceDefaultAccountManager(context: Context): FxaAccountManager {
             val deviceModel = context.serviceLocator.deviceInfo.getDeviceModel()
