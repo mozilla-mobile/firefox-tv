@@ -271,6 +271,8 @@
     <!-- Body text for Firefox Accounts settings page
     %1$s will be replaced with the signed-in user account email. -->
     <string name="fxa_settings_body">Acessando como %1$s</string>
+    <!-- Body text for Firefox Accounts settings page. -->
+    <string name="fxa_settings_body_no_display_name">Entrou</string>
     <!-- Button text for seeing the onboarding screen on the Firefox Accounts settings page.
      %1$s will be replaced with Firefox. -->
     <string name="fxa_settings_primary_button">Abas do %1$s</string>

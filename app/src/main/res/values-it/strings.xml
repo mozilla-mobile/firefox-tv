@@ -130,7 +130,7 @@
     <!-- Used for a button on the Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen. If this button is clicked, ETP will be enabled -->
     <string name="onboarding_etp_enable">Attiva la protezione antitracciamento avanzata</string>
     <!-- Used for a button on the Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen. If this button is clicked, ETP will be disabled -->
-    <string name="onboarding_etp_disable">Disattiva la protezione antitracciamento avanzata</string>
+    <string name="onboarding_etp_disable2">Disattiva la protezione antitracciamento avanzata</string>
     <!-- Spoken to screen reader users to explain image on Enhanced Tracking Protection (formerly 'turbo mode') onboarding -->
     <string name="onboarding_etp_image_a11y">Esempio di protezione antitracciamento avanzata attiva</string>
     <string name="onboarding_turbo_mode_title">La modalità turbo ti permette di navigare più velocemente</string>
