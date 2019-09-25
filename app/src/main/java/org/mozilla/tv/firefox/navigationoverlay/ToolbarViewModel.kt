@@ -50,10 +50,6 @@ class ToolbarViewModel(
     private val _events = BehaviorSubject.create<Consumable<Action>>()
     val events = _events.hide()
 
-    @Deprecated(message = "Use ToolbarViewModel.events for new code")
-    val legacyEvents: LiveData<Consumable<Action>> = LiveDataReactiveStreams // TODO update test, remove this
-        .fromPublisher(events.toFlowable(BackpressureStrategy.LATEST))
-
     val state: Observable<State> = Observables.combineLatest(sessionRepo.state, pinnedTileRepo.pinnedTiles) { sessionState, pinnedTiles ->
         fun isCurrentURLPinned() = pinnedTiles.containsKey(sessionState.currentUrl)
 
