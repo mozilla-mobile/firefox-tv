@@ -12,8 +12,6 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.core.view.forEach
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_navigation_overlay.view.navUrlInput
 import kotlinx.android.synthetic.main.fragment_navigation_overlay.view.topNavContainer
@@ -53,7 +51,7 @@ class ToolbarUiController(
     private lateinit var tooltip: PopupWindow
     private lateinit var tooltipView: View
 
-    fun onViewCreated(layout: View) {
+    fun onCreateView(layout: View) {
         val toolbarClickListener = ToolbarOnClickListener()
         layout.topNavContainer.forEach {
             it.nextFocusDownId = layout.navUrlInput.id
@@ -129,9 +127,8 @@ class ToolbarUiController(
 
     fun observeToolbarState(
         layout: View,
-        viewLifecycleOwner: LifecycleOwner,
         fragmentManager: FragmentManager
-    ): Disposable {
+    ): List<Disposable> {
         fun updateOverlayButtonState(isEnabled: Boolean, overlayButton: ImageButton) {
             overlayButton.isEnabled = isEnabled
             overlayButton.isFocusable = isEnabled
@@ -145,9 +142,8 @@ class ToolbarUiController(
 
         layout.turboButton.setImageResource(turboButtonContent.imageId)
 
-        @Suppress("DEPRECATION")
-        toolbarViewModel.legacyState.observe(viewLifecycleOwner, Observer {
-            if (it == null) return@Observer
+        val stateDisposable = toolbarViewModel.state.subscribe {
+            if (it == null) return@subscribe
             updateOverlayButtonState(it.backEnabled, layout.navButtonBack)
             updateOverlayButtonState(it.forwardEnabled, layout.navButtonForward)
             updateOverlayButtonState(it.pinEnabled, layout.pinButton)
@@ -189,9 +185,9 @@ class ToolbarUiController(
                 // these are inaccurate!
                 layout.navUrlInput.setText(it.urlBarText)
             }
-        })
+        }
 
-        return toolbarViewModel.events.subscribe {
+        val eventDisposable = toolbarViewModel.events.subscribe {
             it?.consume {
                 when (it) {
                     is ToolbarViewModel.Action.ShowTopToast -> ViewUtils.showCenteredTopToast(context, it.textId)
@@ -203,6 +199,7 @@ class ToolbarUiController(
                 true
             }
         }
+        return listOf(stateDisposable, eventDisposable)
     }
 
     private inner class ToolbarOnClickListener : View.OnClickListener {

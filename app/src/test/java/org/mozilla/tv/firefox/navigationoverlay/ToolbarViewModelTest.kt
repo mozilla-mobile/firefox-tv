@@ -14,14 +14,14 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.times
 import org.mockito.Mockito.verify
-import org.mozilla.tv.firefox.ext.map
-import org.mozilla.tv.firefox.helpers.ext.assertValues
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTile
 import org.mozilla.tv.firefox.channels.pinnedtile.PinnedTileRepo
+import org.mozilla.tv.firefox.ext.map
+import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
+import org.mozilla.tv.firefox.helpers.ext.assertValues
 import org.mozilla.tv.firefox.session.SessionRepo
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.PreventLiveDataMainLooperCrashRule
-import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
 
 private const val mozilla = "https://www.mozilla.org/en-US/"
 private const val google = "www.google.com/"
@@ -162,8 +162,6 @@ class ToolbarViewModelTest {
 
     @Test
     fun `WHEN new session state url is not home THEN no overlay visibility event should be emitted`() {
-        @Suppress("DEPRECATION")
-        toolbarVm.events.subscribe { /* start subscription */ }
         pinnedTiles.onNext(linkedMapOf())
         sessionState.onNext(SessionRepo.State(
             backEnabled = true,
