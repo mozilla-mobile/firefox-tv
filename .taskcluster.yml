@@ -1,3 +1,6 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 ---
 version: 1
 reporting: checks-v1
@@ -126,7 +129,7 @@ tasks:
                                     TASKGRAPH_BASE_REPOSITORY: https://hg.mozilla.org/ci/taskgraph
                                     TASKGRAPH_HEAD_REPOSITORY: https://hg.mozilla.org/ci/${taskgraph.branch}
                                     TASKGRAPH_HEAD_REV: ${taskgraph.revision}
-                                    TASKGRAPH_REPOSITORY_TYPE: hg
+                                    TASKGRAPH_REPOSITORY_TYPE: git
                                     REPOSITORIES: {$json: {mobile: "Firefox TV", taskgraph: "Taskgraph"}}
                                     HG_STORE_PATH: /builds/worker/checkouts/hg-store
                                     ANDROID_SDK_ROOT: /builds/worker/android-sdk
