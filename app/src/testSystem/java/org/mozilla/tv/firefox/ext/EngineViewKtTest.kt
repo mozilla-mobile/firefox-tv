@@ -13,9 +13,9 @@ import io.mockk.verify
 import mozilla.components.concept.engine.EngineView
 import org.junit.Before
 import org.junit.Test
-import org.mozilla.tv.firefox.helpers.MockWebBackForwardList
-import org.mozilla.tv.firefox.helpers.MockWebHistoryItem
-import org.mozilla.tv.firefox.helpers.toMockWebBackForwardList
+import org.mozilla.tv.firefox.helpers.FakeWebBackForwardList
+import org.mozilla.tv.firefox.helpers.FakeWebHistoryItem
+import org.mozilla.tv.firefox.helpers.toFakeWebBackForwardList
 import org.mozilla.tv.firefox.utils.URLs
 
 private const val URL_INITIAL_SIGN_IN = "https://accounts.firefox.com/authorization?action=email&response_type=code&client_id=85da77264642d6a1&scope=profile+https%3A%2F%2Fidentity.mozilla.com%2Fapps%2Foldsync&state=madeUpState&code_challenge_method=S256&code_challenge=madeUpCodeChallenge&access_type=offline&keys_jwk=madeUpKeys&redirect_uri=https%3A%2F%2Faccounts.firefox.com%2Foauth%2Fsuccess%2F85da77264642d6a1"
@@ -69,7 +69,7 @@ class EngineViewKtTest {
         backForwardList = listOf(
             URLs.APP_URL_HOME
         ).plus(URL_FLOW_NO_VALIDATION)
-            .toMockWebBackForwardListAsOriginalUrls()
+            .toFakeWebBackForwardListAsOriginalUrls()
 
         engineView.maybeGoBackBeforeFxaSignIn()
 
@@ -84,7 +84,7 @@ class EngineViewKtTest {
             "https://apple.com",
             "https://facebook.com"
         ).plus(URL_FLOW_NO_VALIDATION)
-            .toMockWebBackForwardListAsOriginalUrls()
+            .toFakeWebBackForwardListAsOriginalUrls()
 
         engineView.maybeGoBackBeforeFxaSignIn()
 
@@ -99,7 +99,7 @@ class EngineViewKtTest {
             "https://apple.com",
             "https://facebook.com"
         ).plus(URL_FLOW_WITH_EMAIL_VALIDATION)
-            .toMockWebBackForwardListAsOriginalUrls()
+            .toFakeWebBackForwardListAsOriginalUrls()
 
         engineView.maybeGoBackBeforeFxaSignIn()
 
@@ -114,7 +114,7 @@ class EngineViewKtTest {
             URLs.FIREFOX_ACCOUNTS,
             "https://apple.com"
         ).plus(URL_FLOW_NO_VALIDATION)
-            .toMockWebBackForwardListAsOriginalUrls()
+            .toFakeWebBackForwardListAsOriginalUrls()
 
         engineView.maybeGoBackBeforeFxaSignIn()
 
@@ -122,7 +122,7 @@ class EngineViewKtTest {
     }
 }
 
-private fun List<String>.toMockWebBackForwardListAsOriginalUrls(): MockWebBackForwardList {
-    return map { MockWebHistoryItem(mockOriginalUrl = it) }
-        .toMockWebBackForwardList()
+private fun List<String>.toFakeWebBackForwardListAsOriginalUrls(): FakeWebBackForwardList {
+    return map { FakeWebHistoryItem(mockOriginalUrl = it) }
+        .toFakeWebBackForwardList()
 }
