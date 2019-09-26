@@ -6,8 +6,8 @@ package org.mozilla.tv.firefox.ext
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import org.mozilla.tv.firefox.helpers.MockWebHistoryItem
-import org.mozilla.tv.firefox.helpers.toMockWebBackForwardList
+import org.mozilla.tv.firefox.helpers.FakeWebHistoryItem
+import org.mozilla.tv.firefox.helpers.toFakeWebBackForwardList
 
 class WebBackForwardListKtTest {
 
@@ -20,8 +20,8 @@ class WebBackForwardListKtTest {
         )
 
         // This test relies on our MockWeb* impls having no bugs but we can't do any better.
-        val webBackForwardList = expected.map { MockWebHistoryItem(mockOriginalUrl = it) }
-            .toMockWebBackForwardList()
+        val webBackForwardList = expected.map { FakeWebHistoryItem(mockOriginalUrl = it) }
+            .toFakeWebBackForwardList()
 
         val actual = webBackForwardList.toList()
             .map { it.originalUrl }

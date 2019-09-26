@@ -11,7 +11,7 @@ import android.webkit.WebHistoryItem
 /**
  * An implementation of the [WebBackForwardList] abstract class for testing.
  */
-class MockWebBackForwardList(
+class FakeWebBackForwardList(
     private val backingList: List<WebHistoryItem>,
     private val mockCurrentIndex: Int = 0
 ) : WebBackForwardList() {
@@ -30,7 +30,7 @@ class MockWebBackForwardList(
 /**
  * An implementation of the [WebHistoryItem] abstract class for testing.
  */
-class MockWebHistoryItem(
+class FakeWebHistoryItem(
     private val mockOriginalUrl: String? = null
 ) : WebHistoryItem() {
 
@@ -53,6 +53,6 @@ class MockWebHistoryItem(
     }
 }
 
-fun List<WebHistoryItem>.toMockWebBackForwardList(): MockWebBackForwardList {
-    return MockWebBackForwardList(this)
+fun List<WebHistoryItem>.toFakeWebBackForwardList(): FakeWebBackForwardList {
+    return FakeWebBackForwardList(this)
 }
