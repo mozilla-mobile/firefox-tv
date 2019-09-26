@@ -17,7 +17,7 @@ NOTIFY_EMAIL_ADDRESS = 'firefox-tv@mozilla.com'
 
 @transforms.add
 def email_task(config, tasks):
-    tag = config.params["head_tag"]
+    tag = config.params.get("head_tag")
 
     for task in tasks:
         to_address = task["worker"].pop("to-address")
