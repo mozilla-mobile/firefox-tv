@@ -7,8 +7,9 @@ from __future__ import absolute_import, print_function, unicode_literals
 from importlib import import_module
 import os
 
+from six import text_type
 from taskgraph.parameters import extend_parameters_schema
-from voluptuous import Optional
+from voluptuous import Required, Any
 
 
 def register(graph_config):
@@ -18,7 +19,7 @@ def register(graph_config):
     """
     _import_modules(["worker_types", "target_tasks"])
     extend_parameters_schema({
-        Optional("head_tag"): basestring,
+        Required("head_tag"): Any(text_type, None),
     })
 
 
@@ -27,5 +28,11 @@ def _import_modules(modules):
         import_module(".{}".format(module), package=__name__)
 
 
-def get_decision_parametears(graph_config, parameters):
-    parameters["head_tag"] = os.environ.get("MOBILE_HEAD_TAG")
+def get_decision_parameters(graph_config, parameters):
+    parameters["head_tag"] = None
+    if parameters["tasks_for"] == "github-release":
+        head_tag = os.environ.get("MOBILE_HEAD_TAG")
+        if head_tag is None:
+            raise ValueError("Cannot run github-release if the environment variable "
+                             "'MOBILE_HEAD_TAG' is not defined")
+        parameters["head_tag"] = head_tag.decode("utf-8")

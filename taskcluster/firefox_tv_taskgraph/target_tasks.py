@@ -11,9 +11,6 @@ from taskgraph.target_tasks import _target_task, standard_filter
 def target_tasks_default(full_task_graph, parameters, graph_config):
     """Target the tasks which have indicated they should be run on this project
     via the `run_on_projects` attributes."""
-    if parameters["tasks_for"] == "github-release" and parameters.get("head_tag") is None:
-        raise ValueError("Cannot run github-release if the tag is not defined.")
-
     def filter(task, params):
         return standard_filter(task, params)
 
