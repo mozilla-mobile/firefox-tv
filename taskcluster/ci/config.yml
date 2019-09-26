@@ -11,7 +11,7 @@ taskgraph:
     mobile:
       name: "Firefox TV"
   cached-task-prefix: project.mobile.firefox-tv
-  decision-parameters: 'fenix_taskgraph:get_decision_parameters'
+  decision-parameters: 'firefox_tv_taskgraph:get_decision_parameters'
 
 workers:
   aliases:

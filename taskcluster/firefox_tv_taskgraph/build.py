@@ -4,8 +4,6 @@
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-import os
-
 from taskgraph.transforms.base import TransformSequence
 
 
@@ -20,8 +18,8 @@ def build_task(config, tasks):
     for task in tasks:
         script = task["worker"]["script"].format(
             repo_url=config.params["head_repository"],
-            commit=config.params["head_rev"],  # TODO use params?
-            tag=os.environ.get("GIT_TAG"),  # TODO use params?
+            commit=config.params["head_rev"],
+            tag=config.params["head_tag"],
             branch=config.params["head_ref"],
         )
         bash_command = [
@@ -35,5 +33,7 @@ def build_task(config, tasks):
         del task["worker"]["script"]
         task["worker"]["command"] = bash_command
         task["worker"].setdefault("artifacts", [])
+        task["worker"]["taskcluster-proxy"] = True
+        task["worker"]["chain-of-trust"] = True
 
         yield task
