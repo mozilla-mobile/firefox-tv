@@ -5,10 +5,16 @@
 package org.mozilla.tv.firefox.webrender
 
 import android.content.Context
+import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import androidx.core.content.ContextCompat.startActivity
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import mozilla.components.browser.errorpages.ErrorType
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.request.RequestInterceptor
 import org.mozilla.tv.firefox.R
+import org.mozilla.tv.firefox.ext.serviceLocator
 import org.mozilla.tv.firefox.utils.BuildConstants.getInterceptionResponseContent
 import org.mozilla.tv.firefox.utils.URLs
 
@@ -34,8 +40,13 @@ class CustomContentRequestInterceptor(
             URLs.URL_GPL -> getInterceptionResponseContent(
                 LocalizedContent.generatePage(context, R.raw.gpl))
 
-            URLs.URL_LICENSES -> getInterceptionResponseContent(
-                LocalizedContent.generatePage(context, R.raw.licenses))
+            URLs.URL_LICENSES -> {
+                // Prevent getting stuck in this loop when clicking back from the activity
+                Handler(Looper.getMainLooper()).post { context.serviceLocator.sessionRepo.attemptBack() }
+                startActivity(context, Intent(context, OssLicensesMenuActivity::class.java), null)
+
+                null
+            }
 
             else -> null
         }
