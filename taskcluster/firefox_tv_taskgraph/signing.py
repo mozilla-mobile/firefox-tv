@@ -13,5 +13,5 @@ transforms = TransformSequence()
 @transforms.add
 def signing_task(config, tasks):
     for task in tasks:
-        task["worker"]["signing-type"] = 'dep-signing' if config.params["level"] != 3 else 'production-signing'
+        task["worker"]["signing-type"] = 'dep-signing' if config.params["level"] != u'3' else 'production-signing'
         yield task
