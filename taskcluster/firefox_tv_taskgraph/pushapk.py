@@ -13,5 +13,5 @@ transforms = TransformSequence()
 @transforms.add
 def pushapk_task(config, tasks):
     for task in tasks:
-        task["worker"]["dep"] = config.params["level"] != 3
+        task["worker"]["dep"] = config.params["level"] != u'3'
         yield task
