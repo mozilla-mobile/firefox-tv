@@ -9,7 +9,7 @@ transforms:
   - taskgraph.transforms.task:transforms
 
 jobs:
-  push:
+  sign:
     label: Sign for Github
     description: ''
     worker-type: signing
