@@ -10,6 +10,8 @@ transforms:
 
 jobs:
   push:
+    attributes:
+      release-type: production
     label: Push to Amazon
     description: ''
     worker-type: push-apk
