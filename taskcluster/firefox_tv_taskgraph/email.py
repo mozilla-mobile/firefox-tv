@@ -22,7 +22,7 @@ def email_task(config, tasks):
 
     for task in tasks:
         resolve_keyed_by(task, "worker.content", task["name"], **{
-            "release-type": release_type
+            "release-type": release_type or "production"
         })
 
         if release_type == 'lat':
