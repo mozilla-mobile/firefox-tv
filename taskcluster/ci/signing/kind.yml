@@ -2,26 +2,21 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 ---
-loader: taskgraph.loader.transform:loader
+loader: firefox_tv_taskgraph.loader.single_dep:loader
 
 transforms:
+  - firefox_tv_taskgraph.single_dep:transforms
   - firefox_tv_taskgraph.signing:transforms
   - taskgraph.transforms.task:transforms
 
-jobs:
-  sign:
-    label: Sign for Github
-    description: ''
-    worker-type: signing
-    run-on-tasks-for: [github-release]
-    dependencies:
-      build: build-release
-    worker:
-      upstream-artifacts:
-        - taskType: build
-          paths:
-            - public/build/target.apk
-          formats:
-            - autograph_apk
-          taskId:
-            task-reference: <build>
+kind-dependencies:
+  - build
+
+only-for-build-types:
+  - release
+
+job-template:
+  label: Sign for Github
+  description: ''
+  worker-type: signing
+  run-on-tasks-for: [github-release]

@@ -14,6 +14,14 @@ NOTIFY_EMAIL_ADDRESS = 'firefox-tv@mozilla.com'
 
 
 @transforms.add
+def expose_artifacts_in_attributes(config, tasks):
+    for task in tasks:
+        task.setdefault("attributes", {})
+        task["attributes"]["apks"] = [artifact["name"] for artifact in task["worker"].get("artifacts", [])]
+        yield task
+
+
+@transforms.add
 def build_task(config, tasks):
     for task in tasks:
         script = task["worker"]["script"].format(

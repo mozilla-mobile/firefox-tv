@@ -44,6 +44,8 @@ jobs:
         python ./tools/taskcluster/get-bitbar-token.py
         python ./tools/taskcluster/execute-bitbar-test.py system/debug app-system-debug
   release:
+    attributes:
+      build-type: release
     run-on-tasks-for: [github-release]
     worker:
       artifacts:
