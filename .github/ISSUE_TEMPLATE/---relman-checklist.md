@@ -20,6 +20,7 @@ _Think something can be automated? Add it to [this doc](https://docs.google.com/
   - Merge to master
 - [ ] Cut LAT branch `releases/vX.X-LAT1` (this must include a-c upgrade)
 - [ ] Create GitHub pre-release build `vX.X-LAT1`([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#final-builds))
+- [ ] Wait for automation to email the team mailing list, signalling that the build is done
 - [ ] Release LAT ([instructions](https://developer.amazon.com/docs/app-testing/live-app-testing-getting-started.html))
   - [ ] Email team announcing release ([template/instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#release-announcement-emails))
 
@@ -29,6 +30,7 @@ _Think something can be automated? Add it to [this doc](https://docs.google.com/
   - Merge to master
 - [ ] Cut LAT branch `releases/vX.X-LAT2`
 - [ ] Create GitHub pre-release build `vX.X-LAT2` ([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#final-builds))
+- [ ] Wait for automation to email the team mailing list, signalling that the build is done
 - [ ] Release LAT ([instructions](https://developer.amazon.com/docs/app-testing/live-app-testing-getting-started.html))
   - [ ] Email team announcing release ([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#release-announcement-emails))
 
@@ -50,6 +52,7 @@ _Think something can be automated? Add it to [this doc](https://docs.google.com/
   - Merge to master
 - [ ] Cut release branch `releases/vX.X`
 - [ ] Create GitHub release build `vX.X`([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#final-builds))
+- [ ] Wait for automation to email the team mailing list, signalling that the build is done and uploaded to a pending "upcoming release" in the Amazon console
 - [ ] Submit app with staged rollout at 1% ([instructions](https://developer.amazon.com/docs/app-submission/submitting-apps-to-amazon-appstore.html))
   - [ ] Email team announcing release ([instructions](https://github.com/mozilla-mobile/firefox-tv/wiki/Release-Management-Checklist#release-announcement-emails))
 
