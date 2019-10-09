@@ -129,8 +129,6 @@
     <string name="onboarding_etp_description">ブラウジング中のあなたのプライバシーを保護します。あなたが訪問したサイトを追跡して訪問者の情報を収集する目に見えないコンテンツをブロックします。このようなコンテンツをブロックすると、ページの読み込みが速くなる可能性があります。</string>
     <!-- Used for a button on the Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen. If this button is clicked, ETP will be enabled -->
     <string name="onboarding_etp_enable">強化型トラッキング防止を有効化</string>
-    <!-- Used for a button on the Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen. If this button is clicked, ETP will be disabled -->
-    <string name="onboarding_etp_disable">強化型トラッキング防止を無効化</string>
     <!-- Spoken to screen reader users to explain image on Enhanced Tracking Protection (formerly 'turbo mode') onboarding -->
     <string name="onboarding_etp_image_a11y">強化型トラッキング防止を有効にした場合</string>
     <string name="onboarding_turbo_mode_title">ターボモードはより速くブラウズするのに役立ちます</string>
@@ -274,4 +272,8 @@
     <!-- This text is announced to screen reader users when they focus an image that will display the avatar of the currently logged in user -->
     <string name="content_description_fxa_profile_avatar_image">ユーザープロファイルのアバター画像</string>
 
-    </resources>
+    <!-- Button text to update the app. -->
+    <string name="update_prompt_primary_button">更新</string>
+    <!-- Button text to dismiss the prompt to update the app. -->
+    <string name="update_prompt_secondary_button">後で</string>
+</resources>
