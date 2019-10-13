@@ -129,6 +129,8 @@
     <string name="onboarding_etp_description">ブラウジング中のあなたのプライバシーを保護します。あなたが訪問したサイトを追跡して訪問者の情報を収集する目に見えないコンテンツをブロックします。このようなコンテンツをブロックすると、ページの読み込みが速くなる可能性があります。</string>
     <!-- Used for a button on the Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen. If this button is clicked, ETP will be enabled -->
     <string name="onboarding_etp_enable">強化型トラッキング防止を有効化</string>
+    <!-- Used for a button on the Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen. If this button is clicked, ETP will be disabled -->
+    <string name="onboarding_etp_disable2">強化型トラッキング防止をオフにする</string>
     <!-- Spoken to screen reader users to explain image on Enhanced Tracking Protection (formerly 'turbo mode') onboarding -->
     <string name="onboarding_etp_image_a11y">強化型トラッキング防止を有効にした場合</string>
     <string name="onboarding_turbo_mode_title">ターボモードはより速くブラウズするのに役立ちます</string>
@@ -252,6 +254,11 @@
     <!-- Shown on the onboarding page that explains how to receive tabs that are sent from other devices.
          This text is announced to screen reader users when they focus an image that will display a graphic explaining the receive tab process-->
     <string name="fxa_preboarding_image_a11y">タブを携帯電話やタブレットから Fire TV へ送信した図</string>
+    <!-- Header for Firefox Accounts onboarding screen, which is shown after signing in. -->
+    <string name="fxa_onboarding_header">あなたのタブ。いつでも手元に。</string>
+    <!-- Instruction text for Firefox Accounts onboarding screen, which is shown after signing in.
+     %1$s will be replaced with Firefox. -->
+    <string name="fxa_onboarding_instruction">タブを受信する準備ができました。始めるには、デスクトップ版または iOS 版 %1$s で [端末にタブを送信] を選ぶか、Firefox Preview で [共有] を選んでください。次に Fire TV を選ぶと、すぐにタブが表示されます。</string>
     <!-- Text on the dismiss button for Firefox Accounts onboarding screen, which is shown after signing in. -->
     <string name="fxa_onboarding_primary_button">了解しました</string>
     <!-- Toast shown on webpage when tab is sent from another device
@@ -264,6 +271,8 @@
     <!-- Body text for Firefox Accounts settings page
     %1$s will be replaced with the signed-in user account email. -->
     <string name="fxa_settings_body">%1$s としてログイン</string>
+    <!-- Body text for Firefox Accounts settings page. -->
+    <string name="fxa_settings_body_no_display_name">ログイン中</string>
     <!-- Button text for seeing the onboarding screen on the Firefox Accounts settings page.
      %1$s will be replaced with Firefox. -->
     <string name="fxa_settings_primary_button">%1$s 個のタブ</string>
