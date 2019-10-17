@@ -13,7 +13,7 @@ import taskcluster
 import json
 
 # Get JSON data from taskcluster secrets service
-secrets = taskcluster.Secrets({'baseUrl': 'http://taskcluster/secrets/v1'})
+secrets = taskcluster.Secrets({'rootUrl': os.environ['TASKCLUSTER_PROXY_URL']})
 data = secrets.get('project/mobile/firefox-tv/tokens')
 
 with open(os.path.join(os.path.dirname(__file__), '../../.bitbar_token.json'), 'w') as file:
