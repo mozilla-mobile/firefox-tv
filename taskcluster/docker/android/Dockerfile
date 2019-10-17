@@ -86,7 +86,7 @@ RUN ./gradlew --no-daemon clean assembleDebug lint checkstyle ktlint pmd detekt 
 RUN pip install -r tools/l10n/android2po/requirements.txt
 
 # Install taskcluster python library (used by decision tasks)
-RUN pip install 'taskcluster>=4,<5'
+RUN pip install taskcluster
 
 # Install Python client for Testdroid Cloud APIv2 (used for running UI tests on Bitbar Cloud)
 RUN pip install testdroid
