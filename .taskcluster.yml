@@ -64,7 +64,7 @@ tasks:
               ownTaskId: {$eval: as_slugid("decision_task")}
           in:
               # filter for github events that we will run taskgraph for
-              $if: 'tasks_for == "github-pull-request" || (tasks_for == "github-push" && head_branch[:10] != "refs/tags/") || (tasks_for == "github-release" && event["action"] == "published")'
+              $if: 'tasks_for == "github-pull-request" || (tasks_for == "github-push" && head_branch == "refs/heads/master") || (tasks_for == "github-release" && event["action"] == "published")'
               then:
                   $let:
                       level:
