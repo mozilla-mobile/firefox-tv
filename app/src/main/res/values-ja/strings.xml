@@ -281,6 +281,13 @@
     <!-- This text is announced to screen reader users when they focus an image that will display the avatar of the currently logged in user -->
     <string name="content_description_fxa_profile_avatar_image">ユーザープロファイルのアバター画像</string>
 
+    <!-- Strings for the prompt window for users to update the app. -->
+    <!-- Header string for the prompt shown to users to update the app.
+    %1$s will be replaced with Firefox. -->
+    <string name="update_prompt_header">%1$s を最新の状態に保ちましょう</string>
+    <!-- Instruction text for the prompt shown to users to update the app.
+    %1$s and %2$s will be replaced with Firefox.-->
+    <string name="update_prompt_instruction">最新のパフォーマンスとセキュリティのために %1$s を更新してください。この更新は、タブを他の %2$s ブラウザーから送信して、この大画面で表示できます。</string>
     <!-- Button text to update the app. -->
     <string name="update_prompt_primary_button">更新</string>
     <!-- Button text to dismiss the prompt to update the app. -->
