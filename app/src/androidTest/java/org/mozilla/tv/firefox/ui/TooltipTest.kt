@@ -4,9 +4,12 @@
 
 package org.mozilla.tv.firefox.ui
 
+import okhttp3.mockwebserver.MockWebServer
 import org.junit.Rule
 import org.junit.Test
+import org.mozilla.tv.firefox.helpers.AndroidAssetDispatcher
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule
+import org.mozilla.tv.firefox.helpers.TestAssetHelper
 import org.mozilla.tv.firefox.ui.robots.navigationOverlay
 
 private const val TURBO_MODE_TEXT = "Turbo Mode"
@@ -31,15 +34,23 @@ class TooltipTest {
     /* ktlint-disable no-blank-line-before-rbrace */ // This imposes unreadable grouping.
     @Test
     fun tooltipTest() {
+        val server = MockWebServer().apply {
+            setDispatcher(AndroidAssetDispatcher())
+            start()
+        }
+
+        val pages = TestAssetHelper.getGenericAssets(server)
+
         navigationOverlay {
             // Url bar is focused on startup and next focus up will be turbo mode button
             remoteUp()
             assertTooltipText(TURBO_MODE_TEXT)
             remoteCenter()
             assertTooltipText(TURBO_MODE_TEXT)
-        }.openTileToBrowser(1) {
+            remoteCenter()
+        }.enterUrlAndEnterToBrowser(pages[0].url) {
         }.openOverlay {
-        }.openTileToBrowser(2) {
+        }.enterUrlAndEnterToBrowser(pages[1].url) {
         }.openOverlay {
             // Focus back button
             remoteUp()
@@ -54,13 +65,13 @@ class TooltipTest {
             assertTooltipText(RELOAD_TEXT)
             // Focus pin button
             remoteRight()
-            assertTooltipText(UNPIN_TEXT)
-        }.unpinSite {
+            assertTooltipText(PIN_TEXT)
+        }.pinSite {
         }.openOverlay {
             // This sequence focuses the pin button from the url bar
             remoteUp()
             remoteRight(2)
-            assertTooltipText(PIN_TEXT)
+            assertTooltipText(UNPIN_TEXT)
             // Focus turbo mode button
             remoteRight()
             assertTooltipText(TURBO_MODE_TEXT)

@@ -7,7 +7,6 @@ package org.mozilla.tv.firefox.ui.screenshots;
 
 import android.os.Build;
 
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.Until;
@@ -17,16 +16,22 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mozilla.tv.firefox.MainActivity;
-import org.mozilla.tv.firefox.helpers.NestedScrollToAction;
 import org.mozilla.tv.firefox.R;
+import org.mozilla.tv.firefox.helpers.AndroidAssetDispatcher;
 import org.mozilla.tv.firefox.helpers.MainActivityTestRule;
+import org.mozilla.tv.firefox.helpers.TestAssetHelper;
+import org.mozilla.tv.firefox.ui.robots.BrowserRobot;
+import org.mozilla.tv.firefox.ui.robots.NavigationOverlayRobot;
 
+import java.io.IOException;
+import java.util.List;
+
+import okhttp3.mockwebserver.MockWebServer;
 import tools.fastlane.screengrab.locale.LocaleTestRule;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.hasFocus;
@@ -48,23 +53,25 @@ public class TooltipCaptureTest extends ScreenshotTest {
     }
 
     @Test
-    public void showToolTips() throws InterruptedException {
+    public void showToolTips() throws InterruptedException, IOException {
+        MockWebServer mockServer = new MockWebServer();
+        mockServer.setDispatcher(new AndroidAssetDispatcher());
+        mockServer.start();
 
-        ViewInteraction pinnedTileChannel = onView(withId(R.id.pinned_tiles_channel));
+        List<TestAssetHelper.TestAsset> pages = TestAssetHelper.INSTANCE.getGenericAssets(mockServer);
+
+        NavigationOverlayRobot.Transition navTransition = new NavigationOverlayRobot.Transition();
+        BrowserRobot.Transition browserTransition = new BrowserRobot.Transition();
+
+        navTransition.enterUrlAndEnterToBrowser(pages.get(0).getUrl(), browserRobot -> null);
+
+        browserTransition.openOverlay(navOverlayRobot -> null);
+
+        navTransition.enterUrlAndEnterToBrowser(pages.get(1).getUrl(), browserRobot -> null);
+
+        browserTransition.openOverlay(navOverlayRobot -> null);
 
         onView(allOf(withId(R.id.navUrlInput), hasFocus())).check(matches(isDisplayed()));
-        pinnedTileChannel.perform(new NestedScrollToAction());
-        pinnedTileChannel.check(matches(isDisplayed()));
-
-        // open two sites to enable back and front button
-        pinnedTileChannel.perform(new NestedScrollToAction(), actionOnItemAtPosition(1, click()));
-        device.wait(Until.findObject(By.res(Integer.toString(R.id.progressAnimation))), 2000);
-        device.pressMenu();
-
-        pinnedTileChannel.perform(new NestedScrollToAction(), actionOnItemAtPosition(2, click()));
-        device.wait(Until.findObject(By.res(Integer.toString(R.id.progressAnimation))), 2000);
-
-        device.pressMenu();
         device.pressDPadUp();
         checkTooltipDisplayed();
         takeScreenshotsAfterWait("tooltip-backbutton", 500);
