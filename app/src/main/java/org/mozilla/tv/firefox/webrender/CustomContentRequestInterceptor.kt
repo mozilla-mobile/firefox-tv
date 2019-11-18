@@ -43,7 +43,10 @@ class CustomContentRequestInterceptor(
             URLs.URL_LICENSES -> {
                 // Prevent getting stuck in this loop when clicking back from the activity
                 Handler(Looper.getMainLooper()).post { context.serviceLocator.sessionRepo.attemptBack() }
-                startActivity(context, Intent(context, OssLicensesMenuActivity::class.java), null)
+                val intent = Intent(context, OssLicensesMenuActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                startActivity(context, intent, null)
 
                 null
             }
