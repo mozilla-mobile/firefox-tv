@@ -249,4 +249,54 @@ var _firefoxTV_isPlaybackStateObserverLoaded;
     }
 })();
 """.trimIndent()
+
+    /**
+     * The soft keyboard sends `tab` events when `submit` is clicked. This adds an extra step
+     * to many user flows (for example, on google.com, people expect a search to kick off after
+     * clicking submit, but it doesn't). This script forces a `submit` call after tab events are
+     * received.
+     *
+     * This script will:
+     *  - Search the page for the largest (by element area) <input> element
+     *  - Look for its wrapping <form> element
+     *  - Attach a listener to the <input> to listen to key events while it is focused
+     *  - Call `submit` on the <form> whenever a `tab` key event is received
+     */
+    val ADD_SUBMIT_LISTENER_TO_MAIN_INPUT = """
+        |if (typeof MOZ_FFTV_inputListener === 'undefined') {
+        |   MOZ_FFTV_inputListener = (event) => {
+        |       if (event && event.key === 'Tab') {
+        |           var formWrapper = Array(...event.path).find((it) => it.tagName === 'FORM')
+        |           if (formWrapper) formWrapper.submit()
+        |       }
+        |   }
+        |}
+        |
+        |function toArea(element) {
+        |  if (element == undefined) return 0
+        |  var width = element.offsetWidth ? element.offsetWidth : 0
+        |  var height = element.offsetHeight ? element.offsetHeight : 0
+        |  return width * height
+        |}
+        |
+        |function getInput() {
+        |   var inputs = Array(...document.getElementsByTagName('input'));
+        |   // There are multiple input boxes on Google search, but only one is shown to the user.
+        |   // We assume here that the largest element is the one we want to target.
+        |   var biggestInput = inputs.reduce((acc, next) => {
+        |     if (toArea(acc) >= toArea(next)) {
+        |       return acc;
+        |     } else {
+        |       return next;
+        |     }
+        |   });
+        |   return biggestInput;
+        |}
+        |
+        |var biggestInput = getInput();
+        |if (biggestInput) {
+        |   biggestInput.removeEventListener("keydown", MOZ_FFTV_inputListener);
+        |   biggestInput.addEventListener("keydown", MOZ_FFTV_inputListener);
+        |}
+        """.trimMargin()
 }

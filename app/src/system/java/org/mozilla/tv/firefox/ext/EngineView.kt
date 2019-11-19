@@ -95,6 +95,10 @@ fun EngineView.updateFullscreenScrollPosition() {
     evalJS(Js.MP4TranslationWorkaround.UPDATE_FULLSCREEN_SCROLL_POSITION)
 }
 
+fun EngineView.addSubmitListenerToMainInput() {
+    evalJS(Js.ADD_SUBMIT_LISTENER_TO_MAIN_INPUT)
+}
+
 private fun EngineView.evalJSWithTargetVideo(getExpressionToEval: (videoId: String) -> String) {
     val ID_TARGET_VIDEO = "targetVideo"
     val GET_TARGET_VIDEO_OR_RETURN = """
