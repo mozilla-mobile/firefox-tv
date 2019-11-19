@@ -42,6 +42,7 @@ class ReceiveTabPreboardingActivity : AppCompatActivity() {
 
         buttonNotNow.setOnClickListener {
             finish()
+            TelemetryIntegration.INSTANCE.fxaPreboardingDismissButtonClickEvent()
         }
 
         setOnboardReceiveTabsShown()
@@ -52,7 +53,6 @@ class ReceiveTabPreboardingActivity : AppCompatActivity() {
                 .edit()
                 .putBoolean(ONBOARD_RECEIVE_TABS_SHOWN_PREF, true)
                 .apply()
-        TelemetryIntegration.INSTANCE.fxaPreboardingDismissButtonClickEvent()
     }
 
     companion object {
