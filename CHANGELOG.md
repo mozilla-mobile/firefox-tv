@@ -10,6 +10,7 @@ It diverges in the following ways:
 ## 4.6 - ?
 ### Changed
 - After successful Firefox Account sign in, the page the user was on before sign in is restored (#2805)
+- Improved behavior of soft keyboard `submit` button (#1962)
 
 ## 4.5 - 2019-09-23
 ### Added
