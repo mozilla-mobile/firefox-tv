@@ -45,16 +45,16 @@ Dependencies:
 It is recommended to test directly on a Fire TV: see the [developer guide][dev guide] for more info.
 You can connect with:
 ```shell
-adb connect <IP address>
+adb connect <IP address>:5555
 ```
 
 And then install via Android Studio or adb. Only a single development device
 can be connected to a Fire TV at a time. Note that while you can install on an
-Android TV emulator, the behavior is different from Fire TV's and should not be
-relied upon.
+Android TV emulator, the behavior (particularly `WebView` behavior) is different 
+from Fire TV's and should not be relied upon.
 
 If using an emulator, we recommend the Android TV device image: either 720p or
-1080p is fine. API 22 (Stick) and 25 (4K) are best. You can press `cmd+m` to
+1080p is fine. API 22 (Stick) and 25 (4K) are best. You can press `cmd + m` to
 simulate a menu button press.
 
 ### Unit Testing
@@ -96,6 +96,10 @@ To push without running the pre-push hook (e.g. doc updates):
 git push <remote> --no-verify
 ```
 
+### Release process
+(See [this doc](https://github.com/mozilla-mobile/firefox-tv/blob/master/.github/ISSUE_TEMPLATE/---relman-checklist.md) 
+for a description of our release process)
+
 ### Building release builds
 Release builds can be built in Android Studio or via the command line:
 ```sh
@@ -132,7 +136,7 @@ API services currently supported are:
 * sentry_dsn
 * pocket_key
 
-##### ADM API key
+##### Amazon Device Messaging (ADM) API key
 We suspect **ADM access is only available in local builds for core team members** because testing
 ADM requires access to a private API key that is connected to our app on the Amazon store dashboard.
 
