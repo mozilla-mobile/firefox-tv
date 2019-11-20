@@ -88,6 +88,3 @@ val String.isUriYouTubeTvVideo: Boolean
 
 val String.isUriFxaSignIn: Boolean
     get() = this.startsWith("https://accounts.firefox.com/authorization")
-
-val String.isGoogleSearch: Boolean
-    get() = this.startsWith("https://www.google.com")
