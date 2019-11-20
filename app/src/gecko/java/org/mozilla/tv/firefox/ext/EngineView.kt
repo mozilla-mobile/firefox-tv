@@ -74,6 +74,10 @@ fun EngineView.updateFullscreenScrollPosition() {
     // No action necessary.
 }
 
+fun EngineView.addSubmitListenerToInputElements() {
+    throw NotImplementedError("This has not been implemented in Gecko. Please move over System implementation")
+}
+
 private fun EngineView.evalJSWithTargetVideo(getExpressionToEval: (videoId: String) -> String) {
     val ID_TARGET_VIDEO = "targetVideo"
     val GET_TARGET_VIDEO_OR_RETURN = """
