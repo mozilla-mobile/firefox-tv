@@ -102,7 +102,7 @@ because it does not pass validation (e.g. it contains blank URLs), we record the
 | Fxa needs reauthentication ****        | action   | change                | fxa          | fxa_needs_reauthentication | boolean     |
 | Fxa logged in state                    | action   | change                | fxa          | fxa_logged_in            |               |
 | Fxa logged out state                   | action   | change                | fxa          | fxa_logged_out           |               |
-| Fxa preboarding not now button click   | action   | click                 | fxa          | fxa_preboarding_not_now  |               |
+| Fxa preboarding not now button click   | action   | click                 | fxa          | fxa_preboarding_not_now2 ††† |           |
 | Fxa preboarding sign in button click   | action   | click                 | fxa          | fxa_preboarding_sign_in  |               |
 
 (*)When the pin site switch is clicked, the state (on/off) of the desktop mode switch is also sent.
@@ -122,6 +122,9 @@ does not count if the overlay is opened by the user pressing "back" through thei
 
 (††) This probe was broken in an unknown release; it was fixed in v3.9. This probe does not count if the users exit the
 overlay (without taking an action) _and the app_ by pressing the back button when the overlay is opened.
+
+(†††) There was a bug in the implementation of `fxa_preboarding_not_now` (#2843) that caused it to be sent too frequently. 
+When the bug was fixed, it was updated to `fxa_preboarding_not_now2`. The previous ping is now deprecated. 
 
 ### Browsing
 
