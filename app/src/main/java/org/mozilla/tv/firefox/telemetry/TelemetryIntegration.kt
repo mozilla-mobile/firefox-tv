@@ -117,7 +117,7 @@ open class TelemetryIntegration protected constructor(
         const val FXA_REAUTHENTICATE_BUTTON = "fxa_reauthenticate_button"
         const val FXA_NEEDS_REAUTHENTICATION = "fxa_needs_reauthentication"
         const val FXA_SHOW_ONBOARDING = "fxa_show_onboarding"
-        const val FXA_PREBOARDING_NOT_NOW = "fxa_preboarding_not_now"
+        const val FXA_PREBOARDING_NOT_NOW = "fxa_preboarding_not_now2"
         const val FXA_PREBOARDING_SIGN_IN = "fxa_preboarding_sign_in"
         const val FXA_LOGGED_IN = "fxa_logged_in"
         const val FXA_LOGGED_OUT = "fxa_logged_out"
