@@ -255,22 +255,54 @@ var _firefoxTV_isPlaybackStateObserverLoaded;
      * to many user flows (for example, on google.com, people expect a search to kick off after
      * clicking submit, but it doesn't). This script forces a `submit` call after tab events are
      * received.
+     *
+     * This behavior is added to all <input> elements any time new elements are added to the DOM.
      */
     val ADD_SUBMIT_LISTENER_TO_ALL_INPUTS = """
-        |if (typeof MOZ_FFTV_inputListener === 'undefined') {
-        |   MOZ_FFTV_inputListener = (event) => {
-        |       if (event && event.key === 'Tab') {
-        |           // Get the nearest <form> ancestor
-        |           var formWrapper = Array(...event.path).find((it) => it.tagName === 'FORM')
-        |           if (formWrapper) formWrapper.submit()
-        |       }
-        |   }
-        |}
-        |
-        |Array(...document.getElementsByTagName('input'))
-        |   .forEach((input) => {
-        |       input.removeEventListener("keydown", MOZ_FFTV_inputListener);
-        |       input.addEventListener("keydown", MOZ_FFTV_inputListener);
-        |   });
-        """.trimMargin()
+    (function () {
+        if (typeof _firefoxTV_inputAddedObserver !== 'undefined') return;
+    
+        function inputSubmitListener(event) {
+            console.log("SEVTEST: keypress detected");
+            console.log(event)
+            if (event && event.key === 'Tab') {
+                // Get the nearest <form> ancestor
+                var formWrapper = Array.from(event.path).find((it) => it.tagName === 'FORM')
+                if (formWrapper) formWrapper.submit()
+            };
+        };
+    
+        function attachListeners() {
+            console.log("SEVTEST: listeners attached");
+            Array.from(document.getElementsByTagName('input'))
+                .forEach((input) => {
+                    input.removeEventListener("keydown", inputSubmitListener);
+                    input.addEventListener("keydown", inputSubmitListener);
+                });
+        };
+    
+        function nodeContainsInput(node) {
+            return node.nodeName.toLowerCase() === 'input' ||
+                ((node instanceof Element) && !!node.querySelector('input'));
+        }
+    
+        _firefoxTV_inputAddedObserver = new MutationObserver(mutationList => {
+            const wasInputAdded = mutationList.some(mutation => {
+                return mutation.type === 'childList' &&
+                    (Array.from(mutation.addedNodes).some(nodeContainsInput));
+            });
+            
+            console.log("SEVTEST: mutation. wasInputAdded: " + wasInputAdded);
+    
+            if (wasInputAdded) {
+                /* This may traverse the whole DOM so let's only call it if it's necessary. */
+                attachListeners();
+            }
+        });
+        
+        _firefoxTV_inputAddedObserver.observe(document, {subtree: true, childList: true});
+        
+        attachListeners();
+    })();
+        """.trimIndent()
 }
