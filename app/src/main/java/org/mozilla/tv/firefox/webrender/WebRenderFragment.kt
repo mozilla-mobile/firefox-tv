@@ -39,6 +39,7 @@ import org.mozilla.tv.firefox.architecture.FirefoxViewModelProviders
 import org.mozilla.tv.firefox.ext.addSubmitListenerToInputElements
 import org.mozilla.tv.firefox.ext.couldScrollInDirection
 import org.mozilla.tv.firefox.ext.focusedDOMElement
+import org.mozilla.tv.firefox.ext.isUrlWhitelistedForSubmitInputHack
 import org.mozilla.tv.firefox.ext.isYoutubeTV
 import org.mozilla.tv.firefox.ext.maybeGoBackBeforeFxaSignIn
 import org.mozilla.tv.firefox.ext.observeScrollPosition
@@ -123,11 +124,15 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
     }
 
     override fun onLoadingStateChanged(session: Session, loading: Boolean) {
-        engineView?.addSubmitListenerToInputElements()
         if (!loading) {
             // If the page isn't finished loading, our observers won't be attached to capture the scroll position
             // and the fix won't work. Unfortunately, I've spent too much time on this so I did not prepare a fix.
             engineView?.observeScrollPosition()
+
+            if (session.url.isUrlWhitelistedForSubmitInputHack) {
+                engineView?.addSubmitListenerToInputElements()
+            }
+
             youtubeBackHandler.onLoadComplete()
         }
     }

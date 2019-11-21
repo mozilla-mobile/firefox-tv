@@ -88,3 +88,16 @@ val String.isUriYouTubeTvVideo: Boolean
 
 val String.isUriFxaSignIn: Boolean
     get() = this.startsWith("https://accounts.firefox.com/authorization")
+
+private val addInputScriptWhitelist = setOf(
+    "https://www.google.",
+    "http://www.bing.",
+    "https://www.bing.",
+    "https://www.amazon.",
+    "https://www.reddit."
+)
+
+val String.isUrlWhitelistedForSubmitInputHack: Boolean
+    get() = addInputScriptWhitelist.any {
+        this.startsWith(it)
+    }
