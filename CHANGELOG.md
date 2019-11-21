@@ -11,6 +11,10 @@ It diverges in the following ways:
 ### Changed
 - After successful Firefox Account sign in, the page the user was on before sign in is restored (#2805)
 - Improved behavior of soft keyboard `submit` button on whitelisted sites (#1962)
+- FxA account state will be updated when resuming the app (#2806)
+
+### Fixed
+- Bundled Pocket titles correctly open YouTube (#2912)
 
 ## 4.5 - 2019-09-23
 ### Added
