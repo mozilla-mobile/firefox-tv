@@ -7,7 +7,9 @@ It diverges in the following ways:
 - This project only strictly adheres to
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html) for bug fix releases.
 
-## 4.6 - ?
+## Unreleased
+
+## 4.6 - 2019-11-25
 ### Changed
 - After successful Firefox Account sign in, the page the user was on before sign in is restored (#2805)
 - Improved behavior of soft keyboard `submit` button on whitelisted sites (#1962)
