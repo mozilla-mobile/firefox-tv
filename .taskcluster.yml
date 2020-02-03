@@ -62,9 +62,20 @@ tasks:
                           $if: 'tasks_for == "github-release"'
                           then: '${event.release.tag_name}'
               ownTaskId: {$eval: as_slugid("decision_task")}
+              pullRequestAction:
+                  $if: 'tasks_for == "github-pull-request"'
+                  then: ${event.action}
+                  else: 'UNDEFINED'
+              releaseAction:
+                  $if: 'tasks_for == "github-release"'
+                  then: ${event.action}
+                  else: 'UNDEFINED'
           in:
-              # filter for github events that we will run taskgraph for
-              $if: 'tasks_for == "github-pull-request" || (tasks_for == "github-push" && head_branch == "refs/heads/master") || (tasks_for == "github-release" && event["action"] == "published")'
+              $if: >
+                tasks_for in ["action", "cron"]
+                || (tasks_for == "github-pull-request" && pullRequestAction in ["opened", "reopened", "edited", "synchronize"])
+                || (tasks_for == "github-push" && head_branch == "refs/heads/master")
+                || (tasks_for == "github-release" && releaseAction == "published")
               then:
                   $let:
                       level:
