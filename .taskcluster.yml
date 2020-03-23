@@ -11,7 +11,7 @@ tasks:
     - $let:
           taskgraph:
               branch: taskgraph
-              revision: 09d4c6dec78d17beb186eef1f79c1ab712ccc433
+              revision: a9a010487bf10fca6dc34ba53f40d34a8ab51fc0
           trustDomain: mobile
       in:
           $let:
@@ -61,6 +61,10 @@ tasks:
                       else:
                           $if: 'tasks_for == "github-release"'
                           then: '${event.release.tag_name}'
+              head_tag:
+                  $if: 'tasks_for == "github-release"'
+                  then: '${event.release.tag_name}'
+                  else: ''
               ownTaskId: {$eval: as_slugid("decision_task")}
               pullRequestAction:
                   $if: 'tasks_for == "github-pull-request"'
@@ -136,6 +140,7 @@ tasks:
                                     MOBILE_HEAD_REPOSITORY: '${repoUrl}'
                                     MOBILE_HEAD_REF: '${head_branch}'
                                     MOBILE_HEAD_REV: '${head_sha}'
+                                    MOBILE_HEAD_TAG: '${head_tag}'
                                     MOBILE_REPOSITORY_TYPE: git
                                     TASKGRAPH_BASE_REPOSITORY: https://hg.mozilla.org/ci/taskgraph
                                     TASKGRAPH_HEAD_REPOSITORY: https://hg.mozilla.org/ci/${taskgraph.branch}
@@ -147,9 +152,6 @@ tasks:
                                   - $if: 'tasks_for in ["github-pull-request"]'
                                     then:
                                         MOBILE_PULL_REQUEST_NUMBER: '${event.pull_request.number}'
-                                  - $if: 'tasks_for == "github-release"'
-                                    then:
-                                        MOBILE_HEAD_TAG: '${event.release.tag_name}'
                           features:
                               taskclusterProxy: true
                               chainOfTrust: true
@@ -182,6 +184,7 @@ tasks:
                                 --head-repository="$MOBILE_HEAD_REPOSITORY"
                                 --head-ref="$MOBILE_HEAD_REF"
                                 --head-rev="$MOBILE_HEAD_REV"
+                                --head-tag="$MOBILE_HEAD_TAG"
                                 --repository-type="$MOBILE_REPOSITORY_TYPE"
                                 --tasks-for='${tasks_for}'
 
