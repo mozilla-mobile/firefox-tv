@@ -10,16 +10,23 @@ transforms:
     - taskgraph.transforms.task:transforms
 
 
+kind-dependencies:
+    - toolchain
+
+
 job-defaults:
     description: Build Firefox for Amazon's Fire TV
-    scopes:
-        - secrets:get:project/mobile/firefox-tv/tokens
+    fetches:
+        toolchain:
+            - android-sdk-linux
     run:
         using: gradlew
         use-caches: false
+    scopes:
+        - secrets:get:project/mobile/firefox-tv/tokens
     worker:
         max-run-time: 7200
-        docker-image: {in-tree: android}
+        docker-image: {in-tree: base}
     worker-type: b-android
 
 

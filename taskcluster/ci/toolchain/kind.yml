@@ -2,13 +2,23 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 ---
-
 loader: taskgraph.loader.transform:loader
 
+kind-dependencies:
+    - fetch
+
 transforms:
-    - taskgraph.transforms.docker_image:transforms
+    - taskgraph.transforms.job:transforms
     - taskgraph.transforms.cached_tasks:transforms
     - taskgraph.transforms.task:transforms
 
-jobs:
-    base: {}
+
+job-defaults:
+    run:
+        using: index-search
+    run-on-projects: []
+    worker-type: always-optimized
+
+
+jobs-from:
+    - android.yml
