@@ -5,58 +5,55 @@
 loader: taskgraph.loader.transform:loader
 
 transforms:
-  - firefox_tv_taskgraph.transforms.build:transforms
-  - taskgraph.transforms.task:transforms
+    - firefox_tv_taskgraph.transforms.build:transforms
+    - taskgraph.transforms.job:transforms
+    - taskgraph.transforms.task:transforms
+
 
 job-defaults:
-  description: Build Firefox for Amazon's Fire TV
-  worker-type: b-android
-  scopes:
-    - secrets:get:project/mobile/firefox-tv/tokens
-  worker:
-    max-run-time: 3600
-    docker-image: {in-tree: android}
+    description: Build Firefox for Amazon's Fire TV
+    scopes:
+        - secrets:get:project/mobile/firefox-tv/tokens
+    run:
+        using: gradlew
+        use-caches: false
+    worker:
+        max-run-time: 7200
+        docker-image: {in-tree: android}
+    worker-type: b-android
+
 
 jobs:
-  pr:
-    run-on-tasks-for: [github-pull-request]
-    worker:
-      script: |
-        git fetch {repo_url} {branch}
-        git config advice.detachedHead false
-        git checkout {commit}
-        yes | sdkmanager --licenses
-        ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
-        ./gradlew -Pcoverage jacocoSystemDebugTestReport
-        ./tools/taskcluster/upload-coverage-report.sh
-        ./tools/taskcluster/download-firebase-sdk.sh
-        ./tools/taskcluster/google-firebase-testlab-login.sh
-        ./tools/taskcluster/execute-firebase-test.sh system/debug app-system-debug model=sailfish,version=25,orientation=landscape
-  master:
-    run-on-tasks-for: [github-push]
-    worker:
-      script: |
-        git fetch {repo_url}
-        git config advice.detachedHead false
-        git checkout {commit}
-        yes | sdkmanager --licenses
-        ./gradlew -PisPullRequest clean assembleSystem assembleAndroidTest lint checkstyle ktlint pmd detekt test
-        python ./tools/taskcluster/get-bitbar-token.py
-        python ./tools/taskcluster/execute-bitbar-test.py system/debug app-system-debug
-  release:
-    attributes:
-      build-type: release
-    run-on-tasks-for: [github-release]
-    worker:
-      artifacts:
-        - name: public/build/target.apk
-          path: /opt/firefox-tv/app/build/outputs/apk/system/release/app-system-release-unsigned.apk
-          type: file
-      script: |
-        git fetch {repo_url} --tags
-        git config advice.detachedHead false
-        git checkout {tag}
-        yes | sdkmanager --licenses
-        python tools/taskcluster/get-sentry-token.py
-        python tools/taskcluster/get-pocket-token.py
-        ./gradlew --no-daemon clean test assembleSystemRelease
+    pr:
+        run:
+            gradlew: ["-PisPullRequest", "clean", "assembleSystem", "assembleAndroidTest", "lint", "checkstyle", "ktlint", "pmd", "detekt", "test"]
+            post-gradlew:
+                - ["./gradlew", "-Pcoverage", "jacocoSystemDebugTestReport"]
+                - ["./tools/taskcluster/upload-coverage-report.sh"]
+                - ["./tools/taskcluster/download-firebase-sdk.sh"]
+                - ["./tools/taskcluster/google-firebase-testlab-login.sh"]
+                - ["./tools/taskcluster/execute-firebase-test.sh", "system/debug", "app-system-debug", "model=sailfish,version=25,orientation=landscape"]
+        run-on-tasks-for: [github-pull-request]
+
+    master:
+        run:
+            gradlew: ["-PisPullRequest", "clean", "assembleSystem", "assembleAndroidTest", "lint", "checkstyle", "ktlint", "pmd", "detekt", "test"]
+            post-gradlew:
+                - ["python", "./tools/taskcluster/get-bitbar-token.py"]
+                - ["python", "./tools/taskcluster/execute-bitbar-test.py", "system/debug", "app-system-debug"]
+        run-on-tasks-for: [github-push]
+
+    release:
+        attributes:
+            build-type: release
+        run:
+            pre-gradlew:
+                - ["python", "tools/taskcluster/get-sentry-token.py"]
+                - ["python", "tools/taskcluster/get-pocket-token.py"]
+            gradlew: ["clean", "test", "assembleSystemRelease"]
+        run-on-tasks-for: [github-release]
+        worker:
+            artifacts:
+                - name: public/build/target.apk
+                  path: /opt/firefox-tv/app/build/outputs/apk/system/release/app-system-release-unsigned.apk
+                  type: file

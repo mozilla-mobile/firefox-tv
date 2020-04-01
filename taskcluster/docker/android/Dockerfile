@@ -7,7 +7,20 @@
 
 FROM ubuntu:18.04
 
+
+# Add worker user
+RUN mkdir /builds && \
+    useradd -d /builds/worker -s /bin/bash -m worker && \
+    chown worker:worker /builds/worker && \
+    mkdir /builds/worker/artifacts && \
+    chown worker:worker /builds/worker/artifacts
+
+WORKDIR /builds/worker/
+
+
 ENV ANDROID_BUILD_TOOLS "27.0.3"
+
+ENV ANDROID_SDK_ROOT '/builds/worker/android-sdk-linux'
 
 # Version number of the "Command line tools only" SDK download:
 # https://developer.android.com/studio/#command-tools
@@ -15,7 +28,11 @@ ENV ANDROID_SDK_VERSION "3859397"
 
 ENV ANDROID_PLATFORM_VERSION "27"
 
+ENV CURL 'curl --location --retry 5'
+
 ENV PROJECT_REPOSITORY "https://github.com/mozilla-mobile/firefox-tv.git"
+
+ENV SDK_ZIP_LOCATION "$HOME/sdk-tools-linux.zip"
 
 # Disable interactive gradle output on taskcluster
 ENV TERM dumb
@@ -52,41 +69,34 @@ ENV LANG en_US.UTF-8
 
 # -- Android SDK ------------------------------------------------------------------------
 
-RUN mkdir -p /build/android-sdk
-WORKDIR /build
-
-ENV ANDROID_HOME /build/android-sdk
-ENV ANDROID_SDK_HOME /build/android-sdk
-ENV PATH ${PATH}:${ANDROID_SDK_HOME}/tools:${ANDROID_SDK_HOME}/tools/bin:${ANDROID_SDK_HOME}/platform-tools:/opt/tools:${ANDROID_SDK_HOME}/build-tools/${ANDROID_BUILD_TOOLS}
-
-RUN curl -L https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_VERSION}.zip > sdk.zip \
-        && unzip sdk.zip -d ${ANDROID_SDK_HOME} \
-        && rm sdk.zip
-
-RUN mkdir -p /build/android-sdk/.android/
-RUN touch /build/android-sdk/.android/repositories.cfg
-
-RUN yes | sdkmanager --licenses
-
-# -- Project setup ----------------------------------------------------------------------
-
-WORKDIR /opt
-
-# Checkout source code
-RUN git clone --depth=1 ${PROJECT_REPOSITORY}
-
-# Build project and run gradle tasks once to pull all dependencies
-WORKDIR /opt/firefox-tv/
-RUN ./gradlew --no-daemon clean assembleDebug lint checkstyle ktlint pmd detekt testSystemDebugUnitTest \
-    && ./gradlew --no-daemon clean
-
-# -- Post setup -------------------------------------------------------------------------
+RUN $CURL --output "$SDK_ZIP_LOCATION" "https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_VERSION}.zip" \
+    && unzip -d "$ANDROID_SDK_ROOT" "$SDK_ZIP_LOCATION" \
+    && rm "$SDK_ZIP_LOCATION" \
+    && yes | "${ANDROID_SDK_ROOT}/tools/bin/sdkmanager" --licenses \
+    && chown -R worker:worker "$ANDROID_SDK_ROOT"
 
 # Install dependencies needed to run Android2Po
-RUN pip install -r tools/l10n/android2po/requirements.txt
+# %include tools/l10n/android2po/requirements.txt
+COPY topsrcdir/tools/l10n/android2po/requirements.txt android2po_requirements.txt
+RUN pip install -r android2po_requirements.txt
 
 # Install taskcluster python library (used by decision tasks)
 RUN pip install taskcluster
 
 # Install Python client for Testdroid Cloud APIv2 (used for running UI tests on Bitbar Cloud)
 RUN pip install testdroid
+
+
+# %include-run-task
+
+ENV SHELL=/bin/bash \
+    HOME=/builds/worker \
+    PATH="/builds/worker/.local/bin:$PATH"
+
+
+VOLUME /builds/worker/checkouts
+VOLUME /builds/worker/.cache
+
+
+# run-task expects to run as root
+USER root
