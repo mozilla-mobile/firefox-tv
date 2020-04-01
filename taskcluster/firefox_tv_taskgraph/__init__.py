@@ -17,7 +17,7 @@ def register(graph_config):
     Import all modules that are siblings of this one, triggering decorators in
     the process.
     """
-    _import_modules(["worker_types", "target_tasks"])
+    _import_modules(["job", "target_tasks", "worker_types"])
     extend_parameters_schema({
         Required("release_type", default=None): Any(text_type, None),
     })

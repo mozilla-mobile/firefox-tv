@@ -10,38 +10,9 @@ from taskgraph.transforms.base import TransformSequence
 transforms = TransformSequence()
 
 
-NOTIFY_EMAIL_ADDRESS = 'firefox-tv@mozilla.com'
-
-
 @transforms.add
 def expose_artifacts_in_attributes(config, tasks):
     for task in tasks:
         task.setdefault("attributes", {})
         task["attributes"]["apks"] = [artifact["name"] for artifact in task["worker"].get("artifacts", [])]
-        yield task
-
-
-@transforms.add
-def build_task(config, tasks):
-    for task in tasks:
-        script = task["worker"]["script"].format(
-            repo_url=config.params["head_repository"],
-            commit=config.params["head_rev"],
-            tag=config.params["head_tag"],
-            branch=config.params["head_ref"],
-        )
-        bash_command = [
-            "/bin/bash",
-            "--login",
-            "-c",
-            "cat <<'SCRIPT' > ../script.sh && bash -e ../script.sh\n"
-            "export TERM=dumb\n{}\nSCRIPT".format(script)
-        ]
-
-        del task["worker"]["script"]
-        task["worker"]["command"] = bash_command
-        task["worker"].setdefault("artifacts", [])
-        task["worker"]["taskcluster-proxy"] = True
-        task["worker"]["chain-of-trust"] = True
-
         yield task
