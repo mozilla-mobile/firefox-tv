@@ -5,8 +5,8 @@
 loader: firefox_tv_taskgraph.loader.single_dep:loader
 
 transforms:
-  - firefox_tv_taskgraph.single_dep:transforms
-  - firefox_tv_taskgraph.pushapk:transforms
+  - firefox_tv_taskgraph.transforms.single_dep:transforms
+  - firefox_tv_taskgraph.transforms.pushapk:transforms
   - taskgraph.transforms.task:transforms
 
 kind-dependencies:
