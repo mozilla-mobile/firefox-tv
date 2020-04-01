@@ -72,6 +72,12 @@ def configure_gradlew(config, job, taskdesc):
     run = job["run"]
     worker = taskdesc["worker"] = job["worker"]
 
+    worker.setdefault("env", {}).update({
+        "ANDROID_SDK_ROOT": path.join(
+            run["workdir"], worker["env"]["MOZ_FETCHES_DIR"], "android-sdk-linux"
+        )
+    })
+
     run["command"] = _extract_gradlew_command(run)
     _inject_secrets_scopes(run, taskdesc)
     _set_run_task_attributes(job)

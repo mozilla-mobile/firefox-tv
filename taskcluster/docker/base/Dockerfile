@@ -17,23 +17,6 @@ RUN mkdir /builds && \
 
 WORKDIR /builds/worker/
 
-
-ENV ANDROID_BUILD_TOOLS "27.0.3"
-
-ENV ANDROID_SDK_ROOT '/builds/worker/android-sdk-linux'
-
-# Version number of the "Command line tools only" SDK download:
-# https://developer.android.com/studio/#command-tools
-ENV ANDROID_SDK_VERSION "3859397"
-
-ENV ANDROID_PLATFORM_VERSION "27"
-
-ENV CURL 'curl --location --retry 5'
-
-ENV PROJECT_REPOSITORY "https://github.com/mozilla-mobile/firefox-tv.git"
-
-ENV SDK_ZIP_LOCATION "$HOME/sdk-tools-linux.zip"
-
 # Disable interactive gradle output on taskcluster
 ENV TERM dumb
 
@@ -68,12 +51,6 @@ RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 
 # -- Android SDK ------------------------------------------------------------------------
-
-RUN $CURL --output "$SDK_ZIP_LOCATION" "https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_VERSION}.zip" \
-    && unzip -d "$ANDROID_SDK_ROOT" "$SDK_ZIP_LOCATION" \
-    && rm "$SDK_ZIP_LOCATION" \
-    && yes | "${ANDROID_SDK_ROOT}/tools/bin/sdkmanager" --licenses \
-    && chown -R worker:worker "$ANDROID_SDK_ROOT"
 
 # Install dependencies needed to run Android2Po
 # %include tools/l10n/android2po/requirements.txt

@@ -8,7 +8,6 @@ Apply some defaults and minor modifications to the single_dep jobs.
 from __future__ import absolute_import, print_function, unicode_literals
 
 from taskgraph.transforms.base import TransformSequence
-from taskgraph.util.treeherder import inherit_treeherder_from_dep, join_symbol
 
 
 transforms = TransformSequence()
