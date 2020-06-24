@@ -131,7 +131,7 @@ configurations {
 // Generate markdown docs for the collected metrics.
 ext.gleanGenerateMarkdownDocs = true
 ext.gleanDocsDirectory = "$rootDir/docs/glean"
-apply from: 'https://github.com/mozilla-mobile/android-components/raw/master/components/service/glean/scripts/sdk_generator.gradle'
+apply from: 'https://github.com/mozilla-mobile/android-components/raw/v' + rootProject.ext.moz_components_version + '/components/service/glean/scripts/sdk_generator.gradle'
 
 dependencies {
     implementation 'io.sentry:sentry-android:1.7.21'

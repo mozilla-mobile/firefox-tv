@@ -93,7 +93,7 @@ open class ServiceLocator(val app: Application) {
     @Suppress("DEPRECATION") // We need PocketEndpointRaw until we move to a-c's impl.
     val pocketEndpointRaw by lazy { PocketEndpointRaw(appVersion, buildConfigDerivables.globalPocketVideoEndpoint) }
     val pocketVideoStore by lazy { PocketVideoStore(app, app.assets, pocketVideoJSONValidator) }
-    val pocketVideoFetchScheduler by lazy { PocketVideoFetchScheduler(isPocketEnabledByLocale) }
+    val pocketVideoFetchScheduler by lazy { PocketVideoFetchScheduler(isPocketEnabledByLocale, app.applicationContext) }
     val fxaRepo by lazy { FxaRepo(app, admIntegration = admIntegration) }
     val fxaLoginUseCase by lazy { FxaLoginUseCase(fxaRepo, sessionRepo, screenController) }
     val admIntegration by lazy { ADMIntegration(app) }

@@ -14,6 +14,7 @@ import mozilla.appservices.Megazord
 import mozilla.components.concept.engine.utils.EngineVersion
 import mozilla.components.lib.fetch.okhttp.OkHttpClient
 import mozilla.components.service.glean.Glean
+import mozilla.components.service.glean.config.Configuration
 import mozilla.components.support.base.log.Log
 import mozilla.components.support.base.log.sink.AndroidLogSink
 import mozilla.components.support.ktx.android.content.runOnlyInMainProcess
@@ -113,7 +114,7 @@ open class FirefoxApplication : LocaleAwareApplication() {
 
     private fun initGlean() {
         setGleanUpload()
-        Glean.initialize(applicationContext)
+        Glean.initialize(applicationContext, Configuration(channel = BuildConfig.BUILD_TYPE))
     }
 
     // ServiceLocator needs to be created in onCreate in order to accept Application
