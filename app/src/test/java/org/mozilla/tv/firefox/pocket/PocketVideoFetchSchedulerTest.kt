@@ -15,6 +15,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.slot
 import io.mockk.spyk
 import io.mockk.verify
+import mozilla.components.support.test.robolectric.testContext
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
@@ -37,7 +38,7 @@ class PocketVideoFetchSchedulerTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        scheduler = PocketVideoFetchScheduler { isPocketEnabledByLocale }
+        scheduler = PocketVideoFetchScheduler({ isPocketEnabledByLocale }, context = testContext)
         isPocketEnabledByLocale = true
     }
 
@@ -55,7 +56,7 @@ class PocketVideoFetchSchedulerTest {
     fun `WHEN onStart is called THEN schedulePocketBackgroundFetch is called`() {
         // This test is tightly coupled to the implementation but, given this daily background job will rarely be
         // tested, we want to verify the implementation hasn't accidentally changed in a way that broke the functionality.
-        val schedulerMock = spyk(PocketVideoFetchScheduler { true })
+        val schedulerMock = spyk(PocketVideoFetchScheduler({ true }, testContext))
         schedulerMock.onStart()
         verify(exactly = 1) { schedulerMock.schedulePocketBackgroundFetch(any(), any(), any()) }
     }
