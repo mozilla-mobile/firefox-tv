@@ -20,6 +20,7 @@ import mozilla.components.support.base.log.sink.AndroidLogSink
 import mozilla.components.support.ktx.android.content.runOnlyInMainProcess
 import mozilla.components.support.ktx.android.os.resetAfter
 import mozilla.components.support.rusthttp.RustHttpConfig
+import org.mozilla.tv.firefox.GleanMetrics.LegacyIds
 import org.mozilla.tv.firefox.components.locale.LocaleAwareApplication
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.telemetry.SentryIntegration
@@ -29,6 +30,7 @@ import org.mozilla.tv.firefox.utils.BuildConstants
 import org.mozilla.tv.firefox.utils.OkHttpWrapper
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.webrender.WebRenderComponents
+import java.util.UUID
 
 private const val DEFAULT_LOGTAG = "FFTV"
 
@@ -69,8 +71,8 @@ open class FirefoxApplication : LocaleAwareApplication() {
             SentryIntegration.init(this, serviceLocator.settingsRepo)
 
             initRustDependencies()
-            initGlean()
             TelemetryIntegration.INSTANCE.init(this)
+            initGlean()
             initFretboard()
 
             enableStrictMode()
@@ -115,6 +117,8 @@ open class FirefoxApplication : LocaleAwareApplication() {
     private fun initGlean() {
         setGleanUpload()
         Glean.initialize(applicationContext, Configuration(channel = BuildConfig.BUILD_TYPE))
+        val legacyId = TelemetryIntegration.INSTANCE.clientId
+        LegacyIds.clientId.set(UUID.fromString(legacyId))
     }
 
     // ServiceLocator needs to be created in onCreate in order to accept Application
