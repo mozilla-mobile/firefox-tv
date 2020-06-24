@@ -224,6 +224,10 @@ dependencies {
     androidTestImplementation 'com.squareup.okhttp3:mockwebserver:3.10.0'
     testImplementation 'com.squareup.okhttp3:mockwebserver:3.10.0'
 
+    // For the initial release of Glean 19, we require consumer applications to
+    // depend on a separate library for unit tests. This will be removed in future releases.
+    testImplementation "org.mozilla.telemetry:glean-forUnitTests:21.3.0"
+
     androidTestImplementation "tools.fastlane:screengrab:1.2.0", {
         // This Fastlane dependency causes our builds to fail due to having two different
         // versions of UiAutomator. Fastlane is not on the most recent version of
@@ -244,7 +248,8 @@ dependencies {
     implementation "com.google.android.gms:play-services-oss-licenses:$oss_licenses_version"
 }
 
-task validateReleaseConfiguration(type: ValidateAndroidAppReleaseConfiguration)
+// Removed due to glean upgrade - https://github.com/mozilla-mobile/firefox-tv/issues/2989
+// task validateReleaseConfiguration(type: ValidateAndroidAppReleaseConfiguration)
 
 // -------------------------------------------------------------------------------------------------
 //  Dynamically set versionCode (See tools/build/versionCode.gradle
