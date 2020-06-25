@@ -53,7 +53,6 @@ import org.mozilla.tv.firefox.fxa.FxaRepo.AccountState
 import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.HintViewModel
 import org.mozilla.tv.firefox.hint.InactiveHintViewModel
-import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.telemetry.MenuInteractionMonitor
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.RoundCornerTransformation
@@ -134,13 +133,11 @@ class NavigationOverlayFragment : Fragment() {
     private lateinit var serviceLocator: ServiceLocator
     private lateinit var navigationOverlayViewModel: NavigationOverlayViewModel
     private lateinit var toolbarViewModel: ToolbarViewModel
-    private lateinit var pocketViewModel: PocketViewModel
     private lateinit var hintViewModel: HintViewModel
     private lateinit var toolbarUiController: ToolbarUiController
 
     private var channelReferenceContainer: ChannelReferenceContainer? = null // references a Context, must be nulled.
     private val pinnedTileChannel: DefaultChannel get() = channelReferenceContainer!!.pinnedTileChannel
-    private val pocketChannel: DefaultChannel get() = channelReferenceContainer!!.pocketChannel
     private val newsChannel: DefaultChannel get() = channelReferenceContainer!!.newsChannel
     private val sportsChannel: DefaultChannel get() = channelReferenceContainer!!.sportsChannel
     private val musicChannel: DefaultChannel get() = channelReferenceContainer!!.musicChannel
@@ -154,7 +151,6 @@ class NavigationOverlayFragment : Fragment() {
 
         navigationOverlayViewModel = FirefoxViewModelProviders.of(this).get(NavigationOverlayViewModel::class.java)
         toolbarViewModel = FirefoxViewModelProviders.of(this).get(ToolbarViewModel::class.java)
-        pocketViewModel = FirefoxViewModelProviders.of(this).get(PocketViewModel::class.java)
         hintViewModel = if (serviceLocator.experimentsProvider.shouldShowHintBar()) {
             FirefoxViewModelProviders.of(this).get(OverlayHintViewModel::class.java)
         } else {
@@ -209,7 +205,6 @@ class NavigationOverlayFragment : Fragment() {
         canShowUnpinToast = true
 
         channelReferenceContainer = ChannelReferenceContainer(channelsContainer, createChannelFactory()).also {
-            channelsContainer.addView(it.pocketChannel.channelContainer)
             channelsContainer.addView(it.pinnedTileChannel.channelContainer)
             channelsContainer.addView(it.newsChannel.channelContainer)
             channelsContainer.addView(it.sportsChannel.channelContainer)
@@ -228,8 +223,6 @@ class NavigationOverlayFragment : Fragment() {
         observeRequestFocus()
                 .addTo(compositeDisposable)
         observeChannelVisibility()
-            .forEach { compositeDisposable.add(it) }
-        observePocket()
             .forEach { compositeDisposable.add(it) }
         observeTvGuideTiles()
             .forEach { compositeDisposable.add(it) }
@@ -391,27 +384,6 @@ class NavigationOverlayFragment : Fragment() {
                 }
     }
 
-    private fun observePocket(): List<Disposable> {
-        val disposables = mutableListOf<Disposable>()
-        disposables += observePocketVisibility()
-        disposables += observePocketTiles()
-
-        return disposables
-    }
-
-    private fun observePocketVisibility(): Disposable = pocketViewModel.state
-            .subscribe { when (it) {
-                is PocketViewModel.State.Feed -> pocketChannel.channelContainer.visibility = View.VISIBLE
-                else -> pocketChannel.channelContainer.visibility = View.GONE
-            } }
-
-    private fun observePocketTiles(): Disposable {
-        val pocketDetails = pocketViewModel.state
-            .ofType(PocketViewModel.State.Feed::class.java)
-            .map { it.details }
-        return defaultObserveChannelDetails(pocketChannel, pocketDetails)
-    }
-
     private fun observeTvGuideTiles(): List<Disposable> {
         return listOf(
             defaultObserveChannelDetails(newsChannel, navigationOverlayViewModel.newsChannel),
@@ -532,12 +504,6 @@ private class ChannelReferenceContainer(
     channelContainerView: ViewGroup,
     channelFactory: DefaultChannelFactory
 ) {
-
-    val pocketChannel = channelFactory.createChannel(
-        parent = channelContainerView,
-        id = R.id.pocket_channel,
-        channelConfig = ChannelConfig.getPocketConfig(channelContainerView.context)
-    )
 
     val pinnedTileChannel = channelFactory.createChannel(
         parent = channelContainerView,

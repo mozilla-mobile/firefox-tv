@@ -76,7 +76,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         webRenderComponents.notifyLaunchWithSafeIntent(safeIntent)
 
         lifecycle.addObserver(serviceLocator.engineViewCache)
-        lifecycle.addObserver(serviceLocator.pocketVideoFetchScheduler)
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
@@ -206,8 +205,6 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
 
     override fun onStart() {
         super.onStart()
-        // TODO when MainActivity has a VM, route this call through it
-        serviceLocator.pocketRepo.updatePocketFromStore()
 
         @Suppress("DEPRECATION") // Couldn't work out a better way to do this. If you
         // think of one, please replace this
