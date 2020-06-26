@@ -36,7 +36,8 @@ jobs:
             gradlew: ["-PisPullRequest", "clean", "assembleSystem", "assembleAndroidTest", "lint", "checkstyle", "ktlint", "pmd", "detekt", "test"]
             post-gradlew:
                 - ["./gradlew", "-Pcoverage", "jacocoSystemDebugTestReport"]
-                - ["./tools/taskcluster/upload-coverage-report.sh"]
+                # Disabling codecov until the bug is resolved: https://github.com/mozilla-mobile/firefox-tv/issues/2995
+                #- ["./tools/taskcluster/upload-coverage-report.sh"]
                 - ["./tools/taskcluster/download-firebase-sdk.sh"]
                 - ["./tools/taskcluster/google-firebase-testlab-login.sh"]
                 - ["./tools/taskcluster/execute-firebase-test.sh", "system/debug", "app-system-debug", "model=sailfish,version=25,orientation=landscape"]
