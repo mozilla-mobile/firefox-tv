@@ -10,7 +10,6 @@ import android.net.http.SslError
 import android.os.StrictMode
 import android.view.InputDevice
 import android.view.KeyEvent
-import androidx.annotation.AnyThread
 import androidx.annotation.UiThread
 import mozilla.components.concept.sync.DeviceType
 import mozilla.components.support.ktx.android.os.resetAfter
@@ -18,7 +17,6 @@ import org.mozilla.telemetry.event.TelemetryEvent
 import org.mozilla.telemetry.measurement.SearchesMeasurement
 import org.mozilla.telemetry.ping.TelemetryCorePingBuilder
 import org.mozilla.telemetry.ping.TelemetryMobileEventPingBuilder
-import org.mozilla.telemetry.ping.TelemetryPocketEventPingBuilder
 import org.mozilla.tv.firefox.channels.ChannelTile
 import org.mozilla.tv.firefox.channels.SettingsButton
 import org.mozilla.tv.firefox.channels.SettingsScreen
@@ -29,7 +27,6 @@ import org.mozilla.tv.firefox.fxa.FxaReceivedTab
 import org.mozilla.tv.firefox.navigationoverlay.NavigationEvent
 import org.mozilla.tv.firefox.utils.Assert
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText.AutocompleteResult
-import java.util.Collections
 
 private const val SHARED_PREFS_KEY = "telemetryLib" // Don't call it TelemetryWrapper to avoid accidental IDE rename.
 private const val KEY_CLICKED_HOME_TILE_IDS_PER_SESSION = "clickedHomeTileIDsPerSession"
@@ -53,7 +50,6 @@ open class TelemetryIntegration protected constructor(
         const val ACTION = "action"
         const val AGGREGATE = "aggregate"
         const val ERROR = "error"
-        const val POCKET = "pocket"
     }
 
     private object Method {
@@ -85,7 +81,6 @@ open class TelemetryIntegration protected constructor(
         const val HOME_TILE = "home_tile"
         const val TURBO_MODE = "turbo_mode"
         const val PIN_PAGE = "pin_page"
-        const val POCKET_VIDEO = "pocket_video"
         const val MEDIA_SESSION = "media_session"
         const val DESKTOP_MODE = "desktop_mode"
         const val VIDEO_ID = "video_id"
@@ -103,7 +98,6 @@ open class TelemetryIntegration protected constructor(
         const val OFF = "off"
         const val TILE_BUNDLED = "bundled"
         const val TILE_CUSTOM = "custom"
-        const val TILE_POCKET = "pocket"
         const val YOUTUBE_TILE = "youtube_tile"
         const val EXIT_FIREFOX = "exit"
         const val SETTINGS_CLEAR_DATA_TILE = "clear_data_tile"
@@ -136,10 +130,6 @@ open class TelemetryIntegration protected constructor(
         const val TILE_ID = "tile_id"
         const val BOOLEAN = "boolean"
     }
-
-    // Available on any thread: we synchronize.
-    private val pocketUniqueClickedVideoIDs = Collections.synchronizedSet(mutableSetOf<String>())
-    private val pocketUniqueImpressedVideoIDs = Collections.synchronizedSet(mutableSetOf<String>())
 
     fun init(context: Context) {
         // When initializing the telemetry library it will make sure that all directories exist and
@@ -177,37 +167,19 @@ open class TelemetryIntegration protected constructor(
         resetSessionMeasurements(context)
     }
 
-    // EXT to add events to pocket ping (independently from mobile_events)
-    fun TelemetryEvent.queueInPocketPing() {
-        if (!DeprecatedTelemetryHolder.get().configuration.isCollectionEnabled) {
-            return
-        }
-
-        (DeprecatedTelemetryHolder.get()
-                .getPingBuilder(TelemetryPocketEventPingBuilder.TYPE) as TelemetryPocketEventPingBuilder)
-                .eventsMeasurement.add(this)
-    }
-
     private fun queueSessionMeasurements(context: Context) {
         TelemetryHomeTileUniqueClickPerSessionCounter.queueEvent(context)
-        TelemetryEvent.create(Category.AGGREGATE, Method.CLICK, Object.POCKET_VIDEO,
-                pocketUniqueClickedVideoIDs.size.toString()).queue()
-        queuePocketVideoImpressionEvent()
-        queuePocketVideoClickEvent()
     }
 
     private fun resetSessionMeasurements(context: Context) {
         TelemetryHomeTileUniqueClickPerSessionCounter.resetSessionData(context)
         TelemetryRemoteControlTracker.resetSessionData(context)
-        pocketUniqueClickedVideoIDs.clear()
-        pocketUniqueImpressedVideoIDs.clear()
     }
 
     fun stopMainActivity() {
         DeprecatedTelemetryHolder.get()
                 .queuePing(TelemetryCorePingBuilder.TYPE)
                 .queuePing(TelemetryMobileEventPingBuilder.TYPE)
-                .queuePing(TelemetryPocketEventPingBuilder.TYPE)
                 .scheduleUpload()
     }
 
@@ -420,30 +392,6 @@ open class TelemetryIntegration protected constructor(
                 getTileTypeAsStringValue(removedTile)).queue()
     }
 
-    @AnyThread // pocketUniqueClickedVideoIDs is synchronized.
-    fun pocketVideoClickEvent(id: String) {
-        pocketUniqueClickedVideoIDs.add(id)
-    }
-
-    @AnyThread // pocketUniqueImpressVideoIDs is synchronized.
-    fun pocketVideoImpressionEvent(id: String) {
-        pocketUniqueImpressedVideoIDs.add(id)
-    }
-
-    private fun queuePocketVideoImpressionEvent() {
-        for (videoId in pocketUniqueImpressedVideoIDs) {
-            TelemetryEvent.create(Category.POCKET, Method.IMPRESSION, Object.VIDEO_ID,
-                    videoId).queueInPocketPing()
-        }
-    }
-
-    private fun queuePocketVideoClickEvent() {
-        for (videoId in pocketUniqueClickedVideoIDs) {
-            TelemetryEvent.create(Category.POCKET, Method.CLICK, Object.VIDEO_ID,
-                    videoId.toString()).queueInPocketPing()
-        }
-    }
-
     fun mediaSessionEvent(eventType: MediaSessionEventType) {
         val method = when (eventType) {
             MediaSessionEventType.PLAY_PAUSE_BUTTON -> Method.CLICK
@@ -457,7 +405,6 @@ open class TelemetryIntegration protected constructor(
     private fun getTileTypeAsStringValue(tile: ChannelTile) = when (tile.tileSource) {
         TileSource.BUNDLED -> Value.TILE_BUNDLED
         TileSource.CUSTOM -> Value.TILE_CUSTOM
-        TileSource.POCKET -> Value.TILE_POCKET
         TileSource.NEWS -> Value.TILE_BUNDLED
         TileSource.SPORTS -> Value.TILE_BUNDLED
         TileSource.MUSIC -> Value.TILE_BUNDLED

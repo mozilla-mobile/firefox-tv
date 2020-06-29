@@ -69,17 +69,7 @@ class DefaultChannelAdapter(
             val tile = getItem(position)
             tile.setImage.invoke(imageView)
 
-            // We handle Pocket tiles differently.
-            if (tile.subtitle != null) {
-                titleView.visibility = View.GONE
-
-                pocketTitle.text = tile.subtitle
-                pocketTitle.visibility = View.VISIBLE
-                pocketAuthor.text = tile.title
-                pocketAuthor.visibility = View.VISIBLE
-            } else {
-                titleView.text = tile.title
-            }
+            titleView.text = tile.title
 
             itemView.setOnClickListener {
                 loadUrl(tile.url)
@@ -137,7 +127,5 @@ class DefaultChannelAdapter(
 
 class DefaultChannelTileViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val titleView: TextView = itemView.findViewById(R.id.tile_title)
-    val pocketAuthor: TextView = itemView.findViewById(R.id.tile_pocket_author)
-    val pocketTitle: TextView = itemView.findViewById(R.id.tile_pocket_title)
     val imageView: ImageView = itemView.findViewById(R.id.tile_icon)
 }

@@ -48,33 +48,5 @@
             android:textColor="@color/photonGrey10_a80p"
             android:textSize="18sp"
             tools:text="YouTube" />
-
-        <TextView
-            android:id="@+id/tile_pocket_author"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:fontFamily="@string/font_ember_regular"
-            android:gravity="start"
-            android:paddingTop="8dp"
-            android:textAllCaps="true"
-            android:textColor="@color/photonGrey10_a60p"
-            android:textSize="16sp"
-            android:visibility="gone"
-            tools:text="Kurzgesagt" />
-
-        <TextView
-            android:id="@+id/tile_pocket_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:fontFamily="@string/font_ember_regular"
-            android:gravity="start"
-            android:maxLines="3"
-            android:textColor="@color/photonGrey10_a80p"
-            android:textSize="18sp"
-            android:visibility="gone"
-            tools:text="The Centrifuge Problem - Numberphile" />
     </LinearLayout>
 </org.mozilla.tv.firefox.FocusLossFrameLayout>

@@ -19,7 +19,7 @@ import org.mozilla.tv.firefox.ext.getDimenPixelSize
 import org.mozilla.tv.firefox.utils.PicassoWrapper
 import java.io.File
 
-enum class TileSource { BUNDLED, CUSTOM, POCKET, NEWS, SPORTS, MUSIC }
+enum class TileSource { BUNDLED, CUSTOM, NEWS, SPORTS, MUSIC }
 
 /**
  * Backing data for a [RecyclerView] item in a channel
@@ -42,7 +42,6 @@ data class ChannelTile(
         return when (tileSource) {
             TileSource.BUNDLED, TileSource.CUSTOM ->
                 context.resources.getString(R.string.pinned_tiles_channel_remove_title, title)
-            TileSource.POCKET -> throw NotImplementedError("pocket shouldn't be able to remove tiles")
             TileSource.NEWS ->
                 context.resources.getString(R.string.news_channel_remove_title, title)
             TileSource.SPORTS ->

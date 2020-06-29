@@ -62,7 +62,6 @@ class WebRenderHintViewModelTest {
         sessionRepoState.onNext(fakeSessionState(URLs.PRIVACY_NOTICE_URL))
         pushCursorMove(Direction.LEFT)
         pushScrolledToEdge(Direction.UP)
-        sessionRepoState.onNext(fakeSessionState(URLs.APP_URL_POCKET_ERROR))
         pushCursorMove(Direction.LEFT)
         sessionRepoState.onNext(fakeSessionState(URLs.URL_LICENSES))
 

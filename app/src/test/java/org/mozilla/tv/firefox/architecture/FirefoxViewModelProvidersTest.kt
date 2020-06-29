@@ -10,9 +10,9 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mozilla.tv.firefox.MainActivity
-import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.robolectric.Robolectric
 import org.mozilla.tv.firefox.helpers.FirefoxRobolectricTestRunner
+import org.mozilla.tv.firefox.navigationoverlay.ToolbarViewModel
 
 @RunWith(FirefoxRobolectricTestRunner::class)
 class FirefoxViewModelProvidersTest {
@@ -32,7 +32,7 @@ class FirefoxViewModelProvidersTest {
 
     @Test
     fun `WHEN passed a valid ViewModel THEN of(FragmentActivity) returns a non-null value`() {
-        assertNotNull(FirefoxViewModelProviders.of(mainActivity).get(PocketViewModel::class.java))
+        assertNotNull(FirefoxViewModelProviders.of(mainActivity).get(ToolbarViewModel::class.java))
     }
 }
 

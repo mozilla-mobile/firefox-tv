@@ -13,7 +13,6 @@ import org.mozilla.tv.firefox.hint.HintContentFactory
 import org.mozilla.tv.firefox.navigationoverlay.ChannelTitles
 import org.mozilla.tv.firefox.navigationoverlay.NavigationOverlayViewModel
 import org.mozilla.tv.firefox.navigationoverlay.OverlayHintViewModel
-import org.mozilla.tv.firefox.pocket.PocketViewModel
 import org.mozilla.tv.firefox.navigationoverlay.ToolbarViewModel
 import org.mozilla.tv.firefox.settings.SettingsViewModel
 import org.mozilla.tv.firefox.utils.ServiceLocator
@@ -40,11 +39,6 @@ class ViewModelFactory(
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return when (modelClass) {
-            PocketViewModel::class.java -> PocketViewModel(
-                resources,
-                serviceLocator.pocketRepo
-            ) as T
-
             ToolbarViewModel::class.java -> ToolbarViewModel(
                 sessionRepo = serviceLocator.sessionRepo,
                 pinnedTileRepo = serviceLocator.pinnedTileRepo
