@@ -31,7 +31,7 @@ class CustomContentRequestInterceptor(
         currentPageURL = uri
 
         return when (uri) {
-            URLs.APP_URL_HOME, URLs.APP_URL_POCKET_ERROR ->
+            URLs.APP_URL_HOME ->
                 RequestInterceptor.InterceptionResponse.Content("<html></html>")
 
             URLs.URL_ABOUT -> getInterceptionResponseContent(

@@ -14,7 +14,6 @@ import mozilla.components.service.fretboard.ExperimentDescriptor
 import mozilla.components.support.utils.SafeIntent
 import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.ext.serviceLocator
-import org.mozilla.tv.firefox.pocket.PocketVideoFetchScheduler
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.utils.UrlUtils
 
@@ -59,7 +58,6 @@ object IntentValidator {
 
     fun validate(context: Context, intent: SafeIntent): ValidatedIntentData? {
         setQAExperimentOverrides(intent, context)
-        setQAFetchDelayOverrides(intent, context.serviceLocator.pocketVideoFetchScheduler)
         setQALocaleOverride(intent, context)
 
         when (intent.action) {
@@ -99,12 +97,6 @@ object IntentValidator {
 
         experimentsArray.forEach {
             fretboard.setOverride(context, ExperimentDescriptor(it), true)
-        }
-    }
-
-    private fun setQAFetchDelayOverrides(intent: SafeIntent, pocketVideoFetchScheduler: PocketVideoFetchScheduler) {
-        intent.extras?.getLong(EXTRA_FETCH_DELAY_KEY)?.let { delay ->
-            pocketVideoFetchScheduler.setQAFetchDelayOverride(delay)
         }
     }
 
