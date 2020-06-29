@@ -266,6 +266,15 @@ android.applicationVariants.all { variant ->
     println("Build type: " + buildType + " (versionCode = " + variant.mergedFlavor.versionCode + ")")
 }
 
+// Disable unit tests for gecko since we don't actively support gecko variant for FFTV
+gradle.taskGraph.useFilter { task ->
+    if (task.name.startsWith("test") && task.name.contains("Gecko")) {
+        return false;
+    }
+
+    return true;
+}
+
 // -------------------------------------------------------------------------------------------------
 // Secrets: add API secrets from config files into the BuildConfig instance.
 // We use files because they're easier to manage than environment variables.
