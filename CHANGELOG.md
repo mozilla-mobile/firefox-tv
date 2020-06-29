@@ -8,7 +8,10 @@ It diverges in the following ways:
 [Semantic Versioning](http://semver.org/spec/v2.0.0.html) for bug fix releases.
 
 ## Unreleased
-- Removed Pocket from Homepage.
+
+## 4.7 - 2020-06-30
+### Changed
+- Removed Pocket from Homepage (#2988)
 
 ## 4.6 - 2019-11-25
 ### Changed
