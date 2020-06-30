@@ -46,9 +46,10 @@ jobs:
     master:
         run:
             gradlew: ["-PisPullRequest", "clean", "assembleSystem", "assembleAndroidTest", "lint", "checkstyle", "ktlint", "pmd", "detekt", "test"]
-            post-gradlew:
-                - ["python", "./tools/taskcluster/get-bitbar-token.py"]
-                - ["python", "./tools/taskcluster/execute-bitbar-test.py", "system/debug", "app-system-debug"]
+            # Disabling bitbar until the bug is resolved: https://github.com/mozilla-mobile/firefox-tv/issues/2995
+            # post-gradlew:
+                #- ["python", "./tools/taskcluster/get-bitbar-token.py"]
+                #- ["python", "./tools/taskcluster/execute-bitbar-test.py", "system/debug", "app-system-debug"]
         run-on-tasks-for: [github-push]
 
     release:
