@@ -64,5 +64,5 @@ jobs:
         worker:
             artifacts:
                 - name: public/build/target.apk
-                  path: /opt/firefox-tv/app/build/outputs/apk/system/release/app-system-release-unsigned.apk
+                  path: /builds/worker/checkouts/src/app/build/outputs/apk/system/release/app-system-release-unsigned.apk
                   type: file
