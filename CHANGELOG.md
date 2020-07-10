@@ -9,7 +9,7 @@ It diverges in the following ways:
 
 ## Unreleased
 
-## 4.6 - 2019-11-25
+## 4.6.1 - 2019-11-25
 ### Changed
 - After successful Firefox Account sign in, the page the user was on before sign in is restored (#2805)
 - Improved behavior of soft keyboard `submit` button on whitelisted sites (#1962)
