@@ -18,7 +18,7 @@
     <string name="action_ok">OK</string>
 
     <!-- This text is shown in the URL bar when it's empty -->
-    <string name="urlbar_hint">Pesquisar ou navegar</string>
+    <string name="urlbar_hint">Pesquise ou digite um endereço</string>
 
     <string name="menu_settings">Configurações</string>
     <string name="menu_about">Sobre</string>
@@ -30,11 +30,11 @@
 
     <string name="preference_category_privacy">Privacidade</string>
     <string name="preference_privacy_block_ads">Bloquear rastreadores de anúncios</string>
-    <string name="preference_privacy_block_ads_summary">Algumas propagandas rastreiam visitas a sites, mesmo se você não clicar na propaganda</string>
+    <string name="preference_privacy_block_ads_summary">Algumas propagandas rastreiam visitas a sites, mesmo se você não clicar nos anúncios</string>
     <string name="preference_privacy_block_analytics">Bloquear rastreadores analíticos</string>
-    <string name="preference_privacy_block_analytics_summary">Usado para coletar, analisar e medir atividades como toque e rolagem</string>
+    <string name="preference_privacy_block_analytics_summary">Usados para coletar, analisar e medir atividades como tocar e deslizar</string>
     <string name="preference_privacy_block_social">Bloquear rastreadores de mídias sociais</string>
-    <string name="preference_privacy_block_social_summary">Incorporados nos sites para rastrear suas visitas e exibir funcionalidades como botões de compartilhamento</string>
+    <string name="preference_privacy_block_social_summary">Incorporados em sites para rastrear suas visitas e exibir funcionalidades como botões de compartilhamento</string>
     <string name="preference_privacy_block_content">Bloquear outros rastreadores</string>
     <string name="preference_privacy_block_content_summary2">Ativar pode causar comportamento inesperado em algumas páginas</string>
 
@@ -44,10 +44,10 @@
     <string name="preference_performance_block_webfonts_summary">Pode resultar em falta de ícones ou imagens</string>
 
     <!-- In-app link (in settings) to Firefox for Fire TV privacy notice. -->
-    <string name="preference_privacy_notice">Aviso de Privacidade</string>
+    <string name="preference_privacy_notice">Aviso de privacidade</string>
 
     <!-- Content description (not visible, for screen readers etc.): Navigate forward (browsing history) -->
-    <string name="content_description_forward">Ir para a próxima página</string>
+    <string name="content_description_forward">Próxima página</string>
 
     <!-- Content description (not visible, for screen readers etc.): Reload current website -->
     <string name="content_description_reload">Recarregar o site</string>
@@ -55,12 +55,12 @@
     <!-- Content description (not visible, for screen readers etc.): Navigate back (browsing history) -->
     <string name="content_description_back">Voltar à página anterior</string>
 
-    <string name="external_app_prompt_title">Abrir link em outro app</string>
+    <string name="external_app_prompt_title">Abrir link em outro aplicativo</string>
     <!-- This string is shown when the user has clicked a link that needs to be opened in a different app.
          Argument 2 is the external app name, argument 1 is our name (i.e. Firefox for Fire TV). -->
     <string name="external_app_prompt">Você pode sair do %1$s para abrir este link no %2$s.</string>
     <!-- This text is the title of a dialog shown if no app could be found for a custom link protocol. -->
-    <string name="external_app_prompt_no_app_title">Encontrar um app que consegue abrir o link</string>
+    <string name="external_app_prompt_no_app_title">Encontre um aplicativo que possa abrir o link</string>
     <!-- This text is shown in a dialog if no app could be found for a custom link protocol. %1$s is the name of the app (i.e. Firefox for Fire TV) and %2$s is the name of
          the app store installed on the device (usually that's Google Play). -->
     <string name="external_app_prompt_no_app">Nenhum aplicativo instalado no seu dispositivo consegue abrir este link. Você pode sair do %1$s para procurar um aplicativo compatível no %2$s.</string>
@@ -80,7 +80,7 @@
     <!-- Text shown in the "Your rights" screen.
     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
     %2$s will be replaced with a URL linking to the MPL (e.g. https://www.mozilla.org/en-US/MPL/) -->
-    <string name="your_rights_content2"><![CDATA["O %1$s é disponibilizado de acordo com os termos da "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Licen&#231;a P&#250;blica da Mozilla</a>" e outras licenças de código aberto."]]></string>
+    <string name="your_rights_content2"><![CDATA[%1$s é disponibilizado de acordo com os termos da <a href="%2$s">Licen&#231;a P&#250;blica da Mozilla</a> e outras licenças de código aberto.]]></string>
 
     <!-- Text shown in the "Your rights" screen.
     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
@@ -96,13 +96,13 @@
     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
     %2$s will be replaced with a URL linking to the GPL
     %3$s will be replaced with a URL linking to the tracking protection wiki page (e.g. https://wiki.mozilla.org/Security/Tracking_protection#Lists) -->
-    <string name="your_rights_content5"><![CDATA["O %1$s também usa listas de bloqueio fornecidas pela Disconnect, Inc. como trabalhos separados e independentes, disponibilizados "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">aqui</a>\" sob a \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>.]]></string>
+    <string name="your_rights_content5"><![CDATA[O %1$s também usa listas de bloqueio fornecidas pela Disconnect, Inc. como trabalhos separados e independentes, sob a <a href="%2$s">GNU General Public License v3</a> e disponíveis <a href="%3$s">aqui</a>.]]></string>
 
     <!-- Firefox for Fire TV
     video strings -->
     <!-- Settings strings -->
     <string name="settings_cookies_dialog_title">Limpar todos os cookies e dados de sites</string>
-    <string name="settings_cookies_dialog_content2">Está ação limpará todos os cookies e dados de sites. Limpar essas informações pode finalizar sessões de sites e apagar conteúdo da web armazenado localmente.</string>
+    <string name="settings_cookies_dialog_content2">Está ação limpa todos os cookies e dados de sites. Limpar essas informações pode encerrar sessões de contas em sites e apagar conteúdo web armazenado localmente.</string>
     <!-- Text on a button that, when pressed, will clear all user data.
     Mock: https://user-images.githubusercontent.com/1721875/47298531-59442f00-d618-11e8-98df-632f74e9ebc3.png -->
     <string name="settings_cookies_confirm">Limpar agora</string>
@@ -116,7 +116,7 @@
       %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV) -->
     <string name="settings_telemetry_description">A Mozilla se empenha em coletar somente o necessário para fornecer e melhorar o %1$s para todos.</string>
 
-    <string name="turbo_mode">Modo Turbo</string>
+    <string name="turbo_mode">Modo turbo</string>
     <!-- This string will be displayed underneath the Enhanced Tracking Protection button (formerly
          'Turbo mode') when it is highlighted and ETP is currently active. -->
     <string name="toolbar_etp_on">Proteção aprimorada contra rastreamento ATIVADA</string>
@@ -277,7 +277,7 @@
      %1$s will be replaced with Firefox. -->
     <string name="fxa_settings_primary_button">Abas do %1$s</string>
     <!-- Button text to sign out from the Firefox Accounts settings page -->
-    <string name="fxa_settings_secondary_button">Sair</string>
+    <string name="fxa_settings_secondary_button">Desconectar</string>
     <!-- This text is announced to screen reader users when they focus an image that will display the avatar of the currently logged in user -->
     <string name="content_description_fxa_profile_avatar_image">Imagem de avatar do perfil do usuário</string>
 

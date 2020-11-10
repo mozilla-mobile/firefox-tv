@@ -80,7 +80,7 @@
     <!-- Text shown in the "Your rights" screen.
     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
     %2$s will be replaced with a URL linking to the MPL (e.g. https://www.mozilla.org/en-US/MPL/) -->
-    <string name="your_rights_content2"><![CDATA[\"%1$s 依照 \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla &amp;#20844;&amp;#20849;&amp;#35768;&amp;#21487;&amp;#35777;</a>及其他一些开源许可证向您授权。]]></string>
+    <string name="your_rights_content2"><![CDATA[%1$s 依照 <a href="%2$s">Mozilla 公共许可证</a>及其他一些开源许可证向您授权。]]></string>
 
     <!-- Text shown in the "Your rights" screen.
     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)

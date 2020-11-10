@@ -18,7 +18,7 @@
     <string name="action_ok">OK</string>
 
     <!-- This text is shown in the URL bar when it's empty -->
-    <string name="urlbar_hint">Cerca o inserisci un indirizzo</string>
+    <string name="urlbar_hint">Cerca o scrivi un indirizzo</string>
 
     <string name="menu_settings">Impostazioni</string>
     <string name="menu_about">Informazioni su</string>
@@ -80,23 +80,23 @@
     <!-- Text shown in the "Your rights" screen.
     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
     %2$s will be replaced with a URL linking to the MPL (e.g. https://www.mozilla.org/en-US/MPL/) -->
-    <string name="your_rights_content2"><![CDATA[\"%1$s è disponibile nei termini della \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>\" e di altre licenze Open Source.\"]]></string>
+    <string name="your_rights_content2"><![CDATA[%1$s è disponibile nei termini della <a href="%2$s">Mozilla Public License</a> e di altre licenze Open Source.]]></string>
 
     <!-- Text shown in the "Your rights" screen.
     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
     %2$s will be replaced with a URL linking to the trademark policy (e.g. https://www.mozilla.org/foundation/trademarks/policy/) -->
-    <string name="your_rights_content3"><![CDATA[\"Mozilla non attribuisce all’utente alcun diritto o licenza relativamente all’utilizzo dei marchi registrati da Mozilla Foundation o da altri soggetti, inclusi i nomi Mozilla, Firefox, %1$s e i logo associati. Ulteriori informazioni sono disponibili in \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">questa pagina</a>.]]></string>
+    <string name="your_rights_content3"><![CDATA[Mozilla non attribuisce all’utente alcun diritto o licenza relativamente all’utilizzo dei marchi registrati da Mozilla Foundation o da altri soggetti, inclusi i nomi Mozilla, Firefox, %1$s e i logo associati. Ulteriori informazioni sono disponibili in <a href="%2$s">questa pagina</a>.]]></string>
 
     <!-- Text shown in the "Your rights" screen.
     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
     %2$s will be replaced with a URL linking to the list of licenses used by the dependencies.-->
-    <string name="your_rights_content4"><![CDATA[\"Codice sorgente aggiuntivo per %1$s è disponibile nei termini di altre \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">licenze</a>\" libere e Open Source.\"]]></string>
+    <string name="your_rights_content4"><![CDATA[Codice sorgente aggiuntivo per %1$s è disponibile nei termini di altre <a href="%2$s">licenze</a> libere e Open Source.]]></string>
 
     <!-- Text shown in the "Your rights" screen.
     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
     %2$s will be replaced with a URL linking to the GPL
     %3$s will be replaced with a URL linking to the tracking protection wiki page (e.g. https://wiki.mozilla.org/Security/Tracking_protection#Lists) -->
-    <string name="your_rights_content5"><![CDATA[\"%1$s utilizza un servizio di \"<em xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">blocklist</em>\" fornito da Disconnect, Inc. in qualità di opera aggiuntiva e separata, distribuita nei termini della \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">GNU General Public License v3</a>\" e disponibile \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%3$s">qui</a>.]]></string>
+    <string name="your_rights_content5"><![CDATA[%1$s utilizza un servizio di <em>blocklist</em> fornito da Disconnect, Inc. in qualità di opera aggiuntiva e separata, distribuita nei termini della <a href="%2$s">GNU General Public License v3</a> e disponibile <a href="%3$s">qui</a>.]]></string>
 
     <!-- Firefox for Fire TV
     video strings -->
@@ -260,7 +260,7 @@
      %1$s will be replaced with Firefox. -->
     <string name="fxa_onboarding_instruction">Sei pronto per ricevere le schede. Per iniziare, seleziona Invia scheda a dispositivo su %1$s per desktop e iOS oppure Condividi su Firefox Preview. Quindi scegli Fire TV e la tua scheda verrà visualizzata in un attimo.</string>
     <!-- Text on the dismiss button for Firefox Accounts onboarding screen, which is shown after signing in. -->
-    <string name="fxa_onboarding_primary_button">Ok, ricevuto</string>
+    <string name="fxa_onboarding_primary_button">OK, ricevuto</string>
     <!-- Toast shown on webpage when tab is sent from another device
      %1$s will be replaced with the device name where the tab was sent from. -->
     <string name="fxa_tab_sent_toast">Scheda inviata da %1$s</string>

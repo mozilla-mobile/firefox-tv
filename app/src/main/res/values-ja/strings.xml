@@ -80,7 +80,7 @@
     <!-- Text shown in the "Your rights" screen.
     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
     %2$s will be replaced with a URL linking to the MPL (e.g. https://www.mozilla.org/en-US/MPL/) -->
-    <string name="your_rights_content2"><![CDATA["%1$s は "<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>" やその他オープンソースライセンスの条件に基づいて使用可能となっています。"]]></string>
+    <string name="your_rights_content2"><![CDATA[%1$s は <a href="%2$s">Mozilla Public License</a> やその他オープンソースライセンスの条件に基づいて使用可能となっています。]]></string>
 
     <!-- Text shown in the "Your rights" screen.
     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
@@ -126,7 +126,7 @@
     <!-- Title text for Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen -->
     <string name="onboarding_etp_title">強化型トラッキング防止</string>
     <!-- Description text for Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen -->
-    <string name="onboarding_etp_description">ブラウジング中のあなたのプライバシーを保護します。あなたが訪問したサイトを追跡して訪問者の情報を収集する目に見えないコンテンツをブロックします。このようなコンテンツをブロックすると、ページの読み込みが速くなる可能性があります。</string>
+    <string name="onboarding_etp_description">閲覧中のあなたのプライバシーを保護します。あなたが訪問したサイトを追跡して訪問者の情報を収集する目に見えないコンテンツをブロックします。このようなコンテンツをブロックすると、ページの読み込みが速くなる可能性があります。</string>
     <!-- Used for a button on the Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen. If this button is clicked, ETP will be enabled -->
     <string name="onboarding_etp_enable">強化型トラッキング防止を有効化</string>
     <!-- Used for a button on the Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen. If this button is clicked, ETP will be disabled -->

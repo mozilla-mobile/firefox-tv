@@ -80,7 +80,7 @@
     <!-- Text shown in the "Your rights" screen.
     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
     %2$s will be replaced with a URL linking to the MPL (e.g. https://www.mozilla.org/en-US/MPL/) -->
-    <string name="your_rights_content2"><![CDATA[\"%1$s steht unter der \"<a xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2" href="%2$s">Mozilla Public License</a>\" und anderen Open-Source-Lizenzen.\"]]></string>
+    <string name="your_rights_content2"><![CDATA[%1$s steht unter der <a href="%2$s">Mozilla Public License</a> und anderen Open-Source-Lizenzen.]]></string>
 
     <!-- Text shown in the "Your rights" screen.
     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
