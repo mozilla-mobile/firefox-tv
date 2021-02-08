@@ -15,6 +15,7 @@ import org.mozilla.tv.firefox.ext.serviceLocator
  * for the given lifecycle. This is a wrapper around the framework's [ViewModelProvider] using the application's
  * [ViewModelFactory] to reduce code duplication.
  */
+
 object FirefoxViewModelProviders {
 
     fun of(activity: FragmentActivity): ViewModelProvider {
