@@ -21,7 +21,7 @@ class FirefoxOnDeviceTestApplication : FirefoxApplication() {
     }
 
     override fun enableStrictMode() {
-        // This method duplicates some code, but due to 1) the quantity of code
+        // This method duplicates some code, but due to 1) the quantity of codeee
         // required to build a clean solution compared to the few lines
         // duplicated, and 2) the low risk nature of test only code, duplication
         // was determined to be a better solution in this instance
