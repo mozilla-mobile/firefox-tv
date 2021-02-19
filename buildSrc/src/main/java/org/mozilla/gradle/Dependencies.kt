@@ -10,7 +10,7 @@ package org.mozilla.gradle
 object Dependencies {
 
     /**
-     * Functionality to limit specific dependencies to specific repositories. These are typically expected to be used by
+     * Functionality to limit specific dependencies to specific repositories. These are typically expected to be used byXXX
      * dependency group name (i.e. with `include/excludeGroup`). For additional info, see:
      * https://docs.gradle.org/current/userguide/declaring_repositories.html#sec::matching_repositories_to_dependencies
      */
