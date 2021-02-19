@@ -28,9 +28,6 @@ class NetworkPageLoadTest {
     /* ktlint-disable no-blank-line-before-rbrace */ // This imposes unreadable grouping.
     @Test
     fun networkPageLoadTest() {
-        val googleUrl = "https://google.com".toUri()!!
-        val mozillaUrl = "https://mozilla.org".toUri()!!
-
         navigationOverlay {
         // Work around for #1444: on emulators with turbo mode enabled, the url bar will display
         // any url loaded by the page in addition to the primary url. We disable turbo mode to
@@ -38,14 +35,12 @@ class NetworkPageLoadTest {
         }.toggleTurbo {
         }.openOverlay {
             assertTurboIsSelected(false)
-
-        }.enterUrlAndEnterToBrowser(googleUrl) {
-            assertDOMElementExists(Locator.ID, "hplogo") // google logo
+        }.enterUrlAndEnterToBrowser("https://news.ycombinator.com".toUri()!!) {
+            assertDOMElementExists(Locator.ID, "hnmain") // <table id="hnmain" ...>
         }.openOverlay {
-            assertURLBarTextContains("google")
-
-        }.enterUrlAndEnterToBrowser(mozillaUrl) {
-            assertDOMElementExists(Locator.CLASS_NAME, "mzp-c-navigation-logo") // mozilla logo
+            assertURLBarTextContains("ycombinator")
+        }.enterUrlAndEnterToBrowser("https://www.mozilla.org".toUri()!!) {
+            assertDOMElementExists(Locator.CLASS_NAME, "c-navigation-logo-image") // mozilla logo
         }.openOverlay {
             assertURLBarTextContains("mozilla")
         }
