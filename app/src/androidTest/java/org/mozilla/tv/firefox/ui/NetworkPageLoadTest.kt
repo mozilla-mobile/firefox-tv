@@ -38,11 +38,11 @@ class NetworkPageLoadTest {
         }.enterUrlAndEnterToBrowser("https://www.mozilla.org".toUri()!!) {
             assertDOMElementExists(Locator.CLASS_NAME, "c-navigation-logo-image") // mozilla logo
         }.openOverlay {
-            assertURLBarTextContains("mozilla")
+            assertURLBarTextContains("www.mozilla.org")
         }.enterUrlAndEnterToBrowser("https://support.mozilla.org".toUri()!!) {
             assertDOMElementExists(Locator.CLASS_NAME, "sumo-nav--logo")
         }.openOverlay {
-            assertURLBarTextContains("mozilla")
+            assertURLBarTextContains("support.mozilla.org")
         }
     }
 }
