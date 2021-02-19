@@ -35,10 +35,6 @@ class NetworkPageLoadTest {
         }.toggleTurbo {
         }.openOverlay {
             assertTurboIsSelected(false)
-        }.enterUrlAndEnterToBrowser("https://news.ycombinator.com".toUri()!!) {
-            assertDOMElementExists(Locator.ID, "hnmain") // <table id="hnmain" ...>
-        }.openOverlay {
-            assertURLBarTextContains("ycombinator")
         }.enterUrlAndEnterToBrowser("https://www.mozilla.org".toUri()!!) {
             assertDOMElementExists(Locator.CLASS_NAME, "c-navigation-logo-image") // mozilla logo
         }.openOverlay {
