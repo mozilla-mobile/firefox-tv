@@ -8,21 +8,23 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.PointF
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.TextView
+import androidx.core.text.HtmlCompat
+import androidx.core.view.isGone
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
-import kotlinx.android.synthetic.main.fragment_browser.cursorView
-import kotlinx.android.synthetic.main.fragment_browser.progressBar
-import kotlinx.android.synthetic.main.fragment_browser.view.browserFragmentRoot
-import kotlinx.android.synthetic.main.fragment_browser.view.engineView
-import kotlinx.android.synthetic.main.fragment_browser.view.progressBar
-import kotlinx.android.synthetic.main.hint_bar.hintBarContainer
+import kotlinx.android.synthetic.main.fragment_browser.*
+import kotlinx.android.synthetic.main.fragment_browser.view.*
+import kotlinx.android.synthetic.main.hint_bar.*
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.EngineView
@@ -116,6 +118,9 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 serviceLocator?.experimentsProvider?.shouldUseMp4VideoWorkaround() == true) {
             engineView?.updateFullscreenScrollPosition()
         }
+
+        val bannerLayout: View = window.findViewById(R.id.bannerLayout)
+        bannerLayout.isGone = enabled
     }
 
     override fun onUrlChanged(session: Session, url: String) {
@@ -152,6 +157,29 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             context.serviceLocator.cursorModel.screenBounds = PointF(right.toFloat(), bottom.toFloat())
         }
         context.serviceLocator.cursorModel.webViewCouldScrollInDirectionProvider = layout.engineView::couldScrollInDirection
+
+        // Setup the banner
+
+        val bannerLayout: View = layout.findViewById(R.id.bannerLayout)
+
+        if (getWebBannerDismissed()) {
+            bannerLayout.isGone = true
+        } else {
+            val moreInfoButton: Button = bannerLayout.findViewById(R.id.bannerMoreInfoButton)
+            moreInfoButton.setOnClickListener {
+                (activity as MainActivity).onNonTextInputUrlEntered("https://www.mozilla.org")
+                context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
+            }
+
+            val dismissButton: Button = bannerLayout.findViewById(R.id.bannerDismissButton)
+            dismissButton.setOnClickListener {
+                setWebBannerDismissed(true)
+                bannerLayout.isGone = true
+            }
+
+            val bannerTextView: TextView = bannerLayout.findViewById(R.id.bannerTextView)
+            bannerTextView.text = HtmlCompat.fromHtml(getString(R.string.banner_text), HtmlCompat.FROM_HTML_MODE_COMPACT)
+        }
 
         layout.progressBar.initialize(this)
 
@@ -296,5 +324,19 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         }
 
         return handleCursorKeyEvent(event)
+    }
+
+    private val WEB_BANNER_DISMISSED_PREF = "web_banner_dismissed"
+
+    private fun setWebBannerDismissed(value: Boolean) {
+        PreferenceManager.getDefaultSharedPreferences(this.context)
+                .edit()
+                .putBoolean(WEB_BANNER_DISMISSED_PREF, value)
+                .apply()
+    }
+
+    private fun getWebBannerDismissed(): Boolean {
+        return PreferenceManager.getDefaultSharedPreferences(this.context)
+                .getBoolean(WEB_BANNER_DISMISSED_PREF, false)
     }
 }

@@ -295,4 +295,9 @@
     <string name="update_prompt_primary_button">Update</string>
     <!-- Button text to dismiss the prompt to update the app. -->
     <string name="update_prompt_secondary_button">Not now</string>
+
+    <!-- Text for the banner. -->
+    <string name="banner_text"><![CDATA[<b>Important Message:</b> This is a banner with some content that will wrap over two lines. That was line one and this is line two. Something something blah la la blah.]]></string>
+    <string name="banner_more_info_button">More Info</string>
+    <string name="banner_dismiss_button">Dismiss</string>
 </resources>

@@ -14,6 +14,52 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:id="@+id/bannerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#FEBD4F"
+            android:gravity="center">
+
+          <TextView
+              android:id="@+id/bannerTextView"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_weight="1"
+              android:fontFamily="@string/font_ember_regular"
+              android:textSize="18sp"
+              android:lineSpacingExtra="6sp"
+              android:paddingTop="16dp"
+              android:paddingBottom="16dp"
+              android:paddingLeft="16dp"
+              android:paddingRight="16dp"
+              android:text=""
+              android:textColor="#4E0C0C" />
+
+          <Button
+              android:id="@+id/bannerDismissButton"
+              style="@style/CancelButton"
+              android:layout_width="wrap_content"
+              android:layout_height="36dp"
+              android:layout_marginEnd="16dp"
+              android:layout_weight="0"
+              android:text="@string/banner_dismiss_button"
+              android:textSize="18sp"
+              android:fontFamily="@string/font_ember_regular"/>
+
+          <Button
+              android:id="@+id/bannerMoreInfoButton"
+              style="@style/ConfirmButton"
+              android:layout_width="wrap_content"
+              android:layout_height="36dp"
+              android:layout_marginEnd="16dp"
+              android:layout_weight="0"
+              android:text="@string/banner_more_info_button"
+              android:textSize="18sp"
+              android:fontFamily="@string/font_ember_regular"/>
+        </LinearLayout>
+
         <org.mozilla.tv.firefox.widget.ResizableKeyboardCoordinatorLayout
             app:viewToHideWhenActivated="@+id/erase"
             android:layout_marginTop="0dp"
