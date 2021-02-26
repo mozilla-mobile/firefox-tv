@@ -25,7 +25,6 @@ import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
 import mozilla.components.support.base.observer.Consumable
 import mozilla.components.support.utils.toSafeIntent
-import org.mozilla.tv.firefox.channels.ChannelOnboardingActivity
 import org.mozilla.tv.firefox.components.locale.LocaleAwareAppCompatActivity
 import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.ext.application
@@ -35,7 +34,6 @@ import org.mozilla.tv.firefox.ext.setupForApp
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.fxa.FxaReceivedTab
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
-import org.mozilla.tv.firefox.onboarding.ReceiveTabPreboardingActivity
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.BuildConstants
