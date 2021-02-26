@@ -67,20 +67,7 @@ public class PinTileTests extends ScreenshotTest {
         final Locale currentLocale = LocaleManager.getInstance()
                 .getCurrentLocale(mActivityTestRule.getActivity());
 
-        final boolean pocketIsDisplayed = currentLocale.getLanguage().equals("en");
-        // TODO it would be better to condition this on view visibility, but I'm not sure
-        // how to do that here.
-        if (pocketIsDisplayed) {
-            // Navigate down to pinned tiles, to ensure that they are on screen. This
-            // is important because some of our tests are run on small devices, where
-            // not doing this can cause errors
-            mDevice.pressDPadDown();
-            mDevice.pressDPadDown();
-        } else {
-            // The pocket channel is only displayed in EN locales, so elsewhere we only
-            // need to nav down once.
-            mDevice.pressDPadDown();
-        }
+        mDevice.pressDPadDown();
 
         onView(withText(R.string.homescreen_unpin_tutorial_toast))
                 .inRoot(withDecorView(not(is(mActivityTestRule.getActivity().getWindow().getDecorView()))))
