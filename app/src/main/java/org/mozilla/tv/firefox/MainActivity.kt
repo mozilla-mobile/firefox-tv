@@ -25,7 +25,6 @@ import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineView
 import mozilla.components.support.base.observer.Consumable
 import mozilla.components.support.utils.toSafeIntent
-import org.mozilla.tv.firefox.channels.ChannelOnboardingActivity
 import org.mozilla.tv.firefox.components.locale.LocaleAwareAppCompatActivity
 import org.mozilla.tv.firefox.components.locale.LocaleManager
 import org.mozilla.tv.firefox.ext.application
@@ -35,7 +34,6 @@ import org.mozilla.tv.firefox.ext.setupForApp
 import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.fxa.FxaReceivedTab
 import org.mozilla.tv.firefox.onboarding.OnboardingActivity
-import org.mozilla.tv.firefox.onboarding.ReceiveTabPreboardingActivity
 import org.mozilla.tv.firefox.telemetry.TelemetryIntegration
 import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.BuildConstants
@@ -177,20 +175,10 @@ class MainActivity : LocaleAwareAppCompatActivity(), OnUrlEnteredListener, Media
         if (safeIntent.hasExtra("TURBO_MODE")) return
 
         val settings = Settings.getInstance(this@MainActivity)
-        val localeManager = LocaleManager.getInstance()
 
         val onboardingIntent = when {
             settings.shouldShowTurboModeOnboarding() -> {
                 Intent(this@MainActivity, OnboardingActivity::class.java)
-            }
-            settings.shouldShowTVOnboarding(localeManager, this) -> {
-                Intent(this@MainActivity, ChannelOnboardingActivity::class.java)
-            }
-
-            // Receive tab must _always_ be the last onboarding shown. This is because it
-            // can take the user to sign in
-            settings.shouldShowReceiveTabsPreboarding() -> {
-                Intent(this@MainActivity, ReceiveTabPreboardingActivity::class.java)
             }
             else -> null
         }
