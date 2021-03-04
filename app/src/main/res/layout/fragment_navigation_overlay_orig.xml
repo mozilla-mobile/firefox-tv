@@ -17,9 +17,15 @@
         android:id="@+id/bannerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FEBD4F"
+        android:background="#2A2A2E"
         android:gravity="center"
         android:orientation="horizontal">
+
+      <ImageView
+          android:layout_width="64sp"
+          android:layout_height="64sp"
+          android:paddingStart="16dp"
+          android:src="@drawable/warning"/>
 
         <TextView
             android:id="@+id/bannerTextView"
@@ -34,7 +40,7 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text=""
-            android:textColor="#4E0C0C" />
+            android:textColor="#FBFBFE" />
 
         <Button
             android:id="@+id/bannerMoreInfoButton"
