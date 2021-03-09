@@ -28,26 +28,21 @@ class NetworkPageLoadTest {
     /* ktlint-disable no-blank-line-before-rbrace */ // This imposes unreadable grouping.
     @Test
     fun networkPageLoadTest() {
-        val googleUrl = "https://google.com".toUri()!!
-        val mozillaUrl = "https://mozilla.org".toUri()!!
-
         navigationOverlay {
-        // Work around for #1444: on emulators with turbo mode enabled, the url bar will display
-        // any url loaded by the page in addition to the primary url. We disable turbo mode to
-        // ensure we only see the primary url and can assert it correctly.
+            // Work around for #1444: on emulators with turbo mode enabled, the url bar will display
+            // any url loaded by the page in addition to the primary url. We disable turbo mode to
+            // ensure we only see the primary url and can assert it correctly.
         }.toggleTurbo {
         }.openOverlay {
             assertTurboIsSelected(false)
-
-        }.enterUrlAndEnterToBrowser(googleUrl) {
-            assertDOMElementExists(Locator.ID, "hplogo") // google logo
+        }.enterUrlAndEnterToBrowser("https://www.mozilla.org".toUri()!!) {
+            assertDOMElementExists(Locator.CLASS_NAME, "c-navigation-logo-image") // mozilla logo
         }.openOverlay {
-            assertURLBarTextContains("google")
-
-        }.enterUrlAndEnterToBrowser(mozillaUrl) {
-            assertDOMElementExists(Locator.CLASS_NAME, "mzp-c-navigation-logo") // mozilla logo
+            assertURLBarTextContains("www.mozilla.org")
+        }.enterUrlAndEnterToBrowser("https://support.mozilla.org".toUri()!!) {
+            assertDOMElementExists(Locator.CLASS_NAME, "sumo-nav--logo")
         }.openOverlay {
-            assertURLBarTextContains("mozilla")
+            assertURLBarTextContains("support.mozilla.org")
         }
     }
 }
