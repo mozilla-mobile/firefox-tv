@@ -119,10 +119,19 @@
         <item name="android:paddingEnd">10dp</item>
     </style>
 
-    <style name="BannerCancelButton">
-        <item name="android:background">#0C0C0D</item>
-        <item name="android:textColor">#FBFBFE</item>
-        <item name="android:fontFamily">@string/font_roboto_regular</item>
+    <style name="BannerDismissButton">
+        <item name="android:background">@drawable/dismiss_button_background</item>
+        <item name="android:textColor">@color/photonGrey10</item>
+        <item name="android:fontFamily">@string/font_ember_regular</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+    </style>
+
+    <style name="BannerConfirmButton">
+        <item name="android:background">@drawable/confirm_button_background</item>
+        <item name="android:textColor">@color/photonGrey10</item>
+        <item name="android:fontFamily">@string/font_ember_regular</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:paddingStart">10dp</item>
         <item name="android:paddingEnd">10dp</item>

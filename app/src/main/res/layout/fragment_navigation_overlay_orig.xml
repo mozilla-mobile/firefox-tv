@@ -44,7 +44,7 @@
 
         <Button
             android:id="@+id/bannerMoreInfoButton"
-            style="@style/ConfirmButton"
+            style="@style/BannerConfirmButton"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
