@@ -23,9 +23,11 @@
             android:gravity="center">
 
             <ImageView
-                android:layout_width="64sp"
+                android:contentDescription="@null"
+                android:layout_width="80sp"
                 android:layout_height="64sp"
                 android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:src="@drawable/warning"/>
 
             <TextView
@@ -38,8 +40,6 @@
               android:lineSpacingExtra="6sp"
               android:paddingTop="16dp"
               android:paddingBottom="16dp"
-              android:paddingLeft="16dp"
-              android:paddingRight="16dp"
               android:text=""
               android:textColor="#FBFBFE" />
 
@@ -48,7 +48,8 @@
               style="@style/BannerDismissButton"
               android:layout_width="wrap_content"
               android:layout_height="36dp"
-              android:layout_marginEnd="16dp"
+              android:layout_marginStart="16dp"
+              android:layout_marginEnd="8dp"
               android:layout_weight="0"
               android:text="@string/banner_dismiss_button"
               android:textSize="18sp"
@@ -59,6 +60,7 @@
               style="@style/BannerConfirmButton"
               android:layout_width="wrap_content"
               android:layout_height="36dp"
+              android:layout_marginStart="8dp"
               android:layout_marginEnd="16dp"
               android:layout_weight="0"
               android:text="@string/banner_more_info_button"
