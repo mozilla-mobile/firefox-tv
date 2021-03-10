@@ -13,7 +13,7 @@ jobs:
     label: Email that automation is complete
     description: ''
     worker-type: succeed
-    run-on-tasks-for: [github-release]
+    run-on-tasks-for: []
     dependencies:
       build: build-release
       sign: 'Sign for Github'

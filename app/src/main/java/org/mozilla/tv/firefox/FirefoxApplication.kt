@@ -110,15 +110,17 @@ open class FirefoxApplication : LocaleAwareApplication() {
                 // sending startup data, or 2) sending even when the user has toggled
                 // off data collection
                 Glean.setUploadEnabled(collectionEnabled)
+                if (collectionEnabled) {
+                    LegacyIds.clientId.set(UUID.fromString(TelemetryIntegration.INSTANCE.clientId))
+                }
             }
         }
     }
 
     private fun initGlean() {
         setGleanUpload()
+        LegacyIds.clientId.set(UUID.fromString(TelemetryIntegration.INSTANCE.clientId))
         Glean.initialize(applicationContext, Configuration(channel = BuildConfig.BUILD_TYPE))
-        val legacyId = TelemetryIntegration.INSTANCE.clientId
-        LegacyIds.clientId.set(UUID.fromString(legacyId))
     }
 
     // ServiceLocator needs to be created in onCreate in order to accept Application
