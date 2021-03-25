@@ -58,6 +58,7 @@ import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.RoundCornerTransformation
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.utils.Settings
+import org.mozilla.tv.firefox.utils.SupportUtils
 import org.mozilla.tv.firefox.utils.ViewUtils
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 import java.lang.ref.WeakReference
@@ -175,7 +176,7 @@ class NavigationOverlayFragment : Fragment() {
 
         val bannerMoreInfoButton: Button = bannerLayout.findViewById(R.id.bannerMoreInfoButton)
         bannerMoreInfoButton.setOnClickListener {
-            (activity as MainActivity).onNonTextInputUrlEntered("https://www.mozilla.org")
+            (activity as MainActivity).onNonTextInputUrlEntered(SupportUtils.getSumoURLForTopic(this.context, "firefox-fire-tv"))
             context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
         }
 

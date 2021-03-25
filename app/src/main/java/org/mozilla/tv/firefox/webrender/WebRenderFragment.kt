@@ -55,6 +55,7 @@ import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.InactiveHintViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
+import org.mozilla.tv.firefox.utils.SupportUtils
 import org.mozilla.tv.firefox.utils.URLs
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
@@ -164,7 +165,7 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         val moreInfoButton: Button = bannerLayout.findViewById(R.id.bannerMoreInfoButton)
         moreInfoButton.setOnClickListener {
-            (activity as MainActivity).onNonTextInputUrlEntered("https://www.mozilla.org")
+            (activity as MainActivity).onNonTextInputUrlEntered(SupportUtils.getSumoURLForTopic(this.context, "firefox-fire-tv"))
             context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
         }
 
