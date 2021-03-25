@@ -44,18 +44,6 @@
               android:textColor="#FBFBFE" />
 
           <Button
-              android:id="@+id/bannerDismissButton"
-              style="@style/BannerDismissButton"
-              android:layout_width="wrap_content"
-              android:layout_height="36dp"
-              android:layout_marginStart="16dp"
-              android:layout_marginEnd="8dp"
-              android:layout_weight="0"
-              android:text="@string/banner_dismiss_button"
-              android:textSize="18sp"
-              android:fontFamily="@string/font_ember_regular"/>
-
-          <Button
               android:id="@+id/bannerMoreInfoButton"
               style="@style/BannerConfirmButton"
               android:layout_width="wrap_content"

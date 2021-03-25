@@ -162,24 +162,14 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
 
         val bannerLayout: View = layout.findViewById(R.id.bannerLayout)
 
-        if (getWebBannerDismissed()) {
-            bannerLayout.isGone = true
-        } else {
-            val moreInfoButton: Button = bannerLayout.findViewById(R.id.bannerMoreInfoButton)
-            moreInfoButton.setOnClickListener {
-                (activity as MainActivity).onNonTextInputUrlEntered("https://www.mozilla.org")
-                context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
-            }
-
-            val dismissButton: Button = bannerLayout.findViewById(R.id.bannerDismissButton)
-            dismissButton.setOnClickListener {
-                setWebBannerDismissed(true)
-                bannerLayout.isGone = true
-            }
-
-            val bannerTextView: TextView = bannerLayout.findViewById(R.id.bannerTextView)
-            bannerTextView.text = HtmlCompat.fromHtml(getString(R.string.banner_text), HtmlCompat.FROM_HTML_MODE_COMPACT)
+        val moreInfoButton: Button = bannerLayout.findViewById(R.id.bannerMoreInfoButton)
+        moreInfoButton.setOnClickListener {
+            (activity as MainActivity).onNonTextInputUrlEntered("https://www.mozilla.org")
+            context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
         }
+
+        val bannerTextView: TextView = bannerLayout.findViewById(R.id.bannerTextView)
+        bannerTextView.text = HtmlCompat.fromHtml(getString(R.string.banner_text), HtmlCompat.FROM_HTML_MODE_COMPACT)
 
         layout.progressBar.initialize(this)
 
@@ -324,19 +314,5 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
         }
 
         return handleCursorKeyEvent(event)
-    }
-
-    private val WEB_BANNER_DISMISSED_PREF = "web_banner_dismissed"
-
-    private fun setWebBannerDismissed(value: Boolean) {
-        PreferenceManager.getDefaultSharedPreferences(this.context)
-                .edit()
-                .putBoolean(WEB_BANNER_DISMISSED_PREF, value)
-                .apply()
-    }
-
-    private fun getWebBannerDismissed(): Boolean {
-        return PreferenceManager.getDefaultSharedPreferences(this.context)
-                .getBoolean(WEB_BANNER_DISMISSED_PREF, false)
     }
 }
