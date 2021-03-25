@@ -21,7 +21,7 @@ job-template:
   label: Push to Amazon
   description: ''
   worker-type: push-apk
-  run-on-tasks-for: [github-release]
+  run-on-tasks-for: []
   worker:
     product: firefox-tv
     channel: production

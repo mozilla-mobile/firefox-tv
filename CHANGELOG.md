@@ -9,6 +9,10 @@ It diverges in the following ways:
 
 ## Unreleased
 
+## 4.7.1 - 2020-07-14
+### Fixed
+- deletion-request ping is sent correctly whenever the user opts out of data collection (#3013)
+
 ## 4.7 - 2020-06-30
 ### Changed
 - Removed Pocket from Homepage (#2988)

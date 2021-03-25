@@ -19,4 +19,4 @@ job-template:
   label: Sign for Github
   description: ''
   worker-type: signing
-  run-on-tasks-for: [github-release]
+  run-on-tasks-for: []
