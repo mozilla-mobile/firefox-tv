@@ -174,7 +174,7 @@ class NavigationOverlayFragment : Fragment() {
 
         val bannerMoreInfoButton: Button = bannerLayout.findViewById(R.id.bannerMoreInfoButton)
         bannerMoreInfoButton.setOnClickListener {
-            (activity as MainActivity).onNonTextInputUrlEntered(SupportUtils.getSumoURLForTopic(this.context, "firefox-fire-tv"))
+            (activity as MainActivity).onNonTextInputUrlEntered(SupportUtils.getSumoURLForTopic(this.context, "amazon-end-support"))
             context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
         }
 
