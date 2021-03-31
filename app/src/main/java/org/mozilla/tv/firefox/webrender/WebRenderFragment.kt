@@ -15,8 +15,6 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.FrameLayout
-import android.widget.TextView
-import androidx.core.text.HtmlCompat
 import androidx.core.view.isGone
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -167,9 +165,6 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             (activity as MainActivity).onNonTextInputUrlEntered(SupportUtils.getSumoURLForTopic(this.context, "firefox-fire-tv"))
             context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
         }
-
-        val bannerTextView: TextView = bannerLayout.findViewById(R.id.bannerTextView)
-        bannerTextView.text = HtmlCompat.fromHtml(getString(R.string.banner_text), HtmlCompat.FROM_HTML_MODE_COMPACT)
 
         layout.progressBar.initialize(this)
 

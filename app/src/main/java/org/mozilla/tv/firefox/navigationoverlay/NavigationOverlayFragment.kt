@@ -18,11 +18,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ScrollView
-import android.widget.TextView
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.NONE
 import androidx.core.content.ContextCompat
-import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -179,9 +177,6 @@ class NavigationOverlayFragment : Fragment() {
             (activity as MainActivity).onNonTextInputUrlEntered(SupportUtils.getSumoURLForTopic(this.context, "firefox-fire-tv"))
             context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
         }
-
-        val bannerTextView: TextView = bannerLayout.findViewById(R.id.bannerTextView)
-        bannerTextView.text = HtmlCompat.fromHtml(getString(R.string.banner_text), HtmlCompat.FROM_HTML_MODE_COMPACT)
 
         return view
     }

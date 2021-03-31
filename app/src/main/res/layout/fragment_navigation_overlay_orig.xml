@@ -39,7 +39,7 @@
             android:lineSpacingExtra="6sp"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
-            android:text=""
+            android:text="@string/banner_text"
             android:textColor="#FBFBFE" />
 
         <Button
