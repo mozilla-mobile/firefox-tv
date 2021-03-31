@@ -295,7 +295,6 @@
     <string name="update_prompt_secondary_button">Ahora no</string>
 
     <!-- Text for the banner. -->
-    <string name="banner_text"><![CDATA[<b>Important Message:</b> This is a banner with some content that will wrap over two lines. That was line one and this is line two. Something something blah la la blah.]]></string>
+    <string name="banner_text">Firefox ha finalizado el soporte para Amazon Fire TV. La aplicación seguirá funcionando, pero no recibirá actualizaciones a partir del 30 de abril, 2021.</string>
     <string name="banner_more_info_button">Más información</string>
-    <string name="banner_dismiss_button">Ignorar</string>
 </resources>
