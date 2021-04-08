@@ -292,4 +292,8 @@
     <string name="update_prompt_primary_button">Atualizar</string>
     <!-- Button text to dismiss the prompt to update the app. -->
     <string name="update_prompt_secondary_button">Agora não</string>
+
+    <!-- Text for the banner. -->
+    <string name="banner_text">O Firefox encerrou o suporte ao Amazon Fire TV. O app pode continuar funcionando, mas sem atualizações, inclusive de segurança, a partir de 30 de abril de 2021.</string>
+    <string name="banner_more_info_button">Saiba mais</string>
 </resources>

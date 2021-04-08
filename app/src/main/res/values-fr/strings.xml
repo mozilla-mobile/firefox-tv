@@ -293,4 +293,8 @@
     <string name="update_prompt_primary_button">Mettre à jour</string>
     <!-- Button text to dismiss the prompt to update the app. -->
     <string name="update_prompt_secondary_button">Pas maintenant</string>
+
+    <!-- Text for the banner. -->
+    <string name="banner_text">Firefox n’assure plus la prise en charge des appareils Amazon Fire TV. L’application peut fonctionner, mais ne sera plus mise à jour dès le 30 avril 2021.</string>
+    <string name="banner_more_info_button">En savoir plus</string>
 </resources>

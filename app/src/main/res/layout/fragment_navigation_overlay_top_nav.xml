@@ -11,35 +11,41 @@
         android:id="@+id/navButtonBack"
         style="@style/NavigationButton"
         android:src="@drawable/mozac_ic_back"
+        android:nextFocusUp="@+id/bannerMoreInfoButton"
         android:contentDescription="@string/content_description_back"/>
 
     <ImageButton
         android:id="@+id/navButtonForward"
         style="@style/NavigationButton"
         android:src="@drawable/mozac_ic_forward"
+        android:nextFocusUp="@+id/bannerMoreInfoButton"
         android:contentDescription="@string/content_description_forward"/>
 
     <ImageButton
         android:id="@+id/navButtonReload"
         style="@style/NavigationButton"
         android:src="@drawable/mozac_ic_refresh"
+        android:nextFocusUp="@+id/bannerMoreInfoButton"
         android:contentDescription="@string/content_description_reload"/>
 
     <org.mozilla.tv.firefox.widget.CheckableImageButton
         android:id="@+id/pinButton"
         style="@style/NavigationButton"
         android:src="@drawable/pin_selector"
+        android:nextFocusUp="@+id/bannerMoreInfoButton"
         android:contentDescription="@string/pin_label"/>
 
     <!-- src and content description set programmatically -->
     <org.mozilla.tv.firefox.widget.CheckableImageButton
         android:id="@+id/turboButton"
+        android:nextFocusUp="@+id/bannerMoreInfoButton"
         style="@style/NavigationButton" />
 
     <org.mozilla.tv.firefox.widget.CheckableImageButton
         android:id="@+id/desktopModeButton"
         style="@style/NavigationButton"
         android:src="@drawable/mozac_ic_device_desktop"
+        android:nextFocusUp="@+id/bannerMoreInfoButton"
         android:contentDescription="@string/request_desktop_site_a11y"/>
 
     <View
@@ -56,6 +62,7 @@
         android:scaleType="fitXY"
         android:src="@drawable/ic_fxa_login"
         android:visibility="gone"
+        android:nextFocusUp="@+id/bannerMoreInfoButton"
         android:tint="@null"/>
 
     <!-- Content description is set programmatically.-->
@@ -64,6 +71,7 @@
         android:id="@+id/exitButton"
         style="@style/NavigationButton"
         android:src="@drawable/ic_home"
+        android:nextFocusUp="@+id/bannerMoreInfoButton"
         android:nextFocusRight="@id/exitButton"/>
 
     <ImageView

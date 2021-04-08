@@ -16,6 +16,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ScrollView
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.VisibleForTesting.NONE
@@ -29,12 +30,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.channelsContainer
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.navUrlInput
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.settingsTileContainer
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.exitButton
-import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.fxaButton
-import kotlinx.android.synthetic.main.hint_bar.hintBarContainer
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_orig.*
+import kotlinx.android.synthetic.main.fragment_navigation_overlay_top_nav.*
+import kotlinx.android.synthetic.main.hint_bar.*
 import kotlinx.coroutines.Job
 import org.mozilla.tv.firefox.MainActivity
 import org.mozilla.tv.firefox.R
@@ -58,6 +56,7 @@ import org.mozilla.tv.firefox.telemetry.UrlTextInputLocation
 import org.mozilla.tv.firefox.utils.RoundCornerTransformation
 import org.mozilla.tv.firefox.utils.ServiceLocator
 import org.mozilla.tv.firefox.utils.Settings
+import org.mozilla.tv.firefox.utils.SupportUtils
 import org.mozilla.tv.firefox.utils.ViewUtils
 import org.mozilla.tv.firefox.widget.InlineAutocompleteEditText
 import java.lang.ref.WeakReference
@@ -170,6 +169,15 @@ class NavigationOverlayFragment : Fragment() {
         ).apply {
             onCreateView(view)
         }
+
+        val bannerLayout: View = view.findViewById(R.id.bannerLayout)
+
+        val bannerMoreInfoButton: Button = bannerLayout.findViewById(R.id.bannerMoreInfoButton)
+        bannerMoreInfoButton.setOnClickListener {
+            (activity as MainActivity).onNonTextInputUrlEntered(SupportUtils.getSumoURLForTopic(this.context, "amazon-end-support"))
+            context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
+        }
+
         return view
     }
 
@@ -406,7 +414,7 @@ class NavigationOverlayFragment : Fragment() {
                 }
             },
             onTileFocused = {
-                val prefInt = android.preference.PreferenceManager.getDefaultSharedPreferences(context).getInt(
+                val prefInt = PreferenceManager.getDefaultSharedPreferences(context).getInt(
                         SHOW_UNPIN_TOAST_COUNTER_PREF, 0)
                 if (prefInt < MAX_UNPIN_TOAST_COUNT && canShowUnpinToast) {
                     PreferenceManager.getDefaultSharedPreferences(context)

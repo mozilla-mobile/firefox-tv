@@ -13,6 +13,49 @@
     <!-- This background color is necessary otherwise the browser shows through -->
 
 
+    <LinearLayout
+        android:id="@+id/bannerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#2A2A2E"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+      <ImageView
+          android:contentDescription="@null"
+          android:layout_width="80sp"
+          android:layout_height="64sp"
+          android:paddingStart="16dp"
+          android:paddingEnd="16dp"
+          android:src="@drawable/warning"/>
+
+        <TextView
+            android:id="@+id/bannerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@string/font_ember_regular"
+            android:textSize="18sp"
+            android:lineSpacingExtra="6sp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:text="@string/banner_text"
+            android:textColor="#FBFBFE" />
+
+        <Button
+            android:id="@+id/bannerMoreInfoButton"
+            style="@style/BannerConfirmButton"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="0"
+            android:nextFocusDown="@+id/exitButton"
+            android:text="@string/banner_more_info_button"
+            android:textSize="18sp"
+            android:fontFamily="@string/font_ember_regular" />
+    </LinearLayout>
+
     <org.mozilla.tv.firefox.navigationoverlay.BrowserNavigationOverlayScrollView
         android:id="@+id/overlayScrollView"
         android:layout_width="match_parent"
@@ -64,6 +107,7 @@
                     android:cursorVisible="false"
                     android:drawableStart="@drawable/mozac_ic_search"
                     android:drawablePadding="10dp"
+                    android:fontFamily="@string/font_ember_regular"
                     android:hint="@string/urlbar_hint"
                     android:imeOptions="actionGo|flagNoExtractUi|flagNoFullscreen"
                     android:importantForAutofill="no"
@@ -76,8 +120,8 @@
                     android:textColor="@color/photonGrey10"
                     android:textColorHint="@color/photonGrey10_a80p"
                     android:textIsSelectable="false"
-                    android:fontFamily="@string/font_ember_regular"
-                    tools:ignore="UnusedAttribute" >
+                    tools:ignore="UnusedAttribute">
+
                     <requestFocus />
 
                 </org.mozilla.tv.firefox.widget.InlineAutocompleteEditText>
@@ -106,7 +150,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/overlay_margin_channel_start"
-                    android:layout_marginEnd="@dimen/overlay_margin_end"/>
+                    android:layout_marginEnd="@dimen/overlay_margin_end" />
 
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>

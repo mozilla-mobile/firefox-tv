@@ -292,4 +292,8 @@
     <string name="update_prompt_primary_button">更新</string>
     <!-- Button text to dismiss the prompt to update the app. -->
     <string name="update_prompt_secondary_button">暂时不要</string>
+
+    <!-- Text for the banner. -->
+    <string name="banner_text">Firefox已终止对Amazon Fire TV的支持。自2021年4月30日起，该应用仍可继续运行，但将无法收到安全或其他更新。</string>
+    <string name="banner_more_info_button">了解更多</string>
 </resources>

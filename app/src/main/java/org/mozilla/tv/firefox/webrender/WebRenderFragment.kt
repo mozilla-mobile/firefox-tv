@@ -13,16 +13,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.FrameLayout
+import androidx.core.view.isGone
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.addTo
-import kotlinx.android.synthetic.main.fragment_browser.cursorView
-import kotlinx.android.synthetic.main.fragment_browser.progressBar
-import kotlinx.android.synthetic.main.fragment_browser.view.browserFragmentRoot
-import kotlinx.android.synthetic.main.fragment_browser.view.engineView
-import kotlinx.android.synthetic.main.fragment_browser.view.progressBar
-import kotlinx.android.synthetic.main.hint_bar.hintBarContainer
+import kotlinx.android.synthetic.main.fragment_browser.*
+import kotlinx.android.synthetic.main.fragment_browser.view.*
+import kotlinx.android.synthetic.main.hint_bar.*
 import mozilla.components.browser.session.Session
 import mozilla.components.concept.engine.EngineSession
 import mozilla.components.concept.engine.EngineView
@@ -53,6 +52,7 @@ import org.mozilla.tv.firefox.ext.webRenderComponents
 import org.mozilla.tv.firefox.hint.HintBinder
 import org.mozilla.tv.firefox.hint.InactiveHintViewModel
 import org.mozilla.tv.firefox.session.SessionRepo
+import org.mozilla.tv.firefox.utils.SupportUtils
 import org.mozilla.tv.firefox.utils.URLs
 
 private const val ARGUMENT_SESSION_UUID = "sessionUUID"
@@ -116,6 +116,9 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
                 serviceLocator?.experimentsProvider?.shouldUseMp4VideoWorkaround() == true) {
             engineView?.updateFullscreenScrollPosition()
         }
+
+        val bannerLayout: View = window.findViewById(R.id.bannerLayout)
+        bannerLayout.isGone = enabled
     }
 
     override fun onUrlChanged(session: Session, url: String) {
@@ -152,6 +155,16 @@ class WebRenderFragment : EngineViewLifecycleFragment(), Session.Observer {
             context.serviceLocator.cursorModel.screenBounds = PointF(right.toFloat(), bottom.toFloat())
         }
         context.serviceLocator.cursorModel.webViewCouldScrollInDirectionProvider = layout.engineView::couldScrollInDirection
+
+        // Setup the banner
+
+        val bannerLayout: View = layout.findViewById(R.id.bannerLayout)
+
+        val moreInfoButton: Button = bannerLayout.findViewById(R.id.bannerMoreInfoButton)
+        moreInfoButton.setOnClickListener {
+            (activity as MainActivity).onNonTextInputUrlEntered(SupportUtils.getSumoURLForTopic(this.context, "amazon-end-support"))
+            context?.serviceLocator?.screenController?.showNavigationOverlay(fragmentManager, false)
+        }
 
         layout.progressBar.initialize(this)
 
