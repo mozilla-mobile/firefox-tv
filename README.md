@@ -1,3 +1,5 @@
+> ⚠️ Firefox has ended support for Amazon Fire TV. This app may continue to work, but it won’t receive security or other updates effective April 30, 2021. See also [https://support.mozilla.org/en-US/kb/end-support-firefox-amazon-devices](https://support.mozilla.org/en-US/kb/end-support-firefox-amazon-devices).
+
 # Firefox for Amazon's Fire TV
 
 [![Task Status](https://github.taskcluster.net/v1/repository/mozilla-mobile/firefox-tv/master/badge.svg)](https://github.taskcluster.net/v1/repository/mozilla-mobile/firefox-tv/master/latest)
