@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- ####################################################################################### -->
+    <!-- ## Put only strings into this file that should be translated. Move all other strings ## -->
+    <!-- ## into a separate file like strings_references.xml                                  ## -->
+    <!-- ####################################################################################### -->
+
+    <!-- The brand name of this app -->
+    <string name="firefox_tv_brand_name" tools:keep="@string/firefox_tv_brand_name">Firefox TV</string>
+    <string name="firefox_tv_brand_name_short" tools:keep="@string/firefox_tv_brand_name_short">Firefox</string>
+
+    <!-- The brand name of our partner company, Pocket. -->
+    <string name="pocket_brand_name">Pocket</string>
+
+    <!-- Label used for buttons, e.g. in dialogs -->
+    <string name="action_cancel">Huỷ bỏ</string>
+    <!-- Label used for buttons, e.g. in dialogs -->
+    <string name="action_ok">Đồng ý</string>
+
+    <!-- This text is shown in the URL bar when it's empty -->
+    <string name="urlbar_hint">Tìm kiếm hoặc nhập địa chỉ</string>
+
+    <string name="menu_settings">Cài đặt</string>
+    <string name="menu_about">Giới thiệu</string>
+    <string name="preference_language">Ngôn ngữ</string>
+
+    <!-- This is shown when the user hasn't set a Firefox for Fire TV specific language, i.e. when Firefox for Fire TV
+         is using the system default language. -->
+    <string name="preference_language_systemdefault">Mặc định hệ thống</string>
+
+    <string name="preference_category_privacy">Riêng tư</string>
+    <string name="preference_privacy_block_ads">Chặn trình theo dõi quảng cáo</string>
+    <string name="preference_privacy_block_ads_summary">Một số quảng cáo theo dõi lượt truy cập trang web, ngay cả khi bạn không nhấp vào quảng cáo</string>
+    <string name="preference_privacy_block_analytics">Chặn trình theo dõi phân tích</string>
+    <string name="preference_privacy_block_analytics_summary">Được sử dụng để thu thập, phân tích và đo lường các hoạt động như chạm và cuộn</string>
+    <string name="preference_privacy_block_social">Chặn trình theo dõi xã hội</string>
+    <string name="preference_privacy_block_social_summary">Được nhúng vào các trang web để theo dõi lượt truy cập của bạn và để hiển thị chức năng như nút chia sẻ</string>
+    <string name="preference_privacy_block_content">Chặn các trình theo dõi nội dung khác</string>
+    <string name="preference_privacy_block_content_summary2">Việc kích hoạt có thể khiến một số trang hoạt động không mong muốn</string>
+
+    <string name="preference_category_performance">Hiệu suất</string>
+    <string name="preference_performance_block_webfonts">Chặn phông chữ Web</string>
+    <!-- This text is shown below the setting for disabling web fonts. Some websites use icons/images from a font and those do not show up if fonts are blocked.-->
+    <string name="preference_performance_block_webfonts_summary">Có thể dẫn đến thiếu biểu tượng hoặc hình ảnh</string>
+
+    <!-- In-app link (in settings) to Firefox for Fire TV privacy notice. -->
+    <string name="preference_privacy_notice">Thông báo về quyền riêng tư</string>
+
+    <!-- Content description (not visible, for screen readers etc.): Navigate forward (browsing history) -->
+    <string name="content_description_forward">Quay về trước</string>
+
+    <!-- Content description (not visible, for screen readers etc.): Reload current website -->
+    <string name="content_description_reload">Tải lại trang web</string>
+
+    <!-- Content description (not visible, for screen readers etc.): Navigate back (browsing history) -->
+    <string name="content_description_back">Quay trở lại</string>
+
+    <string name="external_app_prompt_title">Mở liên kết trong một ứng dụng khác</string>
+    <!-- This string is shown when the user has clicked a link that needs to be opened in a different app.
+         Argument 2 is the external app name, argument 1 is our name (i.e. Firefox for Fire TV). -->
+    <string name="external_app_prompt">Bạn có thể rời khỏi %1$s để mở liên kết trong %2$s.</string>
+    <!-- This text is the title of a dialog shown if no app could be found for a custom link protocol. -->
+    <string name="external_app_prompt_no_app_title">Tìm một ứng dụng có thể mở liên kết</string>
+    <!-- This text is shown in a dialog if no app could be found for a custom link protocol. %1$s is the name of the app (i.e. Firefox for Fire TV) and %2$s is the name of
+         the app store installed on the device (usually that's Google Play). -->
+    <string name="external_app_prompt_no_app">Không ứng dụng nào trên thiết bị của bạn có thể mở liên kết này. Bạn có thể rời khỏi %1$s để tìm kiếm %2$s ứng dụng có thể mở.</string>
+    <!-- This label is shown above a list of apps that can be used to open a given link -->
+    <string name="external_multiple_apps_matched_exit">Thoát khỏi Duyệt web riêng tư?</string>
+
+    <!-- The page html title (i.e. the <title> tag content) -->
+    <string name="errorpage_title">Sự cố khi tải trang</string>
+    <string name="errorpage_refresh">Thử lại</string>
+
+    <string name="your_rights">Quyền lợi của bạn</string>
+
+    <!-- Text shown in the "Your rights" screen.
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)-->
+    <string name="your_rights_content1"><![CDATA[%1$s là phần mềm mã nguồn mở miễn phí được tạo bởi Mozilla và các cộng tác viên khác.]]></string>
+
+    <!-- Text shown in the "Your rights" screen.
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+    %2$s will be replaced with a URL linking to the MPL (e.g. https://www.mozilla.org/en-US/MPL/) -->
+    <string name="your_rights_content2"><![CDATA[%1$s is made available to you under the terms of the <a href="%2$s">Mozilla Public License</a> and other open source licenses.]]></string>
+
+    <!-- Text shown in the "Your rights" screen.
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+    %2$s will be replaced with a URL linking to the trademark policy (e.g. https://www.mozilla.org/foundation/trademarks/policy/) -->
+    <string name="your_rights_content3"><![CDATA[Bạn không được cấp bất kỳ quyền hoặc giấy phép nào đối với các nhãn hiệu của Mozilla Foundation hoặc bất kỳ bên nào, bao gồm Mozilla, Firefox hoặc %1$s hoặc tên hoặc biểu trưng.  Thông tin bổ sung có thể được tìm thấy tại <a href="%2$s">đây</a>.]]></string>
+
+    <!-- Text shown in the "Your rights" screen.
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+    %2$s will be replaced with a URL linking to the list of licenses used by the dependencies.-->
+    <string name="your_rights_content4"><![CDATA[Additional source code for %1$s is available under various other free and open source <a href="%2$s">licenses</a>.]]></string>
+
+    <!-- Text shown in the "Your rights" screen.
+    %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+    %2$s will be replaced with a URL linking to the GPL
+    %3$s will be replaced with a URL linking to the tracking protection wiki page (e.g. https://wiki.mozilla.org/Security/Tracking_protection#Lists) -->
+    <string name="your_rights_content5"><![CDATA[%1$s also uses blocklists provided by Disconnect, Inc. as separate and independent works under the <a href="%2$s">GNU General Public License v3</a>, and available <a href="%3$s">here</a>.]]></string>
+
+    <!-- Firefox for Fire TV
+    video strings -->
+    <!-- Settings strings -->
+    <string name="settings_cookies_dialog_title">Xóa tất cả cookie và dữ liệu trang web</string>
+    <string name="settings_cookies_dialog_content2">Điều này sẽ xóa tất cả cookie và dữ liệu trang web. Xóa thông tin này có thể đăng xuất bạn khỏi các trang web và xóa nội dung web được lưu trữ ngoại tuyến.</string>
+    <!-- Text on a button that, when pressed, will clear all user data.
+    Mock: https://user-images.githubusercontent.com/1721875/47298531-59442f00-d618-11e8-98df-632f74e9ebc3.png -->
+    <string name="settings_cookies_confirm">Xóa ngay bây giờ</string>
+
+    <!-- Title for a screen that explains the purpose of our telemetry, and contains a
+    switch that can toggle it on and off
+     Mock: https://user-images.githubusercontent.com/1721875/47298694-b809a880-d618-11e8-9e18-1d6d47d2045d.png -->
+    <string name="preference_mozilla_telemetry2">Gửi dữ liệu sử dụng</string>
+    <!-- Description text that explains the purpose of our telemetry
+      Mock: https://user-images.githubusercontent.com/1721875/47298694-b809a880-d618-11e8-9e18-1d6d47d2045d.png
+      %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV) -->
+    <string name="settings_telemetry_description">Mozilla cố gắng chỉ thu thập những gì chúng tôi cần để cung cấp và cải thiện %1$s cho mọi người</string>
+
+    <string name="turbo_mode">Chế độ Turbo</string>
+    <!-- This string will be displayed underneath the Enhanced Tracking Protection button (formerly
+         'Turbo mode') when it is highlighted and ETP is currently active. -->
+    <string name="toolbar_etp_on">Bảo vệ theo dõi nâng cao BẬT</string>
+    <!-- This string will be displayed underneath the Enhanced Tracking Protection button (formerly
+         'Turbo mode') when it is highlighted and ETP is currently inactive. -->
+    <string name="toolbar_etp_off">Bảo vệ theo dõi nâng cao TẮT</string>
+    <!-- Title text for Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen -->
+    <string name="onboarding_etp_title">Bảo vệ theo dõi nâng cao</string>
+    <!-- Description text for Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen -->
+    <string name="onboarding_etp_description">Bảo vệ quyền riêng tư của bạn khi bạn duyệt web. Chặn nội dung ẩn theo dõi trang web bạn truy cập và hồ sơ của bạn. Việc chặn một số nội dung này có thể làm cho các trang tải nhanh hơn.</string>
+    <!-- Used for a button on the Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen. If this button is clicked, ETP will be enabled -->
+    <string name="onboarding_etp_enable">Bật tính năng Bảo vệ theo dõi nâng cao</string>
+    <!-- Used for a button on the Enhanced Tracking Protection (formerly 'Turbo Mode') onboarding screen. If this button is clicked, ETP will be disabled -->
+    <string name="onboarding_etp_disable2">Tắt tính năng Bảo vệ theo dõi nâng cao</string>
+    <!-- Spoken to screen reader users to explain image on Enhanced Tracking Protection (formerly 'turbo mode') onboarding -->
+    <string name="onboarding_etp_image_a11y">Ví dụ về tính năng Bảo vệ theo dõi nâng cao được bật</string>
+    <string name="onboarding_turbo_mode_title">Chế độ Turbo giúp bạn duyệt nhanh hơn</string>
+    <string name="onboarding_turbo_mode_body2">Chế độ Turbo tự động chặn quảng cáo và trình theo dõi. \n Nếu một trang web không hoạt động theo cách bạn mong đợi, hãy thử tắt tính năng này.</string>
+    <!-- Button text for keeping Turbo Mode enabled in onboarding -->
+    <string name="button_turbo_mode_keep_enabled2">Luôn bật Chế độ Turbo</string>
+    <!-- Button text for turning off Turbo Mode in onboarding -->
+    <string name="button_turbo_mode_turn_off2">Tắt Chế độ Turbo</string>
+    <!-- Spoken to screen reader users to explain image on Turbo mode onboarding -->
+    <string name="turbo_mode_image_a11y">Ví dụ về Chế độ Turbo được bật</string>
+
+    <!-- Text displayed in a toast to explain to the user how to unpin a tile from the homescreen.
+         SELECT refers to a button on the remote: the button at the center of the 4-way directional navigation. -->
+    <string name="homescreen_unpin_tutorial_toast">Nhấn và giữ phim CHỌN để bỏ ghim khỏi màn hình chính</string>
+    <string name="homescreen_tile_remove">Xoá</string>
+
+    <!-- The title of Pinned channel remove modal.
+    %1$s will be replaced by the title of tiles (website titles or url). -->
+    <string name="pinned_tiles_channel_remove_title">Xóa %1$s khỏi các trang web được Ghim</string>
+
+    <!-- Title text displayed above the pinned tile channel. Pinned tiles are a collection of links
+    to commonly used sites (bundled with the app), as well as custom pinnned ones (added by the user)
+    See https://github.com/mozilla-mobile/firefox-tv/issues/1630 for channel mocks -->
+    <string name="pinned_tile_channel_title">Ô được ghim</string>
+
+    <string name="pin_label">Ghim vào màn hình chính</string>
+    <!-- Label shown underneath Pin icon in toolbar when a site is already pinned, to hint to users that
+         they can unpin the site to remove it-->
+    <string name="unpin_label">Bỏ ghim khỏi màn hình chính</string>
+    <string name="notification_pinned_site">Được ghim vào màn hình chính của Firefox TV</string>
+    <string name="notification_unpinned_site">Đã xóa khỏi màn hình chính của Firefox TV</string>
+
+    <!-- The title of a tutorial shown to introduce Pocket video recommendations.
+    %1$s will be replaced with the Pocket brand name. -->
+    <string name="pocket_home_tutorial_title">Giới thiệu các video do %1$s đề xuất</string>
+    <!-- The description text of a tutorial shown to introduce Pocket video recommendations.
+    %1$s will be replaced with the Pocket brand name. -->
+    <string name="pocket_home_tutorial_description">Các video thú vị nhất trên web. Được đề xuất bởi %1$s, hiện là một phần của Mozilla.</string>
+    <!-- The text on the dismiss button of a tutorial shown to introduce Pocket video recommendations. -->
+    <string name="pocket_home_tutorial_dismiss_button">OK, nhận nó</string>
+    <!-- Spoken to screen reader users when they focus the Pocket tile. Clicking this tile will take them to the
+         Pocket video recommendations feed.
+    %1$s will be replaced with the Pocket brand name. -->
+    <string name="pocket_home_a11y_tile_focused">Đề xuất video của %1$s</string>
+    <!-- Spoken by screen reader when they focus the "?" button on the Pocket Video feed screen,
+    which will shows the Pocket tutorial again -->
+    <string name="pocket_info_a11y">Giới thiệu về Pocket</string>
+
+
+    <string name="pocket_video_feed_recommended_videos_title">Video được Đề xuất</string>
+    <!-- Text displayed when the Pocket video recommendations feed failed to load.
+    %1$s will be replaced with the Pocket brand name. -->
+    <string name="pocket_video_feed_failed_to_load">Hừ! Chúng tôi đang gặp sự cố khi hiển thị các đề xuất video của %1$s.</string>
+    <!-- Text displayed on a button to reload the Pocket video recommendations feed if it failed to load. -->
+    <string name="pocket_video_feed_reload_button">Thử lại</string>
+
+    <!--Request desktop site strings-->
+    <!-- Content description for Request desktop version button-->
+    <string name="request_desktop_site_a11y">Yêu cầu phiên bản máy tính để bàn của trang web này</string>
+    <!-- Notification displayed when the user has clicked the "request desktop version" button to turn ON desktop mode,
+    notifying the user that Firefox has requested the "desktop version" from the site -->
+    <string name="notification_request_desktop_site">Phiên bản máy tính để bàn được yêu cầu</string>
+    <!-- Notification displayed when the user has clicked the "request desktop version" button to turn OFF desktop mode,
+    to notify user that Firefox has requested the default "non-desktop version" from the site -->
+    <string name="notification_request_non_desktop_site">Đã trở lại phiên bản không dành cho máy tính để bàn</string>
+
+    <!-- Notification displayed to introduce a "YouTube casting" feature (similar to "broadcasting")
+    Users who have the YouTube app on their phone or tablet can use it to play YouTube videos directly on their tv.
+
+    %s will be replaced with the icon that matches the button in the YouTube app for this feature.
+    Clicking on that button in the YouTube app will show YouTube's instructions on how to cast. -->
+    <string name="youtube_casting_onboarding_toast">Truyền video YouTube từ điện thoại hoặc máy tính bảng của bạn. Mở YouTube trên thiết bị của bạn và nhấn vào %s để bắt đầu.</string>
+
+    <!-- Content description for the Exit Firefox button.
+     %1$s will be replaced with the Firefox brand name. -->
+    <string name="exit_firefox_a11y">Thoát %1$s</string>
+
+    <!-- Hint Strings -->
+    <!-- Hint text displayed when the overlay is open.
+     $IMAGE will be replaced with the image of a hardware back button.
+     When the described button is pressed, the overlay will close and the user will be returned to the browser. -->
+    <string name="hint_press_back_to_close_overlay">Nhấn $IMAGE để quay lại</string>
+    <!-- Content description for a hint bar that is displayed when the overlay is open.
+     When the described button is pressed, the overlay will close and the user will be returned to the browser. -->
+    <string name="hint_press_back_to_close_overlay_a11y">Nhấn nút quay lại để trở lại</string>
+    <!-- Hint text displayed when the browser is open.
+     $IMAGE will be replaced with the image of a hardware menu button.
+     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+     When the described button is pressed, the overlay will open and the browser will be hidden underneath it -->
+    <string name="hint_press_menu_to_open_overlay">Nhấn $IMAGE cho %1$s Trang chủ, tìm kiếm, cài đặt và hơn thế nữa</string>
+    <!-- Content description for a hint bar displayed when the browser is open.
+     %1$s will be replaced with the name of the app (e.g. Firefox for Fire TV)
+     When the described button is pressed, the overlay will open and the browser will be hidden underneath it -->
+    <string name="hint_press_menu_to_open_overlay_a11y">Nhấn nút menu cho %1$s Trang chủ, tìm kiếm, cài đặt và hơn thế nữa</string>
+
+    <!-- Firefox Accounts Strings-->
+    <!-- Description for Sent tab buttons (in navigation toolbar & settings, both on the homescreen)
+     that will launch the Firefox Account sign-in experience so users can receive Firefox tabs on their Fire TV.
+     %1$s will be replaced with Firefox. -->
+    <string name="fxa_navigation_item_new">Mới! Gửi các tab %1$s tới Fire TV</string>
+    <!-- Description for Sent tab button in navigation toolbar
+     that will launch the Firefox Account settings after the user is signed in. -->
+    <string name="fxa_navigation_item_signed_in2">Cài đặt tab đã gửi</string>
+    <!-- Description for Sent tab buttons (in navigation toolbar & settings, both on the homescreen)
+     that will launch the Firefox Account sign-in experience when the user needs to sign in again. -->
+    <string name="fxa_navigation_item_sign_in_again">Các tab đã gửi - đăng nhập lại</string>
+    <!-- Header for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
+    <string name="fxa_preboarding_header">Xem các tab của bạn trên màn hình lớn</string>
+    <!-- Instruction text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature.
+    %1$s will be replaced with Firefox.
+    %2$s will be replaced with the name of our app (i.e. Firefox for Fire TV) -->
+    <string name="fxa_preboarding_instruction">Gửi một tab từ bất kỳ nơi nào bạn sử dụng %1$s và xem tab đó ở đây. Đăng nhập vào %2$s để bắt đầu.</string>
+    <!-- Instruction text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature.
+    %1$s will be replaced with Firefox.
+    %2$s will be replaced with the name of our app (i.e. Firefox for Fire TV) -->
+    <string name="fxa_preboarding_instruction1">Gửi một tab từ %1$s cho máy tính để bàn hoặc điện thoại di động và xem nó ở đây. Đăng nhập vào %2$s để bắt đầu.</string>
+    <!-- Sign-in button text for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
+    <string name="fxa_preboarding_primary_button">Đăng nhập</string>
+    <!-- Text on the cancel button for the Firefox Account sign-in pre-boarding, where we introduce the send tab feature. -->
+    <string name="fxa_preboarding_secondary_button">Không phải bây giờ</string>
+    <!-- Shown on the onboarding page that explains how to receive tabs that are sent from other devices.
+         This text is announced to screen reader users when they focus an image that will display a graphic explaining the receive tab process-->
+    <string name="fxa_preboarding_image_a11y">Hình minh họa các tab được gửi từ điện thoại và máy tính bảng tới Fire TV</string>
+    <!-- Header for Firefox Accounts onboarding screen, which is shown after signing in. -->
+    <string name="fxa_onboarding_header">Các tab của bạn. Bây giờ đã sẵn sàng cho thời gian chính.</string>
+    <!-- Instruction text for Firefox Accounts onboarding screen, which is shown after signing in.
+     %1$s will be replaced with Firefox. -->
+    <string name="fxa_onboarding_instruction">Bạn đã sẵn sàng để nhận các tab. Để bắt đầu, hãy chọn Gửi tab tới thiết bị trên %1$s cho máy tính để bàn và iOS hoặc Chia sẻ trên Firefox Xem trước. Sau đó chọn Fire TV và tab của bạn sẽ xuất hiện chỉ trong giây lát.</string>
+    <!-- Text on the dismiss button for Firefox Accounts onboarding screen, which is shown after signing in. -->
+    <string name="fxa_onboarding_primary_button">OK, đã nhận nó</string>
+    <!-- Toast shown on webpage when tab is sent from another device
+     %1$s will be replaced with the device name where the tab was sent from. -->
+    <string name="fxa_tab_sent_toast">Tab được gửi từ %1$s</string>
+    <!-- Toast shown on webpage when tab is sent from another device that does not have a device name specified -->
+    <string name="fxa_tab_sent_toast_no_device">Đã nhận tab</string>
+    <!-- Description for header text for Firefox Accounts settings page. -->
+    <string name="fxa_settings_header">Các tab đã gửi</string>
+    <!-- Body text for Firefox Accounts settings page
+    %1$s will be replaced with the signed-in user account email. -->
+    <string name="fxa_settings_body">Đăng nhập bằng %1$s</string>
+    <!-- Body text for Firefox Accounts settings page. -->
+    <string name="fxa_settings_body_no_display_name">Đã đăng nhập</string>
+    <!-- Button text for seeing the onboarding screen on the Firefox Accounts settings page.
+     %1$s will be replaced with Firefox. -->
+    <string name="fxa_settings_primary_button">%1$s tab</string>
+    <!-- Button text to sign out from the Firefox Accounts settings page -->
+    <string name="fxa_settings_secondary_button">Đăng xuất</string>
+    <!-- This text is announced to screen reader users when they focus an image that will display the avatar of the currently logged in user -->
+    <string name="content_description_fxa_profile_avatar_image">Ảnh đại diện hồ sơ người dùng</string>
+
+    <!-- Strings for the prompt window for users to update the app. -->
+    <!-- Header string for the prompt shown to users to update the app.
+    %1$s will be replaced with Firefox. -->
+    <string name="update_prompt_header">Luôn cập nhật %1$s</string>
+    <!-- Instruction text for the prompt shown to users to update the app.
+    %1$s and %2$s will be replaced with Firefox.-->
+    <string name="update_prompt_instruction">Cập nhật %1$s để có hiệu suất và bảo mật mới nhất. Bản cập nhật này cho phép bạn gửi các tab từ các trình duyệt %2$s khác và xem chúng tại đây trên màn hình lớn.</string>
+    <!-- Button text to update the app. -->
+    <string name="update_prompt_primary_button">Cập nhật</string>
+    <!-- Button text to dismiss the prompt to update the app. -->
+    <string name="update_prompt_secondary_button">Không phải bây giờ</string>
+</resources>
